@@ -1,7 +1,7 @@
 package com.example.count_out.entity
 
 interface Count {
-    val coordinates: Сoordinates
+    val coordinate: Coordinate
     val timeL: Long
     val heartRate: Int
     val geographicalHeight: Double

@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">count_out</string>
+    <string name="error_1">Error 1.</string>
+    <string name="error_2">Error 2.</string>
 </resources>

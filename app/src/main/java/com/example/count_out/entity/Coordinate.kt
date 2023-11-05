@@ -1,6 +1,6 @@
 package com.example.count_out.entity
 
-interface Сoordinates {
+interface Coordinate {
     val latitude: Double
     val longitude: Double
 }

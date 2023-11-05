@@ -7,7 +7,7 @@ interface Exercise {
     val name: String
     val picture: Any
     val colour: Color
-    val icon: ImageVector
+    val icon: ImageVector?
     val videoClip: String
     val audioTrack: String
 }
