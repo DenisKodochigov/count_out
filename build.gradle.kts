@@ -2,7 +2,7 @@
 buildscript {
 
     val gradleVersion by extra("8.1.2")
-    val daggerVersion by extra("2.48")
+    val daggerVersion by extra("2.48.1")
     val kotlinVersion by extra("1.9.10")
     val composeVersion by extra("1.5.4")
     val minSdk by extra(26)
@@ -20,8 +20,8 @@ buildscript {
 }
 
 plugins {
-//    val gradleVersion = extra["gradleVersion"]
-//    val daggerVersion = extra["daggerVersion"]
+//    val gradleVersion = extra["gradleVersion"] as String
+//    val daggerVersion = extra["daggerVersion"] as String
     val gradleVersion = "8.1.2"
     val daggerVersion = "2.48"
     id ("org.jetbrains.kotlin.android") version "1.8.10" apply false
@@ -33,5 +33,5 @@ plugins {
     id ("com.google.dagger.hilt.android") version daggerVersion apply false
 }
 tasks.register("clean", Delete::class) {  // #3
-    delete(rootProject.buildDir)
+    delete(rootProject)
 }
