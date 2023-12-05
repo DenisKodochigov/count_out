@@ -2,4 +2,7 @@
     <string name="app_name">count_out</string>
     <string name="error_1">Error 1.</string>
     <string name="error_2">Error 2.</string>
+    <string name="workout_text_fab">workout</string>
+    <string name="new_workout">New workout</string>
+    <string name="ok">OK</string>
 </resources>

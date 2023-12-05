@@ -1,4 +1,4 @@
-package com.example.basket.navigation
+package com.example.count_out.navigation
 
 import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.ExitTransition
@@ -8,22 +8,17 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.example.count_out.navigation.RoundScreen
-import com.example.count_out.navigation.SetScreen
-import com.example.count_out.navigation.Setting
-import com.example.count_out.navigation.WorkoutsScreen
+import com.example.basket.navigation.navigateToProducts
+import com.example.count_out.ui.screens.workouts.WorkoutsScreen
 
 @Composable
 fun AppNavHost(
     navController: NavHostController,
     modifier: Modifier = Modifier,
-    showBottomSheet: MutableState<Boolean>,
-    refreshScreen: MutableState<Boolean>,
 ){
 
     NavHost(
@@ -33,11 +28,8 @@ fun AppNavHost(
                 targetState.destination.route?.let { enterTransition(WorkoutsScreen.route, it) } },
             exitTransition = {
                 targetState.destination.route?.let { exitTransition(WorkoutsScreen.route, it)  } }) {
-//            WorkoutsScreen(
-//                showBottomSheet = showBottomSheet,
-//                screen = Workouts,
-//                onClickBasket = { navController.navigateToProducts(it) },
-//            )
+            WorkoutsScreen(
+                screen = WorkoutsScreen, onClickWorkout = { navController.navigateToProducts(it) })
         }
         composable(
             route = RoundScreen.routeWithArgs, arguments = RoundScreen.arguments,
@@ -62,7 +54,7 @@ fun AppNavHost(
 //            SetScreen( showBottomSheet = showBottomSheet, screen = SetScreen )
         }
         composable(
-            route = Setting.route,
+            route = SettingScreen.route,
             enterTransition = {
                 targetState.destination.route?.let { enterTransition(WorkoutsScreen.route, it) } },
             exitTransition = {

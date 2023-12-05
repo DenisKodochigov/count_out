@@ -27,3 +27,14 @@ enum class Rainfall{
     MEDIUM,
     LARGE
 }
+enum class UPDOWN {
+    UP,
+    DOWN,
+    START,
+    END
+}
+enum class TypeKeyboard{
+    DIGIT,
+    TEXT,
+    OTHER
+}

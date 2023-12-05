@@ -16,6 +16,8 @@ interface ScreenDestination {
     val pictureDay: Int
     val pictureNight: Int
     val textHeader: Int
+    var textFAB: String
+    var onClickFAB: () -> Unit
 }
 
 /*** App app navigation destinations*/
@@ -25,6 +27,8 @@ object WorkoutsScreen : ScreenDestination {
     override val pictureDay = R.drawable.ic_launcher_background
     override val pictureNight = R.drawable.ic_launcher_background
     override val textHeader = R.string.app_name
+    override var textFAB: String = ""
+    override var onClickFAB: () -> Unit = {}
 }
 
 object RoundScreen : ScreenDestination {
@@ -36,25 +40,31 @@ object RoundScreen : ScreenDestination {
     override val pictureDay = R.drawable.ic_launcher_background
     override val pictureNight = R.drawable.ic_launcher_background
     override val textHeader = R.string.app_name
+    override var textFAB: String = ""
+    override var onClickFAB: () -> Unit = {}
 }
 
 object SetScreen : ScreenDestination {
     override val icon = Icons.Filled.Dashboard
     override val route = "Set"
-    private const val setsIdArg = "workout_type"
-    val routeWithArgs = "${RoundScreen.route}/{$setsIdArg}"
-    val arguments = listOf(navArgument(setsIdArg) { type = NavType.LongType })
     override val pictureDay = R.drawable.ic_launcher_background
     override val pictureNight = R.drawable.ic_launcher_background
     override val textHeader = R.string.app_name
+    override var textFAB: String = ""
+    override var onClickFAB: () -> Unit = {}
+    private const val setsIdArg = "workout_type"
+    val routeWithArgs = "${RoundScreen.route}/{$setsIdArg}"
+    val arguments = listOf(navArgument(setsIdArg) { type = NavType.LongType })
 }
 
-object Setting : ScreenDestination {
+object SettingScreen : ScreenDestination {
     override val icon = Icons.Filled.Settings
     override val route = "settings"
     override val pictureDay = 0
     override val pictureNight = 0
     override val textHeader = R.string.app_name
+    override var textFAB: String = ""
+    override var onClickFAB: () -> Unit = {}
 }
 
 //object SingleAccount : ScreenDestination {
@@ -74,4 +84,5 @@ object Setting : ScreenDestination {
 //    override val route = "products"
 //}
 // Screens to be displayed in the top AppTabRow
-val appTabRowScreens = listOf(WorkoutsScreen, RoundScreen, SetScreen, Setting)
+val navBottomScreens = listOf(WorkoutsScreen, RoundScreen, SetScreen, SettingScreen)
+val listScreens = listOf(WorkoutsScreen, RoundScreen, SetScreen, SettingScreen)

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">count_out</string>
+    <string name="error_1">Ошибка</string>
+    <string name="error_2">Ошибка</string>
+    <string name="workout_text_fab">Тренировка</string>
+    <string name="new_workout">Новая тренировка</string>
+    <string name="ok">OK</string>
+</resources>
