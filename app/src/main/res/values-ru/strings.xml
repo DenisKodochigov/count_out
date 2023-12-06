@@ -6,4 +6,5 @@
     <string name="workout_text_fab">Тренировка</string>
     <string name="new_workout">Новая тренировка</string>
     <string name="ok">OK</string>
+    <string name="change_name_workout">Редактирование тренировки</string>
 </resources>

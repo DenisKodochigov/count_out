@@ -3,12 +3,10 @@ package com.example.count_out.ui.view_components
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -33,7 +31,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -48,33 +45,30 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.count_out.R
-import com.example.count_out.entity.SizeElement
 import com.example.count_out.entity.TagsTesting.BUTTON_OK
 import com.example.count_out.entity.TypeKeyboard
 import com.example.count_out.entity.TypeText
 import com.example.count_out.entity.UPDOWN
 import com.example.count_out.ui.theme.colorApp
 import com.example.count_out.ui.theme.shapesApp
-import com.example.count_out.ui.theme.sizeApp
 import com.example.count_out.ui.theme.styleApp
 
 @Composable
-fun HeaderScreen(text: String, refreshScreen: MutableState<Boolean> = mutableStateOf(false) ) {
+fun HeaderScreen(text: String ) {
     Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
         TextApp(text = text, style = styleApp(nameStyle = TypeText.NAME_SCREEN))
     }
 }
 
-@Composable
-fun HeaderSection(text: String, modifier: Modifier, refreshScreen: MutableState<Boolean> = mutableStateOf(false)) {
-    Row(
-        modifier
-            .fillMaxWidth()
-            .padding(start = 12.dp), horizontalArrangement = Arrangement.Start) {
-        TextApp(text, style = styleApp(nameStyle = TypeText.NAME_SECTION))
-    }
-}
-
+//@Composable
+//fun HeaderSection(text: String, modifier: Modifier, refreshScreen: MutableState<Boolean> = mutableStateOf(false)) {
+//    Row(
+//        modifier
+//            .fillMaxWidth()
+//            .padding(start = 12.dp), horizontalArrangement = Arrangement.Start) {
+//        TextApp(text, style = styleApp(nameStyle = TypeText.NAME_SECTION))
+//    }
+//}
 
 @Composable fun TextApp(
     text: String,
@@ -93,22 +87,6 @@ fun HeaderSection(text: String, modifier: Modifier, refreshScreen: MutableState<
         textAlign = textAlign,
         modifier = modifier,
         color = color
-    )
-}
-@Composable
-fun MyTextH1(text: String, modifier: Modifier, textAlign: TextAlign) {
-    TextApp (text = text,
-        modifier = modifier,
-        style = styleApp(nameStyle = TypeText.TEXT_IN_LIST),
-        textAlign = textAlign
-    )
-}
-
-@Composable
-fun MyTextH2(text: String, modifier: Modifier = Modifier) {
-    TextApp (text = text,
-        modifier = modifier,
-        style = styleApp(nameStyle = TypeText.TEXT_IN_LIST)
     )
 }
 
@@ -142,9 +120,7 @@ fun MyOutlinedTextFieldWithoutIcon(
                 localFocusManager.clearFocus()
                 enterValue.value = enterText
                 enterText = ""
-                if (keyboardActionsOnDone != null) {
-                    keyboardActionsOnDone.invoke()
-                }
+                if (keyboardActionsOnDone != null) keyboardActionsOnDone.invoke()
                 keyboardController?.hide()
             }
         ),
@@ -153,48 +129,48 @@ fun MyOutlinedTextFieldWithoutIcon(
     )
 }
 
-@Composable
-fun MyOutlinedTextFieldWithoutIconClearing(
-    modifier: Modifier,
-    enterValue: MutableState<String>,
-    typeKeyboard: TypeKeyboard,
-    title: String = ""
-) {
-    val localFocusManager = LocalFocusManager.current
-    var focusItem by remember { mutableStateOf(false) }
-    var enterText by remember { mutableStateOf("") }
-    enterText = if (!focusItem) enterValue.value else ""
-//    val keyboardController = LocalSoftwareKeyboardController.current
-
-    Column(modifier = modifier) {
-        TextApp(
-            text = title,
-            style = styleApp(TypeText.NAME_SLIDER),
-            modifier = Modifier.padding(start = 12.dp)
-        )
-        OutlinedTextField(
-            modifier = modifier
-                .onFocusChanged { focusItem = it.isFocused }
-                .background(color = colorApp.surface),
-            value = enterText,
-            singleLine = true,
-            textStyle = styleApp(nameStyle = TypeText.EDIT_TEXT),
-            onValueChange = {
-                focusItem = false
-                enterText = it
-                enterValue.value = it
-            },
-            keyboardOptions = keyBoardOpt(typeKeyboard),
-            keyboardActions = KeyboardActions(
-                onDone = {
-                    localFocusManager.moveFocus(FocusDirection.Next)
-                    enterValue.value = enterText
-//                keyboardController?.hide()
-                }
-            ),
-        )
-    }
-}
+//@Composable
+//fun MyOutlinedTextFieldWithoutIconClearing(
+//    modifier: Modifier,
+//    enterValue: MutableState<String>,
+//    typeKeyboard: TypeKeyboard,
+//    title: String = ""
+//) {
+//    val localFocusManager = LocalFocusManager.current
+//    var focusItem by remember { mutableStateOf(false) }
+//    var enterText by remember { mutableStateOf("") }
+//    enterText = if (!focusItem) enterValue.value else ""
+////    val keyboardController = LocalSoftwareKeyboardController.current
+//
+//    Column(modifier = modifier) {
+//        TextApp(
+//            text = title,
+//            style = styleApp(TypeText.NAME_SLIDER),
+//            modifier = Modifier.padding(start = 12.dp)
+//        )
+//        OutlinedTextField(
+//            modifier = modifier
+//                .onFocusChanged { focusItem = it.isFocused }
+//                .background(color = colorApp.surface),
+//            value = enterText,
+//            singleLine = true,
+//            textStyle = styleApp(nameStyle = TypeText.EDIT_TEXT),
+//            onValueChange = {
+//                focusItem = false
+//                enterText = it
+//                enterValue.value = it
+//            },
+//            keyboardOptions = keyBoardOpt(typeKeyboard),
+//            keyboardActions = KeyboardActions(
+//                onDone = {
+//                    localFocusManager.moveFocus(FocusDirection.Next)
+//                    enterValue.value = enterText
+////                keyboardController?.hide()
+//                }
+//            ),
+//        )
+//    }
+//}
 
 //@Composable fun showFABs(
 //    startScreen: Boolean,

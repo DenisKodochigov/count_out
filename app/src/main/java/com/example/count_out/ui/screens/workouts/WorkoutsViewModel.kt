@@ -19,19 +19,9 @@ import javax.inject.Inject
 class WorkoutsViewModel @Inject constructor(
     private val errorApp: ErrorApp,
     private val dataRepository: DataRepository
-): ViewModel()  {
+): ViewModel() {
     private val _workoutScreenState = MutableStateFlow(WorkoutsScreenState())
     val workoutScreenState: StateFlow<WorkoutsScreenState> = _workoutScreenState.asStateFlow()
-//
-//    fun getListBasket() {
-//        viewModelScope.launch(Dispatchers.IO) {
-//            kotlin.runCatching { dataRepository.getListBasket() }.fold(
-//                onSuccess = { _basketScreenState.update { currentState ->
-//                    currentState.copy(baskets = it ) } },
-//                onFailure = { errorApp.errorApi(it.message!!) }
-//            )
-//        }
-//    }
 
     fun getWorkouts(){ templateMy { dataRepository.getWorkouts() } }
     fun changeNameWorkout(workout: Workout){ templateMy { dataRepository.changeNameWorkout(workout) } }

@@ -8,6 +8,7 @@ data class WorkoutsScreenState(
     val workouts: MutableState<List<Workout>> = mutableStateOf(emptyList()),
     val enteredName: MutableState<String> = mutableStateOf(""),
     var changeNameWorkout: (Workout) -> Unit = {},
+    var editWorkout: (Workout) -> Unit = {},
     var deleteWorkout: (Long) -> Unit = {},
     var onAddClick: (String) -> Unit = {},
     var onDismiss: () -> Unit = {},

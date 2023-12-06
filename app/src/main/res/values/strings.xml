@@ -5,4 +5,5 @@
     <string name="workout_text_fab">workout</string>
     <string name="new_workout">New workout</string>
     <string name="ok">OK</string>
+    <string name="change_name_workout">Change name workout</string>
 </resources>

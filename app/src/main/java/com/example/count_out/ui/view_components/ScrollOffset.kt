@@ -12,7 +12,7 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 
-fun Modifier.bottomBarAnimatedScroll(height: Dp = 56.dp, offsetHeightPx: MutableState<Float>): Modifier =
+fun Modifier.animatedScroll(height: Dp = 56.dp, offsetHeightPx: MutableState<Float>): Modifier =
     composed {
         val bottomBarHeightPx = with(LocalDensity.current) { (height + 100.dp).roundToPx().toFloat() }
         val connection = remember {

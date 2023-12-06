@@ -1,6 +1,7 @@
 package com.example.count_out.entity
 
 interface Workout {
+    val idWorkout: Long
     val name: String
     val listRound: List<Round>
     val open: Boolean

@@ -30,13 +30,13 @@ import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.example.count_out.ui.theme.TabFadeInAnimationDelay
-import com.example.count_out.ui.theme.TabFadeInAnimationDuration
-import com.example.count_out.ui.theme.TabFadeOutAnimationDuration
 import com.example.count_out.entity.TagsTesting.BOTTOM_APP_BAR
 import com.example.count_out.navigation.ScreenDestination
 import com.example.count_out.navigation.WorkoutsScreen
-import com.example.count_out.navigation.appTabRowScreens
+import com.example.count_out.navigation.navBottomScreens
+import com.example.count_out.ui.theme.TabFadeInAnimationDelay
+import com.example.count_out.ui.theme.TabFadeInAnimationDuration
+import com.example.count_out.ui.theme.TabFadeOutAnimationDuration
 
 @Composable
 fun AppBottomBar(currentScreen: ScreenDestination,
@@ -53,9 +53,9 @@ fun AppBottomBar(currentScreen: ScreenDestination,
     ) {
         Row(modifier = Modifier.padding(top=0.dp),
             verticalAlignment = Alignment.CenterVertically) {
-            appTabRowScreens.forEachIndexed { index, screen ->
+            navBottomScreens.forEachIndexed { index, screen ->
 
-                if (index == appTabRowScreens.size - 1) Spacer(modifier = Modifier.weight(1f))
+                if (index == navBottomScreens.size - 1) Spacer(modifier = Modifier.weight(1f))
                 BottomTab(
                     text = screen.route,
                     icon = screen.icon,

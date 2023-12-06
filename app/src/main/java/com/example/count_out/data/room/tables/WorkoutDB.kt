@@ -6,7 +6,8 @@ import com.example.count_out.entity.Round
 import com.example.count_out.entity.Workout
 
 data class WorkoutDB(
-    override val name: String = "",
+    override val idWorkout: Long = 0,
+    override var name: String = "",
     override val listRound: List<Round> = emptyList(),
     override val open: Boolean = false,
     override val timeStart: Int = 0,
@@ -27,6 +28,6 @@ data class WorkoutDB(
     override val resultTime: Double = 0.0,
     override val resultWeight: Double = 0.0,
     override val resultAmount: Double = 0.0,
-    override val resultRange: Double = 0.0
+    override val resultRange: Double = 0.0,
 ) : Workout
 

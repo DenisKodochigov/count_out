@@ -14,4 +14,6 @@ object Dimen {
     val bsSpacerBottomHeight = 100.dp
 
     val bsItemPaddingVer = 4.dp
+
+    val width8 = 8.dp
 }
