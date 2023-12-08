@@ -21,8 +21,8 @@ import androidx.navigation.compose.rememberNavController
 import com.example.basket.navigation.navigateToScreen
 import com.example.count_out.entity.SizeElement
 import com.example.count_out.navigation.AppNavHost
-import com.example.count_out.navigation.SettingScreen
-import com.example.count_out.navigation.WorkoutsScreen
+import com.example.count_out.navigation.SettingDestination
+import com.example.count_out.navigation.WorkoutsDestination
 import com.example.count_out.navigation.listScreens
 import com.example.count_out.navigation.navBottomScreens
 import com.example.count_out.ui.theme.AppTheme
@@ -49,15 +49,15 @@ fun StartApp() {
             bottomBar = {
                 AppBottomBar(
                     currentScreen = navBottomScreens.find {
-                        it.route == currentDestination?.route } ?: WorkoutsScreen,
+                        it.route == currentDestination?.route } ?: WorkoutsDestination,
                     modifier = Modifier.height(sizeApp(SizeElement.HEIGHT_BOTTOM_BAR)),
                     onTabSelection = { newScreen -> navController.navigateToScreen(newScreen.route) }
                 )
             },
             floatingActionButton = {
                 val currentScreen = listScreens.find { it.route ==
-                        currentDestination?.route?.substringBefore("/") } ?: WorkoutsScreen
-                if (currentScreen != SettingScreen ) {
+                        currentDestination?.route?.substringBefore("/") } ?: WorkoutsDestination
+                if (currentScreen != SettingDestination ) {
                     ExtendedFAB(
                         text =  currentScreen.textFAB,
                         onClick = currentScreen.onClickFAB,

@@ -32,7 +32,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.count_out.entity.TagsTesting.BOTTOM_APP_BAR
 import com.example.count_out.navigation.ScreenDestination
-import com.example.count_out.navigation.WorkoutsScreen
+import com.example.count_out.navigation.WorkoutsDestination
 import com.example.count_out.navigation.navBottomScreens
 import com.example.count_out.ui.theme.TabFadeInAnimationDelay
 import com.example.count_out.ui.theme.TabFadeInAnimationDuration
@@ -116,5 +116,5 @@ private fun BottomTab(
 @Preview
 @Composable
 fun BottomBarAppPreview() {
-    AppBottomBar(currentScreen = WorkoutsScreen, {})
+    AppBottomBar(currentScreen = WorkoutsDestination, {})
 }
