@@ -45,20 +45,20 @@ import com.example.count_out.ui.view_components.animatedScroll
 import kotlin.math.roundToInt
 
 @SuppressLint("UnrememberedMutableState")
-@Composable fun TemplateScreen(
+@Composable fun TrainingScreen(
     trainingId: Long,
     onClickWorkout: (Long) -> Unit,
     screen: ScreenDestination,
 ){
     val viewModel: TrainingViewModel = hiltViewModel()
     viewModel.getWorkouts()
-    TemplateScreenCreateView(
+    TrainingScreenCreateView(
         onClickWorkout = onClickWorkout,
         screen = screen,
         viewModel = viewModel,
     )
 }
-@Composable fun TemplateScreenCreateView(
+@Composable fun TrainingScreenCreateView(
     onClickWorkout: (Long) -> Unit,
     screen: ScreenDestination,
     viewModel: TrainingViewModel
@@ -77,10 +77,10 @@ import kotlin.math.roundToInt
     screen.onClickFAB = { uiState.triggerRunOnClickFAB.value = true}
 
 //    if (uiState.triggerRunOnClickFAB.value) BottomSheetWorkoutAdd( uiState = uiState)
-    TemplateScreenLayout(uiState = uiState)
+    TrainingScreenLayout(uiState = uiState)
 }
 @Composable
-fun TemplateScreenLayout( uiState: TrainingScreenState
+fun TrainingScreenLayout( uiState: TrainingScreenState
 ) {
     val offsetHeightPx = remember { mutableFloatStateOf(0f) }
     Column(
@@ -91,14 +91,14 @@ fun TemplateScreenLayout( uiState: TrainingScreenState
                 offsetHeightPx = offsetHeightPx
             ),
     ){
-        TemplateLazyColumn(
+        TrainingLazyColumn(
             uiState = uiState,
             scrollOffset =-offsetHeightPx.floatValue.roundToInt())
     }
 }
 @SuppressLint("CoroutineCreationDuringComposition")
 @Composable
-fun TemplateLazyColumn(uiState: TrainingScreenState, scrollOffset:Int,
+fun TrainingLazyColumn(uiState: TrainingScreenState, scrollOffset:Int,
 ){
     TopBar(uiState, scrollOffset)
     Spacer(modifier = Modifier.height(2.dp))

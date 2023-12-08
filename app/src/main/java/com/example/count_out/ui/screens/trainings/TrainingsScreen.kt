@@ -47,17 +47,17 @@ import com.example.count_out.ui.view_components.animatedScroll
 import kotlin.math.roundToInt
 
 @SuppressLint("UnrememberedMutableState")
-@Composable fun TemplatesScreen( onClickWorkout: (Long) -> Unit, screen: ScreenDestination,
+@Composable fun TrainingsScreen( onClickWorkout: (Long) -> Unit, screen: ScreenDestination,
 ){
     val viewModel: TrainingsViewModel = hiltViewModel()
     viewModel.getWorkouts()
-    TemplatesScreenCreateView(
+    TrainingsScreenCreateView(
         onClickWorkout = onClickWorkout,
         screen = screen,
         viewModel = viewModel,
     )
 }
-@Composable fun TemplatesScreenCreateView(
+@Composable fun TrainingsScreenCreateView(
     onClickWorkout: (Long) -> Unit,
     screen: ScreenDestination,
     viewModel: TrainingsViewModel
@@ -76,10 +76,10 @@ import kotlin.math.roundToInt
     screen.onClickFAB = { uiState.triggerRunOnClickFAB.value = true}
 
 //    if (uiState.triggerRunOnClickFAB.value) BottomSheetWorkoutAdd( uiState = uiState)
-    TemplatesScreenLayout(uiState = uiState)
+    TrainingsScreenLayout(uiState = uiState)
 }
 @Composable
-fun TemplatesScreenLayout( uiState: TrainingsScreenState
+fun TrainingsScreenLayout( uiState: TrainingsScreenState
 ) {
     val offsetHeightPx = remember { mutableFloatStateOf(0f) }
     Column(
@@ -90,14 +90,14 @@ fun TemplatesScreenLayout( uiState: TrainingsScreenState
                 offsetHeightPx = offsetHeightPx
             ),
     ){
-        TemplatesLazyColumn(
+        TrainingsLazyColumn(
             uiState = uiState,
             scrollOffset =-offsetHeightPx.floatValue.roundToInt())
     }
 }
 @SuppressLint("CoroutineCreationDuringComposition")
 @Composable
-fun TemplatesLazyColumn(uiState: TrainingsScreenState, scrollOffset:Int,
+fun TrainingsLazyColumn(uiState: TrainingsScreenState, scrollOffset:Int,
 ){
     TopBar(uiState, scrollOffset)
     Spacer(modifier = Modifier.height(2.dp))
@@ -159,5 +159,5 @@ fun TemplatesLazyColumn(uiState: TrainingsScreenState, scrollOffset:Int,
 
 @Preview(showBackground = true)
 @Composable fun TemplatesScreenPreview(){
-    TemplatesScreen({}, screen = TrainingsDestination)
+    TrainingsScreen({}, screen = TrainingsDestination)
 }
