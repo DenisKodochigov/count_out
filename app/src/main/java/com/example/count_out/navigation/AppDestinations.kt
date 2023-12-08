@@ -22,6 +22,30 @@ interface ScreenDestination {
 }
 
 /*** App app navigation destinations*/
+object TrainingsDestination : ScreenDestination {
+    override val icon = Icons.Filled.ShoppingBasket
+    override val nameInt: Int = R.string.templates_workout
+    override val route = "trainings"
+    override val pictureDay = R.drawable.ic_launcher_background
+    override val pictureNight = R.drawable.ic_launcher_background
+    override val textHeader = R.string.app_name
+    override var textFAB: String = ""
+    override var onClickFAB: () -> Unit = {}
+}
+object TrainingDestination : ScreenDestination {
+    override val icon = Icons.Filled.ShoppingBasket
+    override val nameInt: Int = R.string.templat_workout
+    override val route = "training"
+    override val pictureDay = R.drawable.ic_launcher_background
+    override val pictureNight = R.drawable.ic_launcher_background
+    override val textHeader = R.string.app_name
+    override var textFAB: String = ""
+    override var onClickFAB: () -> Unit = {}
+
+    const val trainingIdArg = "training_id"
+    val routeWithArgs = "${WorkoutDestination.route}/{$trainingIdArg}"
+    val arguments = listOf(navArgument(trainingIdArg) { type = NavType.LongType })
+}
 object WorkoutsDestination : ScreenDestination {
     override val icon = Icons.Filled.ShoppingBasket
     override val nameInt: Int = R.string.History
@@ -32,30 +56,7 @@ object WorkoutsDestination : ScreenDestination {
     override var textFAB: String = ""
     override var onClickFAB: () -> Unit = {}
 }
-object TemplatesDestination : ScreenDestination {
-    override val icon = Icons.Filled.ShoppingBasket
-    override val nameInt: Int = R.string.templates_workout
-    override val route = "workouts"
-    override val pictureDay = R.drawable.ic_launcher_background
-    override val pictureNight = R.drawable.ic_launcher_background
-    override val textHeader = R.string.app_name
-    override var textFAB: String = ""
-    override var onClickFAB: () -> Unit = {}
-}
-object TemplateDestination : ScreenDestination {
-    override val icon = Icons.Filled.ShoppingBasket
-    override val nameInt: Int = R.string.templat_workout
-    override val route = "workouts"
-    override val pictureDay = R.drawable.ic_launcher_background
-    override val pictureNight = R.drawable.ic_launcher_background
-    override val textHeader = R.string.app_name
-    override var textFAB: String = ""
-    override var onClickFAB: () -> Unit = {}
 
-    const val templateIdArg = "template_id"
-    val routeWithArgs = "${WorkoutDestination.route}/{$templateIdArg}"
-    val arguments = listOf(navArgument(templateIdArg) { type = NavType.LongType })
-}
 object WorkoutDestination : ScreenDestination {
     override val icon = Icons.Filled.ShoppingBasket
     override val nameInt: Int = R.string.Workout
@@ -81,9 +82,9 @@ object RoundDestination : ScreenDestination {
     override var textFAB: String = ""
     override var onClickFAB: () -> Unit = {}
 
-    const val workoutIdArg = "workout_id"
-    val routeWithArgs = "${route}/{$workoutIdArg}"
-    val arguments = listOf(navArgument(workoutIdArg) { type = NavType.LongType })
+    const val roundIdArg = "round_id"
+    val routeWithArgs = "${route}/{$roundIdArg}"
+    val arguments = listOf(navArgument(roundIdArg) { type = NavType.LongType })
 }
 
 object SetDestination : ScreenDestination {
@@ -95,7 +96,7 @@ object SetDestination : ScreenDestination {
     override val textHeader = R.string.app_name
     override var textFAB: String = ""
     override var onClickFAB: () -> Unit = {}
-    const val setsIdArg = "workout_type"
+    const val setsIdArg = "set_type"
     val routeWithArgs = "${route}/{$setsIdArg}"
     val arguments = listOf(navArgument(setsIdArg) { type = NavType.LongType })
 }

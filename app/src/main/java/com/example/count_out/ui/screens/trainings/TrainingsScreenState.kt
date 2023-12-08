@@ -1,11 +1,11 @@
-package com.example.count_out.ui.screens.templates
+package com.example.count_out.ui.screens.trainings
 
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import com.example.count_out.entity.Workout
 
-data class TemplatesScreenState(
-    val templates: MutableState<List<Workout>> = mutableStateOf(emptyList()),
+data class TrainingsScreenState(
+    val trainings: MutableState<List<Workout>> = mutableStateOf(emptyList()),
     val enteredName: MutableState<String> = mutableStateOf(""),
     var changeNameWorkout: (Workout) -> Unit = {},
     var editWorkout: (Workout) -> Unit = {},

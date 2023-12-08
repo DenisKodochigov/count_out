@@ -12,11 +12,11 @@ fun AppNavHost(
 ){
     NavHost(
         navController = navController,
-        startDestination = TemplatesDestination.route,
+        startDestination = TrainingsDestination.route,
         modifier = modifier
     ){
-        templates { navController.navigateToWorkout(it) }
-        template { navController.navigateToWorkout(it) }
+        trainings { navController.navigateToWorkout(it) }
+        training { navController.navigateToWorkout(it) }
         workouts { navController.navigateToWorkout(it) }
         workout { navController.navigateToRound(it) }
         round { navController.navigateToSet(it) }
