@@ -1,6 +1,8 @@
 package com.example.count_out.entity
 
 interface Count {
+    val idCount: Long
+    val workoutId: Long
     val coordinate: Coordinate
     val timeL: Long
     val heartRate: Int

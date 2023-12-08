@@ -1,6 +1,8 @@
 package com.example.count_out.entity
 
 interface Set {
+    val idSet: Long
+    val roundId: Long
     val name: String
     val exercise: Exercise
     val reps: Int
