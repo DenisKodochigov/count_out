@@ -16,9 +16,33 @@ import androidx.navigation.compose.composable
 import com.example.count_out.ui.screens.round.RoundScreen
 import com.example.count_out.ui.screens.set.SetScreen
 import com.example.count_out.ui.screens.settings.SettingScreen
+import com.example.count_out.ui.screens.template.TemplateScreen
+import com.example.count_out.ui.screens.templates.TemplatesScreen
 import com.example.count_out.ui.screens.workout.WorkoutScreen
 import com.example.count_out.ui.screens.workouts.WorkoutsScreen
-
+fun NavGraphBuilder.templates( navigateToScreen: (Long)->Unit){
+    template(
+        route = WorkoutsDestination.route,
+        content = {
+            TemplatesScreen(screen = TemplatesDestination, onClickWorkout = { navigateToScreen( it )}) }
+    )
+}
+fun NavGraphBuilder.template(navigateToScreen: (Long)->Unit){
+    template(
+        routeTo = TemplatesDestination.route,
+        route = TemplateDestination.routeWithArgs,
+        argument = TemplateDestination.arguments,
+        content = {navBackStackEntry ->
+            val workoutId = navBackStackEntry.arguments?.getLong(TemplateDestination.templateIdArg)
+            if (workoutId != null) {
+                TemplateScreen(
+                    templateId = workoutId,
+                    screen = WorkoutDestination,
+                    onClickWorkout = { navigateToScreen(it) })
+            }
+        }
+    )
+}
 fun NavGraphBuilder.workouts(navigateToScreen: (Long)->Unit){
     template(
         route = WorkoutsDestination.route,

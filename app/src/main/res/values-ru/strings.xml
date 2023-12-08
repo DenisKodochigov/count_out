@@ -7,4 +7,8 @@
     <string name="new_workout">Новая тренировка</string>
     <string name="ok">OK</string>
     <string name="change_name_workout">Редактирование тренировки</string>
+    <string name="History">History</string>
+    <string name="Workout">Workout</string>
+    <string name="templates_workout">Templates workout</string>
+    <string name="templat_workout">templat workout</string>
 </resources>

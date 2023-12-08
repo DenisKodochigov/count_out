@@ -4,7 +4,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
-import com.example.basket.navigation.navigateToProducts
 
 @Composable
 fun AppNavHost(
@@ -13,13 +12,15 @@ fun AppNavHost(
 ){
     NavHost(
         navController = navController,
-        startDestination = WorkoutsDestination.route,
+        startDestination = TemplatesDestination.route,
         modifier = modifier
     ){
-        workouts { navController.navigateToProducts(it) }
-        workout { navController.navigateToProducts(it) }
-        round { navController.navigateToProducts(it) }
-        set { navController.navigateToProducts(it) }
+        templates { navController.navigateToWorkout(it) }
+        template { navController.navigateToWorkout(it) }
+        workouts { navController.navigateToWorkout(it) }
+        workout { navController.navigateToRound(it) }
+        round { navController.navigateToSet(it) }
+        set { navController.navigateToWorkout(it) }
         settings()
     }
 }

@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.BottomAppBar
@@ -39,10 +40,11 @@ import com.example.count_out.ui.theme.TabFadeInAnimationDuration
 import com.example.count_out.ui.theme.TabFadeOutAnimationDuration
 
 @Composable
-fun AppBottomBar(currentScreen: ScreenDestination,
-                 onTabSelection: (ScreenDestination) -> Unit,
-                 modifier: Modifier = Modifier )
-{
+fun BottomBarApp(
+    currentScreen: ScreenDestination,
+    onTabSelection: (ScreenDestination) -> Unit,
+    modifier: Modifier = Modifier
+){
     BottomAppBar(
         contentPadding = PaddingValues(0.dp),
         tonalElevation = 6.dp,
@@ -51,18 +53,18 @@ fun AppBottomBar(currentScreen: ScreenDestination,
             .testTag(BOTTOM_APP_BAR)
             .clip(shape = MaterialTheme.shapes.small)
     ) {
-        Row(modifier = Modifier.padding(top=0.dp),
-            verticalAlignment = Alignment.CenterVertically) {
+        Row(
+            modifier = Modifier.padding(horizontal = 12.dp).fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically
+        ){
             navBottomScreens.forEachIndexed { index, screen ->
-
-                if (index == navBottomScreens.size - 1) Spacer(modifier = Modifier.weight(1f))
                 BottomTab(
                     text = screen.route,
                     icon = screen.icon,
                     onSelected = { onTabSelection(screen) },
                     selected = currentScreen == screen
                 )
-                Spacer(modifier = Modifier.width(12.dp))
+                if (index != navBottomScreens.size-1) Spacer(modifier = Modifier.weight(1f).width(12.dp))
             }
         }
     }
@@ -94,7 +96,6 @@ private fun BottomTab(
         label = "", animationSpec = animationSpec,
         targetValue = if (selected) MaterialTheme.colorScheme.primary else colorUnselected,
     )
-    Spacer(modifier = Modifier.width(12.dp))
     IconButton(
         onClick = onSelected,
         modifier = Modifier.fillMaxHeight().testTag(text)
@@ -116,5 +117,5 @@ private fun BottomTab(
 @Preview
 @Composable
 fun BottomBarAppPreview() {
-    AppBottomBar(currentScreen = WorkoutsDestination, {})
+    BottomBarApp(currentScreen = WorkoutsDestination, {})
 }

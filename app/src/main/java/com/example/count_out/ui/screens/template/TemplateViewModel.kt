@@ -1,4 +1,4 @@
-package com.example.count_out.ui.screens.workouts
+package com.example.count_out.ui.screens.template
 
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.count_out.data.DataRepository
 import com.example.count_out.entity.ErrorApp
 import com.example.count_out.entity.Workout
+import com.example.count_out.ui.screens.workouts.TemplateScreenState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -16,13 +17,14 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class WorkoutsViewModel @Inject constructor(
+class TemplateViewModel @Inject constructor(
     private val errorApp: ErrorApp,
     private val dataRepository: DataRepository
 ): ViewModel() {
     private val _workoutScreenState = MutableStateFlow(
-        WorkoutsScreenState( workouts = mutableStateOf(emptyList())))
-    val workoutScreenState: StateFlow<WorkoutsScreenState> = _workoutScreenState.asStateFlow()
+        TemplateScreenState( templates = mutableStateOf(emptyList()))
+    )
+    val workoutScreenState: StateFlow<TemplateScreenState> = _workoutScreenState.asStateFlow()
 
     fun getWorkouts(){ templateMy { dataRepository.getWorkouts() } }
     fun changeNameWorkout(workout: Workout){ templateMy { dataRepository.changeNameWorkout(workout) } }
@@ -32,7 +34,7 @@ class WorkoutsViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             kotlin.runCatching { funDataRepository() }.fold(
                 onSuccess = { _workoutScreenState.update { currentState ->
-                    currentState.copy(workouts = mutableStateOf(it) ) } },
+                    currentState.copy(templates = mutableStateOf(it) ) } },
                 onFailure = { errorApp.errorApi(it.message!!) }
             )
         }

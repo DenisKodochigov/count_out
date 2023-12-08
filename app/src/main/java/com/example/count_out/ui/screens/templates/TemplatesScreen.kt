@@ -1,4 +1,4 @@
-package com.example.count_out.ui.screens.workouts
+package com.example.count_out.ui.screens.templates
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.ExperimentalFoundationApi
@@ -27,6 +27,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.count_out.R
@@ -34,7 +35,7 @@ import com.example.count_out.entity.SizeElement
 import com.example.count_out.entity.TypeText
 import com.example.count_out.entity.Workout
 import com.example.count_out.navigation.ScreenDestination
-import com.example.count_out.ui.bottomsheet.BottomSheetWorkoutAdd
+import com.example.count_out.navigation.TemplatesDestination
 import com.example.count_out.ui.theme.Dimen
 import com.example.count_out.ui.theme.getIdImage
 import com.example.count_out.ui.theme.sizeApp
@@ -46,20 +47,20 @@ import com.example.count_out.ui.view_components.animatedScroll
 import kotlin.math.roundToInt
 
 @SuppressLint("UnrememberedMutableState")
-@Composable fun WorkoutsScreen( onClickWorkout: (Long) -> Unit, screen: ScreenDestination,
+@Composable fun TemplatesScreen( onClickWorkout: (Long) -> Unit, screen: ScreenDestination,
 ){
-    val viewModel: WorkoutsViewModel = hiltViewModel()
+    val viewModel: TemplatesViewModel = hiltViewModel()
     viewModel.getWorkouts()
-    WorkoutScreenCreateView(
+    TemplatesScreenCreateView(
         onClickWorkout = onClickWorkout,
         screen = screen,
         viewModel = viewModel,
     )
 }
-@Composable fun WorkoutScreenCreateView(
+@Composable fun TemplatesScreenCreateView(
     onClickWorkout: (Long) -> Unit,
     screen: ScreenDestination,
-    viewModel: WorkoutsViewModel
+    viewModel: TemplatesViewModel
 ){
     val uiState by viewModel.workoutScreenState.collectAsState()
 
@@ -74,11 +75,11 @@ import kotlin.math.roundToInt
     screen.textFAB = stringResource(id = R.string.workout_text_fab)
     screen.onClickFAB = { uiState.triggerRunOnClickFAB.value = true}
 
-    if (uiState.triggerRunOnClickFAB.value) BottomSheetWorkoutAdd( uiState = uiState)
-    WorkoutScreenLayout(uiState = uiState)
+//    if (uiState.triggerRunOnClickFAB.value) BottomSheetWorkoutAdd( uiState = uiState)
+    TemplatesScreenLayout(uiState = uiState)
 }
 @Composable
-fun WorkoutScreenLayout( uiState: WorkoutsScreenState
+fun TemplatesScreenLayout( uiState: TemplatesScreenState
 ) {
     val offsetHeightPx = remember { mutableFloatStateOf(0f) }
     Column(
@@ -89,30 +90,30 @@ fun WorkoutScreenLayout( uiState: WorkoutsScreenState
                 offsetHeightPx = offsetHeightPx
             ),
     ){
-        WorkoutLazyColumn(
+        TemplatesLazyColumn(
             uiState = uiState,
             scrollOffset =-offsetHeightPx.floatValue.roundToInt())
     }
 }
 @SuppressLint("CoroutineCreationDuringComposition")
 @Composable
-fun WorkoutLazyColumn(uiState: WorkoutsScreenState, scrollOffset:Int,
+fun TemplatesLazyColumn(uiState: TemplatesScreenState, scrollOffset:Int,
 ){
     TopBar(uiState, scrollOffset)
     Spacer(modifier = Modifier.height(2.dp))
     LazyList(uiState)
 }
-@Composable fun TopBar(uiState: WorkoutsScreenState, scrollOffset:Int){
+@Composable fun TopBar(uiState: TemplatesScreenState, scrollOffset:Int){
     CollapsingToolbar(
         text = uiState.screenTextHeader,
         idImage = uiState.idImage,
         scrollOffset = scrollOffset)
 }
 @OptIn(ExperimentalFoundationApi::class)
-@Composable fun LazyList(uiState: WorkoutsScreenState)
+@Composable fun LazyList(uiState: TemplatesScreenState)
 {
     val listState = rememberLazyListState()
-    val listItems = uiState.workouts.value
+    val listItems = uiState.templates.value
     LazyColumn(
         state = listState,
         verticalArrangement = Arrangement.spacedBy(4.dp),
@@ -130,7 +131,7 @@ fun WorkoutLazyColumn(uiState: WorkoutsScreenState, scrollOffset:Int,
         }
     }
 }
-@Composable fun RowLazy(item: Workout, uiState: WorkoutsScreenState, modifier: Modifier){
+@Composable fun RowLazy(item: Workout, uiState: TemplatesScreenState, modifier: Modifier){
     Row(horizontalArrangement = Arrangement.Start, verticalAlignment = Alignment.CenterVertically){
         IconStart(item = item, uiState = uiState)
         Spacer(modifier = Modifier.width(Dimen.width8))
@@ -141,17 +142,22 @@ fun WorkoutLazyColumn(uiState: WorkoutsScreenState, scrollOffset:Int,
         IconEnd(item = item, uiState = uiState)
     }
 }
-@Composable fun IconStart(item: Workout, uiState: WorkoutsScreenState, modifier: Modifier = Modifier){
+@Composable fun IconStart(item: Workout, uiState: TemplatesScreenState, modifier: Modifier = Modifier){
     IconButton(onClick = { uiState.onSelect(item)}) {
         Icon(imageVector = Icons.Default.CheckCircleOutline, contentDescription = "")}
 }
-@Composable fun IconEnd(item: Workout, uiState: WorkoutsScreenState, modifier: Modifier = Modifier){
+@Composable fun IconEnd(item: Workout, uiState: TemplatesScreenState, modifier: Modifier = Modifier){
     IconButton(onClick = { uiState.onOtherAction(item)}) {
         Icon(imageVector = Icons.Default.BlurOn, contentDescription = "")}
 }
-@Composable fun NameWorkout(item: Workout, uiState: WorkoutsScreenState,){
+@Composable fun NameWorkout(item: Workout, uiState: TemplatesScreenState,){
     TextApp(
         text = item.name,
         style = styleApp(nameStyle = TypeText.TEXT_IN_LIST),
         modifier = Modifier.clickable { uiState.onSelectItem(item) })
+}
+
+@Preview(showBackground = true)
+@Composable fun TemplatesScreenPreview(){
+    TemplatesScreen({}, screen = TemplatesDestination)
 }

@@ -18,17 +18,17 @@ import androidx.compose.ui.semantics.testTagsAsResourceId
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.example.basket.navigation.navigateToScreen
 import com.example.count_out.entity.SizeElement
 import com.example.count_out.navigation.AppNavHost
 import com.example.count_out.navigation.SettingDestination
 import com.example.count_out.navigation.WorkoutsDestination
 import com.example.count_out.navigation.listScreens
 import com.example.count_out.navigation.navBottomScreens
+import com.example.count_out.navigation.navigateToScreen
 import com.example.count_out.ui.theme.AppTheme
 import com.example.count_out.ui.theme.Dimen
 import com.example.count_out.ui.theme.sizeApp
-import com.example.count_out.ui.view_components.AppBottomBar
+import com.example.count_out.ui.view_components.BottomBarApp
 import com.example.count_out.ui.view_components.ExtendedFAB
 
 @RequiresApi(Build.VERSION_CODES.S)
@@ -47,7 +47,7 @@ fun StartApp() {
                 .semantics { testTagsAsResourceId = true }
                 .background(color = MaterialTheme.colorScheme.background),
             bottomBar = {
-                AppBottomBar(
+                BottomBarApp(
                     currentScreen = navBottomScreens.find {
                         it.route == currentDestination?.route } ?: WorkoutsDestination,
                     modifier = Modifier.height(sizeApp(SizeElement.HEIGHT_BOTTOM_BAR)),
