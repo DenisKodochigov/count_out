@@ -87,7 +87,6 @@ fun BottomSheetBasketAddContent(uiState: WorkoutsScreenState)
             }
         }
     }
-
 }
 
 @Composable

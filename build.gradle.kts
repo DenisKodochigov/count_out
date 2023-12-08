@@ -23,7 +23,7 @@ plugins {
 //    val gradleVersion = extra["gradleVersion"]
 //    val daggerVersion = extra["daggerVersion"]
     val gradleVersion = "8.2.0"
-    val daggerVersion = "2.48.1"
+    val daggerVersion = "2.49"
     id ("org.jetbrains.kotlin.android") version "1.8.10" apply false
     id ("com.diffplug.spotless") version "6.21.0"  apply false
     id ("com.google.devtools.ksp") version "1.9.20-1.0.13" apply false

@@ -78,9 +78,7 @@ fun NavGraphBuilder.set( navigateToScreen: (Long)->Unit ){
 fun NavGraphBuilder.settings(){
     template(
         route = SettingDestination.route,
-        content = {
-            SettingScreen( screen = SettingDestination )
-        }
+        content = { SettingScreen( screen = SettingDestination ) }
     )
 }
 fun NavGraphBuilder.template(
