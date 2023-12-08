@@ -21,7 +21,7 @@ interface ScreenDestination {
 }
 
 /*** App app navigation destinations*/
-object WorkoutsScreen : ScreenDestination {
+object WorkoutsDestination : ScreenDestination {
     override val icon = Icons.Filled.ShoppingBasket
     override val route = "Workouts"
     override val pictureDay = R.drawable.ic_launcher_background
@@ -30,21 +30,35 @@ object WorkoutsScreen : ScreenDestination {
     override var textFAB: String = ""
     override var onClickFAB: () -> Unit = {}
 }
-
-object RoundScreen : ScreenDestination {
-    override val icon = Icons.Filled.Dashboard
-    override val route = "Round"
-    const val workoutIdArg = "workout_type"
-    val routeWithArgs = "${route}/{$workoutIdArg}"
-    val arguments = listOf(navArgument(workoutIdArg) { type = NavType.LongType })
+object WorkoutDestination : ScreenDestination {
+    override val icon = Icons.Filled.ShoppingBasket
+    override val route = "Workout"
     override val pictureDay = R.drawable.ic_launcher_background
     override val pictureNight = R.drawable.ic_launcher_background
     override val textHeader = R.string.app_name
     override var textFAB: String = ""
     override var onClickFAB: () -> Unit = {}
+
+    const val workoutIdArg = "workout_id"
+    val routeWithArgs = "${route}/{$workoutIdArg}"
+    val arguments = listOf(navArgument(workoutIdArg) { type = NavType.LongType })
 }
 
-object SetScreen : ScreenDestination {
+object RoundDestination : ScreenDestination {
+    override val icon = Icons.Filled.Dashboard
+    override val route = "Round"
+    override val pictureDay = R.drawable.ic_launcher_background
+    override val pictureNight = R.drawable.ic_launcher_background
+    override val textHeader = R.string.app_name
+    override var textFAB: String = ""
+    override var onClickFAB: () -> Unit = {}
+
+    const val workoutIdArg = "workout_id"
+    val routeWithArgs = "${route}/{$workoutIdArg}"
+    val arguments = listOf(navArgument(workoutIdArg) { type = NavType.LongType })
+}
+
+object SetDestination : ScreenDestination {
     override val icon = Icons.Filled.Dashboard
     override val route = "Set"
     override val pictureDay = R.drawable.ic_launcher_background
@@ -52,12 +66,12 @@ object SetScreen : ScreenDestination {
     override val textHeader = R.string.app_name
     override var textFAB: String = ""
     override var onClickFAB: () -> Unit = {}
-    private const val setsIdArg = "workout_type"
-    val routeWithArgs = "${RoundScreen.route}/{$setsIdArg}"
+    const val setsIdArg = "workout_type"
+    val routeWithArgs = "${route}/{$setsIdArg}"
     val arguments = listOf(navArgument(setsIdArg) { type = NavType.LongType })
 }
 
-object SettingScreen : ScreenDestination {
+object SettingDestination : ScreenDestination {
     override val icon = Icons.Filled.Settings
     override val route = "settings"
     override val pictureDay = 0
@@ -84,5 +98,5 @@ object SettingScreen : ScreenDestination {
 //    override val route = "products"
 //}
 // Screens to be displayed in the top AppTabRow
-val navBottomScreens = listOf(WorkoutsScreen, RoundScreen, SetScreen, SettingScreen)
-val listScreens = listOf(WorkoutsScreen, RoundScreen, SetScreen, SettingScreen)
+val navBottomScreens = listOf(WorkoutsDestination, RoundDestination, SetDestination, SettingDestination)
+val listScreens = listOf(WorkoutsDestination, RoundDestination, SetDestination, SettingDestination)
