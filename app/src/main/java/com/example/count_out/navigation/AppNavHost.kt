@@ -15,13 +15,13 @@ fun AppNavHost(
         startDestination = TrainingsDestination.route,
         modifier = modifier
     ){
-        trainings { navController.navigateToWorkout(it) }
-        training { navController.navigateToWorkout(it) }
-        workouts { navController.navigateToWorkout(it) }
-        workout { navController.navigateToRound(it) }
-        round { navController.navigateToSet(it) }
-        set { navController.navigateToWorkout(it) }
-        settings()
+        trainings { navController.navigateToTraining(1) } //navController.navigateToWorkout(it)
+//        training { navController.navigateToWorkout(it) }
+//        workouts { navController.navigateToWorkout(it) }
+//        workout { navController.navigateToRound(it) }
+//        round { navController.navigateToSet(it) }
+//        set { navController.navigateToWorkout(it) }
+//        settings()
     }
 }
 

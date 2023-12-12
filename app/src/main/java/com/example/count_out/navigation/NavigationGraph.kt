@@ -13,101 +13,95 @@ import androidx.navigation.NamedNavArgument
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
-import com.example.count_out.ui.screens.round.RoundScreen
-import com.example.count_out.ui.screens.set.SetScreen
-import com.example.count_out.ui.screens.settings.SettingScreen
-import com.example.count_out.ui.screens.training.TrainingScreen
 import com.example.count_out.ui.screens.trainings.TrainingsScreen
-import com.example.count_out.ui.screens.workout.WorkoutScreen
-import com.example.count_out.ui.screens.workouts.WorkoutsScreen
 fun NavGraphBuilder.trainings( navigateToScreen: (Long)->Unit){
     template(
-        route = WorkoutsDestination.route,
+        route = TrainingsDestination.route,
         content = {
             TrainingsScreen(screen = TrainingsDestination, onClickWorkout = { navigateToScreen( it )}) }
     )
 }
-fun NavGraphBuilder.training(navigateToScreen: (Long)->Unit){
-    template(
-        routeTo = TrainingsDestination.route,
-        route = TrainingDestination.routeWithArgs,
-        argument = TrainingDestination.arguments,
-        content = {navBackStackEntry ->
-            val trainingId = navBackStackEntry.arguments?.getLong(TrainingDestination.trainingIdArg)
-            if (trainingId != null) {
-                TrainingScreen(
-                    trainingId = trainingId,
-                    screen = WorkoutDestination,
-                    onClickWorkout = { navigateToScreen(it) })
-            }
-        }
-    )
-}
-fun NavGraphBuilder.workouts(navigateToScreen: (Long)->Unit){
-    template(
-        route = WorkoutsDestination.route,
-        content = {
-            WorkoutsScreen(screen = WorkoutsDestination, onClickWorkout = { navigateToScreen( it )}) }
-    )
-}
-
-fun NavGraphBuilder.workout(navigateToScreen: (Long)->Unit){
-    template(
-        routeTo = WorkoutsDestination.route,
-        route = WorkoutDestination.routeWithArgs,
-        argument = WorkoutDestination.arguments,
-        content = {navBackStackEntry ->
-            val workoutId = navBackStackEntry.arguments?.getLong(WorkoutDestination.workoutIdArg)
-            if (workoutId != null) {
-                WorkoutScreen(
-                    workoutId = workoutId,
-                    screen = WorkoutDestination,
-                    onClickWorkout = { navigateToScreen(it) })
-            }
-        }
-    )
-}
-fun NavGraphBuilder.round( navigateToScreen: (Long)->Unit ){
-    template(
-        routeTo = WorkoutDestination.route,
-        route = RoundDestination.routeWithArgs,
-        argument = RoundDestination.arguments,
-        content = {navBackStackEntry ->
-            val workoutId = navBackStackEntry.arguments?.getLong(WorkoutDestination.workoutIdArg)
-            if (workoutId != null) {
-                RoundScreen(
-                    workoutId = workoutId,
-                    screen = WorkoutDestination,
-                    onClickWorkout = { navigateToScreen(it) })
-            }
-        }
-    )
-}
-fun NavGraphBuilder.set( navigateToScreen: (Long)->Unit ){
-    template(
-        routeTo = RoundDestination.route,
-        route = SetDestination.routeWithArgs,
-        argument = SetDestination.arguments,
-        content = {navBackStackEntry ->
-            val workoutId = navBackStackEntry.arguments?.getLong(WorkoutDestination.workoutIdArg)
-            if (workoutId != null) {
-                SetScreen(
-                    workoutId = workoutId,
-                    screen = WorkoutDestination,
-                    onClickWorkout = { navigateToScreen(it) })
-            }
-        }
-    )
-}
-fun NavGraphBuilder.settings(){
-    template(
-        route = SettingDestination.route,
-        content = { SettingScreen( screen = SettingDestination ) }
-    )
-}
+//fun NavGraphBuilder.training(navigateToScreen: (Long)->Unit){
+//    template(
+//        routeTo = TrainingsDestination.route,
+//        route = TrainingDestination.routeWithArgs,
+//        argument = TrainingDestination.arguments,
+//        content = {navBackStackEntry ->
+//            val trainingId = navBackStackEntry.arguments?.getLong(TrainingDestination.trainingIdArg)
+//            if (trainingId != null) {
+//                TrainingScreen(
+//                    trainingId = trainingId,
+//                    screen = WorkoutDestination,
+//                    onClickWorkout = { navigateToScreen(it) })
+//            }
+//        }
+//    )
+//}
+//fun NavGraphBuilder.workouts(navigateToScreen: (Long)->Unit){
+//    template(
+//        route = WorkoutsDestination.route,
+//        content = {
+//            WorkoutsScreen(screen = WorkoutsDestination, onClickWorkout = { navigateToScreen( it )}) }
+//    )
+//}
+//
+//fun NavGraphBuilder.workout(navigateToScreen: (Long)->Unit){
+//    template(
+//        routeTo = WorkoutsDestination.route,
+//        route = WorkoutDestination.routeWithArgs,
+//        argument = WorkoutDestination.arguments,
+//        content = {navBackStackEntry ->
+//            val workoutId = navBackStackEntry.arguments?.getLong(WorkoutDestination.workoutIdArg)
+//            if (workoutId != null) {
+//                WorkoutScreen(
+//                    workoutId = workoutId,
+//                    screen = WorkoutDestination,
+//                    onClickWorkout = { navigateToScreen(it) })
+//            }
+//        }
+//    )
+//}
+//fun NavGraphBuilder.round( navigateToScreen: (Long)->Unit ){
+//    template(
+//        routeTo = WorkoutDestination.route,
+//        route = RoundDestination.routeWithArgs,
+//        argument = RoundDestination.arguments,
+//        content = {navBackStackEntry ->
+//            val workoutId = navBackStackEntry.arguments?.getLong(WorkoutDestination.workoutIdArg)
+//            if (workoutId != null) {
+//                RoundScreen(
+//                    workoutId = workoutId,
+//                    screen = WorkoutDestination,
+//                    onClickWorkout = { navigateToScreen(it) })
+//            }
+//        }
+//    )
+//}
+//fun NavGraphBuilder.set( navigateToScreen: (Long)->Unit ){
+//    template(
+//        routeTo = RoundDestination.route,
+//        route = SetDestination.routeWithArgs,
+//        argument = SetDestination.arguments,
+//        content = {navBackStackEntry ->
+//            val workoutId = navBackStackEntry.arguments?.getLong(WorkoutDestination.workoutIdArg)
+//            if (workoutId != null) {
+//                SetScreen(
+//                    workoutId = workoutId,
+//                    screen = WorkoutDestination,
+//                    onClickWorkout = { navigateToScreen(it) })
+//            }
+//        }
+//    )
+//}
+//fun NavGraphBuilder.settings(){
+//    template(
+//        route = SettingDestination.route,
+//        content = { SettingScreen( screen = SettingDestination ) }
+//    )
+//}
 fun NavGraphBuilder.template(
     route: String,
-    routeTo: String = WorkoutsDestination.route,
+    routeTo: String = TrainingsDestination.route,
     argument: List<NamedNavArgument> = emptyList(),
     content: @Composable AnimatedContentScope.(NavBackStackEntry)-> Unit
 ){

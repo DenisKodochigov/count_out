@@ -94,9 +94,9 @@ fun WorkoutLazyColumn(uiState: RoundScreenState, scrollOffset:Int,
 }
 @Composable fun TopBar(uiState: RoundScreenState, scrollOffset:Int){
     CollapsingToolbar(
-        text = uiState.screenTextHeader,
-        idImage = uiState.idImage,
-        scrollOffset = scrollOffset)
+        text = uiState.screenTextHeader,)
+//        idImage = uiState.idImage,
+//        scrollOffset = scrollOffset)
 }
 @OptIn(ExperimentalFoundationApi::class)
 @Composable fun LazyList(uiState: RoundScreenState)
