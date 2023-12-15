@@ -3,19 +3,20 @@
     <string name="app_name">count_out</string>
     <string name="error_1">Ошибка</string>
     <string name="error_2">Ошибка</string>
+    <string name="training_text_fab">План</string>
     <string name="workout_text_fab">Тренировка</string>
     <string name="new_workout">Новая тренировка</string>
     <string name="ok">OK</string>
     <string name="change_name_workout">Редактирование тренировки</string>
     <string name="History">History</string>
     <string name="Workout">Workout</string>
-    <string name="templates_workout">Templates workout</string>
-    <string name="templat_workout">templat workout</string>
+    <string name="plans_workout">Plans workout</string>
+    <string name="plan_workout">plan workout</string>
     <string name="training">План тренировки</string>
     <string name="trainings">тренировки</string>
     <string name="activity">Упражнения</string>
-    <string name="ativitiyes">Упражнений</string>
-    <string name="ativitiyes1">упражнение</string>
+    <string name="activitiyes">Упражнений</string>
+    <string name="activitiyes1">упражнение</string>
     <string name="set">Подход</string>
     <string name="serts">Подходы</string>
     <string name="timing">Длителность</string>
@@ -47,4 +48,7 @@
     <string name="ratio">коэф.</string>
     <string name="group_counts">Отстчеты группой. Введите группу отстчетов (каждое слово соответствует одному отстчету)</string>
     <string name="time_to_rest">Время на отдых</string>
+    <string name="trainings_">Trainings</string>
+    <string name="setting">Настройки</string>
+    <string name="duration">"Длительность: "</string>
 </resources>

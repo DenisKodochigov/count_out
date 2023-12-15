@@ -2,8 +2,8 @@ package com.example.count_out.data.room.tables
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.example.count_out.entity.Coordinate
-import com.example.count_out.entity.Count
+import com.example.count_out.entity.no_use.Coordinate
+import com.example.count_out.entity.no_use.Count
 @Entity(tableName = "tb_counts")
 data class CountDB(
     @PrimaryKey(autoGenerate = true) override val idCount: Long = 0L,

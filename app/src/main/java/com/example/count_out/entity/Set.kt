@@ -2,13 +2,18 @@ package com.example.count_out.entity
 
 interface Set {
     val idSet: Long
-    val roundId: Long
     val name: String
-    val exercise: Exercise
-    val reps: Int
-    val duration: Int
-    val countdown: Boolean
-    val weight: Int
-    val intervalReps: Int
+    val exerciseId: Long
+    val speechId: Long
+    val speechActivity: SpeechActivity
 
+    val weight: Int
+    val intensity: String
+    val distance: Double
+    val duration: Double
+    val reps: Int // количество отстчетов
+    val intervalReps: Double
+    val intervalDown: Double //замедление отчетов
+    val groupCount: String // Группы отстчетов
+    val timeRest: Int
 }

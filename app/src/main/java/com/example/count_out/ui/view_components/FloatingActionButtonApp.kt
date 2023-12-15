@@ -1,7 +1,5 @@
 package com.example.count_out.ui.view_components
 
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.ExtendedFloatingActionButton
@@ -9,32 +7,28 @@ import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
-import com.example.count_out.entity.SizeElement
-import com.example.count_out.entity.TypeText
+import androidx.compose.ui.res.stringResource
+import com.example.count_out.ui.theme.alumniReg14
 import com.example.count_out.ui.theme.colorApp
-import com.example.count_out.ui.theme.sizeApp
-import com.example.count_out.ui.theme.styleApp
 
 @Composable fun ExtendedFAB(
     modifier: Modifier = Modifier,
     icon: ImageVector = Icons.Filled.Add,
     onClick: () -> Unit,
-    text: String
+    textId: Int
 ){
     ExtendedFloatingActionButton(
-        modifier = modifier,
+//        modifier = modifier,
         onClick = onClick,
-        icon = {
-            Icon(
-                imageVector = icon,
-                contentDescription = null,
-                tint = colorApp.onPrimaryContainer,
-                modifier = Modifier
-                    .padding(sizeApp(SizeElement.PADDING_FAB))
-                    .background(color = colorApp.primaryContainer)
-            )
-        },
-        text = { TextApp(text = text, style = styleApp(nameStyle = TypeText.EDIT_TEXT)) },
+        icon = { IconFab(icon = icon) },
+        text = { TextApp(text = stringResource(id = textId), style = alumniReg14) },
+    )
+}
+@Composable fun IconFab(icon: ImageVector){
+    Icon(
+        imageVector = icon,
+        contentDescription = null,
+        tint = colorApp.onPrimaryContainer,
     )
 }
 //@Composable

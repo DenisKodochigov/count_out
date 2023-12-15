@@ -2,19 +2,20 @@
     <string name="app_name">count_out</string>
     <string name="error_1">Error 1.</string>
     <string name="error_2">Error 2.</string>
-    <string name="workout_text_fab">workout</string>
+    <string name="training_text_fab">Training</string>
+    <string name="workout_text_fab">Workout</string>
     <string name="new_workout">New workout</string>
     <string name="ok">OK</string>
     <string name="change_name_workout">Change name workout</string>
     <string name="History">History</string>
     <string name="Workout">Workout</string>
-    <string name="templates_workout">Templates workout</string>
-    <string name="templat_workout">templat workout</string>
+    <string name="plans_workout">Plans workout</string>
+    <string name="plan_workout">plan workout</string>
     <string name="training">Training</string>
     <string name="trainings">trainings</string>
     <string name="activity">Activity</string>
-    <string name="ativitiyes">Ativitiyes</string>
-    <string name="ativitiyes1">Ativitiyes1</string>
+    <string name="activitiyes">Activitiyes</string>
+    <string name="activitiyes1">Activitiyes1</string>
     <string name="set">Set</string>
     <string name="serts">Sets</string>
     <string name="timing">Timing</string>
@@ -46,4 +47,7 @@
     <string name="ratio">ratio</string>
     <string name="group_counts">Counts by the group. Enter a group of counts (each word corresponds to one count)</string>
     <string name="time_to_rest">Time to rest</string>
+    <string name="trainings_">Trainings</string>
+    <string name="setting">Setting</string>
+    <string name="duration">Duration</string>
 </resources>

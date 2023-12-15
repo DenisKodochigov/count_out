@@ -30,7 +30,7 @@ import kotlin.math.roundToInt
 
 @Composable
 fun ItemSwipe(
-    frontFon:@Composable () -> Unit,
+    frontView:@Composable () -> Unit,
     actionDragRight:()->Unit,
     actionDragLeft:()->Unit,
     iconLeft: ImageVector = Icons.Default.Edit,
@@ -68,7 +68,7 @@ fun ItemSwipe(
                     }
                 )
         ) {
-            frontFon()
+            frontView()
         }
     }
 }

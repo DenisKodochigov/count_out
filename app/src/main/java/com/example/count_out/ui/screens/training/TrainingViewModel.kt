@@ -4,8 +4,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.count_out.data.DataRepository
+import com.example.count_out.data.room.tables.TrainingDB
 import com.example.count_out.entity.ErrorApp
-import com.example.count_out.entity.Workout
+import com.example.count_out.entity.Training
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -19,16 +20,32 @@ import javax.inject.Inject
 class TrainingViewModel @Inject constructor(
     private val errorApp: ErrorApp,
     private val dataRepository: DataRepository
-): ViewModel() {
+): ViewModel()
+{
     private val _trainingScreenState = MutableStateFlow(
-        TrainingScreenState( training = mutableStateOf(emptyList())))
+        TrainingScreenState(
+            training = mutableStateOf(TrainingDB()),
+            changeNameTraining = {},
+            onSpeechTraining = {},
+            onDeleteTraining = {},
+            onSpeechRound = {},
+            onDismissSpeechBSTraining = {},
+            onDismissSpeechBSExercise = {},
+            onAddExercise = {},
+            onSpeechExercise = {},
+            onCopyExercise = {},
+            onDeleteExercise = {},
+            onSave = {},
+            onClickWorkout = {}
+        )
+    )
     val trainingScreenState: StateFlow<TrainingScreenState> = _trainingScreenState.asStateFlow()
 
-    fun getWorkouts(){ templateMy { dataRepository.getWorkouts() } }
-    fun changeNameWorkout(workout: Workout){ templateMy { dataRepository.changeNameWorkout(workout) } }
-    fun deleteWorkout(id: Long){ templateMy { dataRepository.deleteWorkout(id) } }
-    fun addWorkout(name: String){ templateMy { dataRepository.addWorkout(name) } }
-    private fun templateMy( funDataRepository:() -> List<Workout> ){
+    fun getTraining(id: Long){ templateMy { dataRepository.getTraining(id) } }
+//    fun changeNameWorkout(workout: Workout){ templateMy { dataRepository.changeNameWorkout(workout) } }
+//    fun deleteWorkout(id: Long){ templateMy { dataRepository.deleteWorkout(id) } }
+//    fun addWorkout(name: String){ templateMy { dataRepository.addWorkout(name) } }
+    private fun templateMy( funDataRepository:() -> Training){
         viewModelScope.launch(Dispatchers.IO) {
             kotlin.runCatching { funDataRepository() }.fold(
                 onSuccess = { _trainingScreenState.update { currentState ->

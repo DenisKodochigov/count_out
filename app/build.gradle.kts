@@ -3,7 +3,6 @@ plugins {
     id ("com.android.application")
     id ("org.jetbrains.kotlin.android")
     id ("kotlin-parcelize")
-    id ("kotlin-kapt")
     id ("com.google.devtools.ksp")
     id ("dagger.hilt.android.plugin")
     id ("com.google.firebase.crashlytics")
@@ -14,7 +13,7 @@ android {
     compileSdk = rootProject.extra["targetSdk"] as Int
 
     defaultConfig {
-        applicationId = "com.example.reader"
+        applicationId = "com.example.count_out"
         minSdk = rootProject.extra["minSdk"] as Int
         targetSdk = rootProject.extra["targetSdk"] as Int
         versionCode = 1
@@ -59,17 +58,17 @@ dependencies {
     val lifecycleVersion = "2.6.2"
 
     implementation("androidx.core:core-ktx:1.12.0")
-    implementation("androidx.activity:activity-compose:1.8.1")
+    implementation("androidx.activity:activity-compose:1.8.2")
     implementation(platform("androidx.compose:compose-bom:2023.10.01"))
     //Hilt
     implementation ("com.google.dagger:hilt-android:$daggerVersion")
     implementation ("androidx.hilt:hilt-navigation-compose:1.1.0")
-    kapt ("com.google.dagger:hilt-android-compiler:$daggerVersion")
+    ksp ("com.google.dagger:dagger-compiler:$daggerVersion")
+    ksp ("com.google.dagger:hilt-compiler:$daggerVersion")
     testImplementation ("com.google.dagger:hilt-android-testing:$daggerVersion")
-    kaptTest ("com.google.dagger:hilt-android-compiler:$daggerVersion")
+//    kaptTest ("com.google.dagger:hilt-android-compiler:$daggerVersion")
     //Jetpack  Compose
     implementation ("androidx.compose.ui:ui:$composeVersion")
-    implementation ("androidx.swiperefreshlayout:swiperefreshlayout:1.2.0-alpha01")
     debugImplementation("androidx.compose.ui:ui-tooling")
     debugImplementation("androidx.compose.ui:ui-test-manifest")
     //Tooling support (Previews, etc.)
@@ -91,7 +90,7 @@ dependencies {
     //Adaptive
     implementation ("androidx.compose.material3:material3-window-size-class:1.1.2")
     //Navigation
-    implementation ("androidx.navigation:navigation-compose:2.7.5")
+    implementation ("androidx.navigation:navigation-compose:2.7.6")
     //Color Palette
     implementation ("androidx.palette:palette-ktx:1.0.0")
     //LifeCycle

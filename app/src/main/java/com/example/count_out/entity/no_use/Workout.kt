@@ -1,13 +1,17 @@
-package com.example.count_out.entity
+package com.example.count_out.entity.no_use
+
+import com.example.count_out.entity.Rainfall
+import com.example.count_out.entity.Training
 
 interface Workout {
     val idWorkout: Long
     val name: String
-    val open: Boolean
-    val counts: Counts
-    val rounds: List<Round>
+    val trainingId: Long
+    val training: Training?
+    val isSelected: Boolean
 
     val temperature:Double
+    val rainfallId: Int
     val rainfall: Rainfall
 
     val timeStart: Int

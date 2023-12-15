@@ -15,7 +15,7 @@ import com.example.count_out.data.room.tables.WorkoutDB
 import com.example.count_out.entity.TagsTesting.DIALOG_EDIT_BASKET_INPUT_NAME
 import com.example.count_out.entity.TypeKeyboard
 import com.example.count_out.entity.TypeText
-import com.example.count_out.entity.Workout
+import com.example.count_out.entity.no_use.Workout
 import com.example.count_out.ui.theme.shapesApp
 import com.example.count_out.ui.theme.styleApp
 import com.example.count_out.ui.view_components.MyOutlinedTextFieldWithoutIcon

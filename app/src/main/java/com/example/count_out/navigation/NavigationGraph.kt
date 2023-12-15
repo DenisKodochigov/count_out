@@ -13,30 +13,30 @@ import androidx.navigation.NamedNavArgument
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
+import com.example.count_out.ui.screens.settings.SettingScreen
+import com.example.count_out.ui.screens.training.TrainingScreen
 import com.example.count_out.ui.screens.trainings.TrainingsScreen
-fun NavGraphBuilder.trainings( navigateToScreen: (Long)->Unit){
+fun NavGraphBuilder.trainings( navigateToScreen: (Long)->Unit ){
     template(
         route = TrainingsDestination.route,
         content = {
-            TrainingsScreen(screen = TrainingsDestination, onClickWorkout = { navigateToScreen( it )}) }
+            TrainingsScreen(
+                screen = TrainingsDestination,
+                onClickTraining = { navigateToScreen( it )},) }
     )
 }
-//fun NavGraphBuilder.training(navigateToScreen: (Long)->Unit){
-//    template(
-//        routeTo = TrainingsDestination.route,
-//        route = TrainingDestination.routeWithArgs,
-//        argument = TrainingDestination.arguments,
-//        content = {navBackStackEntry ->
-//            val trainingId = navBackStackEntry.arguments?.getLong(TrainingDestination.trainingIdArg)
-//            if (trainingId != null) {
-//                TrainingScreen(
-//                    trainingId = trainingId,
-//                    screen = WorkoutDestination,
-//                    onClickWorkout = { navigateToScreen(it) })
-//            }
-//        }
-//    )
-//}
+fun NavGraphBuilder.training( navigateToScreen: (Long)->Unit ){
+    template(
+        routeTo = TrainingsDestination.route,
+        route = TrainingDestination.routeWithArgs,
+        argument = TrainingDestination.arguments,
+        content = {navBackStackEntry ->
+            val trainingId = navBackStackEntry.arguments?.getLong(TrainingDestination.ARG)
+            if (trainingId != null) {
+                TrainingScreen(trainingId = trainingId, onClickExercise = {navigateToScreen(it)}) }
+        }
+    )
+}
 //fun NavGraphBuilder.workouts(navigateToScreen: (Long)->Unit){
 //    template(
 //        route = WorkoutsDestination.route,
@@ -93,12 +93,12 @@ fun NavGraphBuilder.trainings( navigateToScreen: (Long)->Unit){
 //        }
 //    )
 //}
-//fun NavGraphBuilder.settings(){
-//    template(
-//        route = SettingDestination.route,
-//        content = { SettingScreen( screen = SettingDestination ) }
-//    )
-//}
+fun NavGraphBuilder.settings(){
+    template(
+        route = SettingDestination.route,
+        content = { SettingScreen( screen = SettingDestination ) }
+    )
+}
 fun NavGraphBuilder.template(
     route: String,
     routeTo: String = TrainingsDestination.route,
@@ -147,34 +147,3 @@ fun exitTransition(defaultScreen: String, targetScreen: String): ExitTransition 
                             tween(durationMillis = durationMillis, delayMillis = delayMillis))
     }
 }
-
-//        composable(route = WorkoutsScreen.route,
-//            enterTransition = {
-//                targetState.destination.route?.let { enterTransition(WorkoutsScreen.route, it) } },
-//            exitTransition = {
-//                targetState.destination.route?.let { exitTransition(WorkoutsScreen.route, it)  } }) {
-//            WorkoutsScreen(
-//                screen = WorkoutsScreen, onClickWorkout = { navController.navigateToProducts(it) })
-//        }
-//        composable(
-//            route = RoundScreen.routeWithArgs, arguments = RoundScreen.arguments,
-//            enterTransition = {
-//                targetState.destination.route?.let { enterTransition(WorkoutsScreen.route, it) } },
-//            exitTransition = {
-//                targetState.destination.route?.let { exitTransition(WorkoutsScreen.route, it)  } }
-//        )
-//        { navBackStackEntry ->
-//            val basketId = navBackStackEntry.arguments?.getLong(RoundScreen.workoutIdArg)
-//            if (basketId != null) {
-////                RoundScreen(basketId = basketId, showBottomSheet = showBottomSheet, screen = ProductsBasket)
-//            }
-//        }
-//        composable(
-//            route = SetScreen.route,
-//            enterTransition = {
-//                targetState.destination.route?.let { enterTransition(WorkoutsScreen.route, it) } },
-//            exitTransition = {
-//                targetState.destination.route?.let { exitTransition(WorkoutsScreen.route, it)  } }
-//        ) {
-////            SetScreen( showBottomSheet = showBottomSheet, screen = SetScreen )
-//        }

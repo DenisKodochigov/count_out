@@ -44,6 +44,10 @@ val interLight12 = TextStyle(
     fontSize = 12.sp
 )
 val alumniReg12 = TextStyle(
-    fontFamily = FontFamily(Font(R.font.alumnisanspinstripe_regular)),
+    fontFamily = FontFamily(Font(R.font.alumnisans_regular)),
     fontSize = 12.sp
+)
+val alumniReg14 = TextStyle(
+    fontFamily = FontFamily(Font(R.font.alumnisans_regular)),
+    fontSize = 14.sp
 )

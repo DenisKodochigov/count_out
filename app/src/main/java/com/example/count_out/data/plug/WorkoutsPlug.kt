@@ -3,11 +3,8 @@ package com.example.count_out.data.plug
 import com.example.count_out.data.room.tables.CoordinateDB
 import com.example.count_out.data.room.tables.CountDB
 import com.example.count_out.data.room.tables.CountsDB
-import com.example.count_out.data.room.tables.RoundDB
-import com.example.count_out.data.room.tables.SetDB
-import com.example.count_out.entity.Count
-import com.example.count_out.entity.Round
-import com.example.count_out.entity.Workout
+import com.example.count_out.entity.no_use.Count
+import com.example.count_out.entity.no_use.Workout
 import java.util.Calendar
 
 data class WorkoutsPlug(
@@ -65,13 +62,13 @@ data class WorkoutsPlug(
 
         return CountsDB(counts = listCountDB as List<Count>)
     }
-    private fun funRounds(number: Int): List<Round>{
-        val listRound = mutableListOf<RoundDB>()
-        for (i in 1..15){
-            listRound.add(
-                RoundDB(set = SetDB(), amount = 0, beforeTime = 5, afterTime = 5, restTime  = 30,))
-        }
-        
-        return listRound
-    }
+//    private fun funRounds(number: Int): List<Round>{
+//        val listRound = mutableListOf<RoundDB>()
+//        for (i in 1..15){
+//            listRound.add(
+//                RoundDB(set = SetDB(), amount = 0, beforeTime = 5, afterTime = 5, restTime  = 30,))
+//        }
+//
+//        return listRound
+//    }
 }

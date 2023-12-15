@@ -1,5 +1,7 @@
 package com.example.count_out.entity
 
+import com.example.count_out.R
+
 enum class SortingBy {
     BY_NAME,
     BY_SECTION
@@ -37,4 +39,10 @@ enum class TypeKeyboard{
     DIGIT,
     TEXT,
     OTHER
+}
+
+enum class Work(val strId: Int){
+    UP (R.string.work_up),
+    OUT (R.string.work_out ),
+    DOWN ( R.string.work_down );
 }

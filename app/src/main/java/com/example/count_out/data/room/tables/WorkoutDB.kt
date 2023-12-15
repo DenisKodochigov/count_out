@@ -3,19 +3,17 @@ package com.example.count_out.data.room.tables
 import androidx.room.Entity
 import androidx.room.Ignore
 import androidx.room.PrimaryKey
-import com.example.count_out.entity.Counts
 import com.example.count_out.entity.Rainfall
-import com.example.count_out.entity.Round
-import com.example.count_out.entity.Workout
+import com.example.count_out.entity.Training
+import com.example.count_out.entity.no_use.Workout
 @Entity(tableName = "tb_workout")
 data class WorkoutDB(
     @PrimaryKey(autoGenerate = true) override var idWorkout: Long = 0L,
     override var name: String = "",
-    override var open: Boolean = false,
+    override var rainfallId: Int = 0,
     override var timeStart: Int = 0,
     override var timeEnd: Int = 0,
     override var temperature: Double = 0.0,
-    override var rainfall: Rainfall = Rainfall.MEDIUM,
     override var averagePace: Double = 0.0,
     override var maxPace: Double = 0.0,
     override var minPace: Double = 0.0,
@@ -30,8 +28,10 @@ data class WorkoutDB(
     override var resultWeight: Double = 0.0,
     override var resultAmount: Double = 0.0,
     override var resultRange: Double = 0.0,
-    @Ignore override val rounds: List<Round> = emptyList(),
-    @Ignore override val counts: Counts = CountsDB(),
+    override var trainingId: Long = 0,
+    override var isSelected: Boolean = false,
+    @Ignore override val training: Training? = null,
+    @Ignore override var rainfall: Rainfall = Rainfall.MEDIUM,
 ) : Workout {
 //    constructor(): this( minPace = 0.0)
 

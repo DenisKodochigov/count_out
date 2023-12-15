@@ -2,7 +2,7 @@ package com.example.count_out.ui.screens.set
 
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
-import com.example.count_out.entity.Workout
+import com.example.count_out.entity.no_use.Workout
 
 data class SetScreenState(
     val workouts: MutableState<List<Workout>> = mutableStateOf(emptyList()),

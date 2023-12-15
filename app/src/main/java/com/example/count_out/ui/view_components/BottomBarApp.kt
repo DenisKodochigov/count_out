@@ -6,14 +6,14 @@ import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -27,6 +27,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.tooling.preview.Preview
@@ -38,6 +39,7 @@ import com.example.count_out.navigation.navBottomScreens
 import com.example.count_out.ui.theme.TabFadeInAnimationDelay
 import com.example.count_out.ui.theme.TabFadeInAnimationDuration
 import com.example.count_out.ui.theme.TabFadeOutAnimationDuration
+import com.example.count_out.ui.theme.alumniReg12
 import com.example.count_out.ui.theme.bottomBarShape
 
 @Composable
@@ -52,27 +54,37 @@ fun BottomBarApp(
         modifier = modifier
             .background(color = Color.Transparent)  //MaterialTheme.colorScheme.surface)
             .testTag(BOTTOM_APP_BAR)
-            .clip(shape = bottomBarShape)
-    ) {
-        Row(
-            modifier = Modifier.padding(horizontal = 12.dp).fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically
-        ){
-            navBottomScreens.forEachIndexed { index, screen ->
-                BottomTab(
-                    text = screen.route,
-                    icon = screen.icon,
-                    onSelected = { onTabSelection(screen) },
-                    selected = currentScreen == screen
-                )
-                if (index != navBottomScreens.size-1) Spacer(modifier = Modifier.weight(1f).width(12.dp))
-            }
+            .clip(shape = bottomBarShape),
+        content = { BottomBarContent( currentScreen = currentScreen, onTabSelection = onTabSelection )}
+    )
+}
+
+@Composable fun BottomBarContent(
+    currentScreen: ScreenDestination,
+    onTabSelection: (ScreenDestination) -> Unit,
+){
+    Row(
+        modifier = Modifier
+            .padding(horizontal = 12.dp)
+            .fillMaxSize(),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.Center
+    ){
+        Spacer(modifier = Modifier.weight(1f))
+        navBottomScreens.forEach { screen ->
+            ItemBottomBar(
+                text = stringResource(id = screen.iconText),
+                icon = screen.icon,
+                onSelected = { onTabSelection(screen) },
+                selected = currentScreen == screen
+            )
+            Spacer(modifier = Modifier.weight(1f))
         }
     }
 }
 
 @Composable
-private fun BottomTab(
+private fun ItemBottomBar(
     text: String,
     icon: ImageVector,
     onSelected: () -> Unit,
@@ -80,9 +92,10 @@ private fun BottomTab(
 ) {
     val animationSpec = remember {
         tween<Color>(
-            easing = LinearEasing, delayMillis = TabFadeInAnimationDelay,
+            easing = LinearEasing,
+            delayMillis = TabFadeInAnimationDelay,
             durationMillis = if (selected) TabFadeInAnimationDuration
-            else TabFadeOutAnimationDuration
+                                else TabFadeOutAnimationDuration
         )
     }
 
@@ -92,25 +105,32 @@ private fun BottomTab(
         MaterialTheme.colorScheme.primary.blue,
         MaterialTheme.colorScheme.primary.alpha * 0.6f
     )
-
     val iconColor by animateColorAsState(
-        label = "", animationSpec = animationSpec,
+        label = "",
+        animationSpec = animationSpec,
         targetValue = if (selected) MaterialTheme.colorScheme.primary else colorUnselected,
     )
-    IconButton(
-        onClick = onSelected,
-        modifier = Modifier.fillMaxHeight().testTag(text)
-    ) {
+    Column(
+        verticalArrangement = Arrangement.Center,
+        modifier = Modifier.fillMaxHeight(),
+        horizontalAlignment = Alignment.CenterHorizontally)
+    {
+        IconButton(
+            onClick = onSelected,
+            modifier = Modifier.testTag(text)
+        ) {
+            Icon(
+                imageVector = icon,
+                contentDescription = text,
+                tint = iconColor,
+                modifier = Modifier
+                    .fillMaxSize()
+                    .animateContentSize()
+                    .clearAndSetSemantics { contentDescription = text }
+            )
+        }
+        TextApp(text = text, style = alumniReg12)
 
-        Icon(
-            imageVector = icon,
-            contentDescription = text,
-            tint = iconColor,
-            modifier = Modifier
-                .fillMaxSize()
-                .animateContentSize()
-                .clearAndSetSemantics { contentDescription = text }
-        )
     }
 }
 

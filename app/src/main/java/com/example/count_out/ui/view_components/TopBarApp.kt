@@ -3,6 +3,7 @@ package com.example.count_out.ui.view_components
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBackIos
 import androidx.compose.material.icons.filled.MoreHoriz
@@ -13,6 +14,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import com.example.count_out.ui.theme.interReg16
 import com.example.count_out.ui.theme.topBarShape
 
@@ -25,6 +27,7 @@ fun CollapsingToolbar(
     Row(
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier
+            .height(30.dp)
             .fillMaxWidth()
             .background(color = MaterialTheme.colorScheme.surface, shape = topBarShape)
     ){
@@ -33,7 +36,7 @@ fun CollapsingToolbar(
                 contentDescription = null,
                 tint = MaterialTheme.colorScheme.onSurface)
         }
-        TextApp(
+        TextAppColor(
             text = text,
             style = interReg16,
             modifier = Modifier.weight(1f).fillMaxWidth()

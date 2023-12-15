@@ -26,20 +26,17 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.example.count_out.R
 import com.example.count_out.entity.SizeElement
 import com.example.count_out.entity.TypeText
-import com.example.count_out.entity.Workout
+import com.example.count_out.entity.no_use.Workout
 import com.example.count_out.navigation.ScreenDestination
 import com.example.count_out.ui.bottomsheet.BottomSheetWorkoutAdd
 import com.example.count_out.ui.theme.Dimen
 import com.example.count_out.ui.theme.getIdImage
 import com.example.count_out.ui.theme.sizeApp
 import com.example.count_out.ui.theme.styleApp
-import com.example.count_out.ui.view_components.CollapsingToolbar
 import com.example.count_out.ui.view_components.ItemSwipe
 import com.example.count_out.ui.view_components.TextApp
 import com.example.count_out.ui.view_components.animatedScroll
@@ -49,7 +46,7 @@ import kotlin.math.roundToInt
 @Composable fun WorkoutsScreen( onClickWorkout: (Long) -> Unit, screen: ScreenDestination,
 ){
     val viewModel: WorkoutsViewModel = hiltViewModel()
-    viewModel.getWorkouts()
+//    viewModel.getWorkouts()
     WorkoutScreenCreateView(
         onClickWorkout = onClickWorkout,
         screen = screen,
@@ -63,15 +60,13 @@ import kotlin.math.roundToInt
 ){
     val uiState by viewModel.workoutScreenState.collectAsState()
 
-    uiState.changeNameWorkout = remember { { workout -> viewModel.changeNameWorkout(workout) }}
-    uiState.deleteWorkout = remember {{ workoutId -> viewModel.deleteWorkout(workoutId) }}
-    uiState.onAddClick = remember {{ viewModel.addWorkout(it) }}
+//    uiState.changeNameWorkout = remember { { workout -> viewModel.changeNameWorkout(workout) }}
+//    uiState.deleteWorkout = remember {{ workoutId -> viewModel.deleteWorkout(workoutId) }}
+//    uiState.onAddClick = remember {{ viewModel.addWorkout(it) }}
     uiState.onDismiss = remember {{ uiState.triggerRunOnClickFAB.value = false }}
     uiState.onClickWorkout = remember {{id -> onClickWorkout(id)}}
     uiState.idImage = getIdImage(screen)
-    uiState.screenTextHeader = stringResource(screen.textHeader)
 
-    screen.textFAB = stringResource(id = R.string.workout_text_fab)
     screen.onClickFAB = { uiState.triggerRunOnClickFAB.value = true}
 
     if (uiState.triggerRunOnClickFAB.value) BottomSheetWorkoutAdd( uiState = uiState)
@@ -98,16 +93,10 @@ fun WorkoutScreenLayout( uiState: WorkoutsScreenState
 @Composable
 fun WorkoutLazyColumn(uiState: WorkoutsScreenState, scrollOffset:Int,
 ){
-    TopBar(uiState, scrollOffset)
     Spacer(modifier = Modifier.height(2.dp))
     LazyList(uiState)
 }
-@Composable fun TopBar(uiState: WorkoutsScreenState, scrollOffset:Int){
-    CollapsingToolbar(
-        text = uiState.screenTextHeader,)
-//        idImage = uiState.idImage,
-//        scrollOffset = scrollOffset)
-}
+
 @OptIn(ExperimentalFoundationApi::class)
 @Composable fun LazyList(uiState: WorkoutsScreenState)
 {
@@ -122,7 +111,7 @@ fun WorkoutLazyColumn(uiState: WorkoutsScreenState, scrollOffset:Int,
         items( items = listItems, key = { it.idWorkout })
         { item ->
             ItemSwipe(
-                frontFon = {
+                frontView = {
                     RowLazy(item, uiState, modifier = Modifier.animateItemPlacement()) },
                 actionDragLeft = { uiState.deleteWorkout( item.idWorkout )},
                 actionDragRight = { uiState.editWorkout(item) },

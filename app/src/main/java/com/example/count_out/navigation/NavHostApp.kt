@@ -6,7 +6,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 
 @Composable
-fun AppNavHost(
+fun NavHostApp(
     navController: NavHostController,
     modifier: Modifier = Modifier,
 ){
@@ -15,8 +15,8 @@ fun AppNavHost(
         startDestination = TrainingsDestination.route,
         modifier = modifier
     ){
-        trainings { navController.navigateToTraining(1) } //navController.navigateToWorkout(it)
-//        training { navController.navigateToWorkout(it) }
+        trainings { navController.navigateToTraining(it) } //navController.navigateToWorkout(it)
+        training { navController.navigateToActivity(it) }
 //        workouts { navController.navigateToWorkout(it) }
 //        workout { navController.navigateToRound(it) }
 //        round { navController.navigateToSet(it) }
