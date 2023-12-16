@@ -12,9 +12,11 @@ data class TrainingDB(
     override var name: String = "",
     override val isSelected: Boolean = false,
     override val speechId: Long = 0,
+    @Ignore override val workUp: Round = RoundDB(),
+    @Ignore override val workOut: Round = RoundDB(),
+    @Ignore override val workDown: Round = RoundDB(),
     @Ignore override val amountActivity: Int = 0,
-    @Ignore override val rounds: List<Round> = emptyList(),
-    @Ignore override val speechActivity: SpeechActivity = SpeechActivityDB()
+    @Ignore override val speechActivity: SpeechActivity = SpeechActivityDB(),
 ) : Training {
 //    constructor(): this( minPace = 0.0)
 

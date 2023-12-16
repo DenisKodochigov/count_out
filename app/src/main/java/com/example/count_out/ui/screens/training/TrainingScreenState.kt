@@ -3,7 +3,6 @@ package com.example.count_out.ui.screens.training
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.mutableDoubleStateOf
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import com.example.count_out.data.room.tables.TrainingDB
 import com.example.count_out.entity.Round
@@ -13,9 +12,10 @@ import com.example.count_out.entity.no_use.Workout
 data class TrainingScreenState(
     @Stable var trainingId: Long = 0,
     val training: MutableState<Training> = mutableStateOf(TrainingDB()),
-    val rounds: MutableState<List<Round>> = mutableStateOf(emptyList()),
-    val amountExerciseRounds: MutableState<Int> = mutableIntStateOf(0),
     val enteredName: MutableState<String> = mutableStateOf(""),
+    val workUp: MutableState<Round?> = mutableStateOf(null),
+    val workOut: MutableState<Round?> = mutableStateOf(null),
+    val workDown: MutableState<Round?> = mutableStateOf(null),
     val workUpCollapsing: MutableState<Boolean> = mutableStateOf(false),
     val workOutCollapsing: MutableState<Boolean> = mutableStateOf(false),
     val workDownCollapsing: MutableState<Boolean> = mutableStateOf(false),

@@ -14,3 +14,4 @@ val shapesApp = Shapes(
 )
 val topBarShape = RoundedCornerShape(topEnd = 0.dp, topStart = 0.dp, bottomEnd = 6.dp, bottomStart = 6.dp)
 val bottomBarShape = RoundedCornerShape(topEnd = 6.dp, topStart = 6.dp, bottomEnd = 0.dp, bottomStart = 0.dp)
+val shapeAddExercise = RoundedCornerShape(topEnd = 0.dp, topStart = 6.dp, bottomEnd = 6.dp, bottomStart = 0.dp)

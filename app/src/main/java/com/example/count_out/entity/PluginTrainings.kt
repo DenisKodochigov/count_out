@@ -3,7 +3,7 @@ package com.example.count_out.entity
 import com.example.count_out.data.room.tables.TrainingDB
 
 object PluginTrainings {
-    val list = listOf(
+    val list = mutableListOf(
         TrainingDB( idTraining = 0, name = "Training 1", amountActivity = 2),
         TrainingDB( idTraining = 1, name = "Training 2", amountActivity = 5),
         TrainingDB( idTraining = 2, name = "Training 3", amountActivity = 6),

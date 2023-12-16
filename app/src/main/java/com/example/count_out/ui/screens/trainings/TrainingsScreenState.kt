@@ -7,11 +7,11 @@ import com.example.count_out.entity.Training
 
 data class TrainingsScreenState(
     val trainings: MutableState<List<Training>> = mutableStateOf(emptyList()),
-    val enteredName: MutableState<String> = mutableStateOf(""),
     val triggerRunOnClickFAB: MutableState<Boolean> = mutableStateOf(false),
     @Stable var changeNameTraining: (Long) -> Unit = {},
     @Stable var editTraining: (Training) -> Unit = {},
     @Stable var deleteTraining: (Long) -> Unit = {},
+    @Stable var onCopyTraining: (Long) -> Unit = {},
     @Stable var onAddClick: (String) -> Unit = {},
     @Stable var onDismiss: () -> Unit = {},
     @Stable var onSelectItem: (Long) -> Unit = {},

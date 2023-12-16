@@ -17,7 +17,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.BlurOn
 import androidx.compose.material.icons.filled.CheckCircleOutline
 import androidx.compose.material3.Card
 import androidx.compose.material3.Icon
@@ -30,6 +29,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -65,10 +65,6 @@ import com.example.count_out.ui.view_components.TextApp
     viewModel: TrainingsViewModel,
 ){
     val uiState by viewModel.trainingsScreenState.collectAsState()
-
-//    uiState.changeNameTraining = remember { { training -> viewModel.changeNameTraining(training) }}
-//    uiState.deleteTraining = remember {{ trainingId -> viewModel.deleteTraining(trainingId) }}
-//    uiState.onAddClick = remember {{ viewModel.addTraining(it) }}
     uiState.onDismiss = remember {{ uiState.triggerRunOnClickFAB.value = false }}
     uiState.onClickTraining = remember {{id -> onClickTraining(id)}}
     uiState.onSelectItem = { onClickTraining(it) }
@@ -81,9 +77,7 @@ import com.example.count_out.ui.view_components.TextApp
 @Composable fun TrainingsScreenLayout( uiState: TrainingsScreenState
 ){
     Column(
-        modifier = Modifier
-            .fillMaxHeight()
-            .padding(horizontal = Dimen.paddingAppHor),
+        modifier = Modifier.fillMaxHeight().padding(horizontal = Dimen.paddingAppHor),
         content = { TrainingsLazyColumn( uiState = uiState) }
     )
 }
@@ -138,8 +132,9 @@ fun TrainingsLazyColumn(uiState: TrainingsScreenState,
         Icon(imageVector = Icons.Default.CheckCircleOutline, contentDescription = "")}
 }
 @Composable fun IconEnd(item: Training, uiState: TrainingsScreenState, modifier: Modifier = Modifier){
-    IconButton(onClick = { uiState.onOtherAction(item)}) {
-        Icon(imageVector = Icons.Default.BlurOn, contentDescription = "")}
+    IconButton(onClick = { uiState.onCopyTraining(item.idTraining)}) {
+        Icon(painter = painterResource(R.drawable.ic_copy), contentDescription = "")
+    }
 }
 @Composable fun TrainingInformation(
     item: Training,

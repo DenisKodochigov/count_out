@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -17,17 +16,14 @@ import androidx.compose.ui.unit.dp
 import com.example.count_out.R
 import com.example.count_out.entity.BottomSheetInterface
 import com.example.count_out.entity.TypeKeyboard
-import com.example.count_out.entity.TypeText
 import com.example.count_out.ui.theme.Dimen
-import com.example.count_out.ui.theme.styleApp
 import com.example.count_out.ui.view_components.ButtonApp
-import com.example.count_out.ui.view_components.TextApp
-import com.example.count_out.ui.view_components.TextFieldApp
+import com.example.count_out.ui.view_components.TextFieldAppBorder
 
 @Composable fun FieldName(enterValue: MutableState<String>)
 {
     Row(modifier = Modifier.fillMaxWidth()){
-        TextFieldApp(
+        TextFieldAppBorder(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 12.dp),
@@ -133,7 +129,7 @@ import com.example.count_out.ui.view_components.TextFieldApp
 @Composable
 fun FieldAmount(uiState: BottomSheetInterface, modifier: Modifier)
 {
-    TextFieldApp(
+    TextFieldAppBorder(
         modifier = modifier
             .width(120.dp)
             .height(40.dp),

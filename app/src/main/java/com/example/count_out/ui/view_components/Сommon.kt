@@ -2,6 +2,7 @@ package com.example.count_out.ui.view_components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -31,7 +32,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.focus.onFocusChanged
+import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalFocusManager
@@ -53,22 +54,11 @@ import com.example.count_out.ui.theme.colorApp
 import com.example.count_out.ui.theme.shapesApp
 import com.example.count_out.ui.theme.styleApp
 
-@Composable
-fun HeaderScreen(text: String ) {
+@Composable fun HeaderScreen(text: String ) {
     Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
         TextApp(text = text, style = styleApp(nameStyle = TypeText.NAME_SCREEN))
     }
 }
-
-//@Composable
-//fun HeaderSection(text: String, modifier: Modifier, refreshScreen: MutableState<Boolean> = mutableStateOf(false)) {
-//    Row(
-//        modifier
-//            .fillMaxWidth()
-//            .padding(start = 12.dp), horizontalArrangement = Arrangement.Start) {
-//        TextApp(text, style = styleApp(nameStyle = TypeText.NAME_SECTION))
-//    }
-//}
 
 @Composable fun TextApp(
     text: String,
@@ -91,8 +81,7 @@ fun HeaderScreen(text: String ) {
 }
 
 @OptIn(ExperimentalComposeUiApi::class)
-@Composable
-fun MyOutlinedTextFieldWithoutIcon(
+@Composable fun MyOutlinedTextFieldWithoutIcon(
     modifier: Modifier,
     enterValue: MutableState<String>,
     typeKeyboard: TypeKeyboard,
@@ -279,24 +268,29 @@ fun MyOutlinedTextFieldWithoutIcon(
 }
 
 @OptIn(ExperimentalComposeUiApi::class)
-@Composable fun TextFieldApp(modifier: Modifier = Modifier, textAlign: TextAlign,
-                             enterValue: MutableState<String>, typeKeyboard: TypeKeyboard
+@Composable fun TextFieldApp(
+    modifier: Modifier = Modifier,
+    textAlign: TextAlign,
+    enterValue: MutableState<String>,
+    typeKeyboard: TypeKeyboard
 )
 {
     val keyboardController = LocalSoftwareKeyboardController.current
+    val focusRequester = FocusRequester()
     var focusItem by remember { mutableStateOf(false) }
-    enterValue.value = if (!focusItem) enterValue.value else ""
+//    enterValue.value = if (!focusItem) enterValue.value else ""
 
     BasicTextField(
         value = enterValue.value,
+        enabled = focusItem,
+        singleLine = true,
+        maxLines = 1,
+        modifier = modifier.clickable { focusItem = !focusItem },
+        keyboardOptions = keyBoardOpt(typeKeyboard),
+        keyboardActions = KeyboardActions(onDone = { keyboardController?.hide() }),
         onValueChange = {
             focusItem = false
             enterValue.value = it },
-        singleLine = true,
-        maxLines = 1,
-        modifier = modifier.onFocusChanged { focusItem = it.isFocused }
-            .background(color = colorApp.surfaceVariant, shape = shapesApp.extraSmall)
-            .border(width = 1.dp, color = colorApp.onPrimaryContainer, shape = shapesApp.extraSmall),
         textStyle = TextStyle(
             color = colorApp.onSurfaceVariant,
             fontSize = 18.sp,
@@ -306,10 +300,23 @@ fun MyOutlinedTextFieldWithoutIcon(
             Row( verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp)){ it() }
         },
-        keyboardOptions = keyBoardOpt(typeKeyboard),
-        keyboardActions = KeyboardActions(onDone = { keyboardController?.hide() })
     )
 }
+@Composable fun TextFieldAppBorder(
+    modifier: Modifier = Modifier,
+    textAlign: TextAlign,
+    enterValue: MutableState<String>,
+    typeKeyboard: TypeKeyboard
+){
+    TextFieldApp(
+        textAlign = textAlign,
+        enterValue = enterValue,
+        typeKeyboard = typeKeyboard,
+        modifier = Modifier.background(color = colorApp.surfaceVariant, shape = shapesApp.extraSmall)
+            .border(width = 1.dp, color = colorApp.onPrimaryContainer, shape = shapesApp.extraSmall)
+    )
+}
+
 @Composable fun ButtonApp(
     text: String,
     onClick: () -> Unit,
