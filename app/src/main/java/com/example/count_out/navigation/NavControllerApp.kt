@@ -11,8 +11,8 @@ fun NavHostController.navigateToScreen(route: String) =
 fun NavHostController.navigateToTraining(trainingId: Long) {
     this.navigateToScreen("${TrainingDestination.route}/$trainingId")
 }
-fun NavHostController.navigateToActivity(trainingId: Long) {
-    this.navigateToScreen("${ActivityDestination.route}/$trainingId")
+fun NavHostController.navigateToExercise(roundId: Long, exerciseId: Long) {
+    this.navigateToScreen("${ExerciseDestination.route}/$roundId/$exerciseId")
 }
 
 //fun NavHostController.navigateToWorkout(workoutId: Long) {

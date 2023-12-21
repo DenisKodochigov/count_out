@@ -2,7 +2,6 @@ package com.example.count_out.ui.view_components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -32,7 +31,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalFocusManager
@@ -44,13 +43,13 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.example.count_out.R
 import com.example.count_out.entity.TagsTesting.BUTTON_OK
 import com.example.count_out.entity.TypeKeyboard
 import com.example.count_out.entity.TypeText
 import com.example.count_out.entity.UPDOWN
 import com.example.count_out.ui.theme.colorApp
+import com.example.count_out.ui.theme.interReg12
 import com.example.count_out.ui.theme.shapesApp
 import com.example.count_out.ui.theme.styleApp
 
@@ -272,30 +271,32 @@ import com.example.count_out.ui.theme.styleApp
     modifier: Modifier = Modifier,
     textAlign: TextAlign,
     enterValue: MutableState<String>,
-    typeKeyboard: TypeKeyboard
+    typeKeyboard: TypeKeyboard,
+    textStyle:TextStyle ,
+    onChangeValue:(String)->Unit = {}
 )
 {
     val keyboardController = LocalSoftwareKeyboardController.current
-    val focusRequester = FocusRequester()
     var focusItem by remember { mutableStateOf(false) }
-//    enterValue.value = if (!focusItem) enterValue.value else ""
 
     BasicTextField(
         value = enterValue.value,
-        enabled = focusItem,
+        enabled = true,
         singleLine = true,
         maxLines = 1,
-        modifier = modifier.clickable { focusItem = !focusItem },
+//        modifier = modifier.clickable { focusItem = !focusItem },
+        modifier = modifier.onFocusChanged {
+            log(true, "Change focus. state: ${it.isFocused}")
+            if (it.isFocused && !focusItem) focusItem = true
+            if (!it.isFocused && focusItem) {
+                onChangeValue(enterValue.value)
+                focusItem = false
+            }
+        },
         keyboardOptions = keyBoardOpt(typeKeyboard),
         keyboardActions = KeyboardActions(onDone = { keyboardController?.hide() }),
-        onValueChange = {
-            focusItem = false
-            enterValue.value = it },
-        textStyle = TextStyle(
-            color = colorApp.onSurfaceVariant,
-            fontSize = 18.sp,
-            fontWeight = FontWeight.Light,
-            textAlign = textAlign),
+        onValueChange = { enterValue.value = it },
+        textStyle = textStyle,
         decorationBox = {
             Row( verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp)){ it() }
@@ -311,6 +312,7 @@ import com.example.count_out.ui.theme.styleApp
     TextFieldApp(
         textAlign = textAlign,
         enterValue = enterValue,
+        textStyle = interReg12,
         typeKeyboard = typeKeyboard,
         modifier = Modifier.background(color = colorApp.surfaceVariant, shape = shapesApp.extraSmall)
             .border(width = 1.dp, color = colorApp.onPrimaryContainer, shape = shapesApp.extraSmall)

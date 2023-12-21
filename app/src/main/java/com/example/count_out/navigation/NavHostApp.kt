@@ -16,8 +16,9 @@ fun NavHostApp(
         modifier = modifier
     ){
         trainings { navController.navigateToTraining(it) } //navController.navigateToWorkout(it)
-        training { navController.navigateToActivity(it) }
-//        workouts { navController.navigateToWorkout(it) }
+        training ( goToScreen =  {id1, id2 -> navController.navigateToExercise(id1, id2) },
+                    onBaskScreen = { navController.popBackStack() })
+        exercise()
 //        workout { navController.navigateToRound(it) }
 //        round { navController.navigateToSet(it) }
 //        set { navController.navigateToWorkout(it) }

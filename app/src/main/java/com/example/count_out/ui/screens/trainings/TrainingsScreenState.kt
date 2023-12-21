@@ -1,13 +1,13 @@
 package com.example.count_out.ui.screens.trainings
 
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.Stable
-import androidx.compose.runtime.mutableStateOf
 import com.example.count_out.entity.Training
+import javax.inject.Singleton
 
+@Singleton
 data class TrainingsScreenState(
-    val trainings: MutableState<List<Training>> = mutableStateOf(emptyList()),
-    val triggerRunOnClickFAB: MutableState<Boolean> = mutableStateOf(false),
+    @Stable var trainings: List<Training> = emptyList(),
+    @Stable var triggerRunOnClickFAB: Boolean = false,
     @Stable var changeNameTraining: (Long) -> Unit = {},
     @Stable var editTraining: (Training) -> Unit = {},
     @Stable var deleteTraining: (Long) -> Unit = {},

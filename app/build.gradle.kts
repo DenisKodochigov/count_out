@@ -5,7 +5,7 @@ plugins {
     id ("kotlin-parcelize")
     id ("com.google.devtools.ksp")
     id ("dagger.hilt.android.plugin")
-    id ("com.google.firebase.crashlytics")
+//    id ("com.google.firebase.crashlytics")
 }
 
 android {
@@ -108,9 +108,9 @@ dependencies {
     implementation ("com.squareup.moshi:moshi-kotlin:1.15.0")
     ksp ("com.squareup.moshi:moshi-kotlin-codegen:1.15.0")
     // Import the Firebase BoM
-    implementation(platform("com.google.firebase:firebase-bom:32.6.0"))
-    implementation("com.google.firebase:firebase-analytics-ktx")
-    implementation("com.google.firebase:firebase-crashlytics")
+//    implementation(platform("com.google.firebase:firebase-bom:32.6.0"))
+//    implementation("com.google.firebase:firebase-analytics-ktx")
+//    implementation("com.google.firebase:firebase-crashlytics")
 //Testing
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")

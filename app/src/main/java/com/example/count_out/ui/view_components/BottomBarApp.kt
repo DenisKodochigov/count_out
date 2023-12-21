@@ -98,17 +98,17 @@ private fun ItemBottomBar(
                                 else TabFadeOutAnimationDuration
         )
     }
-
+    val colorIcon = MaterialTheme.colorScheme.onSurface
     val colorUnselected = Color(
-        MaterialTheme.colorScheme.primary.red,
-        MaterialTheme.colorScheme.primary.green,
-        MaterialTheme.colorScheme.primary.blue,
-        MaterialTheme.colorScheme.primary.alpha * 0.6f
+        colorIcon.red,
+        colorIcon.green,
+        colorIcon.blue,
+        colorIcon.alpha * 0.6f
     )
     val iconColor by animateColorAsState(
         label = "",
         animationSpec = animationSpec,
-        targetValue = if (selected) MaterialTheme.colorScheme.primary else colorUnselected,
+        targetValue = if (selected) colorIcon else colorUnselected,
     )
     Column(
         verticalArrangement = Arrangement.Center,

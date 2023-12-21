@@ -19,8 +19,8 @@ val interReg12 = TextStyle(
     fontFamily = FontFamily(Font(R.font.inter_regular)),
     fontSize = 12.sp
 )
-val interExtraBold16 = TextStyle(
-    fontFamily = FontFamily(Font(R.font.inter_extrabold)),
+val interBold16 = TextStyle(
+    fontFamily = FontFamily(Font(R.font.inter_bold)),
     fontSize = 16.sp
 )
 val interExtraLight12 = TextStyle(

@@ -4,6 +4,7 @@ interface Round {
     val idRound: Long
     val trainingId: Long
     val speechId: Long
-    val speechActivity: SpeechActivity
-    val exercise: List<Exercise>
+    val speech: Speech
+    val roundType: RoundType
+    val exercise: MutableList<Exercise>
 }

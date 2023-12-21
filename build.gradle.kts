@@ -27,7 +27,7 @@ plugins {
     id ("org.jetbrains.kotlin.android") version "1.8.10" apply false
     id ("com.diffplug.spotless") version "6.21.0"  apply false
     id ("com.google.devtools.ksp") version "1.9.20-1.0.13" apply false
-    id ("com.google.firebase.crashlytics") version "2.9.9" apply false
+//    id ("com.google.firebase.crashlytics") version "2.9.9" apply false
     id ("com.android.library") version gradleVersion apply false
     id ("com.android.application") version gradleVersion apply false
     id ("com.google.dagger.hilt.android") version daggerVersion apply false

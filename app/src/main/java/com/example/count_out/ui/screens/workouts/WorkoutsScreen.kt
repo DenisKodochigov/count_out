@@ -32,7 +32,6 @@ import com.example.count_out.entity.SizeElement
 import com.example.count_out.entity.TypeText
 import com.example.count_out.entity.no_use.Workout
 import com.example.count_out.navigation.ScreenDestination
-import com.example.count_out.ui.bottomsheet.BottomSheetWorkoutAdd
 import com.example.count_out.ui.theme.Dimen
 import com.example.count_out.ui.theme.getIdImage
 import com.example.count_out.ui.theme.sizeApp
@@ -69,7 +68,6 @@ import kotlin.math.roundToInt
 
     screen.onClickFAB = { uiState.triggerRunOnClickFAB.value = true}
 
-    if (uiState.triggerRunOnClickFAB.value) BottomSheetWorkoutAdd( uiState = uiState)
     WorkoutScreenLayout(uiState = uiState)
 }
 @Composable

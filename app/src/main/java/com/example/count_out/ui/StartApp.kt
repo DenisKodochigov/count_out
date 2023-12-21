@@ -19,7 +19,6 @@ import androidx.navigation.compose.rememberNavController
 import com.example.count_out.navigation.NavHostApp
 import com.example.count_out.navigation.TrainingsDestination
 import com.example.count_out.navigation.listScreens
-import com.example.count_out.navigation.navBottomScreens
 import com.example.count_out.navigation.navigateToScreen
 import com.example.count_out.ui.theme.AppTheme
 import com.example.count_out.ui.view_components.BottomBarApp
@@ -35,15 +34,15 @@ fun StartApp() {
         val navController = rememberNavController()
         val currentBackStack by navController.currentBackStackEntryAsState()
         val currentDestination = currentBackStack?.destination
-        val currentScreen = navBottomScreens.find {
-            it.route == currentDestination?.route } ?: TrainingsDestination
+        val currentScreen = listScreens.find {
+            it.routeWithArgs == currentDestination?.route } ?: TrainingsDestination
 
         Scaffold(
             modifier = Modifier.semantics { testTagsAsResourceId = true },
             topBar = {
-                     CollapsingToolbar(
-                         text = stringResource(currentScreen.nameScreen),
-                         backScreen = {navController.navigateUp()})
+                CollapsingToolbar(
+                    text = stringResource(currentScreen.nameScreen),
+                    backScreen = { navController.popBackStack()})
             },
             bottomBar = {
                 BottomBarApp(
@@ -52,10 +51,8 @@ fun StartApp() {
                 )
             },
             floatingActionButton = {
-                val screen = listScreens.find { it.route ==
-                        currentDestination?.route?.substringBefore("/") } ?: TrainingsDestination
-                if (screen.showFab) {
-                    ExtendedFAB(textId =  screen.textFABId, onClick = screen.onClickFAB) }
+                if (currentScreen.showFab) {
+                    ExtendedFAB(textId =  currentScreen.textFABId, onClick = currentScreen.onClickFAB) }
             },
             floatingActionButtonPosition = FabPosition.End,
             content = { innerPadding ->

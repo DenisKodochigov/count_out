@@ -14,9 +14,9 @@
     <string name="plan_workout">plan workout</string>
     <string name="training">План тренировки</string>
     <string name="trainings">тренировки</string>
-    <string name="activity">Упражнения</string>
-    <string name="activitiyes">Упражнений</string>
-    <string name="activitiyes1">упражнение</string>
+    <string name="exercise">Упражнения</string>
+    <string name="exercises">Упражнений</string>
+    <string name="exercise1">упражнение</string>
     <string name="set">Подход</string>
     <string name="serts">Подходы</string>
     <string name="timing">Длителность</string>
@@ -51,4 +51,5 @@
     <string name="trainings_">Trainings</string>
     <string name="setting">Настройки</string>
     <string name="duration">"Длительность: "</string>
+    <string name="part_work">Сеция тренировки.</string>
 </resources>

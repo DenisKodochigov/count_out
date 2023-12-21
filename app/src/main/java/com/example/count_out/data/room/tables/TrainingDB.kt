@@ -4,19 +4,17 @@ import androidx.room.Entity
 import androidx.room.Ignore
 import androidx.room.PrimaryKey
 import com.example.count_out.entity.Round
-import com.example.count_out.entity.SpeechActivity
+import com.example.count_out.entity.Speech
 import com.example.count_out.entity.Training
 @Entity(tableName = "tb_trainings")
 data class TrainingDB(
     @PrimaryKey(autoGenerate = true) override var idTraining: Long = 0L,
     override var name: String = "",
     override val isSelected: Boolean = false,
-    override val speechId: Long = 0,
-    @Ignore override val workUp: Round = RoundDB(),
-    @Ignore override val workOut: Round = RoundDB(),
-    @Ignore override val workDown: Round = RoundDB(),
+    override var speechId: Long = 0,
     @Ignore override val amountActivity: Int = 0,
-    @Ignore override val speechActivity: SpeechActivity = SpeechActivityDB(),
+    @Ignore override var speech: Speech = SpeechDB(),
+    @Ignore override val rounds: List<Round> = emptyList(),
 ) : Training {
 //    constructor(): this( minPace = 0.0)
 

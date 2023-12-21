@@ -41,7 +41,7 @@ enum class TypeKeyboard{
     OTHER
 }
 
-enum class Work(val strId: Int){
+enum class RoundType(val strId: Int){
     UP (R.string.work_up),
     OUT (R.string.work_out ),
     DOWN ( R.string.work_down );

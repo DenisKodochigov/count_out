@@ -1,6 +1,5 @@
 package com.example.count_out.ui.screens.trainings
 
-import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.count_out.data.DataRepository
@@ -22,7 +21,7 @@ class TrainingsViewModel @Inject constructor(
 ): ViewModel() {
     private val _trainingsScreenState = MutableStateFlow(
         TrainingsScreenState(
-            trainings = mutableStateOf(emptyList()),
+            trainings = emptyList(),
             changeNameTraining = { id -> changeNameTraining(id) },
             deleteTraining = { trainingId -> deleteTraining(trainingId) },
             onCopyTraining = { trainingId -> copyTraining(trainingId) },
@@ -39,8 +38,8 @@ class TrainingsViewModel @Inject constructor(
     private fun templateMy( funDataRepository:() -> List<Training> ){
         viewModelScope.launch(Dispatchers.IO) {
             kotlin.runCatching { funDataRepository() }.fold(
-                onSuccess = { _trainingsScreenState.update { currentState ->
-                    currentState.copy(trainings = mutableStateOf(it) ) } },
+                onSuccess = {  _trainingsScreenState.update {
+                    currentState -> currentState.copy( trainings = it ) } },
                 onFailure = { errorApp.errorApi(it.message!!) }
             )
         }

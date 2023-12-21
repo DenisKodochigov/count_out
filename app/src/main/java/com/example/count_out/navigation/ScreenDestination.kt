@@ -12,6 +12,7 @@ import com.example.count_out.R
 /*** Contract for information needed on every App navigation destination*/
 interface ScreenDestination {
     val route: String
+    val routeWithArgs: String
     val nameScreen: Int
     val icon: ImageVector
     val iconText: Int
@@ -25,6 +26,7 @@ interface ScreenDestination {
 /*** App app navigation destinations*/
 object TrainingsDestination : ScreenDestination {
     override val route = "trainings"
+    override val routeWithArgs = route
     override val nameScreen = R.string.plans_workout
     override val icon = Icons.Filled.AccessAlarms
     override val iconText = R.string.trainings_
@@ -36,7 +38,7 @@ object TrainingsDestination : ScreenDestination {
 }
 object TrainingDestination : ScreenDestination {
     override val route = "training"
-    override val nameScreen = R.string.plans_workout
+    override val nameScreen = R.string.plan_workout
     override val icon = Icons.Filled.Brightness5
     override val iconText = R.string.trainings_
     override val pictureDay = R.drawable.ic_launcher_background
@@ -45,34 +47,51 @@ object TrainingDestination : ScreenDestination {
     override var textFABId = R.string.trainings
     override var onClickFAB: () -> Unit = {}
 
-    const val ARG = "training_id"
-    val routeWithArgs = "${route}/{$ARG}"
+    const val ARG = "arg_training"
+    override val routeWithArgs = "${route}/{$ARG}"
     val arguments = listOf(navArgument(ARG) { type = NavType.LongType })
 }
-object ActivityDestination : ScreenDestination {
-    override val route = "action"
-    override val nameScreen = R.string.plans_workout
+object ExerciseDestination : ScreenDestination {
+    override val route = "exercise"
+    override val nameScreen = R.string.exercises
     override val icon = Icons.Filled.Brightness5
-    override val iconText = R.string.activity
+    override val iconText = R.string.part_work
     override val pictureDay = R.drawable.ic_launcher_background
     override val pictureNight = R.drawable.ic_launcher_background
     override val showFab: Boolean = false
-    override var textFABId = R.string.activitiyes1
+    override var textFABId = 0
     override var onClickFAB: () -> Unit = {}
 
-    const val ARG = "training_id"
-    val routeWithArgs = "${route}/{$ARG}"
-    val arguments = listOf(navArgument(ARG) { type = NavType.LongType })
+    const val ARG1 = "arg_training1"
+    const val ARG2 = "arg_training2"
+    override val routeWithArgs = "${route}/{$ARG1}/{$ARG2}"
+    val arguments = listOf(
+        navArgument(ARG1) { type = NavType.LongType },
+        navArgument(ARG2) { type = NavType.LongType })
 }
-//
-//object WorkoutDestination : ScreenDestination {
+object SettingDestination : ScreenDestination {
+    override val route = "settings"
+    override val routeWithArgs = TrainingsDestination.route
+    override val nameScreen = R.string.setting
+    override val icon = Icons.Filled.Settings
+    override val iconText = R.string.setting
+    override val pictureDay = 0
+    override val pictureNight = 0
+    override val showFab: Boolean = false
+    override var textFABId = 0
+    override var onClickFAB: () -> Unit = {}
+}
+val navBottomScreens = listOf(TrainingsDestination, ExerciseDestination, SettingDestination)
+val listScreens = listOf(TrainingsDestination, TrainingDestination, ExerciseDestination, SettingDestination)
+
+//object ExerciseDestination: ScreenDestination {
 //    override val route = "training"
 //    override val nameScreen = R.string.plans_workout
 //    override val icon = Icons.Filled.Brightness5
 //    override val iconText: Int = R.string.trainings_
 //    override val pictureDay = R.drawable.ic_launcher_background
 //    override val pictureNight = R.drawable.ic_launcher_background
-//    override var textFABId: String = ""
+//    override var textFABId: Int = 0
 //    override var onClickFAB: () -> Unit = {}
 //
 //    const val trainingIdArg = "training_id"
@@ -110,17 +129,6 @@ object ActivityDestination : ScreenDestination {
 //    val arguments = listOf(navArgument(setsIdArg) { type = NavType.LongType })
 //}
 //
-object SettingDestination : ScreenDestination {
-    override val route = "settings"
-    override val nameScreen = R.string.setting
-    override val icon = Icons.Filled.Settings
-    override val iconText = R.string.setting
-    override val pictureDay = 0
-    override val pictureNight = 0
-    override val showFab: Boolean = false
-    override var textFABId = 0
-    override var onClickFAB: () -> Unit = {}
-}
 
 //object SingleAccount : ScreenDestination {
 //    // Added for simplicity, this icon will not in fact be used, as SingleAccount isn't
@@ -140,7 +148,5 @@ object SettingDestination : ScreenDestination {
 //    override val route = "products"
 //}
 // Screens to be displayed in the top AppTabRow
-val navBottomScreens = listOf(TrainingsDestination,SettingDestination)
-val listScreens = listOf(TrainingsDestination, TrainingDestination, SettingDestination)
-//val navBottomScreens = listOf(WorkoutsDestination, RoundDestination, SetDestination, SettingDestination)
-//val listScreens = listOf(WorkoutsDestination, RoundDestination, SetDestination, SettingDestination)
+
+

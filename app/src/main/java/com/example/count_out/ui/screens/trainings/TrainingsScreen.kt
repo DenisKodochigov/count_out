@@ -23,6 +23,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -52,7 +53,10 @@ import com.example.count_out.ui.view_components.TextApp
     screen: ScreenDestination,
 ){
     val viewModel: TrainingsViewModel = hiltViewModel()
-    viewModel.getTrainings()
+    LaunchedEffect(true) {
+        viewModel.getTrainings()
+    }
+
     TrainingsScreenCreateView(
         onClickTraining = onClickTraining,
         screen = screen,
@@ -65,13 +69,13 @@ import com.example.count_out.ui.view_components.TextApp
     viewModel: TrainingsViewModel,
 ){
     val uiState by viewModel.trainingsScreenState.collectAsState()
-    uiState.onDismiss = remember {{ uiState.triggerRunOnClickFAB.value = false }}
+    uiState.onDismiss = remember {{ uiState.triggerRunOnClickFAB = false }}
     uiState.onClickTraining = remember {{id -> onClickTraining(id)}}
     uiState.onSelectItem = { onClickTraining(it) }
     uiState.idImage = getIdImage(screen)
-    screen.onClickFAB = { uiState.triggerRunOnClickFAB.value = true}
+    screen.onClickFAB = { uiState.triggerRunOnClickFAB = true}
 
-    if (uiState.triggerRunOnClickFAB.value) onClickTraining(0)
+    if (uiState.triggerRunOnClickFAB) onClickTraining(0)
     TrainingsScreenLayout(uiState = uiState)
 }
 @Composable fun TrainingsScreenLayout( uiState: TrainingsScreenState
@@ -85,8 +89,9 @@ import com.example.count_out.ui.view_components.TextApp
 @Composable
 fun TrainingsLazyColumn(uiState: TrainingsScreenState,
 ){
-    Spacer(modifier = Modifier.height(2.dp))
+    Spacer(modifier = Modifier.height(4.dp))
     LazyList(uiState)
+    Spacer(modifier = Modifier.height(4.dp))
 }
 @OptIn(ExperimentalFoundationApi::class)
 @Composable fun LazyList(uiState: TrainingsScreenState)
@@ -97,7 +102,7 @@ fun TrainingsLazyColumn(uiState: TrainingsScreenState,
         modifier = Modifier.testTag("1")
     )
     {
-        items( items = uiState.trainings.value, key = { it.idTraining })
+        items( items = uiState.trainings, key = { it.idTraining })
         { item ->
             ItemSwipe(
                 frontView = { RowLazy(item, uiState, modifier = Modifier.animateItemPlacement()) },
@@ -143,7 +148,7 @@ fun TrainingsLazyColumn(uiState: TrainingsScreenState,
     Column (modifier = modifier.clickable { uiState.onSelectItem(item.idTraining) }){
         TextApp( text = item.name, style = interReg14)
         TextApp(
-            text = stringResource(id = R.string.activity)+ ": " + item.amountActivity,
+            text = stringResource(id = R.string.exercise)+ ": " + item.amountActivity,
             style = interLight12 )
     }
 }

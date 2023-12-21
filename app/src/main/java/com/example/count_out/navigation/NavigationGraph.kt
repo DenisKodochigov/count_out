@@ -13,29 +13,99 @@ import androidx.navigation.NamedNavArgument
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
+import com.example.count_out.ui.screens.exercise.ExerciseScreen
 import com.example.count_out.ui.screens.settings.SettingScreen
 import com.example.count_out.ui.screens.training.TrainingScreen
 import com.example.count_out.ui.screens.trainings.TrainingsScreen
-fun NavGraphBuilder.trainings( navigateToScreen: (Long)->Unit ){
+fun NavGraphBuilder.trainings( goToScreen: (Long)->Unit ){
     template(
-        route = TrainingsDestination.route,
+        routeTo = TrainingsDestination.route,
         content = {
             TrainingsScreen(
                 screen = TrainingsDestination,
-                onClickTraining = { navigateToScreen( it )},) }
+                onClickTraining = { goToScreen( it )},) }
     )
 }
-fun NavGraphBuilder.training( navigateToScreen: (Long)->Unit ){
+fun NavGraphBuilder.training( goToScreen: (Long, Long)-> Unit, onBaskScreen: ()->Unit ){
     template(
-        routeTo = TrainingsDestination.route,
-        route = TrainingDestination.routeWithArgs,
+        routeFrom = TrainingsDestination.route,
+        routeTo = TrainingDestination.routeWithArgs,
         argument = TrainingDestination.arguments,
         content = {navBackStackEntry ->
-            val trainingId = navBackStackEntry.arguments?.getLong(TrainingDestination.ARG)
-            if (trainingId != null) {
-                TrainingScreen(trainingId = trainingId, onClickExercise = {navigateToScreen(it)}) }
+            TrainingScreen(
+                trainingId = navBackStackEntry.arguments?.getLong(TrainingDestination.ARG) ?: 0,
+                onBaskScreen = onBaskScreen,
+                onClickExercise = { id1, id2 -> goToScreen(id1, id2) })
         }
     )
+}
+fun NavGraphBuilder.exercise(  ){
+    template(
+        routeFrom = TrainingDestination.route,
+        routeTo = ExerciseDestination.routeWithArgs,
+        argument = ExerciseDestination.arguments,
+        content = {navBackStackEntry ->
+            ExerciseScreen(
+                roundId = navBackStackEntry.arguments?.getLong(ExerciseDestination.ARG1) ?: 0,
+                exerciseId = navBackStackEntry.arguments?.getLong(ExerciseDestination.ARG2) ?: 0,
+            )
+        }
+    )
+}
+
+fun NavGraphBuilder.settings(){
+    template(
+        routeTo = SettingDestination.route,
+        content = { SettingScreen( screen = SettingDestination ) }
+    )
+}
+fun NavGraphBuilder.template(
+    routeTo: String,
+    routeFrom: String = "",
+    argument: List<NamedNavArgument> = emptyList(),
+    content: @Composable AnimatedContentScope.(NavBackStackEntry)-> Unit
+){
+    composable(
+        route = routeTo,
+        arguments = argument,
+        enterTransition = {
+            targetState.destination.route?.let { enterTransition(routeFrom, it) } },
+        exitTransition = {
+            targetState.destination.route?.let { exitTransition(routeFrom, it)  } },
+        content = content
+    )
+}
+fun enterTransition(defaultScreen: String, targetScreen: String): EnterTransition {
+    val durationMillis = 800
+    val delayMillis = 200
+    return if (targetScreen == defaultScreen) {
+        slideInHorizontally(
+            animationSpec = tween( durationMillis = durationMillis, delayMillis = delayMillis)
+        ) { it / -1 } + fadeIn( animationSpec =
+                tween(durationMillis = durationMillis, delayMillis = delayMillis))
+    } else {
+        slideInHorizontally(
+            animationSpec = tween(durationMillis = durationMillis, delayMillis = delayMillis)
+        ) { it / 1 } + fadeIn( animationSpec =
+                tween(durationMillis = durationMillis, delayMillis = delayMillis))
+    }
+}
+fun exitTransition(defaultScreen: String, targetScreen: String): ExitTransition {
+    val durationMillis = 800
+    val delayMillis = 200
+    return if (targetScreen == defaultScreen) {
+        slideOutHorizontally(
+            animationSpec = tween(durationMillis = durationMillis, delayMillis = delayMillis)
+        ) { it / 1 } +
+                fadeOut(animationSpec =
+                            tween(durationMillis = durationMillis, delayMillis = delayMillis))
+    } else {
+        slideOutHorizontally(
+            animationSpec = tween(durationMillis = durationMillis, delayMillis = delayMillis)
+        ) { it / -1 } +
+                fadeOut(animationSpec =
+                            tween(durationMillis = durationMillis, delayMillis = delayMillis))
+    }
 }
 //fun NavGraphBuilder.workouts(navigateToScreen: (Long)->Unit){
 //    template(
@@ -93,57 +163,3 @@ fun NavGraphBuilder.training( navigateToScreen: (Long)->Unit ){
 //        }
 //    )
 //}
-fun NavGraphBuilder.settings(){
-    template(
-        route = SettingDestination.route,
-        content = { SettingScreen( screen = SettingDestination ) }
-    )
-}
-fun NavGraphBuilder.template(
-    route: String,
-    routeTo: String = TrainingsDestination.route,
-    argument: List<NamedNavArgument> = emptyList(),
-    content: @Composable AnimatedContentScope.(NavBackStackEntry)-> Unit
-){
-    composable(
-        route = route,
-        arguments = argument,
-        enterTransition = {
-            targetState.destination.route?.let { enterTransition(routeTo, it) } },
-        exitTransition = {
-            targetState.destination.route?.let { exitTransition(routeTo, it)  } },
-        content = content
-    )
-}
-fun enterTransition(defaultScreen: String, targetScreen: String): EnterTransition {
-    val durationMillis = 800
-    val delayMillis = 200
-    return if (targetScreen == defaultScreen) {
-        slideInHorizontally(
-            animationSpec = tween( durationMillis = durationMillis, delayMillis = delayMillis)
-        ) { it / -1 } + fadeIn( animationSpec =
-                tween(durationMillis = durationMillis, delayMillis = delayMillis))
-    } else {
-        slideInHorizontally(
-            animationSpec = tween(durationMillis = durationMillis, delayMillis = delayMillis)
-        ) { it / 1 } + fadeIn( animationSpec =
-                tween(durationMillis = durationMillis, delayMillis = delayMillis))
-    }
-}
-fun exitTransition(defaultScreen: String, targetScreen: String): ExitTransition {
-    val durationMillis = 800
-    val delayMillis = 200
-    return if (targetScreen == defaultScreen) {
-        slideOutHorizontally(
-            animationSpec = tween(durationMillis = durationMillis, delayMillis = delayMillis)
-        ) { it / 1 } +
-                fadeOut(animationSpec =
-                            tween(durationMillis = durationMillis, delayMillis = delayMillis))
-    } else {
-        slideOutHorizontally(
-            animationSpec = tween(durationMillis = durationMillis, delayMillis = delayMillis)
-        ) { it / -1 } +
-                fadeOut(animationSpec =
-                            tween(durationMillis = durationMillis, delayMillis = delayMillis))
-    }
-}
