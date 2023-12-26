@@ -10,11 +10,11 @@ import com.example.count_out.entity.Training
 data class TrainingDB(
     @PrimaryKey(autoGenerate = true) override var idTraining: Long = 0L,
     override var name: String = "",
-    override val isSelected: Boolean = false,
+    override var isSelected: Boolean = false,
     override var speechId: Long = 0,
-    @Ignore override val amountActivity: Int = 0,
+    @Ignore override var amountActivity: Int = 0,
     @Ignore override var speech: Speech = SpeechDB(),
-    @Ignore override val rounds: List<Round> = emptyList(),
+    @Ignore override var rounds: List<Round> = emptyList(),
 ) : Training {
 //    constructor(): this( minPace = 0.0)
 

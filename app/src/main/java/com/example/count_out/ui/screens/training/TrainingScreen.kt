@@ -249,7 +249,7 @@ fun NameTraining( uiState: TrainingScreenState ) {
             typeKeyboard = TypeKeyboard.TEXT,
             textStyle = interBold16,
             onChangeValue = {
-                uiState.changeNameTraining(uiState.training.idTraining, uiState.enteredName.value)}
+                uiState.changeNameTraining(uiState.training, uiState.enteredName.value)}
         )
         Spacer(modifier = Modifier.weight(1f))
         IconButton(

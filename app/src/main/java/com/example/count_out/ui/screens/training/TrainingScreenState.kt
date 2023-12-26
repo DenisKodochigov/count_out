@@ -26,7 +26,7 @@ data class TrainingScreenState(
     val workOutCollapsing: MutableState<Boolean> = mutableStateOf(false),
     val workDownCollapsing: MutableState<Boolean> = mutableStateOf(false),
     val durationRound: MutableState<Double> = mutableDoubleStateOf(0.0),
-    @Stable var changeNameTraining: (Long, String) -> Unit = {_,_ ->},
+    @Stable var changeNameTraining: (Training, String) -> Unit = {_,_ ->},
     @Stable var onSpeechTraining: (Long) -> Unit = {},
     @Stable var onDeleteTraining: (Long) -> Unit = {},
     @Stable var onSpeechRound: (Long) -> Unit = {},

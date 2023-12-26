@@ -10,7 +10,7 @@ import com.example.count_out.entity.Speech
 
 @Entity(tableName = "tb_exercise")
 data class ExerciseDB(
-    @PrimaryKey(autoGenerate = true) override val idExercise: Long = 0L,
+    @PrimaryKey(autoGenerate = true) override var idExercise: Long = 0L,
     override var roundId: Long = 0,
     override var speechId: Long = 0,
     override var activityId: Long = 0,

@@ -27,7 +27,7 @@ class TrainingViewModel @Inject constructor(
         TrainingScreenState(
             training = TrainingDB(),
             enteredName = mutableStateOf(""),
-            changeNameTraining = { id,name -> changeNameTraining(id, name) },
+            changeNameTraining = { training, name -> changeNameTraining(training, name) },
             onSpeechTraining = {},
             onDeleteTraining = { trainingId -> deleteTraining(trainingId) },
             onSpeechRound = {},
@@ -46,10 +46,10 @@ class TrainingViewModel @Inject constructor(
     fun getTraining(id: Long) { templateMy {dataRepository.getTraining(id) } }
 
     private fun setSpeech(speech: Speech, item: Any?) {
-        templateMy { dataRepository.setSpeech(speech, item) } }
+        templateNothing { dataRepository.setSpeech(speech, item) } }
     private fun deleteTraining(id: Long){ templateNothing { dataRepository.deleteTrainingNothing(id) } }
-    private fun changeNameTraining(id: Long, name: String){
-        templateMy { dataRepository.changeNameTraining(id, name) } }
+    private fun changeNameTraining(training: Training, name: String){
+        templateMy { dataRepository.changeNameTraining(training, name) } }
 //    fun deleteWorkout(id: Long){ templateMy { dataRepository.deleteWorkout(id) } }
 //    fun addWorkout(name: String){ templateMy { dataRepository.addWorkout(name) } }
     private fun templateMy( funDataRepository:() -> Training){

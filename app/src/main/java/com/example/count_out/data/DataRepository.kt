@@ -1,5 +1,6 @@
 package com.example.count_out.data
 
+import com.example.count_out.data.room.DataSource
 import com.example.count_out.data.room.tables.ActivityDB
 import com.example.count_out.data.room.tables.ExerciseDB
 import com.example.count_out.data.room.tables.RoundDB
@@ -13,90 +14,41 @@ import com.example.count_out.entity.Round
 import com.example.count_out.entity.Set
 import com.example.count_out.entity.Speech
 import com.example.count_out.entity.Training
-import com.example.count_out.ui.view_components.log
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class DataRepository  @Inject constructor(){
+class DataRepository  @Inject constructor(private val dataSource: DataSource){
 
-    fun getTrainings(): List<Training>{ return Plugins.listTr }
-    fun getTraining(id: Long): Training { return Plugins.item(id) }
-    fun changeNameTraining(id: Long): List<Training>{ return emptyList() }
-    fun deleteTraining(id: Long): List<Training>{
-        Plugins.listTr.remove(Plugins.listTr.find { it.idTraining ==id })
-        return Plugins.listTr
-    }
-    fun copyTraining(id: Long): List<Training>
-    {
-        val item = Plugins.listTr.find { it.idTraining ==id }
-        val idLast = Plugins.listTr.maxBy { it.idTraining }.idTraining
+    fun getTrainings(): List<Training> = dataSource.getTrainings()
+    fun getTraining(id: Long): Training = dataSource.getTraining(id)
+    fun deleteTraining(id: Long): List<Training> = dataSource.deleteTraining(id)
+    fun copyTraining(id: Long): List<Training> = dataSource.copyTraining(id)
+    fun changeNameTraining(training: Training, name: String): Training = dataSource.changeNameTraining(training, name)
 
-        item?.let {
-            val itemC = item.copy()
-            itemC.idTraining = idLast + 1
-            Plugins.listTr.add(itemC) }
-        return Plugins.listTr
-    }
-
-    fun changeNameTraining(id: Long, name: String): Training{
-        val item = Plugins.listTr.find { it.idTraining ==id }
-        item?.let { it.name = name } ?: TrainingDB()
-        log(true, "changeNameTraining: $name")
-        return item as Training
-    }
     fun addTraining(name: String): List<Training>{ return emptyList() }
     fun deleteTrainingNothing(id: Long){
         Plugins.listTr.remove(Plugins.listTr.find { it.idTraining == id })
     }
-    fun setSpeech(speech: Speech, item: Any?): Training{
-        var training: TrainingDB? = null
+    fun setSpeech(speech: Speech, item: Any?)
+    {
+        val speechId = if (speech.idSpeech == -1L) dataSource.addSpeech(speech as SpeechDB)
+                        else dataSource.updateSpeech(speech as SpeechDB)
         when (item) {
             is Training -> {
-                training = Plugins.listTr.find { it.idTraining == item.idTraining }
-                if (training != null) {
-                    training.speech = checkExistingSpeech(training.speech.idSpeech, speech)
-                    training.speechId = training.speech.idSpeech
-                }
+                (item as TrainingDB).speechId = speechId.toLong()
+                dataSource.updateTraining(item)
             }
             is Exercise -> {
-                var exercise: ExerciseDB? = null
-                Plugins.listTr.forEach lit@ { tr->
-                    tr.rounds.forEach {round ->
-                        round.exercise.forEach { exer ->
-                            if (exer.idExercise == item.idExercise) {
-                                training = tr
-                                exercise = exer as ExerciseDB
-                                return@lit
-                            }
-                        }
-                    }
-                }
-                if (exercise != null) {
-                    exercise!!.speech = checkExistingSpeech(exercise!!.speech.idSpeech, speech)
-                    exercise!!.speechId = exercise!!.speech.idSpeech
-                }
+                (item as ExerciseDB).speechId = speechId.toLong()
+                dataSource.updateExercise(item)
             }
             is Round -> {
-                var round:RoundDB? = null
-                Plugins.listTr.forEach lit@ { tr->
-                    tr.rounds.forEach { rnd ->
-                        if (rnd.idRound == item.idRound){
-                            training = tr
-                            round = rnd as RoundDB
-                            return@lit
-                        }
-                    }
-                }
-                if (round != null) {
-                    val speechPlug = checkExistingSpeech(round!!.speech.idSpeech, speech)
-                    round!!.speech = speechPlug
-                    round!!.speechId = speechPlug.idSpeech
-                }
+                (item as RoundDB).speechId = speechId.toLong()
+                dataSource.updateRound(item)
             }
             else -> null
     }
-    return training ?: TrainingDB()
 }
 
     private fun checkExistingSpeech(id: Long, enterSpeech: Speech): Speech {

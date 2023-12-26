@@ -17,11 +17,12 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 object DatabaseModule {
     lateinit var database: AppDatabase
-    private const val mode: Int = 2
+    private const val mode: Int = 0
     @Provides
     @Singleton
     fun provideDatabase(@ApplicationContext appContext: Context): AppDatabase {
         when (mode) {
+            0 -> database = Room.inMemoryDatabaseBuilder( appContext, AppDatabase::class.java).build()
             1 -> {
                 database = Room.inMemoryDatabaseBuilder(appContext, AppDatabase::class.java)
                     .addCallback(object : RoomDatabase.Callback() {
@@ -53,6 +54,9 @@ object DatabaseModule {
         return database
     }
 
+    fun fillingDBTest(database:AppDatabase){
+
+    }
     @Provides
     fun provideDataDao(database: AppDatabase): DataDao {
         return database.dataDao()

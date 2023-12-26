@@ -10,8 +10,8 @@ import com.example.count_out.entity.Speech
 
 @Entity(tableName = "tb_round")
 data class RoundDB(
-    @PrimaryKey(autoGenerate = true) override val idRound: Long = 0L,
-    override val trainingId: Long = 0,
+    @PrimaryKey(autoGenerate = true) override var idRound: Long = 0L,
+    override var trainingId: Long = 0,
     override var speechId: Long = 0,
     @Ignore override val roundType: RoundType = RoundType.OUT,
     @Ignore override val exercise: MutableList<Exercise> = mutableListOf(),

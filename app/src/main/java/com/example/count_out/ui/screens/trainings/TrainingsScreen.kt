@@ -23,7 +23,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -53,10 +52,7 @@ import com.example.count_out.ui.view_components.TextApp
     screen: ScreenDestination,
 ){
     val viewModel: TrainingsViewModel = hiltViewModel()
-    LaunchedEffect(true) {
-        viewModel.getTrainings()
-    }
-
+    viewModel.getTrainings()
     TrainingsScreenCreateView(
         onClickTraining = onClickTraining,
         screen = screen,
@@ -69,13 +65,13 @@ import com.example.count_out.ui.view_components.TextApp
     viewModel: TrainingsViewModel,
 ){
     val uiState by viewModel.trainingsScreenState.collectAsState()
-    uiState.onDismiss = remember {{ uiState.triggerRunOnClickFAB = false }}
+    uiState.onDismiss = remember {{ uiState.triggerRunOnClickFAB.value = false }}
     uiState.onClickTraining = remember {{id -> onClickTraining(id)}}
     uiState.onSelectItem = { onClickTraining(it) }
     uiState.idImage = getIdImage(screen)
-    screen.onClickFAB = { uiState.triggerRunOnClickFAB = true}
+    screen.onClickFAB = { uiState.triggerRunOnClickFAB.value = true }
 
-    if (uiState.triggerRunOnClickFAB) onClickTraining(0)
+    if (uiState.triggerRunOnClickFAB.value) onClickTraining(-1L)
     TrainingsScreenLayout(uiState = uiState)
 }
 @Composable fun TrainingsScreenLayout( uiState: TrainingsScreenState
@@ -100,8 +96,7 @@ fun TrainingsLazyColumn(uiState: TrainingsScreenState,
         state = rememberLazyListState(),
         verticalArrangement = Arrangement.spacedBy(6.dp),
         modifier = Modifier.testTag("1")
-    )
-    {
+    ){
         items( items = uiState.trainings, key = { it.idTraining })
         { item ->
             ItemSwipe(
