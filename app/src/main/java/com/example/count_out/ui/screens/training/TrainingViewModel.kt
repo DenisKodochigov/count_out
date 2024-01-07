@@ -28,8 +28,9 @@ class TrainingViewModel @Inject constructor(
             training = TrainingDB(),
             enteredName = mutableStateOf(""),
             changeNameTraining = { training, name -> changeNameTraining(training, name) },
-            onSpeechTraining = {},
             onDeleteTraining = { trainingId -> deleteTraining(trainingId) },
+            onConfirmationSpeech = { speech, item -> setSpeech( speech, item ) },
+            onSpeechTraining = {},
             onSpeechRound = {},
             onDismissSpeechBSTraining = {},
             onDismissSpeechBSExercise = {},
@@ -38,12 +39,11 @@ class TrainingViewModel @Inject constructor(
             onDeleteExercise = {},
             onSave = {},
             onClickWorkout = {},
-            onConfirmationSpeech = { speech, item -> setSpeech( speech, item ) }
         )
     )
     val trainingScreenState: StateFlow<TrainingScreenState> = _trainingScreenState.asStateFlow()
 
-    fun getTraining(id: Long) { templateMy {dataRepository.getTraining(id) } }
+    fun getTraining(id: Long) { templateMy { dataRepository.getTraining(id) } }
 
     private fun setSpeech(speech: Speech, item: Any?) {
         templateNothing { dataRepository.setSpeech(speech, item) } }

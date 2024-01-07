@@ -71,7 +71,10 @@ import com.example.count_out.ui.view_components.TextApp
     uiState.idImage = getIdImage(screen)
     screen.onClickFAB = { uiState.triggerRunOnClickFAB.value = true }
 
-    if (uiState.triggerRunOnClickFAB.value) onClickTraining(-1L)
+    if (uiState.triggerRunOnClickFAB.value) {
+        uiState.triggerRunOnClickFAB.value = false
+        uiState.onAddTraining()
+    }
     TrainingsScreenLayout(uiState = uiState)
 }
 @Composable fun TrainingsScreenLayout( uiState: TrainingsScreenState
@@ -85,33 +88,32 @@ import com.example.count_out.ui.view_components.TextApp
 @Composable
 fun TrainingsLazyColumn(uiState: TrainingsScreenState,
 ){
-    Spacer(modifier = Modifier.height(4.dp))
+//    Spacer(modifier = Modifier.height(4.dp))
     LazyList(uiState)
-    Spacer(modifier = Modifier.height(4.dp))
+    Spacer(modifier = Modifier.height(8.dp))
 }
 @OptIn(ExperimentalFoundationApi::class)
 @Composable fun LazyList(uiState: TrainingsScreenState)
 {
     LazyColumn(
         state = rememberLazyListState(),
-        verticalArrangement = Arrangement.spacedBy(6.dp),
         modifier = Modifier.testTag("1")
     ){
         items( items = uiState.trainings, key = { it.idTraining })
         { item ->
+            Spacer(modifier = Modifier.height(Dimen.width4))
             ItemSwipe(
                 frontView = { RowLazy(item, uiState, modifier = Modifier.animateItemPlacement()) },
-                actionDragLeft = { uiState.deleteTraining( item.idTraining )},
+                actionDragLeft = { uiState.onDeleteTraining( item.idTraining )},
                 actionDragRight = { uiState.editTraining(item) },
             )
+            Spacer(modifier = Modifier.height(Dimen.width4))
         }
     }
 }
 @Composable fun RowLazy(item: Training, uiState: TrainingsScreenState, modifier: Modifier)
 {
-    Card(
-        elevation = elevationTraining(),
-        shape = MaterialTheme.shapes.extraSmall
+    Card(elevation = elevationTraining(), shape = MaterialTheme.shapes.extraSmall
     ){
         Row(
             horizontalArrangement = Arrangement.Start,
@@ -125,7 +127,6 @@ fun TrainingsLazyColumn(uiState: TrainingsScreenState,
             IconEnd(item = item, uiState = uiState)
         }
     }
-
 }
 @Composable fun IconStart(item: Training, uiState: TrainingsScreenState, modifier: Modifier = Modifier){
     IconButton(onClick = { uiState.onSelect(item)}) {
@@ -141,7 +142,7 @@ fun TrainingsLazyColumn(uiState: TrainingsScreenState,
     uiState: TrainingsScreenState,
     modifier: Modifier = Modifier){
     Column (modifier = modifier.clickable { uiState.onSelectItem(item.idTraining) }){
-        TextApp( text = item.name, style = interReg14)
+        TextApp( text = "${item.name}:${item.idTraining}", style = interReg14)
         TextApp(
             text = stringResource(id = R.string.exercise)+ ": " + item.amountActivity,
             style = interLight12 )

@@ -67,22 +67,26 @@ class ExerciseViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             kotlin.runCatching { dataRepository.getExercise(roundId, exerciseId) }.fold(
                 onSuccess = {
-                    _exerciseScreenState.update { currentState -> currentState.copy(exercise = it) } },
+                    _exerciseScreenState.update { currentState ->
+                        currentState.copy(exercise = it) } },
                 onFailure = { errorApp.errorApi(it.message!!) }
             )
-            kotlin.runCatching { dataRepository.getNameTraining(roundId) }.fold(
+            kotlin.runCatching { dataRepository.getNameTrainingFromRound(roundId) }.fold(
                 onSuccess = {
-                    _exerciseScreenState.update { currentState -> currentState.copy(nameTraining = it) } },
+                    _exerciseScreenState.update { currentState ->
+                        currentState.copy(nameTraining = it) } },
                 onFailure = { errorApp.errorApi(it.message!!) }
             )
             kotlin.runCatching { dataRepository.getNameRound(roundId) }.fold(
                 onSuccess = {
-                    _exerciseScreenState.update { currentState -> currentState.copy(nameRound = it) } },
+                    _exerciseScreenState.update { currentState ->
+                        currentState.copy(nameRound = it, roundId = roundId) } },
                 onFailure = { errorApp.errorApi(it.message!!) }
             )
             kotlin.runCatching { dataRepository.getActivities() }.fold(
                 onSuccess = {
-                    _exerciseScreenState.update { currentState -> currentState.copy(activities = it) } },
+                    _exerciseScreenState.update { currentState ->
+                        currentState.copy(activities = it) } },
                 onFailure = { errorApp.errorApi(it.message!!) }
             )
         }

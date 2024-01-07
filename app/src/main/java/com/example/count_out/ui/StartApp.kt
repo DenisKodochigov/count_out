@@ -27,7 +27,9 @@ import com.example.count_out.ui.view_components.ExtendedFAB
 
 @RequiresApi(Build.VERSION_CODES.S)
 @OptIn(ExperimentalComposeUiApi::class)
-@SuppressLint("RememberReturnType", "UnrememberedMutableState", "SuspiciousIndentation")
+@SuppressLint("RememberReturnType", "UnrememberedMutableState", "SuspiciousIndentation",
+    "RestrictedApi"
+)
 @Composable
 fun StartApp() {
     AppTheme {
@@ -42,6 +44,7 @@ fun StartApp() {
             topBar = {
                 CollapsingToolbar(
                     text = stringResource(currentScreen.nameScreen),
+                    moreHoriz = { println(navController.currentBackStack.value.toString())}  ,
                     backScreen = { navController.popBackStack()})
             },
             bottomBar = {

@@ -118,7 +118,7 @@ private fun ItemBottomBar(
         IconButton(
             onClick = onSelected,
             modifier = Modifier.testTag(text)
-        ) {
+        ){
             Icon(
                 imageVector = icon,
                 contentDescription = text,
@@ -130,7 +130,6 @@ private fun ItemBottomBar(
             )
         }
         TextApp(text = text, style = alumniReg12)
-
     }
 }
 

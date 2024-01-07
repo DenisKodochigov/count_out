@@ -2,6 +2,7 @@ package com.example.count_out.ui.view_components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.focusable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -274,27 +275,23 @@ import com.example.count_out.ui.theme.styleApp
     typeKeyboard: TypeKeyboard,
     textStyle:TextStyle ,
     onChangeValue:(String)->Unit = {}
-)
-{
+){
     val keyboardController = LocalSoftwareKeyboardController.current
     var focusItem by remember { mutableStateOf(false) }
+    val focusManager = LocalFocusManager.current
 
     BasicTextField(
         value = enterValue.value,
         enabled = true,
         singleLine = true,
         maxLines = 1,
-//        modifier = modifier.clickable { focusItem = !focusItem },
-        modifier = modifier.onFocusChanged {
-            log(true, "Change focus. state: ${it.isFocused}")
-            if (it.isFocused && !focusItem) focusItem = true
-            if (!it.isFocused && focusItem) {
-                onChangeValue(enterValue.value)
-                focusItem = false
-            }
-        },
+        modifier = modifier.onFocusChanged { focusItem = it.isFocused }.focusable(),
         keyboardOptions = keyBoardOpt(typeKeyboard),
-        keyboardActions = KeyboardActions(onDone = { keyboardController?.hide() }),
+        keyboardActions = KeyboardActions(onDone = {
+            focusManager.clearFocus()
+            log(true, "BasicTextField enterValue: ${enterValue.value}")
+            onChangeValue(enterValue.value)
+            keyboardController?.hide() }),
         onValueChange = { enterValue.value = it },
         textStyle = textStyle,
         decorationBox = {

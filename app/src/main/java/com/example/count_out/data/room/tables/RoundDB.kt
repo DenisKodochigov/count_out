@@ -13,7 +13,7 @@ data class RoundDB(
     @PrimaryKey(autoGenerate = true) override var idRound: Long = 0L,
     override var trainingId: Long = 0,
     override var speechId: Long = 0,
-    @Ignore override val roundType: RoundType = RoundType.OUT,
-    @Ignore override val exercise: MutableList<Exercise> = mutableListOf(),
+    override var roundType: RoundType = RoundType.OUT,
+    @Ignore override val exercise: List<Exercise> = emptyList(),
     @Ignore override var speech: Speech = SpeechDB(),
 ): Round

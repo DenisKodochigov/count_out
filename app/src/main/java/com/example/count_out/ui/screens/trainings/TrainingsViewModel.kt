@@ -22,13 +22,15 @@ class TrainingsViewModel @Inject constructor(
     private val _trainingsScreenState = MutableStateFlow(
         TrainingsScreenState(
             trainings = emptyList(),
-            deleteTraining = { trainingId -> deleteTraining(trainingId) },
+            onAddTraining = { addTraining() },
+            onDeleteTraining = { trainingId -> deleteTraining(trainingId) },
             onCopyTraining = { trainingId -> copyTraining(trainingId) },
         )
     )
     val trainingsScreenState: StateFlow<TrainingsScreenState> = _trainingsScreenState.asStateFlow()
 
     fun getTrainings(){ templateMy { dataRepository.getTrainings() } }
+    fun addTraining(){ templateMy { dataRepository.addTraining() } }
     fun deleteTraining(id: Long){ templateMy { dataRepository.deleteTraining(id) } }
     fun copyTraining(id: Long){ templateMy { dataRepository.copyTraining(id) } }
     private fun templateMy( funDataRepository:() -> List<Training> ){

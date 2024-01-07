@@ -1,12 +1,11 @@
 package com.example.count_out.navigation
 
-import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 
 fun NavHostController.navigateToScreen(route: String) =
     this.navigate(route) {
         launchSingleTop = true
-        popUpTo(this@navigateToScreen.graph.findStartDestination().id) { saveState = true }
+//        popUpTo(this@navigateToScreen.graph.findStartDestination().id) { saveState = true }
     }
 fun NavHostController.navigateToTraining(trainingId: Long) {
     this.navigateToScreen("${TrainingDestination.route}/$trainingId")

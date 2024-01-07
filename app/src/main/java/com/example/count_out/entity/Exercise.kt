@@ -7,5 +7,5 @@ interface Exercise {
     val activityId: Long
     val speechId: Long
     val speech: Speech
-    val sets: MutableList<Set>
+    val sets: List<Set>
 }

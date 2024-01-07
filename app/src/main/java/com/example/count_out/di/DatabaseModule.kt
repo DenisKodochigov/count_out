@@ -4,8 +4,10 @@ import android.content.Context
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.sqlite.db.SupportSQLiteDatabase
+import com.example.count_out.R
 import com.example.count_out.data.room.AppDatabase
 import com.example.count_out.data.room.DataDao
+import com.example.count_out.data.room.tables.ActivityDB
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -17,7 +19,7 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 object DatabaseModule {
     lateinit var database: AppDatabase
-    private const val mode: Int = 0
+    private const val mode: Int = 1
     @Provides
     @Singleton
     fun provideDatabase(@ApplicationContext appContext: Context): AppDatabase {
@@ -28,9 +30,7 @@ object DatabaseModule {
                     .addCallback(object : RoomDatabase.Callback() {
                         override fun onCreate(db: SupportSQLiteDatabase) {
                             super.onCreate(db)
-                            ioThread {
-//                                database.dataDao().newBasket(BasketDB(nameBasket = "0 basket", dateB = 100000000L))
-                            }
+                            Thread { prepopulateDb(database) }.start()
                         }
                     })
                     .build()
@@ -40,23 +40,26 @@ object DatabaseModule {
                     .addCallback( object: RoomDatabase.Callback(){
                         override fun onCreate(db: SupportSQLiteDatabase) {
                             super.onCreate(db)
-                            ioThread {
-//                             database.dataDao().newBasket(BasketEntity(nameBasket = "Test"))
-                            }
+                            Thread { prepopulateDb(database) }.start()
+//                            Executors.newSingleThreadExecutor().execute {
+//                                database.dataDao().newBasket(BasketEntity(nameBasket = "Test")) }
                         }
                     })
                     .build()
             }
             else -> {
-                database = Room.databaseBuilder( appContext, AppDatabase::class.java, "data.db").build()}
-
+                database = Room
+                    .databaseBuilder( appContext, AppDatabase::class.java, "data.db").build()
+            }
         }
         return database
     }
 
-    fun fillingDBTest(database:AppDatabase){
-
+    private fun prepopulateDb( db: AppDatabase) {
+        db.dataDao().addActivity(ActivityDB(name = "Run", icon = R.drawable.ic_setka))
+        db.dataDao().addActivity(ActivityDB(name = "Ski", icon = R.drawable.ic_setka))
     }
+
     @Provides
     fun provideDataDao(database: AppDatabase): DataDao {
         return database.dataDao()

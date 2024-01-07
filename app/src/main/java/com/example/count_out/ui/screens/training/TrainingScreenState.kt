@@ -14,9 +14,7 @@ import com.example.count_out.entity.Training
 data class TrainingScreenState(
     val training: Training = TrainingDB(),
     val enteredName: MutableState<String> = mutableStateOf(""),
-    val workUp: MutableState<Round?> = mutableStateOf(null),
-    val workOut: MutableState<Round?> = mutableStateOf(null),
-    val workDown: MutableState<Round?> = mutableStateOf(null),
+    val rounds: MutableState<List<Round>> = mutableStateOf(emptyList()),
     val showSpeechTraining: MutableState<Boolean> = mutableStateOf(false),
     val showSpeechWorkUp: MutableState<Boolean> = mutableStateOf(false),
     val showSpeechWorkOut: MutableState<Boolean> = mutableStateOf(false),

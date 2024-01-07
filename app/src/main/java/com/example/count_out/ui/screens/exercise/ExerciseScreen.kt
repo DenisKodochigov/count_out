@@ -12,6 +12,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material3.Card
@@ -20,11 +23,11 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -33,6 +36,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.count_out.R
 import com.example.count_out.data.room.tables.SetDB
+import com.example.count_out.entity.Set
 import com.example.count_out.entity.SizeElement
 import com.example.count_out.ui.bottomsheet.BottomSheetSelectActivity
 import com.example.count_out.ui.bottomsheet.BottomSheetSpeech
@@ -56,15 +60,14 @@ import com.example.count_out.ui.view_components.animatedScroll
 }
 @Composable fun ExerciseScreenCreateView( viewModel: ExerciseViewModel
 ){
-    val uiState by viewModel.exerciseScreenState.collectAsState()
-    uiState.onDismissSelectActivity = { uiState.showBottomSheetSelectActivity.value = false }
-    uiState.onDismissSpeech = { uiState.showBottomSheetSpeech.value = false}
-    uiState.nameSection = stringResource(id = R.string.exercise)
+    val uiState = viewModel.exerciseScreenState.collectAsState()
+    uiState.value.onDismissSelectActivity = { uiState.value.showBottomSheetSelectActivity.value = false }
+    uiState.value.onDismissSpeech = { uiState.value.showBottomSheetSpeech.value = false}
+    uiState.value.nameSection = stringResource(id = R.string.exercise)
 
-    ShowBottomSheet(uiState)
-    ExerciseScreenLayout(uiState = uiState)
+    ShowBottomSheet(uiState.value)
+    ExerciseScreenLayout(uiState = uiState.value)
 }
-
 @Composable fun ShowBottomSheet(uiState: ExerciseScreenState) {
     if (uiState.showBottomSheetSelectActivity.value) BottomSheetSelectActivity(uiState)
     if (uiState.showBottomSheetSpeech.value) {
@@ -93,7 +96,6 @@ fun ExerciseScreenLayout(uiState: ExerciseScreenState
         Spacer(modifier = Modifier.height(Dimen.width8))
     }
 }
-
 @Composable fun NameTraining(uiState: ExerciseScreenState
 ){
     TextApp(
@@ -103,17 +105,15 @@ fun ExerciseScreenLayout(uiState: ExerciseScreenState
         modifier = Modifier.padding(start = 12.dp)
     )
 }
-
 @Composable fun NameSection(uiState: ExerciseScreenState
 ){
     TextApp(
-        text = uiState.nameRound,
+        text = "${uiState.nameRound}:${uiState.roundId}",
         textAlign = TextAlign.Start,
         style = interReg14,
         modifier = Modifier.padding(start = 24.dp)
     )
 }
-
 @Composable fun ExerciseContent(uiState: ExerciseScreenState
 ){
     Card (
@@ -128,13 +128,14 @@ fun ExerciseScreenLayout(uiState: ExerciseScreenState
 //                reverseScrolling = false
 //            )
     ){
-        Column ( modifier = Modifier.fillMaxWidth()
+        Column ( modifier = Modifier
+            .fillMaxWidth()
             .background(color = MaterialTheme.colorScheme.secondary, shape = shapesApp.extraSmall)
         ){
             Column (modifier = Modifier.padding(6.dp)
             ){
                 SelectActivity(uiState)
-                LazSets(uiState)
+                LazySets(uiState)
             }
             RowAddSet(uiState)
         }
@@ -155,7 +156,9 @@ fun ExerciseScreenLayout(uiState: ExerciseScreenState
 @Composable fun IconSelectActivity(uiState: ExerciseScreenState
 ){
     IconButton(
-        modifier = Modifier.width(24.dp).height(24.dp),
+        modifier = Modifier
+            .width(24.dp)
+            .height(24.dp),
         onClick = { uiState.showBottomSheetSelectActivity.value = true })
     {
         Icon(imageVector = Icons.Filled.ArrowDropDown, contentDescription = "")
@@ -178,9 +181,36 @@ fun ExerciseScreenLayout(uiState: ExerciseScreenState
         )
     }
 }
-@Composable fun LazSets(uiState: ExerciseScreenState
+@Composable fun LazySets(uiState: ExerciseScreenState
 ){
+    LazyColumn(
+        state = rememberLazyListState(),
+        modifier = Modifier.testTag("1")
+    ){
+        items( items = uiState.exercise.sets, key = { it.idSet })
+        { item ->
+            Spacer(modifier = Modifier.height(Dimen.width4))
+            LazyContent(uiState, item)
+            Spacer(modifier = Modifier.height(Dimen.width4))
+        }
+    }
+}
 
+@Composable fun LazyContent(uiState: ExerciseScreenState, set: Set){
+    Column {
+        TextApp(text = "${set.idSet}: ${set.name}", style = interThin12)
+        TextApp(text = "Reps: ${set.reps}", style = interThin12)
+        TextApp(text = "intervalDown: ${set.intervalDown}", style = interThin12)
+        TextApp(text = "intervalReps: ${set.intervalReps}", style = interThin12)
+        TextApp(text = "Intensity: ${set.intensity}", style = interThin12)
+        TextApp(text = "distance: ${set.distance}", style = interThin12)
+        TextApp(text = "duration: ${set.duration}", style = interThin12)
+        TextApp(text = "exerciseId: ${set.exerciseId}", style = interThin12)
+        TextApp(text = "groupCount: ${set.groupCount}", style = interThin12)
+        TextApp(text = "timeRest: ${set.timeRest}", style = interThin12)
+        TextApp(text = "weight: ${set.weight}", style = interThin12)
+        TextApp(text = "speech: ${set.speech}", style = interThin12)
+    }
 }
 @Composable fun RowAddSet(uiState: ExerciseScreenState
 ){
@@ -193,7 +223,9 @@ fun ExerciseScreenLayout(uiState: ExerciseScreenState
                 .clickable {
                     uiState.onAddUpdateSet(
                         uiState.exercise.idExercise,
-                        SetDB(exerciseId = uiState.exercise.idExercise)) }
+                        SetDB(exerciseId = uiState.exercise.idExercise)
+                    )
+                }
 
         ) {
             TextApp(
@@ -204,12 +236,14 @@ fun ExerciseScreenLayout(uiState: ExerciseScreenState
             Icon(
                 painter = painterResource(id = R.drawable.ic_add),
                 contentDescription = "",
-                modifier = Modifier.padding(4.dp).width(14.dp).height(14.dp)
+                modifier = Modifier
+                    .padding(4.dp)
+                    .width(14.dp)
+                    .height(14.dp)
             )
         }
     }
 }
-
 @Preview(showBackground = true)
 @Composable fun ExerciseScreenLayoutPreview() {
     ExerciseScreenLayout( ExerciseScreenState())
