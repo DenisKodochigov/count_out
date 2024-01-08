@@ -119,7 +119,7 @@ fun TrainingsLazyColumn(uiState: TrainingsScreenState,
         Row(
             horizontalArrangement = Arrangement.Start,
             verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier.fillMaxWidth().background(color = MaterialTheme.colorScheme.primary)
+            modifier = modifier.fillMaxWidth().background(color = MaterialTheme.colorScheme.primary)
         ){
             IconStart(item = item, uiState = uiState)
             Spacer(modifier = Modifier.width(Dimen.width4))
@@ -129,11 +129,11 @@ fun TrainingsLazyColumn(uiState: TrainingsScreenState,
         }
     }
 }
-@Composable fun IconStart(item: Training, uiState: TrainingsScreenState, modifier: Modifier = Modifier){
+@Composable fun IconStart(item: Training, uiState: TrainingsScreenState){
     IconButton(onClick = { uiState.onSelect(item)}) {
         Icon(imageVector = Icons.Default.CheckCircleOutline, contentDescription = "")}
 }
-@Composable fun IconEnd(item: Training, uiState: TrainingsScreenState, modifier: Modifier = Modifier){
+@Composable fun IconEnd(item: Training, uiState: TrainingsScreenState){
     IconButton(onClick = { uiState.onCopyTraining(item.idTraining)}) {
         Icon(painter = painterResource(R.drawable.ic_copy), contentDescription = "")
     }

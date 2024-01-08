@@ -41,8 +41,6 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.count_out.R
 import com.example.count_out.entity.RoundType
 import com.example.count_out.entity.TypeKeyboard
-import com.example.count_out.entity.TypeText
-import com.example.count_out.entity.no_use.Workout
 import com.example.count_out.ui.bottomsheet.BottomSheetSpeech
 import com.example.count_out.ui.theme.Dimen
 import com.example.count_out.ui.theme.elevationTraining
@@ -52,7 +50,6 @@ import com.example.count_out.ui.theme.interReg14
 import com.example.count_out.ui.theme.interThin12
 import com.example.count_out.ui.theme.shapeAddExercise
 import com.example.count_out.ui.theme.shapesApp
-import com.example.count_out.ui.theme.styleApp
 import com.example.count_out.ui.view_components.TextApp
 import com.example.count_out.ui.view_components.TextFieldApp
 import com.example.count_out.ui.view_components.log
@@ -220,7 +217,7 @@ fun Row2( uiState: TrainingScreenState, roundType: RoundType) {
 fun Row3(uiState: TrainingScreenState, roundType: RoundType)
 {
     Column{
-        var visibleLazy = getCollapsing(uiState, roundType) && amountExercise(uiState, roundType) > 0
+        val visibleLazy = getCollapsing(uiState, roundType) && amountExercise(uiState, roundType) > 0
         LazyExercise(uiState = uiState, roundType = roundType, visibleLazy)
         Spacer(modifier = Modifier.height(4.dp))
         Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.fillMaxWidth())
@@ -417,71 +414,7 @@ fun PoleAddExercise(uiState: TrainingScreenState, roundType: RoundType)
         )
     }
 }
-@SuppressLint("CoroutineCreationDuringComposition")
-@Composable
-fun TrainingLazyColumn(
-    uiState: TrainingScreenState,
-) {
-    Spacer(modifier = Modifier.height(2.dp))
-    LazyList(uiState)
-}
 
-@OptIn(ExperimentalFoundationApi::class)
-@Composable
-fun LazyList(uiState: TrainingScreenState) {
-    LazyColumn(
-        state = rememberLazyListState(),
-        verticalArrangement = Arrangement.spacedBy(4.dp),
-        modifier = Modifier.testTag("1")
-    )
-    {
-//        items( items = uiState.rounds, key = { it. })
-//        { item ->
-//            ItemSwipe(
-//                frontView = {
-//                    RowLazy(item, uiState, modifier = Modifier.animateItemPlacement()) },
-//                actionDragLeft = { uiState.deleteWorkout( item.idWorkout )},
-//                actionDragRight = { uiState.editWorkout(item) },
-//            )
-//        }
-    }
-}
-
-@Composable
-fun RowLazy(item: Workout, uiState: TrainingScreenState, modifier: Modifier) {
-    Row(horizontalArrangement = Arrangement.Start, verticalAlignment = Alignment.CenterVertically) {
-        IconStart(item = item, uiState = uiState)
-        Spacer(modifier = Modifier.width(Dimen.width8))
-        NameWorkout(item = item, uiState = uiState)
-        Spacer(
-            modifier = Modifier
-                .width(Dimen.width8)
-                .weight(1f)
-        )
-        IconEnd(item = item, uiState = uiState)
-    }
-}
-
-@Composable
-fun IconStart(item: Workout, uiState: TrainingScreenState, modifier: Modifier = Modifier) {
-//    IconButton(onClick = { uiState.onSelect(item)}) {
-//        Icon(imageVector = Icons.Default.CheckCircleOutline, contentDescription = "")}
-}
-
-@Composable
-fun IconEnd(item: Workout, uiState: TrainingScreenState, modifier: Modifier = Modifier) {
-//    IconButton(onClick = { uiState.onOtherAction(item)}) {
-//        Icon(imageVector = Icons.Default.BlurOn, contentDescription = "")}
-}
-
-@Composable
-fun NameWorkout(item: Workout, uiState: TrainingScreenState) {
-    TextApp(
-        text = item.name,
-        style = styleApp(nameStyle = TypeText.TEXT_IN_LIST),
-    )
-//        modifier = Modifier.clickable { uiState.onSelectItem(item) })
-}
 @Preview(showBackground = true)
 @Composable
 fun TrainingScreenLayoutPreview() {

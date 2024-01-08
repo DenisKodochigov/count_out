@@ -30,7 +30,6 @@ import com.example.count_out.ui.theme.getIdImage
 import com.example.count_out.ui.theme.sizeApp
 import com.example.count_out.ui.view_components.ItemSwipe
 import com.example.count_out.ui.view_components.animatedScroll
-import kotlin.math.roundToInt
 
 @SuppressLint("UnrememberedMutableState")
 @Composable fun SettingScreen( screen: ScreenDestination,
@@ -68,14 +67,12 @@ fun RoundScreenLayout( uiState: SettingScreenState
                 offsetHeightPx = offsetHeightPx
             ),
     ){
-        WorkoutLazyColumn(
-            uiState = uiState,
-            scrollOffset =-offsetHeightPx.floatValue.roundToInt())
+        WorkoutLazyColumn(uiState = uiState,)
     }
 }
 @SuppressLint("CoroutineCreationDuringComposition")
 @Composable
-fun WorkoutLazyColumn(uiState: SettingScreenState, scrollOffset:Int,
+fun WorkoutLazyColumn(uiState: SettingScreenState,
 ){
     Spacer(modifier = Modifier.height(2.dp))
     LazyList(uiState)
