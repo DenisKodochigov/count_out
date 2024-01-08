@@ -12,6 +12,29 @@ import com.example.count_out.entity.Activity
 import com.example.count_out.entity.Exercise
 import com.example.count_out.entity.Set
 
+data class SetRel(
+    @Embedded val setDB: SetDB,
+    @Relation(parentColumn = "speechId", entityColumn = "idSpeech", entity = SpeechDB::class) val speech: SpeechDB?
+){
+    fun toSet(): Set{
+        return SetDB(
+            name = setDB.name,
+            exerciseId = setDB.exerciseId,
+            speechId = speech?.idSpeech ?: 0L,
+            speech = speech ?: SpeechDB(),
+
+            weight = setDB.weight,
+            intensity = setDB.intensity,
+            distance = setDB.distance,
+            duration = setDB.duration,
+            reps = setDB.reps, // количество отстчетов
+            intervalReps = setDB.intervalReps,
+            intervalDown = setDB.intervalDown, //замедление отчетов
+            groupCount = setDB.groupCount, // Группы отстчетов
+            timeRest = setDB.timeRest
+        )
+    }
+}
 data class ExerciseRel(
     @Embedded val exerciseDB: ExerciseDB,
     @Relation(parentColumn = "activityId", entityColumn = "idActivity", entity = ActivityDB::class) val activity: ActivityDB?,
@@ -21,6 +44,7 @@ data class ExerciseRel(
     fun toExercise(): Exercise{
         return ExerciseDB(
             idExercise = exerciseDB.idExercise,
+            roundId = exerciseDB.roundId,
             activityId = exerciseDB.activityId,
             activity = activity as Activity,
             speech = speech ?: SpeechDB(),
@@ -47,7 +71,7 @@ data class RoundRel(
 ){
     fun toRound(): RoundDB{
         return RoundDB(
-            exercise = exercise?.map { it.toExercise() } ?: emptyList() ,
+            exercise = exercise?.map { it.toExercise() } ?: emptyList(),
             idRound = round.idRound,
             roundType = round.roundType,
             speechId = round.speechId,

@@ -1,6 +1,8 @@
 package com.example.count_out.ui.screens.training
 
 import android.annotation.SuppressLint
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -16,6 +18,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.Card
 import androidx.compose.material3.Icon
@@ -48,6 +51,7 @@ import com.example.count_out.ui.theme.interLight12
 import com.example.count_out.ui.theme.interReg14
 import com.example.count_out.ui.theme.interThin12
 import com.example.count_out.ui.theme.shapeAddExercise
+import com.example.count_out.ui.theme.shapesApp
 import com.example.count_out.ui.theme.styleApp
 import com.example.count_out.ui.view_components.TextApp
 import com.example.count_out.ui.view_components.TextFieldApp
@@ -76,16 +80,16 @@ fun TrainingScreenCreateView(
     viewModel: TrainingViewModel
 ){
     val uiState = viewModel.trainingScreenState.collectAsState()
-    uiState.value.onClickExercise =
-        remember { { idRound, idExercise -> onClickExercise( idRound, idExercise) } }
     uiState.value.onBaskScreen = onBaskScreen
     uiState.value.onAddExercise = remember { { id -> onClickExercise(id, 0) } }
-
+    uiState.value.onClickExercise =
+        remember { { idRound, idExercise -> onClickExercise( idRound, idExercise) } }
     EditSpeech(uiState.value)
     TrainingScreenLayout(uiState = uiState.value)
 }
 
-@Composable fun EditSpeech(uiState: TrainingScreenState){
+@Composable fun EditSpeech(uiState: TrainingScreenState)
+{
     if (uiState.showSpeechTraining.value) {
         uiState.nameSection = stringResource(id = R.string.training)
         uiState.item = uiState.training
@@ -119,7 +123,6 @@ fun TrainingScreenCreateView(
         BottomSheetSpeech(uiState)
     }
 }
-
 @SuppressLint("UnrememberedMutableState")
 @Composable
 fun TrainingScreenLayout( uiState: TrainingScreenState
@@ -130,12 +133,14 @@ fun TrainingScreenLayout( uiState: TrainingScreenState
         modifier = Modifier
             .fillMaxHeight()
             .padding(horizontal = Dimen.paddingAppHor)
-            .clickable(interactionSource = interactionSource, indication = null
-            ){
-                if (uiState.training.name != uiState.enteredName.value){
-                    uiState.changeNameTraining( uiState.training, uiState.enteredName.value)
+            .clickable(
+                interactionSource = interactionSource, indication = null
+            ) {
+                if (uiState.training.name != uiState.enteredName.value) {
+                    uiState.changeNameTraining(uiState.training, uiState.enteredName.value)
                 }
-                focusManager.clearFocus(true) },
+                focusManager.clearFocus(true)
+            },
     ){
         Spacer(modifier = Modifier.height(Dimen.width8))
         NameTraining(uiState = uiState)
@@ -147,9 +152,9 @@ fun TrainingScreenLayout( uiState: TrainingScreenState
         Round(uiState = uiState, roundType = RoundType.DOWN)
     }
 }
-
 @Composable
-fun Round(uiState: TrainingScreenState, roundType: RoundType) {
+fun Round(uiState: TrainingScreenState, roundType: RoundType)
+{
     Card( elevation = elevationTraining(), shape = MaterialTheme.shapes.extraSmall
     ){
         Box(modifier = Modifier.background(color = MaterialTheme.colorScheme.primary))
@@ -157,24 +162,27 @@ fun Round(uiState: TrainingScreenState, roundType: RoundType) {
             Column( modifier = Modifier.padding(start = 8.dp),)
             {
                 Row1(uiState = uiState, roundType)
-                Row2(uiState = uiState)
+                Row2(uiState = uiState, roundType)
                 Row3(uiState = uiState, roundType)
             }
         }
     }
 }
-
 @Composable
 fun Row1(uiState: TrainingScreenState, roundType: RoundType) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
-        modifier = Modifier.fillMaxWidth().padding(bottom = 6.dp)
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(bottom = 6.dp, end = 8.dp)
     )
     {
         TextApp(text = nameRound( uiState, roundType, stringResource(id = roundType.strId)), style = interReg14)
         Spacer(modifier = Modifier.weight(1f))
         IconButton(
-            modifier = Modifier.width(24.dp).height(24.dp),
+            modifier = Modifier
+                .width(24.dp)
+                .height(24.dp),
             onClick = { showSpeechRound(uiState, roundType) }) {
             Icon(
                 painter = painterResource(id = R.drawable.ic_ecv), contentDescription = "",
@@ -183,7 +191,9 @@ fun Row1(uiState: TrainingScreenState, roundType: RoundType) {
         }
         Spacer(modifier = Modifier.width(8.dp))
         IconButton(
-            modifier = Modifier.width(24.dp).height(24.dp),
+            modifier = Modifier
+                .width(24.dp)
+                .height(24.dp),
             onClick = { setCollapsing(uiState, roundType) }) {
             Icon(
                 painter = painterResource(id = getIconCollapsing(uiState, roundType)),
@@ -193,56 +203,114 @@ fun Row1(uiState: TrainingScreenState, roundType: RoundType) {
         }
     }
 }
-
 fun nameRound(uiState: TrainingScreenState, roundType: RoundType, name: String): String{
     return "$name: ${(uiState.training.rounds.find { it.roundType == roundType }?.idRound ?: 0)}"
 }
 @Composable
-fun Row2( uiState: TrainingScreenState ) {
-    val txtDuration = stringResource(id = R.string.duration) + ": " +
-            uiState.durationRound.value.toString()
-    TextApp(text = txtDuration, style = interLight12)
+fun Row2( uiState: TrainingScreenState, roundType: RoundType) {
+    val amountExercise = stringResource(id = R.string.exercises) + ": " + amountExercise(uiState, roundType)
+    val txtDuration = stringResource(id = R.string.duration) + ": " + uiState.durationRound.value.toString()
+    Row(modifier = Modifier.padding(end = 8.dp)) {
+        TextApp(text = amountExercise, style = interLight12)
+        Spacer(modifier = Modifier.weight(1f))
+        TextApp(text = txtDuration, style = interLight12)
+    }
 }
-
 @Composable
 fun Row3(uiState: TrainingScreenState, roundType: RoundType)
 {
-    if (!getCollapsing(uiState, roundType) || amountExercise(uiState, roundType) == 0) {
-        Row3Wrap(uiState, roundType)
-    } else {
-        Row3UnWrap(uiState, roundType)
+    Column{
+        var visibleLazy = getCollapsing(uiState, roundType) && amountExercise(uiState, roundType) > 0
+        LazyExercise(uiState = uiState, roundType = roundType, visibleLazy)
+        Spacer(modifier = Modifier.height(4.dp))
+        Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.fillMaxWidth())
+        {
+            Spacer(modifier = Modifier.weight(1f))
+            PoleAddExercise(uiState = uiState, roundType = roundType)
+        }
     }
 }
 
+@OptIn(ExperimentalFoundationApi::class, ExperimentalAnimationApi::class)
 @Composable
-fun Row3Wrap(uiState: TrainingScreenState, roundType: RoundType) {
-    Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.fillMaxWidth())
-    {
-        val amountExercise = stringResource(id = R.string.exercises) + ": " +
-                amountExercise(uiState, roundType)
-        TextApp(text = amountExercise, style = interLight12)
-        Spacer(modifier = Modifier.weight(1f))
-        PoleAddExercise(uiState = uiState, roundType = roundType)
+fun LazyExercise(uiState: TrainingScreenState, roundType: RoundType, visibleLazy: Boolean)
+{
+    val listExercise = uiState.training.rounds.find { it.roundType == roundType }?.exercise ?: emptyList()
+    LazyColumn(
+        state = rememberLazyListState(),
+        modifier = Modifier
+            .testTag("1")
+            .padding(end = 8.dp, bottom = 8.dp)
+    ){
+        items(items = listExercise, key = { it.idExercise }){ itExercise ->
+
+            AnimatedVisibility(
+                modifier = Modifier.padding(4.dp),
+                visible = visibleLazy
+            ){
+//                Spacer(modifier = Modifier.height(4.dp))
+                Card( elevation = elevationTraining(), shape = MaterialTheme.shapes.extraSmall
+                ){
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .background(
+                                color = MaterialTheme.colorScheme.tertiary,
+                                shape = shapesApp.extraSmall
+                            ))
+                    {
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            modifier = Modifier.weight(1f)
+                                .padding(horizontal = 12.dp)
+                                .clickable { uiState.onClickExercise(
+                                    getIdRound(uiState, roundType), itExercise.idExercise) })
+                        {
+                            TextApp(text = itExercise.activity.name, style = interThin12)
+                        }
+//                        Spacer(modifier = Modifier.weight(1f))
+                        Icon(
+                            painter = painterResource(id = R.drawable.ic_copy),
+                            contentDescription = "",
+                            modifier = Modifier
+                                .padding(4.dp)
+                                .width(14.dp)
+                                .height(14.dp)
+                                .clickable { uiState.onCopyExercise( uiState.training.idTraining,
+                                    itExercise.idExercise) })
+                        Icon(
+                            painter = painterResource(id = R.drawable.ic_ecv),
+                            contentDescription = "",
+                            modifier = Modifier
+                                .padding(4.dp)
+                                .width(14.dp)
+                                .height(14.dp)
+                                .clickable { uiState.onSpeechExercise(itExercise.idExercise) })
+                        Icon(
+                            painter = painterResource(id = R.drawable.ic_del),
+                            contentDescription = "",
+                            modifier = Modifier
+                                .padding(4.dp)
+                                .width(14.dp)
+                                .height(14.dp)
+                                .clickable { uiState.onDeleteExercise( uiState.training.idTraining,
+                                        itExercise.idExercise) })
+                    }
+                }
+//                Spacer(modifier = Modifier.height(4.dp))
+            }
+        }
     }
 }
-
-@Composable
-fun Row3UnWrap(uiState: TrainingScreenState, roundType: RoundType) {
-    Column {
-        val amountExercise = stringResource(id = R.string.exercises) + ": " +
-                amountExercise(uiState, roundType)
-        TextApp(text = amountExercise, style = interLight12)
-        LazyExercise(uiState = uiState, roundType = roundType)
-        PoleAddExercise(uiState = uiState, roundType = roundType)
-    }
-}
-
 @Composable
 fun NameTraining( uiState: TrainingScreenState )
 {
     Row(
         verticalAlignment = Alignment.CenterVertically,
-        modifier = Modifier.fillMaxWidth().padding(bottom = 6.dp)
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(bottom = 6.dp)
     )
     {
         TextFieldApp(
@@ -255,7 +323,9 @@ fun NameTraining( uiState: TrainingScreenState )
         )
         Spacer(modifier = Modifier.weight(1f))
         IconButton(
-            modifier = Modifier.width(24.dp).height(24.dp),
+            modifier = Modifier
+                .width(24.dp)
+                .height(24.dp),
             onClick = { uiState.showSpeechTraining.value = true }) {
             Icon(
                 painter = painterResource(id = R.drawable.ic_ecv), contentDescription = "",
@@ -264,7 +334,9 @@ fun NameTraining( uiState: TrainingScreenState )
         }
         Spacer(modifier = Modifier.width(8.dp))
         IconButton(
-            modifier = Modifier.width(24.dp).height(24.dp),
+            modifier = Modifier
+                .width(24.dp)
+                .height(24.dp),
             onClick = {
                 uiState.onDeleteTraining(uiState.training.idTraining)
                 uiState.onBaskScreen.invoke()
@@ -278,12 +350,12 @@ fun NameTraining( uiState: TrainingScreenState )
         }
     }
 }
-
-fun amountExercise(uiState: TrainingScreenState, roundType: RoundType): Int {
-    return uiState.rounds.value.find{ it.roundType == roundType }?.exercise?.size ?: 0
+fun amountExercise(uiState: TrainingScreenState, roundType: RoundType): Int
+{
+    return uiState.training.rounds.find{ it.roundType == roundType }?.exercise?.size ?: 0
 }
-
-fun setCollapsing(uiState: TrainingScreenState, roundType: RoundType) {
+fun setCollapsing(uiState: TrainingScreenState, roundType: RoundType)
+{
     if (amountExercise(uiState, roundType) > 0) {
         when (roundType) {
             RoundType.UP -> uiState.workUpCollapsing.value = !uiState.workUpCollapsing.value
@@ -292,7 +364,8 @@ fun setCollapsing(uiState: TrainingScreenState, roundType: RoundType) {
         }
     }
 }
-fun getCollapsing(uiState: TrainingScreenState, roundType: RoundType): Boolean {
+fun getCollapsing(uiState: TrainingScreenState, roundType: RoundType): Boolean
+{
     return when (roundType) {
         RoundType.UP -> uiState.workUpCollapsing.value
         RoundType.OUT -> uiState.workOutCollapsing.value
@@ -306,17 +379,17 @@ fun getIconCollapsing(uiState: TrainingScreenState, roundType: RoundType): Int {
         RoundType.DOWN -> getIcon(uiState.workDownCollapsing.value)
     }
 }
-fun showSpeechRound(uiState: TrainingScreenState, roundType: RoundType) {
+fun showSpeechRound(uiState: TrainingScreenState, roundType: RoundType)
+{
     when (roundType) {
         RoundType.UP -> uiState.showSpeechWorkUp.value = true
         RoundType.OUT -> uiState.showSpeechWorkOut.value = true
         RoundType.DOWN -> uiState.showSpeechWorkDown.value = true
     }
 }
-
 fun getIcon(collapsing: Boolean): Int = if (collapsing) R.drawable.ic_wrap1 else R.drawable.ic_wrap
-
-fun getIdRound(uiState: TrainingScreenState, roundType: RoundType): Long {
+fun getIdRound(uiState: TrainingScreenState, roundType: RoundType): Long
+{
     return uiState.training.rounds.find { it.roundType == roundType }?.idRound ?: 0
 }
 @Composable
@@ -344,15 +417,6 @@ fun PoleAddExercise(uiState: TrainingScreenState, roundType: RoundType)
         )
     }
 }
-
-@Composable
-fun LazyExercise(uiState: TrainingScreenState, roundType: RoundType) {
-    Row(modifier = Modifier.clickable { getIdRound(uiState,roundType) }) {
-//        TextApp(text = stringResource(id = R.string.add_activity), style = interThin12)
-//        Icon(painter = painterResource(id = R.drawable.ic_add), contentDescription = "")
-    }
-}
-
 @SuppressLint("CoroutineCreationDuringComposition")
 @Composable
 fun TrainingLazyColumn(
@@ -418,7 +482,6 @@ fun NameWorkout(item: Workout, uiState: TrainingScreenState) {
     )
 //        modifier = Modifier.clickable { uiState.onSelectItem(item) })
 }
-
 @Preview(showBackground = true)
 @Composable
 fun TrainingScreenLayoutPreview() {

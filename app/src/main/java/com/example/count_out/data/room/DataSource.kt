@@ -7,15 +7,19 @@ import com.example.count_out.data.room.tables.SetDB
 import com.example.count_out.data.room.tables.SpeechDB
 import com.example.count_out.data.room.tables.TrainingDB
 import com.example.count_out.entity.Exercise
+import com.example.count_out.entity.Round
 import com.example.count_out.entity.RoundType
 import com.example.count_out.entity.Set
+import com.example.count_out.entity.Speech
 import com.example.count_out.entity.Training
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
 class DataSource @Inject constructor(private val dataDao: DataDao) {
-    fun getTraining(id: Long): TrainingDB = dataDao.getTrainingRel(id).toTraining()
+    fun getTraining(id: Long): TrainingDB {
+        return dataDao.getTrainingRel(id).toTraining()
+    }
     fun getTrainings(): List<Training> = dataDao.getTrainingsRel().map { it.toTraining() }
     fun updateTraining(trainingDB: TrainingDB): Int = dataDao.updateTraining(trainingDB)
     fun addTraining(): List<Training> {
@@ -26,17 +30,7 @@ class DataSource @Inject constructor(private val dataDao: DataDao) {
         dataDao.delTraining(id)
         return dataDao.getTrainingsRel().map { it.toTraining() }
     }
-    fun copyTraining(id: Long): List<Training>{
-        val currentTraining = dataDao.getTrainingRel(id).toTraining()
-        val newTraining = currentTraining.copy(
-            idTraining = 0L,
-            speechId = dataDao.addSpeech(dataDao.getSpeech(currentTraining.speechId)))
 
-        //Сделать копии Rounds, Exercise, Set, Speech
-
-        dataDao.addTraining(newTraining)
-        return dataDao.getTrainingsRel().map { it.toTraining() }
-    }
     fun changeNameTraining(training: Training, name: String): Training {
         (training as TrainingDB).name = name
         dataDao.updateTraining(training)
@@ -63,6 +57,21 @@ class DataSource @Inject constructor(private val dataDao: DataDao) {
         return  if (exerciseId < 1) { createExercise(roundId) }
                 else { dataDao.getExerciseRel(exerciseId).toExercise() }
     }
+    fun copyExercise (trainingId: Long, exerciseId: Long): Training {
+        val source = dataDao.getExerciseRel(exerciseId).toExercise()
+        copyExercise(source, source.roundId)
+        return dataDao.getTrainingRel(trainingId).toTraining()
+    }
+    fun deleteExercise (trainingId: Long, exerciseId: Long): Training {
+        val exercise = dataDao.getExerciseRel(exerciseId)
+        exercise.speech?.let { dataDao.delSpeech(it.idSpeech) }
+        exercise.sets?.forEach { set->
+            dataDao.delSpeech(set.speechId)
+            dataDao.delSet(set.idSet)
+        }
+        dataDao.deleteExercise(exerciseId)
+        return dataDao.getTrainingRel(trainingId).toTraining()
+    }
     fun getExercises(roundId: Long): List<Exercise> = dataDao.getExercisesForRoundRel(roundId).map { it.toExercise() }
     fun updateExercise(exerciseDB: ExerciseDB): Int = dataDao.updateExercise(exerciseDB)
 
@@ -73,8 +82,8 @@ class DataSource @Inject constructor(private val dataDao: DataDao) {
 //Activity
     fun getActivities(): List<ActivityDB> = dataDao.getActivities()
     fun setActivityToExercise(exerciseId: Long, activityId: Long): Exercise {
-        return dataDao.getExerciseRel(
-            dataDao.changeActivityExercise(exerciseId, activityId).toLong()).toExercise()
+        dataDao.changeActivityExercise(exerciseId, activityId).toLong()
+        return dataDao.getExerciseRel( exerciseId ).toExercise()
     }
     fun setColorActivity(activityId: Long, color: Int): ActivityDB{
         return dataDao.getActivity( dataDao.setColorActivity(activityId, color).toLong() )
@@ -101,5 +110,41 @@ class DataSource @Inject constructor(private val dataDao: DataDao) {
             dataDao.addExercise(
                 ExerciseDB(roundId = roundId, speechId = dataDao.addSpeech(SpeechDB())))
         )
+    }
+    fun copyTraining(id: Long): List<Training>{
+        val training = dataDao.getTrainingRel(id).toTraining()
+        val idNew = dataDao.addTraining( training.copy(
+                idTraining = 0L, speechId = copySpeech(training.speech).idSpeech))
+        training.rounds.forEach { round-> copyRound(round, idNew) }
+        return dataDao.getTrainingsRel().map { it.toTraining() }
+    }
+    private fun copyRound(round: Round, trainingId: Long = 0): Round
+    {
+        val idNew = dataDao.addRound((round as RoundDB).copy(
+            idRound = 0,
+            speechId = copySpeech(round.speech).idSpeech,
+            trainingId = if (trainingId == 0L) round.trainingId else trainingId ))
+        round.exercise.forEach { exercise-> copyExercise(exercise, idNew) }
+        return dataDao.getRoundRel(idNew).toRound()
+    }
+    private fun copyExercise(exercise: Exercise, roundId: Long): Exercise
+    {
+        val idNew = dataDao.addExercise((exercise as ExerciseDB).copy(
+            idExercise = 0L,
+            speechId = copySpeech(exercise.speech).idSpeech,
+            roundId = if (roundId == 0L) exercise.roundId else roundId ))
+        exercise.sets.forEach { copySet( it, idNew) }
+        return dataDao.getExerciseRel(idNew).toExercise()
+    }
+    private fun copySet(set: Set, exerciseId: Long): Set{
+        val idNew = dataDao.addSet((set as SetDB).copy(
+            idSet = 0L,
+            speechId = copySpeech(set.speech).idSpeech,
+            exerciseId = if (exerciseId == 0L) set.exerciseId  else exerciseId))
+        return dataDao.getSetRel(idNew).toSet()
+    }
+
+    private fun copySpeech(speech: Speech): Speech{
+        return dataDao.getSpeech(dataDao.addSpeech((speech as SpeechDB).copy(idSpeech = 0L)))
     }
 }

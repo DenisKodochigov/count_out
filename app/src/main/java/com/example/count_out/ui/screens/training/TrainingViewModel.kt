@@ -35,8 +35,8 @@ class TrainingViewModel @Inject constructor(
             onDismissSpeechBSTraining = {},
             onDismissSpeechBSExercise = {},
             onSpeechExercise = {},
-            onCopyExercise = {},
-            onDeleteExercise = {},
+            onCopyExercise = {trainingId, exerciseId -> copyExercise(trainingId, exerciseId)},
+            onDeleteExercise = {trainingId, exerciseId -> deleteExercise(trainingId, exerciseId)},
             onSave = {},
             onClickWorkout = {},
         )
@@ -47,11 +47,14 @@ class TrainingViewModel @Inject constructor(
 
     private fun setSpeech(speech: Speech, item: Any?) {
         templateNothing { dataRepository.setSpeech(speech, item) } }
-    private fun deleteTraining(id: Long){ templateNothing { dataRepository.deleteTrainingNothing(id) } }
+    private fun deleteTraining(trainingId: Long){
+        templateNothing { dataRepository.deleteTrainingNothing(trainingId) } }
     private fun changeNameTraining(training: Training, name: String){
         templateMy { dataRepository.changeNameTraining(training, name) } }
-//    fun deleteWorkout(id: Long){ templateMy { dataRepository.deleteWorkout(id) } }
-//    fun addWorkout(name: String){ templateMy { dataRepository.addWorkout(name) } }
+    private fun copyExercise(trainingId: Long, exerciseId: Long){
+        templateMy { dataRepository.copyExercise(trainingId, exerciseId) } }
+    private fun deleteExercise(trainingId: Long, exerciseId: Long){
+        templateMy { dataRepository.deleteExercise(trainingId, exerciseId) } }
     private fun templateMy( funDataRepository:() -> Training){
         viewModelScope.launch(Dispatchers.IO) {
             kotlin.runCatching { funDataRepository() }.fold(

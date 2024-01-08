@@ -23,8 +23,6 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.mutableFloatStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
@@ -37,7 +35,6 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.count_out.R
 import com.example.count_out.data.room.tables.SetDB
 import com.example.count_out.entity.Set
-import com.example.count_out.entity.SizeElement
 import com.example.count_out.ui.bottomsheet.BottomSheetSelectActivity
 import com.example.count_out.ui.bottomsheet.BottomSheetSpeech
 import com.example.count_out.ui.theme.Dimen
@@ -47,9 +44,7 @@ import com.example.count_out.ui.theme.interReg14
 import com.example.count_out.ui.theme.interThin12
 import com.example.count_out.ui.theme.shapeAddExercise
 import com.example.count_out.ui.theme.shapesApp
-import com.example.count_out.ui.theme.sizeApp
 import com.example.count_out.ui.view_components.TextApp
-import com.example.count_out.ui.view_components.animatedScroll
 
 @SuppressLint("UnrememberedMutableState")
 @Composable fun ExerciseScreen(roundId: Long, exerciseId:Long,
@@ -78,19 +73,11 @@ import com.example.count_out.ui.view_components.animatedScroll
 @Composable
 fun ExerciseScreenLayout(uiState: ExerciseScreenState
 ) {
-    val offsetHeightPx = remember { mutableFloatStateOf(0f) }
-    Column(
-        Modifier
-            .padding(Dimen.paddingAppHor)
-            .fillMaxHeight()
-            .animatedScroll(
-                height = sizeApp(SizeElement.HEIGHT_BOTTOM_BAR),
-                offsetHeightPx = offsetHeightPx
-            ),
+    Column(Modifier.padding(Dimen.paddingAppHor).fillMaxHeight(),
     ){
         Spacer(modifier = Modifier.height(Dimen.width8))
         NameTraining(uiState)
-        NameSection(uiState)
+        NameRound(uiState)
         Spacer(modifier = Modifier.height(Dimen.width8))
         ExerciseContent(uiState)
         Spacer(modifier = Modifier.height(Dimen.width8))
@@ -105,10 +92,10 @@ fun ExerciseScreenLayout(uiState: ExerciseScreenState
         modifier = Modifier.padding(start = 12.dp)
     )
 }
-@Composable fun NameSection(uiState: ExerciseScreenState
+@Composable fun NameRound(uiState: ExerciseScreenState
 ){
     TextApp(
-        text = "${uiState.nameRound}:${uiState.roundId}",
+        text = "${uiState.nameRound}:${uiState.roundId}  ; Exercise: ${uiState.exercise.idExercise}",
         textAlign = TextAlign.Start,
         style = interReg14,
         modifier = Modifier.padding(start = 24.dp)

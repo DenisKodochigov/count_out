@@ -7,22 +7,20 @@ import androidx.compose.runtime.mutableStateOf
 import com.example.count_out.data.room.tables.TrainingDB
 import com.example.count_out.entity.BottomSheetInterface
 import com.example.count_out.entity.Exercise
-import com.example.count_out.entity.Round
 import com.example.count_out.entity.Speech
 import com.example.count_out.entity.Training
 
 data class TrainingScreenState(
     val training: Training = TrainingDB(),
     val enteredName: MutableState<String> = mutableStateOf(""),
-    val rounds: MutableState<List<Round>> = mutableStateOf(emptyList()),
     val showSpeechTraining: MutableState<Boolean> = mutableStateOf(false),
     val showSpeechWorkUp: MutableState<Boolean> = mutableStateOf(false),
     val showSpeechWorkOut: MutableState<Boolean> = mutableStateOf(false),
     val showSpeechWorkDown: MutableState<Boolean> = mutableStateOf(false),
     val showSpeechExercise: MutableState<Exercise?> = mutableStateOf(null),
-    val workUpCollapsing: MutableState<Boolean> = mutableStateOf(false),
-    val workOutCollapsing: MutableState<Boolean> = mutableStateOf(false),
-    val workDownCollapsing: MutableState<Boolean> = mutableStateOf(false),
+    val workUpCollapsing: MutableState<Boolean> = mutableStateOf(true),
+    val workOutCollapsing: MutableState<Boolean> = mutableStateOf(true),
+    val workDownCollapsing: MutableState<Boolean> = mutableStateOf(true),
     val durationRound: MutableState<Double> = mutableDoubleStateOf(0.0),
     @Stable var changeNameTraining: (Training, String) -> Unit = {_,_ ->},
     @Stable var onSpeechTraining: (Long) -> Unit = {},
@@ -33,8 +31,9 @@ data class TrainingScreenState(
     @Stable var onAddExercise: (Long) -> Unit = { },
     @Stable var onClickExercise: (Long, Long) -> Unit = {_,_ ->},
     @Stable var onSpeechExercise: (Long) -> Unit = {},
-    @Stable var onCopyExercise: (Long) -> Unit = {},
-    @Stable var onDeleteExercise: (Long) -> Unit = {},
+    @Stable var onCopyExercise: (Long, Long) -> Unit = {_,_ ->},
+    @Stable var onDeleteExercise: (Long, Long) -> Unit = {_,_ ->},
+
     @Stable var onSave: (Training) -> Unit = {},
     @Stable var onClickWorkout: (Long) ->Unit = {},
     @Stable var onBaskScreen: () ->Unit = {},

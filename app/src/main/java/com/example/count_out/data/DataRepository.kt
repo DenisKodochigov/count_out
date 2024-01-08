@@ -69,13 +69,18 @@ class DataRepository  @Inject constructor(private val dataSource: DataSource){
         return if (roundId < 1) ExerciseDB()
                 else dataSource.getExercise(roundId, exerciseId)
     }
+    fun copyExercise (trainingId: Long, exerciseId: Long): Training {
+        return dataSource.copyExercise( trainingId, exerciseId)
+    }
+    fun deleteExercise(trainingId: Long, exerciseId: Long): Training {
+        return dataSource.deleteExercise( trainingId, exerciseId)
+    }
     fun getExercises(roundId: Long): List<Exercise> {
         return if (roundId < 1) emptyList()
         else dataSource.getExercises(roundId)
     }
     fun getNameTrainingFromRound(roundId: Long): String = dataSource.getNameTrainingFromRound(roundId)
     fun getNameRound(roundId: Long): String = dataSource.getNameRound(roundId)
-
 
 //###### ACTIVITY ##################
     fun getActivities(): List<Activity> = dataSource.getActivities()

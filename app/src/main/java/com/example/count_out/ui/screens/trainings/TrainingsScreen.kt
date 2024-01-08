@@ -1,6 +1,7 @@
 package com.example.count_out.ui.screens.trainings
 
 import android.annotation.SuppressLint
+import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -97,7 +98,7 @@ fun TrainingsLazyColumn(uiState: TrainingsScreenState,
 {
     LazyColumn(
         state = rememberLazyListState(),
-        modifier = Modifier.testTag("1")
+        modifier = Modifier.testTag("1").animateContentSize()
     ){
         items( items = uiState.trainings, key = { it.idTraining })
         { item ->

@@ -7,6 +7,8 @@ import androidx.room.Transaction
 import androidx.room.Update
 import com.example.count_out.data.room.relation.ExerciseRel
 import com.example.count_out.data.room.relation.NameTrainingRel
+import com.example.count_out.data.room.relation.RoundRel
+import com.example.count_out.data.room.relation.SetRel
 import com.example.count_out.data.room.relation.TrainingRel
 import com.example.count_out.data.room.tables.ActivityDB
 import com.example.count_out.data.room.tables.ExerciseDB
@@ -37,6 +39,8 @@ interface DataDao {
     fun updateRound(item: RoundDB): Int
     @Query("SELECT * FROM tb_round WHERE idRound = :id")
     fun getRound(id: Long): RoundDB
+    @Query("SELECT * FROM tb_round WHERE idRound = :id")
+    fun getRoundRel(id: Long): RoundRel
     @Query("SELECT * FROM tb_round WHERE idRound IN (:list)")
     fun getRounds( list: List<Long>): List<RoundDB>
     @Query("SELECT * FROM tb_round WHERE trainingId = :trainingID")
@@ -69,7 +73,7 @@ interface DataDao {
     @Query("SELECT * FROM tb_exercise WHERE idExercise IN (:list)")
     fun getExercisesFilter( list: List<Long>): List<ExerciseDB>
     @Query("DELETE FROM tb_exercise WHERE idExercise = :id")
-    fun delExercise(id: Long)
+    fun deleteExercise(id: Long)
     @Query("UPDATE tb_exercise SET activityId = :activityId WHERE idExercise =:exerciseId")
     fun changeActivityExercise(exerciseId: Long, activityId: Long): Int
 
@@ -93,6 +97,8 @@ interface DataDao {
     fun updateSet(item: SetDB): Int
     @Query("SELECT * FROM tb_set WHERE idSet = :id")
     fun getSet(id: Long): SetDB
+    @Query("SELECT * FROM tb_set WHERE idSet = :id")
+    fun getSetRel(id: Long): SetRel
     @Query("SELECT * FROM tb_set WHERE idSet IN (:list)")
     fun getSets( list: List<Long>): List<SetDB>
     @Query("SELECT * FROM tb_set WHERE exerciseId = :exerciseId")

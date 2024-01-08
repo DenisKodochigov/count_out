@@ -38,23 +38,17 @@ import kotlin.math.roundToInt
     val viewModel: SettingViewModel = hiltViewModel()
 //    viewModel.getWorkouts()
     RoundScreenCreateView(
-//        onClickWorkout = onClickWorkout,
         screen = screen,
         viewModel = viewModel,
     )
 }
 @Composable fun RoundScreenCreateView(
-//    onClickWorkout: (Long) -> Unit,
     screen: ScreenDestination,
     viewModel: SettingViewModel
 ){
     val uiState by viewModel.settingScreenState.collectAsState()
 
-//    uiState.changeNameWorkout = remember { { workout -> viewModel.changeNameWorkout(workout) }}
-//    uiState.deleteWorkout = remember {{ workoutId -> viewModel.deleteWorkout(workoutId) }}
-//    uiState.onAddClick = remember {{ viewModel.addWorkout(it) }}
     uiState.onDismiss = remember {{ uiState.triggerRunOnClickFAB.value = false }}
-//    uiState.onClickWorkout = remember {{id -> onClickWorkout(id)}}
     uiState.idImage = getIdImage(screen)
 
     screen.onClickFAB = { uiState.triggerRunOnClickFAB.value = true}
