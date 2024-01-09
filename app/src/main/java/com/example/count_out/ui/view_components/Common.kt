@@ -357,14 +357,16 @@ fun TextButtonOK(onConfirm: () -> Unit, enabled: Boolean = true) {
     }
 }
 @Composable fun TextStringAndField(text:String, enterValue: MutableState<String>){
-    TextApp(
-        text = text,
-        style = interReg14,
-        textAlign = TextAlign.Start,)
-    TextFieldApp(
-        enterValue = enterValue,
-        typeKeyboard = TypeKeyboard.DIGIT,
-        modifier = Modifier.width(50.dp).background(color = MaterialTheme.colorScheme.surfaceVariant),
-        textStyle = interLight12
-    )
+    Row(verticalAlignment = Alignment.CenterVertically){
+        TextApp(
+            text = text,
+            style = interReg14,
+            textAlign = TextAlign.Start,)
+        TextFieldApp(
+            enterValue = enterValue,
+            typeKeyboard = TypeKeyboard.DIGIT,
+            modifier = Modifier.width(50.dp).background(color = MaterialTheme.colorScheme.surfaceVariant),
+            textStyle = interLight12
+        )
+    }
 }

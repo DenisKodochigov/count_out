@@ -254,18 +254,19 @@ fun setCollapsing(uiState: ExerciseScreenState,  set: Set): Boolean
 @Composable fun ShortInformation(uiState: ExerciseScreenState, set: Set)
 {
     Row(verticalAlignment = Alignment.CenterVertically){
-
-        TextStringAndField(enterValue = uiState.enteredDuration,
-            text = stringResource(id = R.string.duration) + " (" + stringResource(id = R.string.sec) + "): ")
+        TextAppLocal(stringResource(id = R.string.duration) + " (" + stringResource(id = R.string.sec) + "): ")
         Spacer(modifier = Modifier.weight(1f))
-
-        TextStringAndField(enterValue = uiState.enteredDistance,
-            text = stringResource(id = R.string.distance) + " (" + stringResource(id = R.string.km) + "): ")
+        TextAppLocal(stringResource(id = R.string.distance) + " (" + stringResource(id = R.string.km) + "): ")
         Spacer(modifier = Modifier.weight(1f))
-
-        TextStringAndField(enterValue = uiState.enteredWeight,
-            text = stringResource(id = R.string.weight) + " (" + stringResource(id = R.string.kg) + "): ")
+        TextAppLocal(stringResource(id = R.string.weight) + " (" + stringResource(id = R.string.kg) + "): ")
     }
+}
+
+@Composable fun TextAppLocal(text: String){
+    TextApp(
+        text = text,
+        style = interReg14,
+        textAlign = TextAlign.Start,)
 }
 @Composable fun AdditionalInformation(uiState: ExerciseScreenState, set: Set)
 {
@@ -273,10 +274,22 @@ fun setCollapsing(uiState: ExerciseScreenState,  set: Set): Boolean
     AnimatedVisibility(modifier = Modifier.padding(4.dp), visible = visibleLazy
     ){
         Column{
+            TextStringAndField(enterValue = uiState.enteredDuration,
+                text = stringResource(id = R.string.duration) + " (" + stringResource(id = R.string.sec) + "): ")
+            Spacer(modifier = Modifier.height(8.dp))
+
+            TextStringAndField(enterValue = uiState.enteredDistance,
+                text = stringResource(id = R.string.distance) + " (" + stringResource(id = R.string.km) + "): ")
+            Spacer(modifier = Modifier.height(8.dp))
+
+            TextStringAndField(enterValue = uiState.enteredWeight,
+                text = stringResource(id = R.string.weight) + " (" + stringResource(id = R.string.kg) + "): ")
+            Spacer(modifier = Modifier.height(8.dp))
+
             TextApp(text = stringResource(id = R.string.duration_set), style = interReg14)
             SwitchDuration(uiState, set)
-            TextStringAndField(text = stringResource(id = R.string.time_to_rest),
-                enterValue = uiState.enteredTimeRest)
+            TextStringAndField( enterValue = uiState.enteredTimeRest,
+                text = stringResource(id = R.string.time_to_rest) + " (" + stringResource(id = R.string.sec) + "): ",)
         }
     }
 }
