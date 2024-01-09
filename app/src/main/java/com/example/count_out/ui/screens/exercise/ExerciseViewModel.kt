@@ -34,7 +34,6 @@ class ExerciseViewModel @Inject constructor(
                 exerciseId, activityId -> setActivityToExercise(exerciseId, activityId) },
             onSetColorActivity = {
                     activityId, color -> onSetColorActivity(activityId = activityId, color = color) },
-            triggerRunOnClickFAB = mutableStateOf(false),
             listSpeech = emptyList(),
             nameSection  = "",
             item = null,

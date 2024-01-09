@@ -45,7 +45,7 @@ class DataRepository  @Inject constructor(private val dataSource: DataSource){
                 (item as RoundDB).speechId = speechId.toLong()
                 dataSource.updateRound(item)
             }
-            else -> null
+            else -> { }
         }
     }
     fun getExercise(roundId: Long, exerciseId:Long): Exercise {

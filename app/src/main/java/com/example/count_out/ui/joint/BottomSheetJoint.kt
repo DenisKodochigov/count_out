@@ -24,7 +24,6 @@ import com.example.count_out.ui.view_components.TextFieldAppBorder
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 12.dp),
-            textAlign = TextAlign.Start,
             enterValue = enterValue,
             typeKeyboard = TypeKeyboard.TEXT)
     }

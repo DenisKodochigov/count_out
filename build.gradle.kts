@@ -2,7 +2,7 @@
 buildscript {
 
     val gradleVersion by extra("8.2.1")
-    val daggerVersion by extra("2.49")
+    val daggerVersion by extra("2.50")
     val kotlinVersion by extra("1.9.20")
     val composeVersion by extra("1.5.4")
     val minSdk by extra(26)

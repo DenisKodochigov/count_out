@@ -53,4 +53,8 @@
     <string name="workout_text_fab">Workout</string>
     <string name="part_work">Part training</string>
     <string name="message">"Message "</string>
+    <string name="time">Time</string>
+    <string name="km">km</string>
+    <string name="kg">kg</string>
+    <string name="duration_set">Duration set</string>
 </resources>

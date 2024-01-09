@@ -39,7 +39,7 @@ interface DataDao {
     fun updateRound(item: RoundDB): Int
     @Query("SELECT * FROM tb_round WHERE idRound = :id")
     fun getRound(id: Long): RoundDB
-    @Query("SELECT * FROM tb_round WHERE idRound = :id")
+    @Transaction @Query("SELECT * FROM tb_round WHERE idRound = :id")
     fun getRoundRel(id: Long): RoundRel
     @Query("SELECT * FROM tb_round WHERE idRound IN (:list)")
     fun getRounds( list: List<Long>): List<RoundDB>
@@ -97,7 +97,7 @@ interface DataDao {
     fun updateSet(item: SetDB): Int
     @Query("SELECT * FROM tb_set WHERE idSet = :id")
     fun getSet(id: Long): SetDB
-    @Query("SELECT * FROM tb_set WHERE idSet = :id")
+    @Transaction @Query("SELECT * FROM tb_set WHERE idSet = :id")
     fun getSetRel(id: Long): SetRel
     @Query("SELECT * FROM tb_set WHERE idSet IN (:list)")
     fun getSets( list: List<Long>): List<SetDB>

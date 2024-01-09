@@ -19,9 +19,8 @@ data class ExerciseScreenState(
     @Stable val exercise: Exercise = ExerciseDB(),
     @Stable val activities: List<Activity> = emptyList(),
 
-//    @Stable var changeNameWorkout: (Workout) -> Unit = {},
+    @Stable val listCollapsingSet: MutableState<List<Long>> = mutableStateOf(emptyList()),
     @Stable var onAddUpdateSet: (Long, Set) -> Unit = {_,_ ->},
-
     @Stable val showBottomSheetSpeech: MutableState<Boolean> = mutableStateOf(false),
     @Stable val showBottomSheetSelectActivity: MutableState<Boolean> = mutableStateOf(false),
     @Stable var onDismissSelectActivity: () -> Unit = {},
@@ -29,11 +28,20 @@ data class ExerciseScreenState(
     @Stable var onSetColorActivity: (Long, Int) -> Unit = {_,_ ->},
     @Stable var doChangeActivity: (Activity) -> Unit = {},
 
-    @Stable var onClickWorkout: (Long) ->Unit = {},
-    @Stable val triggerRunOnClickFAB: MutableState<Boolean> = mutableStateOf(false),
+    @Stable val enteredDuration: MutableState<String> = mutableStateOf(""),
+    @Stable val enteredWeight: MutableState<String> = mutableStateOf(""),
+    @Stable val enteredDistance: MutableState<String> = mutableStateOf(""),
+    @Stable val enteredIntensity: MutableState<String> = mutableStateOf(""),
+    @Stable val enteredReps: MutableState<String> = mutableStateOf(""),
+    @Stable val enteredTimeRest: MutableState<String> = mutableStateOf(""),
+    @Stable val enteredIntervalDown: MutableState<String> = mutableStateOf(""),
+    @Stable val enteredIntervalReps: MutableState<String> = mutableStateOf(""),
+    @Stable val enteredName: MutableState<String> = mutableStateOf(""),
+    @Stable val enteredGroupCount: MutableState<String> = mutableStateOf(""),
+
     @Stable override var listSpeech: List<Speech> = emptyList(),
+    @Stable override var item: Any? =null,
     @Stable override var nameSection: String = "",
     @Stable override var onConfirmationSpeech: (Speech, Any?) -> Unit = {_,_->},
-    @Stable override var item: Any? =null,
     @Stable override var onDismissSpeech: () -> Unit = {},
 ): BottomSheetInterface

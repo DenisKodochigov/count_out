@@ -72,9 +72,9 @@ object DatabaseModule {
         idSpeech = db.dataDao().addSpeech(SpeechDB())
         val idRound1 = db.dataDao().addRound(RoundDB(trainingId = idTraining, roundType = RoundType.UP, speechId = idSpeech))
         idSpeech = db.dataDao().addSpeech(SpeechDB())
-        val idRound2 = db.dataDao().addRound(RoundDB(trainingId = idTraining, roundType = RoundType.OUT, speechId = idSpeech))
+        db.dataDao().addRound(RoundDB(trainingId = idTraining, roundType = RoundType.OUT, speechId = idSpeech))
         idSpeech = db.dataDao().addSpeech(SpeechDB())
-        val idRound3 = db.dataDao().addRound(RoundDB(trainingId = idTraining, roundType = RoundType.DOWN, speechId = idSpeech))
+        db.dataDao().addRound(RoundDB(trainingId = idTraining, roundType = RoundType.DOWN, speechId = idSpeech))
 
 
         idSpeech = db.dataDao().addSpeech(SpeechDB())

@@ -2,8 +2,6 @@ package com.example.count_out.ui.screens.training
 
 import android.annotation.SuppressLint
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.ExperimentalAnimationApi
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -34,7 +32,6 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -50,6 +47,7 @@ import com.example.count_out.ui.theme.interReg14
 import com.example.count_out.ui.theme.interThin12
 import com.example.count_out.ui.theme.shapeAddExercise
 import com.example.count_out.ui.theme.shapesApp
+import com.example.count_out.ui.view_components.GroupIcons
 import com.example.count_out.ui.view_components.TextApp
 import com.example.count_out.ui.view_components.TextFieldApp
 import com.example.count_out.ui.view_components.log
@@ -84,7 +82,6 @@ fun TrainingScreenCreateView(
     EditSpeech(uiState.value)
     TrainingScreenLayout(uiState = uiState.value)
 }
-
 @Composable fun EditSpeech(uiState: TrainingScreenState)
 {
     if (uiState.showSpeechTraining.value) {
@@ -227,8 +224,6 @@ fun Row3(uiState: TrainingScreenState, roundType: RoundType)
         }
     }
 }
-
-@OptIn(ExperimentalFoundationApi::class, ExperimentalAnimationApi::class)
 @Composable
 fun LazyExercise(uiState: TrainingScreenState, roundType: RoundType, visibleLazy: Boolean)
 {
@@ -257,45 +252,22 @@ fun LazyExercise(uiState: TrainingScreenState, roundType: RoundType, visibleLazy
                                 shape = shapesApp.extraSmall
                             ))
                     {
-                        Row(
-                            verticalAlignment = Alignment.CenterVertically,
-                            modifier = Modifier.weight(1f)
+                        Row(verticalAlignment = Alignment.CenterVertically,
+                            modifier = Modifier
+                                .weight(1f)
                                 .padding(horizontal = 12.dp)
-                                .clickable { uiState.onClickExercise(
-                                    getIdRound(uiState, roundType), itExercise.idExercise) })
-                        {
-                            TextApp(text = itExercise.activity.name, style = interThin12)
-                        }
-//                        Spacer(modifier = Modifier.weight(1f))
-                        Icon(
-                            painter = painterResource(id = R.drawable.ic_copy),
-                            contentDescription = "",
-                            modifier = Modifier
-                                .padding(4.dp)
-                                .width(14.dp)
-                                .height(14.dp)
-                                .clickable { uiState.onCopyExercise( uiState.training.idTraining,
-                                    itExercise.idExercise) })
-                        Icon(
-                            painter = painterResource(id = R.drawable.ic_ecv),
-                            contentDescription = "",
-                            modifier = Modifier
-                                .padding(4.dp)
-                                .width(14.dp)
-                                .height(14.dp)
-                                .clickable { uiState.onSpeechExercise(itExercise.idExercise) })
-                        Icon(
-                            painter = painterResource(id = R.drawable.ic_del),
-                            contentDescription = "",
-                            modifier = Modifier
-                                .padding(4.dp)
-                                .width(14.dp)
-                                .height(14.dp)
-                                .clickable { uiState.onDeleteExercise( uiState.training.idTraining,
-                                        itExercise.idExercise) })
+                                .clickable {
+                                    uiState.onClickExercise(
+                                        getIdRound(uiState, roundType), itExercise.idExercise
+                                    )
+                                })
+                        { TextApp(text = itExercise.activity.name, style = interThin12) }
+                        GroupIcons(
+                            onCopy = { uiState.onCopyExercise(uiState.training.idTraining, itExercise.idExercise)},
+                            onDel = { uiState.onDeleteExercise(uiState.training.idTraining, itExercise.idExercise) },
+                            onSpeech = { uiState.onSpeechExercise(itExercise.idExercise) })
                     }
                 }
-//                Spacer(modifier = Modifier.height(4.dp))
             }
         }
     }
@@ -312,7 +284,6 @@ fun NameTraining( uiState: TrainingScreenState )
     {
         TextFieldApp(
             enterValue = uiState.enteredName,
-            textAlign = TextAlign.Start,
             typeKeyboard = TypeKeyboard.TEXT,
             textStyle = interBold16,
             onChangeValue = {

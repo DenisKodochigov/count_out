@@ -52,4 +52,8 @@
     <string name="setting">Настройки</string>
     <string name="duration">"Длительность: "</string>
     <string name="part_work">Сеция тренировки.</string>
+    <string name="time">Time</string>
+    <string name="km">km</string>
+    <string name="kg">kg</string>
+    <string name="duration_set">Duration set</string>
 </resources>

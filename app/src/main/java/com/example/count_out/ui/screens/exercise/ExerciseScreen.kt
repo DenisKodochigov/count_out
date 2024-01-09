@@ -1,6 +1,7 @@
 package com.example.count_out.ui.screens.exercise
 
 import android.annotation.SuppressLint
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -18,6 +19,7 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -43,8 +45,9 @@ import com.example.count_out.ui.theme.interBold16
 import com.example.count_out.ui.theme.interReg14
 import com.example.count_out.ui.theme.interThin12
 import com.example.count_out.ui.theme.shapeAddExercise
-import com.example.count_out.ui.theme.shapesApp
+import com.example.count_out.ui.view_components.GroupIcons4
 import com.example.count_out.ui.view_components.TextApp
+import com.example.count_out.ui.view_components.TextStringAndField
 
 @SuppressLint("UnrememberedMutableState")
 @Composable fun ExerciseScreen(roundId: Long, exerciseId:Long,
@@ -73,39 +76,47 @@ import com.example.count_out.ui.view_components.TextApp
 @Composable
 fun ExerciseScreenLayout(uiState: ExerciseScreenState
 ) {
-    Column(Modifier.padding(Dimen.paddingAppHor).fillMaxHeight(),
+    Column(
+        Modifier
+            .padding(Dimen.paddingAppHor)
+            .fillMaxHeight(),
     ){
         Spacer(modifier = Modifier.height(Dimen.width8))
-        NameTraining(uiState)
-        NameRound(uiState)
+        NameTrainingRound(uiState)
         Spacer(modifier = Modifier.height(Dimen.width8))
         ExerciseContent(uiState)
         Spacer(modifier = Modifier.height(Dimen.width8))
     }
 }
-@Composable fun NameTraining(uiState: ExerciseScreenState
+@Composable fun NameTrainingRound(uiState: ExerciseScreenState
 ){
-    TextApp(
-        text = uiState.nameTraining,
-        textAlign = TextAlign.Start,
-        style = interBold16,
-        modifier = Modifier.padding(start = 12.dp)
-    )
-}
-@Composable fun NameRound(uiState: ExerciseScreenState
-){
-    TextApp(
-        text = "${uiState.nameRound}:${uiState.roundId}  ; Exercise: ${uiState.exercise.idExercise}",
-        textAlign = TextAlign.Start,
-        style = interReg14,
-        modifier = Modifier.padding(start = 24.dp)
-    )
+    Row(verticalAlignment = Alignment.CenterVertically){
+        TextApp(
+            text = uiState.nameTraining,
+            textAlign = TextAlign.Start,
+            style = interBold16,
+            modifier = Modifier.padding(start = 12.dp)
+        )
+        TextApp(
+            text = "${uiState.nameRound}:${uiState.roundId}  ; Exercise: ${uiState.exercise.idExercise}",
+            textAlign = TextAlign.Start,
+            style = interReg14,
+            modifier = Modifier.padding(start = 24.dp)
+        )
+    }
+
 }
 @Composable fun ExerciseContent(uiState: ExerciseScreenState
 ){
     Card (
         elevation = elevationTraining(),
         shape = MaterialTheme.shapes.extraSmall,
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.secondary,
+            contentColor = MaterialTheme.colorScheme.onSecondary,
+            disabledContainerColor = MaterialTheme.colorScheme.secondary,
+            disabledContentColor = MaterialTheme.colorScheme.onSecondary,
+        )
 //        modifier = Modifier.padding(12.dp)
 //            .fillMaxWidth()
 //            .verticalScroll(
@@ -115,15 +126,24 @@ fun ExerciseScreenLayout(uiState: ExerciseScreenState
 //                reverseScrolling = false
 //            )
     ){
-        Column ( modifier = Modifier
-            .fillMaxWidth()
-            .background(color = MaterialTheme.colorScheme.secondary, shape = shapesApp.extraSmall)
-        ){
-            Column (modifier = Modifier.padding(6.dp)
-            ){
-                SelectActivity(uiState)
-                LazySets(uiState)
-            }
+        Column {
+            Column (modifier = Modifier
+                .fillMaxWidth()
+                .padding(6.dp)){ SelectActivity(uiState) }
+            Card (
+                elevation = elevationTraining(),
+                shape = MaterialTheme.shapes.extraSmall,
+                modifier = Modifier
+                    .padding(6.dp)
+                    .fillMaxWidth(),
+                colors = CardDefaults.cardColors(
+                    containerColor = MaterialTheme.colorScheme.tertiary,
+                    contentColor = MaterialTheme.colorScheme.onTertiary,
+                    disabledContainerColor = MaterialTheme.colorScheme.secondary,
+                    disabledContentColor = MaterialTheme.colorScheme.onSecondary,
+                ),
+                content = { LazySets(uiState) }
+            )
             RowAddSet(uiState)
         }
     }
@@ -142,14 +162,11 @@ fun ExerciseScreenLayout(uiState: ExerciseScreenState
 }
 @Composable fun IconSelectActivity(uiState: ExerciseScreenState
 ){
-    IconButton(
-        modifier = Modifier
-            .width(24.dp)
-            .height(24.dp),
+    IconButton(modifier = Modifier
+        .width(24.dp)
+        .height(24.dp),
         onClick = { uiState.showBottomSheetSelectActivity.value = true })
-    {
-        Icon(imageVector = Icons.Filled.ArrowDropDown, contentDescription = "")
-    }
+    { Icon(imageVector = Icons.Filled.ArrowDropDown, contentDescription = "") }
 }
 @Composable fun TextActivity(uiState: ExerciseScreenState
 ){
@@ -157,10 +174,9 @@ fun ExerciseScreenLayout(uiState: ExerciseScreenState
 }
 @Composable fun IconSpeech(uiState: ExerciseScreenState
 ){
-    IconButton(
-        modifier = Modifier
-            .width(24.dp)
-            .height(24.dp),
+    IconButton(modifier = Modifier
+        .width(24.dp)
+        .height(24.dp),
         onClick = { uiState.showBottomSheetSpeech.value = true }) {
         Icon(
             painter = painterResource(id = R.drawable.ic_ecv), contentDescription = "",
@@ -172,12 +188,16 @@ fun ExerciseScreenLayout(uiState: ExerciseScreenState
 ){
     LazyColumn(
         state = rememberLazyListState(),
-        modifier = Modifier.testTag("1")
+        modifier = Modifier
+            .testTag("1")
+            .padding(horizontal = 8.dp)
     ){
         items( items = uiState.exercise.sets, key = { it.idSet })
-        { item ->
+        { set ->
             Spacer(modifier = Modifier.height(Dimen.width4))
-            LazyContent(uiState, item)
+            NameSet(uiState,set)
+            ShortInformation(uiState,set)
+            AdditionalInformation(uiState,set)
             Spacer(modifier = Modifier.height(Dimen.width4))
         }
     }
@@ -199,7 +219,71 @@ fun ExerciseScreenLayout(uiState: ExerciseScreenState
         TextApp(text = "speech: ${set.speech}", style = interThin12)
     }
 }
-@Composable fun RowAddSet(uiState: ExerciseScreenState
+
+@Composable fun NameSet(uiState: ExerciseScreenState, set: Set)
+{
+    Row{
+        TextApp(
+            text = "${set.idSet}: ${set.name}",
+            style = interReg14,
+            textAlign = TextAlign.Start,
+            modifier = Modifier.weight(1f))
+        GroupIcons4(
+            onCopy = { /*TODO*/ },
+            onSpeech = { /*TODO*/ },
+            onDel = { /*TODO*/ },
+            onCollapsing = { setCollapsing(uiState, set) },
+            wrap = uiState.listCollapsingSet.value.find { it == set.idSet } != null
+        )
+    }
+}
+fun setCollapsing(uiState: ExerciseScreenState,  set: Set): Boolean
+{
+    val listCollapsingSet = uiState.listCollapsingSet.value.toMutableList()
+    val itemList = listCollapsingSet.find { it == set.idSet }
+    return if ( itemList != null) {
+        listCollapsingSet.remove(itemList)
+        uiState.listCollapsingSet.value = listCollapsingSet
+        false
+    } else {
+        listCollapsingSet.add(set.idSet)
+        uiState.listCollapsingSet.value = listCollapsingSet
+        true
+    }
+}
+@Composable fun ShortInformation(uiState: ExerciseScreenState, set: Set)
+{
+    Row(verticalAlignment = Alignment.CenterVertically){
+
+        TextStringAndField(enterValue = uiState.enteredDuration,
+            text = stringResource(id = R.string.duration) + " (" + stringResource(id = R.string.sec) + "): ")
+        Spacer(modifier = Modifier.weight(1f))
+
+        TextStringAndField(enterValue = uiState.enteredDistance,
+            text = stringResource(id = R.string.distance) + " (" + stringResource(id = R.string.km) + "): ")
+        Spacer(modifier = Modifier.weight(1f))
+
+        TextStringAndField(enterValue = uiState.enteredWeight,
+            text = stringResource(id = R.string.weight) + " (" + stringResource(id = R.string.kg) + "): ")
+    }
+}
+@Composable fun AdditionalInformation(uiState: ExerciseScreenState, set: Set)
+{
+    val visibleLazy = uiState.listCollapsingSet.value.find { it == set.idSet } != null
+    AnimatedVisibility(modifier = Modifier.padding(4.dp), visible = visibleLazy
+    ){
+        Column{
+            TextApp(text = stringResource(id = R.string.duration_set), style = interReg14)
+            SwitchDuration(uiState, set)
+            TextStringAndField(text = stringResource(id = R.string.time_to_rest),
+                enterValue = uiState.enteredTimeRest)
+        }
+    }
+}
+@Composable fun SwitchDuration( uiState: ExerciseScreenState, set: Set){
+
+}
+        @Composable fun RowAddSet(uiState: ExerciseScreenState
 ){
     Row (horizontalArrangement = Arrangement.End, modifier = Modifier.fillMaxWidth()){
         Row(
@@ -213,7 +297,6 @@ fun ExerciseScreenLayout(uiState: ExerciseScreenState
                         SetDB(exerciseId = uiState.exercise.idExercise)
                     )
                 }
-
         ) {
             TextApp(
                 text = stringResource(id = R.string.add_set),

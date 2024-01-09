@@ -3,22 +3,16 @@ package com.example.count_out.ui.view_components
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.focusable
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Divider
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -31,10 +25,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.platform.testTag
@@ -48,17 +40,12 @@ import com.example.count_out.R
 import com.example.count_out.entity.TagsTesting.BUTTON_OK
 import com.example.count_out.entity.TypeKeyboard
 import com.example.count_out.entity.TypeText
-import com.example.count_out.entity.UPDOWN
 import com.example.count_out.ui.theme.colorApp
+import com.example.count_out.ui.theme.interLight12
 import com.example.count_out.ui.theme.interReg12
+import com.example.count_out.ui.theme.interReg14
 import com.example.count_out.ui.theme.shapesApp
 import com.example.count_out.ui.theme.styleApp
-
-@Composable fun HeaderScreen(text: String ) {
-    Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
-        TextApp(text = text, style = styleApp(nameStyle = TypeText.NAME_SCREEN))
-    }
-}
 
 @Composable fun TextApp(
     text: String,
@@ -109,7 +96,7 @@ import com.example.count_out.ui.theme.styleApp
                 localFocusManager.clearFocus()
                 enterValue.value = enterText
                 enterText = ""
-                if (keyboardActionsOnDone != null) keyboardActionsOnDone.invoke()
+                keyboardActionsOnDone?.invoke()
                 keyboardController?.hide()
             }
         ),
@@ -232,45 +219,44 @@ import com.example.count_out.ui.theme.styleApp
 //    }
 //}
 
-@Composable fun ShowArrowVer(enable:Boolean, direction: UPDOWN, drawLine: Boolean)
-{
-    Column(modifier = Modifier.fillMaxWidth()){
-        if (direction == UPDOWN.UP && drawLine) Divider(color = colorApp.primary, thickness = 1.dp)
-
-        Row(modifier = Modifier.fillMaxWidth(),  horizontalArrangement = Arrangement.Center) {
-            if( enable ) {
-                if (direction == UPDOWN.UP) ArrowUp() else ArrowDown()
-            }
-            else ArrowNoneVer()
-        }
-        if (direction == UPDOWN.DOWN && drawLine) Divider(color = colorApp.primary, thickness = 1.dp)
-    }
-}
-@Composable fun ShowArrowHor(enable:Boolean, direction: UPDOWN, drawLine: Boolean)
-{
-    Row(modifier = Modifier.fillMaxHeight(),
-        horizontalArrangement = Arrangement.Center, verticalAlignment = Alignment.CenterVertically)
-    {
-        if (direction == UPDOWN.START && drawLine){
-            Divider(color = colorApp.primary, modifier = Modifier
-                .fillMaxHeight()
-                .width(1.dp))
-        }
-
-        if( enable ) { if (direction == UPDOWN.START) ArrowLeft() else ArrowRight()}
-        else ArrowNoneHor()
-        if (direction == UPDOWN.END && drawLine){
-            Divider(color = colorApp.primary, modifier = Modifier
-                .fillMaxHeight()
-                .width(1.dp))
-        }
-    }
-}
+//@Composable fun ShowArrowVer(enable:Boolean, direction: UPDOWN, drawLine: Boolean)
+//{
+//    Column(modifier = Modifier.fillMaxWidth()){
+//        if (direction == UPDOWN.UP && drawLine) Divider(color = colorApp.primary, thickness = 1.dp)
+//
+//        Row(modifier = Modifier.fillMaxWidth(),  horizontalArrangement = Arrangement.Center) {
+//            if( enable ) {
+//                if (direction == UPDOWN.UP) ArrowUp() else ArrowDown()
+//            }
+//            else ArrowNoneVer()
+//        }
+//        if (direction == UPDOWN.DOWN && drawLine) Divider(color = colorApp.primary, thickness = 1.dp)
+//    }
+//}
+//@Composable fun ShowArrowHor(enable:Boolean, direction: UPDOWN, drawLine: Boolean)
+//{
+//    Row(modifier = Modifier.fillMaxHeight(),
+//        horizontalArrangement = Arrangement.Center, verticalAlignment = Alignment.CenterVertically)
+//    {
+//        if (direction == UPDOWN.START && drawLine){
+//            Divider(color = colorApp.primary, modifier = Modifier
+//                .fillMaxHeight()
+//                .width(1.dp))
+//        }
+//
+//        if( enable ) { if (direction == UPDOWN.START) ArrowLeft() else ArrowRight()}
+//        else ArrowNoneHor()
+//        if (direction == UPDOWN.END && drawLine){
+//            Divider(color = colorApp.primary, modifier = Modifier
+//                .fillMaxHeight()
+//                .width(1.dp))
+//        }
+//    }
+//}
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable fun TextFieldApp(
     modifier: Modifier = Modifier,
-    textAlign: TextAlign,
     enterValue: MutableState<String>,
     typeKeyboard: TypeKeyboard,
     textStyle:TextStyle ,
@@ -302,16 +288,14 @@ import com.example.count_out.ui.theme.styleApp
 }
 @Composable fun TextFieldAppBorder(
     modifier: Modifier = Modifier,
-    textAlign: TextAlign,
     enterValue: MutableState<String>,
     typeKeyboard: TypeKeyboard
 ){
     TextFieldApp(
-        textAlign = textAlign,
         enterValue = enterValue,
         textStyle = interReg12,
         typeKeyboard = typeKeyboard,
-        modifier = Modifier.background(color = colorApp.surfaceVariant, shape = shapesApp.extraSmall)
+        modifier = modifier.background(color = colorApp.surfaceVariant, shape = shapesApp.extraSmall)
             .border(width = 1.dp, color = colorApp.onPrimaryContainer, shape = shapesApp.extraSmall)
     )
 }
@@ -344,19 +328,19 @@ import com.example.count_out.ui.theme.styleApp
     }
 }
 
-@Composable fun ButtonCircle(modifier: Modifier, iconButton: ImageVector, onClick: () -> Unit) {
-    val radius = 25.dp
-    IconButton (
-        modifier = modifier
-            .clip(RoundedCornerShape(radius, radius, radius, radius))
-            .size(60.dp),
-        onClick = { onClick() }) {
-        Icon(
-            imageVector = iconButton, null,
-            tint = colorApp.primary ,
-            modifier = Modifier.size(60.dp))
-    }
-}
+//@Composable fun ButtonCircle(modifier: Modifier, iconButton: ImageVector, onClick: () -> Unit) {
+//    val radius = 25.dp
+//    IconButton (
+//        modifier = modifier
+//            .clip(RoundedCornerShape(radius, radius, radius, radius))
+//            .size(60.dp),
+//        onClick = { onClick() }) {
+//        Icon(
+//            imageVector = iconButton, null,
+//            tint = colorApp.primary ,
+//            modifier = Modifier.size(60.dp))
+//    }
+//}
 @Composable
 fun TextButtonOK(onConfirm: () -> Unit, enabled: Boolean = true) {
     Column(
@@ -371,4 +355,16 @@ fun TextButtonOK(onConfirm: () -> Unit, enabled: Boolean = true) {
             )
         }
     }
+}
+@Composable fun TextStringAndField(text:String, enterValue: MutableState<String>){
+    TextApp(
+        text = text,
+        style = interReg14,
+        textAlign = TextAlign.Start,)
+    TextFieldApp(
+        enterValue = enterValue,
+        typeKeyboard = TypeKeyboard.DIGIT,
+        modifier = Modifier.width(50.dp).background(color = MaterialTheme.colorScheme.surfaceVariant),
+        textStyle = interLight12
+    )
 }
