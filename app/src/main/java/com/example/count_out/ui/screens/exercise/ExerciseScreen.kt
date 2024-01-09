@@ -203,22 +203,22 @@ fun ExerciseScreenLayout(uiState: ExerciseScreenState
     }
 }
 
-@Composable fun LazyContent(uiState: ExerciseScreenState, set: Set){
-    Column {
-        TextApp(text = "${set.idSet}: ${set.name}", style = interThin12)
-        TextApp(text = "Reps: ${set.reps}", style = interThin12)
-        TextApp(text = "intervalDown: ${set.intervalDown}", style = interThin12)
-        TextApp(text = "intervalReps: ${set.intervalReps}", style = interThin12)
-        TextApp(text = "Intensity: ${set.intensity}", style = interThin12)
-        TextApp(text = "distance: ${set.distance}", style = interThin12)
-        TextApp(text = "duration: ${set.duration}", style = interThin12)
-        TextApp(text = "exerciseId: ${set.exerciseId}", style = interThin12)
-        TextApp(text = "groupCount: ${set.groupCount}", style = interThin12)
-        TextApp(text = "timeRest: ${set.timeRest}", style = interThin12)
-        TextApp(text = "weight: ${set.weight}", style = interThin12)
-        TextApp(text = "speech: ${set.speech}", style = interThin12)
-    }
-}
+//@Composable fun LazyContent(uiState: ExerciseScreenState, set: Set){
+//    Column {
+//        TextApp(text = "${set.idSet}: ${set.name}", style = interThin12)
+//        TextApp(text = "Reps: ${set.reps}", style = interThin12)
+//        TextApp(text = "intervalDown: ${set.intervalDown}", style = interThin12)
+//        TextApp(text = "intervalReps: ${set.intervalReps}", style = interThin12)
+//        TextApp(text = "Intensity: ${set.intensity}", style = interThin12)
+//        TextApp(text = "distance: ${set.distance}", style = interThin12)
+//        TextApp(text = "duration: ${set.duration}", style = interThin12)
+//        TextApp(text = "exerciseId: ${set.exerciseId}", style = interThin12)
+//        TextApp(text = "groupCount: ${set.groupCount}", style = interThin12)
+//        TextApp(text = "timeRest: ${set.timeRest}", style = interThin12)
+//        TextApp(text = "weight: ${set.weight}", style = interThin12)
+//        TextApp(text = "speech: ${set.speech}", style = interThin12)
+//    }
+//}
 
 @Composable fun NameSet(uiState: ExerciseScreenState, set: Set)
 {

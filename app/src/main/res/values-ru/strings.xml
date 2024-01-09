@@ -26,6 +26,7 @@
     <string name="min">мин</string>
     <string name="s">с</string>
     <string name="sec">сек</string>
+    <string name="message">"Message "</string>
     <string name="message_before_start">Сообщение до начала</string>
     <string name="message_after_start">Сообщение после начала</string>
     <string name="message_before_end">Сообщение до окончания</string>
