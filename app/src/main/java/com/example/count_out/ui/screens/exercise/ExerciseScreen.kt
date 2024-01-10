@@ -2,10 +2,8 @@ package com.example.count_out.ui.screens.exercise
 
 import android.annotation.SuppressLint
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -18,7 +16,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.foundation.onFocusedBoundsChanged
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material3.Card
@@ -27,17 +24,9 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.focus.FocusRequester
-import androidx.compose.ui.focus.focusRequester
-import androidx.compose.ui.focus.focusTarget
-import androidx.compose.ui.focus.onFocusChanged
-import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -61,14 +50,14 @@ import com.example.count_out.ui.view_components.TextApp
 import com.example.count_out.ui.view_components.TextStringAndField
 
 @SuppressLint("UnrememberedMutableState")
-@Composable fun ExerciseScreen(roundId: Long, exerciseId:Long,
-){
+@Composable fun ExerciseScreen(roundId: Long, exerciseId:Long, )
+{
     val viewModel: ExerciseViewModel = hiltViewModel()
     viewModel.getExercise(roundId, exerciseId)
     ExerciseScreenCreateView( viewModel = viewModel)
 }
-@Composable fun ExerciseScreenCreateView( viewModel: ExerciseViewModel
-){
+@Composable fun ExerciseScreenCreateView( viewModel: ExerciseViewModel)
+{
     val uiState = viewModel.exerciseScreenState.collectAsState()
     uiState.value.onDismissSelectActivity = { uiState.value.showBottomSheetSelectActivity.value = false }
     uiState.value.onDismissSpeech = { uiState.value.showBottomSheetSpeech.value = false}
@@ -84,9 +73,8 @@ import com.example.count_out.ui.view_components.TextStringAndField
         BottomSheetSpeech(uiState)
     }
 }
-@Composable
-fun ExerciseScreenLayout(uiState: ExerciseScreenState
-) {
+@Composable fun ExerciseScreenLayout(uiState: ExerciseScreenState)
+{
     Column(
         Modifier
             .padding(Dimen.paddingAppHor)
@@ -99,8 +87,8 @@ fun ExerciseScreenLayout(uiState: ExerciseScreenState
         Spacer(modifier = Modifier.height(Dimen.width8))
     }
 }
-@Composable fun NameTrainingRound(uiState: ExerciseScreenState
-){
+@Composable fun NameTrainingRound(uiState: ExerciseScreenState)
+{
     Row(verticalAlignment = Alignment.CenterVertically){
         TextApp(
             text = uiState.nameTraining,
@@ -117,8 +105,8 @@ fun ExerciseScreenLayout(uiState: ExerciseScreenState
     }
 
 }
-@Composable fun ExerciseContent(uiState: ExerciseScreenState
-){
+@Composable fun ExerciseContent(uiState: ExerciseScreenState)
+{
     Card (
         elevation = elevationTraining(),
         shape = MaterialTheme.shapes.extraSmall,
@@ -137,8 +125,8 @@ fun ExerciseScreenLayout(uiState: ExerciseScreenState
         RowAddSet(uiState)
     }
 }
-@Composable fun SelectActivity(uiState: ExerciseScreenState
-){
+@Composable fun SelectActivity(uiState: ExerciseScreenState)
+{
     Row(verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier.background(color = MaterialTheme.colorScheme.surfaceVariant)
     ){
@@ -149,20 +137,20 @@ fun ExerciseScreenLayout(uiState: ExerciseScreenState
         IconSpeech(uiState)
     }
 }
-@Composable fun IconSelectActivity(uiState: ExerciseScreenState
-){
+@Composable fun IconSelectActivity(uiState: ExerciseScreenState)
+{
     IconButton(modifier = Modifier
         .width(24.dp)
         .height(24.dp),
         onClick = { uiState.showBottomSheetSelectActivity.value = true })
     { Icon(imageVector = Icons.Filled.ArrowDropDown, contentDescription = "") }
 }
-@Composable fun TextActivity(uiState: ExerciseScreenState
-){
+@Composable fun TextActivity(uiState: ExerciseScreenState)
+{
     TextApp(text = uiState.exercise.activity.name, style = interReg14)
 }
-@Composable fun IconSpeech(uiState: ExerciseScreenState
-){
+@Composable fun IconSpeech(uiState: ExerciseScreenState)
+{
     IconButton(modifier = Modifier
         .width(24.dp)
         .height(24.dp),
@@ -173,8 +161,8 @@ fun ExerciseScreenLayout(uiState: ExerciseScreenState
         )
     }
 }
-@Composable fun LazySets(uiState: ExerciseScreenState
-){
+@Composable fun LazySets(uiState: ExerciseScreenState)
+{
     LazyColumn(
         state = rememberLazyListState(),
         modifier = Modifier
@@ -220,94 +208,54 @@ fun ExerciseScreenLayout(uiState: ExerciseScreenState
         )
     }
 }
-fun setCollapsing(uiState: ExerciseScreenState,  set: Set): Boolean
-{
-    val listCollapsingSet = uiState.listCollapsingSet.value.toMutableList()
-    val itemList = listCollapsingSet.find { it == set.idSet }
-    return if ( itemList != null) {
-        listCollapsingSet.remove(itemList)
-        uiState.listCollapsingSet.value = listCollapsingSet
-        false
-    } else {
-        listCollapsingSet.add(set.idSet)
-        uiState.listCollapsingSet.value = listCollapsingSet
-        true
-    }
-}
-
-@OptIn(ExperimentalFoundationApi::class)
 @Composable fun AdditionalInformation(uiState: ExerciseScreenState, set: Set)
 {
-    val enteredDuration: MutableState<String> = remember { mutableStateOf("${set.duration.toInt()}") }
-    val enteredWeight: MutableState<String> = remember { mutableStateOf("${set.weight}") }
-    val enteredDistance: MutableState<String> = remember { mutableStateOf("${set.distance}") }
-    val enteredIntensity: MutableState<String> = remember { mutableStateOf(set.intensity) }
-    val enteredReps: MutableState<String> = remember { mutableStateOf("${set.reps}") }
-    val enteredTimeRest: MutableState<String> = remember { mutableStateOf("${set.timeRest}") }
-    val enteredIntervalDown: MutableState<String> = remember { mutableStateOf("${set.intervalDown}") }
-    val enteredIntervalReps: MutableState<String> = remember { mutableStateOf("${set.intervalReps}") }
-    val enteredName: MutableState<String> = remember { mutableStateOf(set.name) }
-    val enteredGroupCount: MutableState<String> = remember { mutableStateOf(set.groupCount) }
     val visibleLazy = uiState.listCollapsingSet.value.find { it == set.idSet } != null
-    val focusRequester = remember { FocusRequester() }
 
-    Column(modifier = Modifier
-        .testTag("1")
-        .focusRequester(focusRequester)
-        .onFocusChanged {
-            if (visibleLazy) uiState.onChangeSet(
-                SetDB(
-                    idSet = set.idSet,
-                    name = enteredName.value,
-                    exerciseId = set.exerciseId,
-                    speechId = set.speechId,
-                    speech = set.speech,
-                    weight = if (enteredWeight.value.isNotEmpty()) enteredWeight.value.toInt() else 0,
-                    intensity = enteredIntensity.value,
-                    distance = if (enteredWeight.value.isNotEmpty()) enteredDistance.value.toDouble() else 0.0,
-                    duration = if (enteredWeight.value.isNotEmpty()) enteredDuration.value.toInt() else 0,
-                    reps = if (enteredWeight.value.isNotEmpty()) enteredReps.value.toInt() else 0,
-                    intervalReps = if (enteredWeight.value.isNotEmpty()) enteredIntervalReps.value.toDouble() else 0.0,
-                    intervalDown = if (enteredWeight.value.isNotEmpty()) enteredIntervalDown.value.toDouble() else 0.0,
-                    groupCount = enteredGroupCount.value,
-                    timeRest = if (enteredWeight.value.isNotEmpty()) enteredTimeRest.value.toInt() else 0,
-                )
-            )
-        }
-        .focusTarget()
-        .pointerInput(Unit) { detectTapGestures { focusRequester.requestFocus() } }
-        .onFocusedBoundsChanged {
-
-        }
-        .padding(horizontal = 8.dp)){
-        Row(verticalAlignment = Alignment.CenterVertically) {
-            TextStringAndField(enterValue = enteredDuration, editing = visibleLazy,
+    Column(modifier = Modifier.testTag("1").padding(horizontal = 8.dp))
+    {
+        Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.padding(4.dp)) {
+            TextStringAndField(
+                placeholder = set.duration.toString(),
+                onChangeValue = { uiState.onChangeSet ((set as SetDB).copy(duration = it.toInt())) },
+                editing = visibleLazy,
                 text = stringResource(id = R.string.duration) + " (" + stringResource(id = R.string.min) + "): ")
-            Spacer(modifier = Modifier.weight(1f))
-            TextStringAndField(enterValue = enteredDistance, editing = visibleLazy,
-                text = stringResource(id = R.string.distance) + " (" + stringResource(id = R.string.km) + "): ")
-            Spacer(modifier = Modifier.weight(1f))
-            TextStringAndField(enterValue = enteredWeight, editing = visibleLazy,
-                text = stringResource(id = R.string.weight) + " (" + stringResource(id = R.string.kg) + "): ")
         }
-
         AnimatedVisibility(modifier = Modifier.padding(4.dp), visible = visibleLazy
         ){
             Column{
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    TextStringAndField(
+                        placeholder = set.distance.toString(),
+                        onChangeValue = { uiState.onChangeSet ((set as SetDB).copy(distance = it.toDouble())) },
+                        editing = visibleLazy,
+                        text = stringResource(id = R.string.distance) + " (" + stringResource(id = R.string.km) + "): ")
+                    Spacer(modifier = Modifier.weight(1f))
+                    TextStringAndField(
+                        placeholder = set.weight.toString(),
+                        onChangeValue = { uiState.onChangeSet ((set as SetDB).copy(weight = it.toInt())) },
+                        editing = visibleLazy,
+                        text = stringResource(id = R.string.weight) + " (" + stringResource(id = R.string.kg) + "): ")
+                }
+                Spacer(modifier = Modifier.height(8.dp))
                 TextApp(text = stringResource(id = R.string.duration_set), style = interReg14)
                 SwitchDuration(uiState, set)
                 Spacer(modifier = Modifier.height(8.dp))
-                TextStringAndField( enterValue = enteredTimeRest, editing = true,
+                TextStringAndField(
+                    placeholder = set.timeRest.toString(),
+                    onChangeValue = { uiState.onChangeSet ((set as SetDB).copy(timeRest = it.toInt())) },
+                    editing = visibleLazy,
                     text = stringResource(id = R.string.time_to_rest) + " (" + stringResource(id = R.string.sec) + "): ",)
             }
         }
     }
 }
-@Composable fun SwitchDuration( uiState: ExerciseScreenState, set: Set){
+@Composable fun SwitchDuration( uiState: ExerciseScreenState, set: Set)
+{
 
 }
-@Composable fun RowAddSet(uiState: ExerciseScreenState
-){
+@Composable fun RowAddSet(uiState: ExerciseScreenState)
+{
     Row (horizontalArrangement = Arrangement.End, modifier = Modifier.fillMaxWidth()){
         Row(
             horizontalArrangement = Arrangement.Center,
@@ -335,6 +283,20 @@ fun setCollapsing(uiState: ExerciseScreenState,  set: Set): Boolean
                     .height(14.dp)
             )
         }
+    }
+}
+fun setCollapsing(uiState: ExerciseScreenState,  set: Set): Boolean
+{
+    val listCollapsingSet = uiState.listCollapsingSet.value.toMutableList()
+    val itemList = listCollapsingSet.find { it == set.idSet }
+    return if ( itemList != null) {
+        listCollapsingSet.remove(itemList)
+        uiState.listCollapsingSet.value = listCollapsingSet
+        false
+    } else {
+        listCollapsingSet.add(set.idSet)
+        uiState.listCollapsingSet.value = listCollapsingSet
+        true
     }
 }
 @Preview(showBackground = true)

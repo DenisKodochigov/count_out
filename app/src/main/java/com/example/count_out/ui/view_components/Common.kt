@@ -38,6 +38,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.example.count_out.R
 import com.example.count_out.entity.TagsTesting.BUTTON_OK
 import com.example.count_out.entity.TypeKeyboard
@@ -45,7 +46,6 @@ import com.example.count_out.entity.TypeText
 import com.example.count_out.ui.theme.colorApp
 import com.example.count_out.ui.theme.interLight12
 import com.example.count_out.ui.theme.interReg12
-import com.example.count_out.ui.theme.interReg14
 import com.example.count_out.ui.theme.shapesApp
 import com.example.count_out.ui.theme.styleApp
 
@@ -265,16 +265,19 @@ import com.example.count_out.ui.theme.styleApp
     onChangeValue:(String)->Unit = {}
 ){
     val keyboardController = LocalSoftwareKeyboardController.current
-    var focusItem by remember { mutableStateOf(false) }
     val focusManager = LocalFocusManager.current
     var text by rememberSaveable { mutableStateOf("") }
+    val paddingHor = if (textStyle.fontSize > 14.sp) 8.dp else 4.dp
+    val paddingVer = if (textStyle.fontSize > 14.sp) 6.dp else 2.dp
 
     BasicTextField(
         value = text,
         enabled = typeKeyboard != TypeKeyboard.NONE,
         singleLine = true,
         maxLines = 1,
-        modifier = modifier.onFocusChanged { focusItem = it.isFocused }.focusable(),
+        modifier = modifier
+            .onFocusChanged { if (!it.isFocused && text.isNotEmpty()) onChangeValue(text)}
+            .focusable(),
         keyboardOptions = keyBoardOpt(typeKeyboard),
         keyboardActions = KeyboardActions(onDone = {
             focusManager.clearFocus()
@@ -284,7 +287,7 @@ import com.example.count_out.ui.theme.styleApp
         textStyle = textStyle,
         decorationBox = {
             Row( verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp))
+                modifier = Modifier.padding(horizontal = paddingHor, vertical = paddingVer))
             {
                 Box(Modifier.weight(1f)) {
                     if (text.isEmpty()) Text(text = placeholder, style = textStyle )
@@ -365,21 +368,26 @@ fun TextButtonOK(onConfirm: () -> Unit, enabled: Boolean = true) {
         }
     }
 }
-@Composable fun TextStringAndField(text:String, enterValue: MutableState<String>, editing: Boolean){
+@Composable fun TextStringAndField(
+    text:String,
+    placeholder: String,
+    onChangeValue:(String)->Unit = {},
+    editing: Boolean
+){
     val modifier = if (!editing) Modifier.width(50.dp)
             else Modifier.width(50.dp).background(color = MaterialTheme.colorScheme.surfaceVariant)
 
     Row(verticalAlignment = Alignment.CenterVertically){
         TextApp(
             text = text,
-            style = interReg14,
+            style = interReg12,
             textAlign = TextAlign.Start,)
         TextFieldApp(
-            placeholder = enterValue.value,
+            placeholder = placeholder,
             typeKeyboard = if (editing) TypeKeyboard.DIGIT else TypeKeyboard.NONE,
             modifier = modifier,
             textStyle = interLight12,
-            onChangeValue = {enterValue.value = it}
+            onChangeValue = onChangeValue
         )
     }
 }
