@@ -94,6 +94,7 @@ class DataSource @Inject constructor(private val dataDao: DataDao) {
         else { dataDao.updateSet( set as SetDB) }
         return dataDao.getExerciseRel(exerciseId).toExercise()
     }
+
     //######################################################################################
 
     private fun createRound( trainingId: Long, typeRound: RoundType){

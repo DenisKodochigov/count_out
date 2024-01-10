@@ -283,10 +283,11 @@ fun NameTraining( uiState: TrainingScreenState )
     )
     {
         TextFieldApp(
-            enterValue = uiState.enteredName,
+            placeholder = uiState.enteredName.value,
             typeKeyboard = TypeKeyboard.TEXT,
             textStyle = interBold16,
             onChangeValue = {
+                uiState.enteredName.value = it
                 uiState.changeNameTraining(uiState.training, uiState.enteredName.value)}
         )
         Spacer(modifier = Modifier.weight(1f))

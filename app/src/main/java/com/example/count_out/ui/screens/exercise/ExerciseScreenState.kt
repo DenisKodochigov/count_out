@@ -27,17 +27,7 @@ data class ExerciseScreenState(
     @Stable var onSelectActivity: (Long, Long) -> Unit = {_,_ ->},
     @Stable var onSetColorActivity: (Long, Int) -> Unit = {_,_ ->},
     @Stable var doChangeActivity: (Activity) -> Unit = {},
-
-    @Stable val enteredDuration: MutableState<String> = mutableStateOf(""),
-    @Stable val enteredWeight: MutableState<String> = mutableStateOf(""),
-    @Stable val enteredDistance: MutableState<String> = mutableStateOf(""),
-    @Stable val enteredIntensity: MutableState<String> = mutableStateOf(""),
-    @Stable val enteredReps: MutableState<String> = mutableStateOf(""),
-    @Stable val enteredTimeRest: MutableState<String> = mutableStateOf(""),
-    @Stable val enteredIntervalDown: MutableState<String> = mutableStateOf(""),
-    @Stable val enteredIntervalReps: MutableState<String> = mutableStateOf(""),
-    @Stable val enteredName: MutableState<String> = mutableStateOf(""),
-    @Stable val enteredGroupCount: MutableState<String> = mutableStateOf(""),
+    @Stable var onChangeSet: (Set) -> Unit = {},
 
     @Stable override var listSpeech: List<Speech> = emptyList(),
     @Stable override var item: Any? =null,

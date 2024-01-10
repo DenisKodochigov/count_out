@@ -34,6 +34,7 @@ class ExerciseViewModel @Inject constructor(
                 exerciseId, activityId -> setActivityToExercise(exerciseId, activityId) },
             onSetColorActivity = {
                     activityId, color -> onSetColorActivity(activityId = activityId, color = color) },
+            onChangeSet = { set -> onChangeSet( set )},
             listSpeech = emptyList(),
             nameSection  = "",
             item = null,
@@ -42,7 +43,6 @@ class ExerciseViewModel @Inject constructor(
 
     private fun addUpdateSet(exerciseId:Long, set: Set){
         templateMy { dataRepository.addUpdateSet( exerciseId, set) } }
-
     private fun setActivityToExercise(exerciseId: Long, activityId: Long) {
         viewModelScope.launch(Dispatchers.IO) {
             kotlin.runCatching { dataRepository.setActivityToExercise(exerciseId, activityId) }
@@ -90,6 +90,7 @@ class ExerciseViewModel @Inject constructor(
             )
         }
     }
+    private fun onChangeSet(set: Set){ templateMy { dataRepository.onChangeSet( set ) } }
 
     private fun templateMy( funDataRepository:() -> Exercise ){
         viewModelScope.launch(Dispatchers.IO) {

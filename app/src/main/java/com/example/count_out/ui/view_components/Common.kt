@@ -3,6 +3,7 @@ package com.example.count_out.ui.view_components
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.focusable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -21,6 +22,7 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
@@ -257,32 +259,38 @@ import com.example.count_out.ui.theme.styleApp
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable fun TextFieldApp(
     modifier: Modifier = Modifier,
-    enterValue: MutableState<String>,
     typeKeyboard: TypeKeyboard,
     textStyle:TextStyle ,
+    placeholder: String = "",
     onChangeValue:(String)->Unit = {}
 ){
     val keyboardController = LocalSoftwareKeyboardController.current
     var focusItem by remember { mutableStateOf(false) }
     val focusManager = LocalFocusManager.current
+    var text by rememberSaveable { mutableStateOf("") }
 
     BasicTextField(
-        value = enterValue.value,
-        enabled = true,
+        value = text,
+        enabled = typeKeyboard != TypeKeyboard.NONE,
         singleLine = true,
         maxLines = 1,
         modifier = modifier.onFocusChanged { focusItem = it.isFocused }.focusable(),
         keyboardOptions = keyBoardOpt(typeKeyboard),
         keyboardActions = KeyboardActions(onDone = {
             focusManager.clearFocus()
-            log(true, "BasicTextField enterValue: ${enterValue.value}")
-            onChangeValue(enterValue.value)
+            onChangeValue(text)
             keyboardController?.hide() }),
-        onValueChange = { enterValue.value = it },
+        onValueChange = { text = it },
         textStyle = textStyle,
         decorationBox = {
             Row( verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp)){ it() }
+                modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp))
+            {
+                Box(Modifier.weight(1f)) {
+                    if (text.isEmpty()) Text(text = placeholder, style = textStyle )
+                    it()
+                }
+            }
         },
     )
 }
@@ -292,9 +300,10 @@ import com.example.count_out.ui.theme.styleApp
     typeKeyboard: TypeKeyboard
 ){
     TextFieldApp(
-        enterValue = enterValue,
+        placeholder = enterValue.value,
         textStyle = interReg12,
         typeKeyboard = typeKeyboard,
+        onChangeValue = {enterValue.value = it},
         modifier = modifier.background(color = colorApp.surfaceVariant, shape = shapesApp.extraSmall)
             .border(width = 1.dp, color = colorApp.onPrimaryContainer, shape = shapesApp.extraSmall)
     )
@@ -356,17 +365,21 @@ fun TextButtonOK(onConfirm: () -> Unit, enabled: Boolean = true) {
         }
     }
 }
-@Composable fun TextStringAndField(text:String, enterValue: MutableState<String>){
+@Composable fun TextStringAndField(text:String, enterValue: MutableState<String>, editing: Boolean){
+    val modifier = if (!editing) Modifier.width(50.dp)
+            else Modifier.width(50.dp).background(color = MaterialTheme.colorScheme.surfaceVariant)
+
     Row(verticalAlignment = Alignment.CenterVertically){
         TextApp(
             text = text,
             style = interReg14,
             textAlign = TextAlign.Start,)
         TextFieldApp(
-            enterValue = enterValue,
-            typeKeyboard = TypeKeyboard.DIGIT,
-            modifier = Modifier.width(50.dp).background(color = MaterialTheme.colorScheme.surfaceVariant),
-            textStyle = interLight12
+            placeholder = enterValue.value,
+            typeKeyboard = if (editing) TypeKeyboard.DIGIT else TypeKeyboard.NONE,
+            modifier = modifier,
+            textStyle = interLight12,
+            onChangeValue = {enterValue.value = it}
         )
     }
 }

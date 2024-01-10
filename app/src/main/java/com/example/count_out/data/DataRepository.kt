@@ -20,7 +20,6 @@ class DataRepository  @Inject constructor(private val dataSource: DataSource){
 
     fun getTrainings(): List<Training> = dataSource.getTrainings()
     fun getTraining(id: Long): Training = dataSource.getTraining(id)
-
     fun addTraining(): List<Training> = dataSource.addTraining()
     fun deleteTraining(id: Long): List<Training> = dataSource.deleteTraining(id)
     fun copyTraining(id: Long): List<Training> = dataSource.copyTraining(id)
@@ -70,5 +69,6 @@ class DataRepository  @Inject constructor(private val dataSource: DataSource){
 
     //###### SET ##################
     fun addUpdateSet(exerciseId:Long, set: Set): Exercise = dataSource.addUpdateSet(exerciseId, set)
+    fun onChangeSet(set: Set): Exercise = dataSource.addUpdateSet( set.exerciseId, set )
 
 }

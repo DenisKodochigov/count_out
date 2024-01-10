@@ -38,7 +38,8 @@ enum class UPDOWN {
 enum class TypeKeyboard{
     DIGIT,
     TEXT,
-    OTHER
+    OTHER,
+    NONE
 }
 
 enum class RoundType(val strId: Int){

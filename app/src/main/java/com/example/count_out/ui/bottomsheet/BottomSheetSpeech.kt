@@ -94,7 +94,8 @@ fun BottomSheetSpeechContent(uiState: BottomSheetState)
             textStyle = interLight12,
             modifier = Modifier.fillMaxWidth()
                 .background(color = MaterialTheme.colorScheme.primary, shape = shapesApp.extraSmall),
-            enterValue = enterValue,
+            placeholder = enterValue.value,
+            onChangeValue = { enterValue.value = it},
             typeKeyboard = TypeKeyboard.TEXT)
     }
 }

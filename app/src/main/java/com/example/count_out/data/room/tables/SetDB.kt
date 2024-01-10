@@ -13,7 +13,7 @@ data class SetDB(
     override var speechId: Long = 0,
     override var exerciseId: Long = 0,
     override var reps: Int = 0,
-    override var duration: Double = 0.0,
+    override var duration: Int = 0,
     override var weight: Int = 0,
     override var intervalReps: Double = 0.0,
     override var intensity: String = "",
