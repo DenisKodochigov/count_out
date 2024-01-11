@@ -3,6 +3,7 @@ package com.example.count_out.ui.view_components
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.focusable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -403,18 +404,19 @@ fun TextButtonOK(onConfirm: () -> Unit, enabled: Boolean = true) {
     onClick:()->Unit,
     context: @Composable ()->Unit
 ){
-    val sizeRadioButton = 16.dp
-    Row(verticalAlignment = Alignment.CenterVertically) {
+    val sizeRadioButton = 0.dp
+    Row(verticalAlignment = Alignment.Top, horizontalArrangement = Arrangement.Start,
+        modifier = Modifier.background(Color.White).padding(6.dp)) {
         RadioButton(
             selected = radioButtonId == state,
             enabled = true,
             onClick = onClick,
-            modifier = Modifier.size(sizeRadioButton).scale(0.8f),
+            modifier = Modifier.size(sizeRadioButton).scale(0.8f).padding(12.dp),
             colors = RadioButtonDefaults.colors(
                 selectedColor = MaterialTheme.colorScheme.onPrimary,
                 unselectedColor = MaterialTheme.colorScheme.onPrimary
             ))
-        Spacer(modifier = Modifier.width(12.dp))
+        Spacer(modifier = Modifier.width(24.dp))
         context()
     }
 }

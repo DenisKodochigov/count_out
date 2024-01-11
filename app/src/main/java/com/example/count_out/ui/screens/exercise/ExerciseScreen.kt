@@ -1,7 +1,6 @@
 package com.example.count_out.ui.screens.exercise
 
 import android.annotation.SuppressLint
-import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -16,18 +15,12 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.foundation.selection.selectableGroup
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
@@ -42,17 +35,15 @@ import com.example.count_out.data.room.tables.SetDB
 import com.example.count_out.entity.Set
 import com.example.count_out.ui.bottomsheet.BottomSheetSelectActivity
 import com.example.count_out.ui.bottomsheet.BottomSheetSpeech
+import com.example.count_out.ui.screens.exercise.view_component.SelectActivity
+import com.example.count_out.ui.screens.exercise.view_component.SetEdit
 import com.example.count_out.ui.theme.Dimen
 import com.example.count_out.ui.theme.elevationTraining
 import com.example.count_out.ui.theme.interBold16
-import com.example.count_out.ui.theme.interReg12
 import com.example.count_out.ui.theme.interReg14
 import com.example.count_out.ui.theme.interThin12
 import com.example.count_out.ui.theme.shapeAddExercise
-import com.example.count_out.ui.view_components.GroupIcons4
-import com.example.count_out.ui.view_components.RadioButtonApp
 import com.example.count_out.ui.view_components.TextApp
-import com.example.count_out.ui.view_components.TextStringAndField
 
 @SuppressLint("UnrememberedMutableState")
 @Composable fun ExerciseScreen(roundId: Long, exerciseId:Long, )
@@ -108,7 +99,6 @@ import com.example.count_out.ui.view_components.TextStringAndField
             modifier = Modifier.padding(start = 24.dp)
         )
     }
-
 }
 @Composable fun ExerciseContent(uiState: ExerciseScreenState)
 {
@@ -122,9 +112,7 @@ import com.example.count_out.ui.view_components.TextStringAndField
             disabledContentColor = MaterialTheme.colorScheme.onSecondary,
         )
     ){
-        Column (modifier = Modifier
-            .fillMaxWidth()
-            .padding(6.dp))
+        Column (modifier = Modifier.fillMaxWidth().padding(6.dp))
         {
             SelectActivity(uiState)
             LazySets(uiState)
@@ -132,42 +120,7 @@ import com.example.count_out.ui.view_components.TextStringAndField
         RowAddSet(uiState)
     }
 }
-@Composable fun SelectActivity(uiState: ExerciseScreenState)
-{
-    Row(verticalAlignment = Alignment.CenterVertically,
-        modifier = Modifier.background(color = MaterialTheme.colorScheme.surfaceVariant)
-    ){
-        IconSelectActivity(uiState)
-        Spacer(modifier = Modifier.width(12.dp))
-        TextActivity(uiState)
-        Spacer(modifier = Modifier.weight(1f))
-        IconSpeech(uiState)
-    }
-}
-@Composable fun IconSelectActivity(uiState: ExerciseScreenState)
-{
-    IconButton(modifier = Modifier
-        .width(24.dp)
-        .height(24.dp),
-        onClick = { uiState.showBottomSheetSelectActivity.value = true })
-    { Icon(imageVector = Icons.Filled.ArrowDropDown, contentDescription = "") }
-}
-@Composable fun TextActivity(uiState: ExerciseScreenState)
-{
-    TextApp(text = uiState.exercise.activity.name, style = interReg14)
-}
-@Composable fun IconSpeech(uiState: ExerciseScreenState)
-{
-    IconButton(modifier = Modifier
-        .width(24.dp)
-        .height(24.dp),
-        onClick = { uiState.showBottomSheetSpeech.value = true }) {
-        Icon(
-            painter = painterResource(id = R.drawable.ic_ecv), contentDescription = "",
-            modifier = Modifier.padding(4.dp)
-        )
-    }
-}
+
 @Composable fun LazySets(uiState: ExerciseScreenState)
 {
     LazyColumn(
@@ -190,108 +143,11 @@ import com.example.count_out.ui.view_components.TextStringAndField
                     disabledContainerColor = MaterialTheme.colorScheme.secondary,
                     disabledContentColor = MaterialTheme.colorScheme.onSecondary,
                 ),
-                content = {
-                    Spacer(modifier = Modifier.height(Dimen.width4))
-                    NameSet(uiState,set)
-                    AdditionalInformation(uiState,set)
-                    Spacer(modifier = Modifier.height(Dimen.width4))
-                }
+                content = { SetEdit(uiState,set) }
             )
         }
     }
 }
-@Composable fun NameSet(uiState: ExerciseScreenState, set: Set)
-{
-    Row{
-        TextApp(
-            text = "${set.idSet}: ${set.name}",
-            style = interReg14,
-            textAlign = TextAlign.Start,
-            modifier = Modifier
-                .weight(1f)
-                .padding(horizontal = 8.dp))
-        GroupIcons4(
-            onCopy = { /*TODO*/ },
-            onSpeech = { /*TODO*/ },
-            onDel = { /*TODO*/ },
-            onCollapsing = { setCollapsing(uiState, set) },
-            wrap = uiState.listCollapsingSet.value.find { it == set.idSet } != null
-        )
-    }
-}
-@Composable fun AdditionalInformation(uiState: ExerciseScreenState, set: Set)
-{
-    val visibleLazy = uiState.listCollapsingSet.value.find { it == set.idSet } != null
-
-    Column(modifier = Modifier
-        .testTag("1")
-        .padding(horizontal = 8.dp))
-    {
-        Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.padding(4.dp)) {
-            TextStringAndField(
-                placeholder = set.duration.toString(),
-                onChangeValue = { uiState.onChangeSet ((set as SetDB).copy(duration = it.toInt())) },
-                editing = visibleLazy,
-                text = stringResource(id = R.string.duration) + " (" + stringResource(id = R.string.min) + "): ")
-        }
-        AnimatedVisibility(modifier = Modifier.padding(4.dp), visible = visibleLazy
-        ){
-            Column{
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    TextStringAndField(
-                        placeholder = set.distance.toString(),
-                        onChangeValue = { uiState.onChangeSet ((set as SetDB).copy(distance = it.toDouble())) },
-                        editing = visibleLazy,
-                        text = stringResource(id = R.string.distance) + " (" + stringResource(id = R.string.km) + "): ")
-                    Spacer(modifier = Modifier.weight(1f))
-                    TextStringAndField(
-                        placeholder = set.weight.toString(),
-                        onChangeValue = { uiState.onChangeSet ((set as SetDB).copy(weight = it.toInt())) },
-                        editing = visibleLazy,
-                        text = stringResource(id = R.string.weight) + " (" + stringResource(id = R.string.kg) + "): ")
-                }
-                Spacer(modifier = Modifier.height(8.dp))
-                TextApp(text = stringResource(id = R.string.duration_set), style = interReg14)
-                SwitchDuration(uiState, set)
-                Spacer(modifier = Modifier.height(8.dp))
-                TextStringAndField(
-                    placeholder = set.timeRest.toString(),
-                    onChangeValue = { uiState.onChangeSet ((set as SetDB).copy(timeRest = it.toInt())) },
-                    editing = visibleLazy,
-                    text = stringResource(id = R.string.time_to_rest) + " (" + stringResource(id = R.string.sec) + "): ",)
-            }
-        }
-    }
-}
-@Composable fun SwitchDuration( uiState: ExerciseScreenState, set: Set)
-{
-    val state = remember { mutableIntStateOf(1) }
-
-    Column(Modifier.selectableGroup().padding(start = 12.dp))
-    {
-        Spacer(modifier = Modifier.height(6.dp))
-        RadioButtonApp(
-            radioButtonId = 1,
-            state = state.intValue,
-            onClick = { state.intValue = 1},
-            context = {
-                TextStringAndField(
-                    placeholder = set.duration.toString(),
-                    onChangeValue = { uiState.onChangeSet ((set as SetDB).copy(duration = it.toInt())) },
-                    editing = true,
-                    text = stringResource(id = R.string.duration) + " (" + stringResource(id = R.string.min) + "): ") }
-        )
-
-        Spacer(modifier = Modifier.height(6.dp))
-        RadioButtonApp(
-            radioButtonId = 2,
-            state = state.intValue,
-            onClick = { state.intValue = 2},
-            context = { TextApp(text = "RadioButton 2", style = interReg12) }
-        )
-    }
-}
-
 
 @Composable fun RowAddSet(uiState: ExerciseScreenState)
 {

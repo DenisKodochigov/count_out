@@ -54,7 +54,14 @@
     <string name="duration">"Длительность: "</string>
     <string name="part_work">Сеция тренировки.</string>
     <string name="time">Time</string>
-    <string name="km">km</string>
-    <string name="kg">kg</string>
+    <string name="km">км</string>
+    <string name="kg">кг</string>
     <string name="duration_set">Duration set</string>
+    <string name="task_in_approach">Задание в подходе</string>
+    <string name="zone">зона</string>
+    <string name="quantity_reps">Repetitions. Number of counts</string>
+    <string name="time_between_counts">Интервал между отстчетами</string>
+    <string name="slowing_down_counts">Замедление отсчетов</string>
+    <string name="counting_in_order">Отстчет по порядку.</string>
+    <string name="counts_by_group">Отсчеты группой. Введите группу отсчетов (каждое слово соответствует одному отсчету)</string>
 </resources>

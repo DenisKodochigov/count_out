@@ -12,8 +12,8 @@ interface Set {
     val distance: Double
     val duration: Int
     val reps: Int // количество отстчетов
-    val intervalReps: Double
-    val intervalDown: Double //замедление отчетов
+    val intervalReps: Int
+    val intervalDown: Int //замедление отчетов
     val groupCount: String // Группы отстчетов
     val timeRest: Int
 }
