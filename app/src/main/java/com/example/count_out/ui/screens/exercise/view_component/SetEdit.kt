@@ -28,6 +28,7 @@ import com.example.count_out.ui.theme.interReg14
 import com.example.count_out.ui.view_components.GroupIcons4
 import com.example.count_out.ui.view_components.RadioButtonApp
 import com.example.count_out.ui.view_components.TextApp
+import com.example.count_out.ui.view_components.TextAppLines
 import com.example.count_out.ui.view_components.TextFieldApp
 import com.example.count_out.ui.view_components.TextStringAndField
 
@@ -108,7 +109,10 @@ fun SwitchDuration(uiState: ExerciseScreenState, set: Set)
             radioButtonId = 2,
             state = state.intValue,
             onClick = { state.intValue = 2},
-            context = { RadioButtonDuration(uiState = uiState, set = set, visible = state.intValue == 2)}
+            context = {
+//                RadioButtonCountingOrder()
+                RadioButtonDuration(uiState = uiState, set = set, visible = state.intValue == 2)
+            }
         )
         Spacer(modifier = Modifier.height(6.dp))
         RadioButtonApp(
@@ -226,12 +230,18 @@ fun SwitchCount(uiState: ExerciseScreenState, set: Set)
 @Composable
 fun RadioButtonCountingOrder()
 {
-    TextApp(text = stringResource(id = R.string.counting_in_order), style = interLight12)
+    TextApp(
+        text = stringResource(id = R.string.counting_in_order),
+        style = interLight12,
+        modifier = Modifier.padding(vertical = 2.dp))
 }
 @Composable
 fun RadioButtonCountingGroup(uiState: ExerciseScreenState, set: Set, visible: Boolean)
 {
-    TextApp(text = stringResource(id = R.string.counts_by_group), style = interLight12)
+    TextAppLines(
+        text = stringResource(id = R.string.counts_by_group),
+        style = interLight12,
+        modifier = Modifier.padding(vertical = 2.dp))
     AnimatedVisibility(modifier = Modifier.padding(4.dp), visible = visible
     ){
         TextFieldApp(

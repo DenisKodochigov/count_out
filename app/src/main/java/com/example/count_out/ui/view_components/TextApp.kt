@@ -30,6 +30,24 @@ fun TextApp(
     )
 }
 @Composable
+fun TextAppLines(
+    text: String,
+    modifier: Modifier = Modifier,
+    textAlign: TextAlign = TextAlign.Center,
+    style: TextStyle,
+    fontWeight: FontWeight = FontWeight.Normal
+) {
+    Text(
+        text = text,
+        style = style,
+        fontWeight = fontWeight,
+        overflow = TextOverflow.Ellipsis,
+        textAlign = textAlign,
+        modifier = modifier,
+//        color = MaterialTheme.colorScheme.onSurface
+    )
+}
+@Composable
 fun TextAppColor(
     text: String,
     modifier: Modifier = Modifier,

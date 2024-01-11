@@ -405,13 +405,13 @@ fun TextButtonOK(onConfirm: () -> Unit, enabled: Boolean = true) {
     context: @Composable ()->Unit
 ){
     val sizeRadioButton = 0.dp
-    Row(verticalAlignment = Alignment.Top, horizontalArrangement = Arrangement.Start,
-        modifier = Modifier.background(Color.White).padding(6.dp)) {
+    Row(verticalAlignment = Alignment.Top, horizontalArrangement = Arrangement.Start)
+    {
         RadioButton(
             selected = radioButtonId == state,
             enabled = true,
             onClick = onClick,
-            modifier = Modifier.size(sizeRadioButton).scale(0.8f).padding(12.dp),
+            modifier = Modifier.size(sizeRadioButton).scale(1f).padding(8.dp),
             colors = RadioButtonDefaults.colors(
                 selectedColor = MaterialTheme.colorScheme.onPrimary,
                 unselectedColor = MaterialTheme.colorScheme.onPrimary
