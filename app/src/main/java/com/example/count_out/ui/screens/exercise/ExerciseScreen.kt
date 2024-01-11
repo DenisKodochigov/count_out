@@ -16,6 +16,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.selection.selectableGroup
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material3.Card
@@ -25,6 +26,8 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
@@ -42,10 +45,12 @@ import com.example.count_out.ui.bottomsheet.BottomSheetSpeech
 import com.example.count_out.ui.theme.Dimen
 import com.example.count_out.ui.theme.elevationTraining
 import com.example.count_out.ui.theme.interBold16
+import com.example.count_out.ui.theme.interReg12
 import com.example.count_out.ui.theme.interReg14
 import com.example.count_out.ui.theme.interThin12
 import com.example.count_out.ui.theme.shapeAddExercise
 import com.example.count_out.ui.view_components.GroupIcons4
+import com.example.count_out.ui.view_components.RadioButtonApp
 import com.example.count_out.ui.view_components.TextApp
 import com.example.count_out.ui.view_components.TextStringAndField
 
@@ -117,7 +122,9 @@ import com.example.count_out.ui.view_components.TextStringAndField
             disabledContentColor = MaterialTheme.colorScheme.onSecondary,
         )
     ){
-        Column (modifier = Modifier.fillMaxWidth().padding(6.dp))
+        Column (modifier = Modifier
+            .fillMaxWidth()
+            .padding(6.dp))
         {
             SelectActivity(uiState)
             LazySets(uiState)
@@ -174,7 +181,9 @@ import com.example.count_out.ui.view_components.TextStringAndField
             Card (
                 elevation = elevationTraining(),
                 shape = MaterialTheme.shapes.extraSmall,
-                modifier = Modifier.padding(vertical = 8.dp).fillMaxWidth(),
+                modifier = Modifier
+                    .padding(vertical = 8.dp)
+                    .fillMaxWidth(),
                 colors = CardDefaults.cardColors(
                     containerColor = MaterialTheme.colorScheme.tertiary,
                     contentColor = MaterialTheme.colorScheme.onTertiary,
@@ -198,7 +207,9 @@ import com.example.count_out.ui.view_components.TextStringAndField
             text = "${set.idSet}: ${set.name}",
             style = interReg14,
             textAlign = TextAlign.Start,
-            modifier = Modifier.weight(1f).padding(horizontal = 8.dp))
+            modifier = Modifier
+                .weight(1f)
+                .padding(horizontal = 8.dp))
         GroupIcons4(
             onCopy = { /*TODO*/ },
             onSpeech = { /*TODO*/ },
@@ -212,7 +223,9 @@ import com.example.count_out.ui.view_components.TextStringAndField
 {
     val visibleLazy = uiState.listCollapsingSet.value.find { it == set.idSet } != null
 
-    Column(modifier = Modifier.testTag("1").padding(horizontal = 8.dp))
+    Column(modifier = Modifier
+        .testTag("1")
+        .padding(horizontal = 8.dp))
     {
         Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.padding(4.dp)) {
             TextStringAndField(
@@ -252,8 +265,34 @@ import com.example.count_out.ui.view_components.TextStringAndField
 }
 @Composable fun SwitchDuration( uiState: ExerciseScreenState, set: Set)
 {
+    val state = remember { mutableIntStateOf(1) }
 
+    Column(Modifier.selectableGroup().padding(start = 12.dp))
+    {
+        Spacer(modifier = Modifier.height(6.dp))
+        RadioButtonApp(
+            radioButtonId = 1,
+            state = state.intValue,
+            onClick = { state.intValue = 1},
+            context = {
+                TextStringAndField(
+                    placeholder = set.duration.toString(),
+                    onChangeValue = { uiState.onChangeSet ((set as SetDB).copy(duration = it.toInt())) },
+                    editing = true,
+                    text = stringResource(id = R.string.duration) + " (" + stringResource(id = R.string.min) + "): ") }
+        )
+
+        Spacer(modifier = Modifier.height(6.dp))
+        RadioButtonApp(
+            radioButtonId = 2,
+            state = state.intValue,
+            onClick = { state.intValue = 2},
+            context = { TextApp(text = "RadioButton 2", style = interReg12) }
+        )
+    }
 }
+
+
 @Composable fun RowAddSet(uiState: ExerciseScreenState)
 {
     Row (horizontalArrangement = Arrangement.End, modifier = Modifier.fillMaxWidth()){

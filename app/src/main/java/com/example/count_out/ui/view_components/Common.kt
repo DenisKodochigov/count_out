@@ -6,15 +6,20 @@ import androidx.compose.foundation.focusable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Divider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.RadioButton
+import androidx.compose.material3.RadioButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -27,6 +32,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.scale
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalFocusManager
@@ -256,47 +262,7 @@ import com.example.count_out.ui.theme.styleApp
 //    }
 //}
 
-@OptIn(ExperimentalComposeUiApi::class)
-@Composable fun TextFieldApp(
-    modifier: Modifier = Modifier,
-    typeKeyboard: TypeKeyboard,
-    textStyle:TextStyle ,
-    placeholder: String = "",
-    onChangeValue:(String)->Unit = {}
-){
-    val keyboardController = LocalSoftwareKeyboardController.current
-    val focusManager = LocalFocusManager.current
-    var text by rememberSaveable { mutableStateOf("") }
-    val paddingHor = if (textStyle.fontSize > 14.sp) 8.dp else 4.dp
-    val paddingVer = if (textStyle.fontSize > 14.sp) 6.dp else 2.dp
 
-    BasicTextField(
-        value = text,
-        enabled = typeKeyboard != TypeKeyboard.NONE,
-        singleLine = true,
-        maxLines = 1,
-        modifier = modifier
-            .onFocusChanged { if (!it.isFocused && text.isNotEmpty()) onChangeValue(text)}
-            .focusable(),
-        keyboardOptions = keyBoardOpt(typeKeyboard),
-        keyboardActions = KeyboardActions(onDone = {
-            focusManager.clearFocus()
-            onChangeValue(text)
-            keyboardController?.hide() }),
-        onValueChange = { text = it },
-        textStyle = textStyle,
-        decorationBox = {
-            Row( verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier.padding(horizontal = paddingHor, vertical = paddingVer))
-            {
-                Box(Modifier.weight(1f)) {
-                    if (text.isEmpty()) Text(text = placeholder, style = textStyle )
-                    it()
-                }
-            }
-        },
-    )
-}
 @Composable fun TextFieldAppBorder(
     modifier: Modifier = Modifier,
     enterValue: MutableState<String>,
@@ -374,9 +340,6 @@ fun TextButtonOK(onConfirm: () -> Unit, enabled: Boolean = true) {
     onChangeValue:(String)->Unit = {},
     editing: Boolean
 ){
-    val modifier = if (!editing) Modifier.width(50.dp)
-            else Modifier.width(50.dp).background(color = MaterialTheme.colorScheme.surfaceVariant)
-
     Row(verticalAlignment = Alignment.CenterVertically){
         TextApp(
             text = text,
@@ -385,9 +348,73 @@ fun TextButtonOK(onConfirm: () -> Unit, enabled: Boolean = true) {
         TextFieldApp(
             placeholder = placeholder,
             typeKeyboard = if (editing) TypeKeyboard.DIGIT else TypeKeyboard.NONE,
-            modifier = modifier,
+            modifier = Modifier.width(50.dp),
             textStyle = interLight12,
             onChangeValue = onChangeValue
         )
+    }
+}
+@OptIn(ExperimentalComposeUiApi::class)
+@Composable fun TextFieldApp(
+    modifier: Modifier = Modifier,
+    typeKeyboard: TypeKeyboard,
+    textStyle:TextStyle ,
+    placeholder: String = "",
+    onChangeValue:(String)->Unit = {}
+){
+    val keyboardController = LocalSoftwareKeyboardController.current
+    val focusManager = LocalFocusManager.current
+    var text by rememberSaveable { mutableStateOf("") }
+    val enabled = typeKeyboard != TypeKeyboard.NONE
+    val paddingHor = if (textStyle.fontSize > 14.sp) 8.dp else 4.dp
+    val paddingVer = if (textStyle.fontSize > 14.sp) 6.dp else 2.dp
+
+    BasicTextField(
+        value = text,
+        enabled = enabled,
+        singleLine = true,
+        maxLines = 1,
+        modifier = modifier
+            .onFocusChanged { if (!it.isFocused && text.isNotEmpty()) onChangeValue(text)}
+            .focusable(),
+        keyboardOptions = keyBoardOpt(typeKeyboard),
+        keyboardActions = KeyboardActions(onDone = {
+            focusManager.clearFocus()
+            onChangeValue(text)
+            keyboardController?.hide() }),
+        onValueChange = { text = it },
+        textStyle = textStyle,
+        decorationBox = {
+            Row( verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier.padding(horizontal = paddingHor, vertical = paddingVer))
+            {
+                Box(Modifier.weight(1f), contentAlignment = Alignment.BottomCenter) {
+                    if (text.isEmpty()) Text(text = placeholder, style = textStyle )
+                    if (enabled) Divider(color = MaterialTheme.colorScheme.onBackground, thickness = 1.dp)
+                    it()
+                }
+            }
+        },
+    )
+}
+@Composable fun RadioButtonApp(
+    radioButtonId: Int,
+    state: Int,
+    onClick:()->Unit,
+    context: @Composable ()->Unit
+){
+    val sizeRadioButton = 16.dp
+    Row(verticalAlignment = Alignment.CenterVertically) {
+        RadioButton(
+            selected = radioButtonId == state,
+            enabled = true,
+            onClick = onClick,
+            modifier = Modifier.size(sizeRadioButton).scale(0.8f),
+            colors = RadioButtonDefaults.colors(
+                selectedColor = MaterialTheme.colorScheme.onPrimary,
+                unselectedColor = MaterialTheme.colorScheme.onPrimary
+            ))
+        Spacer(modifier = Modifier.width(12.dp))
+        context()
     }
 }
