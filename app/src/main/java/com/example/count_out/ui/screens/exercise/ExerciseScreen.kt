@@ -32,7 +32,6 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.count_out.R
 import com.example.count_out.data.room.tables.SetDB
-import com.example.count_out.entity.Set
 import com.example.count_out.ui.bottomsheet.BottomSheetSelectActivity
 import com.example.count_out.ui.bottomsheet.BottomSheetSpeech
 import com.example.count_out.ui.screens.exercise.view_component.SelectActivity
@@ -120,7 +119,6 @@ import com.example.count_out.ui.view_components.TextApp
         RowAddSet(uiState)
     }
 }
-
 @Composable fun LazySets(uiState: ExerciseScreenState)
 {
     LazyColumn(
@@ -148,7 +146,6 @@ import com.example.count_out.ui.view_components.TextApp
         }
     }
 }
-
 @Composable fun RowAddSet(uiState: ExerciseScreenState)
 {
     Row (horizontalArrangement = Arrangement.End, modifier = Modifier.fillMaxWidth()){
@@ -178,20 +175,6 @@ import com.example.count_out.ui.view_components.TextApp
                     .height(14.dp)
             )
         }
-    }
-}
-fun setCollapsing(uiState: ExerciseScreenState,  set: Set): Boolean
-{
-    val listCollapsingSet = uiState.listCollapsingSet.value.toMutableList()
-    val itemList = listCollapsingSet.find { it == set.idSet }
-    return if ( itemList != null) {
-        listCollapsingSet.remove(itemList)
-        uiState.listCollapsingSet.value = listCollapsingSet
-        false
-    } else {
-        listCollapsingSet.add(set.idSet)
-        uiState.listCollapsingSet.value = listCollapsingSet
-        true
     }
 }
 @Preview(showBackground = true)

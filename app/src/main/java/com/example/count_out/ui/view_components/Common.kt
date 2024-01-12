@@ -3,6 +3,7 @@ package com.example.count_out.ui.view_components
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.focusable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -16,7 +17,7 @@ import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Divider
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.RadioButton
@@ -33,8 +34,10 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.focus.onFocusChanged
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
@@ -274,7 +277,8 @@ import com.example.count_out.ui.theme.styleApp
         textStyle = interReg12,
         typeKeyboard = typeKeyboard,
         onChangeValue = {enterValue.value = it},
-        modifier = modifier.background(color = colorApp.surfaceVariant, shape = shapesApp.extraSmall)
+        modifier = modifier
+            .background(color = colorApp.surfaceVariant, shape = shapesApp.extraSmall)
             .border(width = 1.dp, color = colorApp.onPrimaryContainer, shape = shapesApp.extraSmall)
     )
 }
@@ -337,6 +341,7 @@ fun TextButtonOK(onConfirm: () -> Unit, enabled: Boolean = true) {
 }
 @Composable fun TextStringAndField(
     text:String,
+    fieldTextAlign: TextAlign = TextAlign.Center,
     placeholder: String,
     onChangeValue:(String)->Unit = {},
     editing: Boolean
@@ -350,25 +355,28 @@ fun TextButtonOK(onConfirm: () -> Unit, enabled: Boolean = true) {
             placeholder = placeholder,
             typeKeyboard = if (editing) TypeKeyboard.DIGIT else TypeKeyboard.NONE,
             modifier = Modifier.width(50.dp),
-            textStyle = interLight12,
+            textStyle = interLight12.copy(textAlign = fieldTextAlign),
             onChangeValue = onChangeValue
         )
     }
 }
-@OptIn(ExperimentalComposeUiApi::class)
+@OptIn(ExperimentalComposeUiApi::class, ExperimentalMaterial3Api::class)
 @Composable fun TextFieldApp(
     modifier: Modifier = Modifier,
     typeKeyboard: TypeKeyboard,
     textStyle:TextStyle ,
+    contentAlignment:Alignment = Alignment.BottomCenter,
     placeholder: String = "",
     onChangeValue:(String)->Unit = {}
 ){
     val keyboardController = LocalSoftwareKeyboardController.current
     val focusManager = LocalFocusManager.current
+    val interactionSource = remember { MutableInteractionSource() }
     var text by rememberSaveable { mutableStateOf("") }
     val enabled = typeKeyboard != TypeKeyboard.NONE
     val paddingHor = if (textStyle.fontSize > 14.sp) 8.dp else 4.dp
     val paddingVer = if (textStyle.fontSize > 14.sp) 6.dp else 2.dp
+    val colorLine = MaterialTheme.colorScheme.onBackground
 
     BasicTextField(
         value = text,
@@ -376,7 +384,7 @@ fun TextButtonOK(onConfirm: () -> Unit, enabled: Boolean = true) {
         singleLine = true,
         maxLines = 1,
         modifier = modifier
-            .onFocusChanged { if (!it.isFocused && text.isNotEmpty()) onChangeValue(text)}
+            .onFocusChanged { if (!it.isFocused && text.isNotEmpty()) onChangeValue(text) }
             .focusable(),
         keyboardOptions = keyBoardOpt(typeKeyboard),
         keyboardActions = KeyboardActions(onDone = {
@@ -385,19 +393,29 @@ fun TextButtonOK(onConfirm: () -> Unit, enabled: Boolean = true) {
             keyboardController?.hide() }),
         onValueChange = { text = it },
         textStyle = textStyle,
+        interactionSource = interactionSource,
         decorationBox = {
             Row( verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier.padding(horizontal = paddingHor, vertical = paddingVer))
-            {
-                Box(Modifier.weight(1f), contentAlignment = Alignment.BottomCenter) {
-                    if (text.isEmpty()) Text(text = placeholder, style = textStyle )
-                    if (enabled) Divider(color = MaterialTheme.colorScheme.onBackground, thickness = 1.dp)
+                modifier = modifier.padding(horizontal = paddingHor, vertical = paddingVer)
+            ){
+                Box(contentAlignment = contentAlignment,
+                    modifier = modifier
+                    .drawBehind {
+                        val strokeWidth = 1 * density
+                        val y = size.height - strokeWidth / 2
+                        if ( enabled ) drawLine(color = colorLine, start = Offset(0f, y),
+                            end = Offset(size.width, y), strokeWidth =strokeWidth
+                        )
+                    })
+                {
+                    if (text.isEmpty()) Text(text = placeholder, style = textStyle)
                     it()
                 }
             }
         },
     )
 }
+
 @Composable fun RadioButtonApp(
     radioButtonId: Int,
     state: Int,
@@ -411,7 +429,10 @@ fun TextButtonOK(onConfirm: () -> Unit, enabled: Boolean = true) {
             selected = radioButtonId == state,
             enabled = true,
             onClick = onClick,
-            modifier = Modifier.size(sizeRadioButton).scale(1f).padding(8.dp),
+            modifier = Modifier
+                .size(sizeRadioButton)
+                .scale(1f)
+                .padding(8.dp),
             colors = RadioButtonDefaults.colors(
                 selectedColor = MaterialTheme.colorScheme.onPrimary,
                 unselectedColor = MaterialTheme.colorScheme.onPrimary

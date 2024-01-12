@@ -285,6 +285,7 @@ fun NameTraining( uiState: TrainingScreenState )
         TextFieldApp(
             placeholder = uiState.enteredName.value,
             typeKeyboard = TypeKeyboard.TEXT,
+            contentAlignment = Alignment.BottomStart,
             textStyle = interBold16,
             onChangeValue = {
                 uiState.enteredName.value = it

@@ -4,6 +4,7 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
@@ -11,6 +12,7 @@ import androidx.compose.foundation.selection.selectableGroup
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
@@ -21,7 +23,6 @@ import com.example.count_out.data.room.tables.SetDB
 import com.example.count_out.entity.Set
 import com.example.count_out.entity.TypeKeyboard
 import com.example.count_out.ui.screens.exercise.ExerciseScreenState
-import com.example.count_out.ui.screens.exercise.setCollapsing
 import com.example.count_out.ui.theme.Dimen
 import com.example.count_out.ui.theme.interLight12
 import com.example.count_out.ui.theme.interReg14
@@ -45,14 +46,25 @@ fun NameSet(uiState: ExerciseScreenState, set: Set)
 {
     val distance = if (set.distance > 0.0) "( ${set.distance} " + stringResource(id = R.string.km) + " )" else ""
     val duration = if (set.duration > 0)  "(${set.duration} " + stringResource(id = R.string.min) + ")" else ""
-    Row{
+
+    Row (verticalAlignment = Alignment.CenterVertically){
         TextApp(
-            text = "${set.idSet}: ${set.name} ${if (set.distance > 0) distance else duration}",
+            text = "${set.idSet}: ",
             style = interReg14,
             textAlign = TextAlign.Start,
-            modifier = Modifier
-                .weight(1f)
-                .padding(horizontal = 8.dp))
+            modifier = Modifier.padding(start = 8.dp))
+        TextFieldApp(
+            modifier =Modifier,
+            placeholder = set.name,
+            contentAlignment = Alignment.BottomStart,
+            typeKeyboard = TypeKeyboard.TEXT,
+            textStyle = interReg14,
+            onChangeValue = { uiState.onChangeSet ((set as SetDB).copy(name = it)) })
+        TextApp(
+            text = if (set.distance > 0) distance else duration,
+            style = interReg14,
+            textAlign = TextAlign.Start,)
+        Spacer(modifier = Modifier.weight(1f))
         GroupIcons4(
             onCopy = { /*TODO*/ },
             onSpeech = { /*TODO*/ },
@@ -66,7 +78,6 @@ fun NameSet(uiState: ExerciseScreenState, set: Set)
 fun AdditionalInformation(uiState: ExerciseScreenState, set: Set)
 {
     val visibleLazy = uiState.listCollapsingSet.value.find { it == set.idSet } != null
-
     Column(modifier = Modifier
         .testTag("1")
         .padding(horizontal = 8.dp))
@@ -109,10 +120,7 @@ fun SwitchDuration(uiState: ExerciseScreenState, set: Set)
             radioButtonId = 2,
             state = state.intValue,
             onClick = { state.intValue = 2},
-            context = {
-//                RadioButtonCountingOrder()
-                RadioButtonDuration(uiState = uiState, set = set, visible = state.intValue == 2)
-            }
+            context = { RadioButtonDuration(uiState = uiState, set = set, visible = state.intValue == 2) }
         )
         Spacer(modifier = Modifier.height(6.dp))
         RadioButtonApp(
@@ -218,7 +226,7 @@ fun SwitchCount(uiState: ExerciseScreenState, set: Set)
             onClick = { state.intValue = 1},
             context = { RadioButtonCountingOrder()}
         )
-        Spacer(modifier = Modifier.height(1.dp))
+        Spacer(modifier = Modifier.height(4.dp))
         RadioButtonApp(
             radioButtonId = 2,
             state = state.intValue,
@@ -238,16 +246,34 @@ fun RadioButtonCountingOrder()
 @Composable
 fun RadioButtonCountingGroup(uiState: ExerciseScreenState, set: Set, visible: Boolean)
 {
-    TextAppLines(
-        text = stringResource(id = R.string.counts_by_group),
-        style = interLight12,
-        modifier = Modifier.padding(vertical = 2.dp))
-    AnimatedVisibility(modifier = Modifier.padding(4.dp), visible = visible
-    ){
-        TextFieldApp(
-            placeholder = set.groupCount,
-            typeKeyboard = TypeKeyboard.TEXT,
-            textStyle = interLight12,
-            onChangeValue = { uiState.onChangeSet ((set as SetDB).copy(groupCount = it)) })
+    Column{
+        TextAppLines(
+            text = stringResource(id = R.string.counts_by_group),
+            style = interLight12,
+            modifier = Modifier.padding(vertical = 2.dp))
+        AnimatedVisibility(modifier = Modifier.padding(bottom = 4.dp), visible = visible
+        ){
+            TextFieldApp(
+                modifier = Modifier.fillMaxWidth(),
+                placeholder = set.groupCount,
+                contentAlignment = Alignment.BottomStart,
+                typeKeyboard = TypeKeyboard.TEXT,
+                textStyle = interLight12,
+                onChangeValue = { uiState.onChangeSet ((set as SetDB).copy(groupCount = it)) })
+        }
+    }
+}
+fun setCollapsing(uiState: ExerciseScreenState,  set: Set): Boolean
+{
+    val listCollapsingSet = uiState.listCollapsingSet.value.toMutableList()
+    val itemList = listCollapsingSet.find { it == set.idSet }
+    return if ( itemList != null) {
+        listCollapsingSet.remove(itemList)
+        uiState.listCollapsingSet.value = listCollapsingSet
+        false
+    } else {
+        listCollapsingSet.add(set.idSet)
+        uiState.listCollapsingSet.value = listCollapsingSet
+        true
     }
 }

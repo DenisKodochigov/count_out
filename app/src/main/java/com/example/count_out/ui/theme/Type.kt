@@ -3,6 +3,7 @@ package com.example.count_out.ui.theme
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.sp
 import com.example.count_out.R
 
@@ -18,6 +19,11 @@ val interReg14 = TextStyle(
 val interReg12 = TextStyle(
     fontFamily = FontFamily(Font(R.font.inter_regular)),
     fontSize = 12.sp
+)
+val interReg12Center = TextStyle(
+    fontFamily = FontFamily(Font(R.font.inter_regular)),
+    fontSize = 12.sp,
+    textAlign = TextAlign.Center
 )
 val interBold16 = TextStyle(
     fontFamily = FontFamily(Font(R.font.inter_bold)),

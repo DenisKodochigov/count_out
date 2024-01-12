@@ -26,14 +26,13 @@ fun TextApp(
         overflow = TextOverflow.Ellipsis,
         textAlign = textAlign,
         modifier = modifier,
-//        color = MaterialTheme.colorScheme.onSurface
     )
 }
 @Composable
 fun TextAppLines(
     text: String,
     modifier: Modifier = Modifier,
-    textAlign: TextAlign = TextAlign.Center,
+    textAlign: TextAlign = TextAlign.Start,
     style: TextStyle,
     fontWeight: FontWeight = FontWeight.Normal
 ) {
@@ -41,10 +40,8 @@ fun TextAppLines(
         text = text,
         style = style,
         fontWeight = fontWeight,
-        overflow = TextOverflow.Ellipsis,
         textAlign = textAlign,
         modifier = modifier,
-//        color = MaterialTheme.colorScheme.onSurface
     )
 }
 @Composable
