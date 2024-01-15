@@ -31,7 +31,7 @@ import com.example.count_out.entity.Training
 import com.example.count_out.entity.TypeKeyboard
 import com.example.count_out.ui.joint.ButtonConfirm
 import com.example.count_out.ui.theme.Dimen
-import com.example.count_out.ui.theme.interLight12
+import com.example.count_out.ui.theme.interLight12Start
 import com.example.count_out.ui.theme.shapesApp
 import com.example.count_out.ui.view_components.TextApp
 import com.example.count_out.ui.view_components.TextFieldApp
@@ -62,9 +62,7 @@ import com.example.count_out.ui.view_components.TextFieldApp
 fun BottomSheetSpeechContent(uiState: BottomSheetState)
 {
     Column( horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(Dimen.bsItemPaddingHor)
+        modifier = Modifier.padding(Dimen.bsItemPaddingHor)
     ) {
         SelectOtherSpeech(uiState)
         Spacer(Modifier.height(Dimen.bsSpacerHeight))
@@ -79,6 +77,7 @@ fun BottomSheetSpeechContent(uiState: BottomSheetState)
         Spacer(Modifier.height(Dimen.bsSpacerHeight))
         FieldTextForSpeech(uiState.enteredAfterEnd,
             stringResource(id = R.string.message_after_end) + " " + uiState.nameSection)
+        Spacer(Modifier.height(Dimen.bsConfirmationButtonTopHeight))
         ButtonOK(uiState)
         Spacer(Modifier.height(Dimen.bsSpacerBottomHeight))
     }
@@ -89,14 +88,16 @@ fun BottomSheetSpeechContent(uiState: BottomSheetState)
 }
 @Composable fun FieldTextForSpeech(enterValue: MutableState<String>, nameSection: String){
     Column {
-        TextApp(text = nameSection, style = interLight12)
+        TextApp(text = nameSection, style = interLight12Start)
         TextFieldApp(
-            textStyle = interLight12,
+            textStyle = interLight12Start,
+            showLine = false,
+            contentAlignment = Alignment.BottomStart,
             modifier = Modifier.fillMaxWidth()
                 .background(color = MaterialTheme.colorScheme.primary, shape = shapesApp.extraSmall),
             placeholder = enterValue.value,
-            onChangeValue = { enterValue.value = it},
-            typeKeyboard = TypeKeyboard.TEXT)
+            onChangeValue = { enterValue.value = it },
+            typeKeyboard = TypeKeyboard.TEXT )
     }
 }
 

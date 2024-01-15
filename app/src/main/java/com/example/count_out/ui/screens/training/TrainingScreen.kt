@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -45,6 +46,7 @@ import com.example.count_out.ui.theme.interBold16
 import com.example.count_out.ui.theme.interLight12
 import com.example.count_out.ui.theme.interReg14
 import com.example.count_out.ui.theme.interThin12
+import com.example.count_out.ui.theme.interThin14
 import com.example.count_out.ui.theme.shapeAddExercise
 import com.example.count_out.ui.theme.shapesApp
 import com.example.count_out.ui.view_components.GroupIcons
@@ -153,7 +155,7 @@ fun Round(uiState: TrainingScreenState, roundType: RoundType)
     ){
         Box(modifier = Modifier.background(color = MaterialTheme.colorScheme.primary))
         {
-            Column( modifier = Modifier.padding(start = 8.dp),)
+            Column( modifier = Modifier.padding(start = 6.dp),)
             {
                 Row1(uiState = uiState, roundType)
                 Row2(uiState = uiState, roundType)
@@ -232,7 +234,7 @@ fun LazyExercise(uiState: TrainingScreenState, roundType: RoundType, visibleLazy
         state = rememberLazyListState(),
         modifier = Modifier
             .testTag("1")
-            .padding(end = 8.dp, bottom = 8.dp)
+            .padding(end = 6.dp, bottom = 8.dp)
     ){
         items(items = listExercise, key = { it.idExercise }){ itExercise ->
 
@@ -240,7 +242,6 @@ fun LazyExercise(uiState: TrainingScreenState, roundType: RoundType, visibleLazy
                 modifier = Modifier.padding(4.dp),
                 visible = visibleLazy
             ){
-//                Spacer(modifier = Modifier.height(4.dp))
                 Card( elevation = elevationTraining(), shape = MaterialTheme.shapes.extraSmall
                 ){
                     Row(
@@ -255,13 +256,13 @@ fun LazyExercise(uiState: TrainingScreenState, roundType: RoundType, visibleLazy
                         Row(verticalAlignment = Alignment.CenterVertically,
                             modifier = Modifier
                                 .weight(1f)
-                                .padding(horizontal = 12.dp)
+                                .padding(horizontal = 12.dp, vertical = 8.dp)
                                 .clickable {
                                     uiState.onClickExercise(
                                         getIdRound(uiState, roundType), itExercise.idExercise
                                     )
                                 })
-                        { TextApp(text = itExercise.activity.name, style = interThin12) }
+                        { TextApp(text = itExercise.activity.name, style = interThin14) }
                         GroupIcons(
                             onCopy = { uiState.onCopyExercise(uiState.training.idTraining, itExercise.idExercise)},
                             onDel = { uiState.onDeleteExercise(uiState.training.idTraining, itExercise.idExercise) },
@@ -382,8 +383,7 @@ fun PoleAddExercise(uiState: TrainingScreenState, roundType: RoundType)
             contentDescription = "",
             modifier = Modifier
                 .padding(4.dp)
-                .width(14.dp)
-                .height(14.dp)
+                .size(Dimen.sizeIcon)
         )
     }
 }

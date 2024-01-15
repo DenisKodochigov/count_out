@@ -4,6 +4,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.sp
 import com.example.count_out.R
 
@@ -48,6 +49,12 @@ val interLight16 = TextStyle(
 val interLight12 = TextStyle(
     fontFamily = FontFamily(Font(R.font.inter_light)),
     fontSize = 12.sp
+)
+val interLight12Start = TextStyle(
+    fontFamily = FontFamily(Font(R.font.inter_light)),
+    fontSize = 12.sp,
+    textAlign = TextAlign.Start,
+    textDecoration = TextDecoration.None
 )
 val alumniReg12 = TextStyle(
     fontFamily = FontFamily(Font(R.font.alumnisans_regular)),

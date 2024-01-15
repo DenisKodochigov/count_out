@@ -9,22 +9,23 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.example.count_out.R
+import com.example.count_out.ui.theme.Dimen
 
 @Composable fun GroupIcons(onCopy: ()->Unit, onSpeech: ()->Unit, onDel: ()->Unit ) {
     Icon(
         painter = painterResource(id = R.drawable.ic_copy),
         contentDescription = "",
-        modifier = Modifier.padding(4.dp).size(14.dp).clickable{ onCopy() }
+        modifier = Modifier.padding(4.dp).size(Dimen.sizeIcon).clickable{ onCopy() }
     )
     Icon(
         painter = painterResource(id = R.drawable.ic_ecv),
         contentDescription = "",
-        modifier = Modifier.padding(4.dp).size(14.dp).clickable{ onSpeech() }
+        modifier = Modifier.padding(4.dp).size(Dimen.sizeIcon).clickable{ onSpeech() }
     )
     Icon(
         painter = painterResource(id = R.drawable.ic_del),
         contentDescription = "",
-        modifier = Modifier.padding(4.dp).size(14.dp).clickable{ onDel() }
+        modifier = Modifier.padding(4.dp).size(Dimen.sizeIcon).clickable{ onDel() }
     )
 }
 
@@ -39,7 +40,7 @@ import com.example.count_out.R
      Icon(
         painter = painterResource(id = idIcon),
         contentDescription = "",
-        modifier = Modifier.padding(4.dp).size(14.dp).clickable{ onCollapsing() }
+        modifier = Modifier.padding(4.dp).size(Dimen.sizeIcon).clickable{ onCollapsing() }
     )
     GroupIcons(onCopy, onSpeech, onDel)
 }

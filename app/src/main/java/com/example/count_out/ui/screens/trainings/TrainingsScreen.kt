@@ -81,7 +81,7 @@ import com.example.count_out.ui.view_components.TextApp
 @Composable fun TrainingsScreenLayout( uiState: TrainingsScreenState
 ){
     Column(
-        modifier = Modifier.fillMaxHeight().padding(horizontal = Dimen.paddingAppHor),
+        modifier = Modifier.fillMaxHeight(),
         content = { TrainingsLazyColumn( uiState = uiState) }
     )
 }
@@ -89,7 +89,6 @@ import com.example.count_out.ui.view_components.TextApp
 @Composable
 fun TrainingsLazyColumn(uiState: TrainingsScreenState,
 ){
-//    Spacer(modifier = Modifier.height(4.dp))
     LazyList(uiState)
     Spacer(modifier = Modifier.height(8.dp))
 }
@@ -98,7 +97,7 @@ fun TrainingsLazyColumn(uiState: TrainingsScreenState,
 {
     LazyColumn(
         state = rememberLazyListState(),
-        modifier = Modifier.testTag("1").animateContentSize()
+        modifier = Modifier.testTag("1").animateContentSize().padding(horizontal = Dimen.paddingAppHor)
     ){
         items( items = uiState.trainings, key = { it.idTraining })
         { item ->

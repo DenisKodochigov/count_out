@@ -10,10 +10,12 @@ import com.example.count_out.entity.TypeKeyboard
 @Composable fun keyBoardOpt(typeKeyboard: TypeKeyboard): KeyboardOptions {
     return when (typeKeyboard) {
         TypeKeyboard.TEXT -> {
-            KeyboardOptions(keyboardType = KeyboardType.Text,
+            KeyboardOptions(keyboardType = KeyboardType.Password,
                 capitalization = KeyboardCapitalization.Sentences).copy(imeAction = ImeAction.Done) }
         TypeKeyboard.DIGIT -> {
             KeyboardOptions(keyboardType = KeyboardType.Decimal).copy(imeAction = ImeAction.Done) }
+        TypeKeyboard.PASS -> {
+            KeyboardOptions(keyboardType = KeyboardType.Password).copy(imeAction = ImeAction.Done) }
         else -> { KeyboardOptions.Default.copy(imeAction = ImeAction.Done) }
     }
 }

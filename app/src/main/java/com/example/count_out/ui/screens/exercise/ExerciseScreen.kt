@@ -11,7 +11,7 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
@@ -123,18 +123,14 @@ import com.example.count_out.ui.view_components.TextApp
 {
     LazyColumn(
         state = rememberLazyListState(),
-        modifier = Modifier
-            .testTag("1")
-            .padding(horizontal = 3.dp)
+        modifier = Modifier.testTag("1").padding(horizontal = 3.dp)
     ){
         items( items = uiState.exercise.sets, key = { it.idSet })
         { set ->
             Card (
                 elevation = elevationTraining(),
                 shape = MaterialTheme.shapes.extraSmall,
-                modifier = Modifier
-                    .padding(vertical = 8.dp)
-                    .fillMaxWidth(),
+                modifier = Modifier.padding(vertical = 8.dp).fillMaxWidth(),
                 colors = CardDefaults.cardColors(
                     containerColor = MaterialTheme.colorScheme.tertiary,
                     contentColor = MaterialTheme.colorScheme.onTertiary,
@@ -171,8 +167,7 @@ import com.example.count_out.ui.view_components.TextApp
                 contentDescription = "",
                 modifier = Modifier
                     .padding(4.dp)
-                    .width(14.dp)
-                    .height(14.dp)
+                    .size(Dimen.sizeIcon)
             )
         }
     }

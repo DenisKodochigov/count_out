@@ -24,6 +24,8 @@ import androidx.compose.material3.RadioButton
 import androidx.compose.material3.RadioButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
+import androidx.compose.material3.TextFieldDefaults
+import androidx.compose.material3.TextFieldDefaults.indicatorLine
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
@@ -45,6 +47,7 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -367,6 +370,7 @@ fun TextButtonOK(onConfirm: () -> Unit, enabled: Boolean = true) {
     textStyle:TextStyle ,
     contentAlignment:Alignment = Alignment.BottomCenter,
     placeholder: String = "",
+    showLine: Boolean = true,
     onChangeValue:(String)->Unit = {}
 ){
     val keyboardController = LocalSoftwareKeyboardController.current
@@ -377,6 +381,9 @@ fun TextButtonOK(onConfirm: () -> Unit, enabled: Boolean = true) {
     val paddingHor = if (textStyle.fontSize > 14.sp) 8.dp else 4.dp
     val paddingVer = if (textStyle.fontSize > 14.sp) 6.dp else 2.dp
     val colorLine = MaterialTheme.colorScheme.onBackground
+    val colors = TextFieldDefaults.colors(
+        unfocusedIndicatorColor = Color.Transparent,
+        focusedIndicatorColor = Color.Transparent)
 
     BasicTextField(
         value = text,
@@ -384,6 +391,14 @@ fun TextButtonOK(onConfirm: () -> Unit, enabled: Boolean = true) {
         singleLine = true,
         maxLines = 1,
         modifier = modifier
+            .indicatorLine(
+                enabled = enabled,
+                isError = false,
+                colors = colors,
+                interactionSource = interactionSource,
+                focusedIndicatorLineThickness = 0.dp,
+                unfocusedIndicatorLineThickness = 0.dp
+            )
             .onFocusChanged { if (!it.isFocused && text.isNotEmpty()) onChangeValue(text) }
             .focusable(),
         keyboardOptions = keyBoardOpt(typeKeyboard),
@@ -392,23 +407,30 @@ fun TextButtonOK(onConfirm: () -> Unit, enabled: Boolean = true) {
             onChangeValue(text)
             keyboardController?.hide() }),
         onValueChange = { text = it },
+        visualTransformation = VisualTransformation.None,
         textStyle = textStyle,
-        interactionSource = interactionSource,
+//        interactionSource = interactionSource,
         decorationBox = {
             Row( verticalAlignment = Alignment.CenterVertically,
                 modifier = modifier.padding(horizontal = paddingHor, vertical = paddingVer)
-            ){
+            ) {
                 Box(contentAlignment = contentAlignment,
                     modifier = modifier
-                    .drawBehind {
-                        val strokeWidth = 1 * density
-                        val y = size.height - strokeWidth / 2
-                        if ( enabled ) drawLine(color = colorLine, start = Offset(0f, y),
-                            end = Offset(size.width, y), strokeWidth =strokeWidth
-                        )
-                    })
+                        .drawBehind {
+                            val strokeWidth = 1 * density
+                            val y = size.height - strokeWidth / 2
+                            if (enabled && showLine) {
+                                drawLine(
+                                    color = colorLine,
+                                    start = Offset(0f, y),
+                                    end = Offset(size.width, y),
+                                    strokeWidth = strokeWidth
+                                )
+                            }
+                        }
+                )
                 {
-                    if (text.isEmpty()) Text(text = placeholder, style = textStyle)
+                    if (text.isEmpty()) Text( text = placeholder, style = textStyle)
                     it()
                 }
             }
