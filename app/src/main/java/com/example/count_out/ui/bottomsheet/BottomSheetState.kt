@@ -12,6 +12,7 @@ data class BottomSheetState(
     val enteredBeforeEnd: MutableState<String> = mutableStateOf(""),
     val enteredAfterStart: MutableState<String> = mutableStateOf(""),
     val enteredAfterEnd: MutableState<String> = mutableStateOf(""),
+    @Stable var speechId: Long = 0L,
     @Stable override var item: Any? =null,
     @Stable override var listSpeech: List<Speech> = emptyList(),
     @Stable override var nameSection: String = "",

@@ -66,17 +66,17 @@ fun BottomSheetSpeechContent(uiState: BottomSheetState)
     ) {
         SelectOtherSpeech(uiState)
         Spacer(Modifier.height(Dimen.bsSpacerHeight))
-        FieldTextForSpeech(uiState.enteredBeforeStart,
-            stringResource(id = R.string.message_before_start) + " " + uiState.nameSection)
+        FieldTextForSpeech( enterValue = uiState.enteredBeforeStart,
+            nameSection = stringResource(id = R.string.message_before_start) + " " + uiState.nameSection)
         Spacer(Modifier.height(Dimen.bsSpacerHeight))
-        FieldTextForSpeech(uiState.enteredAfterStart,
-            stringResource(id = R.string.message_after_start) + " " + uiState.nameSection)
+        FieldTextForSpeech( enterValue = uiState.enteredAfterStart,
+            nameSection = stringResource(id = R.string.message_after_start) + " " + uiState.nameSection)
         Spacer(Modifier.height(Dimen.bsSpacerHeight))
-        FieldTextForSpeech(uiState.enteredBeforeEnd,
-            stringResource(id = R.string.message_before_end) + " " + uiState.nameSection)
+        FieldTextForSpeech( enterValue = uiState.enteredBeforeEnd,
+            nameSection = stringResource(id = R.string.message_before_end) + " " + uiState.nameSection)
         Spacer(Modifier.height(Dimen.bsSpacerHeight))
-        FieldTextForSpeech(uiState.enteredAfterEnd,
-            stringResource(id = R.string.message_after_end) + " " + uiState.nameSection)
+        FieldTextForSpeech( enterValue = uiState.enteredAfterEnd,
+            nameSection = stringResource(id = R.string.message_after_end) + " " + uiState.nameSection)
         Spacer(Modifier.height(Dimen.bsConfirmationButtonTopHeight))
         ButtonOK(uiState)
         Spacer(Modifier.height(Dimen.bsSpacerBottomHeight))
@@ -114,6 +114,7 @@ fun init(uiState: BottomSheetState, itemSpeech: BottomSheetInterface){
     uiState.enteredBeforeEnd.value = speech.soundBeforeEnd
     uiState.enteredAfterStart.value = speech.soundAfterStart
     uiState.enteredAfterEnd.value = speech.soundAfterEnd
+    uiState.speechId = speech.idSpeech
 
     uiState.listSpeech = itemSpeech.listSpeech
     uiState.nameSection = itemSpeech.nameSection
@@ -126,6 +127,7 @@ fun ButtonOK(uiState: BottomSheetState){
     ButtonConfirm(onConfirm = {
         uiState.onConfirmationSpeech(
             SpeechDB(
+                idSpeech = uiState.speechId,
                 soundBeforeStart = uiState.enteredBeforeStart.value,
                 soundAfterStart = uiState.enteredAfterStart.value,
                 soundBeforeEnd = uiState.enteredBeforeEnd.value,

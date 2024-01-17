@@ -29,7 +29,7 @@ class DataRepository  @Inject constructor(private val dataSource: DataSource){
     }
     fun setSpeech(speech: Speech, item: Any?)
     {
-        val speechId = if (speech.idSpeech == -1L) dataSource.addSpeech(speech as SpeechDB)
+        val speechId = if (speech.idSpeech == 0L) dataSource.addSpeech(speech as SpeechDB)
                         else dataSource.updateSpeech(speech as SpeechDB)
         when (item) {
             is Training -> {
