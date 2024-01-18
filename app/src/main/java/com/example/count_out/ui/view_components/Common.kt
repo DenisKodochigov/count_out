@@ -1,7 +1,6 @@
 package com.example.count_out.ui.view_components
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.focusable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
@@ -59,7 +58,6 @@ import com.example.count_out.entity.TypeText
 import com.example.count_out.ui.theme.colorApp
 import com.example.count_out.ui.theme.interLight12
 import com.example.count_out.ui.theme.interReg12
-import com.example.count_out.ui.theme.shapesApp
 import com.example.count_out.ui.theme.styleApp
 
 @Composable fun TextApp(
@@ -270,26 +268,26 @@ import com.example.count_out.ui.theme.styleApp
 //}
 
 
-@Composable fun TextFieldAppBorder(
-    modifier: Modifier = Modifier,
-    enterValue: MutableState<String>,
-    typeKeyboard: TypeKeyboard
-){
-    TextFieldApp(
-        placeholder = enterValue.value,
-        textStyle = interReg12,
-        typeKeyboard = typeKeyboard,
-        onChangeValue = {enterValue.value = it},
-        modifier = modifier
-            .background(color = colorApp.surfaceVariant, shape = shapesApp.extraSmall)
-            .border(width = 1.dp, color = colorApp.onPrimaryContainer, shape = shapesApp.extraSmall)
-    )
-}
+//@Composable fun TextFieldAppBorder(
+//    modifier: Modifier = Modifier,
+//    enterValue: MutableState<String>,
+//    typeKeyboard: TypeKeyboard
+//){
+//    TextFieldApp(
+//        placeholder = enterValue.value,
+//        textStyle = interReg12,
+//        typeKeyboard = typeKeyboard,
+//        onChangeValue = {enterValue.value = it},
+//        modifier = modifier
+//            .background(color = colorApp.surfaceVariant, shape = shapesApp.extraSmall)
+//            .border(width = 1.dp, color = colorApp.onPrimaryContainer, shape = shapesApp.extraSmall)
+//    )
+//}
 
 @Composable fun ButtonApp(
     text: String,
     onClick: () -> Unit,
-    modifier: Modifier =Modifier,
+    modifier: Modifier = Modifier,
     enabled: Boolean = true,
 ){
     Button(
@@ -308,7 +306,7 @@ import com.example.count_out.ui.theme.styleApp
             hoveredElevation = 6.dp,
             disabledElevation= 6.dp
         ),
-        modifier = modifier
+        modifier = modifier,
     ) {
         Text(text = text)
     }
@@ -371,6 +369,7 @@ fun TextButtonOK(onConfirm: () -> Unit, enabled: Boolean = true) {
     contentAlignment:Alignment = Alignment.BottomCenter,
     placeholder: String = "",
     showLine: Boolean = true,
+    onLossFocus: Boolean = true,
     onChangeValue:(String)->Unit = {}
 ){
     val keyboardController = LocalSoftwareKeyboardController.current
@@ -399,14 +398,16 @@ fun TextButtonOK(onConfirm: () -> Unit, enabled: Boolean = true) {
                 focusedIndicatorLineThickness = 0.dp,
                 unfocusedIndicatorLineThickness = 0.dp
             )
-            .onFocusChanged { if (!it.isFocused && text.isNotEmpty()) onChangeValue(text) }
+            .onFocusChanged { if ((!it.isFocused || !onLossFocus) && text.isNotEmpty()) onChangeValue(text) }
             .focusable(),
         keyboardOptions = keyBoardOpt(typeKeyboard),
         keyboardActions = KeyboardActions(onDone = {
             focusManager.clearFocus()
             onChangeValue(text)
             keyboardController?.hide() }),
-        onValueChange = { text = it },
+        onValueChange = {
+            text = it
+            if (!onLossFocus) onChangeValue(text)},
         visualTransformation = VisualTransformation.None,
         textStyle = textStyle,
 //        interactionSource = interactionSource,

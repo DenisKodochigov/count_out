@@ -35,8 +35,8 @@ class TrainingViewModel @Inject constructor(
             onDismissSpeechBSTraining = {},
             onDismissSpeechBSExercise = {},
             onSpeechExercise = {},
-            onCopyExercise = {trainingId, exerciseId -> copyExercise(trainingId, exerciseId)},
-            onDeleteExercise = {trainingId, exerciseId -> deleteExercise(trainingId, exerciseId)},
+            onCopyExercise = { trainingId, exerciseId -> copyExercise(trainingId, exerciseId)},
+            onDeleteExercise = { trainingId, exerciseId -> deleteExercise(trainingId, exerciseId)},
             onSave = {},
             onClickWorkout = {},
         )
@@ -46,7 +46,7 @@ class TrainingViewModel @Inject constructor(
     fun getTraining(id: Long) { templateMy { dataRepository.getTraining(id) } }
 
     private fun setSpeech(speech: Speech, item: Any?) {
-        templateNothing { dataRepository.setSpeech(speech, item) } }
+        templateMy { dataRepository.setSpeech(speech, item) as Training } }
     private fun deleteTraining(trainingId: Long){
         templateNothing { dataRepository.deleteTrainingNothing(trainingId) } }
     private fun changeNameTraining(training: Training, name: String){

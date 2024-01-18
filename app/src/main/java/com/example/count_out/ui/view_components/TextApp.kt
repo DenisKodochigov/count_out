@@ -61,6 +61,6 @@ fun TextAppColor(
         overflow = TextOverflow.Ellipsis,
         textAlign = textAlign,
         modifier = modifier,
-        color = color
+//        color = color
     )
 }

@@ -52,6 +52,7 @@ class DataSource @Inject constructor(private val dataDao: DataDao) {
 //Round
     fun updateRound(round: RoundDB): Int = dataDao.updateRound(round)
     fun getNameRound(roundId: Long): String = dataDao.getNameRound(roundId)
+    fun getRound(roundId: Long): RoundDB = dataDao.getRoundRel(roundId).toRound()
 //Exercise
     fun getExercise(roundId: Long, exerciseId:Long): Exercise {
         return  if (exerciseId < 1) { createExercise(roundId) }

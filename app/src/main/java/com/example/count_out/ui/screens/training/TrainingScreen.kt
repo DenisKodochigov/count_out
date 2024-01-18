@@ -2,7 +2,6 @@ package com.example.count_out.ui.screens.training
 
 import android.annotation.SuppressLint
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
@@ -47,12 +46,9 @@ import com.example.count_out.ui.theme.interLight12
 import com.example.count_out.ui.theme.interReg14
 import com.example.count_out.ui.theme.interThin12
 import com.example.count_out.ui.theme.interThin14
-import com.example.count_out.ui.theme.shapeAddExercise
-import com.example.count_out.ui.theme.shapesApp
 import com.example.count_out.ui.view_components.GroupIcons
 import com.example.count_out.ui.view_components.TextApp
 import com.example.count_out.ui.view_components.TextFieldApp
-import com.example.count_out.ui.view_components.log
 
 @SuppressLint("UnrememberedMutableState")
 @Composable
@@ -90,7 +86,7 @@ fun TrainingScreenCreateView(
         uiState.nameSection = stringResource(id = R.string.training)
         uiState.item = uiState.training
         uiState.onDismissSpeech = {
-            log(true, "uiState.showSpeechTraining.value = false")
+//            log(true, "uiState.showSpeechTraining.value = false")
             uiState.showSpeechTraining.value = false}
         BottomSheetSpeech(uiState)
     }
@@ -153,7 +149,9 @@ fun Round(uiState: TrainingScreenState, roundType: RoundType)
 {
     Card( elevation = elevationTraining(), shape = MaterialTheme.shapes.extraSmall
     ){
-        Box(modifier = Modifier.background(color = MaterialTheme.colorScheme.primary))
+        Box(modifier = Modifier
+//            .background(color = MaterialTheme.colorScheme.primary)
+        )
         {
             Column( modifier = Modifier.padding(start = 6.dp),)
             {
@@ -247,11 +245,12 @@ fun LazyExercise(uiState: TrainingScreenState, roundType: RoundType, visibleLazy
                     Row(
                         verticalAlignment = Alignment.CenterVertically,
                         modifier = Modifier
-                            .fillMaxWidth()
-                            .background(
-                                color = MaterialTheme.colorScheme.tertiary,
-                                shape = shapesApp.extraSmall
-                            ))
+//                            .fillMaxWidth()
+//                            .background(
+//                                color = MaterialTheme.colorScheme.tertiary,
+//                                shape = shapesApp.extraSmall
+//                            )
+                    )
                     {
                         Row(verticalAlignment = Alignment.CenterVertically,
                             modifier = Modifier
@@ -371,7 +370,7 @@ fun PoleAddExercise(uiState: TrainingScreenState, roundType: RoundType)
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier
             .clickable { uiState.onAddExercise(getIdRound(uiState, roundType)) }
-            .background(color = MaterialTheme.colorScheme.secondary, shape = shapeAddExercise)
+//            .background(color = MaterialTheme.colorScheme.secondary, shape = shapeAddExercise)
     ) {
         TextApp(
             text = stringResource(id = R.string.add_activity),

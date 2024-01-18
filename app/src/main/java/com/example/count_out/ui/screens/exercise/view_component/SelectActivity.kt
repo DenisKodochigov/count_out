@@ -1,6 +1,5 @@
 package com.example.count_out.ui.screens.exercise.view_component
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
@@ -10,7 +9,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -25,7 +23,7 @@ import com.example.count_out.ui.view_components.TextApp
 fun SelectActivity(uiState: ExerciseScreenState)
 {
     Row(verticalAlignment = Alignment.CenterVertically,
-        modifier = Modifier.background(color = MaterialTheme.colorScheme.surfaceVariant)
+//        modifier = Modifier.background(color = MaterialTheme.colorScheme.surfaceVariant)
     ){
         IconSelectActivity(uiState)
         Spacer(modifier = Modifier.width(12.dp))

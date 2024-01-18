@@ -27,22 +27,25 @@ class DataRepository  @Inject constructor(private val dataSource: DataSource){
     fun deleteTrainingNothing(id: Long){
         Plugins.listTr.remove(Plugins.listTr.find { it.idTraining == id })
     }
-    fun setSpeech(speech: Speech, item: Any?)
+    fun setSpeech(speech: Speech, item: Any?): Any
     {
         val speechId = if (speech.idSpeech == 0L) dataSource.addSpeech(speech as SpeechDB)
                         else dataSource.updateSpeech(speech as SpeechDB)
-        when (item) {
+        return when (item) {
             is Training -> {
                 (item as TrainingDB).speechId = speechId.toLong()
                 dataSource.updateTraining(item)
+                dataSource.getTraining(item.idTraining)
             }
             is Exercise -> {
                 (item as ExerciseDB).speechId = speechId.toLong()
                 dataSource.updateExercise(item)
+                dataSource.getExercise(0, item.idExercise)
             }
             is Round -> {
                 (item as RoundDB).speechId = speechId.toLong()
                 dataSource.updateRound(item)
+                dataSource.getRound(item.idRound)
             }
             else -> { }
         }

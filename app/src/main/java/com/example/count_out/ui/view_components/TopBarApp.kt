@@ -29,7 +29,7 @@ fun CollapsingToolbar(
         modifier = Modifier
             .height(30.dp)
             .fillMaxWidth()
-            .background(color = MaterialTheme.colorScheme.surface, shape = topBarShape)
+//            .background(color = MaterialTheme.colorScheme.surface, shape = topBarShape)
     ){
         IconButton( onClick = backScreen ) {
             Icon(imageVector = Icons.Default.ArrowBackIos,

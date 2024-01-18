@@ -1,7 +1,6 @@
 package com.example.count_out.ui.screens.exercise
 
 import android.annotation.SuppressLint
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -16,7 +15,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
@@ -41,7 +39,6 @@ import com.example.count_out.ui.theme.elevationTraining
 import com.example.count_out.ui.theme.interBold16
 import com.example.count_out.ui.theme.interReg14
 import com.example.count_out.ui.theme.interThin12
-import com.example.count_out.ui.theme.shapeAddExercise
 import com.example.count_out.ui.view_components.TextApp
 
 @SuppressLint("UnrememberedMutableState")
@@ -104,12 +101,12 @@ import com.example.count_out.ui.view_components.TextApp
     Card (
         elevation = elevationTraining(),
         shape = MaterialTheme.shapes.extraSmall,
-        colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.secondary,
-            contentColor = MaterialTheme.colorScheme.onSecondary,
-            disabledContainerColor = MaterialTheme.colorScheme.secondary,
-            disabledContentColor = MaterialTheme.colorScheme.onSecondary,
-        )
+//        colors = CardDefaults.cardColors(
+//            containerColor = MaterialTheme.colorScheme.secondary,
+//            contentColor = MaterialTheme.colorScheme.onSecondary,
+//            disabledContainerColor = MaterialTheme.colorScheme.secondary,
+//            disabledContentColor = MaterialTheme.colorScheme.onSecondary,
+//        )
     ){
         Column (modifier = Modifier.fillMaxWidth().padding(6.dp))
         {
@@ -131,12 +128,12 @@ import com.example.count_out.ui.view_components.TextApp
                 elevation = elevationTraining(),
                 shape = MaterialTheme.shapes.extraSmall,
                 modifier = Modifier.padding(vertical = 8.dp).fillMaxWidth(),
-                colors = CardDefaults.cardColors(
-                    containerColor = MaterialTheme.colorScheme.tertiary,
-                    contentColor = MaterialTheme.colorScheme.onTertiary,
-                    disabledContainerColor = MaterialTheme.colorScheme.secondary,
-                    disabledContentColor = MaterialTheme.colorScheme.onSecondary,
-                ),
+//                colors = CardDefaults.cardColors(
+//                    containerColor = MaterialTheme.colorScheme.tertiary,
+//                    contentColor = MaterialTheme.colorScheme.onTertiary,
+//                    disabledContainerColor = MaterialTheme.colorScheme.secondary,
+//                    disabledContentColor = MaterialTheme.colorScheme.onSecondary,
+//                ),
                 content = { SetEdit(uiState,set) }
             )
         }
@@ -149,7 +146,7 @@ import com.example.count_out.ui.view_components.TextApp
             horizontalArrangement = Arrangement.Center,
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier
-                .background(color = MaterialTheme.colorScheme.tertiary, shape = shapeAddExercise)
+//                .background(color = MaterialTheme.colorScheme.tertiary, shape = shapeAddExercise)
                 .clickable {
                     uiState.onAddUpdateSet(
                         uiState.exercise.idExercise,

@@ -1,6 +1,5 @@
 package com.example.count_out.ui.bottomsheet
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -9,7 +8,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.BottomAppBarDefaults
 import androidx.compose.material3.BottomSheetDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.contentColorFor
 import androidx.compose.material3.rememberModalBottomSheetState
@@ -39,11 +37,12 @@ import com.example.count_out.ui.view_components.TextFieldApp
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable fun BottomSheetSpeech(itemSpeech: BottomSheetInterface)
 {
-    val uiState by remember{ mutableStateOf( BottomSheetState()) }
-    init(uiState, itemSpeech)
+    val uiState by remember{ mutableStateOf( bottomSheetStateNew(itemSpeech)) }
 
     val sheetState = rememberModalBottomSheetState(
-        skipPartiallyExpanded = true, confirmValueChange = { true },)
+        skipPartiallyExpanded = true, )
+//        confirmValueChange = { true },)
+    
     ModalBottomSheet(
         onDismissRequest = {uiState.onDismissSpeech.invoke()},
         modifier = Modifier.padding(horizontal = Dimen.bsPaddingHor1),
@@ -58,6 +57,26 @@ import com.example.count_out.ui.view_components.TextFieldApp
         content = { BottomSheetSpeechContent(uiState) })
 }
 
+fun bottomSheetStateNew(itemSpeech: BottomSheetInterface): BottomSheetState{
+    val speech = when (itemSpeech.item) {
+        is Training-> (itemSpeech.item as Training).speech
+        is Exercise-> (itemSpeech.item as Exercise).speech
+        is Round-> (itemSpeech.item as Round).speech
+        else -> SpeechDB()
+    }
+    return BottomSheetState(
+        enteredBeforeStart = mutableStateOf( speech.soundBeforeStart ),
+        enteredBeforeEnd = mutableStateOf( speech.soundBeforeEnd ),
+        enteredAfterStart = mutableStateOf( speech.soundAfterStart ),
+        enteredAfterEnd = mutableStateOf( speech.soundAfterEnd ),
+        speechId = speech.idSpeech ,
+        listSpeech = itemSpeech.listSpeech,
+        nameSection = itemSpeech.nameSection,
+        item = itemSpeech.item,
+        onConfirmationSpeech = itemSpeech.onConfirmationSpeech,
+        onDismissSpeech = itemSpeech.onDismissSpeech,
+    )
+}
 @Composable
 fun BottomSheetSpeechContent(uiState: BottomSheetState)
 {
@@ -75,55 +94,39 @@ fun BottomSheetSpeechContent(uiState: BottomSheetState)
         FieldTextForSpeech( enterValue = uiState.enteredBeforeEnd,
             nameSection = stringResource(id = R.string.message_before_end) + " " + uiState.nameSection)
         Spacer(Modifier.height(Dimen.bsSpacerHeight))
-        FieldTextForSpeech( enterValue = uiState.enteredAfterEnd,
-            nameSection = stringResource(id = R.string.message_after_end) + " " + uiState.nameSection)
+        FieldTextForSpeech(
+            enterValue = uiState.enteredAfterEnd,
+            nameSection = stringResource(id = R.string.message_after_end) + " " + uiState.nameSection )
         Spacer(Modifier.height(Dimen.bsConfirmationButtonTopHeight))
         ButtonOK(uiState)
         Spacer(Modifier.height(Dimen.bsSpacerBottomHeight))
     }
 }
 
-@Composable fun SelectOtherSpeech(uiState: BottomSheetState){
 
-}
 @Composable fun FieldTextForSpeech(enterValue: MutableState<String>, nameSection: String){
     Column {
         TextApp(text = nameSection, style = interLight12Start)
         TextFieldApp(
             textStyle = interLight12Start,
-            showLine = false,
+            showLine = true,
+            onLossFocus = false,
             contentAlignment = Alignment.BottomStart,
-            modifier = Modifier.fillMaxWidth()
-                .background(color = MaterialTheme.colorScheme.primary, shape = shapesApp.extraSmall),
+            modifier = Modifier.fillMaxWidth(),
+//                .background(color = MaterialTheme.colorScheme.primary, shape = shapesApp.extraSmall),
             placeholder = enterValue.value,
             onChangeValue = { enterValue.value = it },
             typeKeyboard = TypeKeyboard.TEXT )
     }
 }
+@Composable fun SelectOtherSpeech(uiState: BottomSheetState){
 
-fun init(uiState: BottomSheetState, itemSpeech: BottomSheetInterface){
-
-    val speech = when (itemSpeech.item) {
-        is Training-> (itemSpeech.item as Training).speech
-        is Exercise-> (itemSpeech.item as Exercise).speech
-        is Round-> (itemSpeech.item as Round).speech
-        else -> SpeechDB()
-    }
-
-    uiState.enteredBeforeStart.value = speech.soundBeforeStart
-    uiState.enteredBeforeEnd.value = speech.soundBeforeEnd
-    uiState.enteredAfterStart.value = speech.soundAfterStart
-    uiState.enteredAfterEnd.value = speech.soundAfterEnd
-    uiState.speechId = speech.idSpeech
-
-    uiState.listSpeech = itemSpeech.listSpeech
-    uiState.nameSection = itemSpeech.nameSection
-    uiState.item = itemSpeech.item
-    uiState.onConfirmationSpeech = itemSpeech.onConfirmationSpeech
-    uiState.onDismissSpeech = itemSpeech.onDismissSpeech
 }
+
+
 @Composable
-fun ButtonOK(uiState: BottomSheetState){
+fun ButtonOK(uiState: BottomSheetState)
+{
     ButtonConfirm(onConfirm = {
         uiState.onConfirmationSpeech(
             SpeechDB(
