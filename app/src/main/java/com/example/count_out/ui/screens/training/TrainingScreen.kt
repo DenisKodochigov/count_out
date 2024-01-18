@@ -36,16 +36,19 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.count_out.R
+import com.example.count_out.entity.Exercise
 import com.example.count_out.entity.RoundType
 import com.example.count_out.entity.TypeKeyboard
 import com.example.count_out.ui.bottomsheet.BottomSheetSpeech
+import com.example.count_out.ui.screens.exercise.view_component.SelectActivity
+import com.example.count_out.ui.screens.training.exercise.LazySets
+import com.example.count_out.ui.screens.training.exercise.RowAddSet
 import com.example.count_out.ui.theme.Dimen
 import com.example.count_out.ui.theme.elevationTraining
 import com.example.count_out.ui.theme.interBold16
 import com.example.count_out.ui.theme.interLight12
 import com.example.count_out.ui.theme.interReg14
 import com.example.count_out.ui.theme.interThin12
-import com.example.count_out.ui.theme.interThin14
 import com.example.count_out.ui.view_components.GroupIcons
 import com.example.count_out.ui.view_components.TextApp
 import com.example.count_out.ui.view_components.TextFieldApp
@@ -214,8 +217,8 @@ fun Row2( uiState: TrainingScreenState, roundType: RoundType) {
 fun Row3(uiState: TrainingScreenState, roundType: RoundType)
 {
     Column{
-        val visibleLazy = getCollapsing(uiState, roundType) && amountExercise(uiState, roundType) > 0
-        LazyExercise(uiState = uiState, roundType = roundType, visibleLazy)
+        val visibleLazyExercise = getCollapsing(uiState, roundType) && amountExercise(uiState, roundType) > 0
+        LazyExercise(uiState = uiState, roundType = roundType, visibleLazyExercise)
         Spacer(modifier = Modifier.height(4.dp))
         Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.fillMaxWidth())
         {
@@ -225,7 +228,7 @@ fun Row3(uiState: TrainingScreenState, roundType: RoundType)
     }
 }
 @Composable
-fun LazyExercise(uiState: TrainingScreenState, roundType: RoundType, visibleLazy: Boolean)
+fun LazyExercise(uiState: TrainingScreenState, roundType: RoundType, visibleLazyExercise: Boolean)
 {
     val listExercise = uiState.training.rounds.find { it.roundType == roundType }?.exercise ?: emptyList()
     LazyColumn(
@@ -235,40 +238,60 @@ fun LazyExercise(uiState: TrainingScreenState, roundType: RoundType, visibleLazy
             .padding(end = 6.dp, bottom = 8.dp)
     ){
         items(items = listExercise, key = { it.idExercise }){ itExercise ->
-
             AnimatedVisibility(
                 modifier = Modifier.padding(4.dp),
-                visible = visibleLazy
+                visible = visibleLazyExercise
             ){
                 Card( elevation = elevationTraining(), shape = MaterialTheme.shapes.extraSmall
                 ){
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                        modifier = Modifier
-//                            .fillMaxWidth()
-//                            .background(
-//                                color = MaterialTheme.colorScheme.tertiary,
-//                                shape = shapesApp.extraSmall
-//                            )
-                    )
-                    {
-                        Row(verticalAlignment = Alignment.CenterVertically,
-                            modifier = Modifier
-                                .weight(1f)
-                                .padding(horizontal = 12.dp, vertical = 8.dp)
-                                .clickable {
-                                    uiState.onClickExercise(
-                                        getIdRound(uiState, roundType), itExercise.idExercise
-                                    )
-                                })
-                        { TextApp(text = itExercise.activity.name, style = interThin14) }
-                        GroupIcons(
-                            onCopy = { uiState.onCopyExercise(uiState.training.idTraining, itExercise.idExercise)},
-                            onDel = { uiState.onDeleteExercise(uiState.training.idTraining, itExercise.idExercise) },
-                            onSpeech = { uiState.onSpeechExercise(itExercise.idExercise) })
+                    Column {
+                        HeaderExercise(uiState, itExercise)
+                        BodyExercise(uiState, itExercise)
                     }
                 }
             }
+        }
+    }
+}
+
+@Composable fun HeaderExercise(uiState: TrainingScreenState, exercise: Exercise){
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = Modifier
+    ){
+        Row(verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier
+                .weight(1f)
+                .padding(horizontal = 12.dp, vertical = 8.dp)
+                .clickable {
+//                                    uiState.onClickExercise(
+//                                        getIdRound(uiState, roundType), itExercise.idExercise
+//                                    )
+                }
+        ){
+            TextApp(text = exercise.activity.name, style = interLight12)
+        }
+        GroupIcons(
+            onCopy = { uiState.onCopyExercise(uiState.training.idTraining, exercise.idExercise)},
+            onDel = { uiState.onDeleteExercise(uiState.training.idTraining, exercise.idExercise) },
+            onSpeech = { uiState.onSpeechExercise(exercise.idExercise) })
+    }
+}
+@Composable fun BodyExercise(uiState: TrainingScreenState, exercise: Exercise){
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = Modifier
+    ){
+        AnimatedVisibility(modifier = Modifier.padding(4.dp), visible = true
+        ){
+            Column (modifier = Modifier
+                .fillMaxWidth()
+                .padding(6.dp))
+            {
+                SelectActivity(uiState)
+                LazySets(uiState)
+            }
+            RowAddSet(uiState)
         }
     }
 }

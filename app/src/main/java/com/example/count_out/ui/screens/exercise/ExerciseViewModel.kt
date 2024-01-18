@@ -91,7 +91,6 @@ class ExerciseViewModel @Inject constructor(
         }
     }
     private fun onChangeSet(set: Set){ templateMy { dataRepository.onChangeSet( set ) } }
-
     private fun templateMy( funDataRepository:() -> Exercise ){
         viewModelScope.launch(Dispatchers.IO) {
             kotlin.runCatching { funDataRepository() }.fold(
