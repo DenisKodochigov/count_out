@@ -24,6 +24,7 @@ import com.example.count_out.R
 import com.example.count_out.data.room.tables.SpeechDB
 import com.example.count_out.entity.BottomSheetInterface
 import com.example.count_out.entity.Exercise
+import com.example.count_out.entity.Set
 import com.example.count_out.entity.Round
 import com.example.count_out.entity.Training
 import com.example.count_out.entity.TypeKeyboard
@@ -62,6 +63,7 @@ fun bottomSheetStateNew(itemSpeech: BottomSheetInterface): BottomSheetState{
         is Training-> (itemSpeech.item as Training).speech
         is Exercise-> (itemSpeech.item as Exercise).speech
         is Round-> (itemSpeech.item as Round).speech
+        is Set-> (itemSpeech.item as Set).speech
         else -> SpeechDB()
     }
     return BottomSheetState(

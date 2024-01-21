@@ -32,18 +32,31 @@ class TrainingViewModel @Inject constructor(
             onConfirmationSpeech = { speech, item -> setSpeech( speech, item ) },
             onSpeechTraining = {},
             onSpeechRound = {},
-            onDismissSpeechBSTraining = {},
-            onDismissSpeechBSExercise = {},
+            onDismissSpeechTrainingBS = {},
+            onDismissSpeechExerciseBS = {},
             onSpeechExercise = {},
+            onAddExercise = { roundId -> addExercise( roundId )},
             onCopyExercise = { trainingId, exerciseId -> copyExercise(trainingId, exerciseId)},
-            onDeleteExercise = { trainingId, exerciseId -> deleteExercise(trainingId, exerciseId)},
+            onDeleteExercise = { trainingId, exerciseId -> deleteExercise(trainingId, exerciseId)},onSelectActivity = {
+                    exerciseId, activityId -> setActivityToExercise(exerciseId, activityId) },
+            onSetColorActivity = {
+                    activityId, color -> onSetColorActivity(activityId = activityId, color = color) },
             onSave = {},
             onClickWorkout = {},
         )
     )
     val trainingScreenState: StateFlow<TrainingScreenState> = _trainingScreenState.asStateFlow()
 
-    fun getTraining(id: Long) { templateMy { dataRepository.getTraining(id) } }
+    fun getTraining(id: Long) {
+        viewModelScope.launch(Dispatchers.IO) {
+            kotlin.runCatching { dataRepository.getActivities() }.fold(
+                onSuccess = {
+                    _trainingScreenState.update { currentState -> currentState.copy(activities = it) } },
+                onFailure = { errorApp.errorApi(it.message!!) }
+            )
+        }
+        templateMy { dataRepository.getTraining(id) }
+    }
 
     private fun setSpeech(speech: Speech, item: Any?) {
         templateMy { dataRepository.setSpeech(speech, item) as Training } }
@@ -53,8 +66,30 @@ class TrainingViewModel @Inject constructor(
         templateMy { dataRepository.changeNameTraining(training, name) } }
     private fun copyExercise(trainingId: Long, exerciseId: Long){
         templateMy { dataRepository.copyExercise(trainingId, exerciseId) } }
+    private fun addExercise(roundId: Long){
+        templateMy { dataRepository.getExercise( roundId, 0L ) } }
     private fun deleteExercise(trainingId: Long, exerciseId: Long){
         templateMy { dataRepository.deleteExercise(trainingId, exerciseId) } }
+    private fun setActivityToExercise(exerciseId: Long, activityId: Long) {
+        viewModelScope.launch(Dispatchers.IO) {
+            kotlin.runCatching { dataRepository.setActivityToExercise(exerciseId, activityId) }
+                .fold(
+                    onSuccess = {
+                        _trainingScreenState.update { currentState ->
+                            currentState.copy(
+                                training = it,
+                                showBottomSheetSelectActivity = mutableStateOf(false)) }
+                        },
+                    onFailure = { errorApp.errorApi(it.message!!) }
+                )
+        }
+    }
+    private fun onSetColorActivity(activityId: Long, color: Int) {
+        viewModelScope.launch(Dispatchers.IO) {
+            kotlin.runCatching { dataRepository.onSetColorActivity( activityId, color) }
+                .fold( onSuccess = { }, onFailure = { errorApp.errorApi(it.message!!) })
+        }
+    }
     private fun templateMy( funDataRepository:() -> Training){
         viewModelScope.launch(Dispatchers.IO) {
             kotlin.runCatching { funDataRepository() }.fold(

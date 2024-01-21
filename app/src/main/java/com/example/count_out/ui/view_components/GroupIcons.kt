@@ -1,9 +1,13 @@
 package com.example.count_out.ui.view_components
 
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -11,7 +15,7 @@ import androidx.compose.ui.unit.dp
 import com.example.count_out.R
 import com.example.count_out.ui.theme.Dimen
 
-@Composable fun GroupIcons(onCopy: ()->Unit, onSpeech: ()->Unit, onDel: ()->Unit ) {
+@Composable fun IconsCopySpeechDel(onCopy: ()->Unit, onSpeech: ()->Unit, onDel: ()->Unit ) {
     Icon(
         painter = painterResource(id = R.drawable.ic_copy),
         contentDescription = "",
@@ -29,7 +33,7 @@ import com.example.count_out.ui.theme.Dimen
     )
 }
 
-@Composable fun GroupIcons4(
+@Composable fun IconsCollapsingCopySpeechDel(
     onCopy: ()->Unit,
     onSpeech: ()->Unit,
     onDel: ()->Unit,
@@ -42,5 +46,32 @@ import com.example.count_out.ui.theme.Dimen
         contentDescription = "",
         modifier = Modifier.padding(4.dp).size(Dimen.sizeIcon).clickable{ onCollapsing() }
     )
-    GroupIcons(onCopy, onSpeech, onDel)
+    IconsCopySpeechDel(onCopy, onSpeech, onDel)
+}
+@Composable
+fun IconCollapsingSpeech(
+    onSpeech: ()->Unit,
+    onCollapsing:() -> Unit,
+    idIconCollapsing: Int
+){
+    IconButton(
+        modifier = Modifier.width(24.dp).height(24.dp),
+        onClick = onCollapsing )
+    {
+        Icon(
+            painter = painterResource(id = idIconCollapsing),
+            contentDescription = "",
+            modifier = Modifier.padding(4.dp)
+        )
+    }
+    Spacer(modifier = Modifier.width(8.dp))
+    IconButton(
+        modifier = Modifier.width(24.dp).height(24.dp),
+        onClick = onSpeech )
+    {
+        Icon(
+            painter = painterResource(id = R.drawable.ic_ecv), contentDescription = "",
+            modifier = Modifier.padding(4.dp)
+        )
+    }
 }

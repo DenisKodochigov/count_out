@@ -11,9 +11,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.selection.selectableGroup
 import androidx.compose.material3.Card
 import androidx.compose.material3.Icon
@@ -30,6 +27,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.example.count_out.R
 import com.example.count_out.data.room.tables.SetDB
+import com.example.count_out.entity.Exercise
 import com.example.count_out.entity.Set
 import com.example.count_out.entity.TypeKeyboard
 import com.example.count_out.ui.screens.training.TrainingScreenState
@@ -38,7 +36,7 @@ import com.example.count_out.ui.theme.elevationTraining
 import com.example.count_out.ui.theme.interLight12
 import com.example.count_out.ui.theme.interReg14
 import com.example.count_out.ui.theme.interThin12
-import com.example.count_out.ui.view_components.GroupIcons4
+import com.example.count_out.ui.view_components.IconsCollapsingCopySpeechDel
 import com.example.count_out.ui.view_components.RadioButtonApp
 import com.example.count_out.ui.view_components.TextApp
 import com.example.count_out.ui.view_components.TextAppLines
@@ -48,25 +46,19 @@ import com.example.count_out.ui.view_components.TextStringAndField
 @Composable
 fun LazySets(uiState: TrainingScreenState)
 {
-    LazyColumn(
-        state = rememberLazyListState(),
-        modifier = Modifier.testTag("1").padding(horizontal = 3.dp)
-    ){
-        items( items = uiState.exercise.sets, key = { it.idSet })
-        { set ->
-            Card (
-                elevation = elevationTraining(),
-                shape = MaterialTheme.shapes.extraSmall,
-                modifier = Modifier.padding(vertical = 8.dp).fillMaxWidth(),
+    uiState.exercise.sets.forEach { set ->
+        Card (
+            elevation = elevationTraining(),
+            shape = MaterialTheme.shapes.extraSmall,
+            modifier = Modifier.padding(vertical = 8.dp).fillMaxWidth(),
 //                colors = CardDefaults.cardColors(
 //                    containerColor = MaterialTheme.colorScheme.tertiary,
 //                    contentColor = MaterialTheme.colorScheme.onTertiary,
 //                    disabledContainerColor = MaterialTheme.colorScheme.secondary,
 //                    disabledContentColor = MaterialTheme.colorScheme.onSecondary,
 //                ),
-                content = { SetEdit(uiState,set) }
-            )
-        }
+            content = { SetContent(uiState,set) }
+        )
     }
 }
 @Composable fun RowAddSet(uiState: TrainingScreenState)
@@ -101,7 +93,7 @@ fun LazySets(uiState: TrainingScreenState)
 }
 
 @Composable
-fun SetEdit(uiState: TrainingScreenState, set: Set)
+fun SetContent(uiState: TrainingScreenState, set: Set)
 {
     Spacer(modifier = Modifier.height(Dimen.width4))
     NameSet(uiState,set)
@@ -132,7 +124,7 @@ fun NameSet(uiState: TrainingScreenState, set: Set)
             style = interReg14,
             textAlign = TextAlign.Start,)
         Spacer(modifier = Modifier.weight(1f))
-        GroupIcons4(
+        IconsCollapsingCopySpeechDel(
             onCopy = { /*TODO*/ },
             onSpeech = { /*TODO*/ },
             onDel = { /*TODO*/ },
@@ -341,6 +333,20 @@ fun setCollapsing(uiState: TrainingScreenState,  set: Set): Boolean
     } else {
         listCollapsingSet.add(set.idSet)
         uiState.listCollapsingSet.value = listCollapsingSet
+        true
+    }
+}
+fun exerciseCollapsing(uiState: TrainingScreenState,  exercise: Exercise): Boolean
+{
+    val listCollapsingExercise = uiState.listCollapsingExercise.value.toMutableList()
+    val itemList = listCollapsingExercise.find { it == exercise.idExercise }
+    return if ( itemList != null) {
+        listCollapsingExercise.remove(itemList)
+        uiState.listCollapsingSet.value = listCollapsingExercise
+        false
+    } else {
+        listCollapsingExercise.add( exercise.idExercise )
+        uiState.listCollapsingSet.value = listCollapsingExercise
         true
     }
 }

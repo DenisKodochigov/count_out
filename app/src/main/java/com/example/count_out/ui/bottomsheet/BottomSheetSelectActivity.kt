@@ -35,7 +35,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.example.count_out.entity.Activity
 import com.example.count_out.ui.dialog.ChangeColorSectionDialog
-import com.example.count_out.ui.screens.exercise.ExerciseScreenState
+import com.example.count_out.ui.screens.training.TrainingScreenState
 import com.example.count_out.ui.theme.Dimen
 import com.example.count_out.ui.theme.colorApp
 import com.example.count_out.ui.theme.interLight12
@@ -44,7 +44,7 @@ import com.example.count_out.ui.view_components.TextApp
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun BottomSheetSelectActivity(uiState: ExerciseScreenState)
+fun BottomSheetSelectActivity(uiState: TrainingScreenState)
 {
     val sheetState = rememberModalBottomSheetState(
         skipPartiallyExpanded = true, confirmValueChange = { true },)
@@ -63,7 +63,7 @@ fun BottomSheetSelectActivity(uiState: ExerciseScreenState)
 }
 
 @Composable
-fun BottomSheetSelectActivityContent(uiState: ExerciseScreenState)
+fun BottomSheetSelectActivityContent(uiState: TrainingScreenState)
 {
     Column( horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier
@@ -76,7 +76,7 @@ fun BottomSheetSelectActivityContent(uiState: ExerciseScreenState)
     }
 }
 
-@Composable fun LazyActivity(uiState: ExerciseScreenState
+@Composable fun LazyActivity(uiState: TrainingScreenState
 ){
     val listState = rememberLazyListState()
     val activityChangeColor: MutableState<Activity?> = remember { mutableStateOf(null) }

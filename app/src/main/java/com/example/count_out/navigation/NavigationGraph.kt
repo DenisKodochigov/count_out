@@ -34,8 +34,7 @@ fun NavGraphBuilder.training( goToScreen: (Long, Long)-> Unit, onBaskScreen: ()-
         content = {navBackStackEntry ->
             TrainingScreen(
                 trainingId = navBackStackEntry.arguments?.getLong(TrainingDestination.ARG) ?: 0,
-                onBaskScreen = onBaskScreen,
-                onClickExercise = { id1, id2 -> goToScreen(id1, id2) })
+                onBaskScreen = onBaskScreen )
         }
     )
 }

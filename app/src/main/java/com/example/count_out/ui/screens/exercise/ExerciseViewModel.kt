@@ -1,6 +1,5 @@
 package com.example.count_out.ui.screens.exercise
 
-import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.count_out.data.DataRepository
@@ -30,10 +29,10 @@ class ExerciseViewModel @Inject constructor(
             roundId = 0,
             exercise = ExerciseDB(),
             onAddUpdateSet = { idExercise, set -> addUpdateSet(idExercise, set) },
-            onSelectActivity = {
-                exerciseId, activityId -> setActivityToExercise(exerciseId, activityId) },
-            onSetColorActivity = {
-                    activityId, color -> onSetColorActivity(activityId = activityId, color = color) },
+//            onSelectActivity = {
+//                exerciseId, activityId -> setActivityToExercise(exerciseId, activityId) },
+//            onSetColorActivity = {
+//                    activityId, color -> onSetColorActivity(activityId = activityId, color = color) },
             onChangeSet = { set -> onChangeSet( set )},
             listSpeech = emptyList(),
             nameSection  = "",
@@ -43,33 +42,33 @@ class ExerciseViewModel @Inject constructor(
 
     private fun addUpdateSet(exerciseId:Long, set: Set){
         templateMy { dataRepository.addUpdateSet( exerciseId, set) } }
-    private fun setActivityToExercise(exerciseId: Long, activityId: Long) {
-        viewModelScope.launch(Dispatchers.IO) {
-            kotlin.runCatching { dataRepository.setActivityToExercise(exerciseId, activityId) }
-                .fold( onSuccess = {
-                        _exerciseScreenState.update { currentState ->
-                            currentState.copy(
-                                exercise = it,
-                                showBottomSheetSelectActivity = mutableStateOf(false)) }
-                    },
-                    onFailure = { errorApp.errorApi(it.message!!) }
-                )
-        }
-    }
-    private fun onSetColorActivity(activityId: Long, color: Int) {
-        viewModelScope.launch(Dispatchers.IO) {
-            kotlin.runCatching { dataRepository.onSetColorActivity( activityId, color) }
-                .fold( onSuccess = { }, onFailure = { errorApp.errorApi(it.message!!) })
-        }
-    }
+//    private fun setActivityToExercise(exerciseId: Long, activityId: Long) {
+//        viewModelScope.launch(Dispatchers.IO) {
+//            kotlin.runCatching { dataRepository.setActivityToExercise(exerciseId, activityId) }
+//                .fold( onSuccess = {
+//                        _exerciseScreenState.update { currentState ->
+//                            currentState.copy(
+//                                exercise = it,
+//                                showBottomSheetSelectActivity = mutableStateOf(false)) }
+//                    },
+//                    onFailure = { errorApp.errorApi(it.message!!) }
+//                )
+//        }
+//    }
+//    private fun onSetColorActivity(activityId: Long, color: Int) {
+//        viewModelScope.launch(Dispatchers.IO) {
+//            kotlin.runCatching { dataRepository.onSetColorActivity( activityId, color) }
+//                .fold( onSuccess = { }, onFailure = { errorApp.errorApi(it.message!!) })
+//        }
+//    }
     fun getExercise(roundId: Long, exerciseId:Long) {
         viewModelScope.launch(Dispatchers.IO) {
-            kotlin.runCatching { dataRepository.getExercise(roundId, exerciseId) }.fold(
-                onSuccess = {
-                    _exerciseScreenState.update { currentState ->
-                        currentState.copy(exercise = it) } },
-                onFailure = { errorApp.errorApi(it.message!!) }
-            )
+//            kotlin.runCatching { dataRepository.getExercise(roundId, exerciseId) }.fold(
+//                onSuccess = {
+//                    _exerciseScreenState.update { currentState ->
+//                        currentState.copy(exercise = it) } },
+//                onFailure = { errorApp.errorApi(it.message!!) }
+//            )
             kotlin.runCatching { dataRepository.getNameTrainingFromRound(roundId) }.fold(
                 onSuccess = {
                     _exerciseScreenState.update { currentState ->

@@ -20,7 +20,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.count_out.R
-import com.example.count_out.ui.bottomsheet.BottomSheetSelectActivity
 import com.example.count_out.ui.bottomsheet.BottomSheetSpeech
 import com.example.count_out.ui.theme.Dimen
 import com.example.count_out.ui.theme.elevationTraining
@@ -46,7 +45,7 @@ import com.example.count_out.ui.view_components.TextApp
     ExerciseScreenLayout(uiState = uiState.value)
 }
 @Composable fun ShowBottomSheet(uiState: ExerciseScreenState) {
-    if (uiState.showBottomSheetSelectActivity.value) BottomSheetSelectActivity(uiState)
+//    if (uiState.showBottomSheetSelectActivity.value) BottomSheetSelectActivity(uiState)
     if (uiState.showBottomSheetSpeech.value) {
         uiState.item = uiState.exercise
         BottomSheetSpeech(uiState)

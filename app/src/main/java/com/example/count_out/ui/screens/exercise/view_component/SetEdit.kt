@@ -1,38 +1,5 @@
 package com.example.count_out.ui.screens.exercise.view_component
 
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.selection.selectableGroup
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.testTag
-import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.dp
-import com.example.count_out.R
-import com.example.count_out.data.room.tables.SetDB
-import com.example.count_out.entity.Set
-import com.example.count_out.entity.TypeKeyboard
-import com.example.count_out.ui.screens.exercise.ExerciseScreenState
-import com.example.count_out.ui.theme.Dimen
-import com.example.count_out.ui.theme.interLight12
-import com.example.count_out.ui.theme.interReg14
-import com.example.count_out.ui.view_components.GroupIcons4
-import com.example.count_out.ui.view_components.RadioButtonApp
-import com.example.count_out.ui.view_components.TextApp
-import com.example.count_out.ui.view_components.TextAppLines
-import com.example.count_out.ui.view_components.TextFieldApp
-import com.example.count_out.ui.view_components.TextStringAndField
-
 //@Composable
 //fun SetEdit(uiState: ExerciseScreenState, set: Set)
 //{

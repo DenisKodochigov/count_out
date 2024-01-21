@@ -50,9 +50,9 @@ class DataRepository  @Inject constructor(private val dataSource: DataSource){
             else -> { }
         }
     }
-    fun getExercise(roundId: Long, exerciseId:Long): Exercise {
-        return if (roundId < 1) ExerciseDB()
-                else dataSource.getExercise(roundId, exerciseId)
+    fun getExercise(roundId: Long, exerciseId:Long): Training {
+        dataSource.getExercise( roundId, exerciseId )
+        return dataSource.getTraining( dataSource.getRound(roundId = roundId).trainingId )
     }
     fun copyExercise (trainingId: Long, exerciseId: Long): Training {
         return dataSource.copyExercise( trainingId, exerciseId)
@@ -65,8 +65,10 @@ class DataRepository  @Inject constructor(private val dataSource: DataSource){
 
 //###### ACTIVITY ##################
     fun getActivities(): List<Activity> = dataSource.getActivities()
-    fun setActivityToExercise(exerciseId: Long, activityId: Long): Exercise =
+    fun setActivityToExercise(exerciseId: Long, activityId: Long): Training {
         dataSource.setActivityToExercise(exerciseId = exerciseId, activityId = activityId)
+        return getTraining(dataSource.getRound(dataSource.getExercise(0L, exerciseId).roundId).trainingId)
+    }
 
     fun onSetColorActivity(activityId: Long, color: Int) = dataSource.setColorActivity(activityId, color)
 
