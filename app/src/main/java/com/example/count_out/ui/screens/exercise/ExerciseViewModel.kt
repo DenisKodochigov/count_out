@@ -28,7 +28,7 @@ class ExerciseViewModel @Inject constructor(
             nameRound = "",
             roundId = 0,
             exercise = ExerciseDB(),
-            onAddUpdateSet = { idExercise, set -> addUpdateSet(idExercise, set) },
+//            onAddUpdateSet = { idExercise, set -> addUpdateSet(idExercise, set) },
 //            onSelectActivity = {
 //                exerciseId, activityId -> setActivityToExercise(exerciseId, activityId) },
 //            onSetColorActivity = {
@@ -40,8 +40,8 @@ class ExerciseViewModel @Inject constructor(
         ))
     val exerciseScreenState: StateFlow<ExerciseScreenState> = _exerciseScreenState.asStateFlow()
 
-    private fun addUpdateSet(exerciseId:Long, set: Set){
-        templateMy { dataRepository.addUpdateSet( exerciseId, set) } }
+//    private fun addUpdateSet(exerciseId:Long, set: Set){
+//        templateMy { dataRepository.addUpdateSet( exerciseId, set) } }
 //    private fun setActivityToExercise(exerciseId: Long, activityId: Long) {
 //        viewModelScope.launch(Dispatchers.IO) {
 //            kotlin.runCatching { dataRepository.setActivityToExercise(exerciseId, activityId) }

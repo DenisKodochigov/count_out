@@ -1,96 +1,37 @@
-package com.example.count_out.ui.screens.training.exercise
+package com.example.count_out.ui.screens.training.set
 
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.selection.selectableGroup
-import androidx.compose.material3.Card
-import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.example.count_out.R
 import com.example.count_out.data.room.tables.SetDB
-import com.example.count_out.entity.Exercise
 import com.example.count_out.entity.Set
 import com.example.count_out.entity.TypeKeyboard
 import com.example.count_out.ui.screens.training.TrainingScreenState
 import com.example.count_out.ui.theme.Dimen
-import com.example.count_out.ui.theme.elevationTraining
 import com.example.count_out.ui.theme.interLight12
 import com.example.count_out.ui.theme.interReg14
-import com.example.count_out.ui.theme.interThin12
 import com.example.count_out.ui.view_components.IconsCollapsingCopySpeechDel
 import com.example.count_out.ui.view_components.RadioButtonApp
 import com.example.count_out.ui.view_components.TextApp
 import com.example.count_out.ui.view_components.TextAppLines
 import com.example.count_out.ui.view_components.TextFieldApp
 import com.example.count_out.ui.view_components.TextStringAndField
-
-@Composable
-fun LazySets(uiState: TrainingScreenState)
-{
-    uiState.exercise.sets.forEach { set ->
-        Card (
-            elevation = elevationTraining(),
-            shape = MaterialTheme.shapes.extraSmall,
-            modifier = Modifier.padding(vertical = 8.dp).fillMaxWidth(),
-//                colors = CardDefaults.cardColors(
-//                    containerColor = MaterialTheme.colorScheme.tertiary,
-//                    contentColor = MaterialTheme.colorScheme.onTertiary,
-//                    disabledContainerColor = MaterialTheme.colorScheme.secondary,
-//                    disabledContentColor = MaterialTheme.colorScheme.onSecondary,
-//                ),
-            content = { SetContent(uiState,set) }
-        )
-    }
-}
-@Composable fun RowAddSet(uiState: TrainingScreenState)
-{
-    Row (horizontalArrangement = Arrangement.End, modifier = Modifier.fillMaxWidth()){
-        Row(
-            horizontalArrangement = Arrangement.Center,
-            verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier
-//                .background(color = MaterialTheme.colorScheme.tertiary, shape = shapeAddExercise)
-                .clickable {
-                    uiState.onAddUpdateSet(
-                        uiState.exercise.idExercise,
-                        SetDB(exerciseId = uiState.exercise.idExercise)
-                    )
-                }
-        ) {
-            TextApp(
-                text = stringResource(id = R.string.add_set),
-                style = interThin12,
-                modifier = Modifier.padding(horizontal = 4.dp)
-            )
-            Icon(
-                painter = painterResource(id = R.drawable.ic_add),
-                contentDescription = "",
-                modifier = Modifier
-                    .padding(4.dp)
-                    .size(Dimen.sizeIcon)
-            )
-        }
-    }
-}
 
 @Composable
 fun SetContent(uiState: TrainingScreenState, set: Set)
@@ -113,7 +54,7 @@ fun NameSet(uiState: TrainingScreenState, set: Set)
             textAlign = TextAlign.Start,
             modifier = Modifier.padding(start = 8.dp))
         TextFieldApp(
-            modifier =Modifier,
+            modifier = Modifier,
             placeholder = set.name,
             contentAlignment = Alignment.BottomStart,
             typeKeyboard = TypeKeyboard.TEXT,
@@ -322,7 +263,7 @@ fun RadioButtonCountingGroup(uiState: TrainingScreenState, set: Set, visible: Bo
         }
     }
 }
-fun setCollapsing(uiState: TrainingScreenState,  set: Set): Boolean
+fun setCollapsing(uiState: TrainingScreenState, set: Set): Boolean
 {
     val listCollapsingSet = uiState.listCollapsingSet.value.toMutableList()
     val itemList = listCollapsingSet.find { it == set.idSet }
@@ -333,20 +274,6 @@ fun setCollapsing(uiState: TrainingScreenState,  set: Set): Boolean
     } else {
         listCollapsingSet.add(set.idSet)
         uiState.listCollapsingSet.value = listCollapsingSet
-        true
-    }
-}
-fun exerciseCollapsing(uiState: TrainingScreenState,  exercise: Exercise): Boolean
-{
-    val listCollapsingExercise = uiState.listCollapsingExercise.value.toMutableList()
-    val itemList = listCollapsingExercise.find { it == exercise.idExercise }
-    return if ( itemList != null) {
-        listCollapsingExercise.remove(itemList)
-        uiState.listCollapsingSet.value = listCollapsingExercise
-        false
-    } else {
-        listCollapsingExercise.add( exercise.idExercise )
-        uiState.listCollapsingSet.value = listCollapsingExercise
         true
     }
 }

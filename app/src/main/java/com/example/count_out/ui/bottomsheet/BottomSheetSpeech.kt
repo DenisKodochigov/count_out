@@ -24,8 +24,8 @@ import com.example.count_out.R
 import com.example.count_out.data.room.tables.SpeechDB
 import com.example.count_out.entity.BottomSheetInterface
 import com.example.count_out.entity.Exercise
-import com.example.count_out.entity.Set
 import com.example.count_out.entity.Round
+import com.example.count_out.entity.Set
 import com.example.count_out.entity.Training
 import com.example.count_out.entity.TypeKeyboard
 import com.example.count_out.ui.joint.ButtonConfirm
@@ -40,8 +40,7 @@ import com.example.count_out.ui.view_components.TextFieldApp
 {
     val uiState by remember{ mutableStateOf( bottomSheetStateNew(itemSpeech)) }
 
-    val sheetState = rememberModalBottomSheetState(
-        skipPartiallyExpanded = true, )
+    val sheetState = rememberModalBottomSheetState( skipPartiallyExpanded = true, )
 //        confirmValueChange = { true },)
     
     ModalBottomSheet(

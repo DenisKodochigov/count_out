@@ -17,9 +17,8 @@ import javax.inject.Singleton
 
 @Singleton
 class DataSource @Inject constructor(private val dataDao: DataDao) {
-    fun getTraining(id: Long): TrainingDB {
-        return dataDao.getTrainingRel(id).toTraining()
-    }
+    fun getTraining(id: Long): TrainingDB = dataDao.getTrainingRel(id).toTraining()
+
     fun getTrainings(): List<Training> = dataDao.getTrainingsRel().map { it.toTraining() }
     fun updateTraining(trainingDB: TrainingDB): Int = dataDao.updateTraining(trainingDB)
     fun addTraining(): List<Training> {
@@ -54,9 +53,12 @@ class DataSource @Inject constructor(private val dataDao: DataDao) {
     fun getNameRound(roundId: Long): String = dataDao.getNameRound(roundId)
     fun getRound(roundId: Long): RoundDB = dataDao.getRoundRel(roundId).toRound()
 //Exercise
-    fun getExercise(roundId: Long, exerciseId:Long): Exercise {
-        return  if (exerciseId < 1) { createExercise(roundId) }
-                else { dataDao.getExerciseRel(exerciseId).toExercise() }
+    fun getExercise( exerciseId:Long): Exercise {
+        return if (exerciseId > 1) { dataDao.getExerciseRel(exerciseId).toExercise() }
+                else { ExerciseDB() }
+    }
+    fun addExercise( roundId:Long): Exercise {
+        return createExercise( roundId )
     }
     fun copyExercise (trainingId: Long, exerciseId: Long): Training {
         val source = dataDao.getExerciseRel(exerciseId).toExercise()
@@ -110,7 +112,7 @@ class DataSource @Inject constructor(private val dataDao: DataDao) {
     private fun createExercise( roundId: Long): ExerciseDB {
         return dataDao.getExercise(
             dataDao.addExercise(
-                ExerciseDB(roundId = roundId, speechId = dataDao.addSpeech(SpeechDB())))
+                ExerciseDB(roundId = roundId, activityId = 1L, speechId = dataDao.addSpeech(SpeechDB())))
         )
     }
     fun copyTraining(id: Long): List<Training>{

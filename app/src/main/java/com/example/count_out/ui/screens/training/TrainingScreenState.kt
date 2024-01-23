@@ -30,7 +30,7 @@ data class TrainingScreenState(
     val nameTraining: String = "",
     val nameRound: String = "",
     val roundId: Long = 0,
-    val exercise: Exercise = ExerciseDB(),
+    @Stable var exercise: Exercise = ExerciseDB(),
     val activities: List<Activity> = emptyList(),
 
     @Stable var changeNameTraining: (Training, String) -> Unit = {_,_ ->},

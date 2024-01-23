@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.count_out.data.DataRepository
 import com.example.count_out.data.room.tables.TrainingDB
 import com.example.count_out.entity.ErrorApp
+import com.example.count_out.entity.Set
 import com.example.count_out.entity.Speech
 import com.example.count_out.entity.Training
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -37,10 +38,12 @@ class TrainingViewModel @Inject constructor(
             onSpeechExercise = {},
             onAddExercise = { roundId -> addExercise( roundId )},
             onCopyExercise = { trainingId, exerciseId -> copyExercise(trainingId, exerciseId)},
-            onDeleteExercise = { trainingId, exerciseId -> deleteExercise(trainingId, exerciseId)},onSelectActivity = {
+            onDeleteExercise = { trainingId, exerciseId -> deleteExercise(trainingId, exerciseId)},
+            onSelectActivity = {
                     exerciseId, activityId -> setActivityToExercise(exerciseId, activityId) },
             onSetColorActivity = {
                     activityId, color -> onSetColorActivity(activityId = activityId, color = color) },
+            onAddUpdateSet = { idExercise, set -> addUpdateSet(idExercise, set) },
             onSave = {},
             onClickWorkout = {},
         )
@@ -57,7 +60,8 @@ class TrainingViewModel @Inject constructor(
         }
         templateMy { dataRepository.getTraining(id) }
     }
-
+    private fun addUpdateSet(exerciseId:Long, set: Set){
+        templateMy { dataRepository.addUpdateSet( exerciseId, set) } }
     private fun setSpeech(speech: Speech, item: Any?) {
         templateMy { dataRepository.setSpeech(speech, item) as Training } }
     private fun deleteTraining(trainingId: Long){
@@ -67,7 +71,7 @@ class TrainingViewModel @Inject constructor(
     private fun copyExercise(trainingId: Long, exerciseId: Long){
         templateMy { dataRepository.copyExercise(trainingId, exerciseId) } }
     private fun addExercise(roundId: Long){
-        templateMy { dataRepository.getExercise( roundId, 0L ) } }
+        templateMy { dataRepository.addExercise( roundId ) } }
     private fun deleteExercise(trainingId: Long, exerciseId: Long){
         templateMy { dataRepository.deleteExercise(trainingId, exerciseId) } }
     private fun setActivityToExercise(exerciseId: Long, activityId: Long) {
