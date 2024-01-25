@@ -132,8 +132,6 @@ fun TrainingScreenLayout( uiState: TrainingScreenState
         Round(uiState = uiState, roundType = RoundType.DOWN)
     }
 }
-
-
 @Composable
 fun NameTraining( uiState: TrainingScreenState )
 {
@@ -182,7 +180,6 @@ fun NameTraining( uiState: TrainingScreenState )
         }
     }
 }
-
 @Preview(showBackground = true)
 @Composable
 fun TrainingScreenLayoutPreview() {

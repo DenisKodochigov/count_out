@@ -79,7 +79,7 @@ fun Row2Round(uiState: TrainingScreenState, roundType: RoundType) {
 @Composable
 fun Row3Round(uiState: TrainingScreenState, roundType: RoundType)
 {
-    Column{
+    Column(modifier = Modifier.padding(end = 8.dp)){
         ListExercises(
             uiState = uiState,
             roundType = roundType,

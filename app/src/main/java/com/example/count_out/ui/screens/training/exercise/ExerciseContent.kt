@@ -42,7 +42,7 @@ fun ListExercises(uiState: TrainingScreenState, roundType: RoundType, showExerci
 {
     val listExercise = uiState.training.rounds.find { it.roundType == roundType }?.exercise ?: emptyList()
     listExercise.forEach { exercise ->
-        AnimatedVisibility(modifier = Modifier.padding(4.dp), visible = showExercises
+        AnimatedVisibility(modifier = Modifier.padding(top = 8.dp), visible = showExercises
         ){
             Card( elevation = elevationTraining(), shape = MaterialTheme.shapes.extraSmall
             ){
