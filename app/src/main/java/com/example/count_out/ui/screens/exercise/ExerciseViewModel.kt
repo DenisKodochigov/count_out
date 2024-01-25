@@ -6,7 +6,6 @@ import com.example.count_out.data.DataRepository
 import com.example.count_out.data.room.tables.ExerciseDB
 import com.example.count_out.entity.ErrorApp
 import com.example.count_out.entity.Exercise
-import com.example.count_out.entity.Set
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -33,7 +32,7 @@ class ExerciseViewModel @Inject constructor(
 //                exerciseId, activityId -> setActivityToExercise(exerciseId, activityId) },
 //            onSetColorActivity = {
 //                    activityId, color -> onSetColorActivity(activityId = activityId, color = color) },
-            onChangeSet = { set -> onChangeSet( set )},
+//            onChangeSet = { set -> onChangeSet( set )},
             listSpeech = emptyList(),
             nameSection  = "",
             item = null,
@@ -89,7 +88,7 @@ class ExerciseViewModel @Inject constructor(
             )
         }
     }
-    private fun onChangeSet(set: Set){ templateMy { dataRepository.onChangeSet( set ) } }
+//    private fun onChangeSet(set: Set){ templateMy { dataRepository.onChangeSet( set ) } }
     private fun templateMy( funDataRepository:() -> Exercise ){
         viewModelScope.launch(Dispatchers.IO) {
             kotlin.runCatching { funDataRepository() }.fold(

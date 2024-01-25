@@ -123,8 +123,6 @@ fun BottomSheetSpeechContent(uiState: BottomSheetState)
 @Composable fun SelectOtherSpeech(uiState: BottomSheetState){
 
 }
-
-
 @Composable
 fun ButtonOK(uiState: BottomSheetState)
 {

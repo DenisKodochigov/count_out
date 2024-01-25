@@ -66,9 +66,11 @@ fun NameSet(uiState: TrainingScreenState, set: Set)
             textAlign = TextAlign.Start,)
         Spacer(modifier = Modifier.weight(1f))
         IconsCollapsingCopySpeechDel(
-            onCopy = { /*TODO*/ },
-            onSpeech = { /*TODO*/ },
-            onDel = { /*TODO*/ },
+            onCopy = { uiState.onCopySet(uiState.training.idTraining, set.idSet) },
+            onSpeech = {
+                uiState.set = set
+                uiState.showSpeechSet.value = true },
+            onDel = {  uiState.onDeleteSet(uiState.training.idTraining, set.idSet)  },
             onCollapsing = { setCollapsing(uiState, set) },
             wrap = uiState.listCollapsingSet.value.find { it == set.idSet } != null
         )

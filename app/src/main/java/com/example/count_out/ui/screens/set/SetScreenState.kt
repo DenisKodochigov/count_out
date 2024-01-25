@@ -21,7 +21,7 @@ data class SetScreenState(
     var screenTextHeader: String = "",
     @Stable override var listSpeech: List<Speech> = emptyList(),
     @Stable override var nameSection: String = "",
-    @Stable override var onConfirmationSpeech: (Speech, Any?) -> Unit = {_,_->},
+    @Stable override var onConfirmationSpeech: ( Speech, Any?) -> Unit = { _,_->},
     @Stable override var item: Any? =null,
     @Stable override var onDismissSpeech: () -> Unit = {},
 ): BottomSheetInterface

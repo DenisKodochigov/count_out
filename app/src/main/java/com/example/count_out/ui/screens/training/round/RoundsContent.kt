@@ -23,7 +23,6 @@ import com.example.count_out.R
 import com.example.count_out.entity.RoundType
 import com.example.count_out.ui.screens.training.TrainingScreenState
 import com.example.count_out.ui.screens.training.exercise.ListExercises
-import com.example.count_out.ui.screens.training.exercise.getIcon
 import com.example.count_out.ui.theme.Dimen
 import com.example.count_out.ui.theme.elevationTraining
 import com.example.count_out.ui.theme.interLight12
@@ -131,6 +130,8 @@ fun getIconCollapsing(uiState: TrainingScreenState, roundType: RoundType): Int
         RoundType.DOWN -> getIcon(uiState.workDownCollapsing.value)
     }
 }
+
+fun getIcon(collapsing: Boolean): Int = if (collapsing) R.drawable.ic_wrap1 else R.drawable.ic_wrap
 @Composable
 fun PoleAddExercise(uiState: TrainingScreenState, roundType: RoundType)
 {

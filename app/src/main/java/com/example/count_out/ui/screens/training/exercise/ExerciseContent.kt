@@ -31,8 +31,8 @@ import com.example.count_out.ui.screens.training.TrainingScreenState
 import com.example.count_out.ui.screens.training.set.SetContent
 import com.example.count_out.ui.theme.Dimen
 import com.example.count_out.ui.theme.elevationTraining
+import com.example.count_out.ui.theme.interLight12
 import com.example.count_out.ui.theme.interReg14
-import com.example.count_out.ui.theme.interThin12
 import com.example.count_out.ui.view_components.IconsCollapsingCopySpeechDel
 import com.example.count_out.ui.view_components.TextApp
 
@@ -57,6 +57,7 @@ fun ListExercises(uiState: TrainingScreenState, roundType: RoundType, showExerci
 @Composable
 fun SelectActivity(uiState: TrainingScreenState, exercise: Exercise)
 {
+    uiState.exercise = exercise
     Row( verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier.padding(horizontal = 4.dp)
     ){
@@ -66,7 +67,9 @@ fun SelectActivity(uiState: TrainingScreenState, exercise: Exercise)
         Spacer(modifier = Modifier.weight(1f))
         IconsCollapsingCopySpeechDel(
             onCopy = { uiState.onCopyExercise(uiState.training.idTraining, exercise.idExercise)},
-            onSpeech = { uiState.showBottomSheetSpeech.value = true },
+            onSpeech = {
+                uiState.exercise = exercise
+                uiState.showSpeechExercise.value = true },
             onDel = { uiState.onDeleteExercise(uiState.training.idTraining, exercise.idExercise) },
             onCollapsing = { exerciseCollapsing(uiState, exercise)},
             wrap = uiState.listCollapsingExercise.value.find { it == exercise.idExercise } != null
@@ -83,14 +86,12 @@ fun IconSelectActivity(uiState: TrainingScreenState, exercise: Exercise)
     { Icon(imageVector = Icons.Filled.ArrowDropDown, contentDescription = "") }
 }
 
-fun getIcon(collapsing: Boolean): Int = if (collapsing) R.drawable.ic_wrap1 else R.drawable.ic_wrap
 @Composable fun BodyExercise(uiState: TrainingScreenState, exercise: Exercise){
-    Row(
-        verticalAlignment = Alignment.CenterVertically,
+    Column(
         modifier = Modifier
     ){
         AnimatedVisibility(modifier = Modifier.padding(0.dp),
-            visible = true
+            visible = uiState.listCollapsingExercise.value.find { it == exercise.idExercise } != null
         ){
             Column (modifier = Modifier.fillMaxWidth().padding(6.dp), content = {
                 uiState.exercise = exercise
@@ -134,7 +135,7 @@ fun ListSets(uiState: TrainingScreenState)
         ) {
             TextApp(
                 text = stringResource(id = R.string.add_set),
-                style = interThin12,
+                style = interLight12,
                 modifier = Modifier.padding(horizontal = 4.dp)
             )
             Icon(
@@ -147,7 +148,6 @@ fun ListSets(uiState: TrainingScreenState)
         }
     }
 }
-
 fun exerciseCollapsing(uiState: TrainingScreenState,  exercise: Exercise): Boolean
 {
     val listCollapsingExercise = uiState.listCollapsingExercise.value.toMutableList()

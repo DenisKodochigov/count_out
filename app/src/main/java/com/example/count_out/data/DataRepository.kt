@@ -1,8 +1,10 @@
 package com.example.count_out.data
 
 import com.example.count_out.data.room.DataSource
+import com.example.count_out.data.room.tables.ActivityDB
 import com.example.count_out.data.room.tables.ExerciseDB
 import com.example.count_out.data.room.tables.RoundDB
+import com.example.count_out.data.room.tables.SetDB
 import com.example.count_out.data.room.tables.SpeechDB
 import com.example.count_out.data.room.tables.TrainingDB
 import com.example.count_out.entity.Activity
@@ -28,7 +30,7 @@ class DataRepository  @Inject constructor(private val dataSource: DataSource){
     fun deleteTrainingNothing(id: Long){
         Plugins.listTr.remove(Plugins.listTr.find { it.idTraining == id })
     }
-    fun setSpeech(speech: Speech, item: Any?): Any
+    fun setSpeech(trainingId: Long, speech: Speech, item: Any?): Training
     {
         val speechId = if (speech.idSpeech == 0L) dataSource.addSpeech(speech as SpeechDB)
                         else dataSource.updateSpeech(speech as SpeechDB)
@@ -41,14 +43,19 @@ class DataRepository  @Inject constructor(private val dataSource: DataSource){
             is Round -> {
                 (item as RoundDB).speechId =
                     analiseId(idParent = item.speechId, idChild = speechId.toLong())
-                dataSource.getTraining(dataSource.getRound(item.idRound).trainingId)
+                dataSource.getTraining(trainingId)
             }
             is Exercise -> {
                 (item as ExerciseDB).speechId =
                     analiseId(idParent = item.speechId, idChild = speechId.toLong())
-                dataSource.getTraining(dataSource.getRound(item.roundId).trainingId)
+                dataSource.getTraining(trainingId)
             }
-            else -> { }
+            is Set -> {
+                (item as SetDB).speechId =
+                    analiseId(idParent = item.speechId, idChild = speechId.toLong())
+                dataSource.getTraining(trainingId)
+            }
+            else -> { dataSource.getTraining(trainingId) }
         }
     }
 
@@ -60,36 +67,54 @@ class DataRepository  @Inject constructor(private val dataSource: DataSource){
                } else { idParent }
     }
     fun getExercise( roundId: Long, exerciseId:Long): Training {
-        dataSource.getExercise( exerciseId )
+        if ( exerciseId > 0) dataSource.getExercise( exerciseId )
         return dataSource.getTraining( dataSource.getRound(roundId = roundId).trainingId )
     }
-    fun addExercise(roundId: Long): Training {
-        dataSource.addExercise( roundId )
-        return dataSource.getTraining( dataSource.getRound(roundId = roundId).trainingId )
+    fun addExercise(trainingId: Long, roundId: Long): Training {
+        if ( roundId > 0) dataSource.addExercise( roundId )
+        return dataSource.getTraining( trainingId )
     }
     fun copyExercise (trainingId: Long, exerciseId: Long): Training {
-        return dataSource.copyExercise( trainingId, exerciseId)
+        if ( exerciseId > 0) dataSource.copyExercise( exerciseId)
+        return getTraining(trainingId)
     }
     fun deleteExercise(trainingId: Long, exerciseId: Long): Training {
-        return dataSource.deleteExercise( trainingId, exerciseId)
+        if ( exerciseId > 0) dataSource.deleteExercise( exerciseId )
+        return getTraining(trainingId)
     }
-    fun getNameTrainingFromRound(roundId: Long): String = dataSource.getNameTrainingFromRound(roundId)
-    fun getNameRound(roundId: Long): String = dataSource.getNameRound(roundId)
+    fun getNameTrainingFromRound(roundId: Long): String {
+        return if (roundId > 0) dataSource.getNameTrainingFromRound(roundId) else ""
+    }
+    fun getNameRound(roundId: Long): String {
+        return if (roundId > 0) dataSource.getNameRound(roundId) else ""
+    }
 
 //###### ACTIVITY ##################
     fun getActivities(): List<Activity> = dataSource.getActivities()
-    fun setActivityToExercise(exerciseId: Long, activityId: Long): Training {
-        dataSource.setActivityToExercise(exerciseId = exerciseId, activityId = activityId)
-        return getTraining(dataSource.getRound(dataSource.getExercise(exerciseId).roundId).trainingId)
+    fun setActivityToExercise(trainingId: Long, exerciseId: Long, activityId: Long): Training {
+        if (exerciseId > 0 && activityId > 0)
+            dataSource.setActivityToExercise(exerciseId = exerciseId, activityId = activityId)
+        return getTraining( trainingId )
     }
-
-    fun onSetColorActivity(activityId: Long, color: Int) = dataSource.setColorActivity(activityId, color)
+    fun onSetColorActivity(activityId: Long, color: Int): ActivityDB
+    {
+        return if (activityId > 0 ) dataSource.setColorActivity(activityId, color)
+                else  ActivityDB()
+    }
 
     //###### SET ##################
-    fun addUpdateSet(exerciseId:Long, set: Set): Training {
-        val roundId = dataSource.addUpdateSet(exerciseId, set).roundId
-        return dataSource.getTraining(dataSource.getRound(roundId).trainingId)
+    fun addUpdateSet(trainingId: Long, exerciseId:Long, set: Set): Training {
+        if (exerciseId > 0 && set != SetDB()) dataSource.addUpdateSet(exerciseId, set).roundId
+        return dataSource.getTraining(trainingId)
     }
-    fun onChangeSet(set: Set): Exercise = dataSource.addUpdateSet( set.exerciseId, set )
+    fun copySet(trainingId:Long, setId: Long): Training {
+        if (setId > 0 ) dataSource.copySet( setId )
+        return dataSource.getTraining(trainingId)
+    }
+    fun deleteSet(trainingId:Long, setId: Long): Training {
+        if (setId > 0 ) dataSource.deleteSet( setId )
+        return dataSource.getTraining(trainingId)
+    }
+//    fun onChangeSet(set: Set): Exercise = dataSource.addUpdateSet( set.exerciseId, set )
 
 }

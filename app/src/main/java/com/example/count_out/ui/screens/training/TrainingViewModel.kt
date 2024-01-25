@@ -31,11 +31,6 @@ class TrainingViewModel @Inject constructor(
             changeNameTraining = { training, name -> changeNameTraining(training, name) },
             onDeleteTraining = { trainingId -> deleteTraining(trainingId) },
             onConfirmationSpeech = { speech, item -> setSpeech( speech, item ) },
-            onSpeechTraining = {},
-            onSpeechRound = {},
-            onDismissSpeechTrainingBS = {},
-            onDismissSpeechExerciseBS = {},
-            onSpeechExercise = {},
             onAddExercise = { roundId -> addExercise( roundId )},
             onCopyExercise = { trainingId, exerciseId -> copyExercise(trainingId, exerciseId)},
             onDeleteExercise = { trainingId, exerciseId -> deleteExercise(trainingId, exerciseId)},
@@ -43,9 +38,10 @@ class TrainingViewModel @Inject constructor(
                     exerciseId, activityId -> setActivityToExercise(exerciseId, activityId) },
             onSetColorActivity = {
                     activityId, color -> onSetColorActivity(activityId = activityId, color = color) },
+            onCopySet = { trainingId, setId -> copySet(trainingId, setId)},
+            onDeleteSet = { trainingId, setId -> deleteSet(trainingId, setId)},
             onAddUpdateSet = { idExercise, set -> addUpdateSet(idExercise, set) },
-            onSave = {},
-            onClickWorkout = {},
+            onChangeSet = { set -> addUpdateSet(set.exerciseId, set) },
         )
     )
     val trainingScreenState: StateFlow<TrainingScreenState> = _trainingScreenState.asStateFlow()
@@ -61,9 +57,15 @@ class TrainingViewModel @Inject constructor(
         templateMy { dataRepository.getTraining(id) }
     }
     private fun addUpdateSet(exerciseId:Long, set: Set){
-        templateMy { dataRepository.addUpdateSet( exerciseId, set) } }
-    private fun setSpeech(speech: Speech, item: Any?) {
-        templateMy { dataRepository.setSpeech(speech, item) as Training } }
+        templateMy { dataRepository.addUpdateSet(
+            trainingScreenState.value.training.idTraining, exerciseId, set) } }
+    private fun copySet(trainingId:Long, setId: Long){
+        templateMy { dataRepository.copySet( trainingId, setId) } }
+    private fun deleteSet(trainingId:Long, setId: Long){
+        templateMy { dataRepository.deleteSet( trainingId, setId) } }
+    private fun setSpeech( speech: Speech, item: Any?) {
+        templateMy { dataRepository.setSpeech(
+            trainingScreenState.value.training.idTraining,speech, item) as Training } }
     private fun deleteTraining(trainingId: Long){
         templateNothing { dataRepository.deleteTrainingNothing(trainingId) } }
     private fun changeNameTraining(training: Training, name: String){
@@ -71,22 +73,12 @@ class TrainingViewModel @Inject constructor(
     private fun copyExercise(trainingId: Long, exerciseId: Long){
         templateMy { dataRepository.copyExercise(trainingId, exerciseId) } }
     private fun addExercise(roundId: Long){
-        templateMy { dataRepository.addExercise( roundId ) } }
+        templateMy { dataRepository.addExercise(trainingScreenState.value.training.idTraining, roundId ) } }
     private fun deleteExercise(trainingId: Long, exerciseId: Long){
         templateMy { dataRepository.deleteExercise(trainingId, exerciseId) } }
     private fun setActivityToExercise(exerciseId: Long, activityId: Long) {
-        viewModelScope.launch(Dispatchers.IO) {
-            kotlin.runCatching { dataRepository.setActivityToExercise(exerciseId, activityId) }
-                .fold(
-                    onSuccess = {
-                        _trainingScreenState.update { currentState ->
-                            currentState.copy(
-                                training = it,
-                                showBottomSheetSelectActivity = mutableStateOf(false)) }
-                        },
-                    onFailure = { errorApp.errorApi(it.message!!) }
-                )
-        }
+        templateMy{dataRepository.setActivityToExercise(
+            trainingScreenState.value.training.idTraining, exerciseId, activityId)}
     }
     private fun onSetColorActivity(activityId: Long, color: Int) {
         viewModelScope.launch(Dispatchers.IO) {
@@ -98,7 +90,10 @@ class TrainingViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             kotlin.runCatching { funDataRepository() }.fold(
                 onSuccess = { _trainingScreenState.update { currentState ->
-                    currentState.copy( training = it, enteredName = mutableStateOf(it.name) ) } },
+                    currentState.copy(
+                        training = it,
+                        showBottomSheetSelectActivity = mutableStateOf(false),
+                        enteredName = mutableStateOf(it.name) ) } },
                 onFailure = { errorApp.errorApi(it.message!!) }
             )
         }

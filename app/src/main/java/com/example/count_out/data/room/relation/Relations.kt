@@ -13,32 +13,32 @@ import com.example.count_out.entity.Exercise
 import com.example.count_out.entity.Set
 
 data class SetRel(
-    @Embedded val setDB: SetDB,
+    @Embedded val setRel: SetDB,
     @Relation(parentColumn = "speechId", entityColumn = "idSpeech", entity = SpeechDB::class) val speech: SpeechDB?
 ){
     fun toSet(): Set{
         return SetDB(
-            name = setDB.name,
-            exerciseId = setDB.exerciseId,
+            idSet = setRel.idSet,
+            name = setRel.name,
+            exerciseId = setRel.exerciseId,
             speechId = speech?.idSpeech ?: 0L,
             speech = speech ?: SpeechDB(),
-
-            weight = setDB.weight,
-            intensity = setDB.intensity,
-            distance = setDB.distance,
-            duration = setDB.duration,
-            reps = setDB.reps, // количество отстчетов
-            intervalReps = setDB.intervalReps,
-            intervalDown = setDB.intervalDown, //замедление отчетов
-            groupCount = setDB.groupCount, // Группы отстчетов
-            timeRest = setDB.timeRest
+            weight = setRel.weight,
+            intensity = setRel.intensity,
+            distance = setRel.distance,
+            duration = setRel.duration,
+            reps = setRel.reps, // количество отстчетов
+            intervalReps = setRel.intervalReps,
+            intervalDown = setRel.intervalDown, //замедление отчетов
+            groupCount = setRel.groupCount, // Группы отстчетов
+            timeRest = setRel.timeRest
         )
     }
 }
 data class ExerciseRel(
     @Embedded val exerciseDB: ExerciseDB,
     @Relation(parentColumn = "activityId", entityColumn = "idActivity", entity = ActivityDB::class) val activity: ActivityDB?,
-    @Relation(parentColumn = "idExercise", entityColumn = "exerciseId", entity = SetDB::class) val sets: List<SetDB>?,
+    @Relation(parentColumn = "idExercise", entityColumn = "exerciseId", entity = SetDB::class) val sets: List<SetRel>?,
     @Relation(parentColumn = "speechId", entityColumn = "idSpeech", entity = SpeechDB::class) val speech: SpeechDB?
 ){
     fun toExercise(): Exercise{
@@ -49,7 +49,7 @@ data class ExerciseRel(
             activity = activity as Activity,
             speech = speech ?: SpeechDB(),
             speechId = exerciseDB.speechId,
-            sets = sets as List<Set>
+            sets = sets?.map { it.toSet() } ?: emptyList()
         )
     }
 }

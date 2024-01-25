@@ -67,9 +67,7 @@ fun TrainingScreenCreateView(
     if (uiState.showSpeechTraining.value) {
         uiState.nameSection = stringResource(id = R.string.training)
         uiState.item = uiState.training
-        uiState.onDismissSpeech = {
-//            log(true, "uiState.showSpeechTraining.value = false")
-            uiState.showSpeechTraining.value = false}
+        uiState.onDismissSpeech = { uiState.showSpeechTraining.value = false}
         BottomSheetSpeech(uiState)
     }
     if (uiState.showSpeechWorkUp.value) {
@@ -90,16 +88,16 @@ fun TrainingScreenCreateView(
         uiState.onDismissSpeech = { uiState.showSpeechWorkDown.value = false}
         BottomSheetSpeech(uiState)
     }
-    if (uiState.showSpeechExercise.value != null) {
+    if (uiState.showSpeechExercise.value) {
         uiState.nameSection = stringResource(id = R.string.exercise)
-        uiState.item = uiState.showSpeechExercise.value
-        uiState.onDismissSpeech = { uiState.showSpeechExercise.value = null}
+        uiState.item = uiState.exercise
+        uiState.onDismissSpeech = { uiState.showSpeechExercise.value = false}
         BottomSheetSpeech(uiState)
     }
-    if (uiState.showSpeechSet.value != null) {
+    if (uiState.showSpeechSet.value) {
         uiState.nameSection = stringResource(id = R.string.set)
-        uiState.item = uiState.showSpeechSet.value
-        uiState.onDismissSpeech = { uiState.showSpeechSet.value = null}
+        uiState.item = uiState.set
+        uiState.onDismissSpeech = { uiState.showSpeechSet.value = false}
         BottomSheetSpeech(uiState)
     }
     if (uiState.showBottomSheetSelectActivity.value) BottomSheetSelectActivity(uiState)

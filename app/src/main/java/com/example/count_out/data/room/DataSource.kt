@@ -29,7 +29,6 @@ class DataSource @Inject constructor(private val dataDao: DataDao) {
         dataDao.delTraining(id)
         return dataDao.getTrainingsRel().map { it.toTraining() }
     }
-
     fun changeNameTraining(training: Training, name: String): Training {
         (training as TrainingDB).name = name
         dataDao.updateTraining(training)
@@ -60,20 +59,19 @@ class DataSource @Inject constructor(private val dataDao: DataDao) {
     fun addExercise( roundId:Long): Exercise {
         return createExercise( roundId )
     }
-    fun copyExercise (trainingId: Long, exerciseId: Long): Training {
+    fun copyExercise ( exerciseId: Long) {
         val source = dataDao.getExerciseRel(exerciseId).toExercise()
         copyExercise(source, source.roundId)
-        return dataDao.getTrainingRel(trainingId).toTraining()
     }
-    fun deleteExercise (trainingId: Long, exerciseId: Long): Training {
+    fun deleteExercise ( exerciseId: Long) {
         val exercise = dataDao.getExerciseRel(exerciseId)
         exercise.speech?.let { dataDao.delSpeech(it.idSpeech) }
-        exercise.sets?.forEach { set->
+        exercise.sets?.forEach {
+            val set = it.toSet()
             dataDao.delSpeech(set.speechId)
             dataDao.delSet(set.idSet)
         }
         dataDao.deleteExercise(exerciseId)
-        return dataDao.getTrainingRel(trainingId).toTraining()
     }
     fun getExercises(roundId: Long): List<Exercise> = dataDao.getExercisesForRoundRel(roundId).map { it.toExercise() }
     fun updateExercise(exerciseDB: ExerciseDB): Int = dataDao.updateExercise(exerciseDB)
@@ -96,6 +94,12 @@ class DataSource @Inject constructor(private val dataDao: DataDao) {
         if (set.idSet < 1) { dataDao.addSet(set as SetDB) }
         else { dataDao.updateSet( set as SetDB) }
         return dataDao.getExerciseRel(exerciseId).toExercise()
+    }
+    fun copySet( setId: Long){
+        copySet(dataDao.getSet(setId), 0)
+    }
+    fun deleteSet( setId: Long) {
+         dataDao.delSet( setId )
     }
 
     //######################################################################################
@@ -141,10 +145,13 @@ class DataSource @Inject constructor(private val dataDao: DataDao) {
         return dataDao.getExerciseRel(idNew).toExercise()
     }
     private fun copySet(set: Set, exerciseId: Long): Set{
-        val idNew = dataDao.addSet((set as SetDB).copy(
-            idSet = 0L,
-            speechId = copySpeech(set.speech).idSpeech,
-            exerciseId = if (exerciseId == 0L) set.exerciseId  else exerciseId))
+        val idNew = dataDao.addSet(
+            (set as SetDB).copy(
+                idSet = 0L,
+                speechId = copySpeech(set.speech).idSpeech,
+                exerciseId = if (exerciseId == 0L) set.exerciseId  else exerciseId
+            )
+        )
         return dataDao.getSetRel(idNew).toSet()
     }
 
