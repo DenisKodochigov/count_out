@@ -25,9 +25,8 @@ import com.example.count_out.ui.screens.training.TrainingScreenState
 import com.example.count_out.ui.screens.training.exercise.ListExercises
 import com.example.count_out.ui.theme.Dimen
 import com.example.count_out.ui.theme.elevationTraining
+import com.example.count_out.ui.theme.interBold14
 import com.example.count_out.ui.theme.interLight12
-import com.example.count_out.ui.theme.interReg14
-import com.example.count_out.ui.theme.interThin12
 import com.example.count_out.ui.view_components.IconCollapsingSpeech
 import com.example.count_out.ui.view_components.TextApp
 
@@ -54,7 +53,7 @@ fun Row1Round(uiState: TrainingScreenState, roundType: RoundType)
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier.fillMaxWidth().padding(bottom = 6.dp, end = 8.dp)
     ){
-        TextApp(text = nameRound( uiState, roundType, stringResource(id = roundType.strId)), style = interReg14)
+        TextApp(text = nameRound( uiState, roundType, stringResource(id = roundType.strId)), style = interBold14)
         Spacer(modifier = Modifier.weight(1f))
         IconCollapsingSpeech(
             idIconCollapsing = getIconCollapsing(uiState, roundType),
@@ -144,7 +143,7 @@ fun PoleAddExercise(uiState: TrainingScreenState, roundType: RoundType)
     ) {
         TextApp(
             text = stringResource(id = R.string.add_activity),
-            style = interThin12,
+            style = interLight12,
             modifier = Modifier.padding(horizontal = 4.dp)
         )
         Icon(
