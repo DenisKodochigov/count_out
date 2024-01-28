@@ -6,6 +6,7 @@ import com.example.count_out.data.room.tables.RoundDB
 import com.example.count_out.data.room.tables.SetDB
 import com.example.count_out.data.room.tables.SpeechDB
 import com.example.count_out.data.room.tables.TrainingDB
+import com.example.count_out.entity.Activity
 import com.example.count_out.entity.Exercise
 import com.example.count_out.entity.Round
 import com.example.count_out.entity.RoundType
@@ -89,6 +90,10 @@ class DataSource @Inject constructor(private val dataDao: DataDao) {
     fun setColorActivity(activityId: Long, color: Int): ActivityDB{
         return dataDao.getActivity( dataDao.setColorActivity(activityId, color).toLong() )
     }
+    fun addActivity(activity: Activity) = dataDao.addActivity( activity as ActivityDB )
+
+    fun onUpdateActivity(activity: Activity) = dataDao.updateActivity( activity as ActivityDB )
+
 //Sets
     fun addUpdateSet(exerciseId:Long, set: Set): Exercise{
         if (set.idSet < 1) { dataDao.addSet(set as SetDB) }

@@ -21,8 +21,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.mutableFloatStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -30,8 +28,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.count_out.R
-import com.example.count_out.data.room.tables.SetDB
 import com.example.count_out.entity.no_use.Workout
+import com.example.count_out.ui.bottomsheet.BottomSheetAddActivity
+import com.example.count_out.ui.joint.active_view.CardActivity
 import com.example.count_out.ui.theme.Dimen
 import com.example.count_out.ui.theme.elevationTraining
 import com.example.count_out.ui.theme.interBold14
@@ -43,26 +42,26 @@ import com.example.count_out.ui.view_components.TextApp
 @Composable fun SettingScreen( onBaskScreen:() -> Unit
 ){
     val viewModel: SettingViewModel = hiltViewModel()
-    LaunchedEffect(key1 = true, block = {viewModel.init()})
+    LaunchedEffect( key1 = true, block = { viewModel.init() })
     SettingScreenCreateView( viewModel = viewModel )
 }
 @Composable fun SettingScreenCreateView( viewModel: SettingViewModel
 ){
     val uiState = viewModel.settingScreenState.collectAsState()
+    uiState.value.onDismissAddActivity = { uiState.value.showBottomSheetAddActivity.value = false }
+    uiState.value.onConfirmAddActivity = { activity->
+        uiState.value.onAddActivity(activity)
+        uiState.value.showBottomSheetAddActivity.value = false }
     SettingScreenLayout( uiState = uiState.value)
+    if (uiState.value.showBottomSheetAddActivity.value) BottomSheetAddActivity(uiState.value)
 }
 @Composable fun SettingScreenLayout( uiState: SettingScreenState
 ){
-    val offsetHeightPx = remember { mutableFloatStateOf(0f) }
     Column(
         Modifier
             .padding(8.dp)
             .fillMaxHeight()
             .verticalScroll(rememberScrollState())
-//            .animatedScroll(
-//                height = sizeApp(SizeElement.HEIGHT_BOTTOM_BAR),
-//                offsetHeightPx = offsetHeightPx
-//            ),
     ){
         ActiveSection(uiState = uiState,)
     }
@@ -86,7 +85,9 @@ import com.example.count_out.ui.view_components.TextApp
 @Composable fun SectionTitle(uiState: SettingScreenState){
     Row(
         verticalAlignment = Alignment.CenterVertically,
-        modifier = Modifier.fillMaxWidth().padding(bottom = 6.dp, end = 8.dp)
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(bottom = 6.dp, end = 8.dp)
     ){
         TextApp(text = stringResource(id = R.string.add_activity), style = interBold14)
         Spacer(modifier = Modifier.weight(1f))
@@ -111,35 +112,26 @@ import com.example.count_out.ui.view_components.TextApp
 }
 @Composable fun ListActivity(uiState: SettingScreenState){
 
-    val showActivity = uiState.collapsingActivity.value && uiState.activities.value.isNotEmpty()
-    uiState.activities.value.forEach { exercise ->
-        AnimatedVisibility(modifier = Modifier.padding(top = 8.dp), visible = showActivity
-        ){
-            Card( elevation = elevationTraining(), shape = MaterialTheme.shapes.extraSmall
-            ){
-                Column {
-//                    SelectActivity(uiState, exercise)
-//                    BodyExercise(uiState, exercise)
-                }
-            }
-        }
+    val showActivity = uiState.collapsingActivity.value && uiState.activities.isNotEmpty()
+    uiState.activities.forEach { activity ->
+        AnimatedVisibility(
+            modifier = Modifier.padding(top = 8.dp),
+            visible = showActivity,
+            content = { CardActivity(uiState, activity) }
+        )
     }
 }
+
+
 @Composable fun PoleAddActivity(uiState: SettingScreenState){
     Row (horizontalArrangement = Arrangement.End, modifier = Modifier.fillMaxWidth()){
         Row(
-            horizontalArrangement = Arrangement.Center,
+            horizontalArrangement = Arrangement.Start,
             verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier
-                .clickable {
-                    uiState.onAddActivity(
-//                        uiState.exercise.idExercise,
-//                        SetDB(exerciseId = uiState.exercise.idExercise)
-                    )
-                }
+            modifier = Modifier.clickable { uiState.showBottomSheetAddActivity.value = true }
         ) {
             TextApp(
-                text = stringResource(id = R.string.add_set),
+                text = stringResource(id = R.string.add_activity),
                 style = interLight12,
                 modifier = Modifier.padding(horizontal = 4.dp)
             )

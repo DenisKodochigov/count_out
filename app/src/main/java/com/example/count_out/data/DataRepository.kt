@@ -96,12 +96,22 @@ class DataRepository  @Inject constructor(private val dataSource: DataSource){
             dataSource.setActivityToExercise(exerciseId = exerciseId, activityId = activityId)
         return getTraining( trainingId )
     }
-    fun onSetColorActivity(activityId: Long, color: Int): ActivityDB
-    {
+    fun onSetColorActivity(activityId: Long, color: Int): ActivityDB {
         return if (activityId > 0 ) dataSource.setColorActivity(activityId, color)
                 else  ActivityDB()
     }
-
+    fun onSetColorActivityForSettings(activityId: Long, color: Int): List<Activity> {
+        if (activityId > 0 ) dataSource.setColorActivity(activityId, color)
+        return getActivities()
+    }
+    fun onAddActivity(activity: Activity): List<Activity> {
+        dataSource.addActivity(activity)
+        return getActivities()
+    }
+    fun onUpdateActivity(activity: Activity): List<Activity> {
+        dataSource.onUpdateActivity(activity)
+        return getActivities()
+    }
     //###### SET ##################
     fun addUpdateSet(trainingId: Long, exerciseId:Long, set: Set): Training {
         if (exerciseId > 0 && set != SetDB()) dataSource.addUpdateSet(exerciseId, set).roundId
