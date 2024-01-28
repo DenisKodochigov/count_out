@@ -40,13 +40,19 @@ import com.example.count_out.ui.theme.Dimen
     onCollapsing:()->Unit,
     wrap: Boolean)
 {
+    IconsCollapsing( onCollapsing = onCollapsing, wrap = wrap)
+    IconsCopySpeechDel(onCopy, onSpeech, onDel)
+}
+@Composable fun IconsCollapsing(
+    onCollapsing:()->Unit,
+    wrap: Boolean)
+{
     val idIcon = if (wrap) R.drawable.ic_wrap1 else R.drawable.ic_wrap
-     Icon(
+    Icon(
         painter = painterResource(id = idIcon),
         contentDescription = "",
         modifier = Modifier.padding(4.dp).size(Dimen.sizeIcon).clickable{ onCollapsing() }
     )
-    IconsCopySpeechDel(onCopy, onSpeech, onDel)
 }
 @Composable
 fun IconCollapsingSpeech(

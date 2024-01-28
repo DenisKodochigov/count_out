@@ -17,6 +17,7 @@ class SettingViewModel @Inject constructor(
     private val _settingScreenState = MutableStateFlow(SettingScreenState())
     val settingScreenState: StateFlow<SettingScreenState> = _settingScreenState.asStateFlow()
 
+    fun init(){}
 //    fun getWorkouts(){ templateMy { dataRepository.getWorkouts() } }
 //    fun changeNameWorkout(workout: Workout){ templateMy { dataRepository.changeNameWorkout(workout) } }
 //    fun deleteWorkout(id: Long){ templateMy { dataRepository.deleteWorkout(id) } }

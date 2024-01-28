@@ -112,10 +112,9 @@ fun TrainingScreenLayout( uiState: TrainingScreenState
         modifier = Modifier
             .fillMaxHeight()
             .verticalScroll(rememberScrollState())
-            .padding(horizontal = Dimen.paddingAppHor)
-            .clickable(
-                interactionSource = interactionSource, indication = null
-            ) {
+            .padding( horizontal = Dimen.paddingAppHor )
+            .clickable( interactionSource = interactionSource, indication = null
+            ){
                 if (uiState.training.name != uiState.enteredName.value) {
                     uiState.changeNameTraining(uiState.training, uiState.enteredName.value)
                 }

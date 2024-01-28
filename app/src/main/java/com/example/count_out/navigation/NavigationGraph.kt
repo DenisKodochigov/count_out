@@ -13,7 +13,6 @@ import androidx.navigation.NamedNavArgument
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
-import com.example.count_out.ui.screens.exercise.ExerciseScreen
 import com.example.count_out.ui.screens.settings.SettingScreen
 import com.example.count_out.ui.screens.training.TrainingScreen
 import com.example.count_out.ui.screens.trainings.TrainingsScreen
@@ -26,7 +25,7 @@ fun NavGraphBuilder.trainings( goToScreen: (Long)->Unit ){
                 onClickTraining = { goToScreen( it )},) }
     )
 }
-fun NavGraphBuilder.training( goToScreen: (Long, Long)-> Unit, onBaskScreen: ()->Unit ){
+fun NavGraphBuilder.training( onBaskScreen: ()->Unit ){
     template(
         routeFrom = TrainingsDestination.route,
         routeTo = TrainingDestination.routeWithArgs,
@@ -38,26 +37,28 @@ fun NavGraphBuilder.training( goToScreen: (Long, Long)-> Unit, onBaskScreen: ()-
         }
     )
 }
-fun NavGraphBuilder.exercise(  ){
-    template(
-        routeFrom = TrainingDestination.route,
-        routeTo = ExerciseDestination.routeWithArgs,
-        argument = ExerciseDestination.arguments,
-        content = {navBackStackEntry ->
-            ExerciseScreen(
-                roundId = navBackStackEntry.arguments?.getLong(ExerciseDestination.ARG1) ?: 0,
-                exerciseId = navBackStackEntry.arguments?.getLong(ExerciseDestination.ARG2) ?: 0,
-            )
-        }
-    )
-}
 
-fun NavGraphBuilder.settings(){
+fun NavGraphBuilder.settings( onBaskScreen: ()->Unit ){
     template(
         routeTo = SettingDestination.route,
-        content = { SettingScreen( screen = SettingDestination ) }
+        content = { SettingScreen( onBaskScreen = onBaskScreen ) }
     )
 }
+//fun NavGraphBuilder.exercise(  ){
+//    template(
+//        routeFrom = TrainingDestination.route,
+//        routeTo = ExerciseDestination.routeWithArgs,
+//        argument = ExerciseDestination.arguments,
+//        content = {navBackStackEntry ->
+//            ExerciseScreen(
+//                roundId = navBackStackEntry.arguments?.getLong(ExerciseDestination.ARG1) ?: 0,
+//                exerciseId = navBackStackEntry.arguments?.getLong(ExerciseDestination.ARG2) ?: 0,
+//            )
+//        }
+//    )
+//}
+
+
 fun NavGraphBuilder.template(
     routeTo: String,
     routeFrom: String = "",
