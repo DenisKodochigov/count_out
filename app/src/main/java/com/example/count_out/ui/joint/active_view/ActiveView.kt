@@ -90,7 +90,7 @@ fun ActivityValueShort(
             contentAlignment = Alignment.BottomStart,
             typeKeyboard = typeKeyboard,
             textStyle = interLight12,
-            onChangeValue = { onChange( (activity as ActivityDB).copy(name = it)) }
+            onChangeValue = { onChange( (activity.value as ActivityDB).copy(name = it)) }
         )
         Spacer(modifier = Modifier.weight(1f))
         Spacer(modifier = Modifier
@@ -131,7 +131,7 @@ fun ActivityValueFull(
                 contentAlignment = Alignment.BottomStart,
                 typeKeyboard = TypeKeyboard.TEXT,
                 textStyle = interLight12,
-                onChangeValue = { onChange( (activity as ActivityDB).copy(name = it)) }
+                onChangeValue = { onChange( (activity.value as ActivityDB).copy(audioTrack = it)) }
             )
         }
         Row(verticalAlignment = Alignment.CenterVertically, modifier = modifier ){
@@ -142,7 +142,7 @@ fun ActivityValueFull(
                 contentAlignment = Alignment.BottomStart,
                 typeKeyboard = TypeKeyboard.TEXT,
                 textStyle = interLight12,
-                onChangeValue = { onChange( (activity as ActivityDB).copy(name = it)) }
+                onChangeValue = { onChange( (activity.value as ActivityDB).copy(videoClip = it)) }
             )
         }
     }

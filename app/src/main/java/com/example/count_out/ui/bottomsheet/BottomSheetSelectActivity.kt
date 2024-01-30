@@ -1,5 +1,6 @@
 package com.example.count_out.ui.bottomsheet
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -17,6 +18,7 @@ import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.contentColorFor
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -60,6 +62,7 @@ fun BottomSheetSelectActivityContent(uiState: TrainingScreenState)
     }
 }
 
+@SuppressLint("UnrememberedMutableState")
 @Composable fun LazyActivity(uiState: TrainingScreenState
 ){
     val listState = rememberLazyListState()
@@ -70,7 +73,7 @@ fun BottomSheetSelectActivityContent(uiState: TrainingScreenState)
     ) {
         items(items = uiState.activities) {item ->
             ActivityValueShort(
-                activity = item,
+                activity = mutableStateOf(item),
                 typeKeyboard = TypeKeyboard.NONE,
                 onSelect = { uiState.onSelectActivity(uiState.exercise.idExercise, item.idActivity) },
                 onChangeColor = {uiState.onSetColorActivity(item.idActivity, it )

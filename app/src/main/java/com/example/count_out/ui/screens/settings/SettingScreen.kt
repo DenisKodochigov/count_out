@@ -28,6 +28,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.count_out.R
+import com.example.count_out.data.room.tables.ActivityDB
 import com.example.count_out.entity.no_use.Workout
 import com.example.count_out.ui.bottomsheet.BottomSheetAddActivity
 import com.example.count_out.ui.joint.active_view.CardActivity
@@ -128,7 +129,9 @@ import com.example.count_out.ui.view_components.TextApp
         Row(
             horizontalArrangement = Arrangement.Start,
             verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier.clickable { uiState.showBottomSheetAddActivity.value = true }
+            modifier = Modifier.clickable {
+                uiState.activity.value = ActivityDB()
+                uiState.showBottomSheetAddActivity.value = true }
         ) {
             TextApp(
                 text = stringResource(id = R.string.add_activity),
