@@ -24,7 +24,7 @@ data class SettingScreenState(
     @Stable val onSetColorActivity: (Long, Int) -> Unit = { _, _ ->},
     @Stable val onAddActivity: (Activity) ->Unit = {},
     @Stable val onUpdateActivity: (Activity) ->Unit = {},
-
+    @Stable val onDeleteActivity: (Long) ->Unit = {},
 
     @Stable var onDismissAddActivity: () -> Unit = {},
     @Stable var onConfirmAddActivity: (Activity) -> Unit = {},

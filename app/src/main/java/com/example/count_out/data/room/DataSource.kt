@@ -93,6 +93,7 @@ class DataSource @Inject constructor(private val dataDao: DataDao) {
     fun addActivity(activity: Activity) = dataDao.addActivity( activity as ActivityDB )
 
     fun onUpdateActivity(activity: Activity) = dataDao.updateActivity( activity as ActivityDB )
+    fun onDeleteActivity(activityId: Long) = dataDao.delActivity( activityId )
 
 //Sets
     fun addUpdateSet(exerciseId:Long, set: Set): Exercise{

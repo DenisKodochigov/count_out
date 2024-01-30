@@ -90,7 +90,7 @@ import com.example.count_out.ui.view_components.TextApp
             .fillMaxWidth()
             .padding(bottom = 6.dp, end = 8.dp)
     ){
-        TextApp(text = stringResource(id = R.string.add_activity), style = interBold14)
+        TextApp(text = stringResource(id = R.string.list_activity), style = interBold14)
         Spacer(modifier = Modifier.weight(1f))
         IconsCollapsing(
             onCollapsing = { uiState.collapsingActivity.value = !uiState.collapsingActivity.value },

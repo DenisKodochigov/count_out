@@ -5,6 +5,7 @@
     <string name="exercise1">Activity</string>
     <string name="exercise">Activity</string>
     <string name="add_activity">Add activity</string>
+    <string name="list_activity">ACTIVITIES</string>
     <string name="add_set">Add set</string>
     <string name="add_training">Add training</string>
     <string name="change_name_workout">Change name workout</string>

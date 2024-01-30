@@ -25,7 +25,7 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 object DatabaseModule {
     lateinit var database: AppDatabase
-    private const val mode: Int = 1
+    private const val mode: Int = 2
     @Provides
     @Singleton
     fun provideDatabase(@ApplicationContext appContext: Context): AppDatabase {
@@ -70,27 +70,25 @@ object DatabaseModule {
         val idTraining = db.dataDao().addTraining(TrainingDB(name = "Training_test", speechId = idSpeech))
 
         idSpeech = db.dataDao().addSpeech(SpeechDB())
-        val idRound1 = db.dataDao().addRound(RoundDB(trainingId = idTraining, roundType = RoundType.UP, speechId = idSpeech))
-        idSpeech = db.dataDao().addSpeech(SpeechDB())
-        db.dataDao().addRound(RoundDB(trainingId = idTraining, roundType = RoundType.OUT, speechId = idSpeech))
-        idSpeech = db.dataDao().addSpeech(SpeechDB())
-        db.dataDao().addRound(RoundDB(trainingId = idTraining, roundType = RoundType.DOWN, speechId = idSpeech))
-
-
-        idSpeech = db.dataDao().addSpeech(SpeechDB())
-        var idExercise = db.dataDao().addExercise(ExerciseDB(roundId = idRound1, activityId = 1, speechId = idSpeech))
-        idSpeech = db.dataDao().addSpeech(SpeechDB())
-        db.dataDao().addSet(SetDB(exerciseId = idExercise, name = "Set1", speechId = idSpeech))
+            var idRound = db.dataDao().addRound(RoundDB(trainingId = idTraining, roundType = RoundType.UP, speechId = idSpeech))
+                idSpeech = db.dataDao().addSpeech(SpeechDB())
+                var idExercise = db.dataDao().addExercise(ExerciseDB(roundId = idRound, activityId = 1, speechId = idSpeech))
+                idSpeech = db.dataDao().addSpeech(SpeechDB())
+                db.dataDao().addSet(SetDB(exerciseId = idExercise, name = "Set1", speechId = idSpeech))
 
         idSpeech = db.dataDao().addSpeech(SpeechDB())
-        idExercise = db.dataDao().addExercise(ExerciseDB(roundId = idRound1, activityId = 3, speechId = idSpeech))
-        idSpeech = db.dataDao().addSpeech(SpeechDB())
-        db.dataDao().addSet(SetDB(exerciseId = idExercise, name = "Set2", speechId = idSpeech))
+            idRound = db.dataDao().addRound(RoundDB(trainingId = idTraining, roundType = RoundType.OUT, speechId = idSpeech))
+                idSpeech = db.dataDao().addSpeech(SpeechDB())
+                idExercise = db.dataDao().addExercise(ExerciseDB(roundId = idRound, activityId = 3, speechId = idSpeech))
+                idSpeech = db.dataDao().addSpeech(SpeechDB())
+                db.dataDao().addSet(SetDB(exerciseId = idExercise, name = "Set2", speechId = idSpeech))
 
         idSpeech = db.dataDao().addSpeech(SpeechDB())
-        idExercise = db.dataDao().addExercise(ExerciseDB(roundId = idRound1, activityId = 2, speechId = idSpeech))
-        idSpeech = db.dataDao().addSpeech(SpeechDB())
-        db.dataDao().addSet(SetDB(exerciseId = idExercise, name = "Set3", speechId = idSpeech))
+            idRound = db.dataDao().addRound(RoundDB(trainingId = idTraining, roundType = RoundType.DOWN, speechId = idSpeech))
+                idSpeech = db.dataDao().addSpeech(SpeechDB())
+                idExercise = db.dataDao().addExercise(ExerciseDB(roundId = idRound, activityId = 2, speechId = idSpeech))
+                idSpeech = db.dataDao().addSpeech(SpeechDB())
+                db.dataDao().addSet(SetDB(exerciseId = idExercise, name = "Set3", speechId = idSpeech))
     }
 
     @Provides

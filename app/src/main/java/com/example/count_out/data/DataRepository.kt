@@ -112,6 +112,10 @@ class DataRepository  @Inject constructor(private val dataSource: DataSource){
         dataSource.onUpdateActivity(activity)
         return getActivities()
     }
+    fun onDeleteActivity(activityId: Long): List<Activity>{
+        dataSource.onDeleteActivity(activityId)
+        return getActivities()
+    }
     //###### SET ##################
     fun addUpdateSet(trainingId: Long, exerciseId:Long, set: Set): Training {
         if (exerciseId > 0 && set != SetDB()) dataSource.addUpdateSet(exerciseId, set).roundId

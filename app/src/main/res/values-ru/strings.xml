@@ -35,6 +35,7 @@
     <string name="save">Save</string>
     <string name="add_training">Добавить тренировку</string>
     <string name="add_activity">Добавить упражнение</string>
+    <string name="list_activity">Упражнения</string>
     <string name="add_set">Добавить подход</string>
     <string name="work_up">Разминка</string>
     <string name="work_out">Основнная часть</string>

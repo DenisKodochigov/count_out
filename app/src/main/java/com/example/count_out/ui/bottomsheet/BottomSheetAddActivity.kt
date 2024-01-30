@@ -54,8 +54,7 @@ fun BottomSheetAddActivityContent(uiState: SettingScreenState)
             onChangeColor = { uiState.onSetColorActivity(uiState.activity.value.idActivity, it ) }
         )
         Spacer(Modifier.height(Dimen.bsSpacerHeight))
-        ButtonConfirm(
-            onConfirm = { uiState.onConfirmAddActivity(uiState.activity.value)} )
+        ButtonConfirm( onConfirm = { uiState.onConfirmAddActivity(uiState.activity.value)} )
         Spacer(Modifier.height(Dimen.bsSpacerBottomHeight))
     }
 }

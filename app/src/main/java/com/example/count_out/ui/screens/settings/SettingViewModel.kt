@@ -22,7 +22,9 @@ class SettingViewModel @Inject constructor(
     private val _settingScreenState = MutableStateFlow(
         SettingScreenState(
             onAddActivity = { activity-> onAddActivity( activity )},
-            onUpdateActivity = { activity-> onUpdateActivity( activity )},onSetColorActivity = {
+            onUpdateActivity = { activity-> onUpdateActivity( activity )},
+            onDeleteActivity = { activityId-> onDeleteActivity( activityId )},
+            onSetColorActivity = {
             activityId, color -> onSetColorActivityForSettings(activityId = activityId, color = color) },
         ))
     val settingScreenState: StateFlow<SettingScreenState> = _settingScreenState.asStateFlow()
@@ -30,6 +32,7 @@ class SettingViewModel @Inject constructor(
     fun init(){ templateMy{dataRepository.getActivities()} }
     private fun onAddActivity(activity: Activity){ templateMy{ dataRepository.onAddActivity(activity) } }
     private fun onUpdateActivity(activity: Activity){ templateMy{ dataRepository.onUpdateActivity(activity) } }
+    private fun onDeleteActivity(activityId: Long){ templateMy{ dataRepository.onDeleteActivity(activityId) } }
     private fun onSetColorActivityForSettings(activityId: Long, color: Int){
         templateMy{ dataRepository.onSetColorActivityForSettings(activityId, color) } }
 //    fun getWorkouts(){ templateMy { dataRepository.getWorkouts() } }

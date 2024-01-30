@@ -12,8 +12,11 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.DeleteSweep
 import androidx.compose.material3.Card
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
@@ -48,7 +51,8 @@ import com.example.count_out.ui.view_components.TextFieldApp
                 uiState.activity.value = activity
                 uiState.showBottomSheetAddActivity.value = true },
             onChange = { uiState.onUpdateActivity(it) },
-            onChangeColor = { uiState.onSetColorActivity(activity.idActivity, it ) }
+            onChangeColor = { uiState.onSetColorActivity(activity.idActivity, it ) },
+            onDeleteActivity = { uiState.onDeleteActivity( it ) },
         )
     }
 }
@@ -59,11 +63,10 @@ fun ActivityValueShort(
     typeKeyboard: TypeKeyboard = TypeKeyboard.TEXT,
     onSelect: () -> Unit = {},
     onChange: (ActivityDB) -> Unit = {},
-    onChangeColor: (Int) -> Unit = {}
+    onChangeColor: (Int) -> Unit = {},
+    onDeleteActivity:(Long)-> Unit = {}
 ){
-
     val activityChangeColor: MutableState<Activity?> = remember { mutableStateOf(null) }
-
     if (activityChangeColor.value != null) {
         ChangeColorSectionDialog(
             colorItem = activityChangeColor.value!!.color,
@@ -76,9 +79,9 @@ fun ActivityValueShort(
         )
     }
     Row( modifier = Modifier
-            .padding(horizontal = 12.dp, vertical = 4.dp)
-            .clickable { onSelect() }
-            .fillMaxWidth(),
+        .padding(horizontal = 12.dp, vertical = 4.dp)
+        .clickable { onSelect() }
+        .fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Start
     ){
@@ -90,7 +93,10 @@ fun ActivityValueShort(
             contentAlignment = Alignment.BottomStart,
             typeKeyboard = typeKeyboard,
             textStyle = interLight12,
-            onChangeValue = { onChange( (activity.value as ActivityDB).copy(name = it)) }
+            onLossFocus = false,
+            onChangeValue = {
+                activity.value = (activity.value as ActivityDB).copy(name = it)
+                onChange(activity.value as ActivityDB) }
         )
         Spacer(modifier = Modifier.weight(1f))
         Spacer(modifier = Modifier
@@ -103,19 +109,23 @@ fun ActivityValueShort(
             )
             .clickable { activityChangeColor.value = activity.value }
             .background(color = Color(activity.value.color), shape = CircleShape))
+        IconButton( onClick = { onDeleteActivity(activity.value.idActivity) }) {
+            Icon(imageVector = Icons.Filled.DeleteSweep, contentDescription = null)
+        }
     }
 }
 @Composable
 fun ActivityValueFull(
     activity: MutableState<Activity>,
-    onSelect: () -> Unit = {},
     onChange: (ActivityDB) -> Unit = {},
     onChangeColor: (Int) -> Unit = {}
 ){
     val modifier = Modifier.padding(horizontal = 12.dp, vertical = 4.dp)
     Column(
         horizontalAlignment = Alignment.Start,
-        modifier = Modifier.fillMaxWidth().padding(horizontal = 0.dp))
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 0.dp))
     {
         ActivityValueShort(
             activity = activity,
@@ -130,6 +140,7 @@ fun ActivityValueFull(
                 placeholder = activity.value.audioTrack,
                 contentAlignment = Alignment.BottomStart,
                 typeKeyboard = TypeKeyboard.TEXT,
+                onLossFocus = false,
                 textStyle = interLight12,
                 onChangeValue = { onChange( (activity.value as ActivityDB).copy(audioTrack = it)) }
             )
@@ -141,6 +152,7 @@ fun ActivityValueFull(
                 placeholder = activity.value.videoClip,
                 contentAlignment = Alignment.BottomStart,
                 typeKeyboard = TypeKeyboard.TEXT,
+                onLossFocus = false,
                 textStyle = interLight12,
                 onChangeValue = { onChange( (activity.value as ActivityDB).copy(videoClip = it)) }
             )

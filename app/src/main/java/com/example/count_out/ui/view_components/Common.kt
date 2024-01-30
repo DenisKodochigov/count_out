@@ -118,172 +118,6 @@ import com.example.count_out.ui.theme.styleApp
     )
 }
 
-//@Composable
-//fun MyOutlinedTextFieldWithoutIconClearing(
-//    modifier: Modifier,
-//    enterValue: MutableState<String>,
-//    typeKeyboard: TypeKeyboard,
-//    title: String = ""
-//) {
-//    val localFocusManager = LocalFocusManager.current
-//    var focusItem by remember { mutableStateOf(false) }
-//    var enterText by remember { mutableStateOf("") }
-//    enterText = if (!focusItem) enterValue.value else ""
-////    val keyboardController = LocalSoftwareKeyboardController.current
-//
-//    Column(modifier = modifier) {
-//        TextApp(
-//            text = title,
-//            style = styleApp(TypeText.NAME_SLIDER),
-//            modifier = Modifier.padding(start = 12.dp)
-//        )
-//        OutlinedTextField(
-//            modifier = modifier
-//                .onFocusChanged { focusItem = it.isFocused }
-//                .background(color = colorApp.surface),
-//            value = enterText,
-//            singleLine = true,
-//            textStyle = styleApp(nameStyle = TypeText.EDIT_TEXT),
-//            onValueChange = {
-//                focusItem = false
-//                enterText = it
-//                enterValue.value = it
-//            },
-//            keyboardOptions = keyBoardOpt(typeKeyboard),
-//            keyboardActions = KeyboardActions(
-//                onDone = {
-//                    localFocusManager.moveFocus(FocusDirection.Next)
-//                    enterValue.value = enterText
-////                keyboardController?.hide()
-//                }
-//            ),
-//        )
-//    }
-//}
-
-//@Composable fun showFABs(
-//    startScreen: Boolean,
-//    isSelected: Boolean,
-//    modifier: Modifier,
-//    doDeleted: ()->Unit,
-//    doChangeSection: ()->Unit,
-//    doUnSelected:()->Unit):Boolean
-//{
-//    var startScreenLocal = startScreen
-//    if (isSelected) {
-//        startScreenLocal = true
-//        ShowFABs_(show = true,
-//            modifier = modifier,
-//            doDeleted = doDeleted,
-//            doChangeSection = doChangeSection,
-//            doUnSelected = doUnSelected)
-//    } else if (startScreenLocal){
-//        ShowFABs_(show = false, doDeleted = {}, doChangeSection = {}, doUnSelected = {}, modifier = modifier)
-//    }
-//    return startScreenLocal
-//}
-//
-//@Composable fun ShowFABs_(
-//    show: Boolean,
-//    modifier: Modifier,
-//    doDeleted: ()->Unit,
-//    doChangeSection: ()->Unit,
-//    doUnSelected:()->Unit)
-//{
-//    val offset = 8.dp + sizeApp(sizeElement = SizeElement.SIZE_FAB)
-//    Box( modifier = modifier.height(sizeApp(SizeElement.HEIGHT_FAB_BOX))) {
-////        FabAnimation(show = show, offset = 0.dp, icon = Icons.Filled.Delete, onClick = doDeleted)
-////        FabAnimation(show = show, offset = offset, icon = Icons.Filled.Dns, onClick = doChangeSection)
-////        FabAnimation(show = show, offset = offset * 2, icon = Icons.Filled.RemoveDone, onClick = doUnSelected)
-//    }
-//}
-
-//@SuppressLint("UnrememberedMutableState")
-//@Composable
-//fun SwitcherButton(doChangeSorting: (SortingBy) -> Unit) {
-//
-//    val cornerDp = 4.dp
-//
-//    var sortingPosition by remember { mutableStateOf(true) }
-//
-//    Row( verticalAlignment = Alignment.CenterVertically,  horizontalArrangement = Arrangement.Center,
-//        modifier = Modifier
-//            .padding(horizontal = 12.dp)
-//            .fillMaxWidth()
-//            .background(color = Color.Transparent, shape = RoundedCornerShape(cornerDp))
-//            .clickable {
-//                if (sortingPosition) doChangeSorting(SortingBy.BY_SECTION) else doChangeSorting(
-//                    SortingBy.BY_NAME
-//                )
-//                sortingPosition = !sortingPosition
-//            }
-//    ) {
-//        TextApp(
-//            text = stringResource(id = R.string.by_name),
-//            fontWeight = if (sortingPosition) FontWeight.Bold else FontWeight.Normal,
-//            style = styleApp(nameStyle = TypeText.TEXT_IN_LIST_SMALL)
-//        )
-//        Spacer(modifier = Modifier.width(24.dp))
-//        TextApp(
-//            text = stringResource(id = R.string.by_section),
-//            fontWeight = if (!sortingPosition) FontWeight.Bold else FontWeight.Normal,
-//            style = styleApp(nameStyle = TypeText.TEXT_IN_LIST_SMALL)
-//        )
-//    }
-//}
-
-//@Composable fun ShowArrowVer(enable:Boolean, direction: UPDOWN, drawLine: Boolean)
-//{
-//    Column(modifier = Modifier.fillMaxWidth()){
-//        if (direction == UPDOWN.UP && drawLine) Divider(color = colorApp.primary, thickness = 1.dp)
-//
-//        Row(modifier = Modifier.fillMaxWidth(),  horizontalArrangement = Arrangement.Center) {
-//            if( enable ) {
-//                if (direction == UPDOWN.UP) ArrowUp() else ArrowDown()
-//            }
-//            else ArrowNoneVer()
-//        }
-//        if (direction == UPDOWN.DOWN && drawLine) Divider(color = colorApp.primary, thickness = 1.dp)
-//    }
-//}
-//@Composable fun ShowArrowHor(enable:Boolean, direction: UPDOWN, drawLine: Boolean)
-//{
-//    Row(modifier = Modifier.fillMaxHeight(),
-//        horizontalArrangement = Arrangement.Center, verticalAlignment = Alignment.CenterVertically)
-//    {
-//        if (direction == UPDOWN.START && drawLine){
-//            Divider(color = colorApp.primary, modifier = Modifier
-//                .fillMaxHeight()
-//                .width(1.dp))
-//        }
-//
-//        if( enable ) { if (direction == UPDOWN.START) ArrowLeft() else ArrowRight()}
-//        else ArrowNoneHor()
-//        if (direction == UPDOWN.END && drawLine){
-//            Divider(color = colorApp.primary, modifier = Modifier
-//                .fillMaxHeight()
-//                .width(1.dp))
-//        }
-//    }
-//}
-
-
-//@Composable fun TextFieldAppBorder(
-//    modifier: Modifier = Modifier,
-//    enterValue: MutableState<String>,
-//    typeKeyboard: TypeKeyboard
-//){
-//    TextFieldApp(
-//        placeholder = enterValue.value,
-//        textStyle = interReg12,
-//        typeKeyboard = typeKeyboard,
-//        onChangeValue = {enterValue.value = it},
-//        modifier = modifier
-//            .background(color = colorApp.surfaceVariant, shape = shapesApp.extraSmall)
-//            .border(width = 1.dp, color = colorApp.onPrimaryContainer, shape = shapesApp.extraSmall)
-//    )
-//}
-
 @Composable fun ButtonApp(
     text: String,
     onClick: () -> Unit,
@@ -312,21 +146,8 @@ import com.example.count_out.ui.theme.styleApp
     }
 }
 
-//@Composable fun ButtonCircle(modifier: Modifier, iconButton: ImageVector, onClick: () -> Unit) {
-//    val radius = 25.dp
-//    IconButton (
-//        modifier = modifier
-//            .clip(RoundedCornerShape(radius, radius, radius, radius))
-//            .size(60.dp),
-//        onClick = { onClick() }) {
-//        Icon(
-//            imageVector = iconButton, null,
-//            tint = colorApp.primary ,
-//            modifier = Modifier.size(60.dp))
-//    }
-//}
-@Composable
-fun TextButtonOK(onConfirm: () -> Unit, enabled: Boolean = true) {
+@Composable fun TextButtonOK(onConfirm: () -> Unit, enabled: Boolean = true)
+{
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier.fillMaxWidth()
@@ -464,3 +285,132 @@ fun TextButtonOK(onConfirm: () -> Unit, enabled: Boolean = true) {
         context()
     }
 }
+
+//@Composable fun ButtonCircle(modifier: Modifier, iconButton: ImageVector, onClick: () -> Unit) {
+//    val radius = 25.dp
+//    IconButton (
+//        modifier = modifier
+//            .clip(RoundedCornerShape(radius, radius, radius, radius))
+//            .size(60.dp),
+//        onClick = { onClick() }) {
+//        Icon(
+//            imageVector = iconButton, null,
+//            tint = colorApp.primary ,
+//            modifier = Modifier.size(60.dp))
+//    }
+//}
+//@Composable
+//fun MyOutlinedTextFieldWithoutIconClearing(
+//    modifier: Modifier,
+//    enterValue: MutableState<String>,
+//    typeKeyboard: TypeKeyboard,
+//    title: String = ""
+//) {
+//    val localFocusManager = LocalFocusManager.current
+//    var focusItem by remember { mutableStateOf(false) }
+//    var enterText by remember { mutableStateOf("") }
+//    enterText = if (!focusItem) enterValue.value else ""
+////    val keyboardController = LocalSoftwareKeyboardController.current
+//
+//    Column(modifier = modifier) {
+//        TextApp(
+//            text = title,
+//            style = styleApp(TypeText.NAME_SLIDER),
+//            modifier = Modifier.padding(start = 12.dp)
+//        )
+//        OutlinedTextField(
+//            modifier = modifier
+//                .onFocusChanged { focusItem = it.isFocused }
+//                .background(color = colorApp.surface),
+//            value = enterText,
+//            singleLine = true,
+//            textStyle = styleApp(nameStyle = TypeText.EDIT_TEXT),
+//            onValueChange = {
+//                focusItem = false
+//                enterText = it
+//                enterValue.value = it
+//            },
+//            keyboardOptions = keyBoardOpt(typeKeyboard),
+//            keyboardActions = KeyboardActions(
+//                onDone = {
+//                    localFocusManager.moveFocus(FocusDirection.Next)
+//                    enterValue.value = enterText
+////                keyboardController?.hide()
+//                }
+//            ),
+//        )
+//    }
+//}
+
+//@Composable fun showFABs(
+//    startScreen: Boolean,
+//    isSelected: Boolean,
+//    modifier: Modifier,
+//    doDeleted: ()->Unit,
+//    doChangeSection: ()->Unit,
+//    doUnSelected:()->Unit):Boolean
+//{
+//    var startScreenLocal = startScreen
+//    if (isSelected) {
+//        startScreenLocal = true
+//        ShowFABs_(show = true,
+//            modifier = modifier,
+//            doDeleted = doDeleted,
+//            doChangeSection = doChangeSection,
+//            doUnSelected = doUnSelected)
+//    } else if (startScreenLocal){
+//        ShowFABs_(show = false, doDeleted = {}, doChangeSection = {}, doUnSelected = {}, modifier = modifier)
+//    }
+//    return startScreenLocal
+//}
+//
+//@Composable fun ShowFABs_(
+//    show: Boolean,
+//    modifier: Modifier,
+//    doDeleted: ()->Unit,
+//    doChangeSection: ()->Unit,
+//    doUnSelected:()->Unit)
+//{
+//    val offset = 8.dp + sizeApp(sizeElement = SizeElement.SIZE_FAB)
+//    Box( modifier = modifier.height(sizeApp(SizeElement.HEIGHT_FAB_BOX))) {
+////        FabAnimation(show = show, offset = 0.dp, icon = Icons.Filled.Delete, onClick = doDeleted)
+////        FabAnimation(show = show, offset = offset, icon = Icons.Filled.Dns, onClick = doChangeSection)
+////        FabAnimation(show = show, offset = offset * 2, icon = Icons.Filled.RemoveDone, onClick = doUnSelected)
+//    }
+//}
+
+
+//@Composable fun ShowArrowVer(enable:Boolean, direction: UPDOWN, drawLine: Boolean)
+//{
+//    Column(modifier = Modifier.fillMaxWidth()){
+//        if (direction == UPDOWN.UP && drawLine) Divider(color = colorApp.primary, thickness = 1.dp)
+//
+//        Row(modifier = Modifier.fillMaxWidth(),  horizontalArrangement = Arrangement.Center) {
+//            if( enable ) {
+//                if (direction == UPDOWN.UP) ArrowUp() else ArrowDown()
+//            }
+//            else ArrowNoneVer()
+//        }
+//        if (direction == UPDOWN.DOWN && drawLine) Divider(color = colorApp.primary, thickness = 1.dp)
+//    }
+//}
+//@Composable fun ShowArrowHor(enable:Boolean, direction: UPDOWN, drawLine: Boolean)
+//{
+//    Row(modifier = Modifier.fillMaxHeight(),
+//        horizontalArrangement = Arrangement.Center, verticalAlignment = Alignment.CenterVertically)
+//    {
+//        if (direction == UPDOWN.START && drawLine){
+//            Divider(color = colorApp.primary, modifier = Modifier
+//                .fillMaxHeight()
+//                .width(1.dp))
+//        }
+//
+//        if( enable ) { if (direction == UPDOWN.START) ArrowLeft() else ArrowRight()}
+//        else ArrowNoneHor()
+//        if (direction == UPDOWN.END && drawLine){
+//            Divider(color = colorApp.primary, modifier = Modifier
+//                .fillMaxHeight()
+//                .width(1.dp))
+//        }
+//    }
+//}
