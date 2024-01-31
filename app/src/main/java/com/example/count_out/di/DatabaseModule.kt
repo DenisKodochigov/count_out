@@ -25,7 +25,7 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 object DatabaseModule {
     lateinit var database: AppDatabase
-    private const val mode: Int = 2
+    private const val mode: Int = 1
     @Provides
     @Singleton
     fun provideDatabase(@ApplicationContext appContext: Context): AppDatabase {
@@ -74,21 +74,21 @@ object DatabaseModule {
                 idSpeech = db.dataDao().addSpeech(SpeechDB())
                 var idExercise = db.dataDao().addExercise(ExerciseDB(roundId = idRound, activityId = 1, speechId = idSpeech))
                 idSpeech = db.dataDao().addSpeech(SpeechDB())
-                db.dataDao().addSet(SetDB(exerciseId = idExercise, name = "Set1", speechId = idSpeech))
+                db.dataDao().addSet(SetDB(exerciseId = idExercise, name = "Set 1", speechId = idSpeech))
 
         idSpeech = db.dataDao().addSpeech(SpeechDB())
             idRound = db.dataDao().addRound(RoundDB(trainingId = idTraining, roundType = RoundType.OUT, speechId = idSpeech))
                 idSpeech = db.dataDao().addSpeech(SpeechDB())
                 idExercise = db.dataDao().addExercise(ExerciseDB(roundId = idRound, activityId = 3, speechId = idSpeech))
                 idSpeech = db.dataDao().addSpeech(SpeechDB())
-                db.dataDao().addSet(SetDB(exerciseId = idExercise, name = "Set2", speechId = idSpeech))
+                db.dataDao().addSet(SetDB(exerciseId = idExercise, name = "Set 1", speechId = idSpeech))
 
         idSpeech = db.dataDao().addSpeech(SpeechDB())
             idRound = db.dataDao().addRound(RoundDB(trainingId = idTraining, roundType = RoundType.DOWN, speechId = idSpeech))
                 idSpeech = db.dataDao().addSpeech(SpeechDB())
                 idExercise = db.dataDao().addExercise(ExerciseDB(roundId = idRound, activityId = 2, speechId = idSpeech))
                 idSpeech = db.dataDao().addSpeech(SpeechDB())
-                db.dataDao().addSet(SetDB(exerciseId = idExercise, name = "Set3", speechId = idSpeech))
+                db.dataDao().addSet(SetDB(exerciseId = idExercise, name = "Set 1", speechId = idSpeech))
     }
 
     @Provides

@@ -27,6 +27,122 @@ import com.example.count_out.entity.SizeElement
 import com.example.count_out.entity.TypeText
 import com.example.count_out.navigation.ScreenDestination
 
+@Immutable
+data class ColorFamily(
+    val color: Color,
+    val onColor: Color,
+    val colorContainer: Color,
+    val onColorContainer: Color
+)
+
+val unspecified_scheme = ColorFamily(
+    Color.Unspecified, Color.Unspecified, Color.Unspecified, Color.Unspecified
+)
+
+
+lateinit var colorApp: ColorScheme
+@RequiresApi(Build.VERSION_CODES.S)
+@Composable fun AppTheme(content: @Composable () -> Unit) {
+
+    val darkTheme: Boolean = isSystemInDarkTheme()
+    val dynamicColor = false //&& Build.VERSION.SDK_INT >= Build.VERSION_CODES.S
+    colorApp = when {
+        dynamicColor && darkTheme -> dynamicDarkColorScheme(LocalContext.current)
+        dynamicColor && !darkTheme -> dynamicLightColorScheme(LocalContext.current)
+        darkTheme -> darkScheme//DarkColorScheme
+        else -> lightScheme//LightColorScheme
+    }
+    val view = LocalView.current
+    if (!view.isInEditMode) {
+        SideEffect {
+            val window = (view.context as Activity).window
+            window.statusBarColor = colorApp.primary.toArgb()
+            WindowCompat.getInsetsController(window, view).isAppearanceLightStatusBars = darkTheme
+        }
+    }
+    MaterialTheme(colorScheme = colorApp, content = content, shapes = shapesApp)
+}
+
+@Composable fun styleApp(nameStyle: TypeText): TextStyle {
+
+    return when( nameStyle ){
+        TypeText.NAME_SCREEN -> when (AppBase.scale){
+            1-> MaterialTheme.typography.headlineSmall
+            2 -> MaterialTheme.typography.titleMedium
+            else -> MaterialTheme.typography.headlineMedium //0
+        }
+        TypeText.NAME_SECTION -> when (AppBase.scale){
+            1-> MaterialTheme.typography.titleLarge
+            2 -> MaterialTheme.typography.titleSmall
+            else -> MaterialTheme.typography.headlineSmall //0
+        }
+        TypeText.TEXT_IN_LIST -> when (AppBase.scale){
+            1-> MaterialTheme.typography.titleLarge
+            2 -> MaterialTheme.typography.titleSmall
+            else -> MaterialTheme.typography.headlineSmall //0
+        }
+        TypeText.TEXT_IN_LIST_SMALL -> when (AppBase.scale){
+            1-> MaterialTheme.typography.labelLarge
+            2 -> MaterialTheme.typography.labelMedium
+            else -> MaterialTheme.typography.bodyMedium //0
+        }
+        TypeText.EDIT_TEXT -> when (AppBase.scale){
+            1-> MaterialTheme.typography.titleLarge
+            2 -> MaterialTheme.typography.titleSmall
+            else -> MaterialTheme.typography.headlineSmall //0
+        }
+        TypeText.EDIT_TEXT_TITLE -> when (AppBase.scale){
+            1-> MaterialTheme.typography.labelLarge
+            2 -> MaterialTheme.typography.labelMedium
+            else -> MaterialTheme.typography.bodyMedium //0
+        }
+        TypeText.TEXT_IN_LIST_SETTING -> when (AppBase.scale){
+            1-> MaterialTheme.typography.titleLarge
+            2 -> MaterialTheme.typography.titleSmall
+            else -> MaterialTheme.typography.headlineSmall //0
+        }
+        TypeText.NAME_SLIDER -> when (AppBase.scale){
+            1-> MaterialTheme.typography.labelLarge
+            2 -> MaterialTheme.typography.labelMedium
+            else -> MaterialTheme.typography.bodyMedium //0
+        }
+    }
+}
+
+@Composable fun sizeApp(sizeElement: SizeElement): Dp {
+
+    return when( sizeElement ){
+        SizeElement.SIZE_FAB -> when (AppBase.scale){
+            1-> dimensionResource(R.dimen.size_fab_medium)
+            2 -> dimensionResource(R.dimen.size_fab_small)
+            else -> dimensionResource(R.dimen.size_fab_large)
+        }
+        SizeElement.HEIGHT_BOTTOM_BAR -> when (AppBase.scale){
+            1-> dimensionResource(R.dimen.height_bottom_bar_medium)
+            2 -> dimensionResource(R.dimen.height_bottom_bar_small)
+            else -> dimensionResource(R.dimen.height_bottom_bar_large)
+        }
+        SizeElement.PADDING_FAB -> when (AppBase.scale){
+            1-> dimensionResource(R.dimen.padding_fab_medium)
+            2 -> dimensionResource(R.dimen.padding_fab_small)
+            else -> dimensionResource(R.dimen.padding_fab_large)
+        }
+        SizeElement.OFFSET_FAB -> when (AppBase.scale){
+            1-> dimensionResource(R.dimen.offset_fab_medium)
+            2 -> dimensionResource(R.dimen.offset_fab_small)
+            else -> dimensionResource(R.dimen.offset_fab_large)
+        }
+        SizeElement.HEIGHT_FAB_BOX -> when (AppBase.scale){
+            1-> dimensionResource(R.dimen.height_fab_box_medium)
+            2 -> dimensionResource(R.dimen.height_fab_box_small)
+            else -> dimensionResource(R.dimen.height_fab_box_large)
+        }
+    }
+}
+@Composable fun getIdImage(screen: ScreenDestination):Int{
+    val dayNight = isSystemInDarkTheme()
+    return if (dayNight) screen.pictureDay else screen.pictureNight
+}
 val LightColorScheme = lightColorScheme(
     primary = md_theme_light_primary,
     onPrimary = md_theme_light_onPrimary,
@@ -326,120 +442,3 @@ private val highContrastDarkColorScheme = darkColorScheme(
 //val extendedLightHighContrast = ExtendedColorScheme()
 //val extendedDarkMediumContrast = ExtendedColorScheme()
 //val extendedDarkHighContrast = ExtendedColorScheme()
-
-@Immutable
-data class ColorFamily(
-    val color: Color,
-    val onColor: Color,
-    val colorContainer: Color,
-    val onColorContainer: Color
-)
-
-val unspecified_scheme = ColorFamily(
-    Color.Unspecified, Color.Unspecified, Color.Unspecified, Color.Unspecified
-)
-
-
-lateinit var colorApp: ColorScheme
-@RequiresApi(Build.VERSION_CODES.S)
-@Composable fun AppTheme(content: @Composable () -> Unit) {
-
-    val darkTheme: Boolean = isSystemInDarkTheme()
-    val dynamicColor = false //&& Build.VERSION.SDK_INT >= Build.VERSION_CODES.S
-    colorApp = when {
-        dynamicColor && darkTheme -> dynamicDarkColorScheme(LocalContext.current)
-        dynamicColor && !darkTheme -> dynamicLightColorScheme(LocalContext.current)
-        darkTheme -> darkScheme//DarkColorScheme
-        else -> lightScheme//LightColorScheme
-    }
-    val view = LocalView.current
-    if (!view.isInEditMode) {
-        SideEffect {
-            val window = (view.context as Activity).window
-            window.statusBarColor = colorApp.primary.toArgb()
-            WindowCompat.getInsetsController(window, view).isAppearanceLightStatusBars = darkTheme
-        }
-    }
-    MaterialTheme(colorScheme = colorApp, content = content, shapes = shapesApp)
-}
-
-@Composable fun styleApp(nameStyle: TypeText): TextStyle {
-
-    return when( nameStyle ){
-        TypeText.NAME_SCREEN -> when (AppBase.scale){
-            1-> MaterialTheme.typography.headlineSmall
-            2 -> MaterialTheme.typography.titleMedium
-            else -> MaterialTheme.typography.headlineMedium //0
-        }
-        TypeText.NAME_SECTION -> when (AppBase.scale){
-            1-> MaterialTheme.typography.titleLarge
-            2 -> MaterialTheme.typography.titleSmall
-            else -> MaterialTheme.typography.headlineSmall //0
-        }
-        TypeText.TEXT_IN_LIST -> when (AppBase.scale){
-            1-> MaterialTheme.typography.titleLarge
-            2 -> MaterialTheme.typography.titleSmall
-            else -> MaterialTheme.typography.headlineSmall //0
-        }
-        TypeText.TEXT_IN_LIST_SMALL -> when (AppBase.scale){
-            1-> MaterialTheme.typography.labelLarge
-            2 -> MaterialTheme.typography.labelMedium
-            else -> MaterialTheme.typography.bodyMedium //0
-        }
-        TypeText.EDIT_TEXT -> when (AppBase.scale){
-            1-> MaterialTheme.typography.titleLarge
-            2 -> MaterialTheme.typography.titleSmall
-            else -> MaterialTheme.typography.headlineSmall //0
-        }
-        TypeText.EDIT_TEXT_TITLE -> when (AppBase.scale){
-            1-> MaterialTheme.typography.labelLarge
-            2 -> MaterialTheme.typography.labelMedium
-            else -> MaterialTheme.typography.bodyMedium //0
-        }
-        TypeText.TEXT_IN_LIST_SETTING -> when (AppBase.scale){
-            1-> MaterialTheme.typography.titleLarge
-            2 -> MaterialTheme.typography.titleSmall
-            else -> MaterialTheme.typography.headlineSmall //0
-        }
-        TypeText.NAME_SLIDER -> when (AppBase.scale){
-            1-> MaterialTheme.typography.labelLarge
-            2 -> MaterialTheme.typography.labelMedium
-            else -> MaterialTheme.typography.bodyMedium //0
-        }
-    }
-}
-
-@Composable fun sizeApp(sizeElement: SizeElement): Dp {
-
-    return when( sizeElement ){
-        SizeElement.SIZE_FAB -> when (AppBase.scale){
-            1-> dimensionResource(R.dimen.size_fab_medium)
-            2 -> dimensionResource(R.dimen.size_fab_small)
-            else -> dimensionResource(R.dimen.size_fab_large)
-        }
-        SizeElement.HEIGHT_BOTTOM_BAR -> when (AppBase.scale){
-            1-> dimensionResource(R.dimen.height_bottom_bar_medium)
-            2 -> dimensionResource(R.dimen.height_bottom_bar_small)
-            else -> dimensionResource(R.dimen.height_bottom_bar_large)
-        }
-        SizeElement.PADDING_FAB -> when (AppBase.scale){
-            1-> dimensionResource(R.dimen.padding_fab_medium)
-            2 -> dimensionResource(R.dimen.padding_fab_small)
-            else -> dimensionResource(R.dimen.padding_fab_large)
-        }
-        SizeElement.OFFSET_FAB -> when (AppBase.scale){
-            1-> dimensionResource(R.dimen.offset_fab_medium)
-            2 -> dimensionResource(R.dimen.offset_fab_small)
-            else -> dimensionResource(R.dimen.offset_fab_large)
-        }
-        SizeElement.HEIGHT_FAB_BOX -> when (AppBase.scale){
-            1-> dimensionResource(R.dimen.height_fab_box_medium)
-            2 -> dimensionResource(R.dimen.height_fab_box_small)
-            else -> dimensionResource(R.dimen.height_fab_box_large)
-        }
-    }
-}
-@Composable fun getIdImage(screen: ScreenDestination):Int{
-    val dayNight = isSystemInDarkTheme()
-    return if (dayNight) screen.pictureDay else screen.pictureNight
-}

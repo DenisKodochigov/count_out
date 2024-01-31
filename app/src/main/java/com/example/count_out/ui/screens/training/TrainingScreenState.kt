@@ -37,7 +37,7 @@ data class TrainingScreenState(
 
     @Stable var changeNameTraining: (Training, String) -> Unit = {_,_ ->},
     @Stable var onDeleteTraining: (Long) -> Unit = {},
-    @Stable var onAddExercise: (Long) -> Unit = {},
+    @Stable var onAddExercise: (Long, SetDB) -> Unit = {_,_ ->},
     @Stable var onCopyExercise: (Long, Long) -> Unit = {_,_ ->},
     @Stable var onDeleteExercise: (Long, Long) -> Unit = {_,_ ->},
     @Stable var onSelectActivity: (Long, Long) -> Unit = {_,_ ->},

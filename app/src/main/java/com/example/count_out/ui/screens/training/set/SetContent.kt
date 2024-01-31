@@ -36,10 +36,12 @@ import com.example.count_out.ui.view_components.TextStringAndField
 @Composable
 fun SetContent(uiState: TrainingScreenState, set: Set)
 {
-    Spacer(modifier = Modifier.height(Dimen.width4))
-    NameSet(uiState,set)
-    AdditionalInformation(uiState,set)
-    Spacer(modifier = Modifier.height(Dimen.width4))
+    Column{
+        Spacer(modifier = Modifier.height(Dimen.width4))
+        NameSet(uiState,set)
+        AdditionalInformation(uiState,set)
+        Spacer(modifier = Modifier.height(Dimen.width4))
+    }
 }
 @Composable
 fun NameSet(uiState: TrainingScreenState, set: Set)
@@ -49,17 +51,10 @@ fun NameSet(uiState: TrainingScreenState, set: Set)
 
     Row (verticalAlignment = Alignment.CenterVertically){
         TextApp(
-            text = "${set.idSet}: ",
+            text = set.name,
             style = interReg14,
             textAlign = TextAlign.Start,
             modifier = Modifier.padding(start = 8.dp))
-        TextFieldApp(
-            modifier = Modifier,
-            placeholder = set.name,
-            contentAlignment = Alignment.BottomStart,
-            typeKeyboard = TypeKeyboard.TEXT,
-            textStyle = interReg14,
-            onChangeValue = { uiState.onChangeSet ((set as SetDB).copy(name = it)) })
         TextApp(
             text = if (set.distance > 0) distance else duration,
             style = interReg14,

@@ -20,6 +20,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.example.count_out.R
+import com.example.count_out.data.room.tables.SetDB
 import com.example.count_out.entity.RoundType
 import com.example.count_out.ui.screens.training.TrainingScreenState
 import com.example.count_out.ui.screens.training.exercise.ListExercises
@@ -134,12 +135,12 @@ fun getIcon(collapsing: Boolean): Int = if (collapsing) R.drawable.ic_wrap1 else
 @Composable
 fun PoleAddExercise(uiState: TrainingScreenState, roundType: RoundType)
 {
+    val nameNewSet = stringResource(id = R.string.set)
     Row(
         horizontalArrangement = Arrangement.Center,
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier
-            .clickable { uiState.onAddExercise(getIdRound(uiState, roundType)) }
-//            .background(color = MaterialTheme.colorScheme.secondary, shape = shapeAddExercise)
+            .clickable { uiState.onAddExercise(getIdRound(uiState, roundType), SetDB(name = nameNewSet)) }
     ) {
         TextApp(
             text = stringResource(id = R.string.add_activity),

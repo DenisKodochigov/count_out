@@ -4,6 +4,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.count_out.data.DataRepository
+import com.example.count_out.data.room.tables.SetDB
 import com.example.count_out.data.room.tables.TrainingDB
 import com.example.count_out.entity.ErrorApp
 import com.example.count_out.entity.Set
@@ -31,7 +32,7 @@ class TrainingViewModel @Inject constructor(
             changeNameTraining = { training, name -> changeNameTraining(training, name) },
             onDeleteTraining = { trainingId -> deleteTraining(trainingId) },
             onConfirmationSpeech = { speech, item -> setSpeech( speech, item ) },
-            onAddExercise = { roundId -> addExercise( roundId )},
+            onAddExercise = { roundId, set -> addExercise( roundId, set )},
             onCopyExercise = { trainingId, exerciseId -> copyExercise(trainingId, exerciseId)},
             onDeleteExercise = { trainingId, exerciseId -> deleteExercise(trainingId, exerciseId)},
             onSelectActivity = {
@@ -72,8 +73,8 @@ class TrainingViewModel @Inject constructor(
         templateMy { dataRepository.changeNameTraining(training, name) } }
     private fun copyExercise(trainingId: Long, exerciseId: Long){
         templateMy { dataRepository.copyExercise(trainingId, exerciseId) } }
-    private fun addExercise(roundId: Long){
-        templateMy { dataRepository.addExercise(trainingScreenState.value.training.idTraining, roundId ) } }
+    private fun addExercise(roundId: Long, set: SetDB){
+        templateMy { dataRepository.addExercise(trainingScreenState.value.training.idTraining, roundId, set ) } }
     private fun deleteExercise(trainingId: Long, exerciseId: Long){
         templateMy { dataRepository.deleteExercise(trainingId, exerciseId) } }
     private fun setActivityToExercise(exerciseId: Long, activityId: Long) {

@@ -70,8 +70,8 @@ class DataRepository  @Inject constructor(private val dataSource: DataSource){
         if ( exerciseId > 0) dataSource.getExercise( exerciseId )
         return dataSource.getTraining( dataSource.getRound(roundId = roundId).trainingId )
     }
-    fun addExercise(trainingId: Long, roundId: Long): Training {
-        if ( roundId > 0) dataSource.addExercise( roundId )
+    fun addExercise(trainingId: Long, roundId: Long, set: SetDB): Training {
+        if ( roundId > 0) dataSource.addExercise( roundId, set )
         return dataSource.getTraining( trainingId )
     }
     fun copyExercise (trainingId: Long, exerciseId: Long): Training {

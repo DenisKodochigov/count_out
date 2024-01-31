@@ -1,8 +1,10 @@
 package com.example.count_out.ui.screens.training.exercise
 
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -79,7 +81,9 @@ fun SelectActivity(uiState: TrainingScreenState, exercise: Exercise)
 @Composable
 fun IconSelectActivity(uiState: TrainingScreenState, exercise: Exercise)
 {
-    IconButton(modifier = Modifier.width(24.dp).height(24.dp),
+    IconButton(modifier = Modifier
+        .width(24.dp)
+        .height(24.dp),
         onClick = {
             uiState.exercise = exercise
             uiState.showBottomSheetSelectActivity.value = true })
@@ -93,43 +97,45 @@ fun IconSelectActivity(uiState: TrainingScreenState, exercise: Exercise)
         AnimatedVisibility(modifier = Modifier.padding(0.dp),
             visible = uiState.listCollapsingExercise.value.find { it == exercise.idExercise } != null
         ){
-            Column (modifier = Modifier.fillMaxWidth().padding(6.dp), content = {
+            Column (modifier = Modifier
+                .fillMaxWidth()
+                .padding(6.dp), content = {
                 uiState.exercise = exercise
                 ListSets(uiState)})
         }
-        RowAddSet(uiState)
+        RowAddSet(uiState, exercise)
     }
 }
 @Composable
 fun ListSets(uiState: TrainingScreenState)
 {
     uiState.exercise.sets.forEach { set ->
-        Card (
-            elevation = elevationTraining(),
-            shape = MaterialTheme.shapes.extraSmall,
-            modifier = Modifier.padding(vertical = 8.dp).fillMaxWidth(),
-//                colors = CardDefaults.cardColors(
-//                    containerColor = MaterialTheme.colorScheme.tertiary,
-//                    contentColor = MaterialTheme.colorScheme.onTertiary,
-//                    disabledContainerColor = MaterialTheme.colorScheme.secondary,
-//                    disabledContentColor = MaterialTheme.colorScheme.onSecondary,
-//                ),
+        Box (
+            modifier = Modifier
+                .border(
+                    width = 1.dp,
+                    color = MaterialTheme.colorScheme.surface,
+                    shape = MaterialTheme.shapes.extraSmall
+                )
+                .padding(vertical = 8.dp)
+                .fillMaxWidth(),
             content = { SetContent(uiState,set) }
         )
+        Spacer(modifier = Modifier.height(1.dp))
     }
 }
-@Composable fun RowAddSet(uiState: TrainingScreenState)
+@Composable fun RowAddSet(uiState: TrainingScreenState, exercise: Exercise)
 {
     Row (horizontalArrangement = Arrangement.End, modifier = Modifier.fillMaxWidth()){
+        val nameNewSet = stringResource(id = R.string.set) + " ${exercise.sets.size + 1}"
         Row(
             horizontalArrangement = Arrangement.Center,
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier
 //                .background(color = Color.Green, shape = shapeAddExercise)
                 .clickable {
-                    uiState.onAddUpdateSet(
-                        uiState.exercise.idExercise,
-                        SetDB(exerciseId = uiState.exercise.idExercise)
+                    uiState.onAddUpdateSet( exercise.idExercise,
+                        SetDB(name = nameNewSet, exerciseId = exercise.idExercise)
                     )
                 }
         ) {

@@ -57,8 +57,8 @@ class DataSource @Inject constructor(private val dataDao: DataDao) {
         return if (exerciseId > 1) { dataDao.getExerciseRel(exerciseId).toExercise() }
                 else { ExerciseDB() }
     }
-    fun addExercise( roundId:Long): Exercise {
-        return createExercise( roundId )
+    fun addExercise( roundId:Long, set: SetDB): Exercise {
+        return createExercise( roundId , set)
     }
     fun copyExercise ( exerciseId: Long) {
         val source = dataDao.getExerciseRel(exerciseId).toExercise()
@@ -119,11 +119,15 @@ class DataSource @Inject constructor(private val dataDao: DataDao) {
             )
         )
     }
-    private fun createExercise( roundId: Long): ExerciseDB {
-        return dataDao.getExercise(
-            dataDao.addExercise(
-                ExerciseDB(roundId = roundId, activityId = 1L, speechId = dataDao.addSpeech(SpeechDB())))
-        )
+    private fun createExercise( roundId: Long, set: SetDB): ExerciseDB {
+        val exerciseId = dataDao.addExercise(
+            ExerciseDB(
+                roundId = roundId,
+                activityId = 1L,
+                speechId = dataDao.addSpeech(SpeechDB())))
+        val nameSet = set.name + "${dataDao.getSets(exerciseId).size + 1}"
+        dataDao.addSet(set.copy(name = nameSet, exerciseId = exerciseId))
+        return dataDao.getExercise(exerciseId)
     }
     fun copyTraining(id: Long): List<Training>{
         val training = dataDao.getTrainingRel(id).toTraining()
