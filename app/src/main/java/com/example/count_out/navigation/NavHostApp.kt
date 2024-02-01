@@ -15,8 +15,10 @@ fun NavHostApp(
         startDestination = TrainingsDestination.route,
         modifier = modifier
     ){
-        trainings { navController.navigateToTraining(it) } //navController.navigateToWorkout(it)
+        trainings( goToScreenTraining = { navController.navigateToTraining(it) },
+            goToScreenPlayWorkOut = { navController.navigateToPlayWorkout(it) } ) //navController.navigateToWorkout(it)
         training ( onBaskScreen = { navController.popBackStack() })
+        playWorkout ( onBaskScreen = { navController.popBackStack() })
         settings( onBaskScreen = { navController.popBackStack() })
     }
 }

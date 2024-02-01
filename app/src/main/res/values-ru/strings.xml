@@ -65,4 +65,5 @@
     <string name="slowing_down_counts">Замедление отсчетов</string>
     <string name="counting_in_order">Отстчет по порядку.</string>
     <string name="counts_by_group">Отсчеты группой. Введите группу отсчетов (каждое слово соответствует одному отсчету)</string>
+    <string name="screen_play_workou">Play work out</string>
 </resources>

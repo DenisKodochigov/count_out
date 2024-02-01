@@ -109,7 +109,6 @@ class DataSource @Inject constructor(private val dataDao: DataDao) {
     }
 
     //######################################################################################
-
     private fun createRound( trainingId: Long, typeRound: RoundType){
         dataDao.addRound(
             RoundDB(

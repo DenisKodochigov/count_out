@@ -16,6 +16,7 @@ data class TrainingsScreenState(
     @Stable var onCopyTraining: (Long) -> Unit = {},
     @Stable var onDismiss: () -> Unit = {},
     @Stable var onSelectItem: (Long) -> Unit = {},
+    @Stable var onStartWorkout: (Long) -> Unit = {},
     @Stable var onOtherAction: (Training) -> Unit = {},
     @Stable var onSelect: (Training) -> Unit = {},
     @Stable var onClickTraining: (Long) ->Unit = {},

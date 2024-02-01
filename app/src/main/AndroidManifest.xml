@@ -18,6 +18,10 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Reader"
         tools:targetApi="34">
+        <service
+            android:name=".service.WorkoutService"
+            android:exported="false"
+        />
         <activity
             android:name=".MainActivity"
             android:exported="true"

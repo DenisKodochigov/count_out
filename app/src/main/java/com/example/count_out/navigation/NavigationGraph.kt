@@ -13,16 +13,20 @@ import androidx.navigation.NamedNavArgument
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
+import com.example.count_out.ui.screens.play_workout.PlayWorkoutScreen
 import com.example.count_out.ui.screens.settings.SettingScreen
 import com.example.count_out.ui.screens.training.TrainingScreen
 import com.example.count_out.ui.screens.trainings.TrainingsScreen
-fun NavGraphBuilder.trainings( goToScreen: (Long)->Unit ){
+fun NavGraphBuilder.trainings( goToScreenTraining: (Long)->Unit, goToScreenPlayWorkOut: (Long)->Unit ){
     template(
         routeTo = TrainingsDestination.route,
         content = {
             TrainingsScreen(
                 screen = TrainingsDestination,
-                onClickTraining = { goToScreen( it )},) }
+                onClickTraining = { goToScreenTraining( it )},
+                onStartWorkout = { goToScreenPlayWorkOut( it )},
+            )
+        }
     )
 }
 fun NavGraphBuilder.training( onBaskScreen: ()->Unit ){
@@ -32,6 +36,18 @@ fun NavGraphBuilder.training( onBaskScreen: ()->Unit ){
         argument = TrainingDestination.arguments,
         content = {navBackStackEntry ->
             TrainingScreen(
+                trainingId = navBackStackEntry.arguments?.getLong(TrainingDestination.ARG) ?: 0,
+                onBaskScreen = onBaskScreen )
+        }
+    )
+}
+fun NavGraphBuilder.playWorkout( onBaskScreen: ()->Unit ){
+    template(
+        routeFrom = TrainingsDestination.route,
+        routeTo = PlayWorkoutDestination.routeWithArgs,
+        argument = TrainingDestination.arguments,
+        content = {navBackStackEntry ->
+            PlayWorkoutScreen(
                 trainingId = navBackStackEntry.arguments?.getLong(TrainingDestination.ARG) ?: 0,
                 onBaskScreen = onBaskScreen )
         }

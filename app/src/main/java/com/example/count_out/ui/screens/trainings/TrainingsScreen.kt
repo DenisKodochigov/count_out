@@ -17,7 +17,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.CheckCircleOutline
+import androidx.compose.material.icons.filled.PlayCircleOutline
 import androidx.compose.material3.Card
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -31,13 +31,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.count_out.R
 import com.example.count_out.entity.Training
 import com.example.count_out.navigation.ScreenDestination
-import com.example.count_out.navigation.TrainingsDestination
 import com.example.count_out.ui.theme.Dimen
 import com.example.count_out.ui.theme.elevationTraining
 import com.example.count_out.ui.theme.getIdImage
@@ -49,18 +47,21 @@ import com.example.count_out.ui.view_components.TextApp
 @SuppressLint("UnrememberedMutableState")
 @Composable fun TrainingsScreen(
     onClickTraining: (Long) -> Unit,
+    onStartWorkout: (Long) -> Unit,
     screen: ScreenDestination,
 ){
     val viewModel: TrainingsViewModel = hiltViewModel()
     viewModel.getTrainings()
     TrainingsScreenCreateView(
         onClickTraining = onClickTraining,
+        onStartWorkout = onStartWorkout,
         screen = screen,
         viewModel = viewModel,
     )
 }
 @Composable fun TrainingsScreenCreateView(
     onClickTraining: (Long) -> Unit,
+    onStartWorkout: (Long) -> Unit,
     screen: ScreenDestination,
     viewModel: TrainingsViewModel,
 ){
@@ -68,6 +69,7 @@ import com.example.count_out.ui.view_components.TextApp
     uiState.onDismiss = remember {{ uiState.triggerRunOnClickFAB.value = false }}
     uiState.onClickTraining = remember {{id -> onClickTraining(id)}}
     uiState.onSelectItem = { onClickTraining(it) }
+    uiState.onStartWorkout = { onStartWorkout(it) }
     uiState.idImage = getIdImage(screen)
     screen.onClickFAB = { uiState.triggerRunOnClickFAB.value = true }
 
@@ -128,8 +130,8 @@ fun TrainingsLazyColumn(uiState: TrainingsScreenState,
     }
 }
 @Composable fun IconStart(item: Training, uiState: TrainingsScreenState){
-    IconButton(onClick = { uiState.onSelect(item)}) {
-        Icon(imageVector = Icons.Default.CheckCircleOutline, contentDescription = "")}
+    IconButton(onClick = { uiState.onStartWorkout(item.idTraining)}) {
+        Icon(imageVector = Icons.Default.PlayCircleOutline, contentDescription = "")}
 }
 @Composable fun IconEnd(item: Training, uiState: TrainingsScreenState){
     IconButton(onClick = { uiState.onCopyTraining(item.idTraining)}) {
@@ -148,7 +150,3 @@ fun TrainingsLazyColumn(uiState: TrainingsScreenState,
     }
 }
 
-@Preview(showBackground = true)
-@Composable fun TemplatesScreenPreview(){
-    TrainingsScreen({}, screen = TrainingsDestination)
-}

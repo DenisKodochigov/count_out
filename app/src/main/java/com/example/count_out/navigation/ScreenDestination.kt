@@ -51,24 +51,21 @@ object TrainingDestination : ScreenDestination {
     override val routeWithArgs = "${route}/{$ARG}"
     val arguments = listOf(navArgument(ARG) { type = NavType.LongType })
 }
-//object ExerciseDestination : ScreenDestination {
-//    override val route = "exercise"
-//    override val nameScreen = R.string.exercises
-//    override val icon = Icons.Filled.Brightness5
-//    override val iconText = R.string.part_work
-//    override val pictureDay = R.drawable.ic_launcher_background
-//    override val pictureNight = R.drawable.ic_launcher_background
-//    override val showFab: Boolean = false
-//    override var textFABId = 0
-//    override var onClickFAB: () -> Unit = {}
-//
-//    const val ARG1 = "arg_training1"
-//    const val ARG2 = "arg_training2"
-//    override val routeWithArgs = "${route}/{$ARG1}/{$ARG2}"
-//    val arguments = listOf(
-//        navArgument(ARG1) { type = NavType.LongType },
-//        navArgument(ARG2) { type = NavType.LongType })
-//}
+object PlayWorkoutDestination : ScreenDestination {
+    override val route = "playWorkout"
+    override val nameScreen = R.string.screen_play_workou
+    override val icon = Icons.Filled.Brightness5
+    override val iconText = R.string.trainings_
+    override val pictureDay = R.drawable.ic_launcher_background
+    override val pictureNight = R.drawable.ic_launcher_background
+    override val showFab: Boolean = false
+    override var textFABId = R.string.trainings
+    override var onClickFAB: () -> Unit = {}
+
+    const val ARG = "arg_training"
+    override val routeWithArgs = "${route}/{$ARG}"
+    val arguments = listOf(navArgument(ARG) { type = NavType.LongType })
+}
 object SettingDestination : ScreenDestination {
     override val route = "settings"
     override val routeWithArgs = route
@@ -82,7 +79,7 @@ object SettingDestination : ScreenDestination {
     override var onClickFAB: () -> Unit = {}
 }
 val navBottomScreens = listOf(TrainingsDestination, SettingDestination)
-val listScreens = listOf(TrainingsDestination, TrainingDestination, SettingDestination)
+val listScreens = listOf(TrainingsDestination, TrainingDestination, PlayWorkoutDestination, SettingDestination)
 
 //object ExerciseDestination: ScreenDestination {
 //    override val route = "training"
