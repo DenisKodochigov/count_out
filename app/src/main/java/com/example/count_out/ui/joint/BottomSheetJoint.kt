@@ -9,6 +9,13 @@ import com.example.count_out.R
 import com.example.count_out.ui.theme.Dimen
 import com.example.count_out.ui.view_components.ButtonApp
 
+@Composable
+fun ButtonConfirm(onConfirm: ()->Unit)
+{
+    Spacer(modifier = Modifier.height(Dimen.bsItemPaddingVer))
+    ButtonApp(text = stringResource(id = R.string.ok), onClick = onConfirm )
+}
+
 //@Composable fun FieldName(enterValue: MutableState<String>)
 //{
 //    Row(modifier = Modifier.fillMaxWidth()){
@@ -126,9 +133,3 @@ import com.example.count_out.ui.view_components.ButtonApp
 //        typeKeyboard = TypeKeyboard.DIGIT)
 //}
 
-@Composable
-fun ButtonConfirm(onConfirm: ()->Unit)
-{
-    Spacer(modifier = Modifier.height(Dimen.bsItemPaddingVer))
-    ButtonApp(text = stringResource(id = R.string.ok), onClick = onConfirm )
-}

@@ -79,8 +79,6 @@ import com.example.count_out.ui.theme.styleApp
         color = color
     )
 }
-
-@OptIn(ExperimentalComposeUiApi::class)
 @Composable fun MyOutlinedTextFieldWithoutIcon(
     modifier: Modifier,
     enterValue: MutableState<String>,

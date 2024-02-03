@@ -1,5 +1,6 @@
 package com.example.count_out.ui
 
+import android.Manifest
 import android.annotation.SuppressLint
 import android.os.Build
 import androidx.annotation.RequiresApi
@@ -20,13 +21,15 @@ import com.example.count_out.navigation.NavHostApp
 import com.example.count_out.navigation.TrainingsDestination
 import com.example.count_out.navigation.listScreens
 import com.example.count_out.navigation.navigateToScreen
+import com.example.count_out.permission.RequestPermission
 import com.example.count_out.ui.theme.AppTheme
 import com.example.count_out.ui.view_components.BottomBarApp
 import com.example.count_out.ui.view_components.CollapsingToolbar
 import com.example.count_out.ui.view_components.ExtendedFAB
+import com.google.accompanist.permissions.ExperimentalPermissionsApi
 
 @RequiresApi(Build.VERSION_CODES.S)
-@OptIn(ExperimentalComposeUiApi::class)
+@OptIn(ExperimentalComposeUiApi::class, ExperimentalPermissionsApi::class)
 @SuppressLint("RememberReturnType", "UnrememberedMutableState", "SuspiciousIndentation",
     "RestrictedApi"
 )
@@ -59,7 +62,9 @@ fun StartApp() {
             },
             floatingActionButtonPosition = FabPosition.End,
             content = { innerPadding ->
-                NavHostApp(navController = navController, modifier = Modifier.padding(innerPadding)) }
+                NavHostApp(navController = navController, modifier = Modifier.padding(innerPadding))
+                RequestPermission(Manifest.permission.POST_NOTIFICATIONS)
+            }
         )
     }
 }

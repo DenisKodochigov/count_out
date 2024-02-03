@@ -42,7 +42,7 @@ android {
         compose = true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion = rootProject.extra["composeVersion"] as String
+        kotlinCompilerExtensionVersion = "1.5.8"
     }
     packaging {
         resources {
@@ -55,7 +55,7 @@ dependencies {
     val composeVersion = rootProject.extra["composeVersion"] as String
     val daggerVersion = rootProject.extra["daggerVersion"] as String
     val roomVersion = "2.6.1"
-    val lifecycleVersion = "2.6.2"
+    val lifecycleVersion = "2.7.0"
 
     implementation("androidx.core:core-ktx:1.12.0")
     implementation("androidx.activity:activity-compose:1.8.2")
@@ -66,25 +66,25 @@ dependencies {
     ksp ("com.google.dagger:dagger-compiler:$daggerVersion")
     ksp ("com.google.dagger:hilt-compiler:$daggerVersion")
     testImplementation ("com.google.dagger:hilt-android-testing:$daggerVersion")
-//    kaptTest ("com.google.dagger:hilt-android-compiler:$daggerVersion")
     //Jetpack  Compose
     implementation ("androidx.compose.ui:ui:$composeVersion")
+    implementation("com.google.accompanist:accompanist-permissions:0.34.0")
     debugImplementation("androidx.compose.ui:ui-tooling")
-    debugImplementation("androidx.compose.ui:ui-test-manifest:1.5.4")
+    debugImplementation("androidx.compose.ui:ui-test-manifest:$composeVersion")
     //Tooling support (Previews, etc.)
     implementation ("androidx.compose.ui:ui-graphics:$composeVersion")
     implementation ("androidx.compose.ui:ui-tooling-preview:$composeVersion")
     debugImplementation ("androidx.compose.ui:ui-tooling:$composeVersion")
     //Integration with observables
     implementation ("androidx.compose.runtime:runtime:$composeVersion")
+    //noinspection GradleDependency
     implementation ("androidx.compose.runtime:runtime-rxjava2:$composeVersion")
     //Foundation (Border, Background, Box, Image, Scroll, shapes, animations, etc.)
     implementation ("androidx.compose.foundation:foundation:$composeVersion")
     implementation ("androidx.compose.foundation:foundation-layout:$composeVersion")
     // Material Design
     implementation("androidx.compose.material3:material3:1.1.2")
-    implementation ("androidx.compose.ui:ui-text-google-fonts:1.5.4")
-    //Implementation ("androidx.compose.material3:material3:1.1.2")
+    implementation ("androidx.compose.ui:ui-text-google-fonts:1.6.0")
     implementation ("androidx.compose.material:material-icons-core:$composeVersion")
     implementation ("androidx.compose.material:material-icons-extended:$composeVersion")
     //Adaptive

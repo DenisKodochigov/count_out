@@ -27,19 +27,6 @@ import com.example.count_out.entity.SizeElement
 import com.example.count_out.entity.TypeText
 import com.example.count_out.navigation.ScreenDestination
 
-@Immutable
-data class ColorFamily(
-    val color: Color,
-    val onColor: Color,
-    val colorContainer: Color,
-    val onColorContainer: Color
-)
-
-val unspecified_scheme = ColorFamily(
-    Color.Unspecified, Color.Unspecified, Color.Unspecified, Color.Unspecified
-)
-
-
 lateinit var colorApp: ColorScheme
 @RequiresApi(Build.VERSION_CODES.S)
 @Composable fun AppTheme(content: @Composable () -> Unit) {

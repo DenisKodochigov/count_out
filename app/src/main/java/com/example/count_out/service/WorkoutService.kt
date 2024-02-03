@@ -1,66 +1,70 @@
 package com.example.count_out.service
 
 import android.app.Service
+import android.content.ComponentName
+import android.content.Context
 import android.content.Intent
-import android.os.Handler
-import android.os.HandlerThread
+import android.content.ServiceConnection
+import android.icu.text.SimpleDateFormat
+import android.os.Binder
 import android.os.IBinder
-import android.os.Looper
-import android.os.Message
 import android.widget.Toast
+import com.example.count_out.ui.view_components.log
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.runBlocking
+import java.util.Date
+import java.util.Locale
 
-class WorkoutService(): Service() {
+class WorkoutService: Service() {
 
-    private var serviceLooper: Looper? = null
-    private var serviceHandler: ServiceHandler? = null
+    private var pauseService: Boolean = false
+    private val serviceBinder = LocalBinder()
 
-    // Handler that receives messages from the thread
-    private inner class ServiceHandler(looper: Looper) : Handler(looper) {
-        override fun handleMessage(msg: Message) {
-            // Normally we would do some work here, like download a file.
-            // For our sample, we just sleep for 5 seconds.
-            try {
-                Thread.sleep(5000)
-            } catch (e: InterruptedException) {
-                Thread.currentThread().interrupt()
-            }
-
-            // Stop the service using the startId, so that we don't stop
-            // the service in the middle of handling another job
-            stopSelf(msg.arg1)
-        }
+    inner class LocalBinder : Binder() {
+        fun getService(): WorkoutService = this@WorkoutService
     }
-
-    override fun onCreate() {
-        // Start up the thread running the service.  Note that we create a
-        // separate thread because the service normally runs in the process's
-        // main thread, which we don't want to block.  We also make it
-        // background priority so CPU-intensive work will not disrupt our UI. Process.THREAD_PRIORITY_BACKGROUND
-        HandlerThread("ServiceStartArguments", ).apply {
-            start()
-            // Get the HandlerThread's Looper and use it for our Handler
-            serviceLooper = looper
-            serviceHandler = ServiceHandler(looper)
-        }
-    }
-
-    override fun onStartCommand(intent: Intent, flags: Int, startId: Int): Int {
-        Toast.makeText(this, "service starting", Toast.LENGTH_SHORT).show()
-
-        // For each start request, send a message to start a job and deliver the
-        // start ID so we know which request we're stopping when we finish the job
-        serviceHandler?.obtainMessage()?.also { msg ->
-            msg.arg1 = startId
-            serviceHandler?.sendMessage(msg)
-        }
-
-        // If we get killed, after returning from here, restart
-        return START_STICKY
-    }
-    override fun onBind(p0: Intent?): IBinder? {
-        TODO("Not yet implemented")
+    override fun onBind(p0: Intent?): IBinder {
+        return serviceBinder
     }
     override fun onDestroy() {
         Toast.makeText(this, "service done", Toast.LENGTH_SHORT).show()
+    }
+    fun startService(context: Context){
+        Intent( context, WorkoutService::class.java).also { intent ->
+            bindService(intent, serviceConnection, Context.BIND_AUTO_CREATE)
+        }
+    }
+    fun stopService(){
+        unbindService(serviceConnection)
+        mBound = false
+    }
+
+    fun startWorkout(){
+        while(!pauseService){
+            runBlocking { delay(2000) }
+            log(true, "${getCurrentTime()} Text function into service")
+        }
+    }
+    fun pauseWorkout(){
+        pauseService = !pauseService
+    }
+    fun stopWorkout(){
+        mBound = false
+    }
+    private fun getCurrentTime(): String {
+        return SimpleDateFormat("HH:mm:ss MM/dd/yyyy", Locale.US).format(Date())
+    }
+    private val serviceConnection = object : ServiceConnection {
+        override fun onServiceConnected(className: ComponentName, binder: IBinder) {
+            val binderWorkoutService = binder as WorkoutService.LocalBinder
+            mService = binderWorkoutService.getService()
+            mBound = true
+        }
+        override fun onServiceDisconnected(arg0: ComponentName) { mBound = false }
+    }
+
+    companion object {
+        lateinit var mService: WorkoutService
+        var mBound: Boolean = false
     }
 }

@@ -66,4 +66,5 @@
     <string name="counting_in_order">Counting down in order</string>
     <string name="counts_by_group">Counts by the group. Enter a group of counts (each word corresponds to one count)</string>
     <string name="screen_play_workou">Play work out</string>
+    <string name="channel_name">count_out_nitification</string>
 </resources>
