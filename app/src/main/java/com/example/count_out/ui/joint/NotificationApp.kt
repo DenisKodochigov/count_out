@@ -1,5 +1,6 @@
 package com.example.count_out.ui.joint
 
+import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
@@ -16,6 +17,7 @@ import javax.inject.Singleton
 class NotificationApp @Inject constructor(val context: Context){
     private val notificationManager =
         context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+    val notification: Notification = createNotification()
     private val channelId = "chanel_notification_count_out"
     private val channelName = "Sample Channel"
 
@@ -28,24 +30,27 @@ class NotificationApp @Inject constructor(val context: Context){
 //    }
     fun sendNotification()
     {
+        notificationManager.notify(1234, notification)
+        log(true, " send notification")
+    }
+    private fun createNotification(): Notification
+    {
         val intent = Intent(context, MainActivity::class.java).apply {
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         }
         val pendingIntent: PendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_IMMUTABLE)
-
-        val notificationBuilder = NotificationCompat.Builder(context, channelId)
+        return NotificationCompat.Builder(context, channelId)
             .setSmallIcon(R.drawable.ic_app)
             .setContentTitle("Count_out")
             .setContentText("Service run")
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
             .setContentIntent(pendingIntent)
             .setAutoCancel(true)
-        notificationManager.notify(1234, notificationBuilder.build())
-        log(true, " send notification")
+            .build()
     }
     fun createNotificationChannel() {
-        val importance = NotificationManager.IMPORTANCE_DEFAULT
-        val notificationChannel = NotificationChannel(channelId, channelName, importance).apply {
+        val notificationChannel = NotificationChannel(
+            channelId, channelName, NotificationManager.IMPORTANCE_DEFAULT).apply {
             description = "This is a sample notification channel."
         }
         notificationManager.createNotificationChannel(notificationChannel)

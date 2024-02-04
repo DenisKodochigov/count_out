@@ -1,11 +1,11 @@
 package com.example.count_out.di
 
-import android.content.Context
+import com.example.count_out.service.InitService
 import com.example.count_out.service.WorkoutService
+import com.example.count_out.ui.joint.NotificationApp
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
-import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 
@@ -14,7 +14,12 @@ import javax.inject.Singleton
 object WorkOutServiceModule {
     @Singleton
     @Provides
-    fun provideWorkOutService(@ApplicationContext appContext: Context): WorkoutService {
+    fun provideWorkOutService(): WorkoutService {
         return WorkoutService(  )
+    }
+    @Singleton
+    @Provides
+    fun provideInitService(notificationApp: NotificationApp): InitService {
+        return InitService( notificationApp )
     }
 }

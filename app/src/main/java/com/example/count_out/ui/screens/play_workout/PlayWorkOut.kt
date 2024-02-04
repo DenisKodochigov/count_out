@@ -13,11 +13,8 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.example.count_out.service.WorkoutService.Companion.mBound
-import com.example.count_out.service.WorkoutService.Companion.mService
 import com.example.count_out.ui.view_components.ButtonApp
 
 @SuppressLint("UnrememberedMutableState")
@@ -26,11 +23,9 @@ fun PlayWorkoutScreen(
     trainingId: Long,
     onBaskScreen:() -> Unit
 ){
-    val context = LocalContext.current
     val viewModel: PlayWorkoutViewModel = hiltViewModel()
 
     LaunchedEffect( key1 = true, block = {
-        viewModel.startWorkOutService(context)
         viewModel.getTraining(trainingId) })
     PlayWorkoutScreenCreateView( viewModel = viewModel, onBaskScreen = onBaskScreen)
 }
@@ -60,18 +55,11 @@ fun PlayWorkoutScreenCreateView( viewModel: PlayWorkoutViewModel, onBaskScreen:(
 }
 
 fun onButtonStart(uiState:PlayWorkoutScreenState){
-    if (mBound) {
-        uiState.notificationApp?.sendNotification()
-        mService.startWorkout()
-    }
+    uiState.training?.let { uiState.startWorkOutService(it) }
 }
 fun onButtonPause(uiState:PlayWorkoutScreenState){
-    if (mBound) {
-        mService.pauseWorkout()
-    }
+    uiState.pauseWorkOutService
 }
 fun onButtonStop(uiState:PlayWorkoutScreenState){
-    if (mBound) {
-        mService.stopWorkout()
-    }
+   uiState.stopWorkOutService
 }
