@@ -29,13 +29,15 @@ class PlayWorkoutViewModel @Inject constructor(
         ))
     val playWorkoutScreenState: StateFlow<PlayWorkoutScreenState> = _playWorkoutScreenState.asStateFlow()
 
-    fun getTraining(id: Long) { templateMy { dataRepository.getTraining(id) } }
+    fun getTraining(id: Long) {
+        workOutService.createService()
+        templateMy { dataRepository.getTraining(id) } }
 
     private fun startWorkOutService(training: Training){
         workOutService.startWorkout(training)
     }
     private fun stopWorkOutService(){
-        workOutService.stopWorkout()
+        workOutService.unbindService()
     }
     private fun pauseWorkOutService(){
         workOutService.pauseWorkout()

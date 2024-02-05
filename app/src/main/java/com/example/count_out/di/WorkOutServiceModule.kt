@@ -2,7 +2,6 @@ package com.example.count_out.di
 
 import com.example.count_out.service.InitService
 import com.example.count_out.service.WorkoutService
-import com.example.count_out.ui.joint.NotificationApp
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -19,7 +18,7 @@ object WorkOutServiceModule {
     }
     @Singleton
     @Provides
-    fun provideInitService(notificationApp: NotificationApp): InitService {
-        return InitService( notificationApp )
+    fun provideInitService(): InitService {
+        return InitService()
     }
 }

@@ -1,6 +1,5 @@
 package com.example.count_out.ui.joint
 
-import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
@@ -17,28 +16,23 @@ import javax.inject.Singleton
 class NotificationApp @Inject constructor(val context: Context){
     private val notificationManager =
         context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-    val notification: Notification = createNotification()
+    private val notification: NotificationCompat.Builder = createNotification()
     private val channelId = "chanel_notification_count_out"
     private val channelName = "Sample Channel"
+    private val notificationID = 111111
 
-//    private fun requestPermission(permissionType: String, requestCode: Int) {
-//        val permission = ContextCompat.checkSelfPermission( activityMy.applicationContext, permissionType)
-//
-//        if (permission != PackageManager.PERMISSION_GRANTED) {
-//            ActivityCompat.requestPermissions(activityMy, arrayOf(permissionType), requestCode)
-//        }
-//    }
     fun sendNotification()
     {
-        notificationManager.notify(1234, notification)
-        log(true, " send notification")
+        notificationManager.notify(notificationID, notification.build())
+        log(true, "Send notification")
     }
-    private fun createNotification(): Notification
+    private fun createNotification(): NotificationCompat.Builder
     {
-        val intent = Intent(context, MainActivity::class.java).apply {
+        log(true, "createNotification")
+        val intent = Intent(this.context, MainActivity::class.java).apply {
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         }
-        val pendingIntent: PendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_IMMUTABLE)
+        val pendingIntent: PendingIntent = PendingIntent.getActivity(this.context, 0, intent, PendingIntent.FLAG_IMMUTABLE)
         return NotificationCompat.Builder(context, channelId)
             .setSmallIcon(R.drawable.ic_app)
             .setContentTitle("Count_out")
@@ -46,13 +40,17 @@ class NotificationApp @Inject constructor(val context: Context){
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
             .setContentIntent(pendingIntent)
             .setAutoCancel(true)
-            .build()
+
     }
     fun createNotificationChannel() {
+        log(true, "createNotificationChannel")
         val notificationChannel = NotificationChannel(
             channelId, channelName, NotificationManager.IMPORTANCE_DEFAULT).apply {
             description = "This is a sample notification channel."
         }
         notificationManager.createNotificationChannel(notificationChannel)
+    }
+    fun cancelNotification(){
+        notificationManager.cancel(notificationID)
     }
 }

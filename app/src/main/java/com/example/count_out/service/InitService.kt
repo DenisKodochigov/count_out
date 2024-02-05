@@ -4,37 +4,49 @@ import android.content.ComponentName
 import android.content.ServiceConnection
 import android.os.IBinder
 import com.example.count_out.entity.Training
-import com.example.count_out.ui.joint.NotificationApp
+import com.example.count_out.ui.view_components.log
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class InitService @Inject constructor( private val notificationApp: NotificationApp
+class InitService @Inject constructor(
 ){
+    var mService: WorkoutService? = null
+    var isBound : Boolean = false
+    var bind:(ServiceConnection)->Unit = {}
+    var unbind:(ServiceConnection)->Unit = {}
+
     private val serviceConnection = object : ServiceConnection {
         override fun onServiceConnected(className: ComponentName, binder: IBinder) {
-            val binderWorkoutService = binder as WorkoutService.LocalBinder
+            val binderWorkoutService = binder as WorkoutService.WorkoutServiceBinder
             mService = binderWorkoutService.getService()
             isBound  = true
         }
-        override fun onServiceDisconnected(arg0: ComponentName) { isBound  = false }
+        override fun onServiceDisconnected(arg0: ComponentName) {
+            mService = null
+            isBound  = false }
     }
-    fun createService( bindService: (ServiceConnection)->Unit ){
-        bindService(serviceConnection)
+    fun createService(){
+        bind(serviceConnection)
     }
     fun startWorkout(training: Training){
-        notificationApp.sendNotification()
-        if (isBound ) mService.startWorkout(training)
+        log(true, "Start workout service. isBound = $isBound")
+        if (isBound ) {
+            mService?.startWorkout(training)
+        }
     }
     fun pauseWorkout(){
-        if (isBound ) mService.pauseWorkout()
+        log(true, "Pause workout service. isBound = $isBound")
+        if (isBound ) mService?.pauseWorkout()
     }
-    fun stopWorkout(){
-        if (isBound ) mService.unbindService(serviceConnection)
+    fun unbindService(){
+        log(true, "Stop workout service. isBound = $isBound")
+        if (isBound ) unbind(serviceConnection)
         isBound  = false
     }
-    companion object {
-        lateinit var mService: WorkoutService
-        var isBound : Boolean = false
+    fun stopWorkout(){
+        log(true, "Stop workout service. isBound = $isBound")
+        mService?.onDestroy()
+        isBound  = false
     }
 }

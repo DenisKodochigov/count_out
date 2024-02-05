@@ -58,8 +58,8 @@ fun onButtonStart(uiState:PlayWorkoutScreenState){
     uiState.training?.let { uiState.startWorkOutService(it) }
 }
 fun onButtonPause(uiState:PlayWorkoutScreenState){
-    uiState.pauseWorkOutService
+    uiState.pauseWorkOutService()
 }
 fun onButtonStop(uiState:PlayWorkoutScreenState){
-   uiState.stopWorkOutService
+   uiState.stopWorkOutService()
 }
