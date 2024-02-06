@@ -14,23 +14,23 @@ import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class MainActivity : ComponentActivity()
+class MainActivity: ComponentActivity()
 {
     @Inject lateinit var initService: InitService
-
     @RequiresApi(Build.VERSION_CODES.S)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent { StartApp() }
-
     }
     override fun onStart() {
         super.onStart()
-        initService.bind = {  bindService(
-            Intent( this, WorkoutService::class.java),it, Context.BIND_AUTO_CREATE)}
-        initService.unbind = {  unbindService(it) }
+        Intent(this, WorkoutService::class.java).also { intent ->
+            bindService(intent, initService.serviceConnection, Context.BIND_AUTO_CREATE)
+        }
     }
     override fun onStop() {
         super.onStop()
+        unbindService(initService.serviceConnection)
+        initService.isBound = false
     }
 }

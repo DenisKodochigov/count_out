@@ -3,10 +3,11 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
 
-    <permission android:name="android.permission.MEDIA_CONTENT_CONTROL"
+    <permission
+        android:name="android.permission.MEDIA_CONTENT_CONTROL"
         tools:ignore="ReservedSystemPermission" />
 
     <application
@@ -23,14 +24,15 @@
         tools:targetApi="34">
         <service
             android:name=".service.WorkoutService"
-            android:exported="false"
-        />
+            android:exported="false" />
+
         <activity
             android:name=".MainActivity"
             android:exported="true"
             android:theme="@style/Theme.Reader">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>

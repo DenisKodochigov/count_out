@@ -48,14 +48,14 @@ class WorkoutService @Inject constructor(): Service() {
     }
     fun startWorkout(training: Training){
         notificationApp.sendNotification()
-        handlerService()
+        clearService()
     }
     fun pauseWorkout(){
         pauseService = !pauseService
     }
-//    fun stopWorkout(){
-//
-//    }
+    fun stopWorkout(){
+        stopSelf()
+    }
 
 //    private fun executorService(){
 //        val idThread = Random.nextInt()
@@ -89,8 +89,19 @@ class WorkoutService @Inject constructor(): Service() {
 //            }
         }
     }
+
+    private fun clearService(){
+        while(true){
+            try {
+                Thread.sleep(delay)
+                bodyService()
+            } catch ( e: InterruptedException){
+                e.printStackTrace()
+            }
+        }
+    }
     private fun bodyService(){
-        if (! pauseService) log(true, "Body workout service ${getCurrentTime()}; pauseService = $pauseService")
+        if (! pauseService) log(true, "Body workout service ${getCurrentTime()}; pauseService = $pauseService; ")
     }
     private fun getCurrentTime(): String {
         return SimpleDateFormat("HH:mm:ss MM/dd/yyyy", Locale.US).format(Date())
