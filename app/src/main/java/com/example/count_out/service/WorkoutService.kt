@@ -4,25 +4,25 @@ import android.app.Service
 import android.content.Intent
 import android.icu.text.SimpleDateFormat
 import android.os.Binder
-import android.os.Handler
-import android.os.HandlerThread
 import android.os.IBinder
 import android.widget.Toast
 import com.example.count_out.entity.Training
-import com.example.count_out.ui.joint.NotificationApp
+import com.example.count_out.helpers.ServiceThread
 import com.example.count_out.ui.view_components.log
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.Date
 import java.util.Locale
+import java.util.concurrent.Executors
 import javax.inject.Inject
+import kotlin.random.Random
 
 @AndroidEntryPoint
 class WorkoutService @Inject constructor(): Service() {
-    @Inject lateinit var notificationApp: NotificationApp
+
     private var pauseService: Boolean = false
     private val serviceBinder = WorkoutServiceBinder()
-    private lateinit var handlerThread:HandlerThread
-    private lateinit var handler: Handler
+
+    private val serviceThread = ServiceThread()
     private val delay = 1500L
     inner class WorkoutServiceBinder : Binder() {
         fun getService(): WorkoutService = this@WorkoutService
@@ -30,49 +30,42 @@ class WorkoutService @Inject constructor(): Service() {
 
     override fun onCreate() {
         super.onCreate()
-        notificationApp.createNotificationChannel()
-        val handlerThreadName = "workout_thread"
-        handlerThread = HandlerThread(handlerThreadName)
-        handlerThread.start()
-        handler = Handler(handlerThread.looper)
+        serviceThread.init()
     }
     override fun onBind(p0: Intent?): IBinder {
-        return serviceBinder //throw UnsupportedOperationException("Not yet implemented")
+        return serviceBinder
     }
     override fun onDestroy() {
         Toast.makeText(this, "service done", Toast.LENGTH_SHORT).show()
-        handler.removeCallbacksAndMessages(null)
-        handler.looper.quit()
-        handlerThread.quit()
-        notificationApp.cancelNotification()
+        serviceThread.destroy()
     }
     fun startWorkout(training: Training){
-        notificationApp.sendNotification()
-        clearService()
+        handlerService()
     }
     fun pauseWorkout(){
         pauseService = !pauseService
     }
     fun stopWorkout(){
+        onDestroy()
         stopSelf()
     }
 
-//    private fun executorService(){
-//        val idThread = Random.nextInt()
-//        val executorService = Executors.newSingleThreadExecutor()
-//        executorService.execute{
-//            while(true){
-//                try {
-//                    Thread.sleep(delay)
-//                    bodyService()
-//                } catch ( e: InterruptedException){
-//                    e.printStackTrace()
-//                }
-//            }
-//        }
-//    }
+    private fun executorService(){
+        val idThread = Random.nextInt()
+        val executorService = Executors.newSingleThreadExecutor()
+        executorService.execute{
+            while(true){
+                try {
+                    Thread.sleep(delay)
+                    bodyService()
+                } catch ( e: InterruptedException){
+                    e.printStackTrace()
+                }
+            }
+        }
+    }
     private fun handlerService(){
-        handler.post{
+        serviceThread.run{
            while(true){
                 try {
                     Thread.sleep(delay)
@@ -81,29 +74,14 @@ class WorkoutService @Inject constructor(): Service() {
                     e.printStackTrace()
                 }
             }
-//            while (true) {
-//                runBlocking {
-//                    delay(delay)
-//                    bodyService()
-//                }
-//            }
         }
     }
 
-    private fun clearService(){
-        while(true){
-            try {
-                Thread.sleep(delay)
-                bodyService()
-            } catch ( e: InterruptedException){
-                e.printStackTrace()
-            }
-        }
-    }
     private fun bodyService(){
-        if (! pauseService) log(true, "Body workout service ${getCurrentTime()}; pauseService = $pauseService; ")
+        if (! pauseService) log(true, "${getCurrentTime()}; serviceThread = ${serviceThread}; ")
     }
     private fun getCurrentTime(): String {
         return SimpleDateFormat("HH:mm:ss MM/dd/yyyy", Locale.US).format(Date())
     }
 }
+

@@ -13,19 +13,18 @@ class InitService @Inject constructor(
 ){
     var mService: WorkoutService? = null
     var isBound : Boolean = false
-    var bind:(ServiceConnection)->Unit = {}
-    var unbind:(ServiceConnection)->Unit = {}
 
     val serviceConnection = object : ServiceConnection {
         override fun onServiceConnected(className: ComponentName, binder: IBinder) {
-            val binderWorkoutService = binder as WorkoutService.WorkoutServiceBinder
-            mService = binderWorkoutService.getService()
+            val binderService = binder as WorkoutService.WorkoutServiceBinder
+            mService = binderService.getService()
             isBound  = true
             log(true, "onServiceConnected. isBound = $isBound")
         }
         override fun onServiceDisconnected(arg0: ComponentName) {
             mService = null
-            isBound  = false }
+            isBound  = false
+            log(true, "onServiceDisconnected. isBound = $isBound")}
     }
 //    fun createService(){
 //        bind(serviceConnection)
@@ -47,7 +46,7 @@ class InitService @Inject constructor(
 //    }
     fun stopWorkout(){
         log(true, "Stop workout service. isBound = $isBound")
-        mService?.onDestroy()
+        mService?.stopWorkout()
         isBound  = false
     }
 }

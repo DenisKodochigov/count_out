@@ -37,7 +37,7 @@ class PlayWorkoutViewModel @Inject constructor(
         workOutService.startWorkout(training)
     }
     private fun stopWorkOutService(){
-//        workOutService.unbindService()
+        workOutService.stopWorkout()
     }
     private fun pauseWorkOutService(){
         workOutService.pauseWorkout()

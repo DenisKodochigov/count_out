@@ -18,6 +18,7 @@ class MainActivity: ComponentActivity()
 {
     @Inject lateinit var initService: InitService
     @RequiresApi(Build.VERSION_CODES.S)
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent { StartApp() }
@@ -30,7 +31,9 @@ class MainActivity: ComponentActivity()
     }
     override fun onStop() {
         super.onStop()
-        unbindService(initService.serviceConnection)
-        initService.isBound = false
+        if (initService.isBound) {
+            unbindService(initService.serviceConnection)
+            initService.isBound = false
+        }
     }
 }
