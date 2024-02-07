@@ -1,13 +1,11 @@
 package com.example.count_out
 
-import android.content.Context
-import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.annotation.RequiresApi
-import com.example.count_out.service.InitService
+import com.example.count_out.service.ServiceManager
 import com.example.count_out.service.WorkoutService
 import com.example.count_out.ui.StartApp
 import dagger.hilt.android.AndroidEntryPoint
@@ -16,7 +14,7 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class MainActivity: ComponentActivity()
 {
-    @Inject lateinit var initService: InitService
+    @Inject lateinit var serviceManager: ServiceManager
     @RequiresApi(Build.VERSION_CODES.S)
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -25,15 +23,11 @@ class MainActivity: ComponentActivity()
     }
     override fun onStart() {
         super.onStart()
-        Intent(this, WorkoutService::class.java).also { intent ->
-            bindService(intent, initService.serviceConnection, Context.BIND_AUTO_CREATE)
-        }
+        serviceManager.bindService(this@MainActivity, WorkoutService::class.java)
+
     }
     override fun onStop() {
         super.onStop()
-        if (initService.isBound) {
-            unbindService(initService.serviceConnection)
-            initService.isBound = false
-        }
+        if (serviceManager.isBound) serviceManager.unbindService(this@MainActivity)
     }
 }

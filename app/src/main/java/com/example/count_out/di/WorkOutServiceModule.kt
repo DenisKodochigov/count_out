@@ -1,6 +1,6 @@
 package com.example.count_out.di
 
-import com.example.count_out.service.InitService
+import com.example.count_out.service.ServiceManager
 import com.example.count_out.service.WorkoutService
 import dagger.Module
 import dagger.Provides
@@ -18,7 +18,7 @@ object WorkOutServiceModule {
     }
     @Singleton
     @Provides
-    fun provideInitService(): InitService {
-        return InitService()
+    fun provideServiceManager(): ServiceManager {
+        return ServiceManager()
     }
 }
