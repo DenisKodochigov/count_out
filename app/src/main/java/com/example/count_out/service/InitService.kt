@@ -47,6 +47,7 @@ class InitService @Inject constructor(
     fun stopWorkout(){
         log(true, "Stop workout service. isBound = $isBound")
         mService?.stopWorkout()
+        mService?.unbindService(serviceConnection)
         isBound  = false
     }
 }
