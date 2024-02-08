@@ -24,10 +24,11 @@ class WorkoutService @Inject constructor(): Service() {
 
     private var pauseService: Boolean = false
     private val serviceBinder = WorkoutServiceBinder()
+    private val service: Service = this
     private lateinit var coroutineScope: CoroutineScope
     private var count = 0
 
-    private val delay = 1500L
+    private val delay = 2000L
     inner class WorkoutServiceBinder : Binder() {
         fun getService(): WorkoutService = this@WorkoutService
     }
@@ -38,7 +39,7 @@ class WorkoutService @Inject constructor(): Service() {
     fun startWorkout(training: Training){
         log(true, "WorkoutService.startWorkout.")
         coroutineScope = CoroutineScope(Dispatchers.Default)
-        coroutineService()
+        coroutineService(training)
     }
     fun pauseWorkout(){
         pauseService = !pauseService
@@ -46,11 +47,12 @@ class WorkoutService @Inject constructor(): Service() {
     fun stopWorkout(){
         coroutineScope.cancel()
     }
-    private fun coroutineService(){
+    private fun coroutineService(training: Training){
         log(true, "WorkoutService.coroutineService.")
         coroutineScope.launch{
             while(true){
                 try {
+
                     delay(delay)
                     bodyService()
                 } catch ( e: InterruptedException){
@@ -61,7 +63,7 @@ class WorkoutService @Inject constructor(): Service() {
     }
 
     private fun bodyService(){
-        if (! pauseService) log(true, "${getCurrentTime()}; count = ${count++} ")
+        if (! pauseService) log(true, "${getCurrentTime()}; count = ${count++}; service: $service ")
     }
     private fun getCurrentTime(): String {
         return SimpleDateFormat("HH:mm:ss MM/dd/yyyy", Locale.US).format(Date())

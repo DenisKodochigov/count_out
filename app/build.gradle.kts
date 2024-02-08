@@ -111,6 +111,11 @@ dependencies {
 //    implementation(platform("com.google.firebase:firebase-bom:32.6.0"))
 //    implementation("com.google.firebase:firebase-analytics-ktx")
 //    implementation("com.google.firebase:firebase-crashlytics")
+
+
+    //Warning logcat
+//    implementation("com.google.maps.android:android-maps-utils:2.3.0")
+//    implementation("com.google.maps.android:maps-utils-ktx:3.4.0")
 //Testing
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
