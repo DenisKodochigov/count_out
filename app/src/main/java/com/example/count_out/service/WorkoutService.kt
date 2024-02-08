@@ -16,7 +16,9 @@ import kotlinx.coroutines.launch
 import java.util.Date
 import java.util.Locale
 import javax.inject.Inject
+import javax.inject.Singleton
 
+@Singleton
 @AndroidEntryPoint
 class WorkoutService @Inject constructor(): Service() {
 
@@ -34,6 +36,7 @@ class WorkoutService @Inject constructor(): Service() {
     }
 
     fun startWorkout(training: Training){
+        log(true, "WorkoutService.startWorkout.")
         coroutineScope = CoroutineScope(Dispatchers.Default)
         coroutineService()
     }
@@ -44,6 +47,7 @@ class WorkoutService @Inject constructor(): Service() {
         coroutineScope.cancel()
     }
     private fun coroutineService(){
+        log(true, "WorkoutService.coroutineService.")
         coroutineScope.launch{
             while(true){
                 try {

@@ -12,7 +12,7 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class ServiceManager @Inject constructor(
+class ServiceManager @Inject constructor( val context: Context
 ){
     var mService: WorkoutService? = null
     var isBound : Boolean = false
@@ -30,25 +30,30 @@ class ServiceManager @Inject constructor(
             log(true, "onServiceDisconnected. isBound = $isBound")}
     }
     fun startWorkout(training: Training){
-        log(true, "Start workout service. isBound = $isBound, mService = $mService")
-        if (isBound ) mService?.startWorkout(training)
+        if (isBound ) {
+            mService?.startWorkout(training)
+            log(true, "startWorkout. mService?.startWorkout(training). isBound = $isBound, mService = $mService")
+        }
     }
     fun pauseWorkout(){
         log(true, "Pause workout service. isBound = $isBound")
         if (isBound ) mService?.pauseWorkout()
     }
     fun stopWorkout(){
-        log(true, "Stop workout service. isBound = $isBound")
+        unbindService()
+            log(true, "stopWorkout. unbindService. mService = $mService")
         mService?.stopWorkout()
+            log(true, "stopWorkout. mService?.stopWorkout(). mService = $mService")
         mService?.stopSelf()
+            log(true, "stopWorkout. mService?.stopSelf(). mService = $mService")
     }
-    fun <T>bindService(context: Context, clazz: Class<T>) {
+    fun <T>bindService( clazz: Class<T>) {
         context.bindService(Intent(context, clazz), serviceConnection, BIND_AUTO_CREATE)
-        log(true, "bindService: $context")
+        log(true, "bindService: $serviceConnection")
     }
-    fun unbindService(context: Context) {
+    fun unbindService() {
         if (isBound) context.unbindService(serviceConnection)
-        log(true, "unbindService: $context")
+        log(true, "unbindService: $serviceConnection")
     }
 }
 
