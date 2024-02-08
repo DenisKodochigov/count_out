@@ -66,7 +66,16 @@ object DatabaseModule {
         db.dataDao().addActivity(ActivityDB(name = "Ski", icon = R.drawable.ic_setka))
         db.dataDao().addActivity(ActivityDB(name = "Fly", icon = R.drawable.ic_setka))
 
-        var idSpeech = db.dataDao().addSpeech(SpeechDB())
+        var idSpeech = db.dataDao().addSpeech(SpeechDB(
+//            soundBeforeStart = "Sound before start",
+//            soundAfterStart = "Sound after start",
+//            soundBeforeEnd = "Sound before end",
+//            soundAfterEnd = "Sound after end",
+            soundBeforeStart = "Сообщение до начала тренировки",
+            soundAfterStart = "Сообщение после начала тренировки",
+            soundBeforeEnd = "Сообщение до конца тренировки",
+            soundAfterEnd = "Сообщение после конца тренировки",
+        ))
         val idTraining = db.dataDao().addTraining(TrainingDB(name = "Training_test", speechId = idSpeech))
 
         idSpeech = db.dataDao().addSpeech(SpeechDB())

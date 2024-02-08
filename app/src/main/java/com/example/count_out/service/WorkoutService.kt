@@ -5,8 +5,8 @@ import android.content.Intent
 import android.icu.text.SimpleDateFormat
 import android.os.Binder
 import android.os.IBinder
+import com.example.count_out.domain.SpeechManager
 import com.example.count_out.entity.Training
-import com.example.count_out.ui.view_components.log
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -22,13 +22,12 @@ import javax.inject.Singleton
 @AndroidEntryPoint
 class WorkoutService @Inject constructor(): Service() {
 
+    @Inject lateinit var speechManager: SpeechManager
     private var pauseService: Boolean = false
     private val serviceBinder = WorkoutServiceBinder()
-    private val service: Service = this
     private lateinit var coroutineScope: CoroutineScope
-    private var count = 0
 
-    private val delay = 2000L
+    private val delay = 5000L
     inner class WorkoutServiceBinder : Binder() {
         fun getService(): WorkoutService = this@WorkoutService
     }
@@ -37,7 +36,7 @@ class WorkoutService @Inject constructor(): Service() {
     }
 
     fun startWorkout(training: Training){
-        log(true, "WorkoutService.startWorkout.")
+//        log(true, "WorkoutService.startWorkout.")
         coroutineScope = CoroutineScope(Dispatchers.Default)
         coroutineService(training)
     }
@@ -48,22 +47,25 @@ class WorkoutService @Inject constructor(): Service() {
         coroutineScope.cancel()
     }
     private fun coroutineService(training: Training){
-        log(true, "WorkoutService.coroutineService.")
+//        log(true, "WorkoutService.coroutineService.")
         coroutineScope.launch{
-            while(true){
-                try {
-
-                    delay(delay)
-                    bodyService()
-                } catch ( e: InterruptedException){
-                    e.printStackTrace()
-                }
+            try {
+                bodyService(training)
+            } catch ( e: InterruptedException){
+                e.printStackTrace()
             }
         }
     }
 
-    private fun bodyService(){
-        if (! pauseService) log(true, "${getCurrentTime()}; count = ${count++}; service: $service ")
+    private suspend fun bodyService(training: Training){
+        speechManager.speakOut(training.speech.soundBeforeStart)
+        delay(delay)
+        speechManager.speakOut(training.speech.soundAfterStart)
+        delay(delay)
+        speechManager.speakOut(training.speech.soundBeforeEnd)
+        delay(delay)
+        speechManager.speakOut(training.speech.soundAfterEnd)
+//        if (! pauseService) log(true, "${getCurrentTime()}; count = ${count++}; service: $service ")
     }
     private fun getCurrentTime(): String {
         return SimpleDateFormat("HH:mm:ss MM/dd/yyyy", Locale.US).format(Date())
