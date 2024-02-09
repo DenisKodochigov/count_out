@@ -5,8 +5,10 @@ import android.content.Intent
 import android.icu.text.SimpleDateFormat
 import android.os.Binder
 import android.os.IBinder
+import androidx.compose.runtime.MutableState
 import com.example.count_out.domain.SpeechManager
 import com.example.count_out.entity.Training
+import com.example.count_out.ui.view_components.log
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -58,13 +60,24 @@ class WorkoutService @Inject constructor(): Service() {
     }
 
     private suspend fun bodyService(training: Training){
+
+        val speeching: MutableState<Boolean> = speechManager.speeching
         speechManager.speakOut(training.speech.soundBeforeStart)
-        delay(delay)
-        speechManager.speakOut(training.speech.soundAfterStart)
-        delay(delay)
-        speechManager.speakOut(training.speech.soundBeforeEnd)
-        delay(delay)
-        speechManager.speakOut(training.speech.soundAfterEnd)
+        if (!speeching.value) {
+            log(true, "start delay 1")
+            delay(delay)
+            speechManager.speakOut(training.speech.soundAfterStart)
+            if (!speeching.value) {
+                log(true, "start delay 2")
+                delay(delay)
+                speechManager.speakOut(training.speech.soundBeforeEnd)
+                if (!speeching.value) {
+                    log(true, "start delay 3")
+                    delay(delay)
+                    speechManager.speakOut(training.speech.soundAfterEnd)
+                }
+            }
+        }
 //        if (! pauseService) log(true, "${getCurrentTime()}; count = ${count++}; service: $service ")
     }
     private fun getCurrentTime(): String {
