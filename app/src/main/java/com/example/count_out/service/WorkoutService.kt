@@ -5,15 +5,12 @@ import android.content.Intent
 import android.icu.text.SimpleDateFormat
 import android.os.Binder
 import android.os.IBinder
-import androidx.compose.runtime.MutableState
-import com.example.count_out.domain.SpeechManager
 import com.example.count_out.entity.Training
-import com.example.count_out.ui.view_components.log
+import com.example.count_out.service.player.PlayerWorkOut
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.cancel
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.util.Date
 import java.util.Locale
@@ -24,12 +21,11 @@ import javax.inject.Singleton
 @AndroidEntryPoint
 class WorkoutService @Inject constructor(): Service() {
 
-    @Inject lateinit var speechManager: SpeechManager
     private var pauseService: Boolean = false
     private val serviceBinder = WorkoutServiceBinder()
     private lateinit var coroutineScope: CoroutineScope
+    @Inject lateinit var playerWorkOut: PlayerWorkOut
 
-    private val delay = 5000L
     inner class WorkoutServiceBinder : Binder() {
         fun getService(): WorkoutService = this@WorkoutService
     }
@@ -52,7 +48,7 @@ class WorkoutService @Inject constructor(): Service() {
 //        log(true, "WorkoutService.coroutineService.")
         coroutineScope.launch{
             try {
-                bodyService(training)
+                playerWorkOut.playingWorkOut(training)
             } catch ( e: InterruptedException){
                 e.printStackTrace()
             }
@@ -60,24 +56,6 @@ class WorkoutService @Inject constructor(): Service() {
     }
 
     private suspend fun bodyService(training: Training){
-
-        val speeching: MutableState<Boolean> = speechManager.speeching
-        speechManager.speakOut(training.speech.soundBeforeStart)
-        if (!speeching.value) {
-            log(true, "start delay 1")
-            delay(delay)
-            speechManager.speakOut(training.speech.soundAfterStart)
-            if (!speeching.value) {
-                log(true, "start delay 2")
-                delay(delay)
-                speechManager.speakOut(training.speech.soundBeforeEnd)
-                if (!speeching.value) {
-                    log(true, "start delay 3")
-                    delay(delay)
-                    speechManager.speakOut(training.speech.soundAfterEnd)
-                }
-            }
-        }
 //        if (! pauseService) log(true, "${getCurrentTime()}; count = ${count++}; service: $service ")
     }
     private fun getCurrentTime(): String {

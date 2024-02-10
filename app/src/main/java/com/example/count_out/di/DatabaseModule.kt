@@ -71,32 +71,69 @@ object DatabaseModule {
 //            soundAfterStart = "Sound after start",
 //            soundBeforeEnd = "Sound before end",
 //            soundAfterEnd = "Sound after end",
-            soundBeforeStart = "Сообщение до начала тренировки",
-            soundAfterStart = "Сообщение после начала тренировки",
-            soundBeforeEnd = "Сообщение до конца тренировки",
-            soundAfterEnd = "Сообщение после конца тренировки",
+            soundBeforeStart = "Начинаем тренировку",
+            soundAfterStart = "Начали",
+            soundBeforeEnd = "Закончили",
+            soundAfterEnd = "Тренировка закончена",
         ))
         val idTraining = db.dataDao().addTraining(TrainingDB(name = "Training_test", speechId = idSpeech))
 
-        idSpeech = db.dataDao().addSpeech(SpeechDB())
+        idSpeech = db.dataDao().addSpeech(SpeechDB(
+            soundBeforeStart = "Подготовьтесь к разминке",
+            soundAfterStart = "Начали",
+            soundBeforeEnd = "Закончили",
+            soundAfterEnd = "Разминка закончена",
+        ))
             var idRound = db.dataDao().addRound(RoundDB(trainingId = idTraining, roundType = RoundType.UP, speechId = idSpeech))
-                idSpeech = db.dataDao().addSpeech(SpeechDB())
+                idSpeech = db.dataDao().addSpeech(SpeechDB(
+                    soundBeforeStart = "Упражнение",
+                    soundAfterStart = "Начали",
+                    soundBeforeEnd = "Закончили",
+                    soundAfterEnd = "Упражнение закончено",))
                 var idExercise = db.dataDao().addExercise(ExerciseDB(roundId = idRound, activityId = 1, speechId = idSpeech))
-                idSpeech = db.dataDao().addSpeech(SpeechDB())
+                idSpeech = db.dataDao().addSpeech(SpeechDB(
+                    soundBeforeStart = "Подход ",
+                    soundAfterStart = "Начали",
+                    soundBeforeEnd = "Закончили",
+                    soundAfterEnd = "Подход закончен",))
                 db.dataDao().addSet(SetDB(exerciseId = idExercise, name = "Set 1", speechId = idSpeech))
 
-        idSpeech = db.dataDao().addSpeech(SpeechDB())
+        idSpeech = db.dataDao().addSpeech(SpeechDB(
+            soundBeforeStart = "Подготовьтесь к основной части тренировки",
+            soundAfterStart = "Начали",
+            soundBeforeEnd = "Закончили",
+            soundAfterEnd = "Основная часть закончена",))
             idRound = db.dataDao().addRound(RoundDB(trainingId = idTraining, roundType = RoundType.OUT, speechId = idSpeech))
-                idSpeech = db.dataDao().addSpeech(SpeechDB())
+                idSpeech = db.dataDao().addSpeech(SpeechDB(
+                    soundBeforeStart = "Упражнение",
+                    soundAfterStart = "Начали",
+                    soundBeforeEnd = "Закончили",
+                    soundAfterEnd = "Упражнение закончено",))
                 idExercise = db.dataDao().addExercise(ExerciseDB(roundId = idRound, activityId = 3, speechId = idSpeech))
-                idSpeech = db.dataDao().addSpeech(SpeechDB())
+                idSpeech = db.dataDao().addSpeech(SpeechDB(
+                    soundBeforeStart = "Подход ",
+                    soundAfterStart = "Начали",
+                    soundBeforeEnd = "Закончили",
+                    soundAfterEnd = "Подход закончен",))
                 db.dataDao().addSet(SetDB(exerciseId = idExercise, name = "Set 1", speechId = idSpeech))
 
-        idSpeech = db.dataDao().addSpeech(SpeechDB())
+        idSpeech = db.dataDao().addSpeech(SpeechDB(
+            soundBeforeStart = "Подготовьтесь к заминке",
+            soundAfterStart = "Начали",
+            soundBeforeEnd = "Закончили",
+            soundAfterEnd = "Зазминка закончена",))
             idRound = db.dataDao().addRound(RoundDB(trainingId = idTraining, roundType = RoundType.DOWN, speechId = idSpeech))
-                idSpeech = db.dataDao().addSpeech(SpeechDB())
+                idSpeech = db.dataDao().addSpeech(SpeechDB(
+                    soundBeforeStart = "Упражнение",
+                    soundAfterStart = "Начали",
+                    soundBeforeEnd = "Закончили",
+                    soundAfterEnd = "Упражнение закончено",))
                 idExercise = db.dataDao().addExercise(ExerciseDB(roundId = idRound, activityId = 2, speechId = idSpeech))
-                idSpeech = db.dataDao().addSpeech(SpeechDB())
+                idSpeech = db.dataDao().addSpeech(SpeechDB(
+                    soundBeforeStart = "Подход ",
+                    soundAfterStart = "Начали",
+                    soundBeforeEnd = "Закончили",
+                    soundAfterEnd = "Подход закончен",))
                 db.dataDao().addSet(SetDB(exerciseId = idExercise, name = "Set 1", speechId = idSpeech))
     }
 

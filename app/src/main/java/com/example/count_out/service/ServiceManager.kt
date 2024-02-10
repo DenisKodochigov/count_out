@@ -40,7 +40,7 @@ class ServiceManager @Inject constructor( val context: Context
         if (isBound ) mService?.pauseWorkout()
     }
     fun stopWorkout(){
-        unbindService()
+//        unbindService()
 //            log(true, "stopWorkout. unbindService. mService = $mService")
         mService?.stopWorkout()
 //            log(true, "stopWorkout. mService?.stopWorkout(). mService = $mService")
@@ -53,7 +53,6 @@ class ServiceManager @Inject constructor( val context: Context
     }
     fun unbindService() {
         if (isBound) context.unbindService(serviceConnection)
-//        log(true, "unbindService: $serviceConnection")
     }
 }
 
