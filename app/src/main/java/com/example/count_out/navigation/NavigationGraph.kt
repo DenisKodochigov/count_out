@@ -1,8 +1,11 @@
 package com.example.count_out.navigation
 
 import androidx.compose.animation.AnimatedContentScope
+import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.ExitTransition
+import androidx.compose.animation.core.LinearOutSlowInEasing
+import androidx.compose.animation.core.TweenSpec
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -13,169 +16,90 @@ import androidx.navigation.NamedNavArgument
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
+import com.example.count_out.entity.Const.defaultScreen
+import com.example.count_out.entity.Const.delayScreen
+import com.example.count_out.entity.Const.durationScreen
 import com.example.count_out.ui.screens.play_workout.PlayWorkoutScreen
 import com.example.count_out.ui.screens.settings.SettingScreen
 import com.example.count_out.ui.screens.training.TrainingScreen
 import com.example.count_out.ui.screens.trainings.TrainingsScreen
-fun NavGraphBuilder.trainings( goToScreenTraining: (Long)->Unit, goToScreenPlayWorkOut: (Long)->Unit ){
+
+fun NavGraphBuilder.trainings(
+    goToScreenTraining: (Long) -> Unit,
+    goToScreenPlayWorkOut: (Long) -> Unit
+) {
     template(
         routeTo = TrainingsDestination.route,
         content = {
             TrainingsScreen(
                 screen = TrainingsDestination,
-                onClickTraining = { goToScreenTraining( it )},
-                onStartWorkout = { goToScreenPlayWorkOut( it )},
+                onClickTraining = { goToScreenTraining(it) },
+                onStartWorkout = { goToScreenPlayWorkOut(it) },
             )
         }
     )
 }
-fun NavGraphBuilder.training( onBaskScreen: ()->Unit ){
+
+fun NavGraphBuilder.training(onBaskScreen: () -> Unit) {
     template(
-        routeFrom = TrainingsDestination.route,
         routeTo = TrainingDestination.routeWithArgs,
         argument = TrainingDestination.arguments,
-        content = {navBackStackEntry ->
+        content = { navBackStackEntry ->
             TrainingScreen(
                 trainingId = navBackStackEntry.arguments?.getLong(TrainingDestination.ARG) ?: 0,
-                onBaskScreen = onBaskScreen )
+                onBaskScreen = onBaskScreen
+            )
         }
     )
 }
-fun NavGraphBuilder.playWorkout( onBaskScreen: ()->Unit ){
+
+fun NavGraphBuilder.playWorkout(onBaskScreen: () -> Unit) {
     template(
-        routeFrom = TrainingsDestination.route,
         routeTo = PlayWorkoutDestination.routeWithArgs,
         argument = TrainingDestination.arguments,
-        content = {navBackStackEntry ->
+        content = { navBackStackEntry ->
             PlayWorkoutScreen(
                 trainingId = navBackStackEntry.arguments?.getLong(TrainingDestination.ARG) ?: 0,
-                onBaskScreen = onBaskScreen )
+                onBaskScreen = onBaskScreen
+            )
         }
     )
 }
 
-fun NavGraphBuilder.settings( onBaskScreen: ()->Unit ){
+fun NavGraphBuilder.settings(onBaskScreen: () -> Unit) {
     template(
         routeTo = SettingDestination.route,
-        content = { SettingScreen( onBaskScreen = onBaskScreen ) }
+        content = { SettingScreen(onBaskScreen = onBaskScreen) }
     )
 }
-//fun NavGraphBuilder.exercise(  ){
-//    template(
-//        routeFrom = TrainingDestination.route,
-//        routeTo = ExerciseDestination.routeWithArgs,
-//        argument = ExerciseDestination.arguments,
-//        content = {navBackStackEntry ->
-//            ExerciseScreen(
-//                roundId = navBackStackEntry.arguments?.getLong(ExerciseDestination.ARG1) ?: 0,
-//                exerciseId = navBackStackEntry.arguments?.getLong(ExerciseDestination.ARG2) ?: 0,
-//            )
-//        }
-//    )
-//}
-
 
 fun NavGraphBuilder.template(
     routeTo: String,
-    routeFrom: String = "",
     argument: List<NamedNavArgument> = emptyList(),
-    content: @Composable AnimatedContentScope.(NavBackStackEntry)-> Unit
-){
+    content: @Composable AnimatedContentScope.(NavBackStackEntry) -> Unit
+) {
     composable(
         route = routeTo,
         arguments = argument,
-        enterTransition = {
-            targetState.destination.route?.let { enterTransition(routeFrom, it) } },
-        exitTransition = {
-            targetState.destination.route?.let { exitTransition(routeFrom, it)  } },
+        enterTransition = enterTransition,
+        exitTransition = exitTransition,
         content = content
     )
 }
-fun enterTransition(defaultScreen: String, targetScreen: String): EnterTransition {
-    val durationMillis = 800
-    val delayMillis = 200
-    return if (targetScreen == defaultScreen) {
-        slideInHorizontally(
-            animationSpec = tween( durationMillis = durationMillis, delayMillis = delayMillis)
-        ) { it / -1 } + fadeIn( animationSpec =
-                tween(durationMillis = durationMillis, delayMillis = delayMillis))
-    } else {
-        slideInHorizontally(
-            animationSpec = tween(durationMillis = durationMillis, delayMillis = delayMillis)
-        ) { it / 1 } + fadeIn( animationSpec =
-                tween(durationMillis = durationMillis, delayMillis = delayMillis))
-    }
+
+val enterTransition: AnimatedContentTransitionScope<NavBackStackEntry>.() -> EnterTransition = {
+    val targetScreen = targetState.destination.route ?: defaultScreen
+    val direction = if (targetScreen == defaultScreen) -1 else 1
+        slideInHorizontally(animationSpec =tweenM(), initialOffsetX = { it * direction}) +
+            fadeIn( animationSpec = tweenM() )
 }
-fun exitTransition(defaultScreen: String, targetScreen: String): ExitTransition {
-    val durationMillis = 800
-    val delayMillis = 200
-    return if (targetScreen == defaultScreen) {
-        slideOutHorizontally(
-            animationSpec = tween(durationMillis = durationMillis, delayMillis = delayMillis)
-        ) { it / 1 } +
-                fadeOut(animationSpec =
-                            tween(durationMillis = durationMillis, delayMillis = delayMillis))
-    } else {
-        slideOutHorizontally(
-            animationSpec = tween(durationMillis = durationMillis, delayMillis = delayMillis)
-        ) { it / -1 } +
-                fadeOut(animationSpec =
-                            tween(durationMillis = durationMillis, delayMillis = delayMillis))
-    }
+val exitTransition: AnimatedContentTransitionScope<NavBackStackEntry>.() -> ExitTransition = {
+    val targetScreen = targetState.destination.route ?: defaultScreen
+    val direction = if (targetScreen == defaultScreen) 1 else -1
+        slideOutHorizontally(animationSpec = tweenM(), targetOffsetX = { it * direction }) +
+        fadeOut(animationSpec = tweenM())
 }
-//fun NavGraphBuilder.workouts(navigateToScreen: (Long)->Unit){
-//    template(
-//        route = WorkoutsDestination.route,
-//        content = {
-//            WorkoutsScreen(screen = WorkoutsDestination, onClickWorkout = { navigateToScreen( it )}) }
-//    )
-//}
-//
-//fun NavGraphBuilder.workout(navigateToScreen: (Long)->Unit){
-//    template(
-//        routeTo = WorkoutsDestination.route,
-//        route = WorkoutDestination.routeWithArgs,
-//        argument = WorkoutDestination.arguments,
-//        content = {navBackStackEntry ->
-//            val workoutId = navBackStackEntry.arguments?.getLong(WorkoutDestination.workoutIdArg)
-//            if (workoutId != null) {
-//                WorkoutScreen(
-//                    workoutId = workoutId,
-//                    screen = WorkoutDestination,
-//                    onClickWorkout = { navigateToScreen(it) })
-//            }
-//        }
-//    )
-//}
-//fun NavGraphBuilder.round( navigateToScreen: (Long)->Unit ){
-//    template(
-//        routeTo = WorkoutDestination.route,
-//        route = RoundDestination.routeWithArgs,
-//        argument = RoundDestination.arguments,
-//        content = {navBackStackEntry ->
-//            val workoutId = navBackStackEntry.arguments?.getLong(WorkoutDestination.workoutIdArg)
-//            if (workoutId != null) {
-//                RoundScreen(
-//                    workoutId = workoutId,
-//                    screen = WorkoutDestination,
-//                    onClickWorkout = { navigateToScreen(it) })
-//            }
-//        }
-//    )
-//}
-//fun NavGraphBuilder.set( navigateToScreen: (Long)->Unit ){
-//    template(
-//        routeTo = RoundDestination.route,
-//        route = SetDestination.routeWithArgs,
-//        argument = SetDestination.arguments,
-//        content = {navBackStackEntry ->
-//            val workoutId = navBackStackEntry.arguments?.getLong(WorkoutDestination.workoutIdArg)
-//            if (workoutId != null) {
-//                SetScreen(
-//                    workoutId = workoutId,
-//                    screen = WorkoutDestination,
-//                    onClickWorkout = { navigateToScreen(it) })
-//            }
-//        }
-//    )
-//}
+
+fun <T>tweenM(): TweenSpec<T> =
+    tween( durationMillis = durationScreen, delayMillis = delayScreen, easing = LinearOutSlowInEasing)
+
