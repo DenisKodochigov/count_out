@@ -83,23 +83,35 @@ fun NavGraphBuilder.template(
         arguments = argument,
         enterTransition = enterTransition,
         exitTransition = exitTransition,
+//        popEnterTransition = popEnterTransition,
+//        popExitTransition = popExitTransition,
         content = content
     )
 }
 
 val enterTransition: AnimatedContentTransitionScope<NavBackStackEntry>.() -> EnterTransition = {
     val targetScreen = targetState.destination.route ?: defaultScreen
-    val direction = if (targetScreen == defaultScreen) -1 else 1
-        slideInHorizontally(animationSpec =tweenM(), initialOffsetX = { it * direction}) +
-            fadeIn( animationSpec = tweenM() )
+    val direction: Double = if (targetScreen == defaultScreen) -1.0 else 1.0
+    slideInHorizontally(animationSpec =tweenM(), initialOffsetX = { (it * direction).toInt() }) +
+        fadeIn( animationSpec = tweenM() )
 }
 val exitTransition: AnimatedContentTransitionScope<NavBackStackEntry>.() -> ExitTransition = {
     val targetScreen = targetState.destination.route ?: defaultScreen
-    val direction = if (targetScreen == defaultScreen) 1 else -1
-        slideOutHorizontally(animationSpec = tweenM(), targetOffsetX = { it * direction }) +
-        fadeOut(animationSpec = tweenM())
+    val direction: Double = if (targetScreen == defaultScreen) 1.0 else -1.0
+    slideOutHorizontally(animationSpec = tweenM(), targetOffsetX = { (it * direction).toInt() }) +
+    fadeOut(animationSpec = tweenM())
+}
+val popEnterTransition: AnimatedContentTransitionScope<NavBackStackEntry>.() -> EnterTransition = {
+    val targetScreen = targetState.destination.route ?: defaultScreen
+    val direction: Double = if (targetScreen == defaultScreen) (1/3.0) else (1/3.0)
+    slideInHorizontally(initialOffsetX = { (it * direction).toInt() }, animationSpec = tweenM())
 }
 
+val popExitTransition: AnimatedContentTransitionScope<NavBackStackEntry>.() -> ExitTransition = {
+    val targetScreen = targetState.destination.route ?: defaultScreen
+    val direction: Double = if (targetScreen == defaultScreen) (1/3.0) else (1/3.0)
+    slideOutHorizontally(targetOffsetX = { (it * direction).toInt() }, animationSpec = tweenM())
+}
 fun <T>tweenM(): TweenSpec<T> =
     tween( durationMillis = durationScreen, delayMillis = delayScreen, easing = LinearOutSlowInEasing)
 
