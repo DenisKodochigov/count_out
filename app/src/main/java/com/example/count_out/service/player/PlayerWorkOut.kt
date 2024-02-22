@@ -8,15 +8,15 @@ class PlayerWorkOut @Inject constructor(val speechManager:SpeechManager, val pla
 {
     private val delay = 5000L
     suspend fun playingWorkOut(training: Training){
-        if (training.speech.soundBeforeStart.isNotEmpty()) {
+        if (training.speech.beforeStart.isNotEmpty()) {
 
         }
-        speechManager.speakOut(training.speech.soundBeforeStart, delay)
-        speechManager.speakOut(training.speech.soundAfterStart, delay)
+        speechManager.speakOut(training.speech.beforeStart + " " + training.name, delay)
+        speechManager.speakOut(training.speech.afterStart, delay)
         training.rounds.forEach { round->
             playerRound.playingRound(round)
         }
-        speechManager.speakOut(training.speech.soundBeforeEnd, delay)
-        speechManager.speakOut(training.speech.soundAfterEnd, delay)
+        speechManager.speakOut(training.speech.beforeEnd, delay)
+        speechManager.speakOut(training.speech.afterEnd, delay)
     }
 }

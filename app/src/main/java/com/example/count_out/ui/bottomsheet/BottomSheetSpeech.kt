@@ -66,10 +66,10 @@ fun bottomSheetStateNew(itemSpeech: BottomSheetInterface): BottomSheetState{
         else -> SpeechDB()
     }
     return BottomSheetState(
-        enteredBeforeStart = mutableStateOf( speech.soundBeforeStart ),
-        enteredBeforeEnd = mutableStateOf( speech.soundBeforeEnd ),
-        enteredAfterStart = mutableStateOf( speech.soundAfterStart ),
-        enteredAfterEnd = mutableStateOf( speech.soundAfterEnd ),
+        enteredBeforeStart = mutableStateOf( speech.beforeStart ),
+        enteredBeforeEnd = mutableStateOf( speech.beforeEnd ),
+        enteredAfterStart = mutableStateOf( speech.afterStart ),
+        enteredAfterEnd = mutableStateOf( speech.afterEnd ),
         speechId = speech.idSpeech ,
         listSpeech = itemSpeech.listSpeech,
         nameSection = itemSpeech.nameSection,
@@ -130,10 +130,10 @@ fun ButtonOK(uiState: BottomSheetState)
         uiState.onConfirmationSpeech(
             SpeechDB(
                 idSpeech = uiState.speechId,
-                soundBeforeStart = uiState.enteredBeforeStart.value,
-                soundAfterStart = uiState.enteredAfterStart.value,
-                soundBeforeEnd = uiState.enteredBeforeEnd.value,
-                soundAfterEnd = uiState.enteredAfterEnd.value
+                beforeStart = uiState.enteredBeforeStart.value,
+                afterStart = uiState.enteredAfterStart.value,
+                beforeEnd = uiState.enteredBeforeEnd.value,
+                afterEnd = uiState.enteredAfterEnd.value
             ),
             uiState.item
         )

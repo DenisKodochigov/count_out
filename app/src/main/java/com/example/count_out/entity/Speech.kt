@@ -2,8 +2,8 @@ package com.example.count_out.entity
 
 interface Speech {
     var idSpeech: Long
-    var soundBeforeStart: String
-    var soundAfterStart: String
-    var soundBeforeEnd: String
-    var soundAfterEnd: String
+    var beforeStart: String
+    var afterStart: String
+    var beforeEnd: String
+    var afterEnd: String
 }

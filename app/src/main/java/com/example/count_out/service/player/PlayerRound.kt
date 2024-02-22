@@ -8,12 +8,12 @@ class PlayerRound @Inject constructor(val speechManager:SpeechManager, val playe
 {
     private val delay = 5000L
     suspend fun playingRound(round: Round){
-        speechManager.speakOut(round.speech.soundBeforeStart, delay)
-        speechManager.speakOut(round.speech.soundAfterStart, delay)
+        speechManager.speakOut(round.speech.beforeStart, delay)
+        speechManager.speakOut(round.speech.afterStart, delay)
         round.exercise.forEach { exercise->
             playerExercise.playingExercise(exercise)
         }
-        speechManager.speakOut(round.speech.soundBeforeEnd, delay)
-        speechManager.speakOut(round.speech.soundAfterEnd, delay)
+        speechManager.speakOut(round.speech.beforeEnd, delay)
+        speechManager.speakOut(round.speech.afterEnd, delay)
     }
 }

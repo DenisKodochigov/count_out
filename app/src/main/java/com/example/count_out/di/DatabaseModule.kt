@@ -62,78 +62,69 @@ object DatabaseModule {
     }
 
     private fun prepopulateDb( db: AppDatabase) {
-        db.dataDao().addActivity(ActivityDB(name = "Run", icon = R.drawable.ic_setka))
-        db.dataDao().addActivity(ActivityDB(name = "Ski", icon = R.drawable.ic_setka))
-        db.dataDao().addActivity(ActivityDB(name = "Fly", icon = R.drawable.ic_setka))
+        db.dataDao().addActivity(ActivityDB(idActivity = 1, name = "Бег", icon = R.drawable.ic_setka))
+        db.dataDao().addActivity(ActivityDB(idActivity = 2, name = "Беговые лыжи", icon = R.drawable.ic_setka))
+        db.dataDao().addActivity(ActivityDB(idActivity = 3, name = "Простучать бедра", icon = R.drawable.ic_setka,
+            description = "Сядьте на край стула и кулаками простукивайте внешнюю сторону бедер."))
+        db.dataDao().addActivity(ActivityDB(idActivity = 4, name = "Растирка ушей", icon = R.drawable.ic_setka))
+        db.dataDao().addActivity(ActivityDB(idActivity = 5, name = "Растереть макушку", icon = R.drawable.ic_setka))
+        db.dataDao().addActivity(ActivityDB(idActivity = 6, name = "Растереть виски", icon = R.drawable.ic_setka))
+        db.dataDao().addActivity(ActivityDB(idActivity = 7, name = "Растереть заднюю часть шеи", icon = R.drawable.ic_setka))
+        db.dataDao().addActivity(ActivityDB(idActivity = 8, name = "Прямой подъем колен", icon = R.drawable.ic_setka,
+            description = "Поставьте перед собой руки и поочередно подимайте ноги касаясь коленом ладони. Правую коленку к правой руке"))
+        db.dataDao().addActivity(ActivityDB(idActivity = 9, name = "Диагональный подъем колен", icon = R.drawable.ic_setka,
+            description = "Поставьте перед собой руки и поочередно подимайте ноги касаясь коленом ладони. Правую коленку к левой руке"))
+        db.dataDao().addActivity(ActivityDB(idActivity = 10, name = "Приседания с выходом на носки", icon = R.drawable.ic_setka,
+            description = "Глубокие приседания с подъемом на носках и вытягиванием рук вверх"))
+        db.dataDao().addActivity(ActivityDB(idActivity = 11, name = "Сейдза.", icon = R.drawable.ic_setka,
+            description = "Сядьте на согнутые в коленях ноги. Спина прямая, ягодицы касаются пяток."))
+        db.dataDao().addActivity(ActivityDB(idActivity = 12, name = "Кидза.", icon = R.drawable.ic_setka,
+            description = "Сядьте на согнутые в коленях ноги. Спина прямая, ягодицы касаются пяток, носки на подогнутых пальцах."))
+        db.dataDao().addActivity(ActivityDB(idActivity = 13, name = "Отжимания", icon = R.drawable.ic_setka))
+        db.dataDao().addActivity(ActivityDB(idActivity = 14, name = "Нога на ногу", icon = R.drawable.ic_setka,
+            description = "Сядьте на стул. Положите одну ногу в районе ступни на другую. Медленно тяните вернюю ногу вниз, спина прямая."))
+        db.dataDao().addActivity(ActivityDB(idActivity = 15, name = "Велосипед на пресс", icon = R.drawable.ic_setka,
+            description = "Исходное положение: лежа на спине, руки за головой, ноги чуть согнуты. " +
+                    "Руки не нужно сцеплять в замок, чтобы не помогать ими, надавливая на затылок. " +
+                    "Подъемы корпуса должны осуществляться за счет мышц пресса. Поднимите обе ноги, " +
+                    "не отрывая таз. Согните правую ногу в колене, поднимая ее к корпусу. Вторая нога" +
+                    "остается на весу лишь слегка согнутой или прямой. Одновременно с этим движением " +
+                    "оторвите верхнюю часть корпуса, поворачиваясь левым локтем в сторону правого колена. " +
+                    "Важно не отрывать от пола поясницу. Касаться локтем колена необязательно. При " +
+                    "подъеме корпуса выполняется выдох.Выпрямите правую ногу, одновременно сгибая левую. " +
+                    "Движение ног должно быть плавным, имитирующим езду на велосипеде. Корпус при этом " +
+                    "поворачивается другой стороной — теперь правым локтем вы тянитесь к левому колену. "))
+        db.dataDao().addActivity(ActivityDB(idActivity = 16, name = "Расяжка ног", icon = R.drawable.ic_setka,
+            description = "Сядьте на пол, раздвиньте ноги. Покачиваясь вперед, пытайтесь логтями дотянуться до пола между ног"))
 
         var idSpeech = db.dataDao().addSpeech(SpeechDB(
-//            soundBeforeStart = "Sound before start",
-//            soundAfterStart = "Sound after start",
-//            soundBeforeEnd = "Sound before end",
-//            soundAfterEnd = "Sound after end",
-            soundBeforeStart = "Начинаем тренировку",
-            soundAfterStart = "Начали",
-            soundBeforeEnd = "Закончили",
-            soundAfterEnd = "Тренировка закончена",
-        ))
+            beforeStart = "Начинаем ", afterStart = "Начали", beforeEnd = "Закончили", afterEnd = "Тренировка закончена.",))
         val idTraining = db.dataDao().addTraining(TrainingDB(name = "Training_test", speechId = idSpeech))
 
-        idSpeech = db.dataDao().addSpeech(SpeechDB(
-            soundBeforeStart = "Подготовьтесь к разминке",
-            soundAfterStart = "Начали",
-            soundBeforeEnd = "Закончили",
-            soundAfterEnd = "Разминка закончена",
-        ))
-            var idRound = db.dataDao().addRound(RoundDB(trainingId = idTraining, roundType = RoundType.UP, speechId = idSpeech))
-                idSpeech = db.dataDao().addSpeech(SpeechDB(
-                    soundBeforeStart = "Упражнение",
-                    soundAfterStart = "Начали",
-                    soundBeforeEnd = "Закончили",
-                    soundAfterEnd = "Упражнение закончено",))
-                var idExercise = db.dataDao().addExercise(ExerciseDB(roundId = idRound, activityId = 1, speechId = idSpeech))
-                idSpeech = db.dataDao().addSpeech(SpeechDB(
-                    soundBeforeStart = "Подход ",
-                    soundAfterStart = "Начали",
-                    soundBeforeEnd = "Закончили",
-                    soundAfterEnd = "Подход закончен",))
-                db.dataDao().addSet(SetDB(exerciseId = idExercise, name = "Set 1", speechId = idSpeech))
+        idSpeech = db.dataDao().addSpeech(SpeechDB(beforeStart = "Подготовьтесь к разминке", afterStart = "Начали", beforeEnd = "Закончили", afterEnd = "Разминка закончена",))
+        var idRound = db.dataDao().addRound(RoundDB(trainingId = idTraining, roundType = RoundType.UP, speechId = idSpeech))
+        idSpeech = db.dataDao().addSpeech(SpeechDB(beforeStart = "Упражнение", afterStart = "Начали", beforeEnd = "Закончили", afterEnd = "Упражнение закончено",))
+        var idExercise = db.dataDao().addExercise(ExerciseDB(roundId = idRound, activityId = 3, speechId = idSpeech))
+        idSpeech = db.dataDao().addSpeech(SpeechDB(beforeStart = "Подход ", afterStart = "Начали", beforeEnd = "Закончили", afterEnd = "Подход закончен",))
+        db.dataDao().addSet(SetDB(exerciseId = idExercise, name = "Set 1", speechId = idSpeech))
 
-        idSpeech = db.dataDao().addSpeech(SpeechDB(
-            soundBeforeStart = "Подготовьтесь к основной части тренировки",
-            soundAfterStart = "Начали",
-            soundBeforeEnd = "Закончили",
-            soundAfterEnd = "Основная часть закончена",))
+        idSpeech = db.dataDao().addSpeech(SpeechDB(beforeStart = "Подготовьтесь к основной части тренировки", afterStart = "Начали", beforeEnd = "Закончили", afterEnd = "Основная часть закончена",))
             idRound = db.dataDao().addRound(RoundDB(trainingId = idTraining, roundType = RoundType.OUT, speechId = idSpeech))
                 idSpeech = db.dataDao().addSpeech(SpeechDB(
-                    soundBeforeStart = "Упражнение",
-                    soundAfterStart = "Начали",
-                    soundBeforeEnd = "Закончили",
-                    soundAfterEnd = "Упражнение закончено",))
+                    beforeStart = "Упражнение", afterStart = "Начали", beforeEnd = "Закончили", afterEnd = "Упражнение закончено",))
                 idExercise = db.dataDao().addExercise(ExerciseDB(roundId = idRound, activityId = 3, speechId = idSpeech))
                 idSpeech = db.dataDao().addSpeech(SpeechDB(
-                    soundBeforeStart = "Подход ",
-                    soundAfterStart = "Начали",
-                    soundBeforeEnd = "Закончили",
-                    soundAfterEnd = "Подход закончен",))
+                    beforeStart = "Подход ", afterStart = "Начали", beforeEnd = "Закончили", afterEnd = "Подход закончен",))
                 db.dataDao().addSet(SetDB(exerciseId = idExercise, name = "Set 1", speechId = idSpeech))
 
         idSpeech = db.dataDao().addSpeech(SpeechDB(
-            soundBeforeStart = "Подготовьтесь к заминке",
-            soundAfterStart = "Начали",
-            soundBeforeEnd = "Закончили",
-            soundAfterEnd = "Зазминка закончена",))
+            beforeStart = "Подготовьтесь к заминке", afterStart = "Начали", beforeEnd = "Закончили", afterEnd = "Зазминка закончена",))
             idRound = db.dataDao().addRound(RoundDB(trainingId = idTraining, roundType = RoundType.DOWN, speechId = idSpeech))
                 idSpeech = db.dataDao().addSpeech(SpeechDB(
-                    soundBeforeStart = "Упражнение",
-                    soundAfterStart = "Начали",
-                    soundBeforeEnd = "Закончили",
-                    soundAfterEnd = "Упражнение закончено",))
+                    beforeStart = "Упражнение", afterStart = "Начали", beforeEnd = "Закончили", afterEnd = "Упражнение закончено",))
                 idExercise = db.dataDao().addExercise(ExerciseDB(roundId = idRound, activityId = 2, speechId = idSpeech))
                 idSpeech = db.dataDao().addSpeech(SpeechDB(
-                    soundBeforeStart = "Подход ",
-                    soundAfterStart = "Начали",
-                    soundBeforeEnd = "Закончили",
-                    soundAfterEnd = "Подход закончен",))
+                    beforeStart = "Подход ", afterStart = "Начали", beforeEnd = "Закончили", afterEnd = "Подход закончен",))
                 db.dataDao().addSet(SetDB(exerciseId = idExercise, name = "Set 1", speechId = idSpeech))
     }
 

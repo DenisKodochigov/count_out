@@ -9,12 +9,12 @@ class PlayerSet @Inject constructor(val speechManager:SpeechManager)
     @Inject lateinit var playerExercise: PlayerExercise
     private val delay = 5000L
     suspend fun playingSet(set: Set){
-        speechManager.speakOut(set.speech.soundBeforeStart, delay)
-        speechManager.speakOut(set.speech.soundAfterStart, delay)
+        speechManager.speakOut(set.speech.beforeStart, delay)
+        speechManager.speakOut(set.speech.afterStart, delay)
 //        round.exercise.forEach { exercise->
 //            playerExercise.playingExercise(exercise)
 //
-        speechManager.speakOut(set.speech.soundBeforeEnd, delay)
-        speechManager.speakOut(set.speech.soundAfterEnd, delay)
+        speechManager.speakOut(set.speech.beforeEnd, delay)
+        speechManager.speakOut(set.speech.afterEnd, delay)
     }
 }

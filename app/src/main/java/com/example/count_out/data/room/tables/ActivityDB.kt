@@ -8,6 +8,7 @@ import com.example.count_out.entity.Activity
 data class ActivityDB(
     @PrimaryKey(autoGenerate = true) override val idActivity: Long = 0,
     override var name: String = "",
+    override val description: String = "",
     override var icon: Int = R.drawable.ic_cube,
     override var color: Int = 0,
     override var videoClip: String = "",
