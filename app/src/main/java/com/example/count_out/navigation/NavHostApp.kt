@@ -4,6 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
+import com.example.count_out.entity.Const.defaultScreen
 
 @Composable
 fun NavHostApp(
@@ -12,7 +13,7 @@ fun NavHostApp(
 ){
     NavHost(
         navController = navController,
-        startDestination = TrainingsDestination.route,
+        startDestination = defaultScreen,
         modifier = modifier
     ){
         trainings( goToScreenTraining = { navController.navigateToTraining(it) },
