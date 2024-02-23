@@ -76,8 +76,7 @@ fun BottomSheetSelectActivityContent(uiState: TrainingScreenState)
                 activity = mutableStateOf(item),
                 typeKeyboard = TypeKeyboard.NONE,
                 onSelect = { uiState.onSelectActivity(uiState.exercise.idExercise, item.idActivity) },
-                onChangeColor = {uiState.onSetColorActivity(item.idActivity, it )
-                }
+                onChangeColor = {uiState.onSetColorActivity(item.idActivity, it ) }
             )
         }
     }

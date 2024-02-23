@@ -189,12 +189,15 @@ import com.example.count_out.ui.theme.styleApp
     placeholder: String = "",
     showLine: Boolean = true,
     onLossFocus: Boolean = true,
-    onChangeValue:(String)->Unit = {}
+    maxLines: Int = 1,
+    onChangeValue:(String)->Unit = {},
+    edit: Boolean = false
 ){
     val keyboardController = LocalSoftwareKeyboardController.current
     val focusManager = LocalFocusManager.current
     val interactionSource = remember { MutableInteractionSource() }
-    var text by rememberSaveable { mutableStateOf("") }
+    var text by if (edit) rememberSaveable { mutableStateOf(placeholder) }
+                    else rememberSaveable { mutableStateOf("") }
     val enabled = typeKeyboard != TypeKeyboard.NONE
     val paddingHor = if (textStyle.fontSize > 14.sp) 8.dp else 4.dp
     val paddingVer = if (textStyle.fontSize > 14.sp) 6.dp else 2.dp
@@ -206,8 +209,8 @@ import com.example.count_out.ui.theme.styleApp
     BasicTextField(
         value = text,
         enabled = enabled,
-        singleLine = true,
-        maxLines = 1,
+        singleLine = maxLines == 1,
+        maxLines = maxLines,
         modifier = modifier
             .indicatorLine(
                 enabled = enabled,
@@ -250,7 +253,7 @@ import com.example.count_out.ui.theme.styleApp
                         }
                 )
                 {
-                    if (text.isEmpty()) Text( text = placeholder, style = textStyle)
+                    if (text.isEmpty()) Text( text = if (edit) "" else placeholder, style = textStyle)
                     it()
                 }
             }

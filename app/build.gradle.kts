@@ -62,7 +62,7 @@ dependencies {
     implementation(platform("androidx.compose:compose-bom:2023.10.01"))
     //Hilt
     implementation ("com.google.dagger:hilt-android:$daggerVersion")
-    implementation ("androidx.hilt:hilt-navigation-compose:1.1.0")
+    implementation ("androidx.hilt:hilt-navigation-compose:1.2.0")
     ksp ("com.google.dagger:dagger-compiler:$daggerVersion")
     ksp ("com.google.dagger:hilt-compiler:$daggerVersion")
     testImplementation ("com.google.dagger:hilt-android-testing:$daggerVersion")
@@ -70,7 +70,7 @@ dependencies {
     implementation ("androidx.compose.ui:ui:$composeVersion")
     implementation("com.google.accompanist:accompanist-permissions:0.34.0")
     debugImplementation("androidx.compose.ui:ui-tooling")
-    debugImplementation("androidx.compose.ui:ui-test-manifest:$composeVersion")
+    debugImplementation("androidx.compose.ui:ui-test-manifest:1.6.2")
     //Tooling support (Previews, etc.)
     implementation ("androidx.compose.ui:ui-graphics:$composeVersion")
     implementation ("androidx.compose.ui:ui-tooling-preview:$composeVersion")
@@ -84,7 +84,7 @@ dependencies {
     implementation ("androidx.compose.foundation:foundation-layout:$composeVersion")
     // Material Design
     implementation("androidx.compose.material3:material3:1.2.0")
-    implementation ("androidx.compose.ui:ui-text-google-fonts:1.6.1")
+    implementation ("androidx.compose.ui:ui-text-google-fonts:1.6.2")
     implementation ("androidx.compose.material:material-icons-core:$composeVersion")
     implementation ("androidx.compose.material:material-icons-extended:$composeVersion")
     //Adaptive

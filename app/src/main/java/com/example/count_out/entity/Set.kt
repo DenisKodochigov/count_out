@@ -10,9 +10,9 @@ interface Set {
     val weight: Int
     val intensity: String
     val distance: Double
-    val duration: Int
+    val duration: Double
     val reps: Int // количество отстчетов
-    val intervalReps: Int
+    val intervalReps: Double
     val intervalDown: Int //замедление отчетов
     val groupCount: String // Группы отстчетов
     val timeRest: Int

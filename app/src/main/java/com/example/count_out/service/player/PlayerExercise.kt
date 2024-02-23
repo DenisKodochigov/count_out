@@ -6,15 +6,14 @@ import javax.inject.Inject
 
 class PlayerExercise @Inject constructor(val speechManager:SpeechManager, val playerSet: PlayerSet)
 {
-    private val delay = 5000L
     suspend fun playingExercise(exercise: Exercise){
-        speechManager.speakOut(exercise.speech.beforeStart + " " + exercise.activity.name, delay)
-        speechManager.speakOut(exercise.speech.beforeStart + " " + exercise.activity.description, delay)
-        speechManager.speakOut(exercise.speech.afterStart, delay)
+        speechManager.speakOut(exercise.speech.beforeStart + " " + exercise.activity.name, 0L)
+        speechManager.speakOut(exercise.activity.description, 0L)
+        speechManager.speakOut(exercise.speech.afterStart, 0L)
         exercise.sets.forEach { set->
             playerSet.playingSet(set)
         }
-        speechManager.speakOut(exercise.speech.beforeEnd + " " + exercise.activity.name, delay)
-        speechManager.speakOut(exercise.speech.afterEnd, delay)
+        speechManager.speakOut(exercise.speech.beforeEnd, 0L)
+        speechManager.speakOut(exercise.speech.afterEnd, 0L)
     }
 }

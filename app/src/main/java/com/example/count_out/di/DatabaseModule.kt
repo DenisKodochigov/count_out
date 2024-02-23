@@ -25,7 +25,7 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 object DatabaseModule {
     lateinit var database: AppDatabase
-    private const val mode: Int = 1
+    private var mode: Int = 1
     @Provides
     @Singleton
     fun provideDatabase(@ApplicationContext appContext: Context): AppDatabase {
@@ -74,16 +74,18 @@ object DatabaseModule {
             description = "Поставьте перед собой руки и поочередно подимайте ноги касаясь коленом ладони. Правую коленку к правой руке"))
         db.dataDao().addActivity(ActivityDB(idActivity = 9, name = "Диагональный подъем колен", icon = R.drawable.ic_setka,
             description = "Поставьте перед собой руки и поочередно подимайте ноги касаясь коленом ладони. Правую коленку к левой руке"))
-        db.dataDao().addActivity(ActivityDB(idActivity = 10, name = "Приседания с выходом на носки", icon = R.drawable.ic_setka,
+        db.dataDao().addActivity(ActivityDB(idActivity = 10, name = "Паук", icon = R.drawable.ic_setka,
+            description = "Руки за голову. Поднимайте колени к локтям одновременно наклянясь в сторону."))
+        db.dataDao().addActivity(ActivityDB(idActivity = 11, name = "Приседания с выходом на носки", icon = R.drawable.ic_setka,
             description = "Глубокие приседания с подъемом на носках и вытягиванием рук вверх"))
-        db.dataDao().addActivity(ActivityDB(idActivity = 11, name = "Сейдза.", icon = R.drawable.ic_setka,
+        db.dataDao().addActivity(ActivityDB(idActivity = 12, name = "Сейдза.", icon = R.drawable.ic_setka,
             description = "Сядьте на согнутые в коленях ноги. Спина прямая, ягодицы касаются пяток."))
-        db.dataDao().addActivity(ActivityDB(idActivity = 12, name = "Кидза.", icon = R.drawable.ic_setka,
+        db.dataDao().addActivity(ActivityDB(idActivity = 13, name = "Кидза.", icon = R.drawable.ic_setka,
             description = "Сядьте на согнутые в коленях ноги. Спина прямая, ягодицы касаются пяток, носки на подогнутых пальцах."))
-        db.dataDao().addActivity(ActivityDB(idActivity = 13, name = "Отжимания", icon = R.drawable.ic_setka))
-        db.dataDao().addActivity(ActivityDB(idActivity = 14, name = "Нога на ногу", icon = R.drawable.ic_setka,
+        db.dataDao().addActivity(ActivityDB(idActivity = 14, name = "Отжимания", icon = R.drawable.ic_setka))
+        db.dataDao().addActivity(ActivityDB(idActivity = 15, name = "Нога на ногу", icon = R.drawable.ic_setka,
             description = "Сядьте на стул. Положите одну ногу в районе ступни на другую. Медленно тяните вернюю ногу вниз, спина прямая."))
-        db.dataDao().addActivity(ActivityDB(idActivity = 15, name = "Велосипед на пресс", icon = R.drawable.ic_setka,
+        db.dataDao().addActivity(ActivityDB(idActivity = 16, name = "Велосипед на пресс", icon = R.drawable.ic_setka,
             description = "Исходное положение: лежа на спине, руки за головой, ноги чуть согнуты. " +
                     "Руки не нужно сцеплять в замок, чтобы не помогать ими, надавливая на затылок. " +
                     "Подъемы корпуса должны осуществляться за счет мышц пресса. Поднимите обе ноги, " +
@@ -94,38 +96,125 @@ object DatabaseModule {
                     "подъеме корпуса выполняется выдох.Выпрямите правую ногу, одновременно сгибая левую. " +
                     "Движение ног должно быть плавным, имитирующим езду на велосипеде. Корпус при этом " +
                     "поворачивается другой стороной — теперь правым локтем вы тянитесь к левому колену. "))
-        db.dataDao().addActivity(ActivityDB(idActivity = 16, name = "Расяжка ног", icon = R.drawable.ic_setka,
+        db.dataDao().addActivity(ActivityDB(idActivity = 17, name = "Расяжка внутерней части бедер ног", icon = R.drawable.ic_setka,
             description = "Сядьте на пол, раздвиньте ноги. Покачиваясь вперед, пытайтесь логтями дотянуться до пола между ног"))
+        db.dataDao().addActivity(ActivityDB(idActivity = 18, name = "Расяжка нижней части бедер ног", icon = R.drawable.ic_setka,
+            description = "Сядьте на пол, вытяните перед собой ноги. Тянитесь вперед на выдохе."))
+        db.dataDao().addActivity(ActivityDB(idActivity = 19, name = "Кисти рук", icon = R.drawable.ic_setka,
+            description = "Вытяните рукки и сжимайте в кулак и разжимайте кисть"))
 
-        var idSpeech = db.dataDao().addSpeech(SpeechDB(
-            beforeStart = "Начинаем ", afterStart = "Начали", beforeEnd = "Закончили", afterEnd = "Тренировка закончена.",))
-        val idTraining = db.dataDao().addTraining(TrainingDB(name = "Training_test", speechId = idSpeech))
+        var idTraining = db.dataDao().addTraining(TrainingDB(name = "Зарядка", idTraining = 1,
+            speechId = db.dataDao().addSpeech(SpeechDB(beforeStart = "Начинаем ", afterStart = "", beforeEnd = "", afterEnd = "Тренировка закончена.",))))
+//Разминка
+        var idRound = db.dataDao().addRound(RoundDB(trainingId = idTraining, roundType = RoundType.UP,
+            speechId = db.dataDao().addSpeech(SpeechDB(beforeStart = "Подготовьтесь к разминке", afterStart = "", beforeEnd = "", afterEnd = "Разминка закончена",))))
+        //Упражнение 1
+        var idExercise = db.dataDao().addExercise(ExerciseDB(roundId = idRound, activityId = 3,
+            speechId = db.dataDao().addSpeech(SpeechDB(beforeStart = "Упражнение", afterStart = "", beforeEnd = "", afterEnd = "Упражнение закончено",))))
+        db.dataDao().addSet(SetDB(exerciseId = idExercise, name = "Set 1", duration = 0.5, timeRest = 10,
+            speechId = db.dataDao().addSpeech(SpeechDB(beforeStart = "Подход ", afterStart = "Старт", beforeEnd = "", afterEnd = "Подход закончен",))))
+        //Упражнение 2
+        idExercise = db.dataDao().addExercise(ExerciseDB(roundId = idRound, activityId = 4,
+            speechId = db.dataDao().addSpeech(SpeechDB(beforeStart = "Упражнение", afterStart = "", beforeEnd = "", afterEnd = "Упражнение закончено",))))
+        db.dataDao().addSet(SetDB(exerciseId = idExercise, name = "Set 2", duration = 0.5, timeRest = 10,
+            speechId = db.dataDao().addSpeech(SpeechDB(beforeStart = "Подход ", afterStart = "Старт", beforeEnd = "", afterEnd = "Подход закончен",))))
+        //Упражнение 3
+        idExercise = db.dataDao().addExercise(ExerciseDB(roundId = idRound, activityId = 5,
+            speechId = db.dataDao().addSpeech(SpeechDB(beforeStart = "Упражнение", afterStart = "", beforeEnd = "", afterEnd = "Упражнение закончено",))))
+        db.dataDao().addSet(SetDB(exerciseId = idExercise, name = "Set 3", duration = 0.5, timeRest = 10,
+            speechId = db.dataDao().addSpeech(SpeechDB(beforeStart = "Подход ", afterStart = "Старт", beforeEnd = "", afterEnd = "Подход закончен",))))
+        //Упражнение 4
+        idExercise = db.dataDao().addExercise(ExerciseDB(roundId = idRound, activityId = 6,
+            speechId = db.dataDao().addSpeech(SpeechDB(beforeStart = "Упражнение", afterStart = "", beforeEnd = "", afterEnd = "Упражнение закончено",))))
+        db.dataDao().addSet(SetDB(exerciseId = idExercise, name = "Set 4", duration = 0.5, timeRest = 10,
+            speechId = db.dataDao().addSpeech(SpeechDB(beforeStart = "Подход ", afterStart = "Старт", beforeEnd = "", afterEnd = "Подход закончен",))))
+        //Упражнение 5
+        idExercise = db.dataDao().addExercise(ExerciseDB(roundId = idRound, activityId = 7,
+            speechId = db.dataDao().addSpeech(SpeechDB(beforeStart = "Упражнение", afterStart = "", beforeEnd = "", afterEnd = "Упражнение закончено",))))
+        db.dataDao().addSet(SetDB(exerciseId = idExercise, name = "Set 5", duration = 0.5, timeRest = 10,
+            speechId = db.dataDao().addSpeech(SpeechDB(beforeStart = "Подход ", afterStart = "Старт", beforeEnd = "", afterEnd = "Подход закончен",))))
+//Основная часть
+        idRound = db.dataDao().addRound(RoundDB(trainingId = idTraining, roundType = RoundType.OUT,
+            speechId = db.dataDao().addSpeech(SpeechDB(beforeStart = "Подготовьтесь к основной части тренировки", afterStart = "", beforeEnd = "", afterEnd = "Основная часть закончена",))))
+        //Упражнение 1
+        idExercise = db.dataDao().addExercise(ExerciseDB(roundId = idRound, activityId = 8,
+            speechId = db.dataDao().addSpeech(SpeechDB(beforeStart = "Упражнение", afterStart = "", beforeEnd = "", afterEnd = "Упражнение закончено",))))
+        db.dataDao().addSet(SetDB(exerciseId = idExercise, name = "Set 1", reps = 20, intervalReps = 1.5, timeRest = 20,
+            speechId = db.dataDao().addSpeech(SpeechDB(beforeStart = "Подход ", afterStart = "Старт", beforeEnd = "", afterEnd = "Подход закончен",))))
+        //Упражнение 2
+        idExercise = db.dataDao().addExercise(ExerciseDB(roundId = idRound, activityId = 9,
+            speechId = db.dataDao().addSpeech(SpeechDB(beforeStart = "Упражнение", afterStart = "", beforeEnd = "", afterEnd = "Упражнение закончено",))))
+        db.dataDao().addSet(SetDB(exerciseId = idExercise, name = "Set 2", reps = 20, intervalReps = 1.5, timeRest = 20,
+            speechId = db.dataDao().addSpeech(SpeechDB(beforeStart = "Подход ", afterStart = "Старт", beforeEnd = "", afterEnd = "Подход закончен",))))
+        //Упражнение 3
+        idExercise = db.dataDao().addExercise(ExerciseDB(roundId = idRound, activityId = 10,
+            speechId = db.dataDao().addSpeech(SpeechDB(beforeStart = "Упражнение", afterStart = "", beforeEnd = "", afterEnd = "Упражнение закончено",))))
+        db.dataDao().addSet(SetDB(exerciseId = idExercise, name = "Set 3", reps = 20, intervalReps = 1.5, timeRest = 20,
+            speechId = db.dataDao().addSpeech(SpeechDB(beforeStart = "Подход ", afterStart = "Старт", beforeEnd = "", afterEnd = "Подход закончен",))))
+        //Упражнение 4
+        idExercise = db.dataDao().addExercise(ExerciseDB(roundId = idRound, activityId = 11,
+            speechId = db.dataDao().addSpeech(SpeechDB(beforeStart = "Упражнение", afterStart = "", beforeEnd = "", afterEnd = "Упражнение закончено",))))
+        db.dataDao().addSet(SetDB(exerciseId = idExercise, name = "Set 1", reps = 30, intervalReps = 2.0, timeRest = 10,
+            speechId = db.dataDao().addSpeech(SpeechDB(beforeStart = "Подход ", afterStart = "Старт", beforeEnd = "", afterEnd = "Подход закончен",))))
+        //Упражнение 5
+        idExercise = db.dataDao().addExercise(ExerciseDB(roundId = idRound, activityId = 19,
+            speechId = db.dataDao().addSpeech(SpeechDB(beforeStart = "Упражнение", afterStart = "", beforeEnd = "", afterEnd = "Упражнение закончено",))))
+        db.dataDao().addSet(SetDB(exerciseId = idExercise, name = "Set 1", duration = 0.5, timeRest = 10,
+            speechId = db.dataDao().addSpeech(SpeechDB(beforeStart = "Подход ", afterStart = "Старт", beforeEnd = "", afterEnd = "Подход закончен",))))
+        //Упражнение 6
+        idExercise = db.dataDao().addExercise(ExerciseDB(roundId = idRound, activityId = 14,
+            speechId = db.dataDao().addSpeech(SpeechDB(beforeStart = "Упражнение", afterStart = "", beforeEnd = "", afterEnd = "Упражнение закончено",))))
+        db.dataDao().addSet(SetDB(exerciseId = idExercise, name = "Set 1", reps = 15, intervalReps = 2.0, timeRest = 10,
+            speechId = db.dataDao().addSpeech(SpeechDB(beforeStart = "Подход ", afterStart = "Старт", beforeEnd = "", afterEnd = "Подход закончен",))))
+        //Упражнение 7
+        idExercise = db.dataDao().addExercise(ExerciseDB(roundId = idRound, activityId = 12,
+            speechId = db.dataDao().addSpeech(SpeechDB(beforeStart = "Упражнение", afterStart = "", beforeEnd = "", afterEnd = "Упражнение закончено",))))
+        db.dataDao().addSet(SetDB(exerciseId = idExercise, name = "Set 1", duration = 0.5, timeRest = 10,
+            speechId = db.dataDao().addSpeech(SpeechDB(beforeStart = "Подход ", afterStart = "Старт", beforeEnd = "", afterEnd = "Подход закончен",))))
+        //Упражнение 7
+        idExercise = db.dataDao().addExercise(ExerciseDB(roundId = idRound, activityId = 16,
+            speechId = db.dataDao().addSpeech(SpeechDB(beforeStart = "Упражнение", afterStart = "", beforeEnd = "", afterEnd = "Упражнение закончено",))))
+        db.dataDao().addSet(SetDB(exerciseId = idExercise, name = "Set 1", reps = 20, intervalReps = 2.0, timeRest = 10,
+            speechId = db.dataDao().addSpeech(SpeechDB(beforeStart = "Подход ", afterStart = "Старт", beforeEnd = "", afterEnd = "Подход закончен",))))
+        //Упражнение 8
+        idExercise = db.dataDao().addExercise(ExerciseDB(roundId = idRound, activityId = 13,
+            speechId = db.dataDao().addSpeech(SpeechDB(beforeStart = "Упражнение", afterStart = "", beforeEnd = "", afterEnd = "Упражнение закончено",))))
+        db.dataDao().addSet(SetDB(exerciseId = idExercise, name = "Set 1", duration = 0.5, timeRest = 10,
+            speechId = db.dataDao().addSpeech(SpeechDB(beforeStart = "Подход ", afterStart = "Старт", beforeEnd = "", afterEnd = "Подход закончен",))))
+//Заминка
+        idRound = db.dataDao().addRound(RoundDB(trainingId = idTraining, roundType = RoundType.DOWN,
+            speechId = db.dataDao().addSpeech(SpeechDB(beforeStart = "Подготовьтесь к заминке", afterStart = "", beforeEnd = "", afterEnd = "Зазминка закончена",))))
+        idExercise = db.dataDao().addExercise(ExerciseDB(roundId = idRound, activityId = 17,
+            speechId = db.dataDao().addSpeech(SpeechDB(beforeStart = "Упражнение", afterStart = "", beforeEnd = "", afterEnd = "Упражнение закончено",))))
+        db.dataDao().addSet(SetDB(exerciseId = idExercise, name = "Set 1", duration = 1.0, timeRest = 10,
+            speechId = db.dataDao().addSpeech(SpeechDB(beforeStart = "Подход ", afterStart = "Старт", beforeEnd = "", afterEnd = "Подход закончен",))))
+        idExercise = db.dataDao().addExercise(ExerciseDB(roundId = idRound, activityId = 18,
+            speechId = db.dataDao().addSpeech(SpeechDB(beforeStart = "Упражнение", afterStart = "", beforeEnd = "", afterEnd = "Упражнение закончено",))))
+        db.dataDao().addSet(SetDB(exerciseId = idExercise, name = "Set 1", duration = 1.0, timeRest = 10,
+            speechId = db.dataDao().addSpeech(SpeechDB(beforeStart = "Подход ", afterStart = "Старт", beforeEnd = "", afterEnd = "Подход закончен",))))
 
-        idSpeech = db.dataDao().addSpeech(SpeechDB(beforeStart = "Подготовьтесь к разминке", afterStart = "Начали", beforeEnd = "Закончили", afterEnd = "Разминка закончена",))
-        var idRound = db.dataDao().addRound(RoundDB(trainingId = idTraining, roundType = RoundType.UP, speechId = idSpeech))
-        idSpeech = db.dataDao().addSpeech(SpeechDB(beforeStart = "Упражнение", afterStart = "Начали", beforeEnd = "Закончили", afterEnd = "Упражнение закончено",))
-        var idExercise = db.dataDao().addExercise(ExerciseDB(roundId = idRound, activityId = 3, speechId = idSpeech))
-        idSpeech = db.dataDao().addSpeech(SpeechDB(beforeStart = "Подход ", afterStart = "Начали", beforeEnd = "Закончили", afterEnd = "Подход закончен",))
-        db.dataDao().addSet(SetDB(exerciseId = idExercise, name = "Set 1", speechId = idSpeech))
 
-        idSpeech = db.dataDao().addSpeech(SpeechDB(beforeStart = "Подготовьтесь к основной части тренировки", afterStart = "Начали", beforeEnd = "Закончили", afterEnd = "Основная часть закончена",))
-            idRound = db.dataDao().addRound(RoundDB(trainingId = idTraining, roundType = RoundType.OUT, speechId = idSpeech))
-                idSpeech = db.dataDao().addSpeech(SpeechDB(
-                    beforeStart = "Упражнение", afterStart = "Начали", beforeEnd = "Закончили", afterEnd = "Упражнение закончено",))
-                idExercise = db.dataDao().addExercise(ExerciseDB(roundId = idRound, activityId = 3, speechId = idSpeech))
-                idSpeech = db.dataDao().addSpeech(SpeechDB(
-                    beforeStart = "Подход ", afterStart = "Начали", beforeEnd = "Закончили", afterEnd = "Подход закончен",))
-                db.dataDao().addSet(SetDB(exerciseId = idExercise, name = "Set 1", speechId = idSpeech))
-
-        idSpeech = db.dataDao().addSpeech(SpeechDB(
-            beforeStart = "Подготовьтесь к заминке", afterStart = "Начали", beforeEnd = "Закончили", afterEnd = "Зазминка закончена",))
-            idRound = db.dataDao().addRound(RoundDB(trainingId = idTraining, roundType = RoundType.DOWN, speechId = idSpeech))
-                idSpeech = db.dataDao().addSpeech(SpeechDB(
-                    beforeStart = "Упражнение", afterStart = "Начали", beforeEnd = "Закончили", afterEnd = "Упражнение закончено",))
-                idExercise = db.dataDao().addExercise(ExerciseDB(roundId = idRound, activityId = 2, speechId = idSpeech))
-                idSpeech = db.dataDao().addSpeech(SpeechDB(
-                    beforeStart = "Подход ", afterStart = "Начали", beforeEnd = "Закончили", afterEnd = "Подход закончен",))
-                db.dataDao().addSet(SetDB(exerciseId = idExercise, name = "Set 1", speechId = idSpeech))
+        idTraining = db.dataDao().addTraining(TrainingDB(name = "Тренировка", idTraining = 2,
+            speechId = db.dataDao().addSpeech(SpeechDB(beforeStart = "Начинаем ", afterStart = "", beforeEnd = "", afterEnd = "Тренировка закончена.",))))
+//Разминка
+        idRound = db.dataDao().addRound(RoundDB(trainingId = idTraining, roundType = RoundType.UP,
+            speechId = db.dataDao().addSpeech(SpeechDB(beforeStart = "Подготовьтесь к разминке", afterStart = "", beforeEnd = "", afterEnd = "Разминка закончена",))))
+        //Упражнение 1
+        idExercise = db.dataDao().addExercise(ExerciseDB(roundId = idRound, activityId = 8,
+            speechId = db.dataDao().addSpeech(SpeechDB(beforeStart = "Упражнение", afterStart = "", beforeEnd = "", afterEnd = "Упражнение закончено",))))
+        db.dataDao().addSet(SetDB(exerciseId = idExercise, name = "Set 1", reps = 20, intervalReps = 2.0, timeRest = 10,
+            speechId = db.dataDao().addSpeech(SpeechDB(beforeStart = "Подход ", afterStart = "Старт", beforeEnd = "", afterEnd = "Подход закончен",))))
+//Основная часть
+        idRound = db.dataDao().addRound(RoundDB(trainingId = idTraining, roundType = RoundType.OUT,
+            speechId = db.dataDao().addSpeech(SpeechDB(beforeStart = "", afterStart = "", beforeEnd = "", afterEnd = "",))))
+        //Упражнение 1
+        idExercise = db.dataDao().addExercise(ExerciseDB(roundId = idRound, activityId = 8,
+            speechId = db.dataDao().addSpeech(SpeechDB(beforeStart = "", afterStart = "", beforeEnd = "", afterEnd = "",))))
+//Заминка
+        idRound = db.dataDao().addRound(RoundDB(trainingId = idTraining, roundType = RoundType.DOWN,
+            speechId = db.dataDao().addSpeech(SpeechDB(beforeStart = "", afterStart = "", beforeEnd = "", afterEnd = "",))))
+        idExercise = db.dataDao().addExercise(ExerciseDB(roundId = idRound, activityId = 8,
+            speechId = db.dataDao().addSpeech(SpeechDB(beforeStart = "", afterStart = "", beforeEnd = "", afterEnd = "",))))
     }
 
     @Provides

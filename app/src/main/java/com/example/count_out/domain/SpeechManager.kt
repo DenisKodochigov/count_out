@@ -43,11 +43,18 @@ class SpeechManager(val context: Context) {
             } else { tts = null }
         }
     }
-    suspend fun speakOut(text: String, delay: Long){
+    suspend fun speakOut(text: String, delay: Long = 0L){
         if (text.isNotEmpty()) {
             log(true, "SpeechManager.speakOut: $text")
             tts?.speak(text, TextToSpeech.QUEUE_ADD, null,"speakOut")
-            delay(delay)
+            val d: Long = if (delay ==0L) text.length * 50L else delay
+            delay(d)
+        }
+    }
+    fun speakOutFlush(text: String){
+        if (text.isNotEmpty()) {
+            log(true, "SpeechManager.speakOut: $text")
+            tts?.speak(text, TextToSpeech.QUEUE_FLUSH, null,"speakOut")
         }
     }
     fun speakOut(text: String){

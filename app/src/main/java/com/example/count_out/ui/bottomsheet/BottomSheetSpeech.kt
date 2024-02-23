@@ -31,6 +31,7 @@ import com.example.count_out.entity.TypeKeyboard
 import com.example.count_out.ui.joint.ButtonConfirm
 import com.example.count_out.ui.theme.Dimen
 import com.example.count_out.ui.theme.interLight12Start
+import com.example.count_out.ui.theme.interThin10Start
 import com.example.count_out.ui.theme.shapesApp
 import com.example.count_out.ui.view_components.TextApp
 import com.example.count_out.ui.view_components.TextFieldApp
@@ -107,17 +108,20 @@ fun BottomSheetSpeechContent(uiState: BottomSheetState)
 
 @Composable fun FieldTextForSpeech(enterValue: MutableState<String>, nameSection: String){
     Column {
-        TextApp(text = nameSection, style = interLight12Start)
         TextFieldApp(
             textStyle = interLight12Start,
             showLine = true,
             onLossFocus = false,
+            maxLines = 3,
+            edit = true,
             contentAlignment = Alignment.BottomStart,
             modifier = Modifier.fillMaxWidth(),
 //                .background(color = MaterialTheme.colorScheme.primary, shape = shapesApp.extraSmall),
             placeholder = enterValue.value,
             onChangeValue = { enterValue.value = it },
             typeKeyboard = TypeKeyboard.TEXT )
+        TextApp(text = nameSection, style = interThin10Start,
+            modifier = Modifier.padding(start = Dimen.bsItemPaddingHor))
     }
 }
 @Composable fun SelectOtherSpeech(uiState: BottomSheetState){

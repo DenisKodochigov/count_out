@@ -26,6 +26,12 @@ val interReg12Center = TextStyle(
     fontSize = 12.sp,
     textAlign = TextAlign.Center
 )
+val interReg12Start = TextStyle(
+    fontFamily = FontFamily(Font(R.font.inter_regular)),
+    fontSize = 12.sp,
+    textAlign = TextAlign.Start,
+    textDecoration = TextDecoration.None
+)
 val interBold16 = TextStyle(
     fontFamily = FontFamily(Font(R.font.inter_bold)),
     fontSize = 16.sp
@@ -45,6 +51,11 @@ val interThin14 = TextStyle(
 val interThin12 = TextStyle(
     fontFamily = FontFamily(Font(R.font.inter_thin)),
     fontSize = 12.sp
+)
+val interThin10Start = TextStyle(
+    fontFamily = FontFamily(Font(R.font.inter_thin)),
+    fontSize = 10.sp,
+    textAlign = TextAlign.Start,
 )
 val interLight16 = TextStyle(
     fontFamily = FontFamily(Font(R.font.inter_light)),

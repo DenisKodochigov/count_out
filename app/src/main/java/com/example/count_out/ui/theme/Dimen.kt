@@ -7,7 +7,8 @@ object Dimen {
     val paddingAppVer = 12.dp
 
     val bsPaddingHor1 = 12.dp
-    val bsSpacerHeight = 6.dp
+    val bsSpacerHeight = 14.dp
+    val bsSpacerHeight1 = 8.dp
     val bsItemPaddingHor = 6.dp
 
     val bsConfirmationButtonTopHeight = 30.dp

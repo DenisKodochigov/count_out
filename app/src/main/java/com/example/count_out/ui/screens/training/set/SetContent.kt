@@ -154,7 +154,7 @@ fun RadioButtonDuration(uiState: TrainingScreenState, set: Set, visible: Boolean
     Column {
         TextStringAndField(
             placeholder = set.duration.toString(),
-            onChangeValue = { uiState.onChangeSet ((set as SetDB).copy(duration = it.toInt())) },
+            onChangeValue = { uiState.onChangeSet ((set as SetDB).copy(duration = it.toDouble())) },
             editing = true,
             text = stringResource(id = R.string.duration) + " (" + stringResource(id = R.string.min) + "): ")
         AnimatedVisibility(modifier = Modifier.padding(4.dp), visible = visible
@@ -194,7 +194,7 @@ fun RadioButtonCount(uiState: TrainingScreenState, set: Set, visible: Boolean)
                     text = stringResource(id = R.string.intensity) + " (" + stringResource(id = R.string.zone) + "): ")
                 TextStringAndField(
                     placeholder = set.intervalReps.toString(),
-                    onChangeValue = { uiState.onChangeSet ((set as SetDB).copy(intervalReps = it.toInt())) },
+                    onChangeValue = { uiState.onChangeSet ((set as SetDB).copy(intervalReps = it.toDouble())) },
                     editing = true,
                     text = stringResource(id = R.string.time_between_counts) + " (" + stringResource(id = R.string.sec) + "): ")
                 TextStringAndField(

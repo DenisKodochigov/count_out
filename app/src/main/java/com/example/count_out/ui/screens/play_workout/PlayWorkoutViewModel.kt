@@ -3,11 +3,12 @@ package com.example.count_out.ui.screens.play_workout
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.count_out.data.DataRepository
+import com.example.count_out.data.room.tables.StateWorkOutDB
 import com.example.count_out.entity.ErrorApp
+import com.example.count_out.entity.StateWorkOut
 import com.example.count_out.entity.Training
 import com.example.count_out.service.ServiceManager
 import com.example.count_out.service.WorkoutService
-import com.example.count_out.ui.view_components.log
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -31,6 +32,8 @@ class PlayWorkoutViewModel @Inject constructor(
         ))
     val playWorkoutScreenState: StateFlow<PlayWorkoutScreenState> = _playWorkoutScreenState.asStateFlow()
 
+    private var _stateWorkoutService: MutableStateFlow<StateWorkOut> = MutableStateFlow(StateWorkOutDB())
+    val stateWorkoutService: StateFlow<StateWorkOut> = _stateWorkoutService.asStateFlow()
     init {
         serviceManager.bindService(WorkoutService::class.java)
     }
@@ -38,7 +41,7 @@ class PlayWorkoutViewModel @Inject constructor(
         templateMy { dataRepository.getTraining(id) } }
 
     private fun startWorkOutService(training: Training){
-        serviceManager.startWorkout(training)
+        _stateWorkoutService = serviceManager.startWorkout(training)
     }
     private fun stopWorkOutService(){
         serviceManager.stopWorkout()

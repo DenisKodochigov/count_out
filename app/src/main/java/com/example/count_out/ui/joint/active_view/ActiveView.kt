@@ -27,7 +27,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.example.count_out.R
 import com.example.count_out.data.room.tables.ActivityDB
 import com.example.count_out.entity.Activity
 import com.example.count_out.entity.TypeKeyboard
@@ -134,7 +136,7 @@ fun ActivityValueFull(
             onChangeColor = onChangeColor
         )
         Row(verticalAlignment = Alignment.CenterVertically, modifier = modifier){
-            TextApp(text = "Audio Track: ", style = interLight12)
+            TextApp(text = stringResource(id = R.string.audio_track), style = interLight12)
             TextFieldApp(
                 modifier = Modifier.fillMaxWidth(),
                 placeholder = activity.value.audioTrack,
@@ -146,13 +148,27 @@ fun ActivityValueFull(
             )
         }
         Row(verticalAlignment = Alignment.CenterVertically, modifier = modifier ){
-            TextApp(text = "Video Clip: ", style = interLight12)
+            TextApp(text = stringResource(id = R.string.video_clip), style = interLight12)
             TextFieldApp(
                 modifier = Modifier.fillMaxWidth(),
                 placeholder = activity.value.videoClip,
                 contentAlignment = Alignment.BottomStart,
                 typeKeyboard = TypeKeyboard.TEXT,
                 onLossFocus = false,
+                textStyle = interLight12,
+                onChangeValue = { onChange( (activity.value as ActivityDB).copy(videoClip = it)) }
+            )
+        }
+        Column( modifier = modifier ){
+            TextApp(text = stringResource(id = R.string.description), style = interLight12)
+            TextFieldApp(
+                modifier = Modifier.fillMaxWidth(),
+                placeholder = activity.value.description,
+                contentAlignment = Alignment.BottomStart,
+                typeKeyboard = TypeKeyboard.TEXT,
+                onLossFocus = false,
+                maxLines = 3,
+                edit = true,
                 textStyle = interLight12,
                 onChangeValue = { onChange( (activity.value as ActivityDB).copy(videoClip = it)) }
             )
