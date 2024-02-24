@@ -12,11 +12,12 @@ import java.util.Locale
 
 class SpeechManager(val context: Context) {
 
+    private val show = false
     private var tts:TextToSpeech? = null
     val speeching: MutableState<Boolean> = mutableStateOf(true)
 
     fun init(){
-        log(true, "SpeechManager.init")
+        log(show, "SpeechManager.init")
         tts = TextToSpeech(context){ status ->
             if ( status == TextToSpeech.SUCCESS) {
                 val result = tts?.setLanguage( Locale.getDefault() )
@@ -26,17 +27,17 @@ class SpeechManager(val context: Context) {
                     tts?.setOnUtteranceProgressListener(object : UtteranceProgressListener(){
                         override fun onStart(utteranceId: String) {
                             speeching.value = true
-//                            log(true, "SpeechManager.On Start")
+//                            log(show, "SpeechManager.On Start")
                         }
                         override fun onDone(utteranceId: String) {
                             speeching.value = false
-//                            log(true, "SpeechManager.On Done")
+//                            log(show, "SpeechManager.On Done")
                         }
                         @Deprecated("Deprecated in Java",
                             ReplaceWith("Log.i(\"TextToSpeech\", \"On Error\")", "android.util.Log")
                         )
                         override fun onError(utteranceId: String) {
-//                            log(true, "SpeechManager.On Error")
+//                            log(show, "SpeechManager.On Error")
                         }
                     })
                 }
@@ -45,7 +46,7 @@ class SpeechManager(val context: Context) {
     }
     suspend fun speakOut(text: String, delay: Long = 0L){
         if (text.isNotEmpty()) {
-            log(true, "SpeechManager.speakOut: $text")
+            log(show, "SpeechManager.speakOut: $text")
             tts?.speak(text, TextToSpeech.QUEUE_ADD, null,"speakOut")
             val d: Long = if (delay ==0L) text.length * 50L else delay
             delay(d)
@@ -53,13 +54,13 @@ class SpeechManager(val context: Context) {
     }
     fun speakOutFlush(text: String){
         if (text.isNotEmpty()) {
-            log(true, "SpeechManager.speakOut: $text")
+            log(show, "SpeechManager.speakOut: $text")
             tts?.speak(text, TextToSpeech.QUEUE_FLUSH, null,"speakOut")
         }
     }
     fun speakOut(text: String){
         if (text.isNotEmpty()) {
-            log(true, "SpeechManager.speakOut: $text")
+            log(show, "SpeechManager.speakOut: $text")
             tts?.speak(text, TextToSpeech.QUEUE_ADD, null,"speakOut")
         }
     }

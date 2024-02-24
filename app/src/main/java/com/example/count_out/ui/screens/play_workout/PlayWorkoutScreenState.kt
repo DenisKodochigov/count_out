@@ -16,4 +16,5 @@ data class PlayWorkoutScreenState(
     val onPause: ()->Unit = {},
     val onStop: ()->Unit = {},
     @Stable var onBaskScreen: () ->Unit = {},
+    @Stable var startTime: Long = 0L,
 )

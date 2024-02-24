@@ -1,19 +1,30 @@
 package com.example.count_out.service.player
 
+import com.example.count_out.data.room.tables.StateWorkOutDB
 import com.example.count_out.domain.SpeechManager
 import com.example.count_out.entity.Exercise
+import com.example.count_out.ui.view_components.log
+import kotlinx.coroutines.flow.MutableStateFlow
 import javax.inject.Inject
 
 class PlayerExercise @Inject constructor(val speechManager:SpeechManager, val playerSet: PlayerSet)
 {
-    suspend fun playingExercise(exercise: Exercise){
-        speechManager.speakOut(exercise.speech.beforeStart + " " + exercise.activity.name, 0L)
-        speechManager.speakOut(exercise.activity.description, 0L)
-        speechManager.speakOut(exercise.speech.afterStart, 0L)
+    private val show = false
+    suspend fun playingExercise(exercise: Exercise, stateService: MutableStateFlow<StateWorkOutDB>){
+        speech(exercise.speech.beforeStart + " " + exercise.activity.name, stateService)
+        speech(exercise.activity.description, stateService)
+        speech(exercise.speech.afterStart, stateService)
         exercise.sets.forEach { set->
-            playerSet.playingSet(set)
+            playerSet.playingSet(set, stateService)
         }
-        speechManager.speakOut(exercise.speech.beforeEnd, 0L)
-        speechManager.speakOut(exercise.speech.afterEnd, 0L)
+        speech(exercise.speech.beforeEnd, stateService)
+        speech(exercise.speech.afterEnd, stateService)
+    }
+    suspend fun speech(text: String, stateService: MutableStateFlow<StateWorkOutDB>){
+        if (text.length > 1) {
+            stateService.value = StateWorkOutDB(state = text)
+            log(show, "PlayerExercise stateService: ${stateService.value}")
+            speechManager.speakOut(text, 0L)
+        }
     }
 }

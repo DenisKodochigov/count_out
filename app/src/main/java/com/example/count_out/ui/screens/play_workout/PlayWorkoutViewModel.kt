@@ -5,7 +5,6 @@ import androidx.lifecycle.viewModelScope
 import com.example.count_out.data.DataRepository
 import com.example.count_out.data.room.tables.StateWorkOutDB
 import com.example.count_out.entity.ErrorApp
-import com.example.count_out.entity.StateWorkOut
 import com.example.count_out.entity.Training
 import com.example.count_out.service.ServiceManager
 import com.example.count_out.service.WorkoutService
@@ -32,8 +31,8 @@ class PlayWorkoutViewModel @Inject constructor(
         ))
     val playWorkoutScreenState: StateFlow<PlayWorkoutScreenState> = _playWorkoutScreenState.asStateFlow()
 
-    private var _stateWorkoutService: MutableStateFlow<StateWorkOut> = MutableStateFlow(StateWorkOutDB())
-    val stateWorkoutService: StateFlow<StateWorkOut> = _stateWorkoutService.asStateFlow()
+    private val _stateWorkoutService: MutableStateFlow<StateWorkOutDB> = MutableStateFlow(StateWorkOutDB())
+    val stateWorkoutService: StateFlow<StateWorkOutDB> = _stateWorkoutService.asStateFlow()
     init {
         serviceManager.bindService(WorkoutService::class.java)
     }
@@ -41,8 +40,16 @@ class PlayWorkoutViewModel @Inject constructor(
         templateMy { dataRepository.getTraining(id) } }
 
     private fun startWorkOutService(training: Training){
-        _stateWorkoutService = serviceManager.startWorkout(training)
+        viewModelScope.launch(Dispatchers.IO) {
+            kotlin.runCatching {
+                serviceManager.startWorkout(training, _stateWorkoutService)
+            }.fold(
+                onSuccess = { },
+                onFailure = { errorApp.errorApi(it.message!!) }
+            )
+        }
     }
+
     private fun stopWorkOutService(){
         serviceManager.stopWorkout()
     }

@@ -2,7 +2,6 @@ package com.example.count_out.service.player
 
 import com.example.count_out.data.room.tables.StateWorkOutDB
 import com.example.count_out.domain.SpeechManager
-import com.example.count_out.entity.StateWorkOut
 import com.example.count_out.entity.Training
 import com.example.count_out.ui.view_components.log
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -10,21 +9,21 @@ import javax.inject.Inject
 
 class PlayerWorkOut @Inject constructor(val speechManager:SpeechManager, private val playerRound: PlayerRound)
 {
-    val stateWorkOut: MutableStateFlow<StateWorkOut> = MutableStateFlow(StateWorkOutDB())
-    suspend fun playingWorkOut(training: Training){
-        speech(training.speech.beforeStart + " " + training.name)
-        speech(training.speech.afterStart )
+    private val show = false
+    suspend fun playingWorkOut(training: Training, stateService: MutableStateFlow<StateWorkOutDB>){
+        speech(training.speech.beforeStart + " " + training.name, stateService)
+        speech(training.speech.afterStart, stateService )
         training.rounds.forEach { round->
-            playerRound.playingRound(round)
+            playerRound.playingRound(round, stateService)
         }
-        speech(training.speech.beforeEnd )
-        speech(training.speech.afterEnd )
+        speech(training.speech.beforeEnd, stateService )
+        speech(training.speech.afterEnd, stateService )
     }
 
-    suspend fun speech(text: String){
+    suspend fun speech(text: String, stateService: MutableStateFlow<StateWorkOutDB>){
         if (text.length > 1) {
-            stateWorkOut.value = StateWorkOutDB(state = text)
-            log(true, "PlayerWorkOut stateWorkOut: ${stateWorkOut.value}")
+            stateService.value = StateWorkOutDB(state = text)
+            log(show, "PlayerWorkOut stateWorkOut: ${stateService.value}")
             speechManager.speakOut(text, 0L)
         }
     }

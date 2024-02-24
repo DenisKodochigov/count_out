@@ -193,7 +193,7 @@ object DatabaseModule {
         db.dataDao().addSet(SetDB(exerciseId = idExercise, name = "Set 1", duration = 1.0, timeRest = 10,
             speechId = db.dataDao().addSpeech(SpeechDB(beforeStart = "Подход ", afterStart = "Старт", beforeEnd = "", afterEnd = "Подход закончен",))))
 
-
+/*
         idTraining = db.dataDao().addTraining(TrainingDB(name = "Тренировка", idTraining = 2,
             speechId = db.dataDao().addSpeech(SpeechDB(beforeStart = "Начинаем ", afterStart = "", beforeEnd = "", afterEnd = "Тренировка закончена.",))))
 //Разминка
@@ -215,7 +215,9 @@ object DatabaseModule {
             speechId = db.dataDao().addSpeech(SpeechDB(beforeStart = "", afterStart = "", beforeEnd = "", afterEnd = "",))))
         idExercise = db.dataDao().addExercise(ExerciseDB(roundId = idRound, activityId = 8,
             speechId = db.dataDao().addSpeech(SpeechDB(beforeStart = "", afterStart = "", beforeEnd = "", afterEnd = "",))))
+    */
     }
+
 
     @Provides
     fun provideDataDao(database: AppDatabase): DataDao {

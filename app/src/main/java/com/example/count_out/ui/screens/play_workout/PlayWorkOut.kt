@@ -4,9 +4,11 @@ import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -18,6 +20,10 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.count_out.ui.theme.interLight12
 import com.example.count_out.ui.view_components.ButtonApp
 import com.example.count_out.ui.view_components.TextApp
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
+import java.util.TimeZone
 
 @SuppressLint("UnrememberedMutableState")
 @Composable
@@ -26,16 +32,16 @@ fun PlayWorkoutScreen(
     onBaskScreen:() -> Unit
 ){
     val viewModel: PlayWorkoutViewModel = hiltViewModel()
-
-    LaunchedEffect( key1 = true, block = {
-        viewModel.getTraining(trainingId) })
+    LaunchedEffect( key1 = true, block = { viewModel.getTraining(trainingId) })
     PlayWorkoutScreenCreateView( viewModel = viewModel, onBaskScreen = onBaskScreen)
 }
 @Composable
 fun PlayWorkoutScreenCreateView( viewModel: PlayWorkoutViewModel, onBaskScreen:() -> Unit
 ){
     val uiState by viewModel.playWorkoutScreenState.collectAsState()
-    LaunchedEffect(key1 = true, block = { uiState.stateWorkout.add(viewModel.stateWorkoutService.value) })
+    val state by viewModel.stateWorkoutService.collectAsState()
+    if (state.state != null)  uiState.stateWorkout.add(state)
+    else uiState.startTime = state.time!!
     uiState.onBaskScreen = onBaskScreen
     PlayWorkoutScreenLayout(uiState = uiState)
 }
@@ -62,14 +68,30 @@ fun PlayWorkoutScreenCreateView( viewModel: PlayWorkoutViewModel, onBaskScreen:(
 {
     Column(modifier = Modifier.fillMaxWidth(), horizontalAlignment = Alignment.Start, verticalArrangement = Arrangement.Center) {
         uiState.stateWorkout.forEach { state ->
-            Row {
-                TextApp(text = state.time.toString(), style = interLight12)
+            Row (modifier = Modifier.padding(horizontal = 12.dp)){
+                TextApp(text = getDuration( startTime = uiState.startTime, time = state.time!!),
+                    modifier = Modifier.width(60.dp),
+                    style = interLight12)
+                Spacer(modifier = Modifier.width(12.dp))
                 TextApp(text = state.state.toString(), style = interLight12)
             }
         }
     }
 }
 
+fun getDuration(startTime: Long, time: Long): String{
+    val duration: Long = time - startTime
+    val hour = duration / 1000 / 60 / 60
+    val minutes = duration / 1000 / 60
+    val seconds = duration / 1000 % 60
+    return String.format("%02d:%02d:%02d",hour, minutes, seconds)
+}
+fun Long.getTime(): String {
+    val date = Date(this.toLong())
+    val formatter = SimpleDateFormat("HH:mm:ss", Locale.getDefault())
+    formatter.setTimeZone(TimeZone.getTimeZone("UTC"))
+    return formatter.format(date)
+}
 fun onButtonStart(uiState:PlayWorkoutScreenState){
     uiState.training?.let { uiState.startWorkOutService(it) }
 }

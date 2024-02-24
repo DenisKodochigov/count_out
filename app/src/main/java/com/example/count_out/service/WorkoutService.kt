@@ -2,22 +2,17 @@ package com.example.count_out.service
 
 import android.app.Service
 import android.content.Intent
-import android.icu.text.SimpleDateFormat
 import android.os.Binder
 import android.os.IBinder
 import com.example.count_out.data.room.tables.StateWorkOutDB
-import com.example.count_out.entity.StateWorkOut
 import com.example.count_out.entity.Training
 import com.example.count_out.service.player.PlayerWorkOut
-import com.example.count_out.ui.view_components.log
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
-import java.util.Date
-import java.util.Locale
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -36,11 +31,8 @@ class WorkoutService @Inject constructor(): Service() {
     override fun onBind(p0: Intent?): IBinder {
         return serviceBinder
     }
-
-    fun startWorkout(training: Training): MutableStateFlow<StateWorkOut>{
-//        log(true, "WorkoutService.startWorkout.")
-        coroutineScope = CoroutineScope(Dispatchers.Default)
-        return coroutineService(training)
+    fun startWorkout(training: Training, stateService: MutableStateFlow<StateWorkOutDB>){
+        coroutineService(training, stateService)
     }
     fun pauseWorkout(){
         pauseService = !pauseService
@@ -48,29 +40,16 @@ class WorkoutService @Inject constructor(): Service() {
     fun stopWorkout(){
         coroutineScope.cancel()
     }
-    fun stateWorkout(): MutableStateFlow<StateWorkOut> {
-        return MutableStateFlow(StateWorkOutDB())
-    }
-    private fun coroutineService(training: Training): MutableStateFlow<StateWorkOut>{
-//        log(true, "WorkoutService.coroutineService.")
-        var stateWorkOut: MutableStateFlow<StateWorkOut> = MutableStateFlow(StateWorkOutDB())
+
+    private fun coroutineService(training: Training, stateService: MutableStateFlow<StateWorkOutDB>){
+        coroutineScope = CoroutineScope(Dispatchers.Default)
         coroutineScope.launch{
             try {
-                stateWorkOut = playerWorkOut.stateWorkOut
-                playerWorkOut.playingWorkOut(training)
-                log(true, "stateWorkOut: ${stateWorkOut.value}")
+                playerWorkOut.playingWorkOut(training, stateService)
             } catch ( e: InterruptedException){
                 e.printStackTrace()
             }
         }
-        return stateWorkOut
-    }
-
-    private suspend fun bodyService(training: Training){
-//        if (! pauseService) log(true, "${getCurrentTime()}; count = ${count++}; service: $service ")
-    }
-    private fun getCurrentTime(): String {
-        return SimpleDateFormat("HH:mm:ss MM/dd/yyyy", Locale.US).format(Date())
     }
 }
 
