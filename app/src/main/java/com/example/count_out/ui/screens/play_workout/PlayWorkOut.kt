@@ -70,7 +70,7 @@ fun PlayWorkoutScreenCreateView( viewModel: PlayWorkoutViewModel, onBaskScreen:(
         uiState.stateWorkout.forEach { state ->
             Row (modifier = Modifier.padding(horizontal = 12.dp)){
                 TextApp(text = getDuration( startTime = uiState.startTime, time = state.time!!),
-                    modifier = Modifier.width(60.dp),
+                    modifier = Modifier.width(70.dp),
                     style = interLight12)
                 Spacer(modifier = Modifier.width(12.dp))
                 TextApp(text = state.state.toString(), style = interLight12)

@@ -13,7 +13,16 @@ class PlayerSet @Inject constructor(val speechManager:SpeechManager)
     @Inject lateinit var playerExercise: PlayerExercise
     private val show = false
     suspend fun playingSet(set: Set, stateService: MutableStateFlow<StateWorkOutDB>){
-        speech(set.speech.beforeStart, stateService)
+        val textBeforeSet = if (set.reps > 0) {
+            " " + set.reps.toString() + " повторений"
+        } else if (set.duration > 0){
+            if (set.duration < 1) " " + (set.duration * 60).toInt().toString() + " секунд"
+            else if (set.duration == 1.0) " " + set.duration .toString() + " минута"
+            else if (set.duration > 1.0 && set.duration < 5.0) " " + set.duration .toString() + " минуты"
+            else " " + set.duration .toString() + " минут"
+        } else ""
+
+        speech(set.speech.beforeStart + textBeforeSet, stateService)
         speech(set.speech.afterStart, stateService)
 
         if (set.reps > 0) {
@@ -25,8 +34,10 @@ class PlayerSet @Inject constructor(val speechManager:SpeechManager)
         } else if (set.duration > 0){
             delay((set.duration * 60 * 1000).toLong())
         }
-        speech(set.timeRest.toString() + " секунд отдыха.", stateService)
-        delay((set.timeRest * 1000).toLong())
+        if (set.timeRest > 0) {
+            speech(set.timeRest.toString() + " секунд отдыха.", stateService)
+            delay((set.timeRest * 1000).toLong())
+        }
         speech(set.speech.beforeEnd, stateService)
         speech(set.speech.afterEnd, stateService)
     }

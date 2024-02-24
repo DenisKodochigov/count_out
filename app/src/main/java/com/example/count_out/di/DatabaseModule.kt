@@ -25,7 +25,7 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 object DatabaseModule {
     lateinit var database: AppDatabase
-    private var mode: Int = 1
+    private var mode: Int = 2
     @Provides
     @Singleton
     fun provideDatabase(@ApplicationContext appContext: Context): AppDatabase {
@@ -111,27 +111,27 @@ object DatabaseModule {
         //Упражнение 1
         var idExercise = db.dataDao().addExercise(ExerciseDB(roundId = idRound, activityId = 3,
             speechId = db.dataDao().addSpeech(SpeechDB(beforeStart = "Упражнение", afterStart = "", beforeEnd = "", afterEnd = "Упражнение закончено",))))
-        db.dataDao().addSet(SetDB(exerciseId = idExercise, name = "Set 1", duration = 0.5, timeRest = 10,
+        db.dataDao().addSet(SetDB(exerciseId = idExercise, name = "Set 1", duration = 0.5,
             speechId = db.dataDao().addSpeech(SpeechDB(beforeStart = "Подход ", afterStart = "Старт", beforeEnd = "", afterEnd = "Подход закончен",))))
         //Упражнение 2
         idExercise = db.dataDao().addExercise(ExerciseDB(roundId = idRound, activityId = 4,
             speechId = db.dataDao().addSpeech(SpeechDB(beforeStart = "Упражнение", afterStart = "", beforeEnd = "", afterEnd = "Упражнение закончено",))))
-        db.dataDao().addSet(SetDB(exerciseId = idExercise, name = "Set 2", duration = 0.5, timeRest = 10,
+        db.dataDao().addSet(SetDB(exerciseId = idExercise, name = "Set 2", duration = 0.5,
             speechId = db.dataDao().addSpeech(SpeechDB(beforeStart = "Подход ", afterStart = "Старт", beforeEnd = "", afterEnd = "Подход закончен",))))
         //Упражнение 3
         idExercise = db.dataDao().addExercise(ExerciseDB(roundId = idRound, activityId = 5,
             speechId = db.dataDao().addSpeech(SpeechDB(beforeStart = "Упражнение", afterStart = "", beforeEnd = "", afterEnd = "Упражнение закончено",))))
-        db.dataDao().addSet(SetDB(exerciseId = idExercise, name = "Set 3", duration = 0.5, timeRest = 10,
+        db.dataDao().addSet(SetDB(exerciseId = idExercise, name = "Set 3", duration = 0.5,
             speechId = db.dataDao().addSpeech(SpeechDB(beforeStart = "Подход ", afterStart = "Старт", beforeEnd = "", afterEnd = "Подход закончен",))))
         //Упражнение 4
         idExercise = db.dataDao().addExercise(ExerciseDB(roundId = idRound, activityId = 6,
             speechId = db.dataDao().addSpeech(SpeechDB(beforeStart = "Упражнение", afterStart = "", beforeEnd = "", afterEnd = "Упражнение закончено",))))
-        db.dataDao().addSet(SetDB(exerciseId = idExercise, name = "Set 4", duration = 0.5, timeRest = 10,
+        db.dataDao().addSet(SetDB(exerciseId = idExercise, name = "Set 4", duration = 0.5,
             speechId = db.dataDao().addSpeech(SpeechDB(beforeStart = "Подход ", afterStart = "Старт", beforeEnd = "", afterEnd = "Подход закончен",))))
         //Упражнение 5
         idExercise = db.dataDao().addExercise(ExerciseDB(roundId = idRound, activityId = 7,
             speechId = db.dataDao().addSpeech(SpeechDB(beforeStart = "Упражнение", afterStart = "", beforeEnd = "", afterEnd = "Упражнение закончено",))))
-        db.dataDao().addSet(SetDB(exerciseId = idExercise, name = "Set 5", duration = 0.5, timeRest = 10,
+        db.dataDao().addSet(SetDB(exerciseId = idExercise, name = "Set 5", duration = 0.5,
             speechId = db.dataDao().addSpeech(SpeechDB(beforeStart = "Подход ", afterStart = "Старт", beforeEnd = "", afterEnd = "Подход закончен",))))
 //Основная часть
         idRound = db.dataDao().addRound(RoundDB(trainingId = idTraining, roundType = RoundType.OUT,

@@ -48,7 +48,7 @@ class SpeechManager(val context: Context) {
         if (text.isNotEmpty()) {
             log(show, "SpeechManager.speakOut: $text")
             tts?.speak(text, TextToSpeech.QUEUE_ADD, null,"speakOut")
-            val d: Long = if (delay ==0L) text.length * 50L else delay
+            val d: Long = if (delay ==0L) text.length * 70L else delay
             delay(d)
         }
     }
