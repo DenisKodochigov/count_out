@@ -70,4 +70,5 @@
     <string name="audio_track">Audio track</string>
     <string name="video_clip">Video clip</string>
     <string name="description">Description</string>
+    <string name="null_s">""</string>
 </resources>

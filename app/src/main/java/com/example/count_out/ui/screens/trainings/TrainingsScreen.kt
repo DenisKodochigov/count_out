@@ -44,7 +44,6 @@ import com.example.count_out.ui.theme.interReg14
 import com.example.count_out.ui.view_components.ItemSwipe
 import com.example.count_out.ui.view_components.TextApp
 
-@SuppressLint("UnrememberedMutableState")
 @Composable fun TrainingsScreen(
     onClickTraining: (Long) -> Unit,
     onStartWorkout: (Long) -> Unit,

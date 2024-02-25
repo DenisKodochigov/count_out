@@ -13,6 +13,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -32,17 +34,30 @@ class PlayWorkoutViewModel @Inject constructor(
     val playWorkoutScreenState: StateFlow<PlayWorkoutScreenState> = _playWorkoutScreenState.asStateFlow()
 
     private val _stateWorkoutService: MutableStateFlow<StateWorkOutDB> = MutableStateFlow(StateWorkOutDB())
-    val stateWorkoutService: StateFlow<StateWorkOutDB> = _stateWorkoutService.asStateFlow()
+
     init {
         serviceManager.bindService(WorkoutService::class.java)
+        _stateWorkoutService
+            .onEach { state ->
+                if (state.state != null){
+                    val states = _playWorkoutScreenState.value.stateWorkout.toMutableList()
+                    states.add(state)
+                    _playWorkoutScreenState.update { screenState -> screenState.copy(stateWorkout = states) }
+                    if (state.time != null && _playWorkoutScreenState.value.startTime == 0L){
+                        _playWorkoutScreenState.update { screenState -> screenState.copy(startTime = state.time) }
+                    }
+                }
+            }
+            .launchIn(viewModelScope)
     }
+
     fun getTraining(id: Long) {
         templateMy { dataRepository.getTraining(id) } }
 
     private fun startWorkOutService(training: Training){
         viewModelScope.launch(Dispatchers.IO) {
             kotlin.runCatching {
-                serviceManager.startWorkout(training, _stateWorkoutService)
+                serviceManager.startWorkout( training, _stateWorkoutService )
             }.fold(
                 onSuccess = { },
                 onFailure = { errorApp.errorApi(it.message!!) }
