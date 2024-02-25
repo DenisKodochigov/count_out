@@ -39,7 +39,7 @@ fun PlayWorkoutScreen(
     trainingId: Long,
     onBaskScreen:() -> Unit
 ){
-    val viewModel: PlayWorkoutViewModel = hiltViewModel()
+    val viewModel: PlayWorkoutViewModel = hiltViewModel<PlayWorkoutViewModel>()
     LaunchedEffect( key1 = true, block = { viewModel.getTraining(trainingId) })
     PlayWorkoutScreenCreateView( viewModel = viewModel, onBaskScreen = onBaskScreen)
 }
@@ -77,6 +77,7 @@ fun PlayWorkoutScreenCreateView( viewModel: PlayWorkoutViewModel, onBaskScreen:(
 }
 @Composable fun PlayWorkoutScreenLayoutContent( uiState: PlayWorkoutScreenState
 ){
+    TextApp(text = "uiState: $uiState", style = interLight12)
     ListState(uiState)
 }
 
@@ -120,9 +121,9 @@ fun getDuration(startTime: Long, time: Long): String{
     return String.format("%02d:%02d:%02d",hour, minutes, seconds)
 }
 fun Long.getTime(): String {
-    val date = Date(this.toLong())
+    val date = Date(this)
     val formatter = SimpleDateFormat("HH:mm:ss", Locale.getDefault())
-    formatter.setTimeZone(TimeZone.getTimeZone("UTC"))
+    formatter.timeZone = TimeZone.getTimeZone("UTC")
     return formatter.format(date)
 }
 fun onButtonStart(uiState:PlayWorkoutScreenState){

@@ -5,9 +5,11 @@ import androidx.compose.material.icons.filled.AccessAlarms
 import androidx.compose.material.icons.filled.Brightness5
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.lifecycle.ViewModel
 import androidx.navigation.NavType
 import androidx.navigation.navArgument
 import com.example.count_out.R
+import com.example.count_out.ui.screens.play_workout.PlayWorkoutViewModel
 
 /*** Contract for information needed on every App navigation destination*/
 interface ScreenDestination {

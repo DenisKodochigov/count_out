@@ -17,8 +17,11 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import javax.annotation.Signed
 import javax.inject.Inject
+import javax.inject.Singleton
 
+@Signed
 @HiltViewModel
 class PlayWorkoutViewModel @Inject constructor(
     private val errorApp: ErrorApp,

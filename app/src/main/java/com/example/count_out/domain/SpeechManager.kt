@@ -8,8 +8,9 @@ import androidx.compose.runtime.mutableStateOf
 import com.example.count_out.ui.view_components.log
 import kotlinx.coroutines.delay
 import java.util.Locale
+import javax.inject.Singleton
 
-
+@Singleton
 class SpeechManager(val context: Context) {
 
     private val show = false

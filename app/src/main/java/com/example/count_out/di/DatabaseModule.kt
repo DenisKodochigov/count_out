@@ -103,7 +103,7 @@ object DatabaseModule {
         db.dataDao().addActivity(ActivityDB(idActivity = 19, name = "Кисти рук", icon = R.drawable.ic_setka,
             description = "Вытяните рукки и сжимайте в кулак и разжимайте кисть"))
 
-        var idTraining = db.dataDao().addTraining(TrainingDB(name = "Зарядка", idTraining = 1,
+        val idTraining = db.dataDao().addTraining(TrainingDB(name = "Зарядка", idTraining = 1,
             speechId = db.dataDao().addSpeech(SpeechDB(beforeStart = "Начинаем ", afterStart = "", beforeEnd = "", afterEnd = "Тренировка закончена.",))))
 //Разминка
         var idRound = db.dataDao().addRound(RoundDB(trainingId = idTraining, roundType = RoundType.UP,
