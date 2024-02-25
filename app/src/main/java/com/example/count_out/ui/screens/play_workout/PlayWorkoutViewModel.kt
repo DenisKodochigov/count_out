@@ -19,7 +19,6 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.annotation.Signed
 import javax.inject.Inject
-import javax.inject.Singleton
 
 @Signed
 @HiltViewModel
@@ -28,6 +27,7 @@ class PlayWorkoutViewModel @Inject constructor(
     private val dataRepository: DataRepository,
     private val serviceManager: ServiceManager,
 ): ViewModel() {
+
     private val _playWorkoutScreenState = MutableStateFlow(
         PlayWorkoutScreenState(
             startWorkOutService = { startWorkOutService( it ) },

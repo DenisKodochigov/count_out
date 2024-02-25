@@ -77,7 +77,7 @@ fun PlayWorkoutScreenCreateView( viewModel: PlayWorkoutViewModel, onBaskScreen:(
 }
 @Composable fun PlayWorkoutScreenLayoutContent( uiState: PlayWorkoutScreenState
 ){
-    TextApp(text = "uiState: $uiState", style = interLight12)
+//    TextApp(text = "uiState: $uiState", style = interLight12)
     ListState(uiState)
 }
 
