@@ -20,8 +20,10 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.example.count_out.R
 import com.example.count_out.data.room.tables.SetDB
+import com.example.count_out.entity.GoalSet
 import com.example.count_out.entity.Set
 import com.example.count_out.entity.TypeKeyboard
+import com.example.count_out.entity.Zone
 import com.example.count_out.ui.screens.training.TrainingScreenState
 import com.example.count_out.ui.theme.Dimen
 import com.example.count_out.ui.theme.interLight12
@@ -99,7 +101,7 @@ fun AdditionalInformation(uiState: TrainingScreenState, set: Set)
 @Composable
 fun SwitchDuration(uiState: TrainingScreenState, set: Set)
 {
-    val state = remember { mutableIntStateOf(1) }
+    val state = remember { mutableIntStateOf(set.goal.id) }
     Column(
         Modifier
             .selectableGroup()
@@ -109,25 +111,30 @@ fun SwitchDuration(uiState: TrainingScreenState, set: Set)
         RadioButtonApp(
             radioButtonId = 1,
             state = state.intValue,
-            onClick = { state.intValue = 1},
+            onClick = { state.intValue = 1
+                uiState.onChangeSet ((set as SetDB).copy(goal = GoalSet.DESTINATION))},
             context = { RadioButtonDistance(uiState = uiState, set = set, visible = state.intValue == 1)}
         )
         Spacer(modifier = Modifier.height(6.dp))
         RadioButtonApp(
             radioButtonId = 2,
             state = state.intValue,
-            onClick = { state.intValue = 2},
+            onClick = { state.intValue = 2
+                uiState.onChangeSet ((set as SetDB).copy(goal = GoalSet.DURATION))},
             context = { RadioButtonDuration(uiState = uiState, set = set, visible = state.intValue == 2) }
         )
         Spacer(modifier = Modifier.height(6.dp))
         RadioButtonApp(
             radioButtonId = 3,
             state = state.intValue,
-            onClick = { state.intValue = 3},
+            onClick = {
+                state.intValue = 3
+                uiState.onChangeSet ((set as SetDB).copy(goal = GoalSet.COUNT)) },
             context = { RadioButtonCount(uiState = uiState, set = set, visible = state.intValue == 3)}
         )
     }
 }
+
 @Composable
 fun RadioButtonDistance(uiState: TrainingScreenState, set: Set, visible: Boolean)
 {
@@ -140,8 +147,8 @@ fun RadioButtonDistance(uiState: TrainingScreenState, set: Set, visible: Boolean
         AnimatedVisibility(modifier = Modifier.padding(4.dp), visible = visible
         ){
             TextStringAndField(
-                placeholder = set.intensity,
-                onChangeValue = { uiState.onChangeSet ((set as SetDB).copy(intensity = it)) },
+                placeholder = set.intensity.name,
+                onChangeValue = { uiState.onChangeSet ((set as SetDB).copy(intensity = Zone.MEDIUM)) },
                 editing = true,
                 text = stringResource(id = R.string.intensity) + " (" + stringResource(id = R.string.zone) + "): ")
         }
@@ -161,8 +168,8 @@ fun RadioButtonDuration(uiState: TrainingScreenState, set: Set, visible: Boolean
         ){
             Row{
                 TextStringAndField(
-                    placeholder = set.intensity,
-                    onChangeValue = { uiState.onChangeSet ((set as SetDB).copy(intensity = it)) },
+                    placeholder = set.intensity.name,
+                    onChangeValue = { uiState.onChangeSet ((set as SetDB).copy(intensity = Zone.MEDIUM)) },
                     editing = true,
                     text = stringResource(id = R.string.intensity) + " (" + stringResource(id = R.string.zone) + "): ")
                 Spacer(modifier = Modifier.width(12.dp))

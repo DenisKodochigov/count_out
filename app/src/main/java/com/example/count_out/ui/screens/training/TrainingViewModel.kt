@@ -66,7 +66,7 @@ class TrainingViewModel @Inject constructor(
         templateMy { dataRepository.deleteSet( trainingId, setId) } }
     private fun setSpeech( speech: Speech, item: Any?) {
         templateMy { dataRepository.setSpeech(
-            trainingScreenState.value.training.idTraining,speech, item) as Training } }
+            trainingScreenState.value.training.idTraining,speech, item) } }
     private fun deleteTraining(trainingId: Long){
         templateNothing { dataRepository.deleteTrainingNothing(trainingId) } }
     private fun changeNameTraining(training: Training, name: String){

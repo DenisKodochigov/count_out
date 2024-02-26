@@ -7,4 +7,5 @@ interface Round {
     val speech: Speech
     val roundType: RoundType
     val exercise: List<Exercise>
+    val sequenceExercise: String
 }

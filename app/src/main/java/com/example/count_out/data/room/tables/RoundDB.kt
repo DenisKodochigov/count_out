@@ -14,6 +14,7 @@ data class RoundDB(
     override var trainingId: Long = 0,
     override var speechId: Long = 0,
     override var roundType: RoundType = RoundType.OUT,
+    override var sequenceExercise: String = "",
     @Ignore override val exercise: List<Exercise> = emptyList(),
     @Ignore override var speech: Speech = SpeechDB(),
 ): Round

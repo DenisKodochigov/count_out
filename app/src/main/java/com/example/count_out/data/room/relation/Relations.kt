@@ -31,7 +31,8 @@ data class SetRel(
             intervalReps = setRel.intervalReps,
             intervalDown = setRel.intervalDown, //замедление отчетов
             groupCount = setRel.groupCount, // Группы отстчетов
-            timeRest = setRel.timeRest
+            timeRest = setRel.timeRest,
+            goal = setRel.goal,
         )
     }
 }
@@ -46,6 +47,7 @@ data class ExerciseRel(
             idExercise = exerciseDB.idExercise,
             roundId = exerciseDB.roundId,
             activityId = exerciseDB.activityId,
+            sequenceNumber = exerciseDB.sequenceNumber,
             activity = activity as Activity,
             speech = speech ?: SpeechDB(),
             speechId = exerciseDB.speechId,
@@ -76,7 +78,8 @@ data class RoundRel(
             roundType = round.roundType,
             speechId = round.speechId,
             speech = speech ?: SpeechDB(),
-            trainingId = round.trainingId
+            trainingId = round.trainingId,
+            sequenceExercise = round.sequenceExercise
         )
     }
 }

@@ -8,4 +8,5 @@ interface Exercise {
     val speechId: Long
     val speech: Speech
     val sets: List<Set>
+    val sequenceNumber: Int
 }

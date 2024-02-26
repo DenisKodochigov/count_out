@@ -42,16 +42,21 @@ enum class TypeKeyboard{
     OTHER,
     NONE
 }
-enum class Zone{
-    EXTRASLOW,
-    SLOW,
-    MEDIUM,
-    HIGH,
-    MAX
+enum class Zone(val id: Int){
+    EXTRASLOW(1),
+    SLOW(2),
+    MEDIUM(3),
+    HIGH(4),
+    MAX(5)
 }
 
 enum class RoundType(val strId: Int){
     UP (R.string.work_up),
     OUT (R.string.work_out ),
     DOWN ( R.string.work_down );
+}
+enum class GoalSet(val id: Int){
+    DESTINATION(1),
+    DURATION(2),
+    COUNT(3),
 }

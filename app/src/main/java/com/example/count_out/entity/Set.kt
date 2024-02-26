@@ -6,9 +6,10 @@ interface Set {
     val exerciseId: Long
     val speechId: Long
     val speech: Speech
+    val goal: GoalSet
 
     val weight: Int
-    val intensity: String
+    val intensity: Zone
     val distance: Double
     val duration: Double
     val reps: Int // количество отстчетов
