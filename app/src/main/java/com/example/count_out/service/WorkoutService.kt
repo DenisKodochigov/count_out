@@ -4,14 +4,13 @@ import android.app.Service
 import android.content.Intent
 import android.os.Binder
 import android.os.IBinder
-import com.example.count_out.data.room.tables.StateWorkOutDB
+import com.example.count_out.entity.StateWorkOut
 import com.example.count_out.entity.Training
 import com.example.count_out.service.player.PlayerWorkOut
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.cancel
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -31,7 +30,7 @@ class WorkoutService @Inject constructor(): Service() {
     override fun onBind(p0: Intent?): IBinder {
         return serviceBinder
     }
-    fun startWorkout(training: Training, stateService: MutableStateFlow<StateWorkOutDB>){
+    fun startWorkout(training: Training, stateService: (StateWorkOut)->Unit){
         coroutineService(training, stateService)
     }
     fun pauseWorkout(){
@@ -40,8 +39,7 @@ class WorkoutService @Inject constructor(): Service() {
     fun stopWorkout(){
         coroutineScope.cancel()
     }
-
-    private fun coroutineService(training: Training, stateService: MutableStateFlow<StateWorkOutDB>){
+    private fun coroutineService(training: Training, stateService: (StateWorkOut)->Unit){
         coroutineScope = CoroutineScope(Dispatchers.Default)
         coroutineScope.launch{
             try {

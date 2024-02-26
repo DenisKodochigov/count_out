@@ -23,10 +23,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.example.count_out.entity.StateWorkOut
 import com.example.count_out.ui.theme.interLight12
 import com.example.count_out.ui.view_components.FABStartStopWorkOut
 import com.example.count_out.ui.view_components.TextApp
-import com.example.count_out.ui.view_components.log
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -68,7 +68,7 @@ fun PlayWorkoutScreenCreateView( viewModel: PlayWorkoutViewModel, onBaskScreen:(
             },
             onClickStop = {
                 uiState.switchStartStop.value = !uiState.switchStartStop.value
-                uiState.stateWorkout.clear()
+                uiState.statesWorkout.value = emptyList()
                 onButtonStop(uiState)
             },
             onClickPause = { onButtonPause(uiState) },
@@ -77,24 +77,24 @@ fun PlayWorkoutScreenCreateView( viewModel: PlayWorkoutViewModel, onBaskScreen:(
 }
 @Composable fun PlayWorkoutScreenLayoutContent( uiState: PlayWorkoutScreenState
 ){
-//    TextApp(text = "uiState: $uiState", style = interLight12)
     ListState(uiState)
 }
 
 @SuppressLint("MutableCollectionMutableState")
 @Composable fun ListState(uiState: PlayWorkoutScreenState)
 {
-    val states =  uiState.stateWorkout
     val coroutineScope = rememberCoroutineScope()
-    val listState = rememberLazyListState()
+    val lazyState = rememberLazyListState()
 
     LazyColumn(
-        state = listState,
-        modifier = Modifier.fillMaxWidth().animateContentSize(),
+        state = lazyState,
+        modifier = Modifier
+            .fillMaxWidth()
+            .animateContentSize(),
         horizontalAlignment = Alignment.Start,
         verticalArrangement = Arrangement.Center
     ){
-        items(items = states ){ item->
+        items(items = uiState.statesWorkout.value ){ item->
             Row (modifier = Modifier.padding(horizontal = 12.dp, vertical = 4.dp)){
                 TextApp(text = getDuration( startTime = uiState.startTime, time = item.time!!),
                     modifier = Modifier.width(70.dp),
@@ -104,15 +104,16 @@ fun PlayWorkoutScreenCreateView( viewModel: PlayWorkoutViewModel, onBaskScreen:(
             }
         }
     }
-    LaunchedEffect(listState.canScrollForward){
-        if (listState.canScrollForward) {
+    LaunchedEffect(lazyState.canScrollForward){
+        if (lazyState.canScrollForward) {
             coroutineScope.launch {
-                log(true, "listState.animateScrollToItem ${if (states.size == 0 ) 0 else states.size-1}")
-                listState.animateScrollToItem(index = if (states.size == 0 ) 0 else states.size-1)
+                lazyState.animateScrollToItem(index = listSize( uiState.statesWorkout.value ))
             }
         }
     }
 }
+fun listSize(list: List<StateWorkOut>): Int = if (list.isEmpty()) 0 else list.size - 1
+
 fun getDuration(startTime: Long, time: Long): String{
     val duration: Long = time - startTime
     val hour = duration / 1000 / 60 / 60

@@ -10,7 +10,7 @@ import javax.inject.Singleton
 @Singleton
 data class PlayWorkoutScreenState(
     val training: Training? = null,
-    val stateWorkout: MutableList<StateWorkOut> = mutableListOf(),
+    val statesWorkout: MutableState<List<StateWorkOut>> = mutableStateOf(emptyList()),
     val switchStartStop: MutableState<Boolean> = mutableStateOf(true),
     val startWorkOutService: (Training)->Unit = {},
     val stopWorkOutService: ()->Unit = {},
