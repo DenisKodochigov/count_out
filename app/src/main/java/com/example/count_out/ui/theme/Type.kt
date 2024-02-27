@@ -40,6 +40,10 @@ val interBold14 = TextStyle(
     fontFamily = FontFamily(Font(R.font.inter_bold)),
     fontSize = 14.sp
 )
+val interBold12 = TextStyle(
+    fontFamily = FontFamily(Font(R.font.inter_bold)),
+    fontSize = 12.sp
+)
 val interExtraLight12 = TextStyle(
     fontFamily = FontFamily(Font(R.font.inter_extralight)),
     fontSize = 12.sp

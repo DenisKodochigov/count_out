@@ -42,12 +42,12 @@ enum class TypeKeyboard{
     OTHER,
     NONE
 }
-enum class Zone(val id: Int){
-    EXTRASLOW(1),
-    SLOW(2),
-    MEDIUM(3),
-    HIGH(4),
-    MAX(5)
+enum class Zone(val id: Int, var maxPulse: Int){
+    EXTRASLOW( id = 1, maxPulse = 100),
+    SLOW(id = 2, maxPulse = 120),
+    MEDIUM(id = 3, maxPulse = 135),
+    HIGH(id = 4, maxPulse = 160),
+    MAX(id = 5, maxPulse = 180)
 }
 
 enum class RoundType(val strId: Int){

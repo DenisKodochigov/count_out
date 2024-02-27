@@ -1,6 +1,7 @@
 package com.example.count_out.ui.screens.training.set
 
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -9,11 +10,15 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.selection.selectableGroup
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -26,6 +31,7 @@ import com.example.count_out.entity.TypeKeyboard
 import com.example.count_out.entity.Zone
 import com.example.count_out.ui.screens.training.TrainingScreenState
 import com.example.count_out.ui.theme.Dimen
+import com.example.count_out.ui.theme.elevationTraining
 import com.example.count_out.ui.theme.interLight12
 import com.example.count_out.ui.theme.interReg14
 import com.example.count_out.ui.view_components.IconsCollapsingCopySpeechDel
@@ -34,6 +40,7 @@ import com.example.count_out.ui.view_components.TextApp
 import com.example.count_out.ui.view_components.TextAppLines
 import com.example.count_out.ui.view_components.TextFieldApp
 import com.example.count_out.ui.view_components.TextStringAndField
+
 
 @Composable
 fun SetContent(uiState: TrainingScreenState, set: Set)
@@ -79,27 +86,35 @@ fun AdditionalInformation(uiState: TrainingScreenState, set: Set)
     val visibleLazy = uiState.listCollapsingSet.value.find { it == set.idSet } != null
     Column(modifier = Modifier
         .testTag("1")
-        .padding(horizontal = 8.dp))
+        .padding(start = 8.dp))
     {
         AnimatedVisibility(modifier = Modifier.padding(4.dp), visible = visibleLazy
         ){
-            Column{
-                Spacer(modifier = Modifier.height(8.dp))
-                TextApp(text = stringResource(id = R.string.task_in_approach), style = interReg14)
-                Spacer(modifier = Modifier.height(8.dp))
-                SwitchDuration(uiState, set)
-                Spacer(modifier = Modifier.height(8.dp))
-                TextStringAndField(
-                    placeholder = set.timeRest.toString(),
-                    onChangeValue = { uiState.onChangeSet ((set as SetDB).copy(timeRest = it.toInt())) },
-                    editing = visibleLazy,
-                    text = stringResource(id = R.string.time_to_rest) + " (" + stringResource(id = R.string.sec) + "): ",)
+            Row {
+                Column(modifier = Modifier.weight(1f)){
+                    Spacer(modifier = Modifier.height(8.dp))
+                    TextApp(text = stringResource(id = R.string.task_in_approach), style = interReg14)
+                    Spacer(modifier = Modifier.height(8.dp))
+                    SwitchGoal(uiState, set)
+                    Spacer(modifier = Modifier.height(8.dp))
+                    TextStringAndField(
+                        placeholder = set.timeRest.toString(),
+                        onChangeValue = { uiState.onChangeSet ((set as SetDB).copy(timeRest = it.toInt())) },
+                        editing = visibleLazy,
+                        text = stringResource(id = R.string.time_to_rest) + " (" + stringResource(id = R.string.sec) + "): ",)
+                }
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    modifier = Modifier
+                        .width(65.dp)
+                        .padding(top = 12.dp),
+                    content = { SelectZone(uiState, set) })
             }
         }
     }
 }
 @Composable
-fun SwitchDuration(uiState: TrainingScreenState, set: Set)
+fun SwitchGoal(uiState: TrainingScreenState, set: Set)
 {
     val state = remember { mutableIntStateOf(set.goal.id) }
     Column(
@@ -144,16 +159,7 @@ fun RadioButtonDistance(uiState: TrainingScreenState, set: Set, visible: Boolean
             onChangeValue = { uiState.onChangeSet ((set as SetDB).copy(distance = it.toDouble())) },
             editing = true,
             text = stringResource(id = R.string.distance) + " (" + stringResource(id = R.string.km) + "): ")
-        AnimatedVisibility(modifier = Modifier.padding(4.dp), visible = visible
-        ){
-            TextStringAndField(
-                placeholder = set.intensity.name,
-                onChangeValue = { uiState.onChangeSet ((set as SetDB).copy(intensity = Zone.MEDIUM)) },
-                editing = true,
-                text = stringResource(id = R.string.intensity) + " (" + stringResource(id = R.string.zone) + "): ")
-        }
     }
-
 }
 @Composable
 fun RadioButtonDuration(uiState: TrainingScreenState, set: Set, visible: Boolean)
@@ -166,12 +172,7 @@ fun RadioButtonDuration(uiState: TrainingScreenState, set: Set, visible: Boolean
             text = stringResource(id = R.string.duration) + " (" + stringResource(id = R.string.min) + "): ")
         AnimatedVisibility(modifier = Modifier.padding(4.dp), visible = visible
         ){
-            Row{
-                TextStringAndField(
-                    placeholder = set.intensity.name,
-                    onChangeValue = { uiState.onChangeSet ((set as SetDB).copy(intensity = Zone.MEDIUM)) },
-                    editing = true,
-                    text = stringResource(id = R.string.intensity) + " (" + stringResource(id = R.string.zone) + "): ")
+            Column{
                 Spacer(modifier = Modifier.width(12.dp))
                 TextStringAndField(
                     placeholder = set.weight.toString(),
@@ -194,11 +195,6 @@ fun RadioButtonCount(uiState: TrainingScreenState, set: Set, visible: Boolean)
         AnimatedVisibility(modifier = Modifier.padding(4.dp), visible = visible
         ){
             Column{
-                TextStringAndField(
-                    placeholder = set.weight.toString(),
-                    onChangeValue = { uiState.onChangeSet ((set as SetDB).copy(weight = it.toInt())) },
-                    editing = true,
-                    text = stringResource(id = R.string.intensity) + " (" + stringResource(id = R.string.zone) + "): ")
                 TextStringAndField(
                     placeholder = set.intervalReps.toString(),
                     onChangeValue = { uiState.onChangeSet ((set as SetDB).copy(intervalReps = it.toDouble())) },
@@ -279,5 +275,49 @@ fun setCollapsing(uiState: TrainingScreenState, set: Set): Boolean
         listCollapsingSet.add(set.idSet)
         uiState.listCollapsingSet.value = listCollapsingSet
         true
+    }
+}
+@Composable
+fun SelectZone(uiState: TrainingScreenState, set: Set){
+    TextApp(
+        style = interLight12,
+        text = stringResource(id = R.string.zone) )
+    ChipZone(Zone.EXTRASLOW, uiState, set)
+    ChipZone(Zone.SLOW, uiState, set)
+    ChipZone(Zone.MEDIUM, uiState, set)
+    ChipZone(Zone.HIGH, uiState, set)
+    ChipZone(Zone.MAX, uiState, set)
+}
+@Composable fun ChipZone(zone: Zone, uiState: TrainingScreenState, set: Set){
+    ChipMy(text = ".. " + zone.maxPulse.toString(),
+        selected = set.intensity == zone,
+        onClick = { uiState.onChangeSet ((set as SetDB).copy(intensity = zone)) },)
+}
+
+@Composable fun ChipMy(
+    text: String,
+    selected: Boolean,
+    onClick: ()->Unit
+){
+    val delta = 0.1f
+    val containerColor = CardDefaults.cardColors().containerColor
+    val containerColorSelected = Color(
+        red = containerColor.red + if (containerColor.red < (1.0 - delta)) delta else 0.0f,
+        blue = containerColor.blue + if (containerColor.blue < (1.0 - delta)) delta else 0.0f,
+        green = containerColor.green + if (containerColor.green < (1.0 - delta)) delta else 0.0f,
+        alpha = containerColor.alpha
+    )
+    Card(
+        shape = MaterialTheme.shapes.extraSmall,
+        elevation = elevationTraining(),
+        colors = CardDefaults.cardColors(
+            containerColor = if (selected) containerColorSelected else containerColor),
+        modifier = Modifier
+            .padding(horizontal = 6.dp, vertical = 4.dp)
+            .clickable { onClick() }
+    ) {
+        TextApp(text = text,
+            style = interLight12 ,
+            modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp))
     }
 }
