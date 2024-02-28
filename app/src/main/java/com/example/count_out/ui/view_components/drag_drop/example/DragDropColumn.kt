@@ -52,8 +52,7 @@ fun <T : Any> DragDropColumn(
                         if (overscrollJob?.isActive == true)
                             return@detectDragGesturesAfterLongPress
                         dragDropState.checkForOverScroll().takeIf { it != 0f }?.let {
-                            overscrollJob =
-                                scope.launch {
+                            overscrollJob = scope.launch {
                                     dragDropState.state.animateScrollBy(
                                         it*1.3f, tween(easing = FastOutLinearInEasing)
                                     )
