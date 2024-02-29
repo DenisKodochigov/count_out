@@ -48,7 +48,7 @@ fun <T : Any> DragDropColumn(
                     onDrag = { change, offset ->
                         change.consume()
                         dragDropState.onDrag(offset = offset)
-                        log(true, "change: $change; offset: $offset")
+                        log(false, "change: $change; offset: $offset")
                         if (overscrollJob?.isActive == true)
                             return@detectDragGesturesAfterLongPress
                         dragDropState.checkForOverScroll().takeIf { it != 0f }?.let {

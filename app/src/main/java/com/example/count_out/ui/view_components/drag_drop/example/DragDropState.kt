@@ -9,6 +9,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.geometry.Offset
+import com.example.count_out.ui.view_components.log
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
@@ -36,6 +37,7 @@ class DragDropState1 internal constructor(
     private val currentElement: LazyListItemInfo? = currentIndexOfDraggedItem?.let {
             state.getVisibleItemInfoFor1( absoluteIndex = it) }
     fun onDragStart(offset: Offset) {
+        log(true, "offset $offset")
         state.layoutInfo.visibleItemsInfo
             .firstOrNull { item -> offset.y.toInt() in item.offset..(item.offset + item.size) }
             ?.also {

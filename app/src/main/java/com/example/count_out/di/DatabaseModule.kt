@@ -103,9 +103,9 @@ object DatabaseModule {
             description = "Сядьте на пол, вытяните перед собой ноги. Тянитесь вперед на выдохе."))
         db.dataDao().addActivity(ActivityDB(idActivity = 19, name = "Кисти рук", icon = R.drawable.ic_setka,
             description = "Вытяните рукки и сжимайте в кулак и разжимайте кисть"))
-        db.dataDao().addActivity(ActivityDB(idActivity = 20, name = "Гантели. Базовое упражнение на плечи. Прямой ход", icon = R.drawable.ic_setka,
+        db.dataDao().addActivity(ActivityDB(idActivity = 20, name = "Гантели. Плечи. Прямой ход", icon = R.drawable.ic_setka,
             description = "Руки опущены вдоль тела. Поднимите перед собой, разведите в стороны и поворотом оси гантелей из вертикального в горизонтальное положение. Опустите руки в исходное стостояние."))
-        db.dataDao().addActivity(ActivityDB(idActivity = 21, name = "Гантели. Базовое упражнение на плечи. Обартный ход", icon = R.drawable.ic_setka,
+        db.dataDao().addActivity(ActivityDB(idActivity = 21, name = "Гантели. Плечи. Обартный ход", icon = R.drawable.ic_setka,
             description = "Руки опущены вдоль тела. Разведите руки в стороны. Сведите перед собой с изменением оси гантелей с горизонтального в вертикальное положение. Опустите руки в исходное положение."))
 
 

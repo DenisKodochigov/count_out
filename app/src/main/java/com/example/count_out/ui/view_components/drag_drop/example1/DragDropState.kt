@@ -1,4 +1,4 @@
-package com.example.count_out.ui.view_components.drag_drop
+package com.example.count_out.ui.view_components.drag_drop.example1
 
 import androidx.compose.foundation.lazy.LazyListItemInfo
 import androidx.compose.foundation.lazy.LazyListState
