@@ -3,7 +3,6 @@ package com.example.count_out.ui.view_components
 import androidx.compose.foundation.background
 import androidx.compose.foundation.focusable
 import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -33,7 +32,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.draw.scale
@@ -45,10 +43,8 @@ import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.count_out.R
@@ -60,25 +56,7 @@ import com.example.count_out.ui.theme.interLight12
 import com.example.count_out.ui.theme.interReg12
 import com.example.count_out.ui.theme.styleApp
 
-@Composable fun TextApp(
-    text: String,
-    modifier: Modifier = Modifier,
-    textAlign: TextAlign = TextAlign.Center,
-    style: TextStyle,
-    fontWeight: FontWeight = FontWeight.Normal,
-    color: Color = colorApp.onSurface
-) {
-    Text(
-        text = text,
-        style = style,
-        maxLines = 1,
-        fontWeight = fontWeight,
-        overflow = TextOverflow.Ellipsis,
-        textAlign = textAlign,
-        modifier = modifier,
-        color = color
-    )
-}
+
 @Composable fun MyOutlinedTextFieldWithoutIcon(
     modifier: Modifier,
     enterValue: MutableState<String>,
@@ -111,8 +89,6 @@ import com.example.count_out.ui.theme.styleApp
                 keyboardController?.hide()
             }
         ),
-//        leadingIcon = { enterText = onAddIconEditText(onNewArticle,enterText) },
-//        trailingIcon = { enterText = onAddIconEditText(onNewArticle,enterText) }
     )
 }
 
@@ -169,6 +145,8 @@ import com.example.count_out.ui.theme.styleApp
     Row(verticalAlignment = Alignment.CenterVertically){
         TextApp(
             text = text,
+            modifier = Modifier.weight(1f),
+            maxLines = 2,
             style = interReg12,
             textAlign = TextAlign.Start,)
         TextFieldApp(
@@ -180,7 +158,7 @@ import com.example.count_out.ui.theme.styleApp
         )
     }
 }
-@OptIn(ExperimentalComposeUiApi::class, ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable fun TextFieldApp(
     modifier: Modifier = Modifier,
     typeKeyboard: TypeKeyboard,
@@ -220,7 +198,11 @@ import com.example.count_out.ui.theme.styleApp
                 focusedIndicatorLineThickness = 0.dp,
                 unfocusedIndicatorLineThickness = 0.dp
             )
-            .onFocusChanged { if ((!it.isFocused || !onLossFocus) && text.isNotEmpty()) onChangeValue(text) }
+            .onFocusChanged {
+                if ((!it.isFocused || !onLossFocus) && text.isNotEmpty()) onChangeValue(
+                    text
+                )
+            }
             .focusable(),
         keyboardOptions = keyBoardOpt(typeKeyboard),
         keyboardActions = KeyboardActions(onDone = {
@@ -267,8 +249,8 @@ import com.example.count_out.ui.theme.styleApp
     onClick:()->Unit,
     context: @Composable ()->Unit
 ){
-    val sizeRadioButton = 0.dp
-    Row(verticalAlignment = Alignment.Top, horizontalArrangement = Arrangement.Start)
+    val sizeRadioButton = 12.dp
+    Row(verticalAlignment = Alignment.Top)
     {
         RadioButton(
             selected = radioButtonId == state,
@@ -276,13 +258,13 @@ import com.example.count_out.ui.theme.styleApp
             onClick = onClick,
             modifier = Modifier
                 .size(sizeRadioButton)
-                .scale(1f)
-                .padding(8.dp),
+                .scale(0.8f)
+                .padding(top = 8.dp),
             colors = RadioButtonDefaults.colors(
                 selectedColor = MaterialTheme.colorScheme.onPrimary,
                 unselectedColor = MaterialTheme.colorScheme.onPrimary
             ))
-        Spacer(modifier = Modifier.width(24.dp))
+        Spacer(modifier = Modifier.width(6.dp))
         context()
     }
 }

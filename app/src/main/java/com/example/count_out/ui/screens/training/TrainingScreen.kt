@@ -157,7 +157,8 @@ fun NameTraining( uiState: TrainingScreenState )
                 .height(24.dp),
             onClick = { uiState.showSpeechTraining.value = true }) {
             Icon(
-                painter = painterResource(id = R.drawable.ic_ecv), contentDescription = "",
+                painter = painterResource(id = R.drawable.ic_ecv),
+                contentDescription = "",
                 modifier = Modifier.padding(4.dp)
             )
         }

@@ -12,3 +12,10 @@ fun log(showLog: Boolean, text: String){
 fun ToastApp (text: String){
     Toast.makeText(LocalContext.current, text, Toast.LENGTH_SHORT).show()
 }
+
+fun String.toDoubleMy(): Double {
+    return if (this.isNotEmpty()) this.toDouble() else 0.0
+}
+fun String.toIntMy(): Int {
+    return if (this.isNotEmpty()) this.toInt() else 0
+}

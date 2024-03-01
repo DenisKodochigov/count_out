@@ -26,7 +26,7 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 object DatabaseModule {
     lateinit var database: AppDatabase
-    private var mode: Int = 2
+    private var mode: Int = 1
     @Provides
     @Singleton
     fun provideDatabase(@ApplicationContext appContext: Context): AppDatabase {
@@ -109,8 +109,8 @@ object DatabaseModule {
             description = "Руки опущены вдоль тела. Разведите руки в стороны. Сведите перед собой с изменением оси гантелей с горизонтального в вертикальное положение. Опустите руки в исходное положение."))
 
 
-//        createTrainingPlansTesting(db)
-        createTrainingPlansReal(db)
+        createTrainingPlansTesting(db)
+//        createTrainingPlansReal(db)
     }
     private fun createTrainingPlansTesting( db: AppDatabase) {
 

@@ -15,6 +15,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Card
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -73,7 +75,7 @@ import com.example.count_out.ui.view_components.drag_drop_column.ColumnDragDrop
         Modifier
             .padding(8.dp)
             .fillMaxHeight()
-//            .verticalScroll(rememberScrollState())
+            .verticalScroll(rememberScrollState())
     ){
         ActiveSection(uiState = uiState,)
 //        LazyListDragDrop(

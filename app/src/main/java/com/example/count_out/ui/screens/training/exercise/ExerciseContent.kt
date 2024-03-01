@@ -24,6 +24,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.example.count_out.R
 import com.example.count_out.data.room.tables.SetDB
@@ -67,9 +68,12 @@ fun SelectActivity(uiState: TrainingScreenState, exercise: Exercise)
         modifier = Modifier.padding(horizontal = 4.dp)
     ){
         IconSelectActivity(uiState, exercise)
-        Spacer(modifier = Modifier.width(12.dp))
-        TextApp(text = exercise.activity.name, style = interReg14)
-        Spacer(modifier = Modifier.weight(1f))
+        Spacer(modifier = Modifier.width(2.dp))
+        TextApp(
+            text = exercise.activity.name,
+            textAlign = TextAlign.Start,
+            style = interReg14,
+            modifier = Modifier.weight(1f))
         IconsCollapsingCopySpeechDel(
             onCopy = { uiState.onCopyExercise(uiState.training.idTraining, exercise.idExercise)},
             onSpeech = {
@@ -99,9 +103,11 @@ fun IconSelectActivity(uiState: TrainingScreenState, exercise: Exercise)
         AnimatedVisibility(modifier = Modifier.padding(0.dp),
             visible = uiState.listCollapsingExercise.value.find { it == exercise.idExercise } != null
         ){
-            Column (modifier = Modifier.fillMaxWidth().padding(6.dp), content = {
-                uiState.exercise = exercise
-                ListSets(uiState)}
+            Column (modifier = Modifier.fillMaxWidth().padding(6.dp),
+                content = {
+                    uiState.exercise = exercise
+                    ListSets(uiState)
+                }
             )
         }
         RowAddSet(uiState, exercise)

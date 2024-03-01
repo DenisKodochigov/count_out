@@ -81,7 +81,7 @@ fun ActivityValueShort(
         )
     }
     Row( modifier = Modifier
-        .padding(horizontal = 12.dp, vertical = 4.dp)
+        .padding( start = 12.dp)
         .clickable { onSelect() }
         .fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically,
@@ -90,7 +90,7 @@ fun ActivityValueShort(
         Icon(painter = painterResource(id = activity.value.icon), contentDescription = null)
         Spacer(modifier = Modifier.padding(end= 12.dp))
         TextFieldApp(
-            modifier = Modifier,
+            modifier = Modifier.weight(1f),
             placeholder = "${activity.value.idActivity}:${activity.value.name}",
             contentAlignment = Alignment.BottomStart,
             typeKeyboard = typeKeyboard,
@@ -100,7 +100,6 @@ fun ActivityValueShort(
                 activity.value = (activity.value as ActivityDB).copy(name = it)
                 onChange(activity.value as ActivityDB) }
         )
-        Spacer(modifier = Modifier.weight(1f))
         Spacer(modifier = Modifier
             .size(size = 32.dp)
             .clip(shape = CircleShape)

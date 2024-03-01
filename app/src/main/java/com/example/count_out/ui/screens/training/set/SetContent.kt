@@ -33,6 +33,7 @@ import com.example.count_out.ui.screens.training.TrainingScreenState
 import com.example.count_out.ui.theme.Dimen
 import com.example.count_out.ui.theme.elevationTraining
 import com.example.count_out.ui.theme.interLight12
+import com.example.count_out.ui.theme.interReg12
 import com.example.count_out.ui.theme.interReg14
 import com.example.count_out.ui.view_components.IconsCollapsingCopySpeechDel
 import com.example.count_out.ui.view_components.RadioButtonApp
@@ -40,6 +41,8 @@ import com.example.count_out.ui.view_components.TextApp
 import com.example.count_out.ui.view_components.TextAppLines
 import com.example.count_out.ui.view_components.TextFieldApp
 import com.example.count_out.ui.view_components.TextStringAndField
+import com.example.count_out.ui.view_components.toDoubleMy
+import com.example.count_out.ui.view_components.toIntMy
 
 
 @Composable
@@ -88,7 +91,7 @@ fun AdditionalInformation(uiState: TrainingScreenState, set: Set)
         .testTag("1")
         .padding(start = 8.dp))
     {
-        AnimatedVisibility(modifier = Modifier.padding(4.dp), visible = visibleLazy
+        AnimatedVisibility(modifier = Modifier.padding(0.dp), visible = visibleLazy
         ){
             Row {
                 Column(modifier = Modifier.weight(1f)){
@@ -99,7 +102,7 @@ fun AdditionalInformation(uiState: TrainingScreenState, set: Set)
                     Spacer(modifier = Modifier.height(8.dp))
                     TextStringAndField(
                         placeholder = set.timeRest.toString(),
-                        onChangeValue = { uiState.onChangeSet ((set as SetDB).copy(timeRest = it.toInt())) },
+                        onChangeValue = { uiState.onChangeSet ((set as SetDB).copy(timeRest = it.toIntMy())) },
                         editing = visibleLazy,
                         text = stringResource(id = R.string.time_to_rest) + " (" + stringResource(id = R.string.sec) + "): ",)
                 }
@@ -117,10 +120,7 @@ fun AdditionalInformation(uiState: TrainingScreenState, set: Set)
 fun SwitchGoal(uiState: TrainingScreenState, set: Set)
 {
     val state = remember { mutableIntStateOf(set.goal.id) }
-    Column(
-        Modifier
-            .selectableGroup()
-            .padding(start = 12.dp))
+    Column( Modifier.selectableGroup())
     {
         Spacer(modifier = Modifier.height(6.dp))
         RadioButtonApp(
@@ -156,7 +156,7 @@ fun RadioButtonDistance(uiState: TrainingScreenState, set: Set, visible: Boolean
     Column {
         TextStringAndField(
             placeholder = set.distance.toString(),
-            onChangeValue = { uiState.onChangeSet ((set as SetDB).copy(distance = it.toDouble())) },
+            onChangeValue = { uiState.onChangeSet ((set as SetDB).copy(distance = it.toDoubleMy())) },
             editing = true,
             text = stringResource(id = R.string.distance) + " (" + stringResource(id = R.string.km) + "): ")
     }
@@ -167,19 +167,16 @@ fun RadioButtonDuration(uiState: TrainingScreenState, set: Set, visible: Boolean
     Column {
         TextStringAndField(
             placeholder = set.duration.toString(),
-            onChangeValue = { uiState.onChangeSet ((set as SetDB).copy(duration = it.toDouble())) },
+            onChangeValue = { uiState.onChangeSet ((set as SetDB).copy(duration = it.toDoubleMy())) },
             editing = true,
             text = stringResource(id = R.string.duration) + " (" + stringResource(id = R.string.min) + "): ")
-        AnimatedVisibility(modifier = Modifier.padding(4.dp), visible = visible
+        AnimatedVisibility( visible = visible, modifier = Modifier.padding(top = 8.dp)
         ){
-            Column{
-                Spacer(modifier = Modifier.width(12.dp))
-                TextStringAndField(
-                    placeholder = set.weight.toString(),
-                    onChangeValue = { uiState.onChangeSet ((set as SetDB).copy(weight = it.toInt())) },
-                    editing = true,
-                    text = stringResource(id = R.string.weight) + " (" + stringResource(id = R.string.kg) + "): ")
-            }
+            TextStringAndField(
+                placeholder = set.weight.toString(),
+                onChangeValue = { uiState.onChangeSet ((set as SetDB).copy(weight = it.toIntMy())) },
+                editing = true,
+                text = stringResource(id = R.string.weight) + " (" + stringResource(id = R.string.kg) + "): ")
         }
     }
 }
@@ -189,20 +186,22 @@ fun RadioButtonCount(uiState: TrainingScreenState, set: Set, visible: Boolean)
     Column {
         TextStringAndField(
             placeholder = set.reps.toString(),
-            onChangeValue = { uiState.onChangeSet ((set as SetDB).copy(reps = it.toInt())) },
+            onChangeValue = { uiState.onChangeSet ((set as SetDB).copy(reps = it.toIntMy())) },
             editing = true,
             text = stringResource(id = R.string.quantity_reps) )
-        AnimatedVisibility(modifier = Modifier.padding(4.dp), visible = visible
+        AnimatedVisibility(modifier = Modifier.padding(top = 8.dp), visible = visible
         ){
             Column{
                 TextStringAndField(
                     placeholder = set.intervalReps.toString(),
-                    onChangeValue = { uiState.onChangeSet ((set as SetDB).copy(intervalReps = it.toDouble())) },
+                    onChangeValue = { uiState.onChangeSet ((set as SetDB).copy(intervalReps = it.toDoubleMy())) },
                     editing = true,
-                    text = stringResource(id = R.string.time_between_counts) + " (" + stringResource(id = R.string.sec) + "): ")
+                    text = stringResource(id = R.string.time_between_counts) + " (" +
+                            stringResource(id = R.string.sec) + "): ")
+                Spacer(modifier = Modifier.height(8.dp))
                 TextStringAndField(
                     placeholder = set.intervalDown.toString(),
-                    onChangeValue = { uiState.onChangeSet ((set as SetDB).copy(intervalDown = it.toInt())) },
+                    onChangeValue = { uiState.onChangeSet ((set as SetDB).copy(intervalDown = it.toIntMy())) },
                     editing = true,
                     text = stringResource(id = R.string.slowing_down_counts) )
                 SwitchCount(uiState, set)
@@ -214,10 +213,7 @@ fun RadioButtonCount(uiState: TrainingScreenState, set: Set, visible: Boolean)
 fun SwitchCount(uiState: TrainingScreenState, set: Set)
 {
     val state = remember { mutableIntStateOf(1) }
-    Column(
-        Modifier
-            .selectableGroup()
-            .padding(start = 12.dp))
+    Column( Modifier.selectableGroup())
     {
         Spacer(modifier = Modifier.height(6.dp))
         RadioButtonApp(
@@ -240,7 +236,7 @@ fun RadioButtonCountingOrder()
 {
     TextApp(
         text = stringResource(id = R.string.counting_in_order),
-        style = interLight12,
+        style = interReg12,
         modifier = Modifier.padding(vertical = 2.dp))
 }
 @Composable
@@ -249,7 +245,7 @@ fun RadioButtonCountingGroup(uiState: TrainingScreenState, set: Set, visible: Bo
     Column{
         TextAppLines(
             text = stringResource(id = R.string.counts_by_group),
-            style = interLight12,
+            style = interReg12,
             modifier = Modifier.padding(vertical = 2.dp))
         AnimatedVisibility(modifier = Modifier.padding(bottom = 4.dp), visible = visible
         ){
