@@ -37,22 +37,25 @@ import com.example.count_out.ui.theme.interLight12
 import com.example.count_out.ui.theme.interReg14
 import com.example.count_out.ui.view_components.IconsCollapsingCopySpeechDel
 import com.example.count_out.ui.view_components.TextApp
-
+import com.example.count_out.ui.view_components.drag_drop_column.ColumnDragDrop
 
 @Composable
 fun ListExercises(uiState: TrainingScreenState, roundType: RoundType, showExercises: Boolean)
 {
-    val listExercise = uiState.training.rounds.find { it.roundType == roundType }?.exercise ?: emptyList()
-    listExercise.forEach { exercise ->
-        AnimatedVisibility(modifier = Modifier.padding(top = 8.dp), visible = showExercises
-        ){
-            Card( elevation = elevationTraining(), shape = MaterialTheme.shapes.extraSmall
-            ){
-                Column {
-                    SelectActivity(uiState, exercise)
-                    BodyExercise(uiState, exercise)
-                }
-            }
+    ColumnDragDrop(
+        items = uiState.training.rounds.find { it.roundType == roundType }?.exercise ?: emptyList(),
+        modifier = Modifier,
+        showList = showExercises,
+        viewItem = { item -> ElementColum( item, modifier = Modifier, uiState = uiState) }
+    )
+}
+@Composable
+fun <T>ElementColum (item:T, modifier: Modifier = Modifier, uiState: TrainingScreenState,){
+    Card( elevation = elevationTraining(), shape = MaterialTheme.shapes.extraSmall
+    ){
+        Column {
+            SelectActivity(uiState, item as Exercise)
+            BodyExercise(uiState, item as Exercise)
         }
     }
 }
@@ -89,7 +92,6 @@ fun IconSelectActivity(uiState: TrainingScreenState, exercise: Exercise)
             uiState.showBottomSheetSelectActivity.value = true })
     { Icon(imageVector = Icons.Filled.ArrowDropDown, contentDescription = "") }
 }
-
 @Composable fun BodyExercise(uiState: TrainingScreenState, exercise: Exercise){
     Column(
         modifier = Modifier
@@ -97,11 +99,10 @@ fun IconSelectActivity(uiState: TrainingScreenState, exercise: Exercise)
         AnimatedVisibility(modifier = Modifier.padding(0.dp),
             visible = uiState.listCollapsingExercise.value.find { it == exercise.idExercise } != null
         ){
-            Column (modifier = Modifier
-                .fillMaxWidth()
-                .padding(6.dp), content = {
+            Column (modifier = Modifier.fillMaxWidth().padding(6.dp), content = {
                 uiState.exercise = exercise
-                ListSets(uiState)})
+                ListSets(uiState)}
+            )
         }
         RowAddSet(uiState, exercise)
     }

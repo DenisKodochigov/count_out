@@ -21,7 +21,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -45,7 +44,7 @@ import com.example.count_out.ui.theme.interReg12
 import com.example.count_out.ui.theme.shapesApp
 import com.example.count_out.ui.view_components.IconsCollapsing
 import com.example.count_out.ui.view_components.TextApp
-import com.example.count_out.ui.view_components.drag_drop.LazyListDragDrop
+import com.example.count_out.ui.view_components.drag_drop_column.ColumnDragDrop
 
 @SuppressLint("UnrememberedMutableState")
 @Composable fun SettingScreen( onBaskScreen:() -> Unit
@@ -66,10 +65,10 @@ import com.example.count_out.ui.view_components.drag_drop.LazyListDragDrop
 }
 @Composable fun SettingScreenLayout( uiState: SettingScreenState
 ){
-    val listItems = remember{ mutableStateOf(
+    val listItems = remember{
         listOf("Item 0", "Item 1", "Item 2", "Item 3", "Item 4", "Item 5", "Item 6", "Item 7",
             "Item 8", "Item 9", "Item 10", "Item 11", "Item 12", "Item 13", "Item 14", "Item 15",
-            "Item 16", "Item 17", "Item 18", "Item 19", "Item 20"))}
+            "Item 16", "Item 17", "Item 18", "Item 19", "Item 20")}
     Column(
         Modifier
             .padding(8.dp)
@@ -77,14 +76,19 @@ import com.example.count_out.ui.view_components.drag_drop.LazyListDragDrop
 //            .verticalScroll(rememberScrollState())
     ){
         ActiveSection(uiState = uiState,)
-        LazyListDragDrop(
+//        LazyListDragDrop(
+//            items = listItems,
+//            viewItem = { item -> ElementColum(item)})
+
+        ColumnDragDrop(
             items = listItems,
-            viewItem = { item -> ElementColumBasket(item)})
+            showList = true,
+            viewItem = { item -> ElementColum( item )})
     }
 }
 
 @Composable
-fun <T>ElementColumBasket (item:T, modifier: Modifier = Modifier){
+fun <T>ElementColum (item:T , modifier: Modifier = Modifier){
     Row(
         modifier = modifier
             .clip(shape = shapesApp.extraSmall)

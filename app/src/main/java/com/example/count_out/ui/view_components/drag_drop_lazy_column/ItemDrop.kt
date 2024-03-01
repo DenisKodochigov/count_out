@@ -1,4 +1,4 @@
-package com.example.count_out.ui.view_components.drag_drop
+package com.example.count_out.ui.view_components.drag_drop_lazy_column
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.combinedClickable
@@ -21,7 +21,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
-import com.example.count_out.ui.view_components.log
 import kotlinx.coroutines.launch
 import kotlin.math.roundToInt
 
@@ -32,11 +31,11 @@ fun ItemDrop(
     indexItem:Int,
     frontFon:@Composable () -> Unit,
     onMoveItem: (Int) -> Unit,
+    onClickItem: (Int) -> Unit,
 ){
-
-    val enableDrag = remember { mutableStateOf(true) }
+    val enableDrag = remember { mutableStateOf(false) }
     val coroutineScope = rememberCoroutineScope()
-    val stateDrag by remember{ mutableStateOf(StateDrag(indexItem = indexItem))}
+    val stateDrag by remember{ mutableStateOf(StateDrag(indexItem = indexItem, lazyState = lazyState))}
 
     Box(modifier = Modifier.fillMaxWidth()
     ){
@@ -44,23 +43,21 @@ fun ItemDrop(
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .offset { IntOffset(0, stateDrag.offsetA.value.roundToInt()) }
+                .offset { IntOffset(0, stateDrag.shift.value.roundToInt()) }
                 .combinedClickable(
-                    onClick = { },
+                    onClick = { onClickItem( indexItem ) },
                     onLongClick = { enableDrag.value = true },
                 )
                 .draggable(
                     enabled = enableDrag.value,
                     state = rememberDraggableState { delta ->
-                        coroutineScope.launch { offsetControl(delta, stateDrag) }
+                        coroutineScope.launch { stateDrag.shiftItem(delta) }
                     },
                     orientation = Orientation.Vertical,
-                    onDragStarted = { onDragStarted(lazyState, stateDrag) },
+                    onDragStarted = { stateDrag.onStartDrag() },
                     onDragStopped = {
-//                        enableDrag.value = false
-                        coroutineScope.launch {
-                            onDragStopped(lazyState, stateDrag, onMoveItem)
-                        }
+                        enableDrag.value = false
+                        coroutineScope.launch { stateDrag.onStopDrag(onMoveItem) }
                     }
                 )
         ){
@@ -68,30 +65,7 @@ fun ItemDrop(
         }
     }
 }
-suspend fun offsetControl( delta: Float, stateDrag: StateDrag)
-{
-    log(false, "offsetLog  offset: ${stateDrag.offset}; delta: $delta; maxOffsetUp to maxOffsetDown ${stateDrag.maxOffsetUp}:${stateDrag.maxOffsetDown}")
-    if ((stateDrag.offset + delta) in stateDrag.maxOffsetUp..stateDrag.maxOffsetDown) {
-        stateDrag.offsetA.snapTo(stateDrag.offsetA.value + delta)
-        stateDrag.offsetA.value.plus(delta)
-        stateDrag.offset += delta
-    }
-}
 
-fun onDragStarted(lazyState: LazyListState, stateDrag: StateDrag)
-{
-    stateDrag.offset = lazyState.layoutInfo.visibleItemsInfo[stateDrag.indexItem].offset.toFloat()
-    stateDrag.maxOffsetDown = lazyState.layoutInfo.visibleItemsInfo.last().offset.toFloat()
-}
-
-fun onDragStopped(lazyState: LazyListState, stateDrag: StateDrag, onMoveItem: (Int) -> Unit,)
-{
-    lazyState.layoutInfo.visibleItemsInfo.firstOrNull { item ->
-        stateDrag.offset.toInt() in item.offset .. (item.offset + item.size)
-    }?.also { item ->
-        if (stateDrag.indexItem != item.index) onMoveItem(item.index)
-    }
-}
 @Composable
 fun BackFon(modifier: Modifier = Modifier){
     Row(modifier = modifier

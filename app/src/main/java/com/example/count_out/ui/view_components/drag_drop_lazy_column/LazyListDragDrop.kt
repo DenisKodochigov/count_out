@@ -1,9 +1,8 @@
-package com.example.count_out.ui.view_components.drag_drop
+package com.example.count_out.ui.view_components.drag_drop_lazy_column
 
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
@@ -22,19 +21,18 @@ fun <T>LazyListDragDrop(
 
     LazyColumn(
         state = lazyState,
-        modifier = modifier
-            .fillMaxSize()
-            .padding(top = 10.dp, start = 10.dp, end = 10.dp),
+        modifier = modifier.fillMaxSize(),
     ) {
         itemsIndexed(items.value) { index, item ->
             ItemDrop(
                 lazyState = lazyState,
                 indexItem = index,
                 frontFon = { viewItem(item) },
+                onClickItem = {},
                 onMoveItem = { indexTo ->
                     items.value = moveItem(list = items.value.toMutableList(), from = index, to = indexTo)
 //                    items.value.toMutableList().move(index, indexTo)
-                             },
+                },
             )
             Spacer(modifier = Modifier.height(4.dp))
         }
@@ -48,7 +46,6 @@ fun <T>moveItem(list:MutableList<T>, from: Int, to: Int): List<T> {
     }
     return list
 }
-
 
 fun <T> MutableList<T>.move(from:Int, to:Int){
     if (from != to){

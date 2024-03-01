@@ -65,7 +65,6 @@ fun Row1Round(uiState: TrainingScreenState, roundType: RoundType)
 }
 fun nameRound(uiState: TrainingScreenState, roundType: RoundType, name: String): String =
     "$name: ${(uiState.training.rounds.find { it.roundType == roundType }?.idRound ?: 0)}"
-
 @Composable
 fun Row2Round(uiState: TrainingScreenState, roundType: RoundType) {
     val amountExercise = stringResource(id = R.string.exercises) + ": " + amountExercise(uiState, roundType)
