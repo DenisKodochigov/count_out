@@ -18,7 +18,6 @@ fun <T>LazyListDragDrop(
     viewItem:@Composable (T) -> Unit
 ) {
     val lazyState = rememberLazyListState()
-
     LazyColumn(
         state = lazyState,
         modifier = modifier.fillMaxSize(),

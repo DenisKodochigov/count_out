@@ -73,7 +73,7 @@ data class RoundRel(
 ){
     fun toRound(): RoundDB{
         return RoundDB(
-            exercise = exercise?.map { it.toExercise() } ?: emptyList(),
+            exercise = sortExercise(round.sequenceExercise, exercise),//exercise?.map { it.toExercise() } ?: emptyList(), sortExercise(round.sequenceExercise, exercise)
             idRound = round.idRound,
             roundType = round.roundType,
             speechId = round.speechId,
@@ -81,6 +81,20 @@ data class RoundRel(
             trainingId = round.trainingId,
             sequenceExercise = round.sequenceExercise
         )
+    }
+    private fun sortExercise(sequenceExercise: String, exercise: List<ExerciseRel>? ):List<Exercise>{
+        val sortingList = sequenceExercise.split(",")
+        val listExercise: MutableList<Exercise> = mutableListOf()
+        if (sortingList.size > 1) {
+            sortingList.forEach { id->
+                exercise?.find { it.exerciseDB.idExercise == id.toLong() }?.also { exercise ->
+                    listExercise.add(exercise.toExercise()) } ?: mutableListOf<Exercise>()
+            }
+        } else {
+            exercise?.forEach { listExercise.add( it.toExercise() ) } ?: mutableListOf<Exercise>()
+        }
+//        return exercise?.map { it.toExercise() } ?: emptyList()
+        return listExercise.toList()
     }
 }
 data class TrainingRel(

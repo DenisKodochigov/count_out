@@ -13,13 +13,28 @@ import com.example.count_out.entity.RoundType
 import com.example.count_out.entity.Set
 import com.example.count_out.entity.Speech
 import com.example.count_out.entity.Training
+import com.example.count_out.ui.view_components.log
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
 class DataSource @Inject constructor(private val dataDao: DataDao) {
-    fun getTraining(id: Long): TrainingDB = dataDao.getTrainingRel(id).toTraining()
+    fun getTraining(id: Long): TrainingDB {
+        val training = dataDao.getTrainingRel(id).toTraining()
+        checkSequenceExercise(training)
+        return training
+    }
 
+    private fun checkSequenceExercise(training: Training){
+        training.rounds.forEach { round->
+            if ( round.sequenceExercise.isEmpty()) {
+                val listExercise = dataDao.getExercisesForRoundRel(round.idRound)
+                (round as RoundDB).sequenceExercise = listExercise.map{ it.exerciseDB.idExercise}.toString()
+                round.sequenceExercise = round.sequenceExercise.replace("[", "").replace("]", "").replace(" ", "")
+                dataDao.updateRound(round)
+            }
+        }
+    }
     fun getTrainings(): List<Training> = dataDao.getTrainingsRel().map { it.toTraining() }
     fun updateTraining(trainingDB: TrainingDB): Int = dataDao.updateTraining(trainingDB)
     fun addTraining(): List<Training> {
@@ -52,13 +67,19 @@ class DataSource @Inject constructor(private val dataDao: DataDao) {
     fun updateRound(round: RoundDB): Int = dataDao.updateRound(round)
     fun getNameRound(roundId: Long): String = dataDao.getNameRound(roundId)
     fun getRound(roundId: Long): RoundDB = dataDao.getRoundRel(roundId).toRound()
+
 //Exercise
     fun getExercise( exerciseId:Long): Exercise {
         return if (exerciseId > 1) { dataDao.getExerciseRel(exerciseId).toExercise() }
                 else { ExerciseDB() }
     }
     fun addExercise( roundId:Long, set: SetDB): Exercise {
-        return createExercise( roundId , set)
+        val exercise = createExercise( roundId , set)
+        val round = getRound(roundId)
+        round.sequenceExercise = round.sequenceExercise + ", ${exercise.idExercise}"
+        dataDao.updateRound(round)
+        log(true, "round.sequenceExercise ${round.sequenceExercise}")
+        return exercise
     }
     fun copyExercise ( exerciseId: Long) {
         val source = dataDao.getExerciseRel(exerciseId).toExercise()
@@ -66,6 +87,11 @@ class DataSource @Inject constructor(private val dataDao: DataDao) {
     }
     fun deleteExercise ( exerciseId: Long) {
         val exercise = dataDao.getExerciseRel(exerciseId)
+        val round = getRound(exercise.exerciseDB.roundId)
+
+        round.sequenceExercise = deleteIdFromSequence( round.sequenceExercise, exerciseId )
+        dataDao.updateRound(round)
+        log(true, "round.sequenceExercise ${round.sequenceExercise}")
         exercise.speech?.let { dataDao.delSpeech(it.idSpeech) }
         exercise.sets?.forEach {
             val set = it.toSet()
@@ -151,6 +177,11 @@ class DataSource @Inject constructor(private val dataDao: DataDao) {
             speechId = copySpeech(exercise.speech).idSpeech,
             roundId = if (roundId == 0L) exercise.roundId else roundId ))
         exercise.sets.forEach { copySet( it, idNew) }
+        val round  = dataDao.getRound(roundId)
+        round.sequenceExercise = round.sequenceExercise.substringBefore("${exercise.idExercise}") +
+                "${exercise.idExercise},$idNew" +
+                round.sequenceExercise.substringAfter("${exercise.idExercise}")
+        dataDao.updateRound( round )
         return dataDao.getExerciseRel(idNew).toExercise()
     }
     private fun copySet(set: Set, exerciseId: Long): Set{
@@ -166,5 +197,12 @@ class DataSource @Inject constructor(private val dataDao: DataDao) {
 
     private fun copySpeech(speech: Speech): Speech{
         return dataDao.getSpeech(dataDao.addSpeech((speech as SpeechDB).copy(idSpeech = 0L)))
+    }
+    private fun deleteIdFromSequence(sequence: String, idExercise: Long ): String{
+        return if (sequence.contains("$idExercise,")){
+                    sequence.replace("$idExercise,", "")
+                } else if ( sequence.contains(", $idExercise")){
+                    sequence.replace(", $idExercise", "")
+                } else {  sequence }
     }
 }

@@ -39,6 +39,7 @@ import com.example.count_out.ui.theme.interReg14
 import com.example.count_out.ui.view_components.IconsCollapsingCopySpeechDel
 import com.example.count_out.ui.view_components.TextApp
 import com.example.count_out.ui.view_components.drag_drop_column.ColumnDragDrop
+import com.example.count_out.ui.view_components.log
 
 @Composable
 fun ListExercises(uiState: TrainingScreenState, roundType: RoundType, showExercises: Boolean)
@@ -47,7 +48,8 @@ fun ListExercises(uiState: TrainingScreenState, roundType: RoundType, showExerci
         items = uiState.training.rounds.find { it.roundType == roundType }?.exercise ?: emptyList(),
         modifier = Modifier,
         showList = showExercises,
-        viewItem = { item -> ElementColum( item, modifier = Modifier, uiState = uiState) }
+        viewItem = { item -> ElementColum( item, modifier = Modifier, uiState = uiState) },
+        onMoveItem = { from, to-> log(true, "from: $from; to: $to")}
     )
 }
 @Composable
