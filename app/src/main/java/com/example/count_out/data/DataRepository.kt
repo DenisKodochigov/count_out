@@ -58,7 +58,6 @@ class DataRepository  @Inject constructor(private val dataSource: DataSource){
             else -> { dataSource.getTraining(trainingId) }
         }
     }
-
     private fun analiseId(idParent: Long, idChild: Long): Long{
         return if (idParent == 0L) { idChild }
                else if (idParent != idChild) {
@@ -80,6 +79,10 @@ class DataRepository  @Inject constructor(private val dataSource: DataSource){
     }
     fun deleteExercise(trainingId: Long, exerciseId: Long): Training {
         if ( exerciseId > 0) dataSource.deleteExercise( exerciseId )
+        return getTraining(trainingId)
+    }
+    fun changeSequenceExercise(trainingId: Long, roundId: Long, from: Int, to: Int): Training{
+        if ( roundId > 0) dataSource.changeSequenceExercise( roundId, from, to)
         return getTraining(trainingId)
     }
     fun getNameTrainingFromRound(roundId: Long): String {

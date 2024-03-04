@@ -44,12 +44,16 @@ import com.example.count_out.ui.view_components.log
 @Composable
 fun ListExercises(uiState: TrainingScreenState, roundType: RoundType, showExercises: Boolean)
 {
+    val listExercise = uiState.training.rounds.find { it.roundType == roundType }?.exercise ?: emptyList()
+    val roundId = if (listExercise.isNotEmpty()) listExercise[0].roundId else 0
+
     ColumnDragDrop(
-        items = uiState.training.rounds.find { it.roundType == roundType }?.exercise ?: emptyList(),
+        items = listExercise,
         modifier = Modifier,
         showList = showExercises,
         viewItem = { item -> ElementColum( item, modifier = Modifier, uiState = uiState) },
-        onMoveItem = { from, to-> log(true, "from: $from; to: $to")}
+        onMoveItem = { from, to-> log(true, "from: $from; to: $to")
+            uiState.changeSequenceExercise( uiState.training.idTraining, roundId, from, to )}
     )
 }
 @Composable

@@ -67,7 +67,18 @@ class DataSource @Inject constructor(private val dataDao: DataDao) {
     fun updateRound(round: RoundDB): Int = dataDao.updateRound(round)
     fun getNameRound(roundId: Long): String = dataDao.getNameRound(roundId)
     fun getRound(roundId: Long): RoundDB = dataDao.getRoundRel(roundId).toRound()
+    fun changeSequenceExercise( roundId: Long, from: Int, to: Int){
+        val round = dataDao.getRound(roundId)
+        val listExercise = round.sequenceExercise.split(",")
+        val fromItem = listExercise[from]
+        val toItem = listExercise[to]
+        val replaceItem = if (from == listExercise.size - 1) ",$fromItem" else "$fromItem,"
 
+        round.sequenceExercise = round.sequenceExercise.replace(replaceItem, "").let {
+            it.substringBefore(toItem) + toItem + "," + fromItem  + it.substringAfter(toItem)
+        }
+        dataDao.updateRound(round)
+    }
 //Exercise
     fun getExercise( exerciseId:Long): Exercise {
         return if (exerciseId > 1) { dataDao.getExerciseRel(exerciseId).toExercise() }

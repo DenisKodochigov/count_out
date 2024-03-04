@@ -40,6 +40,7 @@ data class TrainingScreenState(
     @Stable var onAddExercise: (Long, SetDB) -> Unit = {_,_ ->},
     @Stable var onCopyExercise: (Long, Long) -> Unit = {_,_ ->},
     @Stable var onDeleteExercise: (Long, Long) -> Unit = {_,_ ->},
+    @Stable var changeSequenceExercise: (Long, Long, Int, Int) -> Unit = {_,_,_,_ ->},
     @Stable var onSelectActivity: (Long, Long) -> Unit = {_,_ ->},
     @Stable var onSetColorActivity: (Long, Int) -> Unit = {_,_ ->},
     @Stable var doChangeActivity: (Activity) -> Unit = {},
