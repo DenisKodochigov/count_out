@@ -5,7 +5,7 @@ import com.example.count_out.entity.Exercise
 import com.example.count_out.entity.StateWorkOut
 import javax.inject.Inject
 
-class PlayerExercise @Inject constructor(val speechManager:SpeechManager, val playerSet: PlayerSet)
+class PlayerExercise @Inject constructor(val speechManager:SpeechManager, private val playerSet: PlayerSet)
 {
     private val show = false
     suspend fun playingExercise(exercise: Exercise, stateService: (StateWorkOut)->Unit){

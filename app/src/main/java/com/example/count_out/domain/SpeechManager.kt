@@ -6,6 +6,8 @@ import android.speech.tts.UtteranceProgressListener
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import com.example.count_out.data.room.tables.StateWorkOutDB
+import com.example.count_out.entity.Const.durationChar
+import com.example.count_out.entity.Const.intervalDelay
 import com.example.count_out.entity.StateWorkOut
 import com.example.count_out.ui.view_components.log
 import kotlinx.coroutines.delay
@@ -17,6 +19,7 @@ class SpeechManager(val context: Context) {
 
     private val show = false
     private var tts:TextToSpeech? = null
+    private val pause = mutableStateOf(false)
     val speeching: MutableState<Boolean> = mutableStateOf(true)
 
     fun init(){
@@ -47,36 +50,34 @@ class SpeechManager(val context: Context) {
             } else { tts = null }
         }
     }
-    private suspend fun speakOut(text: String, delay: Long = 0L){
-        if (text.isNotEmpty()) {
-            log(show, "SpeechManager.speakOut: $text")
-            tts?.speak(text, TextToSpeech.QUEUE_ADD, null,"speakOut")
-            val d: Long = if (delay ==0L) text.length * 70L else delay
-            delay(d)
-        }
-    }
+
     suspend fun speech(text: String, stateService: (StateWorkOut)->Unit){
         if (text.length > 1) {
             stateService( StateWorkOutDB(state = text))
-            speakOut(text, 0L)
+            speakOutAdd(text)
+            delayMy(delay = text.length * durationChar)
         }
     }
+    private fun speakOutAdd(text: String){
+        log(show, "SpeechManager.speakOut: $text")
+        tts?.speak(text, TextToSpeech.QUEUE_ADD, null,"speakOut")
+    }
+
     fun speakOutFlush(text: String){
-        if (text.isNotEmpty()) {
-            log(show, "SpeechManager.speakOut: $text")
-            tts?.speak(text, TextToSpeech.QUEUE_FLUSH, null,"speakOut")
+        log(show, "SpeechManager.speakOut: $text")
+        tts?.speak(text, TextToSpeech.QUEUE_FLUSH, null,"speakOut")
+    }
+    fun onPause(pauseUI:MutableState<Boolean>) {
+        pause.value = pauseUI.value
+    }
+    private suspend fun delayMy(delay: Long){
+        var count = 0
+        val delta = (delay/intervalDelay).toInt()
+        while (count <= delta){
+            while (!pause.value) {
+                count++
+                delay(intervalDelay)
+            }
         }
-    }
-    fun speakOut(text: String){
-        if (text.isNotEmpty()) {
-            log(show, "SpeechManager.speakOut: $text")
-            tts?.speak(text, TextToSpeech.QUEUE_ADD, null,"speakOut")
-        }
-    }
-    fun onStop(){
-        tts?.stop()
-    }
-    fun onDestroy(){
-        tts?.shutdown()
     }
 }

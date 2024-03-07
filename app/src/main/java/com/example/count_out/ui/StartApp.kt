@@ -26,10 +26,9 @@ import com.example.count_out.ui.theme.AppTheme
 import com.example.count_out.ui.view_components.BottomBarApp
 import com.example.count_out.ui.view_components.CollapsingToolbar
 import com.example.count_out.ui.view_components.ExtendedFAB
-import com.google.accompanist.permissions.ExperimentalPermissionsApi
 
 @RequiresApi(Build.VERSION_CODES.S)
-@OptIn(ExperimentalComposeUiApi::class, ExperimentalPermissionsApi::class)
+@OptIn(ExperimentalComposeUiApi::class)
 @SuppressLint("RememberReturnType", "UnrememberedMutableState", "SuspiciousIndentation",
     "RestrictedApi"
 )

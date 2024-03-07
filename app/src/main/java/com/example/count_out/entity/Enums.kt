@@ -60,3 +60,6 @@ enum class GoalSet(val id: Int){
     DURATION(2),
     COUNT(3),
 }
+enum class StopwatchState {
+    Idle, Started, Stopped, Canceled
+}
