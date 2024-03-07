@@ -1,5 +1,6 @@
 package com.example.count_out.service.player
 
+import androidx.compose.runtime.MutableState
 import com.example.count_out.domain.SpeechManager
 import com.example.count_out.entity.Round
 import com.example.count_out.entity.StateWorkOut
@@ -9,13 +10,14 @@ class PlayerRound @Inject constructor(
     val speechManager:SpeechManager,
     private val playerExercise: PlayerExercise)
 {
-    suspend fun playingRound(round: Round, stateService: (StateWorkOut)->Unit){
-        speechManager.speech(round.speech.beforeStart, stateService)
-        speechManager.speech(round.speech.afterStart, stateService)
+    suspend fun playingRound(round: Round,
+                             pause: MutableState<Boolean>, stateService: (StateWorkOut)->Unit){
+        speechManager.speech(round.speech.beforeStart, pause, stateService)
+        speechManager.speech(round.speech.afterStart, pause, stateService)
         round.exercise.forEach { exercise->
-            playerExercise.playingExercise(exercise, stateService)
+            playerExercise.playingExercise(exercise, pause, stateService)
         }
-        speechManager.speech(round.speech.beforeEnd, stateService)
-        speechManager.speech(round.speech.afterEnd, stateService)
+        speechManager.speech(round.speech.beforeEnd, pause, stateService)
+        speechManager.speech(round.speech.afterEnd, pause, stateService)
     }
 }

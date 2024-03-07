@@ -5,9 +5,8 @@ import android.app.Service
 import android.content.Intent
 import android.os.Binder
 import android.os.IBinder
-import com.example.count_out.entity.Const.ACTION_SERVICE_CANCEL
-import com.example.count_out.entity.Const.ACTION_SERVICE_START
-import com.example.count_out.entity.Const.ACTION_SERVICE_STOP
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateOf
 import com.example.count_out.entity.Const.NOTIFICATION_ID
 import com.example.count_out.entity.Const.STOPWATCH_STATE
 import com.example.count_out.entity.StateWorkOut
@@ -28,6 +27,7 @@ import javax.inject.Singleton
 @AndroidEntryPoint
 class WorkoutService @Inject constructor(): Service() {
     private lateinit var coroutineScope: CoroutineScope
+    private val pause = mutableStateOf(false)
     @Inject lateinit var stopWatch: StopWatch
     @Inject lateinit var notificationHelper: NotificationHelper
     @Inject lateinit var playerWorkOut: PlayerWorkOut
@@ -38,73 +38,69 @@ class WorkoutService @Inject constructor(): Service() {
     override fun onBind(p0: Intent?): IBinder = WorkoutServiceBinder()
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         when (intent?.getStringExtra(STOPWATCH_STATE)) {
-            StopwatchState.Started.name -> {
-                notificationHelper.setStopButton(this)
-                startForegroundService()
-                stopWatch.onStart { hours, minutes, seconds ->
-                    notificationHelper.updateNotification(hours = hours, minutes = minutes, seconds = seconds)
-                }
-            }
-            StopwatchState.Stopped.name -> {
-                stopWatch.onStop()
-                notificationHelper.setResumeButton(this)
-            }
-            StopwatchState.Canceled.name -> {
-                stopWatch.onStop()
-                stopWatch.cancel()
-                stopForegroundService()
-            }
+            StopwatchState.onPause.name -> pauseWorkout()
+            StopwatchState.onStop.name -> stopWatch.onStop()
         }
-        intent?.action.let {
-            when (it) {
-                ACTION_SERVICE_START -> {
-                    notificationHelper.setStopButton(this)
-                    startForegroundService()
-                    stopWatch.onStart { hours, minutes, seconds ->
-                        notificationHelper.updateNotification(hours = hours, minutes = minutes, seconds = seconds)
-                    }
-                }
-                ACTION_SERVICE_STOP -> {
-                    stopWatch.onStop()
-                    notificationHelper.setResumeButton(this)
-                }
-                ACTION_SERVICE_CANCEL -> {
-                    stopWatch.onStop()
-                    stopWatch.cancel()
-                    stopForegroundService()
-                }
-            }
-        }
+//        intent?.action.let {
+//            when (it) {
+//                ACTION_SERVICE_START -> {
+//                    notificationHelper.setStopButton(this)
+//                    startForegroundService()
+//                    stopWatch.onStart { hours, minutes, seconds ->
+//                        notificationHelper.updateNotification(hours = hours, minutes = minutes, seconds = seconds)
+//                    }
+//                }
+//                ACTION_SERVICE_STOP -> {
+//                    stopWatch.onStop()
+//                    notificationHelper.setResumeButton(this)
+//                }
+//                ACTION_SERVICE_CANCEL -> {
+//                    stopWatch.onStop()
+//                    stopWatch.cancel()
+//                    stopForegroundService()
+//                }
+//            }
+//        }
         return super.onStartCommand(intent, flags, startId)
     }
-    @SuppressLint("ForegroundServiceType")
-    private fun startForegroundService() {
-        notificationHelper.createChannel()
-        startForeground(NOTIFICATION_ID, notificationHelper.notificationBuilder.build())
-    }
-    private fun stopForegroundService() {
-        notificationHelper.cancel()
-        stopForeground(STOP_FOREGROUND_REMOVE)
-        stopSelf()
-    }
 
+//    private fun stopForegroundService() {
+//        notificationHelper.cancel()
+//        stopForeground(STOP_FOREGROUND_REMOVE)
+//        stopSelf()
+//    }
+
+    @SuppressLint("ForegroundServiceType")
     fun startWorkout(training: Training, stateService: (StateWorkOut)->Unit){
-        coroutineService(training, stateService)
+        notificationHelper.createChannel()
+        notificationHelper.setPauseButton(this)
+        coroutineService(training, pause, stateService)
         stopWatch.onStart { hours, minutes, seconds ->
             notificationHelper.updateNotification(hours = hours, minutes = minutes, seconds = seconds)
         }
+        startForeground(NOTIFICATION_ID, notificationHelper.build())
     }
     fun pauseWorkout(){
-
+        pause.value = !pause.value
+        stopWatch.onPause(pause)
+        if (pause.value) notificationHelper.setContinueButton(this)
+        else notificationHelper.setPauseButton(this)
     }
     fun stopWorkout(){
+        notificationHelper.cancel()
+        stopWatch.onStop()
+        stopForeground(STOP_FOREGROUND_REMOVE)
         coroutineScope.cancel()
     }
-    private fun coroutineService(training: Training, stateService: (StateWorkOut)->Unit){
+    private fun coroutineService(
+        training: Training,
+        pause: MutableState<Boolean>,
+        stateService: (StateWorkOut)->Unit)
+    {
         coroutineScope = CoroutineScope(Dispatchers.Default)
         coroutineScope.launch{
             try {
-                playerWorkOut.playingWorkOut(training, stateService)
+                playerWorkOut.playingWorkOut(training, pause, stateService)
             } catch ( e: InterruptedException){
                 e.printStackTrace()
             }

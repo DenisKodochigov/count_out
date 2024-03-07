@@ -19,7 +19,6 @@ class SpeechManager(val context: Context) {
 
     private val show = false
     private var tts:TextToSpeech? = null
-    private val pause = mutableStateOf(false)
     val speeching: MutableState<Boolean> = mutableStateOf(true)
 
     fun init(){
@@ -51,11 +50,13 @@ class SpeechManager(val context: Context) {
         }
     }
 
-    suspend fun speech(text: String, stateService: (StateWorkOut)->Unit){
+    suspend fun speech(text: String,
+                       pause: MutableState<Boolean>,
+                       stateService: (StateWorkOut)->Unit){
         if (text.length > 1) {
             stateService( StateWorkOutDB(state = text))
             speakOutAdd(text)
-            delayMy(delay = text.length * durationChar)
+            delayMy(delay = text.length * durationChar, pause)
         }
     }
     private fun speakOutAdd(text: String){
@@ -67,17 +68,13 @@ class SpeechManager(val context: Context) {
         log(show, "SpeechManager.speakOut: $text")
         tts?.speak(text, TextToSpeech.QUEUE_FLUSH, null,"speakOut")
     }
-    fun onPause(pauseUI:MutableState<Boolean>) {
-        pause.value = pauseUI.value
-    }
-    private suspend fun delayMy(delay: Long){
+
+    private suspend fun delayMy(delay: Long, pause: MutableState<Boolean>){
         var count = 0
         val delta = (delay/intervalDelay).toInt()
         while (count <= delta){
-            while (!pause.value) {
-                count++
-                delay(intervalDelay)
-            }
+            if (!pause.value) count++
+            delay(intervalDelay)
         }
     }
 }

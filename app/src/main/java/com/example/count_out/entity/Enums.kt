@@ -61,5 +61,5 @@ enum class GoalSet(val id: Int){
     COUNT(3),
 }
 enum class StopwatchState {
-    Idle, Started, Stopped, Canceled
+    Idle, Started, onPause, onStop
 }
