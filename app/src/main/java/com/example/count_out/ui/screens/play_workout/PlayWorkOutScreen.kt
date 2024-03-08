@@ -24,6 +24,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.count_out.entity.StateWorkOut
+import com.example.count_out.ui.theme.interBold48
 import com.example.count_out.ui.theme.interLight12
 import com.example.count_out.ui.view_components.FABStartStopWorkOut
 import com.example.count_out.ui.view_components.TextApp
@@ -77,7 +78,26 @@ fun PlayWorkoutScreenCreateView( viewModel: PlayWorkoutViewModel, onBaskScreen:(
 }
 @Composable fun PlayWorkoutScreenLayoutContent( uiState: PlayWorkoutScreenState
 ){
+    CountTime(uiState)
     ListState(uiState)
+}
+
+@Composable fun CountTime(uiState: PlayWorkoutScreenState){
+
+//    val tickTime: MutableState<TickTime> = remember{ mutableStateOf(TickTime(hour = "00", min="00", sec= "00")) }
+//    if (uiState.statesWorkout.value.isNotEmpty()){
+//        uiState.statesWorkout.value.last().tickTime?.let {
+//            log(true, "CountTime tickTime: $tickTime statesWorkout: ${it}")
+//            tickTime.value = it }
+//    }
+    val tickTime = uiState.tickTime
+    Row (modifier = Modifier.fillMaxWidth() ,horizontalArrangement = Arrangement.Center) {
+        TextApp(text = tickTime.hour, style = interBold48)
+        TextApp(text = ":", style = interBold48)
+        TextApp(text = tickTime.min, style = interBold48)
+        TextApp(text = ":", style = interBold48)
+        TextApp(text = tickTime.sec, style = interBold48)
+    }
 }
 
 @SuppressLint("MutableCollectionMutableState")
@@ -95,12 +115,16 @@ fun PlayWorkoutScreenCreateView( viewModel: PlayWorkoutViewModel, onBaskScreen:(
         verticalArrangement = Arrangement.Center
     ){
         items(items = uiState.statesWorkout.value ){ item->
-            Row (modifier = Modifier.padding(horizontal = 12.dp, vertical = 4.dp)){
-                TextApp(text = getDuration( startTime = uiState.startTime, time = item.time!!),
-                    modifier = Modifier.width(70.dp),
-                    style = interLight12)
-                Spacer(modifier = Modifier.width(12.dp))
-                TextApp(text = item.state.toString(), style = interLight12)
+            if (item.state != null) {
+                Row(modifier = Modifier.padding(horizontal = 12.dp, vertical = 4.dp)) {
+                    TextApp(
+                        text = getDuration(startTime = uiState.startTime, time = item.time!!),
+                        modifier = Modifier.width(70.dp),
+                        style = interLight12
+                    )
+                    Spacer(modifier = Modifier.width(12.dp))
+                    TextApp(text = item.state.toString(), style = interLight12)
+                }
             }
         }
     }

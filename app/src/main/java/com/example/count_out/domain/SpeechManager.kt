@@ -5,10 +5,10 @@ import android.speech.tts.TextToSpeech
 import android.speech.tts.UtteranceProgressListener
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
-import com.example.count_out.data.room.tables.StateWorkOutDB
 import com.example.count_out.entity.Const.durationChar
 import com.example.count_out.entity.Const.intervalDelay
 import com.example.count_out.entity.StateWorkOut
+import com.example.count_out.entity.StreamsWorkout
 import com.example.count_out.ui.view_components.log
 import kotlinx.coroutines.delay
 import java.util.Locale
@@ -50,11 +50,13 @@ class SpeechManager(val context: Context) {
         }
     }
 
-    suspend fun speech(text: String,
-                       pause: MutableState<Boolean>,
-                       stateService: (StateWorkOut)->Unit){
+    suspend fun speech(
+        text: String,
+        pause: MutableState<Boolean>,
+        streamsWorkout: StreamsWorkout
+    ){
         if (text.length > 1) {
-            stateService( StateWorkOutDB(state = text))
+            streamsWorkout.flowMessage.emit ( StateWorkOut(state = text))
             speakOutAdd(text)
             delayMy(delay = text.length * durationChar, pause)
         }

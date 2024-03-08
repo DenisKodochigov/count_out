@@ -32,6 +32,10 @@ val interReg12Start = TextStyle(
     textAlign = TextAlign.Start,
     textDecoration = TextDecoration.None
 )
+val interBold48 = TextStyle(
+    fontFamily = FontFamily(Font(R.font.inter_bold)),
+    fontSize = 48.sp
+)
 val interBold16 = TextStyle(
     fontFamily = FontFamily(Font(R.font.inter_bold)),
     fontSize = 16.sp

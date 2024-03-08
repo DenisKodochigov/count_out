@@ -9,8 +9,9 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import com.example.count_out.entity.Const.NOTIFICATION_ID
 import com.example.count_out.entity.Const.STOPWATCH_STATE
-import com.example.count_out.entity.StateWorkOut
 import com.example.count_out.entity.StopwatchState
+import com.example.count_out.entity.StreamsWorkout
+import com.example.count_out.entity.TickTime
 import com.example.count_out.entity.Training
 import com.example.count_out.helpers.NotificationHelper
 import com.example.count_out.service.player.PlayerWorkOut
@@ -26,7 +27,8 @@ import javax.inject.Singleton
 @Singleton
 @AndroidEntryPoint
 class WorkoutService @Inject constructor(): Service() {
-    private lateinit var coroutineScope: CoroutineScope
+    private lateinit var coroutineStopwatch: CoroutineScope
+    private lateinit var coroutineSpeech: CoroutineScope
     private val pause = mutableStateOf(false)
     @Inject lateinit var stopWatch: StopWatch
     @Inject lateinit var notificationHelper: NotificationHelper
@@ -41,45 +43,22 @@ class WorkoutService @Inject constructor(): Service() {
             StopwatchState.onPause.name -> pauseWorkout()
             StopwatchState.onStop.name -> stopWatch.onStop()
         }
-//        intent?.action.let {
-//            when (it) {
-//                ACTION_SERVICE_START -> {
-//                    notificationHelper.setStopButton(this)
-//                    startForegroundService()
-//                    stopWatch.onStart { hours, minutes, seconds ->
-//                        notificationHelper.updateNotification(hours = hours, minutes = minutes, seconds = seconds)
-//                    }
-//                }
-//                ACTION_SERVICE_STOP -> {
-//                    stopWatch.onStop()
-//                    notificationHelper.setResumeButton(this)
-//                }
-//                ACTION_SERVICE_CANCEL -> {
-//                    stopWatch.onStop()
-//                    stopWatch.cancel()
-//                    stopForegroundService()
-//                }
-//            }
-//        }
         return super.onStartCommand(intent, flags, startId)
     }
-
-//    private fun stopForegroundService() {
-//        notificationHelper.cancel()
-//        stopForeground(STOP_FOREGROUND_REMOVE)
-//        stopSelf()
-//    }
-
     @SuppressLint("ForegroundServiceType")
-    fun startWorkout(training: Training, stateService: (StateWorkOut)->Unit){
+    fun startWorkout(training: Training, streamsWorkout: StreamsWorkout){
         notificationHelper.createChannel()
         notificationHelper.setPauseButton(this)
-        coroutineService(training, pause, stateService)
-        stopWatch.onStart { hours, minutes, seconds ->
-            notificationHelper.updateNotification(hours = hours, minutes = minutes, seconds = seconds)
-        }
+        coroutineService(training, pause, streamsWorkout)
+        stopWatch.onStart { countTime -> sendCountTime(countTime, streamsWorkout) }
         startForeground(NOTIFICATION_ID, notificationHelper.build())
     }
+    private fun sendCountTime(tick: TickTime, streamsWorkout: StreamsWorkout){
+        notificationHelper.updateNotification(hours = tick.hour, minutes = tick.min, seconds = tick.sec)
+        coroutineStopwatch = CoroutineScope(Dispatchers.Default)
+        coroutineStopwatch.launch{ streamsWorkout.flowTick.emit( tick )}
+    }
+
     fun pauseWorkout(){
         pause.value = !pause.value
         stopWatch.onPause(pause)
@@ -90,20 +69,18 @@ class WorkoutService @Inject constructor(): Service() {
         notificationHelper.cancel()
         stopWatch.onStop()
         stopForeground(STOP_FOREGROUND_REMOVE)
-        coroutineScope.cancel()
+        coroutineStopwatch.cancel()
+        coroutineSpeech.cancel()
     }
     private fun coroutineService(
         training: Training,
         pause: MutableState<Boolean>,
-        stateService: (StateWorkOut)->Unit)
-    {
-        coroutineScope = CoroutineScope(Dispatchers.Default)
-        coroutineScope.launch{
-            try {
-                playerWorkOut.playingWorkOut(training, pause, stateService)
-            } catch ( e: InterruptedException){
-                e.printStackTrace()
-            }
+        streamsWorkout: StreamsWorkout,
+    ){
+        coroutineSpeech = CoroutineScope(Dispatchers.Default)
+        coroutineSpeech.launch {
+            try { playerWorkOut.playingWorkOut(training, pause, streamsWorkout) }
+            catch ( e: InterruptedException){ e.printStackTrace() }
         }
     }
 }

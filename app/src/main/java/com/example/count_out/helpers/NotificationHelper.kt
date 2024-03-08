@@ -15,7 +15,7 @@ import com.example.count_out.entity.Const.NOTIFICATION_CHANNEL_DESCRIPTION
 import com.example.count_out.entity.Const.NOTIFICATION_CHANNEL_ID
 import com.example.count_out.entity.Const.NOTIFICATION_CHANNEL_NAME
 import com.example.count_out.entity.Const.NOTIFICATION_ID
-import com.example.count_out.entity.Const.RESUME_REQUEST_CODE
+import com.example.count_out.entity.Const.SET_CONTENT_TITLE
 import com.example.count_out.entity.Const.STOPWATCH_STATE
 import com.example.count_out.entity.StopwatchState
 import com.example.count_out.service.WorkoutService
@@ -39,7 +39,7 @@ class NotificationHelper @Inject constructor(private val context: Context)
 
     private val notificationBuilder: NotificationCompat.Builder by lazy {
         NotificationCompat.Builder(context, NOTIFICATION_CHANNEL_ID)
-            .setContentTitle(context.getString(R.string.app_name))
+            .setContentTitle(SET_CONTENT_TITLE)
             .setContentText("00:00:00")
             .setOngoing(true)
             .setSound(null)
@@ -86,12 +86,6 @@ class NotificationHelper @Inject constructor(private val context: Context)
             0, NotificationCompat.Action(0, "Pause", onPauseAction(context)))
         notificationManager.notify(NOTIFICATION_ID, notificationBuilder.build())
     }
-    private fun onStartAction(context: Context): PendingIntent = PendingIntent.getService(
-        context,
-        RESUME_REQUEST_CODE,
-        Intent( context, WorkoutService::class.java).apply {
-            putExtra(STOPWATCH_STATE, StopwatchState.Started.name)},
-        PendingIntent.FLAG_IMMUTABLE )
     private fun onPauseAction(context: Context): PendingIntent = PendingIntent.getService(
         context, 0,
         Intent(context, WorkoutService::class.java).apply {

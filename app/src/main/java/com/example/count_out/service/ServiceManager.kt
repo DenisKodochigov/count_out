@@ -6,8 +6,8 @@ import android.content.Context.BIND_AUTO_CREATE
 import android.content.Intent
 import android.content.ServiceConnection
 import android.os.IBinder
-import com.example.count_out.data.room.tables.StateWorkOutDB
 import com.example.count_out.entity.StateWorkOut
+import com.example.count_out.entity.StreamsWorkout
 import com.example.count_out.entity.Training
 import kotlinx.coroutines.flow.MutableStateFlow
 import javax.inject.Inject
@@ -16,7 +16,7 @@ import javax.inject.Singleton
 @Singleton
 class ServiceManager @Inject constructor( val context: Context
 ){
-    var mService: WorkoutService? = null
+    private var mService: WorkoutService? = null
     var isBound : Boolean = false
 
     private val serviceConnection = object : ServiceConnection {
@@ -30,10 +30,10 @@ class ServiceManager @Inject constructor( val context: Context
             isBound  = false
         }
     }
-    fun startWorkout(training: Training, state: (StateWorkOut)->Unit){
+    fun startWorkout(training: Training, streamsWorkout: StreamsWorkout){
         if (isBound ) {
-            mService?.startWorkout(training, state)
-        } else { MutableStateFlow(StateWorkOutDB())}
+            mService?.startWorkout(training, streamsWorkout)
+        } else { MutableStateFlow(StateWorkOut())}
     }
     fun pauseWorkout(){
         if (isBound ) mService?.pauseWorkout()
@@ -41,8 +41,8 @@ class ServiceManager @Inject constructor( val context: Context
 
     fun stopWorkout(){
         mService?.stopWorkout()
-//        mService?.stopSelf()
     }
+
     fun <T>bindService( clazz: Class<T>) {
         context.bindService(Intent(context, clazz), serviceConnection, BIND_AUTO_CREATE)
     }
