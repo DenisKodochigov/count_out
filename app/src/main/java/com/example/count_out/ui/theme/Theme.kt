@@ -2,7 +2,6 @@ package com.example.count_out.ui.theme
 
 import android.app.Activity
 import android.os.Build
-import androidx.annotation.RequiresApi
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.ColorScheme
 import androidx.compose.material3.MaterialTheme
@@ -11,9 +10,7 @@ import androidx.compose.material3.dynamicDarkColorScheme
 import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.SideEffect
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
@@ -28,11 +25,11 @@ import com.example.count_out.entity.TypeText
 import com.example.count_out.navigation.ScreenDestination
 
 lateinit var colorApp: ColorScheme
-@RequiresApi(Build.VERSION_CODES.S)
+
 @Composable fun AppTheme(content: @Composable () -> Unit) {
 
     val darkTheme: Boolean = isSystemInDarkTheme()
-    val dynamicColor = false //&& Build.VERSION.SDK_INT >= Build.VERSION_CODES.S
+    val dynamicColor = false && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S
     colorApp = when {
         dynamicColor && darkTheme -> dynamicDarkColorScheme(LocalContext.current)
         dynamicColor && !darkTheme -> dynamicLightColorScheme(LocalContext.current)

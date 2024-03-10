@@ -18,7 +18,7 @@ class ErrorApp @Inject constructor(@ApplicationContext val context: Context) {
 //                Toast.makeText(context, toastMessage, Toast.LENGTH_SHORT).show()
 //            }
 //        }
-        log(true, errorMessage)
+        log(true, "Error: $errorMessage")
     }
 }
 

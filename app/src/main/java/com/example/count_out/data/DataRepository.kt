@@ -61,7 +61,7 @@ class DataRepository  @Inject constructor(private val dataSource: DataSource){
     private fun analiseId(idParent: Long, idChild: Long): Long{
         return if (idParent == 0L) { idChild }
                else if (idParent != idChild) {
-                   log(true, "Error. ID Speech")
+//                   log(true, "Error. ID Speech")
                    idChild
                } else { idParent }
     }

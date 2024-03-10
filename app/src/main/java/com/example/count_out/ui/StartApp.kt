@@ -2,8 +2,6 @@ package com.example.count_out.ui
 
 import android.Manifest
 import android.annotation.SuppressLint
-import android.os.Build
-import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.FabPosition
 import androidx.compose.material3.Scaffold
@@ -27,7 +25,6 @@ import com.example.count_out.ui.view_components.BottomBarApp
 import com.example.count_out.ui.view_components.CollapsingToolbar
 import com.example.count_out.ui.view_components.ExtendedFAB
 
-@RequiresApi(Build.VERSION_CODES.S)
 @OptIn(ExperimentalComposeUiApi::class)
 @SuppressLint("RememberReturnType", "UnrememberedMutableState", "SuspiciousIndentation",
     "RestrictedApi"
@@ -62,13 +59,15 @@ fun StartApp() {
             floatingActionButtonPosition = FabPosition.End,
             content = { innerPadding ->
                 NavHostApp(navController = navController, modifier = Modifier.padding(innerPadding))
-                RequestPermission(Manifest.permission.POST_NOTIFICATIONS)
+                RequestPermission(Manifest.permission.POST_NOTIFICATIONS, 31)
+                RequestPermission(Manifest.permission.FOREGROUND_SERVICE, 28)
+                RequestPermission(Manifest.permission.FOREGROUND_SERVICE_SPECIAL_USE, 34)
             }
         )
     }
 }
 
-@RequiresApi(Build.VERSION_CODES.S)
+
 @Preview
 @Composable
 fun StartAppPreview(){

@@ -70,7 +70,7 @@ dependencies {
     implementation ("androidx.compose.ui:ui:$composeVersion")
     implementation("com.google.accompanist:accompanist-permissions:0.34.0")
     debugImplementation("androidx.compose.ui:ui-tooling")
-    debugImplementation("androidx.compose.ui:ui-test-manifest:1.6.2")
+    debugImplementation("androidx.compose.ui:ui-test-manifest:1.6.3")
     //Tooling support (Previews, etc.)
     implementation ("androidx.compose.ui:ui-graphics:$composeVersion")
     implementation ("androidx.compose.ui:ui-tooling-preview:$composeVersion")
@@ -83,12 +83,12 @@ dependencies {
     implementation ("androidx.compose.foundation:foundation:$composeVersion")
     implementation ("androidx.compose.foundation:foundation-layout:$composeVersion")
     // Material Design
-    implementation("androidx.compose.material3:material3:1.2.0")
-    implementation ("androidx.compose.ui:ui-text-google-fonts:1.6.2")
+    implementation("androidx.compose.material3:material3:1.2.1")
+    implementation ("androidx.compose.ui:ui-text-google-fonts:1.6.3")
     implementation ("androidx.compose.material:material-icons-core:$composeVersion")
     implementation ("androidx.compose.material:material-icons-extended:$composeVersion")
     //Adaptive
-    implementation ("androidx.compose.material3:material3-window-size-class:1.2.0")
+    implementation ("androidx.compose.material3:material3-window-size-class:1.2.1")
     //Navigation
     implementation ("androidx.navigation:navigation-compose:2.7.7")
     //Color Palette

@@ -20,7 +20,7 @@ data class StateDrag(
             offset = lazyState.layoutInfo.visibleItemsInfo[indexItem].offset.toFloat()
             maxOffsetDown = lazyState.layoutInfo.visibleItemsInfo.last().offset.toFloat()
         } else {
-            log(true, "visibleItemsInfo.isEmpty")
+//            log(true, "visibleItemsInfo.isEmpty")
         }
     }
     fun onStopDrag(onMoveItem: (Int) -> Unit){

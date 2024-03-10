@@ -3,7 +3,9 @@ package com.example.count_out.service
 import android.annotation.SuppressLint
 import android.app.Service
 import android.content.Intent
+import android.content.pm.ServiceInfo.FOREGROUND_SERVICE_TYPE_SPECIAL_USE
 import android.os.Binder
+import android.os.Build
 import android.os.IBinder
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
@@ -24,11 +26,12 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 import javax.inject.Singleton
 
+
 @Singleton
 @AndroidEntryPoint
 class WorkoutService @Inject constructor(): Service() {
-    private lateinit var coroutineStopwatch: CoroutineScope
-    private lateinit var coroutineSpeech: CoroutineScope
+    private var coroutineStopwatch = CoroutineScope(Dispatchers.Default)
+    private var coroutineSpeech = CoroutineScope(Dispatchers.Default)
     private val pause = mutableStateOf(false)
     @Inject lateinit var stopWatch: StopWatch
     @Inject lateinit var notificationHelper: NotificationHelper
@@ -47,15 +50,14 @@ class WorkoutService @Inject constructor(): Service() {
     }
     @SuppressLint("ForegroundServiceType")
     fun startWorkout(training: Training, streamsWorkout: StreamsWorkout){
-        notificationHelper.createChannel()
+        if (!notificationHelper.channelExist()) notificationHelper.createChannel()
         notificationHelper.setPauseButton(this)
         coroutineService(training, pause, streamsWorkout)
         stopWatch.onStart { countTime -> sendCountTime(countTime, streamsWorkout) }
-        startForeground(NOTIFICATION_ID, notificationHelper.build())
+        startForegroundService()
     }
     private fun sendCountTime(tick: TickTime, streamsWorkout: StreamsWorkout){
         notificationHelper.updateNotification(hours = tick.hour, minutes = tick.min, seconds = tick.sec)
-        coroutineStopwatch = CoroutineScope(Dispatchers.Default)
         coroutineStopwatch.launch{ streamsWorkout.flowTick.emit( tick )}
     }
 
@@ -77,11 +79,17 @@ class WorkoutService @Inject constructor(): Service() {
         pause: MutableState<Boolean>,
         streamsWorkout: StreamsWorkout,
     ){
-        coroutineSpeech = CoroutineScope(Dispatchers.Default)
         coroutineSpeech.launch {
             try { playerWorkOut.playingWorkOut(training, pause, streamsWorkout) }
             catch ( e: InterruptedException){ e.printStackTrace() }
         }
     }
+    private fun startForegroundService(){
+        if (Build.VERSION.SDK_INT >= 31)
+            startForeground(NOTIFICATION_ID, notificationHelper.build(), FOREGROUND_SERVICE_TYPE_SPECIAL_USE)
+        else startForeground(NOTIFICATION_ID, notificationHelper.build())
+    }
+
+
 }
 

@@ -13,7 +13,6 @@ import com.example.count_out.entity.RoundType
 import com.example.count_out.entity.Set
 import com.example.count_out.entity.Speech
 import com.example.count_out.entity.Training
-import com.example.count_out.ui.view_components.log
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -89,7 +88,7 @@ class DataSource @Inject constructor(private val dataDao: DataDao) {
         val round = getRound(roundId)
         round.sequenceExercise = round.sequenceExercise + ", ${exercise.idExercise}"
         dataDao.updateRound(round)
-        log(true, "round.sequenceExercise ${round.sequenceExercise}")
+//        log(true, "round.sequenceExercise ${round.sequenceExercise}")
         return exercise
     }
     fun copyExercise ( exerciseId: Long) {
@@ -102,7 +101,7 @@ class DataSource @Inject constructor(private val dataDao: DataDao) {
 
         round.sequenceExercise = deleteIdFromSequence( round.sequenceExercise, exerciseId )
         dataDao.updateRound(round)
-        log(true, "round.sequenceExercise ${round.sequenceExercise}")
+//        log(true, "round.sequenceExercise ${round.sequenceExercise}")
         exercise.speech?.let { dataDao.delSpeech(it.idSpeech) }
         exercise.sets?.forEach {
             val set = it.toSet()

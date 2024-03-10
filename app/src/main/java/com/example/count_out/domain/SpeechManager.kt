@@ -9,7 +9,6 @@ import com.example.count_out.entity.Const.durationChar
 import com.example.count_out.entity.Const.intervalDelay
 import com.example.count_out.entity.StateWorkOut
 import com.example.count_out.entity.StreamsWorkout
-import com.example.count_out.ui.view_components.log
 import kotlinx.coroutines.delay
 import java.util.Locale
 import javax.inject.Singleton
@@ -22,7 +21,7 @@ class SpeechManager(val context: Context) {
     val speeching: MutableState<Boolean> = mutableStateOf(true)
 
     fun init(){
-        log(show, "SpeechManager.init")
+//        log(show, "SpeechManager.init")
         tts = TextToSpeech(context){ status ->
             if ( status == TextToSpeech.SUCCESS) {
                 val result = tts?.setLanguage( Locale.getDefault() )
@@ -62,12 +61,12 @@ class SpeechManager(val context: Context) {
         }
     }
     private fun speakOutAdd(text: String){
-        log(show, "SpeechManager.speakOut: $text")
+//        log(show, "SpeechManager.speakOut: $text")
         tts?.speak(text, TextToSpeech.QUEUE_ADD, null,"speakOut")
     }
 
     fun speakOutFlush(text: String){
-        log(show, "SpeechManager.speakOut: $text")
+//        log(show, "SpeechManager.speakOut: $text")
         tts?.speak(text, TextToSpeech.QUEUE_FLUSH, null,"speakOut")
     }
 

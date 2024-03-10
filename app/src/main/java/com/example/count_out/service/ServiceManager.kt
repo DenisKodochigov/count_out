@@ -38,11 +38,9 @@ class ServiceManager @Inject constructor( val context: Context
     fun pauseWorkout(){
         if (isBound ) mService?.pauseWorkout()
     }
-
     fun stopWorkout(){
         mService?.stopWorkout()
     }
-
     fun <T>bindService( clazz: Class<T>) {
         context.bindService(Intent(context, clazz), serviceConnection, BIND_AUTO_CREATE)
     }

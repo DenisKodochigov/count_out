@@ -52,9 +52,15 @@ class PlayWorkoutViewModel @Inject constructor(
         }
     }
     private suspend fun receiveStateWorkout(streamsWorkout: StreamsWorkout){
+
+//        val tickFlow = streamsWorkout.flowTick.asStateFlow()
+//        tickFlow.value
+
         viewModelScope.launch(Dispatchers.IO) {
             streamsWorkout.flowTick.collect { tick ->
-                _playWorkoutScreenState.update { currentState -> currentState.copy( tickTime = tick )}}
+//                log(true, "PlayWorkoutViewModel tick: $tick")
+                _playWorkoutScreenState.update { currentState ->
+                    currentState.copy( tickTime = tick )}}
         }
         viewModelScope.launch(Dispatchers.IO) {
             streamsWorkout.flowMessage.collect { message -> collectState(message) } }

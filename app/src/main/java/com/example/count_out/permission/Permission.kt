@@ -1,5 +1,6 @@
 package com.example.count_out.permission
 
+import android.os.Build
 import android.widget.Toast
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -12,17 +13,18 @@ import com.google.accompanist.permissions.shouldShowRationale
 
 @OptIn(ExperimentalPermissionsApi::class)
 @Composable
-fun RequestPermission(permission: String){
-    val permissionState = rememberPermissionState(permission = permission)
-    LaunchedEffect(key1 = Unit ){
-        permissionState.launchPermissionRequest()
-    }
-
-    if (!permissionState.status.isGranted){
-        if (permissionState.status.shouldShowRationale) {
-            Toast(LocalContext.current, )
-        } else {
-            ToastApp("Please, get permission on notification.")
+fun RequestPermission(permission: String, requiredSDK: Int){
+    if (Build.VERSION.SDK_INT >= requiredSDK) {
+        val permissionState = rememberPermissionState(permission = permission)
+        LaunchedEffect(key1 = Unit ){
+            permissionState.launchPermissionRequest()
+        }
+        if (!permissionState.status.isGranted){
+            if (permissionState.status.shouldShowRationale) {
+                Toast(LocalContext.current, )
+            } else {
+                ToastApp("Please, get permission on notification.")
+            }
         }
     }
 }

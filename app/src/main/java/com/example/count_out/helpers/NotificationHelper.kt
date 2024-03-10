@@ -97,4 +97,10 @@ class NotificationHelper @Inject constructor(private val context: Context)
         Intent(context, WorkoutService::class.java).apply {
             putExtra(STOPWATCH_STATE, StopwatchState.onStop.name) },
         PendingIntent.FLAG_IMMUTABLE )
+
+    fun channelExist(): Boolean{
+        return if (notificationManager.getNotificationChannel(NOTIFICATION_ID.toString()) != null) {
+            notificationManager.getNotificationChannel(NOTIFICATION_ID.toString()).importance != NotificationManager.IMPORTANCE_NONE
+        } else false
+    }
 }
