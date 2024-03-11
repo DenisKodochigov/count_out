@@ -19,6 +19,7 @@ class StopWatch {
             if (!pauseStopWatch.value) {
                 duration = duration.plus(1.seconds)
                 duration.toComponents { h, m, s, _ ->
+//                    log(true, "StopWatch $h $m $s")
                     onTick(TickTime(hour = h.toInt().pad(), min = m.pad(), sec = s.pad()))
                 }
             }

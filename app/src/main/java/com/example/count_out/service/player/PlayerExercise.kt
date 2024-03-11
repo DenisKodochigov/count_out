@@ -8,7 +8,6 @@ import javax.inject.Inject
 
 class PlayerExercise @Inject constructor(val speechManager:SpeechManager, private val playerSet: PlayerSet)
 {
-    private val show = false
     suspend fun playingExercise(
         exercise: Exercise,
         pause: MutableState<Boolean>, streamsWorkout: StreamsWorkout

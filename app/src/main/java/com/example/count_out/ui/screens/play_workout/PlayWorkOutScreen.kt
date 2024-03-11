@@ -40,7 +40,7 @@ fun PlayWorkoutScreen(
     trainingId: Long,
     onBaskScreen:() -> Unit
 ){
-    val viewModel: PlayWorkoutViewModel = hiltViewModel<PlayWorkoutViewModel>()
+    val viewModel: PlayWorkoutViewModel = hiltViewModel()
     LaunchedEffect( key1 = true, block = { viewModel.getTraining(trainingId) })
     PlayWorkoutScreenCreateView( viewModel = viewModel, onBaskScreen = onBaskScreen)
 }

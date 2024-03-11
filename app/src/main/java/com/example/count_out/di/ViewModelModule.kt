@@ -17,7 +17,6 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 object ViewModelModule {
 
-    @Singleton
     @Provides
     fun providePlayWorkoutViewModel(
         errorApp: ErrorApp,

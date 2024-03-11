@@ -23,8 +23,7 @@ import javax.inject.Inject
 class TrainingViewModel @Inject constructor(
     private val errorApp: ErrorApp,
     private val dataRepository: DataRepository
-): ViewModel()
-{
+): ViewModel() {
     private val _trainingScreenState = MutableStateFlow(
         TrainingScreenState(
             training = TrainingDB(),

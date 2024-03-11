@@ -11,6 +11,7 @@ import com.example.count_out.entity.TickTime
 import com.example.count_out.entity.Training
 import com.example.count_out.service.ServiceManager
 import com.example.count_out.service.WorkoutService
+import com.example.count_out.ui.view_components.log
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -18,17 +19,14 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import javax.annotation.Signed
 import javax.inject.Inject
 
-@Signed
 @HiltViewModel
 class PlayWorkoutViewModel @Inject constructor(
     private val errorApp: ErrorApp,
     private val dataRepository: DataRepository,
     private val serviceManager: ServiceManager,
 ): ViewModel() {
-
     private val _playWorkoutScreenState = MutableStateFlow(
         PlayWorkoutScreenState(
             startWorkOutService = { startWorkOutService( it ) },
@@ -36,16 +34,27 @@ class PlayWorkoutViewModel @Inject constructor(
             pauseWorkOutService = { pauseWorkOutService( ) }
         ))
     val playWorkoutScreenState: StateFlow<PlayWorkoutScreenState> = _playWorkoutScreenState.asStateFlow()
-    val streamsWorkout = StreamsWorkout()
+    private val streamsWorkout = StreamsWorkout()
     init {
         serviceManager.bindService(WorkoutService::class.java)
+        log(true, "init Viewmodel id: $this")
     }
+
+    override fun onCleared() {
+        super.onCleared()
+        serviceManager.unbindService()
+        log(true, "onCleared id: $this")
+    }
+
     fun getTraining(id: Long) {
         templateMy { dataRepository.getTraining(id) } }
 
     private fun startWorkOutService(training: Training){
+        log(true, "startWorkOutService id: $this")
         viewModelScope.launch(Dispatchers.IO) {
-            kotlin.runCatching { serviceManager.startWorkout(training,streamsWorkout) }.fold(
+            kotlin.runCatching {
+                log(true, "startWorkOutService kotlin.runCatching")
+                serviceManager.startWorkout(training,streamsWorkout) }.fold(
                 onSuccess = { receiveStateWorkout(streamsWorkout) },
                 onFailure = { errorApp.errorApi(it.message!!) }
             )
@@ -58,7 +67,7 @@ class PlayWorkoutViewModel @Inject constructor(
 
         viewModelScope.launch(Dispatchers.IO) {
             streamsWorkout.flowTick.collect { tick ->
-//                log(true, "PlayWorkoutViewModel tick: $tick")
+                log(true, "PlayWorkoutViewModel tick: $tick")
                 _playWorkoutScreenState.update { currentState ->
                     currentState.copy( tickTime = tick )}}
         }
@@ -78,13 +87,22 @@ class PlayWorkoutViewModel @Inject constructor(
         }
     }
     private fun stopWorkOutService(){
-        _playWorkoutScreenState.update { screenState ->
-            screenState.copy( startTime = 0L,
-                        tickTime = TickTime(hour = "00", min = "00", sec = "00")) }
-        serviceManager.stopWorkout()
+        viewModelScope.launch(Dispatchers.IO) {
+            kotlin.runCatching { serviceManager.stopWorkout() }.fold(
+                onSuccess = {   _playWorkoutScreenState.update { screenState ->
+                    screenState.copy( startTime = 0L, tickTime =
+                    TickTime(hour = "00", min = "00", sec = "00")) } },
+                onFailure = { errorApp.errorApi(it.message!!) }
+            )
+        }
     }
     private fun pauseWorkOutService(){
-        serviceManager.pauseWorkout()
+        viewModelScope.launch(Dispatchers.IO) {
+            kotlin.runCatching { serviceManager.pauseWorkout() }.fold(
+                onSuccess = {  },
+                onFailure = { errorApp.errorApi(it.message!!) }
+            )
+        }
     }
     private fun templateMy( funDataRepository:() -> Training ){
         viewModelScope.launch(Dispatchers.IO) {

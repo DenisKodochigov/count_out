@@ -44,10 +44,8 @@ fun TrainingScreen(
     onBaskScreen:() -> Unit
 ){
     val viewModel: TrainingViewModel = hiltViewModel()
-    LaunchedEffect(true){ viewModel.getTraining(trainingId)}
-    TrainingScreenCreateView(
-        viewModel = viewModel,
-        onBaskScreen = onBaskScreen)
+    LaunchedEffect(true){ viewModel.getTraining(trainingId) }
+    TrainingScreenCreateView( viewModel = viewModel, onBaskScreen = onBaskScreen )
 }
 
 @SuppressLint("StateFlowValueCalledInComposition")

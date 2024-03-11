@@ -33,7 +33,8 @@ class ServiceManager @Inject constructor( val context: Context
     fun startWorkout(training: Training, streamsWorkout: StreamsWorkout){
         if (isBound ) {
             mService?.startWorkout(training, streamsWorkout)
-        } else { MutableStateFlow(StateWorkOut())}
+        } else { MutableStateFlow(StateWorkOut())
+        }
     }
     fun pauseWorkout(){
         if (isBound ) mService?.pauseWorkout()
