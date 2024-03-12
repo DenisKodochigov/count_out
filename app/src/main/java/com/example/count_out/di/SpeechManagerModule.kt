@@ -11,7 +11,7 @@ import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-object SpeechManagerModule {
+class SpeechManagerModule {
     @Singleton
     @Provides
     fun provideSpeechManager(@ApplicationContext appContext: Context): SpeechManager {

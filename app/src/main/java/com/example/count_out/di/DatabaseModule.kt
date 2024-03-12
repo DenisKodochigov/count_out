@@ -24,7 +24,7 @@ import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-object DatabaseModule {
+class DatabaseModule {
     lateinit var database: AppDatabase
     private var mode: Int = 1
     @Provides

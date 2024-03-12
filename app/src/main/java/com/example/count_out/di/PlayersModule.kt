@@ -13,7 +13,7 @@ import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-object PlayersModule {
+class PlayersModule {
     @Singleton
     @Provides
     fun providePlayerWorkOut(speechManager: SpeechManager, playerRound: PlayerRound): PlayerWorkOut {

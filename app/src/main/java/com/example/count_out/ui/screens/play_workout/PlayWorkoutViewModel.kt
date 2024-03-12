@@ -35,25 +35,26 @@ class PlayWorkoutViewModel @Inject constructor(
         ))
     val playWorkoutScreenState: StateFlow<PlayWorkoutScreenState> = _playWorkoutScreenState.asStateFlow()
     private val streamsWorkout = StreamsWorkout()
+    private val show = false
     init {
         serviceManager.bindService(WorkoutService::class.java)
-        log(true, "init Viewmodel id: $this")
+        log(show, "init Viewmodel id: $this")
     }
 
     override fun onCleared() {
         super.onCleared()
         serviceManager.unbindService()
-        log(true, "onCleared id: $this")
+        log(show, "onCleared id: $this")
     }
 
     fun getTraining(id: Long) {
         templateMy { dataRepository.getTraining(id) } }
 
     private fun startWorkOutService(training: Training){
-        log(true, "startWorkOutService id: $this")
+        log(show, "startWorkOutService id: $this")
         viewModelScope.launch(Dispatchers.IO) {
             kotlin.runCatching {
-                log(true, "startWorkOutService kotlin.runCatching")
+                log(true, "startWorkOutService kotlin.runCatching $streamsWorkout")
                 serviceManager.startWorkout(training,streamsWorkout) }.fold(
                 onSuccess = { receiveStateWorkout(streamsWorkout) },
                 onFailure = { errorApp.errorApi(it.message!!) }
@@ -67,7 +68,7 @@ class PlayWorkoutViewModel @Inject constructor(
 
         viewModelScope.launch(Dispatchers.IO) {
             streamsWorkout.flowTick.collect { tick ->
-                log(true, "PlayWorkoutViewModel tick: $tick")
+                log(show, "PlayWorkoutViewModel tick: $tick")
                 _playWorkoutScreenState.update { currentState ->
                     currentState.copy( tickTime = tick )}}
         }

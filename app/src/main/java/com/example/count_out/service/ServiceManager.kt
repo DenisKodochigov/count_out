@@ -9,7 +9,11 @@ import android.os.IBinder
 import com.example.count_out.entity.StateWorkOut
 import com.example.count_out.entity.StreamsWorkout
 import com.example.count_out.entity.Training
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -17,6 +21,7 @@ import javax.inject.Singleton
 class ServiceManager @Inject constructor( val context: Context
 ){
     private var mService: WorkoutService? = null
+    private lateinit var coroutine: CoroutineScope
     var isBound : Boolean = false
 
     private val serviceConnection = object : ServiceConnection {
@@ -33,14 +38,19 @@ class ServiceManager @Inject constructor( val context: Context
     fun startWorkout(training: Training, streamsWorkout: StreamsWorkout){
         if (isBound ) {
             mService?.startWorkout(training, streamsWorkout)
-        } else { MutableStateFlow(StateWorkOut())
-        }
+            coroutine = CoroutineScope(Dispatchers.Default)
+            coroutine.launch {
+                streamsWorkout.flowMessage = mService?.flowStateService!!
+                streamsWorkout.flowTick = mService?.flowTick!!
+            }
+        } else { MutableStateFlow(StateWorkOut()) }
     }
     fun pauseWorkout(){
         if (isBound ) mService?.pauseWorkout()
     }
     fun stopWorkout(){
         mService?.stopWorkout()
+        coroutine.cancel()
     }
     fun <T>bindService( clazz: Class<T>) {
         context.bindService(Intent(context, clazz), serviceConnection, BIND_AUTO_CREATE)

@@ -8,8 +8,9 @@ import androidx.compose.runtime.mutableStateOf
 import com.example.count_out.entity.Const.durationChar
 import com.example.count_out.entity.Const.intervalDelay
 import com.example.count_out.entity.StateWorkOut
-import com.example.count_out.entity.StreamsWorkout
+import com.example.count_out.ui.view_components.log
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.MutableStateFlow
 import java.util.Locale
 import javax.inject.Singleton
 
@@ -21,7 +22,7 @@ class SpeechManager(val context: Context) {
     val speeching: MutableState<Boolean> = mutableStateOf(true)
 
     fun init(){
-//        log(show, "SpeechManager.init")
+        log(show, "SpeechManager.init")
         tts = TextToSpeech(context){ status ->
             if ( status == TextToSpeech.SUCCESS) {
                 val result = tts?.setLanguage( Locale.getDefault() )
@@ -31,17 +32,17 @@ class SpeechManager(val context: Context) {
                     tts?.setOnUtteranceProgressListener(object : UtteranceProgressListener(){
                         override fun onStart(utteranceId: String) {
                             speeching.value = true
-//                            log(show, "SpeechManager.On Start")
+                            log(show, "SpeechManager.On Start $tts")
                         }
                         override fun onDone(utteranceId: String) {
                             speeching.value = false
-//                            log(show, "SpeechManager.On Done")
+                            log(show, "SpeechManager.On Done $tts")
                         }
                         @Deprecated("Deprecated in Java",
                             ReplaceWith("Log.i(\"TextToSpeech\", \"On Error\")", "android.util.Log")
                         )
                         override fun onError(utteranceId: String) {
-//                            log(show, "SpeechManager.On Error")
+                            log(show, "SpeechManager.On Error $utteranceId")
                         }
                     })
                 }
@@ -52,10 +53,10 @@ class SpeechManager(val context: Context) {
     suspend fun speech(
         text: String,
         pause: MutableState<Boolean>,
-        streamsWorkout: StreamsWorkout
+        flowStateServiceMutable: MutableStateFlow<StateWorkOut>
     ){
         if (text.length > 1) {
-            streamsWorkout.flowMessage.emit ( StateWorkOut(state = text))
+            flowStateServiceMutable.emit ( StateWorkOut(state = text))
             speakOutAdd(text)
             delayMy(delay = text.length * durationChar, pause)
         }

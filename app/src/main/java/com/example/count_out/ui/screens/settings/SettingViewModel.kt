@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.count_out.data.DataRepository
 import com.example.count_out.entity.Activity
 import com.example.count_out.entity.ErrorApp
+import com.example.count_out.ui.view_components.log
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -30,10 +31,18 @@ class SettingViewModel @Inject constructor(
     val settingScreenState: StateFlow<SettingScreenState> = _settingScreenState.asStateFlow()
 
     fun init(){ templateMy{dataRepository.getActivities()} }
-    private fun onAddActivity(activity: Activity){ templateMy{ dataRepository.onAddActivity(activity) } }
-    private fun onUpdateActivity(activity: Activity){ templateMy{ dataRepository.onUpdateActivity(activity) } }
-    private fun onDeleteActivity(activityId: Long){ templateMy{ dataRepository.onDeleteActivity(activityId) } }
+
+    private fun onAddActivity(activity: Activity){
+        log(true, "onAddActivity: $this")
+        templateMy{ dataRepository.onAddActivity(activity) } }
+    private fun onUpdateActivity(activity: Activity){
+        log(true, "onUpdateActivity: $this")
+        templateMy{ dataRepository.onUpdateActivity(activity) } }
+    private fun onDeleteActivity(activityId: Long){
+        log(true, "onDeleteActivity: $this")
+        templateMy{ dataRepository.onDeleteActivity(activityId) } }
     private fun onSetColorActivityForSettings(activityId: Long, color: Int){
+        log(true, "onSetColorActivityForSettings: $this")
         templateMy{ dataRepository.onSetColorActivityForSettings(activityId, color) } }
 //    fun getWorkouts(){ templateMy { dataRepository.getWorkouts() } }
 //    fun changeNameWorkout(workout: Workout){ templateMy { dataRepository.changeNameWorkout(workout) } }

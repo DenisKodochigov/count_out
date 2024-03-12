@@ -2,24 +2,42 @@ package com.example.count_out.service.player
 
 import androidx.compose.runtime.MutableState
 import com.example.count_out.domain.SpeechManager
-import com.example.count_out.entity.StreamsWorkout
+import com.example.count_out.entity.StateWorkOut
 import com.example.count_out.entity.Training
+import com.example.count_out.ui.view_components.log
+import kotlinx.coroutines.flow.MutableStateFlow
 import javax.inject.Inject
 
 class PlayerWorkOut @Inject constructor(val speechManager:SpeechManager, private val playerRound: PlayerRound)
 {
+    private val show = true
     suspend fun playingWorkOut(
         training: Training,
         pause: MutableState<Boolean>,
-        streamsWorkout: StreamsWorkout
-    )
-    {
-        speechManager.speech(training.speech.beforeStart + " " + training.name, pause, streamsWorkout)
-        speechManager.speech(training.speech.afterStart, pause, streamsWorkout )
+        flowStateServiceMutable: MutableStateFlow<StateWorkOut>
+    ) {
+        log(show, "PlayerWorkOut $this")
+        speechManager.speech(training.speech.beforeStart + " " + training.name, pause, flowStateServiceMutable)
+        speechManager.speech(training.speech.afterStart, pause, flowStateServiceMutable )
         training.rounds.forEach { round->
-            playerRound.playingRound(round, pause, streamsWorkout)
+            playerRound.playingRound(round, pause, flowStateServiceMutable)
         }
-        speechManager.speech(training.speech.beforeEnd, pause, streamsWorkout )
-        speechManager.speech(training.speech.afterEnd, pause, streamsWorkout )
+        speechManager.speech(training.speech.beforeEnd, pause, flowStateServiceMutable )
+        speechManager.speech(training.speech.afterEnd, pause, flowStateServiceMutable )
     }
+//    suspend fun playingWorkOut(
+//        training: Training,
+//        pause: MutableState<Boolean>,
+//        streamsWorkout: StreamsWorkout,
+//        flowStateServiceMutable: MutableStateFlow<StateWorkOut>
+//    ) {
+//        log(show, "PlayerWorkOut $this")
+//        speechManager.speech(training.speech.beforeStart + " " + training.name, pause, streamsWorkout)
+//        speechManager.speech(training.speech.afterStart, pause, streamsWorkout )
+//        training.rounds.forEach { round->
+//            playerRound.playingRound(round, pause, streamsWorkout)
+//        }
+//        speechManager.speech(training.speech.beforeEnd, pause, streamsWorkout )
+//        speechManager.speech(training.speech.afterEnd, pause, streamsWorkout )
+//    }
 }

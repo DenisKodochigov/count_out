@@ -12,7 +12,7 @@ import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-object NotificationModule {
+class NotificationModule {
     @Singleton
     @Provides
     fun provideNotificationApp(@ApplicationContext appContext: Context): NotificationHelper {

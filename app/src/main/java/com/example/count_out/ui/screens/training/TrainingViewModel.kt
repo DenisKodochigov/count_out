@@ -92,7 +92,9 @@ class TrainingViewModel @Inject constructor(
     }
     private fun templateMy( funDataRepository:() -> Training){
         viewModelScope.launch(Dispatchers.IO) {
-            kotlin.runCatching { funDataRepository() }.fold(
+            kotlin.runCatching {
+                funDataRepository()
+            }.fold(
                 onSuccess = { _trainingScreenState.update { currentState ->
                     currentState.copy(
                         training = it,
