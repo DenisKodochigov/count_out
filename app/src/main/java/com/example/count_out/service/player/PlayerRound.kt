@@ -24,16 +24,4 @@ class PlayerRound @Inject constructor(
         speechManager.speech(round.speech.beforeEnd, pause, flowStateServiceMutable)
         speechManager.speech(round.speech.afterEnd, pause, flowStateServiceMutable)
     }
-//    suspend fun playingRound(
-//        round: Round,
-//        pause: MutableState<Boolean>, streamsWorkout: StreamsWorkout
-//    ){
-//        speechManager.speech(round.speech.beforeStart, pause, streamsWorkout)
-//        speechManager.speech(round.speech.afterStart, pause, streamsWorkout)
-//        round.exercise.forEach { exercise->
-//            playerExercise.playingExercise(exercise, pause, streamsWorkout)
-//        }
-//        speechManager.speech(round.speech.beforeEnd, pause, streamsWorkout)
-//        speechManager.speech(round.speech.afterEnd, pause, streamsWorkout)
-//    }
 }

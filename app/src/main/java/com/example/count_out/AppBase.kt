@@ -7,6 +7,7 @@ import dagger.hilt.android.HiltAndroidApp
 class AppBase: Application() {
     override fun onCreate() {
         super.onCreate()
+
 //        FirebaseCrashlytics.getInstance().setCrashlyticsCollectionEnabled(!BuildConfig.DEBUG)
     }
     companion object App{

@@ -13,7 +13,6 @@ import com.example.count_out.entity.Const.NOTIFICATION_ID
 import com.example.count_out.entity.Const.STOPWATCH_STATE
 import com.example.count_out.entity.StateWorkOut
 import com.example.count_out.entity.StopwatchState
-import com.example.count_out.entity.StreamsWorkout
 import com.example.count_out.entity.TickTime
 import com.example.count_out.entity.Training
 import com.example.count_out.helpers.NotificationHelper
@@ -36,17 +35,13 @@ class WorkoutService @Inject constructor(): Service()
     @Inject lateinit var stopWatch: StopWatch
     @Inject lateinit var notificationHelper: NotificationHelper
     @Inject lateinit var playerWorkOut: PlayerWorkOut
-    private lateinit var coroutineStopwatch: CoroutineScope
     private lateinit var coroutineSpeech: CoroutineScope
     private val pause = mutableStateOf(false)
-    private val show = true
 
-    val flowTick: MutableStateFlow<TickTime> = MutableStateFlow(TickTime(hour = "00", min="00", sec= "00"))
-    val flowStateService: MutableStateFlow<StateWorkOut> = MutableStateFlow(StateWorkOut())
 
-    inner class WorkoutServiceBinder : Binder() {
-        fun getService(): WorkoutService = this@WorkoutService
-    }
+    lateinit var flowTick: MutableStateFlow<TickTime>
+    lateinit var flowStateService: MutableStateFlow<StateWorkOut>
+    inner class WorkoutServiceBinder : Binder() { fun getService(): WorkoutService = this@WorkoutService }
     override fun onBind(p0: Intent?): IBinder = WorkoutServiceBinder()
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         when (intent?.getStringExtra(STOPWATCH_STATE)) {
@@ -56,18 +51,19 @@ class WorkoutService @Inject constructor(): Service()
         return super.onStartCommand(intent, flags, startId)
     }
     @SuppressLint("ForegroundServiceType")
-    fun startWorkout(training: Training, streamsWorkout: StreamsWorkout){
-        if (!notificationHelper.channelExist()) notificationHelper.createChannel()
-        notificationHelper.setPauseButton(this)
-        coroutineStopwatch = CoroutineScope(Dispatchers.Default)
-        coroutineSpeech = CoroutineScope(Dispatchers.Default)
-        coroutineService(training, pause, streamsWorkout)
-        stopWatch.onStart { countTime -> sendCountTime(countTime) }
+    fun startWorkout(training: Training){
+        flowTick = MutableStateFlow(TickTime(hour = "00", min="00", sec= "00"))
+        flowStateService = MutableStateFlow(StateWorkOut())
         startForegroundService()
+        notificationHelper.setPauseButton(this)
+        coroutineSpeech = CoroutineScope(Dispatchers.Default)
+        coroutineService(training, pause)
+        stopWatch.onStart { countTime -> sendCountTime(countTime) }
+
     }
     private fun sendCountTime(tick: TickTime){
         notificationHelper.updateNotification(hours = tick.hour, minutes = tick.min, seconds = tick.sec)
-        coroutineStopwatch.launch{ flowTick.emit( tick )}
+        flowTick.value = tick
     }
 
     fun pauseWorkout(){
@@ -80,13 +76,11 @@ class WorkoutService @Inject constructor(): Service()
         stopForeground(STOP_FOREGROUND_REMOVE)
         notificationHelper.cancel()
         stopWatch.onStop()
-        coroutineStopwatch.cancel()
         coroutineSpeech.cancel()
     }
     private fun coroutineService(
         training: Training,
         pause: MutableState<Boolean>,
-        streamsWorkout: StreamsWorkout,
     ){
         coroutineSpeech.launch {
             try { playerWorkOut.playingWorkOut(training, pause, flowStateService) }
@@ -94,11 +88,10 @@ class WorkoutService @Inject constructor(): Service()
         }
     }
     private fun startForegroundService(){
+        if (!notificationHelper.channelExist()) notificationHelper.createChannel()
         if (Build.VERSION.SDK_INT >= 31)
             startForeground(NOTIFICATION_ID, notificationHelper.build(), FOREGROUND_SERVICE_TYPE_SPECIAL_USE)
         else startForeground(NOTIFICATION_ID, notificationHelper.build())
     }
-
-
 }
 

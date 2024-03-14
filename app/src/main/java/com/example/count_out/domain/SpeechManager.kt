@@ -56,7 +56,8 @@ class SpeechManager(val context: Context) {
         flowStateServiceMutable: MutableStateFlow<StateWorkOut>
     ){
         if (text.length > 1) {
-            flowStateServiceMutable.emit ( StateWorkOut(state = text))
+//            log(true, "SpeechManager.speakOut: $text")
+            flowStateServiceMutable.value = StateWorkOut(state = text)
             speakOutAdd(text)
             delayMy(delay = text.length * durationChar, pause)
         }

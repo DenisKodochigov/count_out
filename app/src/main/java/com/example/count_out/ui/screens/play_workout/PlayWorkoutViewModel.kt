@@ -6,12 +6,9 @@ import androidx.lifecycle.viewModelScope
 import com.example.count_out.data.DataRepository
 import com.example.count_out.entity.ErrorApp
 import com.example.count_out.entity.StateWorkOut
-import com.example.count_out.entity.StreamsWorkout
 import com.example.count_out.entity.TickTime
 import com.example.count_out.entity.Training
 import com.example.count_out.service.ServiceManager
-import com.example.count_out.service.WorkoutService
-import com.example.count_out.ui.view_components.log
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -34,50 +31,34 @@ class PlayWorkoutViewModel @Inject constructor(
             pauseWorkOutService = { pauseWorkOutService( ) }
         ))
     val playWorkoutScreenState: StateFlow<PlayWorkoutScreenState> = _playWorkoutScreenState.asStateFlow()
-    private val streamsWorkout = StreamsWorkout()
-    private val show = false
+
     init {
-        serviceManager.bindService(WorkoutService::class.java)
-        log(show, "init Viewmodel id: $this")
+        if (serviceManager.isStarted) receiveStateWorkout()
     }
-
-    override fun onCleared() {
-        super.onCleared()
-        serviceManager.unbindService()
-        log(show, "onCleared id: $this")
-    }
-
     fun getTraining(id: Long) {
         templateMy { dataRepository.getTraining(id) } }
 
-    private fun startWorkOutService(training: Training){
-        log(show, "startWorkOutService id: $this")
+    private fun startWorkOutService(training: Training)
+    {
         viewModelScope.launch(Dispatchers.IO) {
-            kotlin.runCatching {
-                log(true, "startWorkOutService kotlin.runCatching $streamsWorkout")
-                serviceManager.startWorkout(training,streamsWorkout) }.fold(
-                onSuccess = { receiveStateWorkout(streamsWorkout) },
+            kotlin.runCatching { serviceManager.startWorkout(training) }.fold(
+                onSuccess = { receiveStateWorkout() },
                 onFailure = { errorApp.errorApi(it.message!!) }
             )
         }
     }
-    private suspend fun receiveStateWorkout(streamsWorkout: StreamsWorkout){
-
-//        val tickFlow = streamsWorkout.flowTick.asStateFlow()
-//        tickFlow.value
-
+    private fun receiveStateWorkout(){
         viewModelScope.launch(Dispatchers.IO) {
-            streamsWorkout.flowTick.collect { tick ->
-                log(show, "PlayWorkoutViewModel tick: $tick")
-                _playWorkoutScreenState.update { currentState ->
-                    currentState.copy( tickTime = tick )}}
+            serviceManager.flowTick.collect { tick ->
+                _playWorkoutScreenState.update { currentState -> currentState.copy( tickTime = tick )}}
         }
         viewModelScope.launch(Dispatchers.IO) {
-            streamsWorkout.flowMessage.collect { message -> collectState(message) } }
+            serviceManager.flowStateService.collect { state -> collectState(state) } }
     }
     private fun collectState(stateService: StateWorkOut){
         if (stateService.state != null){
             val states = _playWorkoutScreenState.value.statesWorkout.value.toMutableList()
+//            log(show, "PlayWorkoutViewModel states: $states")
             states.add(stateService)
             _playWorkoutScreenState.update { screenState ->
                 screenState.copy(statesWorkout = mutableStateOf( states )) }
@@ -90,9 +71,15 @@ class PlayWorkoutViewModel @Inject constructor(
     private fun stopWorkOutService(){
         viewModelScope.launch(Dispatchers.IO) {
             kotlin.runCatching { serviceManager.stopWorkout() }.fold(
-                onSuccess = {   _playWorkoutScreenState.update { screenState ->
-                    screenState.copy( startTime = 0L, tickTime =
-                    TickTime(hour = "00", min = "00", sec = "00")) } },
+                onSuccess = {
+                    _playWorkoutScreenState.update { screenState ->
+                        screenState.copy(
+                            startTime = 0L,
+                            tickTime = TickTime(hour = "00", min = "00", sec = "00"),
+                            statesWorkout = mutableStateOf(emptyList()),
+                        )
+                    }
+                },
                 onFailure = { errorApp.errorApi(it.message!!) }
             )
         }

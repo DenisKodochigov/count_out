@@ -23,17 +23,4 @@ class PlayerExercise @Inject constructor(val speechManager:SpeechManager, privat
         speechManager.speech(exercise.speech.beforeEnd, pause, flowStateServiceMutable)
         speechManager.speech(exercise.speech.afterEnd, pause, flowStateServiceMutable)
     }
-//    suspend fun playingExercise(
-//        exercise: Exercise,
-//        pause: MutableState<Boolean>, streamsWorkout: StreamsWorkout
-//    ){
-//        speechManager.speech(exercise.speech.beforeStart + " " + exercise.activity.name, pause, streamsWorkout)
-//        speechManager.speech(exercise.activity.description, pause, streamsWorkout)
-//        speechManager.speech(exercise.speech.afterStart, pause, streamsWorkout)
-//        exercise.sets.forEach { set->
-//            playerSet.playingSet(set, pause, streamsWorkout)
-//        }
-//        speechManager.speech(exercise.speech.beforeEnd, pause, streamsWorkout)
-//        speechManager.speech(exercise.speech.afterEnd, pause, streamsWorkout)
-//    }
 }

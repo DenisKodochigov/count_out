@@ -38,6 +38,7 @@ fun StartApp() {
         val currentScreen = listScreens.find {
             it.routeWithArgs == currentDestination?.route } ?: TrainingsDestination
 
+
         Scaffold(
             modifier = Modifier.semantics { testTagsAsResourceId = true },
             topBar = {
