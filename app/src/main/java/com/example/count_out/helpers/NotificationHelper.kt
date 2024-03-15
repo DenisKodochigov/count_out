@@ -18,7 +18,7 @@ import com.example.count_out.entity.Const.NOTIFICATION_ID
 import com.example.count_out.entity.Const.SET_CONTENT_TITLE
 import com.example.count_out.entity.Const.STOPWATCH_STATE
 import com.example.count_out.entity.StopwatchState
-import com.example.count_out.service.WorkoutService
+import com.example.count_out.service.workout.WorkoutService
 import javax.inject.Inject
 import javax.inject.Singleton
 

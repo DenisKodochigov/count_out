@@ -29,7 +29,6 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.count_out.R
 import com.example.count_out.data.room.tables.ActivityDB
-import com.example.count_out.entity.no_use.Workout
 import com.example.count_out.ui.bottomsheet.BottomSheetAddActivity
 import com.example.count_out.ui.joint.active_view.CardActivity
 import com.example.count_out.ui.theme.Dimen
@@ -148,6 +147,3 @@ import com.example.count_out.ui.view_components.TextApp
         }
     }
 }
-@Composable fun IconStart(uiState: SettingScreenState){}
-@Composable fun IconEnd(uiState: SettingScreenState){}
-@Composable fun NameWorkout(item: Workout, uiState: SettingScreenState,){}

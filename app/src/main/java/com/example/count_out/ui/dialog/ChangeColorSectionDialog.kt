@@ -21,6 +21,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Divider
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.derivedStateOf
@@ -159,7 +160,10 @@ fun ChangeColorSectionLayout(color: MutableState<Int>)
 @Composable fun ShowArrowVer(enable:Boolean, direction: UPDOWN, drawLine: Boolean)
 {
     Column(modifier = Modifier.fillMaxWidth()){
-        if (direction == UPDOWN.UP && drawLine) Divider(color = colorApp.primary, thickness = 1.dp)
+        if (direction == UPDOWN.UP && drawLine) HorizontalDivider(
+            thickness = 1.dp,
+            color = colorApp.primary
+        )
 
         Row(modifier = Modifier.fillMaxWidth(),  horizontalArrangement = Arrangement.Center) {
             if( enable ) {
@@ -167,7 +171,10 @@ fun ChangeColorSectionLayout(color: MutableState<Int>)
             }
             else ArrowNoneVer()
         }
-        if (direction == UPDOWN.DOWN && drawLine) Divider(color = colorApp.primary, thickness = 1.dp)
+        if (direction == UPDOWN.DOWN && drawLine) HorizontalDivider(
+            thickness = 1.dp,
+            color = colorApp.primary
+        )
     }
 }
 @Composable fun ShowArrowHor(enable:Boolean, direction: UPDOWN, drawLine: Boolean)
@@ -176,9 +183,11 @@ fun ChangeColorSectionLayout(color: MutableState<Int>)
         horizontalArrangement = Arrangement.Center, verticalAlignment = Alignment.CenterVertically)
     {
         if (direction == UPDOWN.START && drawLine){
-            Divider(color = colorApp.primary, modifier = Modifier
-                .fillMaxHeight()
-                .width(1.dp))
+            HorizontalDivider(
+                modifier = Modifier
+                    .fillMaxHeight()
+                    .width(1.dp), color = colorApp.primary
+            )
         }
 
         if( enable ) { if (direction == UPDOWN.START) ArrowLeft() else ArrowRight()}

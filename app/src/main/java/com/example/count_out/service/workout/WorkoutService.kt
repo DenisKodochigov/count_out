@@ -1,4 +1,4 @@
-package com.example.count_out.service
+package com.example.count_out.service.workout
 
 import android.annotation.SuppressLint
 import android.app.Service

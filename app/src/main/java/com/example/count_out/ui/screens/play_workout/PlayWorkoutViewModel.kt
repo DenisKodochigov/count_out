@@ -5,10 +5,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.count_out.data.DataRepository
 import com.example.count_out.entity.ErrorApp
-import com.example.count_out.entity.StateWorkOut
 import com.example.count_out.entity.TickTime
 import com.example.count_out.entity.Training
-import com.example.count_out.service.ServiceManager
+import com.example.count_out.service.workout.ServiceManager
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -34,6 +33,8 @@ class PlayWorkoutViewModel @Inject constructor(
 
     init {
         if (serviceManager.isStarted) receiveStateWorkout()
+        _playWorkoutScreenState.update { currentState ->
+            currentState.copy( switchStartStop = mutableStateOf(serviceManager.isStarted) )}
     }
     fun getTraining(id: Long) {
         templateMy { dataRepository.getTraining(id) } }
@@ -49,25 +50,25 @@ class PlayWorkoutViewModel @Inject constructor(
     }
     private fun receiveStateWorkout(){
         viewModelScope.launch(Dispatchers.IO) {
+            _playWorkoutScreenState.update { currentState ->
+                currentState.copy( switchStartStop = mutableStateOf(serviceManager.isStarted) )}
             serviceManager.flowTick.collect { tick ->
                 _playWorkoutScreenState.update { currentState -> currentState.copy( tickTime = tick )}}
         }
         viewModelScope.launch(Dispatchers.IO) {
-            serviceManager.flowStateService.collect { state -> collectState(state) } }
-    }
-    private fun collectState(stateService: StateWorkOut){
-        if (stateService.state != null){
-            val states = _playWorkoutScreenState.value.statesWorkout.value.toMutableList()
-//            log(show, "PlayWorkoutViewModel states: $states")
-            states.add(stateService)
-            _playWorkoutScreenState.update { screenState ->
-                screenState.copy(statesWorkout = mutableStateOf( states )) }
-            if (stateService.time != null && _playWorkoutScreenState.value.startTime == 0L){
+            serviceManager.flowStateService.collect { state ->
                 _playWorkoutScreenState.update { screenState ->
-                    screenState.copy(startTime = stateService.time) }
+                    screenState.copy(statesWorkout = mutableStateOf( state )) }
+                if (state.isNotEmpty()) {
+                    if (state.last().time != null && _playWorkoutScreenState.value.startTime == 0L){
+                        _playWorkoutScreenState.update { screenState ->
+                            screenState.copy(startTime = state.last().time!!) }
+                    }
+                }
             }
         }
     }
+
     private fun stopWorkOutService(){
         viewModelScope.launch(Dispatchers.IO) {
             kotlin.runCatching { serviceManager.stopWorkout() }.fold(
@@ -77,6 +78,7 @@ class PlayWorkoutViewModel @Inject constructor(
                             startTime = 0L,
                             tickTime = TickTime(hour = "00", min = "00", sec = "00"),
                             statesWorkout = mutableStateOf(emptyList()),
+                            switchStartStop = mutableStateOf(serviceManager.isStarted),
                         )
                     }
                 },

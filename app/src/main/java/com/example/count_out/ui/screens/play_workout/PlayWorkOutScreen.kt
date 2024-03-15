@@ -62,16 +62,9 @@ fun PlayWorkoutScreenCreateView( viewModel: PlayWorkoutViewModel, onBaskScreen:(
         )
         FABStartStopWorkOut(
             modifier = Modifier.align(alignment = Alignment.BottomCenter),
-            switchStartStop = uiState.switchStartStop.value,
-            onClickStart = {
-                uiState.switchStartStop.value = !uiState.switchStartStop.value
-                onButtonStart(uiState)
-            },
-            onClickStop = {
-                uiState.switchStartStop.value = !uiState.switchStartStop.value
-                uiState.statesWorkout.value = emptyList()
-                onButtonStop(uiState)
-            },
+            switchStartStop = ! uiState.switchStartStop.value,
+            onClickStart = { onButtonStart(uiState) },
+            onClickStop = { onButtonStop(uiState) },
             onClickPause = { onButtonPause(uiState) },
         )
     }
@@ -84,12 +77,6 @@ fun PlayWorkoutScreenCreateView( viewModel: PlayWorkoutViewModel, onBaskScreen:(
 
 @Composable fun CountTime(uiState: PlayWorkoutScreenState){
 
-//    val tickTime: MutableState<TickTime> = remember{ mutableStateOf(TickTime(hour = "00", min="00", sec= "00")) }
-//    if (uiState.statesWorkout.value.isNotEmpty()){
-//        uiState.statesWorkout.value.last().tickTime?.let {
-//            log(true, "CountTime tickTime: $tickTime statesWorkout: ${it}")
-//            tickTime.value = it }
-//    }
     val tickTime = uiState.tickTime
     Row (modifier = Modifier.fillMaxWidth() ,horizontalArrangement = Arrangement.Center) {
         TextApp(text = tickTime.hour, style = interBold48)

@@ -29,7 +29,7 @@
         android:networkSecurityConfig="@xml/network_security_config"
         tools:targetApi="34">
         <service
-            android:name=".service.WorkoutService"
+            android:name=".service.workout.WorkoutService"
             android:foregroundServiceType = "specialUse"
             android:exported="false"/>
         <activity

@@ -58,7 +58,7 @@ fun ListExercises(uiState: TrainingScreenState, roundType: RoundType, showExerci
 }
 @Composable
 fun <T>ElementColum (item:T, modifier: Modifier = Modifier, uiState: TrainingScreenState,){
-    Card( elevation = elevationTraining(), shape = MaterialTheme.shapes.extraSmall
+    Card( elevation = elevationTraining(), shape = MaterialTheme.shapes.extraSmall, modifier = modifier
     ){
         Column {
             SelectActivity(uiState, item as Exercise)

@@ -1,8 +1,8 @@
 package com.example.count_out.di
 
 import android.content.Context
-import com.example.count_out.service.ServiceManager
-import com.example.count_out.service.WorkoutService
+import com.example.count_out.service.workout.ServiceManager
+import com.example.count_out.service.workout.WorkoutService
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

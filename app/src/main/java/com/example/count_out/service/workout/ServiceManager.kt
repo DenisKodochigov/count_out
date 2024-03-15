@@ -1,4 +1,4 @@
-package com.example.count_out.service
+package com.example.count_out.service.workout
 
 import android.content.ComponentName
 import android.content.Context
@@ -9,7 +9,11 @@ import android.os.IBinder
 import com.example.count_out.entity.StateWorkOut
 import com.example.count_out.entity.TickTime
 import com.example.count_out.entity.Training
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -17,11 +21,13 @@ import javax.inject.Singleton
 class ServiceManager @Inject constructor( val context: Context
 ){
     private var mService: WorkoutService? = null
-    var isBound : Boolean = false
-    var stop = false
-    var isStarted = false
+    private val listStateService: MutableList<StateWorkOut> = mutableListOf()
+    private lateinit var coroutine: CoroutineScope
+
     lateinit var flowTick: MutableStateFlow<TickTime>
-    lateinit var flowStateService: MutableStateFlow<StateWorkOut>
+    lateinit var flowStateService: MutableStateFlow<List<StateWorkOut>>
+    var isBound : Boolean = false
+    var isStarted = false
 
     private val serviceConnection = object : ServiceConnection {
         override fun onServiceConnected(className: ComponentName, binder: IBinder) {
@@ -37,19 +43,26 @@ class ServiceManager @Inject constructor( val context: Context
     fun startWorkout(training: Training){
         if (isBound ) {
             flowTick = MutableStateFlow(TickTime(hour = "00", min="00", sec= "00"))
-            flowStateService = MutableStateFlow(StateWorkOut())
+            flowStateService = MutableStateFlow(emptyList())
             mService?.startWorkout(training)
-            flowStateService = mService?.flowStateService!!
-            flowTick = mService?.flowTick!!
             isStarted = true
+            flowTick = mService?.flowTick!!
+            coroutine = CoroutineScope(Dispatchers.Default)
+            coroutine.launch {
+                mService?.flowStateService!!.collect{ state ->
+                    listStateService.add(state)
+                    flowStateService.value = listStateService
+                }
+            }
         }
     }
     fun pauseWorkout(){
         if (isBound ) mService?.pauseWorkout()
     }
     fun stopWorkout(){
-        stop = true
-        isStarted = true
+        isStarted = false
+        listStateService.clear()
+        coroutine.cancel()
         mService?.stopWorkout()
     }
     fun <T>bindService( clazz: Class<T>) {
