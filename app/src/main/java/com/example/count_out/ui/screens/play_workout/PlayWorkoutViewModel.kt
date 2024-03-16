@@ -4,6 +4,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.count_out.data.DataRepository
+import com.example.count_out.data.room.tables.SetDB
 import com.example.count_out.entity.ErrorApp
 import com.example.count_out.entity.TickTime
 import com.example.count_out.entity.Training
@@ -27,7 +28,8 @@ class PlayWorkoutViewModel @Inject constructor(
         PlayWorkoutScreenState(
             startWorkOutService = { startWorkOutService( it ) },
             stopWorkOutService = { stopWorkOutService( ) },
-            pauseWorkOutService = { pauseWorkOutService( ) }
+            pauseWorkOutService = { pauseWorkOutService( ) },
+            updateSet = { trainingId, setDB -> updateSet ( trainingId, setDB) }
         ))
     val playWorkoutScreenState: StateFlow<PlayWorkoutScreenState> = _playWorkoutScreenState.asStateFlow()
 
@@ -38,11 +40,17 @@ class PlayWorkoutViewModel @Inject constructor(
     }
     fun getTraining(id: Long) {
         templateMy { dataRepository.getTraining(id) } }
+    private fun updateSet(trainingId: Long,set: SetDB) {
+        templateMy { dataRepository.updateSet( trainingId, set) }
+    }
+
 
     private fun startWorkOutService(training: Training)
     {
         viewModelScope.launch(Dispatchers.IO) {
-            kotlin.runCatching { serviceManager.startWorkout(training) }.fold(
+            kotlin.runCatching {
+                sendTrainingFlow(training)
+                serviceManager.startWorkout() }.fold(
                 onSuccess = { receiveStateWorkout() },
                 onFailure = { errorApp.errorApi(it.message!!) }
             )
@@ -58,7 +66,7 @@ class PlayWorkoutViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             serviceManager.flowStateService.collect { state ->
                 _playWorkoutScreenState.update { screenState ->
-                    screenState.copy(statesWorkout = mutableStateOf( state )) }
+                    screenState.copy( statesWorkout = mutableStateOf( state )) }
                 if (state.isNotEmpty()) {
                     if (state.last().time != null && _playWorkoutScreenState.value.startTime == 0L){
                         _playWorkoutScreenState.update { screenState ->
@@ -97,10 +105,17 @@ class PlayWorkoutViewModel @Inject constructor(
     private fun templateMy( funDataRepository:() -> Training ){
         viewModelScope.launch(Dispatchers.IO) {
             kotlin.runCatching { funDataRepository() }.fold(
-                onSuccess = {  _playWorkoutScreenState.update {
-                        currentState -> currentState.copy( training = it ) } },
+                onSuccess = {
+                    _playWorkoutScreenState.update {
+                        currentState -> currentState.copy( training = it ) }
+                    sendTrainingFlow(it)
+                },
                 onFailure = { errorApp.errorApi(it.message!!) }
             )
         }
+    }
+
+    private fun sendTrainingFlow(training: Training){
+        serviceManager.flowTraining.value = training
     }
 }

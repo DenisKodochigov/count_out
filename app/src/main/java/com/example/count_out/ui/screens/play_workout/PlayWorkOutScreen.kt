@@ -23,11 +23,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.example.count_out.data.room.tables.SetDB
 import com.example.count_out.entity.StateWorkOut
 import com.example.count_out.ui.theme.interBold48
 import com.example.count_out.ui.theme.interLight12
+import com.example.count_out.ui.view_components.FABCorrectInterval
 import com.example.count_out.ui.view_components.FABStartStopWorkOut
 import com.example.count_out.ui.view_components.TextApp
+import com.example.count_out.ui.view_components.toPositive
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -67,6 +70,28 @@ fun PlayWorkoutScreenCreateView( viewModel: PlayWorkoutViewModel, onBaskScreen:(
             onClickStop = { onButtonStop(uiState) },
             onClickPause = { onButtonPause(uiState) },
         )
+        if (uiState.statesWorkout.value.isNotEmpty()) {
+            uiState.statesWorkout.value.last().set?.let { setService ->
+                uiState.findSet(setService.idSet)?.let {setScreen ->
+                    FABCorrectInterval(
+                        currentValue = setScreen.intervalReps,
+                        downInterval = {
+                            uiState.training?.let {
+                                uiState.updateSet( it.idTraining,
+                                    (setScreen as SetDB).copy(
+                                        intervalReps = (setScreen.intervalReps - 0.1).toPositive()))
+                            }
+                        },
+                        upInterval = {
+                            uiState.training?.let {
+                                uiState.updateSet(it.idTraining,
+                                    (setScreen as SetDB).copy( intervalReps = setScreen.intervalReps + 0.1 ))
+                            }
+                        }
+                    )
+                }
+            }
+        }
     }
 }
 @Composable fun PlayWorkoutScreenLayoutContent( uiState: PlayWorkoutScreenState

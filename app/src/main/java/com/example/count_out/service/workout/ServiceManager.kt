@@ -6,6 +6,7 @@ import android.content.Context.BIND_AUTO_CREATE
 import android.content.Intent
 import android.content.ServiceConnection
 import android.os.IBinder
+import com.example.count_out.data.room.tables.TrainingDB
 import com.example.count_out.entity.StateWorkOut
 import com.example.count_out.entity.TickTime
 import com.example.count_out.entity.Training
@@ -26,6 +27,7 @@ class ServiceManager @Inject constructor( val context: Context
 
     lateinit var flowTick: MutableStateFlow<TickTime>
     lateinit var flowStateService: MutableStateFlow<List<StateWorkOut>>
+    var flowTraining = MutableStateFlow(TrainingDB() as Training)
     var isBound : Boolean = false
     var isStarted = false
 
@@ -40,14 +42,16 @@ class ServiceManager @Inject constructor( val context: Context
             isBound  = false
         }
     }
-    fun startWorkout(training: Training){
+    suspend fun startWorkout(){
         if (isBound ) {
             flowTick = MutableStateFlow(TickTime(hour = "00", min="00", sec= "00"))
             flowStateService = MutableStateFlow(emptyList())
-            mService?.startWorkout(training)
+            coroutine = CoroutineScope(Dispatchers.Default)
+            mService?.training = flowTraining
+            mService?.startWorkout()
             isStarted = true
             flowTick = mService?.flowTick!!
-            coroutine = CoroutineScope(Dispatchers.Default)
+
             coroutine.launch {
                 mService?.flowStateService!!.collect{ state ->
                     listStateService.add(state)
@@ -56,6 +60,7 @@ class ServiceManager @Inject constructor( val context: Context
             }
         }
     }
+
     fun pauseWorkout(){
         if (isBound ) mService?.pauseWorkout()
     }

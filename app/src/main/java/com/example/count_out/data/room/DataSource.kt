@@ -137,6 +137,9 @@ class DataSource @Inject constructor(private val dataDao: DataDao) {
         else { dataDao.updateSet( set as SetDB) }
         return dataDao.getExerciseRel(exerciseId).toExercise()
     }
+    fun updateSet(set: Set){
+        dataDao.updateSet( set as SetDB)
+    }
     fun copySet( setId: Long){
         copySet(dataDao.getSet(setId), 0)
     }

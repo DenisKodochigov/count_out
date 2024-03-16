@@ -9,7 +9,8 @@ interface WorkOutAPI {
     var flowTick: MutableStateFlow<TickTime>
     var flowStateService: MutableStateFlow<StateWorkOut>
     val training: MutableStateFlow<Training>
-    fun startWorkout(training: Training)
+
+    suspend fun startWorkout()
     fun stopWorkout()
     fun pauseWorkout()
 }

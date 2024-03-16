@@ -7,7 +7,6 @@ interface Set {
     val speechId: Long
     val speech: Speech
     val goal: GoalSet
-
     val weight: Int
     val intensity: Zone
     val distance: Double

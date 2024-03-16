@@ -3,6 +3,8 @@ package com.example.count_out.ui.screens.play_workout
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.mutableStateOf
+import com.example.count_out.data.room.tables.SetDB
+import com.example.count_out.entity.Set
 import com.example.count_out.entity.StateWorkOut
 import com.example.count_out.entity.TickTime
 import com.example.count_out.entity.Training
@@ -14,6 +16,7 @@ data class PlayWorkoutScreenState(
     val statesWorkout: MutableState<List<StateWorkOut>> = mutableStateOf(emptyList()),
     val switchStartStop: MutableState<Boolean> = mutableStateOf(true),
     val tickTime: TickTime = TickTime(hour = "00", min="00", sec= "00"),
+    val updateSet: (Long, SetDB)->Unit = { _, _->},
     val startWorkOutService: (Training)->Unit = {},
     val stopWorkOutService: ()->Unit = {},
     val pauseWorkOutService: ()->Unit = {},
@@ -22,4 +25,19 @@ data class PlayWorkoutScreenState(
     val onStop: ()->Unit = {},
     @Stable var onBaskScreen: () ->Unit = {},
     @Stable var startTime: Long = 0L,
-)
+){
+    fun findSet(setId: Long): Set?{
+        return training?.let { trainitIt->
+            trainitIt.rounds.forEachIndexed { indexRound, round ->
+                round.exercise.forEachIndexed{ indexExercise, exercise ->
+                    exercise.sets.forEachIndexed{ indexSet, set ->
+                        if (set.idSet == setId) {
+                            return@let training.rounds[indexRound].exercise[indexExercise].sets[indexSet]
+                        }
+                    }
+                }
+            }
+            null
+        }
+    }
+}

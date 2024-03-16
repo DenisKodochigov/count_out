@@ -109,21 +109,21 @@ class DatabaseModule {
             description = "Руки опущены вдоль тела. Разведите руки в стороны. Сведите перед собой с изменением оси гантелей с горизонтального в вертикальное положение. Опустите руки в исходное положение."))
 
 
-//        createTrainingPlansTesting(db)
-        createTrainingPlansReal(db)
+        createTrainingPlansTesting(db)
+//        createTrainingPlansReal(db)
     }
     private fun createTrainingPlansTesting( db: AppDatabase) {
 
-        val idTraining = db.dataDao().addTraining(TrainingDB(name = "Зарядка", idTraining = 1,
-            speechId = db.dataDao().addSpeech(SpeechDB(beforeStart = "Начинаем ", afterStart = "", beforeEnd = "", afterEnd = "Тренировка закончена.",))))
+        val idTraining = db.dataDao().addTraining(TrainingDB(name = "", idTraining = 1,
+            speechId = db.dataDao().addSpeech(SpeechDB(beforeStart = " ", afterStart = "", beforeEnd = "", afterEnd = "",))))
 //Разминка
         var idRound = db.dataDao().addRound(RoundDB(trainingId = idTraining, roundType = RoundType.UP,
-            speechId = db.dataDao().addSpeech(SpeechDB(beforeStart = "Подготовьтесь к разминке", afterStart = "", beforeEnd = "", afterEnd = "Разминка закончена",))))
+            speechId = db.dataDao().addSpeech(SpeechDB(beforeStart = "", afterStart = "", beforeEnd = "", afterEnd = "",))))
         //Упражнение 1
         var idExercise = db.dataDao().addExercise(ExerciseDB(roundId = idRound, activityId = 3,
-            speechId = db.dataDao().addSpeech(SpeechDB(beforeStart = "Упражнение", afterStart = "", beforeEnd = "", afterEnd = "Упражнение закончено",))))
-        db.dataDao().addSet(SetDB(exerciseId = idExercise, name = "Set 1", duration = 0.1, goal = GoalSet.DURATION,
-            speechId = db.dataDao().addSpeech(SpeechDB(beforeStart = "Подход ", afterStart = "Старт", beforeEnd = "", afterEnd = "Подход закончен",))))
+            speechId = db.dataDao().addSpeech(SpeechDB(beforeStart = "", afterStart = "", beforeEnd = "", afterEnd = "о",))))
+        db.dataDao().addSet(SetDB(exerciseId = idExercise, name = "Set 1", reps = 30, intervalReps = 1.5, timeRest = 10, goal = GoalSet.COUNT,
+            speechId = db.dataDao().addSpeech(SpeechDB(beforeStart = "Подход ", afterStart = "", beforeEnd = "", afterEnd = "",))))
         //Упражнение 2
         idExercise = db.dataDao().addExercise(ExerciseDB(roundId = idRound, activityId = 4,
             speechId = db.dataDao().addSpeech(SpeechDB(beforeStart = "Упражнение", afterStart = "", beforeEnd = "", afterEnd = "Упражнение закончено",))))
