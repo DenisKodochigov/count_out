@@ -1,5 +1,6 @@
 package com.example.count_out.service.player
 
+import com.example.count_out.data.room.tables.SpeechDB
 import com.example.count_out.domain.SpeechManager
 import com.example.count_out.entity.VariablesInService
 import com.example.count_out.entity.VariablesOutService
@@ -11,14 +12,13 @@ class PlayerExercise @Inject constructor(val speechManager:SpeechManager, privat
         template: VariablesInService,
         variablesOut: VariablesOutService,
     ){
-        speechManager.speech(template.getExercise().speech.beforeStart + " " +
-                template.getExercise().activity.name, variablesOut)
-        speechManager.speech(template.getExercise().activity.description, variablesOut)
-        speechManager.speech(template.getExercise().speech.afterStart, variablesOut)
+        speechManager.speech(variablesOut, template.getExercise().speech.beforeStart, template.getExercise().activity.name)
+        speechManager.speech(variablesOut, SpeechDB(), template.getExercise().activity.description)
+        speechManager.speech(variablesOut, template.getExercise().speech.afterStart)
         template.getExercise().sets.forEachIndexed { index, _->
             playerSet.playingSet(template.apply { indexSet = index }, variablesOut)
         }
-        speechManager.speech(template.getExercise().speech.beforeEnd, variablesOut)
-        speechManager.speech(template.getExercise().speech.afterEnd, variablesOut)
+        speechManager.speech(variablesOut, template.getExercise().speech.beforeEnd)
+        speechManager.speech(variablesOut, template.getExercise().speech.afterEnd)
     }
 }

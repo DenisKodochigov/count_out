@@ -5,9 +5,10 @@ import com.example.count_out.entity.no_use.MessageWorkOut
 import kotlinx.coroutines.flow.MutableStateFlow
 
 data class VariablesOutService (
-    var flowTick: MutableStateFlow<TickTime> = MutableStateFlow(TickTime()),
+    val flowTick: MutableStateFlow<TickTime> = MutableStateFlow(TickTime()),
     val messageList: MutableStateFlow<List<MessageWorkOut>> = MutableStateFlow(emptyList()),
-    var set: MutableStateFlow<Set> = MutableStateFlow(SetDB() as Set),
+    val set: MutableStateFlow<Set> = MutableStateFlow(SetDB() as Set),
+    val durationSpeech:MutableStateFlow<Pair<Long, Long>> = MutableStateFlow(Pair(0,0)),
     val stateRunning: MutableStateFlow<StateRunning> = MutableStateFlow(StateRunning.Stopped)
 ){
     fun addMessage(text: String){

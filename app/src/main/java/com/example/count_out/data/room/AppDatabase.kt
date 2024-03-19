@@ -11,6 +11,7 @@ import com.example.count_out.data.room.tables.ExerciseDB
 import com.example.count_out.data.room.tables.RoundDB
 import com.example.count_out.data.room.tables.SetDB
 import com.example.count_out.data.room.tables.SpeechDB
+import com.example.count_out.data.room.tables.SpeechKitDB
 import com.example.count_out.data.room.tables.TrainingDB
 
 @Database(entities = [
@@ -20,6 +21,7 @@ import com.example.count_out.data.room.tables.TrainingDB
     ActivityDB::class,
     SetDB::class,
     SpeechDB::class,
+    SpeechKitDB::class,
     CountDB::class,
     ], version = 1, exportSchema = false)
 @TypeConverters(ConverterZone::class, ConverterGoalSet::class)

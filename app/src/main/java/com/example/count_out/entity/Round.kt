@@ -4,7 +4,7 @@ interface Round {
     val idRound: Long
     val trainingId: Long
     val speechId: Long
-    val speech: Speech
+    val speech: SpeechKit
     val roundType: RoundType
     val exercise: List<Exercise>
     val sequenceExercise: String

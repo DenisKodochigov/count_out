@@ -6,22 +6,21 @@ import android.speech.tts.UtteranceProgressListener
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import com.example.count_out.entity.Const.durationChar
+import com.example.count_out.entity.Speech
 import com.example.count_out.entity.VariablesOutService
 import com.example.count_out.helpers.delayMy
-import com.example.count_out.ui.view_components.log
+import com.example.count_out.ui.view_components.lg
 import java.util.Locale
 import javax.inject.Singleton
 
 @Singleton
 class SpeechManager(val context: Context) {
 
-    private val show = false
     private var duration: Long = 0L
     private var tts:TextToSpeech? = null
     val speeching: MutableState<Boolean> = mutableStateOf(true)
 
     fun init(){
-        log(show, "SpeechManager.init")
         tts = TextToSpeech(context){ status ->
             if ( status == TextToSpeech.SUCCESS) {
                 val result = tts?.setLanguage( Locale.getDefault() )
@@ -32,18 +31,18 @@ class SpeechManager(val context: Context) {
                         override fun onStart(utteranceId: String) {
                             duration = System.currentTimeMillis()
                             speeching.value = true
-                            log(show, "SpeechManager.On Start $tts")
+                            lg( "SpeechManager.On Start $tts")
                         }
                         override fun onDone(utteranceId: String) {
                             duration = System.currentTimeMillis() - duration
                             speeching.value = false
-                            log(show, "SpeechManager.On Done $tts")
+                            lg( "SpeechManager.On Done $tts")
                         }
                         @Deprecated("Deprecated in Java",
                             ReplaceWith("Log.i(\"TextToSpeech\", \"On Error\")", "android.util.Log")
                         )
                         override fun onError(utteranceId: String) {
-                            log(show, "SpeechManager.On Error $utteranceId")
+                            lg("SpeechManager.On Error $utteranceId")
                         }
                     })
                 }
@@ -51,14 +50,16 @@ class SpeechManager(val context: Context) {
         }
     }
     suspend fun speech(
-        text: String,
-        variablesOut: VariablesOutService
+        variablesOut: VariablesOutService,
+        speech: Speech,
+        text: String = "",
     ): Long{
         duration = 0
-        if (text.length > 1) {
-            variablesOut.addMessage(text)
-            speakOutAdd(text)
-            delayMy(delay = text.length * durationChar, variablesOut.stateRunning)
+        val speechText = speech.message + text
+        if ((speechText).length > 1) {
+            variablesOut.addMessage(speechText)
+            speakOutAdd(speechText)
+            delayMy(delay = speechText.length * durationChar, variablesOut.stateRunning)
         }
         return duration
     }

@@ -8,7 +8,7 @@ import com.example.count_out.data.room.tables.SetDB
 import com.example.count_out.data.room.tables.TrainingDB
 import com.example.count_out.entity.ErrorApp
 import com.example.count_out.entity.Set
-import com.example.count_out.entity.Speech
+import com.example.count_out.entity.SpeechKit
 import com.example.count_out.entity.Training
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -65,7 +65,7 @@ class TrainingViewModel @Inject constructor(
         templateMy { dataRepository.copySet( trainingId, setId) } }
     private fun deleteSet(trainingId:Long, setId: Long){
         templateMy { dataRepository.deleteSet( trainingId, setId) } }
-    private fun setSpeech( speech: Speech, item: Any?) {
+    private fun setSpeech(speech: SpeechKit, item: Any?) {
         templateMy { dataRepository.setSpeech(
             trainingScreenState.value.training.idTraining,speech, item) } }
     private fun deleteTraining(trainingId: Long){

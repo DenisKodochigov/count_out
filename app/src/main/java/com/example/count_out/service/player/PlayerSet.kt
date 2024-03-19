@@ -1,6 +1,7 @@
 package com.example.count_out.service.player
 
 import com.example.count_out.data.room.tables.SetDB
+import com.example.count_out.data.room.tables.SpeechDB
 import com.example.count_out.domain.SpeechManager
 import com.example.count_out.entity.GoalSet
 import com.example.count_out.entity.VariablesInService
@@ -15,17 +16,17 @@ class PlayerSet @Inject constructor(val speechManager:SpeechManager)
         variablesOut: VariablesOutService,
     ){
         val textBeforeSet = textBeforeSet(template)
-        speechManager.speech(template.getSet().speech.beforeStart + textBeforeSet, variablesOut)
-        speechManager.speech(template.getSet().speech.afterStart, variablesOut)
+        speechManager.speech(variablesOut, template.getSet().speech.beforeStart, textBeforeSet)
+        speechManager.speech(variablesOut, template.getSet().speech.afterStart)
 
         bodyPlayingSet(template, variablesOut)
 
         if (template.getSet().timeRest > 0) {
-            speechManager.speech(template.getSet().timeRest.toString() + " секунд отдыха.", variablesOut)
+            speechManager.speech(variablesOut, SpeechDB(),  template.getSet().timeRest.toString() + " секунд отдыха.")
             delayMy((template.getSet().timeRest * 1000).toLong(), variablesOut.stateRunning)
         }
-        speechManager.speech(template.getSet().speech.beforeEnd, variablesOut)
-        speechManager.speech(template.getSet().speech.afterEnd, variablesOut)
+        speechManager.speech(variablesOut, template.getSet().speech.beforeEnd )
+        speechManager.speech(variablesOut, template.getSet().speech.afterEnd )
     }
 
 
@@ -44,7 +45,7 @@ class PlayerSet @Inject constructor(val speechManager:SpeechManager)
         variablesOut: VariablesOutService,
     ){
         for (count in 1..template.getSet().reps){
-            variablesOut.set!!.value = template.getSet()
+            variablesOut.set.value = template.getSet()
             speechManager.speakOutFlush(text = count.toString())
             delayMy((template.getSetIntervalReps() * 1000).toLong(), variablesOut.stateRunning)
         }

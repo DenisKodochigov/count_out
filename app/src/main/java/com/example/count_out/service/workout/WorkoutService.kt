@@ -61,14 +61,11 @@ class WorkoutService @Inject constructor(): Service()
         }
         variablesOut.stateRunning.value = StateRunning.Started
     }
-
     fun pauseWorkout()
     {
         variablesOut.stateRunning.value = StateRunning.Pause
         notificationHelper.setPauseButton(this)
     }
-
-
     fun stopWorkout(){
         variablesOut.stateRunning.value = StateRunning.Stopped
         stopForeground(STOP_FOREGROUND_REMOVE)

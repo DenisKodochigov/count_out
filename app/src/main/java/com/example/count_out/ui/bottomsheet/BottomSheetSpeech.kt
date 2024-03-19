@@ -22,6 +22,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.count_out.R
 import com.example.count_out.data.room.tables.SpeechDB
+import com.example.count_out.data.room.tables.SpeechKitDB
 import com.example.count_out.entity.BottomSheetInterface
 import com.example.count_out.entity.Exercise
 import com.example.count_out.entity.Round
@@ -40,10 +41,8 @@ import com.example.count_out.ui.view_components.TextFieldApp
 @Composable fun BottomSheetSpeech(itemSpeech: BottomSheetInterface)
 {
     val uiState by remember{ mutableStateOf( bottomSheetStateNew(itemSpeech)) }
-
     val sheetState = rememberModalBottomSheetState( skipPartiallyExpanded = true, )
-//        confirmValueChange = { true },)
-    
+
     ModalBottomSheet(
         onDismissRequest = {uiState.onDismissSpeech.invoke()},
         modifier = Modifier.padding(horizontal = Dimen.bsPaddingHor1),
@@ -64,14 +63,14 @@ fun bottomSheetStateNew(itemSpeech: BottomSheetInterface): BottomSheetState{
         is Exercise-> (itemSpeech.item as Exercise).speech
         is Round-> (itemSpeech.item as Round).speech
         is Set-> (itemSpeech.item as Set).speech
-        else -> SpeechDB()
+        else -> SpeechKitDB()
     }
     return BottomSheetState(
-        enteredBeforeStart = mutableStateOf( speech.beforeStart ),
-        enteredBeforeEnd = mutableStateOf( speech.beforeEnd ),
-        enteredAfterStart = mutableStateOf( speech.afterStart ),
-        enteredAfterEnd = mutableStateOf( speech.afterEnd ),
-        speechId = speech.idSpeech ,
+        enteredBeforeStart = mutableStateOf( speech.beforeStart.message ),
+        enteredBeforeEnd = mutableStateOf( speech.beforeEnd.message ),
+        enteredAfterStart = mutableStateOf( speech.afterStart.message ),
+        enteredAfterEnd = mutableStateOf( speech.afterEnd.message ),
+        speechKit= speech ,
         listSpeech = itemSpeech.listSpeech,
         nameSection = itemSpeech.nameSection,
         item = itemSpeech.item,
@@ -116,7 +115,6 @@ fun BottomSheetSpeechContent(uiState: BottomSheetState)
             edit = true,
             contentAlignment = Alignment.BottomStart,
             modifier = Modifier.fillMaxWidth(),
-//                .background(color = MaterialTheme.colorScheme.primary, shape = shapesApp.extraSmall),
             placeholder = enterValue.value,
             onChangeValue = { enterValue.value = it },
             typeKeyboard = TypeKeyboard.TEXT )
@@ -132,12 +130,16 @@ fun ButtonOK(uiState: BottomSheetState)
 {
     ButtonConfirm(onConfirm = {
         uiState.onConfirmationSpeech(
-            SpeechDB(
-                idSpeech = uiState.speechId,
-                beforeStart = uiState.enteredBeforeStart.value,
-                afterStart = uiState.enteredAfterStart.value,
-                beforeEnd = uiState.enteredBeforeEnd.value,
-                afterEnd = uiState.enteredAfterEnd.value
+            SpeechKitDB(
+                idSpeechKit = uiState.speechKit.idSpeechKit,
+                idBeforeStart = uiState.speechKit.idBeforeStart,
+                idAfterStart = uiState.speechKit.idAfterStart,
+                idBeforeEnd = uiState.speechKit.idBeforeEnd,
+                idAfterEnd = uiState.speechKit.idAfterEnd,
+                beforeStart = (uiState.speechKit.beforeStart as SpeechDB).copy(message = uiState.enteredBeforeStart.value),
+                afterStart = (uiState.speechKit.afterStart as SpeechDB).copy(message = uiState.enteredAfterStart.value),
+                beforeEnd = (uiState.speechKit.beforeEnd as SpeechDB).copy(message = uiState.enteredBeforeEnd.value),
+                afterEnd = (uiState.speechKit.afterEnd as SpeechDB).copy(message = uiState.enteredAfterEnd.value)
             ),
             uiState.item
         )

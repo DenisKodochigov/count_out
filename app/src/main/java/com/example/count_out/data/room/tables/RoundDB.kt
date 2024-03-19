@@ -6,7 +6,7 @@ import androidx.room.PrimaryKey
 import com.example.count_out.entity.Exercise
 import com.example.count_out.entity.Round
 import com.example.count_out.entity.RoundType
-import com.example.count_out.entity.Speech
+import com.example.count_out.entity.SpeechKit
 
 @Entity(tableName = "tb_round")
 data class RoundDB(
@@ -16,5 +16,5 @@ data class RoundDB(
     override var roundType: RoundType = RoundType.OUT,
     override var sequenceExercise: String = "",
     @Ignore override val exercise: List<Exercise> = emptyList(),
-    @Ignore override var speech: Speech = SpeechDB(),
+    @Ignore override var speech: SpeechKit = SpeechKitDB(),
 ): Round

@@ -8,7 +8,7 @@ import com.example.count_out.entity.Activity
 import com.example.count_out.entity.BottomSheetInterface
 import com.example.count_out.entity.Exercise
 import com.example.count_out.entity.Set
-import com.example.count_out.entity.Speech
+import com.example.count_out.entity.SpeechKit
 import javax.inject.Singleton
 
 @Singleton
@@ -29,9 +29,9 @@ data class ExerciseScreenState(
     @Stable var doChangeActivity: (Activity) -> Unit = {},
     @Stable var onChangeSet: (Set) -> Unit = {},
 
-    @Stable override var listSpeech: List<Speech> = emptyList(),
+    @Stable override var listSpeech: List<SpeechKit> = emptyList(),
     @Stable override var item: Any? =null,
     @Stable override var nameSection: String = "",
-    @Stable override var onConfirmationSpeech: (Speech, Any?) -> Unit = {_,_->},
+    @Stable override var onConfirmationSpeech: (SpeechKit, Any?) -> Unit = {_,_->},
     @Stable override var onDismissSpeech: () -> Unit = {},
 ): BottomSheetInterface

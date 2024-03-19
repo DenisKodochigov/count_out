@@ -5,13 +5,14 @@ import com.example.count_out.data.room.tables.ExerciseDB
 import com.example.count_out.data.room.tables.RoundDB
 import com.example.count_out.data.room.tables.SetDB
 import com.example.count_out.data.room.tables.SpeechDB
+import com.example.count_out.data.room.tables.SpeechKitDB
 import com.example.count_out.data.room.tables.TrainingDB
 import com.example.count_out.entity.Activity
 import com.example.count_out.entity.Exercise
 import com.example.count_out.entity.Round
 import com.example.count_out.entity.RoundType
 import com.example.count_out.entity.Set
-import com.example.count_out.entity.Speech
+import com.example.count_out.entity.SpeechKit
 import com.example.count_out.entity.Training
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -56,7 +57,7 @@ class DataSource @Inject constructor(private val dataDao: DataDao) {
     }
     private fun createTraining(): Long {
         val trainingId = dataDao.addTraining(
-            TrainingDB(name = "Training", speechId = dataDao.addSpeech(SpeechDB())))
+            TrainingDB(name = "Training", speechId = newSpeechKit()))
         createRound(trainingId, RoundType.UP)
         createRound(trainingId, RoundType.OUT)
         createRound(trainingId, RoundType.DOWN)
@@ -96,26 +97,59 @@ class DataSource @Inject constructor(private val dataDao: DataDao) {
         copyExercise(source, source.roundId)
     }
     fun deleteExercise ( exerciseId: Long) {
-        val exercise = dataDao.getExerciseRel(exerciseId)
-        val round = getRound(exercise.exerciseDB.roundId)
+        val exercise = dataDao.getExerciseRel(exerciseId).toExercise()
+        val round = getRound(exercise.roundId)
 
         round.sequenceExercise = deleteIdFromSequence( round.sequenceExercise, exerciseId )
         dataDao.updateRound(round)
-//        log(true, "round.sequenceExercise ${round.sequenceExercise}")
-        exercise.speech?.let { dataDao.delSpeech(it.idSpeech) }
-        exercise.sets?.forEach {
-            val set = it.toSet()
-            dataDao.delSpeech(set.speechId)
-            dataDao.delSet(set.idSet)
+        deleteSpeechKit(exercise.speech)
+        exercise.sets.forEach {
+            deleteSpeechKit(it.speech)
+            dataDao.delSet(it.idSet)
         }
         dataDao.deleteExercise(exerciseId)
     }
-    fun getExercises(roundId: Long): List<Exercise> = dataDao.getExercisesForRoundRel(roundId).map { it.toExercise() }
-    fun updateExercise(exerciseDB: ExerciseDB): Int = dataDao.updateExercise(exerciseDB)
-
 //Speech
     fun addSpeech(speech: SpeechDB): Long = dataDao.addSpeech(speech)
     fun updateSpeech(speech: SpeechDB): Int = dataDao.updateSpeech(speech)
+//SpeechKit
+    private fun deleteSpeechKit(speechKit: SpeechKit){
+        dataDao.delSpeech(speechKit.idBeforeStart)
+        dataDao.delSpeech(speechKit.idAfterStart)
+        dataDao.delSpeech(speechKit.idBeforeEnd)
+        dataDao.delSpeech(speechKit.idAfterEnd)
+        dataDao.delSpeechKit(speechKit.idSpeechKit)
+    }
+    fun updateSpeechKit(speechKit: SpeechKitDB): SpeechKit{
+        speechKit.idBeforeStart = dataDao.updateSpeech(speechKit.beforeStart as SpeechDB).toLong()
+        speechKit.idAfterStart = dataDao.updateSpeech(speechKit.afterStart as SpeechDB).toLong()
+        speechKit.idBeforeEnd = dataDao.updateSpeech(speechKit.beforeEnd as SpeechDB).toLong()
+        speechKit.idAfterEnd = dataDao.updateSpeech(speechKit.afterEnd as SpeechDB).toLong()
+        return speechKit
+    }
+    fun addSpeechKit(speechKit: SpeechKitDB): Long{
+        speechKit.idBeforeStart = dataDao.addSpeech(speechKit.beforeStart as SpeechDB)
+        speechKit.idAfterStart = dataDao.addSpeech(speechKit.afterStart as SpeechDB)
+        speechKit.idBeforeEnd = dataDao.addSpeech(speechKit.beforeEnd as SpeechDB)
+        speechKit.idAfterEnd = dataDao.addSpeech(speechKit.afterEnd as SpeechDB)
+        return dataDao.addSpeechKit(speechKit)
+    }
+    private fun newSpeechKit(): Long{
+        val newSpeechKit = SpeechKitDB()
+        newSpeechKit.idBeforeStart = dataDao.addSpeech(SpeechDB())
+        newSpeechKit.idAfterStart = dataDao.addSpeech(SpeechDB())
+        newSpeechKit.idBeforeEnd = dataDao.addSpeech(SpeechDB())
+        newSpeechKit.idAfterEnd = dataDao.addSpeech(SpeechDB())
+        return dataDao.addSpeechKit(newSpeechKit)
+    }
+    private fun copySpeechKit(speech: SpeechKitDB): Long{
+        val newSpeechKit = speech.copy(idSpeechKit = 0L)
+        newSpeechKit.idBeforeStart = dataDao.addSpeech(dataDao.getSpeech(speech.idBeforeStart).copy(idSpeech = 0L))
+        newSpeechKit.idAfterStart = dataDao.addSpeech(dataDao.getSpeech(speech.idBeforeStart).copy(idSpeech = 0L))
+        newSpeechKit.idBeforeEnd = dataDao.addSpeech(dataDao.getSpeech(speech.idBeforeEnd).copy(idSpeech = 0L))
+        newSpeechKit.idAfterEnd = dataDao.addSpeech(dataDao.getSpeech(speech.idAfterEnd).copy(idSpeech = 0L))
+        return dataDao.addSpeechKit(newSpeechKit)
+    }
 
 //Activity
     fun getActivities(): List<ActivityDB> = dataDao.getActivities()
@@ -153,7 +187,7 @@ class DataSource @Inject constructor(private val dataDao: DataDao) {
             RoundDB(
                 trainingId = trainingId,
                 roundType = typeRound,
-                speechId = dataDao.addSpeech(SpeechDB())
+                speechId = newSpeechKit()
             )
         )
     }
@@ -162,15 +196,18 @@ class DataSource @Inject constructor(private val dataDao: DataDao) {
             ExerciseDB(
                 roundId = roundId,
                 activityId = 1L,
-                speechId = dataDao.addSpeech(SpeechDB())))
+                speechId = newSpeechKit()))
         val nameSet = set.name + "${dataDao.getSets(exerciseId).size + 1}"
         dataDao.addSet(set.copy(name = nameSet, exerciseId = exerciseId))
         return dataDao.getExercise(exerciseId)
     }
     fun copyTraining(id: Long): List<Training>{
         val training = dataDao.getTrainingRel(id).toTraining()
-        val idNew = dataDao.addTraining( training.copy(
-                idTraining = 0L, speechId = copySpeech(training.speech).idSpeech))
+        val idNew = dataDao.addTraining(
+            training.copy(
+                idTraining = 0L,
+                speechId = copySpeechKit(training.speech as SpeechKitDB))
+        )
         training.rounds.forEach { round-> copyRound(round, idNew) }
         return dataDao.getTrainingsRel().map { it.toTraining() }
     }
@@ -178,7 +215,7 @@ class DataSource @Inject constructor(private val dataDao: DataDao) {
     {
         val idNew = dataDao.addRound((round as RoundDB).copy(
             idRound = 0,
-            speechId = copySpeech(round.speech).idSpeech,
+            speechId = copySpeechKit(round.speech as SpeechKitDB),
             trainingId = if (trainingId == 0L) round.trainingId else trainingId ))
         round.exercise.forEach { exercise-> copyExercise(exercise, idNew) }
         return dataDao.getRoundRel(idNew).toRound()
@@ -187,7 +224,7 @@ class DataSource @Inject constructor(private val dataDao: DataDao) {
     {
         val idNew = dataDao.addExercise((exercise as ExerciseDB).copy(
             idExercise = 0L,
-            speechId = copySpeech(exercise.speech).idSpeech,
+            speechId = copySpeechKit(exercise.speech as SpeechKitDB),
             roundId = if (roundId == 0L) exercise.roundId else roundId ))
         exercise.sets.forEach { copySet( it, idNew) }
         val round  = dataDao.getRound(roundId)
@@ -201,16 +238,13 @@ class DataSource @Inject constructor(private val dataDao: DataDao) {
         val idNew = dataDao.addSet(
             (set as SetDB).copy(
                 idSet = 0L,
-                speechId = copySpeech(set.speech).idSpeech,
+                speechId = copySpeechKit(set.speech as SpeechKitDB),
                 exerciseId = if (exerciseId == 0L) set.exerciseId  else exerciseId
             )
         )
         return dataDao.getSetRel(idNew).toSet()
     }
 
-    private fun copySpeech(speech: Speech): Speech{
-        return dataDao.getSpeech(dataDao.addSpeech((speech as SpeechDB).copy(idSpeech = 0L)))
-    }
     private fun deleteIdFromSequence(sequence: String, idExercise: Long ): String{
         return if (sequence.contains("$idExercise,")){
                     sequence.replace("$idExercise,", "")

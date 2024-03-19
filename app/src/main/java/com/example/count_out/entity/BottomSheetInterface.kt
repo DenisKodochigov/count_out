@@ -2,8 +2,8 @@ package com.example.count_out.entity
 
 interface BottomSheetInterface {
     var item: Any?
-    val listSpeech: List<Speech>
+    val listSpeech: List<SpeechKit>
     val nameSection: String
-    var onConfirmationSpeech: (Speech, Any?) -> Unit
+    var onConfirmationSpeech: (SpeechKit, Any?) -> Unit
     var onDismissSpeech: () -> Unit
 }

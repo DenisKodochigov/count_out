@@ -5,7 +5,7 @@ interface Set {
     val name: String
     val exerciseId: Long
     val speechId: Long
-    val speech: Speech
+    val speech: SpeechKit
     val goal: GoalSet
     val weight: Int
     val intensity: Zone

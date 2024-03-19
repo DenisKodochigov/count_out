@@ -5,14 +5,14 @@ import com.example.count_out.data.room.tables.ActivityDB
 import com.example.count_out.data.room.tables.ExerciseDB
 import com.example.count_out.data.room.tables.RoundDB
 import com.example.count_out.data.room.tables.SetDB
-import com.example.count_out.data.room.tables.SpeechDB
+import com.example.count_out.data.room.tables.SpeechKitDB
 import com.example.count_out.data.room.tables.TrainingDB
 import com.example.count_out.entity.Activity
 import com.example.count_out.entity.Exercise
 import com.example.count_out.entity.Plugins
 import com.example.count_out.entity.Round
 import com.example.count_out.entity.Set
-import com.example.count_out.entity.Speech
+import com.example.count_out.entity.SpeechKit
 import com.example.count_out.entity.Training
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -29,29 +29,25 @@ class DataRepository  @Inject constructor(private val dataSource: DataSource){
     fun deleteTrainingNothing(id: Long){
         Plugins.listTr.remove(Plugins.listTr.find { it.idTraining == id })
     }
-    fun setSpeech(trainingId: Long, speech: Speech, item: Any?): Training
+    fun setSpeech(trainingId: Long, speech: SpeechKit, item: Any?): Training
     {
-        val speechId = if (speech.idSpeech == 0L) dataSource.addSpeech(speech as SpeechDB)
-                        else dataSource.updateSpeech(speech as SpeechDB)
+        val speechId = if (speech.idSpeechKit == 0L) dataSource.addSpeechKit(speech as SpeechKitDB)
+                        else dataSource.updateSpeechKit(speech as SpeechKitDB).idSpeechKit
         return when (item) {
             is Training -> {
-                (item as TrainingDB).speechId =
-                    analiseId(idParent = item.speechId, idChild = speechId.toLong())
+                (item as TrainingDB).speechId = analiseId(idParent = item.speechId, idChild = speechId)
                 dataSource.getTraining(item.idTraining)
             }
             is Round -> {
-                (item as RoundDB).speechId =
-                    analiseId(idParent = item.speechId, idChild = speechId.toLong())
+                (item as RoundDB).speechId = analiseId(idParent = item.speechId, idChild = speechId)
                 dataSource.getTraining(trainingId)
             }
             is Exercise -> {
-                (item as ExerciseDB).speechId =
-                    analiseId(idParent = item.speechId, idChild = speechId.toLong())
+                (item as ExerciseDB).speechId = analiseId(idParent = item.speechId, idChild = speechId)
                 dataSource.getTraining(trainingId)
             }
             is Set -> {
-                (item as SetDB).speechId =
-                    analiseId(idParent = item.speechId, idChild = speechId.toLong())
+                (item as SetDB).speechId = analiseId(idParent = item.speechId, idChild = speechId)
                 dataSource.getTraining(trainingId)
             }
             else -> { dataSource.getTraining(trainingId) }
@@ -59,10 +55,8 @@ class DataRepository  @Inject constructor(private val dataSource: DataSource){
     }
     private fun analiseId(idParent: Long, idChild: Long): Long{
         return if (idParent == 0L) { idChild }
-               else if (idParent != idChild) {
-//                   log(true, "Error. ID Speech")
-                   idChild
-               } else { idParent }
+               else if (idParent != idChild) { idChild }
+                else { idParent }
     }
     fun getExercise( roundId: Long, exerciseId:Long): Training {
         if ( exerciseId > 0) dataSource.getExercise( exerciseId )

@@ -9,12 +9,14 @@ import com.example.count_out.data.room.relation.ExerciseRel
 import com.example.count_out.data.room.relation.NameTrainingRel
 import com.example.count_out.data.room.relation.RoundRel
 import com.example.count_out.data.room.relation.SetRel
+import com.example.count_out.data.room.relation.SpeechKitRel
 import com.example.count_out.data.room.relation.TrainingRel
 import com.example.count_out.data.room.tables.ActivityDB
 import com.example.count_out.data.room.tables.ExerciseDB
 import com.example.count_out.data.room.tables.RoundDB
 import com.example.count_out.data.room.tables.SetDB
 import com.example.count_out.data.room.tables.SpeechDB
+import com.example.count_out.data.room.tables.SpeechKitDB
 import com.example.count_out.data.room.tables.TrainingDB
 
 @Dao
@@ -106,6 +108,13 @@ interface DataDao {
     @Query("DELETE FROM tb_set WHERE idSet = :id")
     fun delSet(id: Long)
 
+//SpeechKit
+    @Query("DELETE FROM tb_speech_kit WHERE idSpeechKit = :id")
+    fun delSpeechKit(id: Long)
+    @Query("SELECT * FROM tb_speech_kit WHERE idSpeechKit = :id")
+    fun getSpeechKit(id: Long): SpeechKitRel
+    @Insert
+    fun addSpeechKit(item: SpeechKitDB): Long
 //Speech
     @Insert
     fun addSpeech(item: SpeechDB): Long

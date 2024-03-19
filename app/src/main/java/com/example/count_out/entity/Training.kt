@@ -7,5 +7,5 @@ interface Training {
     val rounds: List<Round>
     val isSelected: Boolean
     var speechId: Long
-    var speech: Speech
+    var speech: SpeechKit
 }

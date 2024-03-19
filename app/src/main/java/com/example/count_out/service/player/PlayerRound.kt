@@ -13,12 +13,12 @@ class PlayerRound @Inject constructor(
         template: VariablesInService,
         variablesOut: VariablesOutService,
     ){
-        speechManager.speech( template.getRound().speech.beforeStart, variablesOut)
-        speechManager.speech(template.getRound().speech.afterStart, variablesOut)
+        speechManager.speech(variablesOut, template.getRound().speech.beforeStart)
+        speechManager.speech(variablesOut, template.getRound().speech.afterStart)
         template.getRound().exercise.forEachIndexed { index, _->
             playerExercise.playingExercise( template.apply { indexExercise = index }, variablesOut)
         }
-        speechManager.speech(template.getRound().speech.beforeEnd, variablesOut)
-        speechManager.speech(template.getRound().speech.afterEnd, variablesOut)
+        speechManager.speech(variablesOut, template.getRound().speech.beforeEnd)
+        speechManager.speech(variablesOut, template.getRound().speech.afterEnd)
     }
 }

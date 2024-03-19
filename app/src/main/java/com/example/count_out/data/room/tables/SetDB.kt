@@ -5,7 +5,7 @@ import androidx.room.Ignore
 import androidx.room.PrimaryKey
 import com.example.count_out.entity.GoalSet
 import com.example.count_out.entity.Set
-import com.example.count_out.entity.Speech
+import com.example.count_out.entity.SpeechKit
 import com.example.count_out.entity.Zone
 
 @Entity(tableName = "tb_set")
@@ -24,5 +24,5 @@ data class SetDB(
     override var intervalDown: Int = 0,
     override var groupCount: String = "",
     override var timeRest: Int = 0,
-    @Ignore override var speech: Speech = SpeechDB(),
+    @Ignore override var speech: SpeechKit = SpeechKitDB(),
 ): Set

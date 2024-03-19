@@ -6,7 +6,7 @@ interface Exercise {
     val activity: Activity
     val activityId: Long
     val speechId: Long
-    val speech: Speech
+    val speech: SpeechKit
     val sets: List<Set>
     val sequenceNumber: Int
 }
