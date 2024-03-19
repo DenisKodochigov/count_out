@@ -10,4 +10,8 @@ data class SpeechDB(
     override var afterStart: String = "",
     override var beforeEnd: String = "",
     override var afterEnd: String = "",
+    override var durationBeforeStart: Long = 0L,
+    override var durationAfterStart: Long = 0L,
+    override var durationBeforeEnd: Long = 0L,
+    override var durationAfterEnd: Long = 0L,
 ): Speech

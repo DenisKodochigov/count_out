@@ -3,12 +3,13 @@ package com.example.count_out.entity
 import com.example.count_out.data.room.tables.TrainingDB
 import kotlinx.coroutines.flow.MutableStateFlow
 
-data class TemplatePlayer(
+data class VariablesInService(
     var training: MutableStateFlow<Training> = MutableStateFlow(TrainingDB() as Training),
+    var stateRunning: MutableStateFlow<StateRunning> = MutableStateFlow(StateRunning.Stopped),
     var indexRound: Int = 0,
     var indexExercise: Int = 0,
     var indexSet: Int = 0,
-){
+) {
     fun getTraining() = training.value
     fun getRound() = training.value.rounds[indexRound]
     fun getExercise() = training.value.rounds[indexRound].exercise[indexExercise]

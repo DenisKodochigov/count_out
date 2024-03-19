@@ -27,6 +27,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.example.count_out.entity.StateRunning
 import com.example.count_out.ui.theme.alumniReg14
 import com.example.count_out.ui.theme.colorApp
 import com.example.count_out.ui.theme.interLight12
@@ -57,30 +58,50 @@ import java.math.RoundingMode
     onClickStart: () -> Unit,
     onClickStop: () -> Unit,
     onClickPause: () -> Unit,
-    switchStartStop: Boolean
+    switchState: StateRunning,
 ){
     Column (modifier = modifier,){
         Row( horizontalArrangement = Arrangement.Center) {
-            if (switchStartStop) {
-                FloatingActionButton(
-                    onClick = onClickStart,
-                    content = { Icon(Icons.Filled.PlayArrow,"") },
-                )
-            } else {
-                FloatingActionButton(
-                    onClick = onClickStop,
-                    content = { Icon(Icons.Filled.Stop,"") },
-                )
-                Spacer(modifier = Modifier.width(12.dp))
-                FloatingActionButton(
-                    onClick = onClickPause,
-                    content = { Icon(Icons.Filled.Pause,"") },
-                )
+            when (switchState){
+                StateRunning.Started -> FabStartedService(onClickStop, onClickPause)
+                StateRunning.Stopped -> FabStoppedService(onClickStart)
+                StateRunning.Pause -> FabPauseService(onClickStart, onClickStop)
             }
         }
         Spacer(modifier = Modifier.height(12.dp))
     }
 }
+
+@Composable fun FabStartedService(onClickStop: () -> Unit, onClickPause: () -> Unit,){
+    FloatingActionButton(
+        onClick = onClickPause,
+        content = { Icon(Icons.Filled.Pause,"") },
+    )
+    Spacer(modifier = Modifier.width(12.dp))
+    FloatingActionButton(
+        onClick = onClickStop,
+        content = { Icon(Icons.Filled.Stop,"") },
+    )
+}
+@Composable fun FabStoppedService(onClickStart: () -> Unit,){
+    FloatingActionButton(
+        onClick = onClickStart,
+        content = { Icon(Icons.Filled.PlayArrow,"") },
+    )
+}
+
+@Composable fun FabPauseService(onClickStart: () -> Unit, onClickStop: () -> Unit){
+    FloatingActionButton(
+        onClick = onClickStart,
+        content = { Icon(Icons.Filled.PlayArrow,"") },
+    )
+    Spacer(modifier = Modifier.width(12.dp))
+    FloatingActionButton(
+        onClick = onClickStop,
+        content = { Icon(Icons.Filled.Stop,"") },
+    )
+}
+
 
 @Composable fun FABCorrectInterval(
     currentValue: Double,

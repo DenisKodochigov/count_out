@@ -6,4 +6,9 @@ interface Speech {
     var afterStart: String
     var beforeEnd: String
     var afterEnd: String
+
+    var durationBeforeStart: Long
+    var durationAfterStart: Long
+    var durationBeforeEnd: Long
+    var durationAfterEnd: Long
 }

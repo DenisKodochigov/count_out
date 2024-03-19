@@ -24,7 +24,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.count_out.data.room.tables.SetDB
-import com.example.count_out.entity.StateWorkOut
+import com.example.count_out.entity.no_use.MessageWorkOut
 import com.example.count_out.ui.theme.interBold48
 import com.example.count_out.ui.theme.interLight12
 import com.example.count_out.ui.view_components.FABCorrectInterval
@@ -57,6 +57,7 @@ fun PlayWorkoutScreenCreateView( viewModel: PlayWorkoutViewModel, onBaskScreen:(
 
 @Composable fun PlayWorkoutScreenLayout( uiState: PlayWorkoutScreenState
 ){
+//    if (uiState.statesWorkout.value.isNotEmpty()) lg("PlayWorkoutScreen ${uiState.statesWorkout.value.last()}")
     Box()
     {
         Column(
@@ -65,32 +66,28 @@ fun PlayWorkoutScreenCreateView( viewModel: PlayWorkoutViewModel, onBaskScreen:(
         )
         FABStartStopWorkOut(
             modifier = Modifier.align(alignment = Alignment.BottomCenter),
-            switchStartStop = ! uiState.switchStartStop.value,
+            switchState= uiState.switchState.value,
             onClickStart = { onButtonStart(uiState) },
             onClickStop = { onButtonStop(uiState) },
             onClickPause = { onButtonPause(uiState) },
         )
-        if (uiState.statesWorkout.value.isNotEmpty()) {
-            uiState.statesWorkout.value.last().set?.let { setService ->
-                uiState.findSet(setService.idSet)?.let {setScreen ->
-                    FABCorrectInterval(
-                        currentValue = setScreen.intervalReps,
-                        downInterval = {
-                            uiState.training?.let {
-                                uiState.updateSet( it.idTraining,
-                                    (setScreen as SetDB).copy(
-                                        intervalReps = (setScreen.intervalReps - 0.1).toPositive()))
-                            }
-                        },
-                        upInterval = {
-                            uiState.training?.let {
-                                uiState.updateSet(it.idTraining,
-                                    (setScreen as SetDB).copy( intervalReps = setScreen.intervalReps + 0.1 ))
-                            }
-                        }
-                    )
+        uiState.findSet(uiState.playerSet.value.idSet)?.let { playSet->
+            FABCorrectInterval(
+                currentValue = playSet.intervalReps,
+                downInterval = {
+                    uiState.training?.let {
+                        uiState.updateSet( it.idTraining,
+                            (playSet as SetDB).copy(
+                                intervalReps = (playSet.intervalReps - 0.1).toPositive()))
+                    }
+                },
+                upInterval = {
+                    uiState.training?.let {
+                        uiState.updateSet(it.idTraining,
+                            (playSet as SetDB).copy( intervalReps = playSet.intervalReps + 0.1 ))
+                    }
                 }
-            }
+            )
         }
     }
 }
@@ -127,16 +124,14 @@ fun PlayWorkoutScreenCreateView( viewModel: PlayWorkoutViewModel, onBaskScreen:(
         verticalArrangement = Arrangement.Center
     ){
         items(items = uiState.statesWorkout.value ){ item->
-            if (item.state != null) {
-                Row(modifier = Modifier.padding(horizontal = 12.dp, vertical = 4.dp)) {
-                    TextApp(
-                        text = getDuration(startTime = uiState.startTime, time = item.time!!),
-                        modifier = Modifier.width(70.dp),
-                        style = interLight12
-                    )
-                    Spacer(modifier = Modifier.width(12.dp))
-                    TextApp(text = item.state.toString(), style = interLight12)
-                }
+            Row(modifier = Modifier.padding(horizontal = 12.dp, vertical = 4.dp)) {
+                TextApp(
+                    text = getDuration(startTime = uiState.startTime, time = item.time!!),
+                    modifier = Modifier.width(70.dp),
+                    style = interLight12
+                )
+                Spacer(modifier = Modifier.width(12.dp))
+                TextApp(text = item.message.toString(), style = interLight12)
             }
         }
     }
@@ -148,7 +143,7 @@ fun PlayWorkoutScreenCreateView( viewModel: PlayWorkoutViewModel, onBaskScreen:(
         }
     }
 }
-fun listSize(list: List<StateWorkOut>): Int = if (list.isEmpty()) 0 else list.size - 1
+fun listSize(list: List<MessageWorkOut>): Int = if (list.isEmpty()) 0 else list.size - 1
 
 fun getDuration(startTime: Long, time: Long): String{
     val duration: Long = time - startTime

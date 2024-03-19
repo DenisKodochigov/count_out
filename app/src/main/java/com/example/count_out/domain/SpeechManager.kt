@@ -6,11 +6,9 @@ import android.speech.tts.UtteranceProgressListener
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import com.example.count_out.entity.Const.durationChar
-import com.example.count_out.entity.Const.intervalDelay
-import com.example.count_out.entity.StateWorkOut
+import com.example.count_out.entity.VariablesOutService
+import com.example.count_out.helpers.delayMy
 import com.example.count_out.ui.view_components.log
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.MutableStateFlow
 import java.util.Locale
 import javax.inject.Singleton
 
@@ -18,6 +16,7 @@ import javax.inject.Singleton
 class SpeechManager(val context: Context) {
 
     private val show = false
+    private var duration: Long = 0L
     private var tts:TextToSpeech? = null
     val speeching: MutableState<Boolean> = mutableStateOf(true)
 
@@ -31,10 +30,12 @@ class SpeechManager(val context: Context) {
                 } else {
                     tts?.setOnUtteranceProgressListener(object : UtteranceProgressListener(){
                         override fun onStart(utteranceId: String) {
+                            duration = System.currentTimeMillis()
                             speeching.value = true
                             log(show, "SpeechManager.On Start $tts")
                         }
                         override fun onDone(utteranceId: String) {
+                            duration = System.currentTimeMillis() - duration
                             speeching.value = false
                             log(show, "SpeechManager.On Done $tts")
                         }
@@ -49,34 +50,26 @@ class SpeechManager(val context: Context) {
             } else { tts = null }
         }
     }
-
     suspend fun speech(
         text: String,
-        pause: MutableState<Boolean>,
-        flowStateServiceMutable: MutableStateFlow<StateWorkOut>
-    ){
+        variablesOut: VariablesOutService
+    ): Long{
+        duration = 0
         if (text.length > 1) {
-            flowStateServiceMutable.value = StateWorkOut(state = text)
+            variablesOut.addMessage(text)
             speakOutAdd(text)
-            delayMy(delay = text.length * durationChar, pause)
+            delayMy(delay = text.length * durationChar, variablesOut.stateRunning)
         }
+        return duration
     }
     private fun speakOutAdd(text: String){
-//        log(show, "SpeechManager.speakOut: $text")
         tts?.speak(text, TextToSpeech.QUEUE_ADD, null,"speakOut")
     }
 
     fun speakOutFlush(text: String){
-//        log(show, "SpeechManager.speakOut: $text")
         tts?.speak(text, TextToSpeech.QUEUE_FLUSH, null,"speakOut")
     }
 
-    private suspend fun delayMy(delay: Long, pause: MutableState<Boolean>){
-        var count = 0
-        val delta = (delay/intervalDelay).toInt()
-        while (count <= delta){
-            if (!pause.value) count++
-            delay(intervalDelay)
-        }
-    }
+
+    fun getDuration() = duration
 }
