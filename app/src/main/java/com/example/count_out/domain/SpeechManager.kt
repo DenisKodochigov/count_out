@@ -5,10 +5,9 @@ import android.speech.tts.TextToSpeech
 import android.speech.tts.UtteranceProgressListener
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
-import com.example.count_out.entity.Const.durationChar
 import com.example.count_out.entity.Speech
+import com.example.count_out.entity.StateRunning
 import com.example.count_out.entity.VariablesOutService
-import com.example.count_out.helpers.delayMy
 import com.example.count_out.ui.view_components.lg
 import java.util.Locale
 import javax.inject.Singleton
@@ -16,8 +15,11 @@ import javax.inject.Singleton
 @Singleton
 class SpeechManager(val context: Context) {
 
+    private var durationStart: Long = 0L
+    private var durationEnd: Long = 0L
     private var duration: Long = 0L
     private var tts:TextToSpeech? = null
+    private var idSpeech: Int = 0
     val speeching: MutableState<Boolean> = mutableStateOf(true)
 
     fun init(){
@@ -29,14 +31,13 @@ class SpeechManager(val context: Context) {
                 } else {
                     tts?.setOnUtteranceProgressListener(object : UtteranceProgressListener(){
                         override fun onStart(utteranceId: String) {
-                            duration = System.currentTimeMillis()
+                            durationStart = System.currentTimeMillis()
                             speeching.value = true
-                            lg( "SpeechManager.On Start $tts")
                         }
                         override fun onDone(utteranceId: String) {
-                            duration = System.currentTimeMillis() - duration
+                            durationEnd = System.currentTimeMillis()
+                            duration = durationEnd - durationStart
                             speeching.value = false
-                            lg( "SpeechManager.On Done $tts")
                         }
                         @Deprecated("Deprecated in Java",
                             ReplaceWith("Log.i(\"TextToSpeech\", \"On Error\")", "android.util.Log")
@@ -49,28 +50,25 @@ class SpeechManager(val context: Context) {
             } else { tts = null }
         }
     }
-    suspend fun speech(
-        variablesOut: VariablesOutService,
-        speech: Speech,
-        text: String = "",
-    ): Long{
-        duration = 0
-        val speechText = speech.message + text
+    fun speech( variablesOut: VariablesOutService, speech: Speech, ): Long
+    {
+        val speechText = speech.message + speech.addMessage
         if ((speechText).length > 1) {
             variablesOut.addMessage(speechText)
             speakOutAdd(speechText)
-            delayMy(delay = speechText.length * durationChar, variablesOut.stateRunning)
+            while (speeching.value || variablesOut.stateRunning.value == StateRunning.Pause) { }
+            if( speech.duration == 0L && speech.idSpeech > 0 && duration > 0 )
+                variablesOut.durationSpeech.value = speech.idSpeech to duration
         }
-        return duration
+        return durationEnd
     }
     private fun speakOutAdd(text: String){
-        tts?.speak(text, TextToSpeech.QUEUE_ADD, null,"speakOut")
+        speeching.value = true
+        tts?.speak(text, TextToSpeech.QUEUE_ADD, null,"speakOut$idSpeech")
     }
-
     fun speakOutFlush(text: String){
-        tts?.speak(text, TextToSpeech.QUEUE_FLUSH, null,"speakOut")
+        speeching.value = true
+        tts?.speak(text, TextToSpeech.QUEUE_FLUSH, null,"speakOut$idSpeech")
     }
-
-
-    fun getDuration() = duration
+    fun getDuration() = durationEnd
 }

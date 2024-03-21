@@ -129,7 +129,9 @@ interface DataDao {
     fun getSpeechs( list: List<Long>): List<SpeechDB>
     @Query("DELETE FROM tb_speech WHERE idSpeech = :id")
     fun delSpeech(id: Long)
-//Settings
+    @Query("UPDATE tb_speech SET duration = :duration WHERE idSpeech =:id")
+    fun updateDuration(duration: Long, id: Long): Int
+    //Settings
     @Insert
     fun addSetting(item: SettingDB): Long
     @Update

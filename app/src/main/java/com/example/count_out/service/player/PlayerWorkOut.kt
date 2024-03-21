@@ -12,7 +12,8 @@ class PlayerWorkOut @Inject constructor(val speechManager:SpeechManager, private
         template: VariablesInService,
         variablesOut: VariablesOutService,
     ) {
-        speechManager.speech(variablesOut, template.getTraining().speech.beforeStart, template.getTraining().name)
+        template.getTraining().speech.beforeStart.addMessage = ". " + template.getTraining().name
+        speechManager.speech(variablesOut, template.getTraining().speech.beforeStart)
         speechManager.speech(variablesOut, template.getTraining().speech.afterStart)
         template.getTraining().rounds.forEachIndexed { index, _->
             playerRound.playingRound( template.apply { indexRound = index }, variablesOut)

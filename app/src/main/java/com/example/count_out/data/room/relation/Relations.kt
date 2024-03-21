@@ -9,11 +9,11 @@ import com.example.count_out.data.room.tables.SetDB
 import com.example.count_out.data.room.tables.SpeechDB
 import com.example.count_out.data.room.tables.SpeechKitDB
 import com.example.count_out.data.room.tables.TrainingDB
+import com.example.count_out.domain.toNumeric
 import com.example.count_out.entity.Activity
 import com.example.count_out.entity.Exercise
 import com.example.count_out.entity.Set
 import com.example.count_out.entity.SpeechKit
-import com.example.count_out.ui.view_components.toNumeric
 
 data class SpeechKitRel(
     @Embedded val speechKitDB: SpeechKitDB,

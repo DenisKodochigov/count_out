@@ -24,13 +24,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.count_out.data.room.tables.SetDB
+import com.example.count_out.domain.toPositive
 import com.example.count_out.entity.no_use.MessageWorkOut
 import com.example.count_out.ui.theme.interBold48
 import com.example.count_out.ui.theme.interLight12
 import com.example.count_out.ui.view_components.FABCorrectInterval
 import com.example.count_out.ui.view_components.FABStartStopWorkOut
 import com.example.count_out.ui.view_components.TextApp
-import com.example.count_out.ui.view_components.toPositive
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Date

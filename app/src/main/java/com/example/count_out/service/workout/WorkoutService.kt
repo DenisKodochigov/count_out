@@ -26,10 +26,10 @@ import javax.inject.Inject
 import javax.inject.Singleton
 @Singleton
 @AndroidEntryPoint
-class WorkoutService @Inject constructor(): Service()
+class WorkoutService @Inject constructor(): Service(), WorkOutAPI
 {
-    var variablesOut: VariablesOutService = VariablesOutService()
-    var variablesIn: VariablesInService = VariablesInService()
+    override var variablesOut: VariablesOutService = VariablesOutService()
+    override var variablesIn: VariablesInService = VariablesInService()
 
     @Inject lateinit var stopWatch: StopWatch
     @Inject lateinit var notificationHelper: NotificationHelper
@@ -47,7 +47,7 @@ class WorkoutService @Inject constructor(): Service()
         return super.onStartCommand(intent, flags, startId)
     }
     @SuppressLint("ForegroundServiceType")
-    fun startWorkout()
+    override fun startWorkout()
     {
         if (variablesOut.stateRunning.value == StateRunning.Pause){
             notificationHelper.setContinueButton(this)
@@ -61,12 +61,12 @@ class WorkoutService @Inject constructor(): Service()
         }
         variablesOut.stateRunning.value = StateRunning.Started
     }
-    fun pauseWorkout()
+    override fun pauseWorkout()
     {
         variablesOut.stateRunning.value = StateRunning.Pause
         notificationHelper.setPauseButton(this)
     }
-    fun stopWorkout(){
+    override fun stopWorkout(){
         variablesOut.stateRunning.value = StateRunning.Stopped
         stopForeground(STOP_FOREGROUND_REMOVE)
         notificationHelper.cancel()

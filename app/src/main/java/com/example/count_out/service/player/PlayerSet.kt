@@ -16,13 +16,14 @@ class PlayerSet @Inject constructor(val speechManager:SpeechManager)
         variablesOut: VariablesOutService,
     ){
         val textBeforeSet = textBeforeSet(template)
-        speechManager.speech(variablesOut, template.getSet().speech.beforeStart, textBeforeSet)
+        template.getSet().speech.beforeStart.addMessage = textBeforeSet
+        speechManager.speech(variablesOut, template.getSet().speech.beforeStart)
         speechManager.speech(variablesOut, template.getSet().speech.afterStart)
 
         bodyPlayingSet(template, variablesOut)
 
         if (template.getSet().timeRest > 0) {
-            speechManager.speech(variablesOut, SpeechDB(),  template.getSet().timeRest.toString() + " секунд отдыха.")
+            speechManager.speech(variablesOut, SpeechDB(addMessage = template.getSet().timeRest.toString() + " секунд отдыха."))
             delayMy((template.getSet().timeRest * 1000).toLong(), variablesOut.stateRunning)
         }
         speechManager.speech(variablesOut, template.getSet().speech.beforeEnd )

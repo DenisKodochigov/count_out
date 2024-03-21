@@ -15,6 +15,7 @@ import com.example.count_out.entity.RoundType
 import com.example.count_out.entity.Set
 import com.example.count_out.entity.SpeechKit
 import com.example.count_out.entity.Training
+import com.example.count_out.ui.view_components.lg
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -187,6 +188,10 @@ class DataSource @Inject constructor(private val dataDao: DataDao) {
     fun updateSetting(item: SettingDB) = dataDao.getSettingId(dataDao.updateSetting(item).toLong())
     fun addSetting(item: SettingDB): SettingDB{
         return dataDao.getSettingId(dataDao.addSetting(item))
+    }
+    fun updateDuration(duration: Pair<Long, Long>){
+        lg(" Write duration $duration")
+        dataDao.updateDuration(id = duration.first, duration = duration.second)
     }
     //######################################################################################
     private fun createRound( trainingId: Long, typeRound: RoundType){

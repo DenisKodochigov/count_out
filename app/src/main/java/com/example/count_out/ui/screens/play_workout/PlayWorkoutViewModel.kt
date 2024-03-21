@@ -61,7 +61,7 @@ class PlayWorkoutViewModel @Inject constructor(
             kotlin.runCatching {
                 variablesInService.training = MutableStateFlow(training)
                 variablesInService.stateRunning = MutableStateFlow(StateRunning.Started)
-                variablesInService.speechDescription =
+                variablesInService.enableSpeechDescription =
                     MutableStateFlow(dataRepository.getSetting(R.string.speech_description).value == 1)
                 serviceManager.startWorkout( variablesInService )
             }.fold(
@@ -87,6 +87,9 @@ class PlayWorkoutViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             variablesOut.flowTick.collect { tick ->
                 _playWorkoutScreenState.update { currentState -> currentState.copy( tickTime = tick )}}
+        }
+        viewModelScope.launch(Dispatchers.IO) {
+            variablesOut.durationSpeech.collect { duration -> dataRepository.updateDuration(duration)}
         }
         viewModelScope.launch(Dispatchers.IO) {
             variablesOut.messageList.collect { state ->

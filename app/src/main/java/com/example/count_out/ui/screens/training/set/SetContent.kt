@@ -25,6 +25,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.example.count_out.R
 import com.example.count_out.data.room.tables.SetDB
+import com.example.count_out.domain.toDoubleMy
+import com.example.count_out.domain.toIntMy
 import com.example.count_out.entity.GoalSet
 import com.example.count_out.entity.Set
 import com.example.count_out.entity.TypeKeyboard
@@ -41,9 +43,6 @@ import com.example.count_out.ui.view_components.TextApp
 import com.example.count_out.ui.view_components.TextAppLines
 import com.example.count_out.ui.view_components.TextFieldApp
 import com.example.count_out.ui.view_components.TextStringAndField
-import com.example.count_out.ui.view_components.toDoubleMy
-import com.example.count_out.ui.view_components.toIntMy
-
 
 @Composable
 fun SetContent(uiState: TrainingScreenState, set: Set)
