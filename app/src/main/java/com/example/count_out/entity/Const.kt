@@ -9,12 +9,11 @@ object Const {
     const val durationChar = 67L
     val defaultScreen = TrainingsDestination.route
 
-    const val ACTION_SERVICE_START = "ACTION_SERVICE_START"
-    const val ACTION_SERVICE_STOP = "ACTION_SERVICE_STOP"
-    const val ACTION_SERVICE_CANCEL = "ACTION_SERVICE_CANCEL"
+    const val TabFadeInAnimationDuration = 150
+    const val TabFadeInAnimationDelay = 100
+    const val TabFadeOutAnimationDuration = 100
 
     const val STOPWATCH_STATE = "STOPWATCH_STATE"
-    const val ACTION = "ACTION"
 
     const val SET_CONTENT_TITLE = "COUNT_OUT"
     const val NOTIFICATION_ID = 999

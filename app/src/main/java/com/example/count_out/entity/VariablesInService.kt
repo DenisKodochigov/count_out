@@ -6,6 +6,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 data class VariablesInService(
     var training: MutableStateFlow<Training> = MutableStateFlow(TrainingDB() as Training),
     var stateRunning: MutableStateFlow<StateRunning> = MutableStateFlow(StateRunning.Stopped),
+    var speechDescription: MutableStateFlow<Boolean> = MutableStateFlow(true),
     var indexRound: Int = 0,
     var indexExercise: Int = 0,
     var indexSet: Int = 0,

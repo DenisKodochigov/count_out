@@ -13,6 +13,7 @@ import com.example.count_out.entity.Activity
 import com.example.count_out.entity.Exercise
 import com.example.count_out.entity.Set
 import com.example.count_out.entity.SpeechKit
+import com.example.count_out.ui.view_components.toNumeric
 
 data class SpeechKitRel(
     @Embedded val speechKitDB: SpeechKitDB,
@@ -105,7 +106,7 @@ data class RoundRel(
         val listExercise: MutableList<Exercise> = mutableListOf()
         if (sortingList.size > 1) {
             sortingList.forEach { id->
-                exercise?.find { it.exerciseDB.idExercise == id.toLong() }?.also { exercise ->
+                exercise?.find { it.exerciseDB.idExercise == id.toNumeric().toLong() }?.also { exercise ->
                     listExercise.add(exercise.toExercise()) } ?: mutableListOf<Exercise>()
             }
         } else {

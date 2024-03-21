@@ -2,7 +2,6 @@ package com.example.count_out.ui.screens.training.exercise
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -11,18 +10,12 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material3.Card
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -32,10 +25,10 @@ import com.example.count_out.entity.Exercise
 import com.example.count_out.entity.RoundType
 import com.example.count_out.ui.screens.training.TrainingScreenState
 import com.example.count_out.ui.screens.training.set.SetContent
-import com.example.count_out.ui.theme.Dimen
 import com.example.count_out.ui.theme.elevationTraining
-import com.example.count_out.ui.theme.interLight12
 import com.example.count_out.ui.theme.interReg14
+import com.example.count_out.ui.view_components.IconAddItem
+import com.example.count_out.ui.view_components.IconSelectActivity
 import com.example.count_out.ui.view_components.IconsCollapsingCopySpeechDel
 import com.example.count_out.ui.view_components.TextApp
 import com.example.count_out.ui.view_components.drag_drop_column.ColumnDragDrop
@@ -73,7 +66,10 @@ fun SelectActivity(uiState: TrainingScreenState, exercise: Exercise)
     Row( verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier.padding(horizontal = 4.dp)
     ){
-        IconSelectActivity(uiState, exercise)
+        IconSelectActivity(
+            onClick = {
+                uiState.exercise = exercise
+                uiState.showBottomSheetSelectActivity.value = true })
         Spacer(modifier = Modifier.width(2.dp))
         TextApp(
             text = exercise.activity.name,
@@ -91,17 +87,7 @@ fun SelectActivity(uiState: TrainingScreenState, exercise: Exercise)
         )
     }
 }
-@Composable
-fun IconSelectActivity(uiState: TrainingScreenState, exercise: Exercise)
-{
-    IconButton(modifier = Modifier
-        .width(24.dp)
-        .height(24.dp),
-        onClick = {
-            uiState.exercise = exercise
-            uiState.showBottomSheetSelectActivity.value = true })
-    { Icon(imageVector = Icons.Filled.ArrowDropDown, contentDescription = "") }
-}
+
 @Composable fun BodyExercise(uiState: TrainingScreenState, exercise: Exercise){
     Column(
         modifier = Modifier
@@ -141,30 +127,13 @@ fun ListSets(uiState: TrainingScreenState)
 {
     Row (horizontalArrangement = Arrangement.End, modifier = Modifier.fillMaxWidth()){
         val nameNewSet = stringResource(id = R.string.set) + " ${exercise.sets.size + 1}"
-        Row(
-            horizontalArrangement = Arrangement.Center,
-            verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier
-//                .background(color = Color.Green, shape = shapeAddExercise)
-                .clickable {
-                    uiState.onAddUpdateSet( exercise.idExercise,
-                        SetDB(name = nameNewSet, exerciseId = exercise.idExercise)
-                    )
-                }
-        ) {
-            TextApp(
-                text = stringResource(id = R.string.add_set),
-                style = interLight12,
-                modifier = Modifier.padding(horizontal = 4.dp)
-            )
-            Icon(
-                painter = painterResource(id = R.drawable.ic_add),
-                contentDescription = "",
-                modifier = Modifier
-                    .padding(4.dp)
-                    .size(Dimen.sizeIcon)
-            )
-        }
+        IconAddItem(
+            textId = R.string.add_set,
+            onAdd = {
+                uiState.onAddUpdateSet( exercise.idExercise,
+                SetDB(name = nameNewSet, exerciseId = exercise.idExercise))
+            }
+        )
     }
 }
 fun exerciseCollapsing(uiState: TrainingScreenState,  exercise: Exercise): Boolean

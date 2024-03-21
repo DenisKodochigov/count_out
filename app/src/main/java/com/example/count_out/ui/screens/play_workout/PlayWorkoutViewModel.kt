@@ -3,6 +3,7 @@ package com.example.count_out.ui.screens.play_workout
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.count_out.R
 import com.example.count_out.data.DataRepository
 import com.example.count_out.data.room.tables.SetDB
 import com.example.count_out.entity.ErrorApp
@@ -60,6 +61,8 @@ class PlayWorkoutViewModel @Inject constructor(
             kotlin.runCatching {
                 variablesInService.training = MutableStateFlow(training)
                 variablesInService.stateRunning = MutableStateFlow(StateRunning.Started)
+                variablesInService.speechDescription =
+                    MutableStateFlow(dataRepository.getSetting(R.string.speech_description).value == 1)
                 serviceManager.startWorkout( variablesInService )
             }.fold(
                 onSuccess = { receiveStateWorkout(it) },

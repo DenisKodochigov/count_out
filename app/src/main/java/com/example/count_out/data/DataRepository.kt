@@ -5,6 +5,7 @@ import com.example.count_out.data.room.tables.ActivityDB
 import com.example.count_out.data.room.tables.ExerciseDB
 import com.example.count_out.data.room.tables.RoundDB
 import com.example.count_out.data.room.tables.SetDB
+import com.example.count_out.data.room.tables.SettingDB
 import com.example.count_out.data.room.tables.SpeechKitDB
 import com.example.count_out.data.room.tables.TrainingDB
 import com.example.count_out.entity.Activity
@@ -128,6 +129,19 @@ class DataRepository  @Inject constructor(private val dataSource: DataSource){
     fun deleteSet(trainingId:Long, setId: Long): Training {
         if (setId > 0 ) dataSource.deleteSet( setId )
         return dataSource.getTraining(trainingId)
+    }
+//Setting
+    fun getSettings(): List<SettingDB>{
+        return dataSource.getSettings()
+    }
+    fun getSetting(parameter: Int) = dataSource.getSetting(parameter)
+    fun updateSetting(item: SettingDB): List<SettingDB>{
+        dataSource.updateSetting(item)
+        return dataSource.getSettings()
+    }
+    fun addSetting(item: SettingDB): List<SettingDB>{
+        dataSource.addSetting(item)
+        return dataSource.getSettings()
     }
 //    fun onChangeSet(set: Set): Exercise = dataSource.addUpdateSet( set.exerciseId, set )
 

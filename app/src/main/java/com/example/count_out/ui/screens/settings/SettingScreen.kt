@@ -18,23 +18,31 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Card
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Switch
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.count_out.R
 import com.example.count_out.data.room.tables.ActivityDB
+import com.example.count_out.data.room.tables.SettingDB
 import com.example.count_out.ui.bottomsheet.BottomSheetAddActivity
 import com.example.count_out.ui.joint.active_view.CardActivity
 import com.example.count_out.ui.theme.Dimen
 import com.example.count_out.ui.theme.elevationTraining
 import com.example.count_out.ui.theme.interBold14
 import com.example.count_out.ui.theme.interLight12
+import com.example.count_out.ui.theme.interReg14
 import com.example.count_out.ui.view_components.IconsCollapsing
 import com.example.count_out.ui.view_components.TextApp
 
@@ -63,9 +71,44 @@ import com.example.count_out.ui.view_components.TextApp
             .verticalScroll(rememberScrollState())
             .padding(8.dp)
             .fillMaxHeight(),
-        content = { ActiveSection(uiState = uiState,) }
+        content = {
+            ActiveSection(uiState = uiState,)
+            OtherSettings(uiState = uiState,) }
     )
 }
+@Composable fun OtherSettings(uiState: SettingScreenState)
+{
+    Spacer(modifier = Modifier.height(12.dp))
+    SettingSpeechDescription(uiState)
+}
+@Composable fun SettingSpeechDescription(uiState: SettingScreenState){
+    uiState.settings.value.find{ it.parameter == R.string.speech_description}?.let {setting->
+        TemplateSwitch(setting = setting, change = { checked->
+            uiState.onUpdateSetting(setting.copy(value = if (checked) 1 else 0))
+        })
+    }
+}
+@Composable fun TemplateSwitch(setting: SettingDB, change:(Boolean)->Unit)
+{
+    var checked by remember { mutableStateOf( setting.value == 1) }
+    Row( verticalAlignment = Alignment.CenterVertically,
+        modifier = Modifier.padding(horizontal = 4.dp)
+    ){
+        TextApp(
+            text = stringResource( setting.parameter),
+            textAlign = TextAlign.Start,
+            modifier = Modifier.weight(1f),
+            style = interReg14)
+        Switch(
+            checked = checked,
+            onCheckedChange = {
+                checked = it
+                change(it)
+            }
+        )
+    }
+}
+
 @Composable fun ActiveSection(uiState: SettingScreenState)
 {
     Card ( elevation = elevationTraining(), shape = MaterialTheme.shapes.extraSmall

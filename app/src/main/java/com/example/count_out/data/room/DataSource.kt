@@ -4,6 +4,7 @@ import com.example.count_out.data.room.tables.ActivityDB
 import com.example.count_out.data.room.tables.ExerciseDB
 import com.example.count_out.data.room.tables.RoundDB
 import com.example.count_out.data.room.tables.SetDB
+import com.example.count_out.data.room.tables.SettingDB
 import com.example.count_out.data.room.tables.SpeechDB
 import com.example.count_out.data.room.tables.SpeechKitDB
 import com.example.count_out.data.room.tables.TrainingDB
@@ -180,7 +181,13 @@ class DataSource @Inject constructor(private val dataDao: DataDao) {
     fun deleteSet( setId: Long) {
          dataDao.delSet( setId )
     }
-
+//Setting
+    fun getSettings(): List<SettingDB> = dataDao.getSettings()
+    fun getSetting(parameter: Int) = dataDao.getSetting(parameter)
+    fun updateSetting(item: SettingDB) = dataDao.getSettingId(dataDao.updateSetting(item).toLong())
+    fun addSetting(item: SettingDB): SettingDB{
+        return dataDao.getSettingId(dataDao.addSetting(item))
+    }
     //######################################################################################
     private fun createRound( trainingId: Long, typeRound: RoundType){
         dataDao.addRound(

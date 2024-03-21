@@ -15,6 +15,7 @@ import com.example.count_out.data.room.tables.ActivityDB
 import com.example.count_out.data.room.tables.ExerciseDB
 import com.example.count_out.data.room.tables.RoundDB
 import com.example.count_out.data.room.tables.SetDB
+import com.example.count_out.data.room.tables.SettingDB
 import com.example.count_out.data.room.tables.SpeechDB
 import com.example.count_out.data.room.tables.SpeechKitDB
 import com.example.count_out.data.room.tables.TrainingDB
@@ -41,7 +42,8 @@ interface DataDao {
     fun updateRound(item: RoundDB): Int
     @Query("SELECT * FROM tb_round WHERE idRound = :id")
     fun getRound(id: Long): RoundDB
-    @Transaction @Query("SELECT * FROM tb_round WHERE idRound = :id")
+    @Transaction
+    @Query("SELECT * FROM tb_round WHERE idRound = :id")
     fun getRoundRel(id: Long): RoundRel
     @Query("SELECT * FROM tb_round WHERE idRound IN (:list)")
     fun getRounds( list: List<Long>): List<RoundDB>
@@ -111,6 +113,7 @@ interface DataDao {
 //SpeechKit
     @Query("DELETE FROM tb_speech_kit WHERE idSpeechKit = :id")
     fun delSpeechKit(id: Long)
+    @Transaction
     @Query("SELECT * FROM tb_speech_kit WHERE idSpeechKit = :id")
     fun getSpeechKit(id: Long): SpeechKitRel
     @Insert
@@ -126,4 +129,15 @@ interface DataDao {
     fun getSpeechs( list: List<Long>): List<SpeechDB>
     @Query("DELETE FROM tb_speech WHERE idSpeech = :id")
     fun delSpeech(id: Long)
+//Settings
+    @Insert
+    fun addSetting(item: SettingDB): Long
+    @Update
+    fun updateSetting(item: SettingDB): Int
+    @Query("SELECT * FROM tb_settings")
+    fun getSettings(): List<SettingDB>
+    @Query("SELECT * FROM tb_settings WHERE parameter = :parameter")
+    fun getSetting(parameter: Int): SettingDB
+    @Query("SELECT * FROM tb_settings WHERE idSetting = :id")
+    fun getSettingId(id: Long): SettingDB
 }

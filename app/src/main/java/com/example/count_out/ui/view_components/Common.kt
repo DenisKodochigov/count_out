@@ -16,6 +16,8 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.LocalContentColor
+import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.RadioButton
@@ -180,6 +182,7 @@ import com.example.count_out.ui.theme.styleApp
     val paddingHor = if (textStyle.fontSize > 14.sp) 8.dp else 4.dp
     val paddingVer = if (textStyle.fontSize > 14.sp) 6.dp else 2.dp
     val colorLine = MaterialTheme.colorScheme.onBackground
+    val mergedStyle = LocalTextStyle.current.merge(textStyle.copy(color = LocalContentColor.current))
     val colors = TextFieldDefaults.colors(
         unfocusedIndicatorColor = Color.Transparent,
         focusedIndicatorColor = Color.Transparent)
@@ -199,9 +202,7 @@ import com.example.count_out.ui.theme.styleApp
                 unfocusedIndicatorLineThickness = 0.dp
             )
             .onFocusChanged {
-                if ((!it.isFocused || !onLossFocus) && text.isNotEmpty()) onChangeValue(
-                    text
-                )
+                if ((!it.isFocused || !onLossFocus) && text.isNotEmpty()) onChangeValue(text)
             }
             .focusable(),
         keyboardOptions = keyBoardOpt(typeKeyboard),
@@ -213,7 +214,7 @@ import com.example.count_out.ui.theme.styleApp
             text = it
             if (!onLossFocus) onChangeValue(text)},
         visualTransformation = VisualTransformation.None,
-        textStyle = textStyle,
+        textStyle = mergedStyle,
 //        interactionSource = interactionSource,
         decorationBox = {
             Row( verticalAlignment = Alignment.CenterVertically,

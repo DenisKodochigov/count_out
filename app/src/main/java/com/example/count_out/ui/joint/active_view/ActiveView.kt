@@ -169,7 +169,7 @@ fun ActivityValueFull(
                 maxLines = 3,
                 edit = true,
                 textStyle = interLight12,
-                onChangeValue = { onChange( (activity.value as ActivityDB).copy(videoClip = it)) }
+                onChangeValue = { onChange( (activity.value as ActivityDB).copy(description = it)) }
             )
         }
     }

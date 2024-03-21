@@ -32,13 +32,13 @@ import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.count_out.entity.Const.TabFadeInAnimationDelay
+import com.example.count_out.entity.Const.TabFadeInAnimationDuration
+import com.example.count_out.entity.Const.TabFadeOutAnimationDuration
 import com.example.count_out.entity.TagsTesting.BOTTOM_APP_BAR
 import com.example.count_out.navigation.ScreenDestination
 import com.example.count_out.navigation.TrainingsDestination
 import com.example.count_out.navigation.navBottomScreens
-import com.example.count_out.ui.theme.TabFadeInAnimationDelay
-import com.example.count_out.ui.theme.TabFadeInAnimationDuration
-import com.example.count_out.ui.theme.TabFadeOutAnimationDuration
 import com.example.count_out.ui.theme.alumniReg12
 import com.example.count_out.ui.theme.bottomBarShape
 

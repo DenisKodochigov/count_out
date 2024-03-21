@@ -33,7 +33,7 @@ fun <T>ColumnDragDrop(
     modifier: Modifier = Modifier,
     viewItem:@Composable (T) -> Unit,
     showList: Boolean,
-    onMoveItem: (Int, Int) -> Unit = {_,_->Unit},
+    onMoveItem: (Int, Int) -> Unit = {_,_->},
     onClickItem: (Int) -> Unit = {},
 ){
     var heightList by remember { mutableIntStateOf(0) }

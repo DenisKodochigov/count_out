@@ -13,7 +13,8 @@ class PlayerExercise @Inject constructor(val speechManager:SpeechManager, privat
         variablesOut: VariablesOutService,
     ){
         speechManager.speech(variablesOut, template.getExercise().speech.beforeStart, template.getExercise().activity.name)
-        speechManager.speech(variablesOut, SpeechDB(), template.getExercise().activity.description)
+        if (template.speechDescription.value)
+            speechManager.speech(variablesOut, SpeechDB(), template.getExercise().activity.description)
         speechManager.speech(variablesOut, template.getExercise().speech.afterStart)
         template.getExercise().sets.forEachIndexed { index, _->
             playerSet.playingSet(template.apply { indexSet = index }, variablesOut)

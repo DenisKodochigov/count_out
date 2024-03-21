@@ -57,7 +57,6 @@ fun PlayWorkoutScreenCreateView( viewModel: PlayWorkoutViewModel, onBaskScreen:(
 
 @Composable fun PlayWorkoutScreenLayout( uiState: PlayWorkoutScreenState
 ){
-//    if (uiState.statesWorkout.value.isNotEmpty()) lg("PlayWorkoutScreen ${uiState.statesWorkout.value.last()}")
     Box()
     {
         Column(

@@ -11,6 +11,7 @@ import com.example.count_out.data.room.tables.ActivityDB
 import com.example.count_out.data.room.tables.ExerciseDB
 import com.example.count_out.data.room.tables.RoundDB
 import com.example.count_out.data.room.tables.SetDB
+import com.example.count_out.data.room.tables.SettingDB
 import com.example.count_out.data.room.tables.SpeechDB
 import com.example.count_out.data.room.tables.SpeechKitDB
 import com.example.count_out.data.room.tables.TrainingDB
@@ -109,9 +110,13 @@ class DatabaseModule {
         db.dataDao().addActivity(ActivityDB(idActivity = 21, name = "Гантели. Плечи. Обартный ход", icon = R.drawable.ic_setka,
             description = "Руки опущены вдоль тела. Разведите руки в стороны. Сведите перед собой с изменением оси гантелей с горизонтального в вертикальное положение. Опустите руки в исходное положение."))
 
-
+        createSetting(db)
         createTrainingPlansTesting(db)
 //        createTrainingPlansReal(db)
+    }
+
+    private fun createSetting( db: AppDatabase){
+        db.dataDao().addSetting(SettingDB(parameter = R.string.speech_description, value = 1))
     }
     private fun createTrainingPlansTesting( db: AppDatabase) {
 

@@ -2,11 +2,6 @@ package com.example.count_out.entity
 
 import com.example.count_out.R
 
-enum class SortingBy {
-    BY_NAME,
-    BY_SECTION
-}
-
 enum class TypeText {
     NAME_SCREEN,
     NAME_SECTION,
