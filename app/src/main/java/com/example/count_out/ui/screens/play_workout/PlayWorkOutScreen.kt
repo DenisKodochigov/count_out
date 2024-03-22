@@ -25,6 +25,8 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.count_out.data.room.tables.SetDB
 import com.example.count_out.domain.toPositive
+import com.example.count_out.entity.Set
+import com.example.count_out.entity.StateRunning
 import com.example.count_out.entity.no_use.MessageWorkOut
 import com.example.count_out.ui.theme.interBold48
 import com.example.count_out.ui.theme.interLight12
@@ -32,10 +34,6 @@ import com.example.count_out.ui.view_components.FABCorrectInterval
 import com.example.count_out.ui.view_components.FABStartStopWorkOut
 import com.example.count_out.ui.view_components.TextApp
 import kotlinx.coroutines.launch
-import java.text.SimpleDateFormat
-import java.util.Date
-import java.util.Locale
-import java.util.TimeZone
 
 @SuppressLint("UnrememberedMutableState")
 @Composable
@@ -57,20 +55,26 @@ fun PlayWorkoutScreenCreateView( viewModel: PlayWorkoutViewModel, onBaskScreen:(
 
 @Composable fun PlayWorkoutScreenLayout( uiState: PlayWorkoutScreenState
 ){
-    Box()
-    {
+    Box() {
         Column(
             modifier = Modifier.fillMaxSize(),
             content = { PlayWorkoutScreenLayoutContent(uiState)}
         )
+        val stateRunning: StateRunning
+        val playerSet: Set
+        try {
+            stateRunning = uiState.switchState.value
+            playerSet = uiState.playerSet.value
+        } catch (_:IllegalStateException){ return}
+
         FABStartStopWorkOut(
             modifier = Modifier.align(alignment = Alignment.BottomCenter),
-            switchState= uiState.switchState.value,
+            switchState= stateRunning,
             onClickStart = { onButtonStart(uiState) },
             onClickStop = { onButtonStop(uiState) },
             onClickPause = { onButtonPause(uiState) },
         )
-        uiState.findSet(uiState.playerSet.value.idSet)?.let { playSet->
+        uiState.findSet(playerSet.idSet)?.let { playSet->
             FABCorrectInterval(
                 currentValue = playSet.intervalReps,
                 downInterval = {
@@ -125,12 +129,12 @@ fun PlayWorkoutScreenCreateView( viewModel: PlayWorkoutViewModel, onBaskScreen:(
         items(items = uiState.statesWorkout.value ){ item->
             Row(modifier = Modifier.padding(horizontal = 12.dp, vertical = 4.dp)) {
                 TextApp(
-                    text = getDuration(startTime = uiState.startTime, time = item.time!!),
+                    text = getDuration( time = item.time!!),
                     modifier = Modifier.width(70.dp),
                     style = interLight12
                 )
                 Spacer(modifier = Modifier.width(12.dp))
-                TextApp(text = item.message.toString(), style = interLight12)
+                TextApp(text = item.message, style = interLight12)
             }
         }
     }
@@ -144,18 +148,12 @@ fun PlayWorkoutScreenCreateView( viewModel: PlayWorkoutViewModel, onBaskScreen:(
 }
 fun listSize(list: List<MessageWorkOut>): Int = if (list.isEmpty()) 0 else list.size - 1
 
-fun getDuration(startTime: Long, time: Long): String{
-    val duration: Long = time - startTime
+fun getDuration(time: Long): String{
+    val duration: Long = time
     val hour = duration / 1000 / 60 / 60
     val minutes = duration / 1000 / 60
     val seconds = duration / 1000 % 60
     return String.format("%02d:%02d:%02d",hour, minutes, seconds)
-}
-fun Long.getTime(): String {
-    val date = Date(this)
-    val formatter = SimpleDateFormat("HH:mm:ss", Locale.getDefault())
-    formatter.timeZone = TimeZone.getTimeZone("UTC")
-    return formatter.format(date)
 }
 fun onButtonStart(uiState:PlayWorkoutScreenState){
     uiState.training?.let { uiState.startWorkOutService(it) }

@@ -38,8 +38,7 @@ class WorkoutService @Inject constructor(): Service(), WorkOutAPI
 
     inner class WorkoutServiceBinder : Binder() { fun getService(): WorkoutService = this@WorkoutService }
     override fun onBind(p0: Intent?): IBinder = WorkoutServiceBinder()
-    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int
-    {
+    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         when (intent?.getStringExtra(STOPWATCH_STATE)) {
             StopwatchState.onPause.name -> pauseWorkout()
             StopwatchState.onStop.name -> stopWatch.onStop()
@@ -47,8 +46,8 @@ class WorkoutService @Inject constructor(): Service(), WorkOutAPI
         return super.onStartCommand(intent, flags, startId)
     }
     @SuppressLint("ForegroundServiceType")
-    override fun startWorkout()
-    {
+    override fun startWorkout() {
+        variablesOut.startTime = System.currentTimeMillis()
         if (variablesOut.stateRunning.value == StateRunning.Pause){
             notificationHelper.setContinueButton(this)
         }
@@ -61,8 +60,7 @@ class WorkoutService @Inject constructor(): Service(), WorkOutAPI
         }
         variablesOut.stateRunning.value = StateRunning.Started
     }
-    override fun pauseWorkout()
-    {
+    override fun pauseWorkout() {
         variablesOut.stateRunning.value = StateRunning.Pause
         notificationHelper.setPauseButton(this)
     }
@@ -73,18 +71,16 @@ class WorkoutService @Inject constructor(): Service(), WorkOutAPI
         stopWatch.onStop()
         coroutineSpeech.cancel()
         variablesOut.cancel()
+        variablesOut.startTime = 0L
     }
-    private fun sendCountTime(tick: TickTime
-    ){
+    private fun sendCountTime(tick: TickTime){
         notificationHelper.updateNotification(hours = tick.hour, minutes = tick.min, seconds = tick.sec)
         variablesOut.flowTick.value = tick
     }
-    private fun playTraining()
-    {
+    private fun playTraining() {
         coroutineSpeech.launch { playerWorkOut.playingWorkOut(variablesIn, variablesOut) }
     }
-    private fun startForegroundService()
-    {
+    private fun startForegroundService() {
         if (!notificationHelper.channelExist()) notificationHelper.createChannel()
         if (Build.VERSION.SDK_INT >= 31)
             startForeground(NOTIFICATION_ID, notificationHelper.build(), FOREGROUND_SERVICE_TYPE_SPECIAL_USE)

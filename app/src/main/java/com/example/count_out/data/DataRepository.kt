@@ -139,12 +139,5 @@ class DataRepository  @Inject constructor(private val dataSource: DataSource){
         dataSource.updateSetting(item)
         return dataSource.getSettings()
     }
-    fun updateDuration(duration: Pair<Long, Long>){
-        dataSource.updateDuration(duration)
-    }
-    fun addSetting(item: SettingDB): List<SettingDB>{
-        dataSource.addSetting(item)
-        return dataSource.getSettings()
-    }
-//    fun onChangeSet(set: Set): Exercise = dataSource.addUpdateSet( set.exerciseId, set )
+    fun updateDuration(duration: Pair<Long, Long>){ dataSource.updateDuration(duration) }
 }

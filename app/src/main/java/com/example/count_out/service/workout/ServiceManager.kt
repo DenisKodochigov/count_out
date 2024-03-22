@@ -27,14 +27,11 @@ class ServiceManager @Inject constructor(val context: Context
             isBound  = false
         }
     }
-    fun startWorkout(variablesIn: VariablesInService): VariablesOutService{
-        val variablesOut = connectingToService(variablesIn)
+    fun startWorkout(){
         if (isBound ) {
             workOutService.startWorkout()
         }
-        return variablesOut
     }
-
     fun connectingToService(variablesIn: VariablesInService): VariablesOutService{
         workOutService.variablesIn = variablesIn
         return workOutService.variablesOut

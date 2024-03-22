@@ -1,5 +1,10 @@
 package com.example.count_out.domain
 
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
+import java.util.TimeZone
+
 fun formatTime(
     seconds: String, minutes: String, hours: String
 ): String = "$hours:$minutes:$seconds"
@@ -22,4 +27,10 @@ fun String.toNumeric(): Double{
         }
         if (result.isNotEmpty()) result.toDouble() else 0.0
     } else 0.0
+}
+fun Long.getTime(): String {
+    val date = Date(this)
+    val formatter = SimpleDateFormat("HH:mm:ss", Locale.getDefault())
+    formatter.timeZone = TimeZone.getTimeZone("UTC")
+    return formatter.format(date)
 }

@@ -38,14 +38,9 @@ class PlayWorkoutViewModel @Inject constructor(
 
     val variablesInService = VariablesInService()
     init {
-        val continues = serviceManager.stateRunningService() == StateRunning.Started ||
-                serviceManager.stateRunningService() == StateRunning.Pause
         viewModelScope.launch(Dispatchers.IO) {
-            kotlin.runCatching {
-                if (continues) serviceManager.connectingToService(variablesInService)
-                else VariablesOutService()
-            }.fold(
-                onSuccess = { if (continues) receiveStateWorkout(it) },
+            kotlin.runCatching { serviceManager.connectingToService(variablesInService) }.fold(
+                onSuccess = { receiveStateWorkout(it) },
                 onFailure = { errorApp.errorApi(it.message!!) }
             )
         }
@@ -53,8 +48,7 @@ class PlayWorkoutViewModel @Inject constructor(
     fun getTraining(id: Long) {
         templateMy { dataRepository.getTraining(id) } }
     private fun updateSet(trainingId: Long,set: SetDB) {
-        templateMy { dataRepository.updateSet( trainingId, set) }
-    }
+        templateMy { dataRepository.updateSet( trainingId, set) } }
     private fun startWorkOutService(training: Training)
     {
         viewModelScope.launch(Dispatchers.IO) {
@@ -63,19 +57,30 @@ class PlayWorkoutViewModel @Inject constructor(
                 variablesInService.stateRunning = MutableStateFlow(StateRunning.Started)
                 variablesInService.enableSpeechDescription =
                     MutableStateFlow(dataRepository.getSetting(R.string.speech_description).value == 1)
-                serviceManager.startWorkout( variablesInService )
+                serviceManager.startWorkout()
             }.fold(
-                onSuccess = { receiveStateWorkout(it) },
+                onSuccess = {  },
                 onFailure = { errorApp.errorApi(it.message!!) }
             )
         }
     }
+//    private fun setStartTime(){
+//        viewModelScope.launch(Dispatchers.IO) {
+//            kotlin.runCatching { serviceManager.getStartTime() }.fold(
+//                onSuccess = { startTime ->
+//                    _playWorkoutScreenState.update { screenState ->
+//                        screenState.copy(startTime =  startTime) } },
+//                onFailure = { errorApp.errorApi(it.message!!) }
+//            )
+//            _playWorkoutScreenState.update { screenState ->
+//                screenState.copy(startTime =  System.currentTimeMillis()) }
+//        }
+//    }
     private fun receiveStateWorkout(variablesOut: VariablesOutService){
         viewModelScope.launch(Dispatchers.IO) {
             variablesOut.stateRunning.collect{
                 _playWorkoutScreenState.update { screenState ->
-                    screenState.copy(switchState = mutableStateOf(it))
-                }
+                    screenState.copy(switchState = mutableStateOf(it)) }
                 if (it == StateRunning.Stopped) stopWorkOutService()
             }
         }
@@ -89,18 +94,13 @@ class PlayWorkoutViewModel @Inject constructor(
                 _playWorkoutScreenState.update { currentState -> currentState.copy( tickTime = tick )}}
         }
         viewModelScope.launch(Dispatchers.IO) {
-            variablesOut.durationSpeech.collect { duration -> dataRepository.updateDuration(duration)}
+            variablesOut.durationSpeech.collect { duration ->
+                dataRepository.updateDuration(duration)}
         }
         viewModelScope.launch(Dispatchers.IO) {
             variablesOut.messageList.collect { state ->
                 _playWorkoutScreenState.update { screenState ->
                     screenState.copy( statesWorkout = mutableStateOf( state )) }
-                if (state.isNotEmpty()) {
-                    if (state.last().time != null && _playWorkoutScreenState.value.startTime == 0L){
-                        _playWorkoutScreenState.update { screenState ->
-                            screenState.copy(startTime = state.last().time!!) }
-                    }
-                }
             }
         }
     }

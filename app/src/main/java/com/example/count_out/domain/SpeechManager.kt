@@ -57,8 +57,9 @@ class SpeechManager(val context: Context) {
             variablesOut.addMessage(speechText)
             speakOutAdd(speechText)
             while (speeching.value || variablesOut.stateRunning.value == StateRunning.Pause) { }
-            if( speech.duration == 0L && speech.idSpeech > 0 && duration > 0 )
+            if( speech.duration == 0L && speech.idSpeech > 0 && duration > 0 ){
                 variablesOut.durationSpeech.value = speech.idSpeech to duration
+            }
         }
         return durationEnd
     }
