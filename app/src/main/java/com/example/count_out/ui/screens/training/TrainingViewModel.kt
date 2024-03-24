@@ -10,6 +10,7 @@ import com.example.count_out.entity.ErrorApp
 import com.example.count_out.entity.Set
 import com.example.count_out.entity.SpeechKit
 import com.example.count_out.entity.Training
+import com.example.count_out.ui.view_components.lg
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -44,10 +45,17 @@ class TrainingViewModel @Inject constructor(
             onDeleteSet = { trainingId, setId -> deleteSet(trainingId, setId)},
             onAddUpdateSet = { idExercise, set -> addUpdateSet(idExercise, set) },
             onChangeSet = { set -> addUpdateSet(set.exerciseId, set) },
+            onLongClick = { enableDrag -> onLongClick(enableDrag)}
         )
     )
     val trainingScreenState: StateFlow<TrainingScreenState> = _trainingScreenState.asStateFlow()
-
+    private fun onLongClick(enableDrag: Boolean) {
+        viewModelScope.launch(Dispatchers.IO) {
+            lg("TrainingViewModel enableDrag: $enableDrag")
+            _trainingScreenState.update { currentState ->
+                currentState.copy(enableDrag = mutableStateOf(enableDrag)) }
+        }
+    }
     fun getTraining(id: Long) {
         viewModelScope.launch(Dispatchers.IO) {
             kotlin.runCatching { dataRepository.getActivities() }.fold(

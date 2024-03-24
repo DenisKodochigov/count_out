@@ -64,18 +64,6 @@ class PlayWorkoutViewModel @Inject constructor(
             )
         }
     }
-//    private fun setStartTime(){
-//        viewModelScope.launch(Dispatchers.IO) {
-//            kotlin.runCatching { serviceManager.getStartTime() }.fold(
-//                onSuccess = { startTime ->
-//                    _playWorkoutScreenState.update { screenState ->
-//                        screenState.copy(startTime =  startTime) } },
-//                onFailure = { errorApp.errorApi(it.message!!) }
-//            )
-//            _playWorkoutScreenState.update { screenState ->
-//                screenState.copy(startTime =  System.currentTimeMillis()) }
-//        }
-//    }
     private fun receiveStateWorkout(variablesOut: VariablesOutService){
         viewModelScope.launch(Dispatchers.IO) {
             variablesOut.stateRunning.collect{

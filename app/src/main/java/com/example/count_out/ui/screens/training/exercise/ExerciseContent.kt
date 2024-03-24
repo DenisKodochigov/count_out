@@ -44,9 +44,11 @@ fun ListExercises(uiState: TrainingScreenState, roundType: RoundType, showExerci
         items = listExercise,
         modifier = Modifier,
         showList = showExercises,
+        enableDrag = uiState.enableDrag,
         viewItem = { item -> ElementColum( item, modifier = Modifier, uiState = uiState) },
         onMoveItem = { from, to-> log(true, "from: $from; to: $to")
-            uiState.changeSequenceExercise( uiState.training.idTraining, roundId, from, to )}
+            uiState.changeSequenceExercise( uiState.training.idTraining, roundId, from, to )},
+        onLongClick = { uiState.onLongClick ( it ) }
     )
 }
 @Composable

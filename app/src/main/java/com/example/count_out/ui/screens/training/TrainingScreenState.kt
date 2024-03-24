@@ -27,6 +27,7 @@ data class TrainingScreenState(
     val workOutCollapsing: MutableState<Boolean> = mutableStateOf(true),
     val workDownCollapsing: MutableState<Boolean> = mutableStateOf(true),
     val durationRound: MutableState<Double> = mutableDoubleStateOf(0.0),
+    val enableDrag: MutableState<Boolean> = mutableStateOf(false),
 
     val nameTraining: String = "",
     val nameRound: String = "",
@@ -48,6 +49,7 @@ data class TrainingScreenState(
     @Stable var onAddUpdateSet: (Long, Set) -> Unit = { _, _ ->},
     @Stable var onDeleteSet: (Long, Long) -> Unit = {_,_ ->},
     @Stable var onChangeSet: (Set) -> Unit = {},
+    @Stable var onLongClick: (Boolean) -> Unit = {},
 
     @Stable val listCollapsingSet: MutableState<List<Long>> = mutableStateOf(emptyList()),
     @Stable val listCollapsingExercise: MutableState<List<Long>> = mutableStateOf(emptyList()),

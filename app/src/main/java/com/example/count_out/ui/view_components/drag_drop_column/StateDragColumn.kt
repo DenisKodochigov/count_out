@@ -8,6 +8,7 @@ import kotlin.math.round
 @Singleton
 data class StateDragColumn(
     val indexItem: Int = 0,
+    var offsetBegin: Float = 0f,
     var offset: Float = 0f,
     val heightList: Float = 1f,
     val sizeList: Int = 0,
@@ -18,7 +19,7 @@ data class StateDragColumn(
     private val heightItem = if (heightList > 0 && sizeList > 0) (heightList / sizeList) else 0f
     fun onStartDrag() {
         if (heightList > 0 && sizeList > 0) {
-            offset = indexItem * heightItem
+            offsetBegin = indexItem * heightItem
             maxOffsetDown = heightList
         } else {
 //            log(true, "onStartDrag heightList:$heightList; sizeList:$sizeList")
@@ -30,9 +31,10 @@ data class StateDragColumn(
         onMoveItem( indexItem, moveToIndex )
     }
     suspend fun shiftItem( delta: Float){
-        if ((offset + shift.value + delta) in maxOffsetUp..maxOffsetDown) {
-            shift.snapTo(shift.value + delta)
-            shift.value.plus(delta)
+        offset += delta
+        if ((offsetBegin + shift.value + offset) in maxOffsetUp..maxOffsetDown) {
+            shift.snapTo(shift.value + offset)
+            shift.value.plus(offset)
         }
 //        log(true, "offset: $offset; shift.value: ${shift.value}; shiftItem: $delta; ")
     }

@@ -79,7 +79,7 @@ dependencies {
     implementation ("androidx.compose.ui:ui:$composeVersion")
     implementation("com.google.accompanist:accompanist-permissions:0.34.0")
     debugImplementation("androidx.compose.ui:ui-tooling")
-    debugImplementation("androidx.compose.ui:ui-test-manifest:1.6.3")
+    debugImplementation("androidx.compose.ui:ui-test-manifest:1.6.4")
     //Tooling support (Previews, etc.)
     implementation ("androidx.compose.ui:ui-graphics:$composeVersion")
     implementation ("androidx.compose.ui:ui-tooling-preview:$composeVersion")
@@ -93,7 +93,7 @@ dependencies {
     implementation ("androidx.compose.foundation:foundation-layout:$composeVersion")
     // Material Design
     implementation("androidx.compose.material3:material3:1.2.1")
-    implementation ("androidx.compose.ui:ui-text-google-fonts:1.6.3")
+    implementation ("androidx.compose.ui:ui-text-google-fonts:1.6.4")
     implementation ("androidx.compose.material:material-icons-core:$composeVersion")
     implementation ("androidx.compose.material:material-icons-extended:$composeVersion")
     //Adaptive

@@ -111,8 +111,8 @@ class DatabaseModule {
             description = "Руки опущены вдоль тела. Разведите руки в стороны. Сведите перед собой с изменением оси гантелей с горизонтального в вертикальное положение. Опустите руки в исходное положение."))
 
         createSetting(db)
-        createTrainingPlansTesting(db)
-//        createTrainingPlansReal(db)
+//        createTrainingPlansTesting(db)
+        createTrainingPlansReal(db)
     }
 
     private fun createSetting( db: AppDatabase){
