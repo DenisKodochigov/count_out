@@ -84,7 +84,7 @@ fun BottomSheetSpeechContent(uiState: BottomSheetState)
     Column( horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier.padding(Dimen.bsItemPaddingHor)
     ) {
-        SelectOtherSpeech(uiState)
+//        SelectOtherSpeech(uiState)
         Spacer(Modifier.height(Dimen.bsSpacerHeight))
         FieldTextForSpeech( enterValue = uiState.enteredBeforeStart,
             nameSection = stringResource(id = R.string.message_before_start) + " " + uiState.nameSection)
@@ -122,9 +122,9 @@ fun BottomSheetSpeechContent(uiState: BottomSheetState)
             modifier = Modifier.padding(start = Dimen.bsItemPaddingHor))
     }
 }
-@Composable fun SelectOtherSpeech(uiState: BottomSheetState){
-
-}
+//@Composable fun SelectOtherSpeech(uiState: BottomSheetState){
+//
+//}
 @Composable
 fun ButtonOK(uiState: BottomSheetState)
 {

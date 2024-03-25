@@ -58,7 +58,6 @@ import com.example.count_out.ui.theme.interLight12
 import com.example.count_out.ui.theme.interReg12
 import com.example.count_out.ui.theme.styleApp
 
-
 @Composable fun MyOutlinedTextFieldWithoutIcon(
     modifier: Modifier,
     enterValue: MutableState<String>,
@@ -164,7 +163,7 @@ import com.example.count_out.ui.theme.styleApp
 @Composable fun TextFieldApp(
     modifier: Modifier = Modifier,
     typeKeyboard: TypeKeyboard,
-    textStyle:TextStyle ,
+    textStyle: TextStyle,
     contentAlignment:Alignment = Alignment.BottomCenter,
     placeholder: String = "",
     showLine: Boolean = true,

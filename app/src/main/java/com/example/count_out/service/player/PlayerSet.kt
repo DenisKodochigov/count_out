@@ -38,7 +38,7 @@ class PlayerSet @Inject constructor(val speechManager:SpeechManager)
         when (template.getSet().goal){
             GoalSet.COUNT -> playSetCount(template, variablesOut)
             GoalSet.DURATION -> playSetDURATION(template, variablesOut)
-            GoalSet.DESTINATION -> playSetDESTINATION(template, variablesOut)
+            GoalSet.DESTINATION -> {} // playSetDESTINATION(template, variablesOut)
         }
     }
     private suspend fun playSetCount(
@@ -58,12 +58,12 @@ class PlayerSet @Inject constructor(val speechManager:SpeechManager)
     ){
         delayMy((template.getSet().duration * 60 * 1000).toLong(), variablesOut.stateRunning)
     }
-    private suspend fun playSetDESTINATION(
-        template: VariablesInService,
-        variablesOut: VariablesOutService,
-    ){
-
-    }
+//    private suspend fun playSetDESTINATION(
+//        template: VariablesInService,
+//        variablesOut: VariablesOutService,
+//    ){
+//
+//    }
 
     private fun textBeforeSet(template: VariablesInService,): String{
         return when (template.getSet().goal){

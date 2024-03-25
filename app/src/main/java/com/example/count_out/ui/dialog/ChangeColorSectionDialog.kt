@@ -20,7 +20,6 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.Divider
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
@@ -193,9 +192,8 @@ fun ChangeColorSectionLayout(color: MutableState<Int>)
         if( enable ) { if (direction == UPDOWN.START) ArrowLeft() else ArrowRight()}
         else ArrowNoneHor()
         if (direction == UPDOWN.END && drawLine){
-            Divider(color = colorApp.primary, modifier = Modifier
-                .fillMaxHeight()
-                .width(1.dp))
+            HorizontalDivider(modifier =
+                Modifier.fillMaxHeight().width(1.dp), color = colorApp.primary)
         }
     }
 }

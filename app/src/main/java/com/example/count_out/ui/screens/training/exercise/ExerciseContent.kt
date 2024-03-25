@@ -31,7 +31,7 @@ import com.example.count_out.ui.view_components.IconAddItem
 import com.example.count_out.ui.view_components.IconSelectActivity
 import com.example.count_out.ui.view_components.IconsCollapsingCopySpeechDel
 import com.example.count_out.ui.view_components.TextApp
-import com.example.count_out.ui.view_components.drag_drop_column.ColumnDragDrop
+import com.example.count_out.ui.view_components.drag_drop_column.ColumnDD
 import com.example.count_out.ui.view_components.log
 
 @Composable
@@ -40,20 +40,21 @@ fun ListExercises(uiState: TrainingScreenState, roundType: RoundType, showExerci
     val listExercise = uiState.training.rounds.find { it.roundType == roundType }?.exercise ?: emptyList()
     val roundId = if (listExercise.isNotEmpty()) listExercise[0].roundId else 0
 
-    ColumnDragDrop(
+    ColumnDD(
         items = listExercise,
         modifier = Modifier,
         showList = showExercises,
-        enableDrag = uiState.enableDrag,
-        viewItem = { item -> ElementColum( item, modifier = Modifier, uiState = uiState) },
+        viewItem = { item -> ElementColum( item, uiState = uiState) },
         onMoveItem = { from, to-> log(true, "from: $from; to: $to")
             uiState.changeSequenceExercise( uiState.training.idTraining, roundId, from, to )},
-        onLongClick = { uiState.onLongClick ( it ) }
     )
 }
 @Composable
-fun <T>ElementColum (item:T, modifier: Modifier = Modifier, uiState: TrainingScreenState,){
-    Card( elevation = elevationTraining(), shape = MaterialTheme.shapes.extraSmall, modifier = modifier
+fun <T>ElementColum (item:T, uiState: TrainingScreenState,){
+    Card(
+        elevation = elevationTraining(),
+        shape = MaterialTheme.shapes.extraSmall,
+        modifier = Modifier
     ){
         Column {
             SelectActivity(uiState, item as Exercise)
@@ -90,7 +91,8 @@ fun SelectActivity(uiState: TrainingScreenState, exercise: Exercise)
     }
 }
 
-@Composable fun BodyExercise(uiState: TrainingScreenState, exercise: Exercise){
+@Composable
+fun BodyExercise(uiState: TrainingScreenState, exercise: Exercise){
     Column(
         modifier = Modifier
     ){
@@ -125,7 +127,8 @@ fun ListSets(uiState: TrainingScreenState)
         Spacer(modifier = Modifier.height(1.dp))
     }
 }
-@Composable fun RowAddSet(uiState: TrainingScreenState, exercise: Exercise)
+@Composable
+fun RowAddSet(uiState: TrainingScreenState, exercise: Exercise)
 {
     Row (horizontalArrangement = Arrangement.End, modifier = Modifier.fillMaxWidth()){
         val nameNewSet = stringResource(id = R.string.set) + " ${exercise.sets.size + 1}"

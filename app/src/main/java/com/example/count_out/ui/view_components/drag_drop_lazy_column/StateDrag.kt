@@ -3,7 +3,7 @@ package com.example.count_out.ui.view_components.drag_drop_lazy_column
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.AnimationVector1D
 import androidx.compose.foundation.lazy.LazyListState
-import com.example.count_out.ui.view_components.log
+import com.example.count_out.ui.view_components.lg
 import javax.inject.Singleton
 
 @Singleton
