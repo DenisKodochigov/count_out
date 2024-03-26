@@ -11,11 +11,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.onGloballyPositioned
@@ -23,7 +20,6 @@ import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import com.example.count_out.ui.view_components.lg
 import kotlinx.coroutines.launch
-import kotlin.math.roundToInt
 
 @Composable
 fun <T>ColumnDD(
@@ -34,41 +30,22 @@ fun <T>ColumnDD(
     onMoveItem: (Int, Int) -> Unit = {_,_->},
     onClickItem: (Int) -> Unit = {},
 ){
-    var heightList by remember { mutableIntStateOf(0) }
-    val stateDrag = StateDragColumn( )
-    val coroutineScope = rememberCoroutineScope()
-
-    Column( modifier = Modifier
-        .onGloballyPositioned { heightList = it.size.height }
+    var heightList = 0
+    Column( modifier = Modifier.onGloballyPositioned { heightList = it.size.height }
     ) {
-        stateDrag.heightList = heightList.toFloat()
-        stateDrag.sizeList = items.size
         items.forEachIndexed { index, item ->
             AnimatedVisibility(
                 visible = showList,
                 modifier = modifier
-                    .padding(top = 8.dp)
-                    .pointerInput(Unit) {
-                        detectDragGesturesAfterLongPress(
-                            onDrag = { change, offset ->
-                                change.consume()
-//                            lg("onDrag offsetY: ${offset.y}")
-//                            stateDrag.shiftItem(offset.y)
-                                coroutineScope.launch { stateDrag.shiftItem(offset.y, index) }
-                            },
-                            onDragStart = { stateDrag.onStartDrag(index) },
-                            onDragEnd = {  },
-                            onDragCancel = {
-                                lg("onDragCancel ")
-                                coroutineScope.launch { stateDrag.onStopDrag(index,onMoveItem) } }
-                        )
-                    },
+                    .padding(top = 8.dp),
                 content = {
                     ItemDD(
                         frontFon = { viewItem( item ) },
                         indexItem = index,
-                        offsetY = stateDrag.shift.value.roundToInt(),
+                        heightList = heightList,
+                        size = items.size,
                         onClickItem = onClickItem,
+                        onMoveItem = onMoveItem
                     )
                 }
             )
@@ -80,18 +57,37 @@ fun <T>ColumnDD(
 @Composable
 fun ItemDD(
     indexItem: Int,
-    offsetY: Int,
+    heightList: Int = 0,
+    size: Int = 0,
     frontFon:@Composable () -> Unit,
+    onMoveItem: (Int, Int) -> Unit = {_,_->},
     onClickItem: (Int) -> Unit,
 ){
+    val stateDrag = remember { StateDragColumn( heightList = heightList.toFloat(), sizeList = size) }
+    val coroutineScope = rememberCoroutineScope()
+    lg("heightList $heightList, stateDrag $stateDrag")
+
     Box(modifier = Modifier.fillMaxWidth()
     ){
 //        if (enableDrag.value) lg("RowItem $indexItem ")
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .offset { IntOffset(0, offsetY) }
+                .offset { IntOffset(0, stateDrag.itemOffset()) }
                 .clickable { onClickItem(indexItem) }
+                .pointerInput(Unit) {
+                    detectDragGesturesAfterLongPress(
+                        onDrag = { change, offset ->
+                            change.consume()
+                            coroutineScope.launch { stateDrag.shiftItem(offset.y) }
+                        },
+                        onDragStart = { stateDrag.onStartDrag(indexItem) },
+                        onDragEnd = { },
+                        onDragCancel = {
+                            coroutineScope.launch { stateDrag.onStopDrag(indexItem, onMoveItem) }
+                        }
+                    )
+                },
         ){
             frontFon( )
         }

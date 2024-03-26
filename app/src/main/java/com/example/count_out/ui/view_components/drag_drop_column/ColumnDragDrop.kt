@@ -1,5 +1,5 @@
-//package com.example.count_out.ui.view_components.drag_drop_column
-//
+package com.example.count_out.ui.view_components.drag_drop_column
+
 //import android.annotation.SuppressLint
 //import androidx.compose.animation.AnimatedVisibility
 //import androidx.compose.foundation.ExperimentalFoundationApi
