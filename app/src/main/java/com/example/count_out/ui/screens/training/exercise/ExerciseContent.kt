@@ -32,7 +32,7 @@ import com.example.count_out.ui.view_components.IconSelectActivity
 import com.example.count_out.ui.view_components.IconsCollapsingCopySpeechDel
 import com.example.count_out.ui.view_components.TextApp
 import com.example.count_out.ui.view_components.drag_drop_column.ColumnDD
-import com.example.count_out.ui.view_components.log
+import com.example.count_out.ui.view_components.lg
 
 @Composable
 fun ListExercises(uiState: TrainingScreenState, roundType: RoundType, showExercises: Boolean)
@@ -45,7 +45,7 @@ fun ListExercises(uiState: TrainingScreenState, roundType: RoundType, showExerci
         modifier = Modifier,
         showList = showExercises,
         viewItem = { item -> ElementColum( item, uiState = uiState) },
-        onMoveItem = { from, to-> log(true, "from: $from; to: $to")
+        onMoveItem = { from, to-> lg("from: $from; to: $to")
             uiState.changeSequenceExercise( uiState.training.idTraining, roundId, from, to )},
     )
 }

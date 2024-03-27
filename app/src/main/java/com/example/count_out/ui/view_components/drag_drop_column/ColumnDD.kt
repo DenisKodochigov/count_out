@@ -11,15 +11,16 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
-import com.example.count_out.ui.view_components.lg
-import kotlinx.coroutines.launch
+import com.example.count_out.domain.vibrate
 
 @Composable
 fun <T>ColumnDD(
@@ -30,14 +31,13 @@ fun <T>ColumnDD(
     onMoveItem: (Int, Int) -> Unit = {_,_->},
     onClickItem: (Int) -> Unit = {},
 ){
-    var heightList = 0
-    Column( modifier = Modifier.onGloballyPositioned { heightList = it.size.height }
+    val heightList: MutableState<Int> = remember { mutableIntStateOf(0) }
+    Column(modifier = Modifier.onGloballyPositioned { heightList.value = it.size.height }
     ) {
         items.forEachIndexed { index, item ->
             AnimatedVisibility(
                 visible = showList,
-                modifier = modifier
-                    .padding(top = 8.dp),
+                modifier = modifier.padding(top = 8.dp),
                 content = {
                     ItemDD(
                         frontFon = { viewItem( item ) },
@@ -53,23 +53,20 @@ fun <T>ColumnDD(
     }
 }
 
-@SuppressLint("UnrememberedMutableState")
+@SuppressLint("UnrememberedMutableState", "UnnecessaryComposedModifier")
 @Composable
 fun ItemDD(
     indexItem: Int,
-    heightList: Int = 0,
+    heightList: MutableState<Int>,
     size: Int = 0,
     frontFon:@Composable () -> Unit,
     onMoveItem: (Int, Int) -> Unit = {_,_->},
     onClickItem: (Int) -> Unit,
 ){
-    val stateDrag = remember { StateDragColumn( heightList = heightList.toFloat(), sizeList = size) }
-    val coroutineScope = rememberCoroutineScope()
-    lg("heightList $heightList, stateDrag $stateDrag")
-
+    val stateDrag =  rememberStateDragColumn( heightList = heightList, sizeList = size)
+    val context = LocalContext.current
     Box(modifier = Modifier.fillMaxWidth()
     ){
-//        if (enableDrag.value) lg("RowItem $indexItem ")
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -79,17 +76,24 @@ fun ItemDD(
                     detectDragGesturesAfterLongPress(
                         onDrag = { change, offset ->
                             change.consume()
-                            coroutineScope.launch { stateDrag.shiftItem(offset.y) }
+                            stateDrag.shiftItem(offset.y)
                         },
-                        onDragStart = { stateDrag.onStartDrag(indexItem) },
-                        onDragEnd = { },
-                        onDragCancel = {
-                            coroutineScope.launch { stateDrag.onStopDrag(indexItem, onMoveItem) }
-                        }
+                        onDragStart = {
+                            vibrate(context)
+                            stateDrag.onStartDrag(indexItem) },
+                        onDragEnd = { stateDrag.onStopDrag(indexItem, onMoveItem) },
+                        onDragCancel = {}
                     )
                 },
         ){
             frontFon( )
         }
     }
+}
+@Composable
+fun rememberStateDragColumn(
+    heightList: MutableState<Int>,
+    sizeList: Int,
+): StateDragColumn {
+    return remember { StateDragColumn(heightList = heightList, sizeList = sizeList) }
 }

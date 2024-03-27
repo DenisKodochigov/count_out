@@ -51,8 +51,7 @@ fun DragDropList(
                     onDrag = { change, offset ->
                         change.consume()
                         dragDropListState.onDrag(offset)
-                        if (overscrollJob?.isActive == true)
-                            return@detectDragGesturesAfterLongPress
+                        if (overscrollJob?.isActive == true) return@detectDragGesturesAfterLongPress
                         dragDropListState.checkForOverScroll()
                             .takeIf { it != 0f }
                             ?.let { overscrollJob = scope.launch { dragDropListState.lazyListState.scrollBy(it) } }

@@ -44,7 +44,6 @@ fun TrainingScreen(
     LaunchedEffect(true){ viewModel.getTraining(trainingId) }
     TrainingScreenCreateView( viewModel = viewModel, onBaskScreen = onBaskScreen )
 }
-
 @SuppressLint("StateFlowValueCalledInComposition")
 @Composable
 fun TrainingScreenCreateView(

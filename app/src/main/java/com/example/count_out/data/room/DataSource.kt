@@ -72,11 +72,15 @@ class DataSource @Inject constructor(private val dataDao: DataDao) {
         val round = dataDao.getRound(roundId)
         val listExercise = round.sequenceExercise.split(",")
         val fromItem = listExercise[from]
-        val toItem = listExercise[to]
         val replaceItem = if (from == listExercise.size - 1) ",$fromItem" else "$fromItem,"
 
-        round.sequenceExercise = round.sequenceExercise.replace(replaceItem, "").let {
-            it.substringBefore(toItem) + toItem + "," + fromItem  + it.substringAfter(toItem)
+        round.sequenceExercise = if (to >= listExercise.size - 1){
+            round.sequenceExercise.replace(replaceItem, "").let { "$it,$fromItem" }
+        } else {
+            val toItem = listExercise[to]
+            round.sequenceExercise.replace(replaceItem, "").let {
+                it.substringBefore(toItem) + "$fromItem,$toItem" + it.substringAfter(toItem)
+            }
         }
         dataDao.updateRound(round)
     }
@@ -88,9 +92,8 @@ class DataSource @Inject constructor(private val dataDao: DataDao) {
     fun addExercise( roundId:Long, set: SetDB): Exercise {
         val exercise = createExercise( roundId , set)
         val round = getRound(roundId)
-        round.sequenceExercise = round.sequenceExercise + ", ${exercise.idExercise}"
+        round.sequenceExercise += ", ${exercise.idExercise}"
         dataDao.updateRound(round)
-//        log(true, "round.sequenceExercise ${round.sequenceExercise}")
         return exercise
     }
     fun copyExercise ( exerciseId: Long) {
