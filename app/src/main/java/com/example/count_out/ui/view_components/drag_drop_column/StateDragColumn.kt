@@ -13,17 +13,23 @@ data class StateDragColumn(
 ) {
     private var offsetBegin: Float = 0f
     private var offsetY: MutableState<Float> = mutableFloatStateOf(0f)
+    private var offsetZ: MutableState<Float> = mutableFloatStateOf(0f)
     private var heightItem: Int = 0
 
     fun onStartDrag( indexItem: Int) {
         if (heightList.value > 0 && sizeList > 0) {
             heightItem = round((heightList.value / sizeList).toDouble()).toInt()
             offsetBegin = (indexItem * heightItem).toFloat()
+            offsetZ.value = 1.0f
+//            lg("onStartDrag heightList=${heightList.value}; sizeList: $sizeList")
         }
     }
     fun onStopDrag( indexItem: Int, onMoveItem: (Int, Int) -> Unit){
-        onMoveItem( indexItem, indexItem + roundMy(offsetY.value / heightItem) )
+        val indexTo = indexItem + roundMy(offsetY.value / heightItem)
+        if (indexTo != indexItem) onMoveItem( indexItem, indexTo )
         offsetY.value =0f
+        offsetZ.value = 0.0f
+//        lg("onStopDrag offsetZ=${offsetY.value}")
     }
     private fun roundMy( value: Float): Int{
         return if (value > 0) {
@@ -37,9 +43,9 @@ data class StateDragColumn(
     fun shiftItem(delta: Float){
         if ((offsetBegin + offsetY.value + delta) in 0f..(heightList.value - heightItem/2).toFloat()) {
             offsetY.value += delta
+//            lg("shiftItem offsetZ=${offsetY.value}")
         }
     }
-    fun itemOffset(): Int{
-        return offsetY.value.toInt()
-    }
+    fun itemOffset() = offsetY.value.toInt()
+    fun itemZ() = offsetZ.value
 }

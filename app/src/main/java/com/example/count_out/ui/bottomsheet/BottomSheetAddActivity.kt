@@ -19,6 +19,7 @@ import com.example.count_out.ui.joint.active_view.ActivityValueFull
 import com.example.count_out.ui.screens.settings.SettingScreenState
 import com.example.count_out.ui.theme.Dimen
 import com.example.count_out.ui.theme.shapesApp
+import com.example.count_out.ui.view_components.lg
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -42,6 +43,7 @@ fun BottomSheetAddActivity(uiState: SettingScreenState)
 @Composable
 fun BottomSheetAddActivityContent(uiState: SettingScreenState)
 {
+    lg("BottomSheetAddActivityContent")
     Column( horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier
             .fillMaxWidth()

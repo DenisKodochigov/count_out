@@ -39,14 +39,14 @@ class SettingViewModel @Inject constructor(
         templateMy{dataRepository.getActivities()} }
 
     private fun onAddActivity(activity: Activity){
-        log(true, "onAddActivity: $this")
         templateMy{ dataRepository.onAddActivity(activity) } }
+
     private fun onUpdateActivity(activity: Activity){
-        log(true, "onUpdateActivity: $this")
         templateMy{ dataRepository.onUpdateActivity(activity) } }
+
     private fun onDeleteActivity(activityId: Long){
-        log(true, "onDeleteActivity: $this")
         templateMy{ dataRepository.onDeleteActivity(activityId) } }
+
     private fun onSetColorActivityForSettings(activityId: Long, color: Int){
         log(true, "onSetColorActivityForSettings: $this")
         templateMy{ dataRepository.onSetColorActivityForSettings(activityId, color) } }

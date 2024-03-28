@@ -1,6 +1,7 @@
 package com.example.count_out.ui.joint.active_view
 
 import android.annotation.SuppressLint
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -81,9 +82,9 @@ fun ActivityValueShort(
         )
     }
     Row( modifier = Modifier
-        .padding( start = 12.dp)
-        .clickable { onSelect() }
-        .fillMaxWidth(),
+            .padding( start = 12.dp)
+            .clickable { onSelect() }
+            .fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Start
     ){
