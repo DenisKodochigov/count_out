@@ -34,32 +34,29 @@ fun ItemDrop(
     onClickItem: (Int) -> Unit,
 ){
     val enableDrag = remember { mutableStateOf(false) }
-    val coroutineScope = rememberCoroutineScope()
+    val scope = rememberCoroutineScope()
     val stateDrag by remember{ mutableStateOf(StateDrag(indexItem = indexItem, lazyState = lazyState))}
 
     Box(modifier = Modifier.fillMaxWidth()
     ){
         BackFon( modifier = Modifier.align(alignment = Alignment.Center))
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .offset { IntOffset(0, stateDrag.shift.value.roundToInt()) }
-                .combinedClickable(
-                    onClick = { onClickItem( indexItem ) },
-                    onLongClick = { enableDrag.value = true },
-                )
-                .draggable(
-                    enabled = enableDrag.value,
-                    state = rememberDraggableState { delta ->
-                        coroutineScope.launch { stateDrag.shiftItem(delta) }
-                    },
-                    orientation = Orientation.Vertical,
-                    onDragStarted = { stateDrag.onStartDrag() },
-                    onDragStopped = {
-                        enableDrag.value = false
-                        coroutineScope.launch { stateDrag.onStopDrag(onMoveItem) }
-                    }
-                )
+        Row(modifier = Modifier
+            .fillMaxWidth()
+            .offset { IntOffset(0, stateDrag.shift.value.roundToInt()) }
+            .combinedClickable(
+                onClick = { onClickItem( indexItem ) },
+                onLongClick = { enableDrag.value = true },
+            )
+            .draggable(
+                enabled = enableDrag.value,
+                state = rememberDraggableState { scope.launch { stateDrag.shiftItem(it) } },
+                orientation = Orientation.Vertical,
+                onDragStarted = { stateDrag.onStartDrag() },
+                onDragStopped = {
+                    enableDrag.value = false
+                    scope.launch { stateDrag.onStopDrag(onMoveItem) }
+                }
+            )
         ){
             frontFon()
         }
