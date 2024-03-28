@@ -55,7 +55,7 @@ fun PlayWorkoutScreenCreateView( viewModel: PlayWorkoutViewModel, onBaskScreen:(
 
 @Composable fun PlayWorkoutScreenLayout( uiState: PlayWorkoutScreenState
 ){
-    Box() {
+    Box {
         Column(
             modifier = Modifier.fillMaxSize(),
             content = { PlayWorkoutScreenLayoutContent(uiState)}
