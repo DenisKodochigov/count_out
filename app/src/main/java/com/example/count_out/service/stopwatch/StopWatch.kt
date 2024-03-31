@@ -11,7 +11,7 @@ import kotlin.time.Duration.Companion.seconds
 
 class StopWatch {
     private var duration: Duration = Duration.ZERO
-    private lateinit var timer: Timer
+    private var timer: Timer = Timer()
 
     fun onStart(pause: MutableStateFlow<StateRunning>,onTick: (TickTime) -> Unit) {
         timer = fixedRateTimer(initialDelay = 1000L, period = 1000L) {

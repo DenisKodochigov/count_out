@@ -34,7 +34,7 @@ class WorkoutService @Inject constructor(): Service(), WorkOutAPI
     @Inject lateinit var stopWatch: StopWatch
     @Inject lateinit var notificationHelper: NotificationHelper
     @Inject lateinit var playerWorkOut: PlayerWorkOut
-    private lateinit var coroutineSpeech: CoroutineScope
+    private lateinit var scopeSpeech: CoroutineScope
 
     inner class WorkoutServiceBinder : Binder() { fun getService(): WorkoutService = this@WorkoutService }
     override fun onBind(p0: Intent?): IBinder = WorkoutServiceBinder()
@@ -53,8 +53,8 @@ class WorkoutService @Inject constructor(): Service(), WorkOutAPI
         }
         else if (variablesOut.stateRunning.value == StateRunning.Stopped) {
             startForegroundService()
+            scopeSpeech = CoroutineScope(Dispatchers.Default)
             notificationHelper.setPauseButton(this)
-            coroutineSpeech = CoroutineScope(Dispatchers.Default)
             stopWatch.onStart(variablesOut.stateRunning) { countTime -> sendCountTime(countTime) }
             playTraining()
         }
@@ -69,7 +69,7 @@ class WorkoutService @Inject constructor(): Service(), WorkOutAPI
         stopForeground(STOP_FOREGROUND_REMOVE)
         notificationHelper.cancel()
         stopWatch.onStop()
-        coroutineSpeech.cancel()
+        scopeSpeech.cancel()
         variablesOut.cancel()
         variablesOut.startTime = 0L
     }
@@ -78,7 +78,7 @@ class WorkoutService @Inject constructor(): Service(), WorkOutAPI
         variablesOut.flowTick.value = tick
     }
     private fun playTraining() {
-        coroutineSpeech.launch { playerWorkOut.playingWorkOut(variablesIn, variablesOut) }
+        scopeSpeech.launch { playerWorkOut.playingWorkOut(variablesIn, variablesOut) }
     }
     private fun startForegroundService() {
         if (!notificationHelper.channelExist()) notificationHelper.createChannel()

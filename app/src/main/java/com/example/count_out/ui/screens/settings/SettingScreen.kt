@@ -2,8 +2,6 @@ package com.example.count_out.ui.screens.settings
 
 import android.annotation.SuppressLint
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.ExperimentalAnimationApi
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -30,12 +28,10 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.zIndex
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.count_out.R
 import com.example.count_out.data.room.tables.ActivityDB
@@ -67,7 +63,6 @@ import com.example.count_out.ui.view_components.TextApp
     SettingScreenLayout( uiState = uiState.value)
     if (uiState.value.showBottomSheetAddActivity.value) BottomSheetAddActivity(uiState.value)
 }
-@OptIn(ExperimentalAnimationApi::class)
 @SuppressLint("UnrememberedMutableState")
 @Composable fun SettingScreenLayout(uiState: SettingScreenState
 ){
@@ -152,7 +147,6 @@ import com.example.count_out.ui.view_components.TextApp
         Spacer(modifier = Modifier.height(4.dp))
     }
 }
-@OptIn(ExperimentalAnimationApi::class)
 @Composable fun SectionBottom(uiState: SettingScreenState){
     Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.fillMaxWidth())
     {
@@ -198,9 +192,3 @@ import com.example.count_out.ui.view_components.TextApp
     }
 }
 
-@Composable fun povedenieZ(){
-    Box {
-        Row(modifier = Modifier.size(65.dp).background(color = Color.LightGray ).zIndex(0.0f)) {}
-        Row(modifier = Modifier.size(50.dp).background(color = Color.Gray ).zIndex(0f)) {}
-    }
-}

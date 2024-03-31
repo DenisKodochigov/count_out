@@ -52,7 +52,7 @@ class SpeechManager(val context: Context) {
     }
     fun speech( variablesOut: VariablesOutService, speech: Speech, ): Long
     {
-        val speechText = speech.message + speech.addMessage
+        val speechText = speech.message + " " + speech.addMessage
         if ((speechText).length > 1) {
             variablesOut.addMessage(speechText)
             speakOutAdd(speechText)
