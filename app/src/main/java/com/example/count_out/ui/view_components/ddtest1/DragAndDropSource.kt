@@ -48,25 +48,20 @@ import androidx.compose.ui.unit.dp
         textAlign = TextAlign.Center,
         text = "Hold me to drag and drop"
     )
-    val enteredIndex = remember {
-        mutableIntStateOf(-1)
-    }
+    val enteredIndex = remember { mutableIntStateOf(-1) }
 
     LazyColumn {
         items(50) {
             Text(
                 modifier = Modifier
                     .then(
-                        if (enteredIndex.intValue == it) {
-                            Modifier.background(Color.White)
+                        if (enteredIndex.intValue == it) { Modifier.background(Color.White)
                         } else Modifier.background(Color.Cyan)
                     )
                     .fillMaxWidth()
                     .height(80.dp)
                     .dragAndDropTarget(
-                        shouldStartDragAndDrop = {
-                            true
-                        },
+                        shouldStartDragAndDrop = { true },
                         target = object : DragAndDropTarget {
                             override fun onDrop(event: DragAndDropEvent): Boolean {
                                 enteredIndex.intValue = -1

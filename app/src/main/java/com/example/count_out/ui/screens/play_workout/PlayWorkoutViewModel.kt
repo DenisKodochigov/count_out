@@ -21,6 +21,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+
 @HiltViewModel
 class PlayWorkoutViewModel @Inject constructor(
     private val errorApp: ErrorApp,
@@ -36,7 +37,7 @@ class PlayWorkoutViewModel @Inject constructor(
         ))
     val playWorkoutScreenState: StateFlow<PlayWorkoutScreenState> = _playWorkoutScreenState.asStateFlow()
 
-    val variablesInService = VariablesInService()
+    private val variablesInService = VariablesInService()
     init {
         viewModelScope.launch(Dispatchers.IO) {
             kotlin.runCatching { serviceManager.connectingToService(variablesInService) }.fold(
@@ -57,6 +58,7 @@ class PlayWorkoutViewModel @Inject constructor(
                 variablesInService.stateRunning = MutableStateFlow(StateRunning.Started)
                 variablesInService.enableSpeechDescription =
                     MutableStateFlow(dataRepository.getSetting(R.string.speech_description).value == 1)
+//                lg("PlayWorkoutViewModel.startWorkOutService")
                 serviceManager.startWorkout()
             }.fold(
                 onSuccess = {  },
@@ -69,12 +71,16 @@ class PlayWorkoutViewModel @Inject constructor(
             variablesOut.stateRunning.collect{
                 _playWorkoutScreenState.update { screenState ->
                     screenState.copy(switchState = mutableStateOf(it)) }
-                if (it == StateRunning.Stopped) stopWorkOutService()
+//                if (it == StateRunning.End) {
+//                    lg("receiveStateWorkout StateRunning.End")
+//                    stopWorkOutService()
+//                }
             }
         }
         viewModelScope.launch(Dispatchers.IO) {
             variablesOut.set.collect{ set->
-                _playWorkoutScreenState.update { currentState -> currentState.copy( playerSet = mutableStateOf(set) )}
+                _playWorkoutScreenState.update { currentState ->
+                    currentState.copy( playerSet = mutableStateOf(set) )}
             }
         }
         viewModelScope.launch(Dispatchers.IO) {
@@ -94,6 +100,7 @@ class PlayWorkoutViewModel @Inject constructor(
     }
 
     private fun stopWorkOutService(){
+//        lg("PlayWorkoutViewModel.stopWorkout")
         viewModelScope.launch(Dispatchers.IO) {
             kotlin.runCatching { serviceManager.stopWorkout() }.fold(
                 onSuccess = {

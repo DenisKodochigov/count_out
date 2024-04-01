@@ -17,6 +17,7 @@ import com.example.count_out.entity.VariablesOutService
 import com.example.count_out.helpers.NotificationHelper
 import com.example.count_out.service.player.PlayerWorkOut
 import com.example.count_out.service.stopwatch.StopWatch
+import com.example.count_out.ui.view_components.lg
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -24,6 +25,7 @@ import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 import javax.inject.Singleton
+
 @Singleton
 @AndroidEntryPoint
 class WorkoutService @Inject constructor(): Service(), WorkOutAPI
@@ -47,37 +49,41 @@ class WorkoutService @Inject constructor(): Service(), WorkOutAPI
     }
     @SuppressLint("ForegroundServiceType")
     override fun startWorkout() {
+        lg("WorkoutService.startWorkout ${variablesOut.stateRunning.value}")
         variablesOut.startTime = System.currentTimeMillis()
         if (variablesOut.stateRunning.value == StateRunning.Pause){
+            variablesOut.stateRunning.value = StateRunning.Started
             notificationHelper.setContinueButton(this)
-        }
-        else if (variablesOut.stateRunning.value == StateRunning.Stopped) {
+        } else if (variablesOut.stateRunning.value == StateRunning.Stopped ||
+                variablesOut.stateRunning.value == StateRunning.Created)
+        {
             startForegroundService()
+            variablesOut.stateRunning.value = StateRunning.Started
             scopeSpeech = CoroutineScope(Dispatchers.Default)
             notificationHelper.setPauseButton(this)
             stopWatch.onStart(variablesOut.stateRunning) { countTime -> sendCountTime(countTime) }
             playTraining()
         }
-        variablesOut.stateRunning.value = StateRunning.Started
     }
     override fun pauseWorkout() {
         variablesOut.stateRunning.value = StateRunning.Pause
         notificationHelper.setPauseButton(this)
     }
     override fun stopWorkout(){
-        variablesOut.stateRunning.value = StateRunning.Stopped
+        lg("WorkoutService Stop workout")
+        stopWatch.onStop()
+        variablesOut.cancel()
         stopForeground(STOP_FOREGROUND_REMOVE)
         notificationHelper.cancel()
-        stopWatch.onStop()
         scopeSpeech.cancel()
-        variablesOut.cancel()
-        variablesOut.startTime = 0L
     }
     private fun sendCountTime(tick: TickTime){
         notificationHelper.updateNotification(hours = tick.hour, minutes = tick.min, seconds = tick.sec)
         variablesOut.flowTick.value = tick
+//        lg("sendCountTime $tick")
     }
     private fun playTraining() {
+        lg("WorkoutService variablesOut.stateRunning.value  ${variablesOut.stateRunning.value}")
         scopeSpeech.launch { playerWorkOut.playingWorkOut(variablesIn, variablesOut) }
     }
     private fun startForegroundService() {

@@ -9,6 +9,7 @@ import com.example.count_out.entity.Speech
 import com.example.count_out.entity.StateRunning
 import com.example.count_out.entity.VariablesOutService
 import com.example.count_out.ui.view_components.lg
+import kotlinx.coroutines.flow.MutableStateFlow
 import java.util.Locale
 import javax.inject.Singleton
 
@@ -20,7 +21,7 @@ class SpeechManager(val context: Context) {
     private var duration: Long = 0L
     private var tts:TextToSpeech? = null
     private var idSpeech: Int = 0
-    val speeching: MutableState<Boolean> = mutableStateOf(true)
+    private val speeching: MutableState<Boolean> = mutableStateOf(true)
 
     fun init(){
         tts = TextToSpeech(context){ status ->
@@ -50,26 +51,40 @@ class SpeechManager(val context: Context) {
             } else { tts = null }
         }
     }
-    fun speech( variablesOut: VariablesOutService, speech: Speech, ): Long
+    fun speech( variablesOut: VariablesOutService, speech: Speech): Long
     {
-        val speechText = speech.message + " " + speech.addMessage
-        if ((speechText).length > 1) {
-            variablesOut.addMessage(speechText)
-            speakOutAdd(speechText)
-            while (speeching.value || variablesOut.stateRunning.value == StateRunning.Pause) { }
-            if( speech.duration == 0L && speech.idSpeech > 0 && duration > 0 ){
-                variablesOut.durationSpeech.value = speech.idSpeech to duration
+        if (variablesOut.stateRunning.value != StateRunning.Stopped){
+            val speechText = speech.message + " " + speech.addMessage
+            if ((speechText).length > 1) {
+                lg("StateRunning Start ${variablesOut.stateRunning.value}, ${speechText}")
+                variablesOut.addMessage(speechText)
+                speakOutAdd(speechText, variablesOut.stateRunning)
+                while (speeching.value || variablesOut.stateRunning.value == StateRunning.Pause) { }
+                if( speech.duration == 0L && speech.idSpeech > 0 && duration > 0 ){
+                    variablesOut.durationSpeech.value = speech.idSpeech to duration
+                }
             }
+        } else {
+            stopTts()
         }
+//        lg("StateRunning Stop ${variablesOut.stateRunning.value}, ${speech.message}")
         return durationEnd
     }
-    private fun speakOutAdd(text: String){
-        speeching.value = true
-        tts?.speak(text, TextToSpeech.QUEUE_ADD, null,"speakOut$idSpeech")
+    private fun speakOutAdd(text: String, speakEnabled: MutableStateFlow<StateRunning>){
+        if (speakEnabled.value != StateRunning.Stopped){
+            speeching.value = true
+            tts?.speak(text, TextToSpeech.QUEUE_ADD, null,"speakOut$idSpeech")
+        }
     }
-    fun speakOutFlush(text: String){
-        speeching.value = true
-        tts?.speak(text, TextToSpeech.QUEUE_FLUSH, null,"speakOut$idSpeech")
+    fun speakOutFlush(text: String, speakEnabled: MutableStateFlow<StateRunning>){
+        if (speakEnabled.value != StateRunning.Stopped){
+            speeching.value = true
+            tts?.speak(text, TextToSpeech.QUEUE_FLUSH, null,"speakOut$idSpeech")
+        }
     }
     fun getDuration() = durationEnd
+
+    private fun stopTts(){
+        tts?.stop()
+    }
 }

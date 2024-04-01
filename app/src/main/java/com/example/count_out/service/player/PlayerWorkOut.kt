@@ -8,19 +8,16 @@ import javax.inject.Inject
 
 class PlayerWorkOut @Inject constructor(val speechManager:SpeechManager, private val playerRound: PlayerRound)
 {
-    suspend fun playingWorkOut(
-        template: VariablesInService,
-        variablesOut: VariablesOutService,
+    suspend fun playingWorkOut(template: VariablesInService, variablesOut: VariablesOutService,
     ) {
-        template.getTraining().speech.beforeStart.addMessage = ". " + template.getTraining().name
-        speechManager.speech(variablesOut, template.getTraining().speech.beforeStart)
-        speechManager.speech(variablesOut, template.getTraining().speech.afterStart)
-        template.getTraining().rounds.forEachIndexed { index, _->
-            playerRound.playingRound( template.apply { indexRound = index }, variablesOut)
+        if (variablesOut.stateRunning.value == StateRunning.Started) {
+            template.getTraining().speech.beforeStart.addMessage = ". " + template.getTraining().name
+            speechManager.speech(variablesOut, template.getTraining().speech.beforeStart)
+            speechManager.speech(variablesOut, template.getTraining().speech.afterStart)
+            template.getTraining().rounds.forEachIndexed { index, _->
+                playerRound.playingRound( template.apply { indexRound = index }, variablesOut) }
+            speechManager.speech(variablesOut, template.getTraining().speech.beforeEnd)
+            speechManager.speech(variablesOut, template.getTraining().speech.afterEnd)
         }
-        speechManager.speech(variablesOut, template.getTraining().speech.beforeEnd )
-        speechManager.speech(variablesOut, template.getTraining().speech.afterEnd )
-        template.stateRunning.value = StateRunning.Stopped
-        variablesOut.stateRunning.value = StateRunning.Stopped
     }
 }

@@ -33,6 +33,7 @@ import com.example.count_out.ui.theme.interLight12
 import com.example.count_out.ui.view_components.FABCorrectInterval
 import com.example.count_out.ui.view_components.FABStartStopWorkOut
 import com.example.count_out.ui.view_components.TextApp
+import com.example.count_out.ui.view_components.lg
 import kotlinx.coroutines.launch
 
 @SuppressLint("UnrememberedMutableState")
@@ -120,9 +121,7 @@ fun PlayWorkoutScreenCreateView( viewModel: PlayWorkoutViewModel, onBaskScreen:(
 
     LazyColumn(
         state = lazyState,
-        modifier = Modifier
-            .fillMaxWidth()
-            .animateContentSize(),
+        modifier = Modifier.fillMaxWidth().animateContentSize(),
         horizontalAlignment = Alignment.Start,
         verticalArrangement = Arrangement.Center
     ){
@@ -162,5 +161,5 @@ fun onButtonPause(uiState:PlayWorkoutScreenState){
     uiState.pauseWorkOutService()
 }
 fun onButtonStop(uiState:PlayWorkoutScreenState){
-   uiState.stopWorkOutService()
+    uiState.stopWorkOutService()
 }

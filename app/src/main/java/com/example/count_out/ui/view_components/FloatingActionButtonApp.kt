@@ -65,6 +65,7 @@ import java.math.RoundingMode
             when (switchState){
                 StateRunning.Started -> FabStartedService(onClickStop, onClickPause)
                 StateRunning.Stopped -> FabStoppedService(onClickStart)
+                StateRunning.Created -> FabStoppedService(onClickStart)
                 StateRunning.Pause -> FabPauseService(onClickStart, onClickStop)
             }
         }

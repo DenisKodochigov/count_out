@@ -60,5 +60,5 @@ enum class StopwatchState {
 }
 
 enum class StateRunning {
-    Started, Pause, Stopped
+    Created, Started, Pause, Stopped
 }
