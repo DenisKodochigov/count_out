@@ -49,7 +49,6 @@ class WorkoutService @Inject constructor(): Service(), WorkOutAPI
     }
     @SuppressLint("ForegroundServiceType")
     override fun startWorkout() {
-        lg("WorkoutService.startWorkout ${variablesOut.stateRunning.value}")
         variablesOut.startTime = System.currentTimeMillis()
         if (variablesOut.stateRunning.value == StateRunning.Pause){
             variablesOut.stateRunning.value = StateRunning.Started
@@ -70,7 +69,6 @@ class WorkoutService @Inject constructor(): Service(), WorkOutAPI
         notificationHelper.setPauseButton(this)
     }
     override fun stopWorkout(){
-        lg("WorkoutService Stop workout")
         stopWatch.onStop()
         variablesOut.cancel()
         stopForeground(STOP_FOREGROUND_REMOVE)
@@ -83,7 +81,6 @@ class WorkoutService @Inject constructor(): Service(), WorkOutAPI
 //        lg("sendCountTime $tick")
     }
     private fun playTraining() {
-        lg("WorkoutService variablesOut.stateRunning.value  ${variablesOut.stateRunning.value}")
         scopeSpeech.launch { playerWorkOut.playingWorkOut(variablesIn, variablesOut) }
     }
     private fun startForegroundService() {

@@ -58,7 +58,6 @@ class PlayWorkoutViewModel @Inject constructor(
                 variablesInService.stateRunning = MutableStateFlow(StateRunning.Started)
                 variablesInService.enableSpeechDescription =
                     MutableStateFlow(dataRepository.getSetting(R.string.speech_description).value == 1)
-//                lg("PlayWorkoutViewModel.startWorkOutService")
                 serviceManager.startWorkout()
             }.fold(
                 onSuccess = {  },
@@ -71,10 +70,6 @@ class PlayWorkoutViewModel @Inject constructor(
             variablesOut.stateRunning.collect{
                 _playWorkoutScreenState.update { screenState ->
                     screenState.copy(switchState = mutableStateOf(it)) }
-//                if (it == StateRunning.End) {
-//                    lg("receiveStateWorkout StateRunning.End")
-//                    stopWorkOutService()
-//                }
             }
         }
         viewModelScope.launch(Dispatchers.IO) {
@@ -98,9 +93,7 @@ class PlayWorkoutViewModel @Inject constructor(
             }
         }
     }
-
     private fun stopWorkOutService(){
-//        lg("PlayWorkoutViewModel.stopWorkout")
         viewModelScope.launch(Dispatchers.IO) {
             kotlin.runCatching { serviceManager.stopWorkout() }.fold(
                 onSuccess = {

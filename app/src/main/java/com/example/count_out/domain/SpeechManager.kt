@@ -56,7 +56,6 @@ class SpeechManager(val context: Context) {
         if (variablesOut.stateRunning.value != StateRunning.Stopped){
             val speechText = speech.message + " " + speech.addMessage
             if ((speechText).length > 1) {
-                lg("StateRunning Start ${variablesOut.stateRunning.value}, ${speechText}")
                 variablesOut.addMessage(speechText)
                 speakOutAdd(speechText, variablesOut.stateRunning)
                 while (speeching.value || variablesOut.stateRunning.value == StateRunning.Pause) { }
@@ -67,7 +66,6 @@ class SpeechManager(val context: Context) {
         } else {
             stopTts()
         }
-//        lg("StateRunning Stop ${variablesOut.stateRunning.value}, ${speech.message}")
         return durationEnd
     }
     private fun speakOutAdd(text: String, speakEnabled: MutableStateFlow<StateRunning>){
