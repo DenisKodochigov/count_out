@@ -13,7 +13,7 @@ class PlayerExercise @Inject constructor(val speechManager:SpeechManager, privat
         variablesOut: VariablesOutService,
     ){
         if (variablesOut.stateRunning.value == StateRunning.Started) {
-            template.getExercise().speech.beforeStart.addMessage +=  template.getExercise().activity.name + "."
+            template.getExercise().speech.beforeStart.addMessage = template.getExercise().activity.name + "."
             if (template.enableSpeechDescription.value)
                 template.getExercise().speech.beforeStart.addMessage += template.getExercise().activity.description
             speechManager.speech(variablesOut, template.getExercise().speech.beforeStart)
