@@ -47,13 +47,14 @@ enum class Zone(val id: Int, var maxPulse: Int){
 
 enum class RoundType(val strId: Int){
     UP (R.string.work_up),
-    OUT (R.string.work_out ),
-    DOWN ( R.string.work_down );
+    OUT (R.string.work_out),
+    DOWN (R.string.work_down);
 }
 enum class GoalSet(val id: Int){
     DESTINATION(1),
     DURATION(2),
     COUNT(3),
+    COUNT_GROUP(4),
 }
 enum class StopwatchState {
     Idle, Started, onPause, onStop

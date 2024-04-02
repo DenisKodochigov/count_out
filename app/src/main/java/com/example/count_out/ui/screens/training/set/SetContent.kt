@@ -218,14 +218,18 @@ fun SwitchCount(uiState: TrainingScreenState, set: Set)
         RadioButtonApp(
             radioButtonId = 1,
             state = state.intValue,
-            onClick = { state.intValue = 1},
+            onClick = {
+                state.intValue = 1
+                uiState.onChangeSet ((set as SetDB).copy(goal = GoalSet.COUNT)) },
             context = { RadioButtonCountingOrder()}
         )
         Spacer(modifier = Modifier.height(4.dp))
         RadioButtonApp(
             radioButtonId = 2,
             state = state.intValue,
-            onClick = { state.intValue = 2},
+            onClick = {
+                state.intValue = 2
+                uiState.onChangeSet ((set as SetDB).copy(goal = GoalSet.COUNT_GROUP))  },
             context = { RadioButtonCountingGroup(uiState = uiState, set = set, visible = state.intValue == 2)}
         )
     }
@@ -248,13 +252,19 @@ fun RadioButtonCountingGroup(uiState: TrainingScreenState, set: Set, visible: Bo
             modifier = Modifier.padding(vertical = 2.dp))
         AnimatedVisibility(modifier = Modifier.padding(bottom = 4.dp), visible = visible
         ){
-            TextFieldApp(
-                modifier = Modifier.fillMaxWidth(),
-                placeholder = set.groupCount,
-                contentAlignment = Alignment.BottomStart,
-                typeKeyboard = TypeKeyboard.TEXT,
-                textStyle = interLight12,
-                onChangeValue = { uiState.onChangeSet ((set as SetDB).copy(groupCount = it)) })
+            Column {
+                TextAppLines(
+                    text = stringResource(id = R.string.counts_by_group_add),
+                    style = interReg12,
+                    modifier = Modifier.padding(vertical = 2.dp))
+                TextFieldApp(
+                    modifier = Modifier.fillMaxWidth(),
+                    placeholder = set.groupCount,
+                    contentAlignment = Alignment.BottomStart,
+                    typeKeyboard = TypeKeyboard.TEXT,
+                    textStyle = interLight12,
+                    onChangeValue = { uiState.onChangeSet ((set as SetDB).copy(groupCount = it)) })
+            }
         }
     }
 }

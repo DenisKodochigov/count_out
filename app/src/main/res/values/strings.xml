@@ -14,7 +14,6 @@
     <string name="duration_of_the_approach">Duration of the approach</string>
     <string name="error_1">Error 1.</string>
     <string name="error_2">Error 2.</string>
-    <string name="group_counts">Counts by the group. Enter a group of counts (each word corresponds to one count)</string>
     <string name="h">h</string>
     <string name="History">History</string>
     <string name="hour">hour</string>
@@ -64,7 +63,8 @@
     <string name="time_between_counts">The interval between counts</string>
     <string name="slowing_down_counts">Slowing down the counts</string>
     <string name="counting_in_order">Counting down in order</string>
-    <string name="counts_by_group">Counts by the group. Enter a group of counts (each word corresponds to one count)</string>
+    <string name="counts_by_group">Counts by the group.</string>
+    <string name="counts_by_group_add"> Enter a group of counts (each word corresponds to one count)</string>
     <string name="screen_play_workou">Play work out</string>
     <string name="channel_name">count_out_nitification</string>
     <string name="audio_track">Audio track</string>

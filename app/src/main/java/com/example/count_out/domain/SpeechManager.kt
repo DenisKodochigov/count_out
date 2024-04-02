@@ -60,18 +60,15 @@ class SpeechManager(val context: Context) {
         if (variablesOut.stateRunning.value != StateRunning.Stopped){
             val speechText = speech.message + " " + speech.addMessage
             if ((speechText).length > 1) {
-                lg("speak begin $speechText")
                 variablesOut.addMessage(speechText)
                 speakOutAdd(speechText, variablesOut.stateRunning)
-                lg("begin isSpeaking ${tts?.isSpeaking}; speeching: ${speeching.value}  ")
-                while (speeching.value || variablesOut.stateRunning.value == StateRunning.Pause || tts?.isSpeaking == true) {
-                    delay(100L)
-                }
-                lg("end isSpeaking ${tts?.isSpeaking}; speeching: ${speeching.value}  ")
+                while (speeching.value ||
+                        variablesOut.stateRunning.value == StateRunning.Pause ||
+                        tts?.isSpeaking == true)
+                { delay(100L) }
                 if( speech.duration == 0L && speech.idSpeech > 0 && duration > 0 ){
                     variablesOut.durationSpeech.value = speech.idSpeech to duration
                 }
-                lg("speak end $speechText")
             }
         } else {
             stopTts()
