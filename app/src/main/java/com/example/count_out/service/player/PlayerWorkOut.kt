@@ -18,6 +18,7 @@ class PlayerWorkOut @Inject constructor(val speechManager:SpeechManager, private
                 playerRound.playingRound( template.apply { indexRound = index }, variablesOut) }
             speechManager.speech(variablesOut, template.getTraining().speech.beforeEnd)
             speechManager.speech(variablesOut, template.getTraining().speech.afterEnd)
+            variablesOut.stateRunning.value =StateRunning.Stopped
         }
     }
 }

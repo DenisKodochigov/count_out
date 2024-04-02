@@ -81,7 +81,10 @@ class WorkoutService @Inject constructor(): Service(), WorkOutAPI
 //        lg("sendCountTime $tick")
     }
     private fun playTraining() {
-        scopeSpeech.launch { playerWorkOut.playingWorkOut(variablesIn, variablesOut) }
+        scopeSpeech.launch {
+            playerWorkOut.playingWorkOut(variablesIn, variablesOut)
+            stopWorkout()
+        }
     }
     private fun startForegroundService() {
         if (!notificationHelper.channelExist()) notificationHelper.createChannel()
