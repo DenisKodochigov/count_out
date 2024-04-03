@@ -141,21 +141,24 @@ import com.example.count_out.ui.theme.styleApp
     fieldTextAlign: TextAlign = TextAlign.Center,
     placeholder: String,
     onChangeValue:(String)->Unit = {},
-    editing: Boolean
+    editing: Boolean,
+    visibleField: Boolean = true
 ){
-    Row(verticalAlignment = Alignment.CenterVertically){
+    Row(verticalAlignment = Alignment.CenterVertically) {
         TextApp(
             text = text,
             modifier = Modifier.weight(1f),
             maxLines = 2,
             style = interReg12,
-            textAlign = TextAlign.Start,)
+            textAlign = TextAlign.Start,
+        )
         TextFieldApp(
             placeholder = placeholder,
             typeKeyboard = if (editing) TypeKeyboard.DIGIT else TypeKeyboard.NONE,
             modifier = Modifier.width(50.dp),
             textStyle = interLight12.copy(textAlign = fieldTextAlign),
-            onChangeValue = onChangeValue
+            onChangeValue = onChangeValue,
+            visible = visibleField
         )
     }
 }
@@ -170,7 +173,8 @@ import com.example.count_out.ui.theme.styleApp
     onLossFocus: Boolean = true,
     maxLines: Int = 1,
     onChangeValue:(String)->Unit = {},
-    edit: Boolean = false
+    edit: Boolean = false,
+    visible: Boolean = true
 ){
     val keyboardController = LocalSoftwareKeyboardController.current
     val focusManager = LocalFocusManager.current
@@ -180,7 +184,7 @@ import com.example.count_out.ui.theme.styleApp
     val enabled = typeKeyboard != TypeKeyboard.NONE
     val paddingHor = if (textStyle.fontSize > 14.sp) 8.dp else 4.dp
     val paddingVer = if (textStyle.fontSize > 14.sp) 6.dp else 2.dp
-    val colorLine = MaterialTheme.colorScheme.onBackground
+    val colorLine = if (visible) MaterialTheme.colorScheme.onBackground else Color.Transparent
     val mergedStyle = LocalTextStyle.current.merge(textStyle.copy(color = LocalContentColor.current))
     val colors = TextFieldDefaults.colors(
         unfocusedIndicatorColor = Color.Transparent,
@@ -235,37 +239,37 @@ import com.example.count_out.ui.theme.styleApp
                         }
                 )
                 {
-                    if (text.isEmpty()) Text( text = if (edit) "" else placeholder, style = textStyle)
+                    if (text.isEmpty()) Text( text = if (edit || !visible) "" else placeholder, style = textStyle)
                     it()
                 }
             }
         },
     )
 }
-
 @Composable fun RadioButtonApp(
     radioButtonId: Int,
     state: Int,
     onClick:()->Unit,
-    context: @Composable ()->Unit
+    contextRight: @Composable ()->Unit,
+    contextBottom: @Composable ()->Unit
 ){
     val sizeRadioButton = 12.dp
-    Row(verticalAlignment = Alignment.Top)
-    {
-        RadioButton(
-            selected = radioButtonId == state,
-            enabled = true,
-            onClick = onClick,
-            modifier = Modifier
-                .size(sizeRadioButton)
-                .scale(0.8f)
-                .padding(top = 8.dp),
-            colors = RadioButtonDefaults.colors(
-                selectedColor = MaterialTheme.colorScheme.onPrimary,
-                unselectedColor = MaterialTheme.colorScheme.onPrimary
-            ))
-        Spacer(modifier = Modifier.width(6.dp))
-        context()
+    Column(){
+        Row(verticalAlignment = Alignment.CenterVertically)
+        {
+            RadioButton(
+                selected = radioButtonId == state,
+                enabled = true,
+                onClick = onClick,
+                modifier = Modifier.size(sizeRadioButton).scale(0.8f),
+                colors = RadioButtonDefaults.colors(
+                    selectedColor = MaterialTheme.colorScheme.onPrimary,
+                    unselectedColor = MaterialTheme.colorScheme.onPrimary
+                )
+            )
+            Spacer(modifier = Modifier.width(6.dp))
+            contextRight()
+        }
     }
+    contextBottom()
 }
-

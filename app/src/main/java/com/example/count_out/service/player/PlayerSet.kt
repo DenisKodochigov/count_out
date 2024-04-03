@@ -41,7 +41,7 @@ class PlayerSet @Inject constructor(val speechManager:SpeechManager)
         when (template.getSet().goal){
             GoalSet.COUNT -> playSetCount(template, variablesOut)
             GoalSet.DURATION -> playSetDURATION(template, variablesOut)
-            GoalSet.DESTINATION -> playSetDESTINATION(template, variablesOut)
+            GoalSet.DISTANCE -> playSetDESTINATION(template, variablesOut)
             GoalSet.COUNT_GROUP -> playSetCOUNTGROUP(template, variablesOut)
         }
     }
@@ -113,7 +113,7 @@ class PlayerSet @Inject constructor(val speechManager:SpeechManager)
                 else if (template.getSet().duration > 1.0 && template.getSet().duration < 5.0) " " +
                         template.getSet().duration .toString() + " минуты"
                 else " " + template.getSet().duration .toString() + " минут"
-            GoalSet.DESTINATION ->
+            GoalSet.DISTANCE ->
                 if (template.getSet().distance < 5.0) " " + template.getSet().distance .toString() + " километра"
                 else " " + template.getSet().distance .toString() + " километров"
         }

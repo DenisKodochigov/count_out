@@ -20,7 +20,7 @@ class StopWatch {
                 duration.toComponents { h, m, s, _ ->
                     onTick(TickTime(hour = h.toInt().pad(), min = m.pad(), sec = s.pad()))
                 }
-            } else if (pause.value != StateRunning.Stopped){
+            } else if (pause.value == StateRunning.Stopped){
                 duration = Duration.ZERO
                 timer.cancel()
             }

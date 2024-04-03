@@ -78,7 +78,7 @@ class WorkoutService @Inject constructor(): Service(), WorkOutAPI
     private fun sendCountTime(tick: TickTime){
         notificationHelper.updateNotification(hours = tick.hour, minutes = tick.min, seconds = tick.sec)
         variablesOut.flowTick.value = tick
-//        lg("sendCountTime $tick")
+        lg("sendCountTime $tick")
     }
     private fun playTraining() {
         scopeSpeech.launch {

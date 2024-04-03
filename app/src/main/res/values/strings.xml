@@ -60,10 +60,9 @@
     <string name="task_in_approach">The task is in the approach</string>
     <string name="zone">zone</string>
     <string name="quantity_reps">Repetitions. Number of counts</string>
+    <string name="quantity_group_reps">Repetitions. Group of counts</string>
     <string name="time_between_counts">The interval between counts</string>
     <string name="slowing_down_counts">Slowing down the counts</string>
-    <string name="counting_in_order">Counting down in order</string>
-    <string name="counts_by_group">Counts by the group.</string>
     <string name="counts_by_group_add"> Enter a group of counts (each word corresponds to one count)</string>
     <string name="screen_play_workou">Play work out</string>
     <string name="channel_name">count_out_nitification</string>

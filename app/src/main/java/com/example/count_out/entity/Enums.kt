@@ -51,7 +51,7 @@ enum class RoundType(val strId: Int){
     DOWN (R.string.work_down);
 }
 enum class GoalSet(val id: Int){
-    DESTINATION(1),
+    DISTANCE(1),
     DURATION(2),
     COUNT(3),
     COUNT_GROUP(4),
