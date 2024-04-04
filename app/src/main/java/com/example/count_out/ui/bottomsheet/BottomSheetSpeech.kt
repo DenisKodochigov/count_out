@@ -29,11 +29,11 @@ import com.example.count_out.entity.Round
 import com.example.count_out.entity.Set
 import com.example.count_out.entity.Training
 import com.example.count_out.entity.TypeKeyboard
-import com.example.count_out.ui.joint.ButtonConfirm
 import com.example.count_out.ui.theme.Dimen
 import com.example.count_out.ui.theme.interLight12Start
 import com.example.count_out.ui.theme.interThin10Start
 import com.example.count_out.ui.theme.shapesApp
+import com.example.count_out.ui.view_components.ButtonConfirm
 import com.example.count_out.ui.view_components.TextApp
 import com.example.count_out.ui.view_components.TextFieldApp
 

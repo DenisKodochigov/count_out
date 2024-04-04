@@ -10,4 +10,5 @@ interface WorkOutAPI {
     fun startWorkout()
     fun stopWorkout()
     fun pauseWorkout()
+    fun continueWorkout()
 }

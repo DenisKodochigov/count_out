@@ -37,7 +37,7 @@ import com.example.count_out.R
 import com.example.count_out.data.room.tables.ActivityDB
 import com.example.count_out.data.room.tables.SettingDB
 import com.example.count_out.ui.bottomsheet.BottomSheetAddActivity
-import com.example.count_out.ui.joint.active_view.CardActivity
+import com.example.count_out.ui.bottomsheet.CardActivity
 import com.example.count_out.ui.theme.Dimen
 import com.example.count_out.ui.theme.elevationTraining
 import com.example.count_out.ui.theme.interBold14

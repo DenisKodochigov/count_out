@@ -23,7 +23,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.example.count_out.entity.TypeKeyboard
-import com.example.count_out.ui.joint.active_view.ActivityValueShort
 import com.example.count_out.ui.screens.training.TrainingScreenState
 import com.example.count_out.ui.theme.Dimen
 import com.example.count_out.ui.theme.shapesApp

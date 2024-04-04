@@ -39,7 +39,9 @@ class SettingViewModel @Inject constructor(
         templateMy{dataRepository.getActivities()} }
 
     private fun onAddActivity(activity: Activity){
-        templateMy{ dataRepository.onAddActivity(activity) } }
+        templateMy{
+            if (activity.idActivity > 0) dataRepository.onUpdateActivity(activity)
+            else dataRepository.onAddActivity(activity) } }
 
     private fun onUpdateActivity(activity: Activity){
         templateMy{ dataRepository.onUpdateActivity(activity) } }

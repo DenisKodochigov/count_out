@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -53,6 +54,7 @@ import com.example.count_out.R
 import com.example.count_out.entity.TagsTesting.BUTTON_OK
 import com.example.count_out.entity.TypeKeyboard
 import com.example.count_out.entity.TypeText
+import com.example.count_out.ui.theme.Dimen
 import com.example.count_out.ui.theme.colorApp
 import com.example.count_out.ui.theme.interLight12
 import com.example.count_out.ui.theme.interReg12
@@ -272,4 +274,10 @@ import com.example.count_out.ui.theme.styleApp
         }
     }
     contextBottom()
+}
+@Composable
+fun ButtonConfirm(onConfirm: ()->Unit)
+{
+    Spacer(modifier = Modifier.height(Dimen.bsItemPaddingVer))
+    ButtonApp(text = stringResource(id = R.string.ok), onClick = onConfirm )
 }

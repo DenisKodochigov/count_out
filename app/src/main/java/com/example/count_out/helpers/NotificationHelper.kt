@@ -19,12 +19,15 @@ import com.example.count_out.entity.Const.SET_CONTENT_TITLE
 import com.example.count_out.entity.Const.STOPWATCH_STATE
 import com.example.count_out.entity.StopwatchState
 import com.example.count_out.service.workout.WorkoutService
+import com.example.count_out.ui.view_components.lg
+import kotlinx.coroutines.flow.MutableStateFlow
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
 class NotificationHelper @Inject constructor(private val context: Context)
 {
+    private var stateButton: MutableStateFlow<Boolean> = MutableStateFlow(true)
     private val notificationManager by lazy {
         context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager }
     private val pendingIntent by lazy {
@@ -74,6 +77,7 @@ class NotificationHelper @Inject constructor(private val context: Context)
     }
     @SuppressLint("RestrictedApi")
     fun setContinueButton(context: Context) {
+        stateButton.value = false
         notificationBuilder.mActions.removeAt(0)
         notificationBuilder.mActions.add(
             0, NotificationCompat.Action(0, "Continue", onPauseAction(context)))
@@ -81,21 +85,26 @@ class NotificationHelper @Inject constructor(private val context: Context)
     }
     @SuppressLint("RestrictedApi")
     fun setPauseButton(context: Context) {
+        stateButton.value = true
         notificationBuilder.mActions.removeAt(0)
         notificationBuilder.mActions.add(
             0, NotificationCompat.Action(0, "Pause", onPauseAction(context)))
         notificationManager.notify(NOTIFICATION_ID, notificationBuilder.build())
     }
-    private fun onPauseAction(context: Context): PendingIntent = PendingIntent.getService(
-        context, 0,
-        Intent(context, WorkoutService::class.java).apply {
-            putExtra(STOPWATCH_STATE, StopwatchState.onPause.name) },
-        PendingIntent.FLAG_IMMUTABLE )
+    private fun onPauseAction(context: Context): PendingIntent {
+        lg("NotificationHelper onPauseAction")
+        return PendingIntent.getService(
+            context, 0,
+            Intent(context, WorkoutService::class.java).apply {
+                putExtra(STOPWATCH_STATE,
+                    if (stateButton.value) StopwatchState.Paused.name else StopwatchState.Started.name) },
+            PendingIntent.FLAG_IMMUTABLE )
+    }
 
     private fun onStopAction(context: Context): PendingIntent = PendingIntent.getService(
         context, 0,
         Intent(context, WorkoutService::class.java).apply {
-            putExtra(STOPWATCH_STATE, StopwatchState.onStop.name) },
+            putExtra(STOPWATCH_STATE, StopwatchState.Stopped.name) },
         PendingIntent.FLAG_IMMUTABLE )
 
     fun channelExist(): Boolean{

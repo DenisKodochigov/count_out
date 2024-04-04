@@ -42,8 +42,9 @@ class WorkoutService @Inject constructor(): Service(), WorkOutAPI
     override fun onBind(p0: Intent?): IBinder = WorkoutServiceBinder()
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         when (intent?.getStringExtra(STOPWATCH_STATE)) {
-            StopwatchState.onPause.name -> pauseWorkout()
-            StopwatchState.onStop.name -> stopWatch.onStop()
+            StopwatchState.Started.name -> continueWorkout()
+            StopwatchState.Paused.name -> pauseWorkout()
+            StopwatchState.Stopped.name -> stopWatch.onStop()
         }
         return super.onStartCommand(intent, flags, startId)
     }
@@ -51,8 +52,7 @@ class WorkoutService @Inject constructor(): Service(), WorkOutAPI
     override fun startWorkout() {
         variablesOut.startTime = System.currentTimeMillis()
         if (variablesOut.stateRunning.value == StateRunning.Pause){
-            variablesOut.stateRunning.value = StateRunning.Started
-            notificationHelper.setContinueButton(this)
+            continueWorkout()
         } else if (variablesOut.stateRunning.value == StateRunning.Stopped ||
                 variablesOut.stateRunning.value == StateRunning.Created)
         {
@@ -64,9 +64,14 @@ class WorkoutService @Inject constructor(): Service(), WorkOutAPI
             playTraining()
         }
     }
+    override fun continueWorkout(){
+        variablesOut.stateRunning.value = StateRunning.Started
+        notificationHelper.setContinueButton(this)
+    }
     override fun pauseWorkout() {
+        lg("notification pause")
         variablesOut.stateRunning.value = StateRunning.Pause
-        notificationHelper.setPauseButton(this)
+        notificationHelper.setContinueButton(this)
     }
     override fun stopWorkout(){
         stopWatch.onStop()
@@ -78,7 +83,6 @@ class WorkoutService @Inject constructor(): Service(), WorkOutAPI
     private fun sendCountTime(tick: TickTime){
         notificationHelper.updateNotification(hours = tick.hour, minutes = tick.min, seconds = tick.sec)
         variablesOut.flowTick.value = tick
-        lg("sendCountTime $tick")
     }
     private fun playTraining() {
         scopeSpeech.launch {
