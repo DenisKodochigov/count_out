@@ -6,24 +6,22 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.FabPosition
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTagsAsResourceId
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.count_out.navigation.NavHostApp
-import com.example.count_out.navigation.TrainingsDestination
-import com.example.count_out.navigation.listScreens
+import com.example.count_out.navigation.backStack
 import com.example.count_out.navigation.navigateToScreen
 import com.example.count_out.permission.RequestPermission
 import com.example.count_out.ui.theme.AppTheme
 import com.example.count_out.ui.view_components.BottomBarApp
 import com.example.count_out.ui.view_components.CollapsingToolbar
 import com.example.count_out.ui.view_components.ExtendedFAB
+import com.example.count_out.ui.view_components.lg
 
 @OptIn(ExperimentalComposeUiApi::class)
 @SuppressLint("RememberReturnType", "UnrememberedMutableState", "SuspiciousIndentation",
@@ -33,12 +31,11 @@ import com.example.count_out.ui.view_components.ExtendedFAB
 fun StartApp() {
     AppTheme {
         val navController = rememberNavController()
-        val currentBackStack by navController.currentBackStackEntryAsState()
-        val currentDestination = currentBackStack?.destination
-        val currentScreen = listScreens.find {
-            it.routeWithArgs == currentDestination?.route } ?: TrainingsDestination
-
-
+//        val currentBackStack by navController.currentBackStackEntryAsState()
+//        val currentDestination = currentBackStack?.destination
+//        val currentScreen = listScreens.find {
+//            it.routeWithArgs == currentDestination?.route } ?: TrainingsDestination
+        val currentScreen = navController.backStack()
         Scaffold(
             modifier = Modifier.semantics { testTagsAsResourceId = true },
             topBar = {
@@ -59,6 +56,7 @@ fun StartApp() {
             },
             floatingActionButtonPosition = FabPosition.End,
             content = { innerPadding ->
+                lg("StartApp")
                 NavHostApp(navController = navController, modifier = Modifier.padding(innerPadding))
                 RequestPermission(Manifest.permission.POST_NOTIFICATIONS, 31)
                 RequestPermission(Manifest.permission.FOREGROUND_SERVICE, 28)

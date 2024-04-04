@@ -122,9 +122,6 @@ fun BottomSheetSpeechContent(uiState: BottomSheetState)
             modifier = Modifier.padding(start = Dimen.bsItemPaddingHor))
     }
 }
-//@Composable fun SelectOtherSpeech(uiState: BottomSheetState){
-//
-//}
 @Composable
 fun ButtonOK(uiState: BottomSheetState)
 {

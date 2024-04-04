@@ -9,6 +9,11 @@ fun NavHostController.navigateToTraining(trainingId: Long) {
 fun NavHostController.navigateToPlayWorkout( trainingId: Long) {
     this.navigateToScreen("${PlayWorkoutDestination.route}/$trainingId")
 }
-
+fun NavHostController.backStack(): ScreenDestination{
+    return listScreens.find{ it.routeWithArgs == this.currentBackStackEntry?.destination?.route } ?:
+    TrainingsDestination
+//    return listScreens.find{ it.routeWithArgs == this.currentBackStackEntryAsState().value?.destination?.route } ?:
+//        TrainingsDestination
+}
 
 

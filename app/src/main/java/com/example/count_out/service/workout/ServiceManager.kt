@@ -43,7 +43,6 @@ class ServiceManager @Inject constructor(val context: Context
     }
     fun stateRunningService() = workOutService.variablesOut.stateRunning.value
     fun stopWorkout(){
-//        lg("ServiceManager.stopWorkout")
         workOutService.stopWorkout()
     }
     fun <T>bindService( clazz: Class<T>) {

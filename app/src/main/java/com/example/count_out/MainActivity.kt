@@ -12,7 +12,6 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class MainActivity: ComponentActivity()
 {
-
     @Inject lateinit var serviceManager: ServiceManager
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

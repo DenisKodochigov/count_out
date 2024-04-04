@@ -23,6 +23,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -43,6 +44,7 @@ import com.example.count_out.ui.theme.interLight12
 import com.example.count_out.ui.theme.interReg14
 import com.example.count_out.ui.view_components.ItemSwipe
 import com.example.count_out.ui.view_components.TextApp
+import com.example.count_out.ui.view_components.lg
 
 @Composable fun TrainingsScreen(
     onClickTraining: (Long) -> Unit,
@@ -50,7 +52,8 @@ import com.example.count_out.ui.view_components.TextApp
     screen: ScreenDestination,
 ){
     val viewModel: TrainingsViewModel = hiltViewModel()
-    viewModel.getTrainings()
+    LaunchedEffect(true){ viewModel.getTrainings()}
+    lg("TrainingsScreen $viewModel")
     TrainingsScreenCreateView(
         onClickTraining = onClickTraining,
         onStartWorkout = onStartWorkout,
@@ -64,11 +67,12 @@ import com.example.count_out.ui.view_components.TextApp
     screen: ScreenDestination,
     viewModel: TrainingsViewModel,
 ){
+    lg("TrainingsScreenCreateView")
     val uiState by viewModel.trainingsScreenState.collectAsState()
     uiState.onDismiss = remember {{ uiState.triggerRunOnClickFAB.value = false }}
     uiState.onClickTraining = remember {{id -> onClickTraining(id)}}
-    uiState.onSelectItem = { onClickTraining(it) }
-    uiState.onStartWorkout = { onStartWorkout(it) }
+    uiState.onSelectItem = remember {{ onClickTraining(it) }}
+    uiState.onStartWorkout = remember {{ onStartWorkout(it) }}
     uiState.idImage = getIdImage(screen)
     screen.onClickFAB = { uiState.triggerRunOnClickFAB.value = true }
 
@@ -80,6 +84,7 @@ import com.example.count_out.ui.view_components.TextApp
 }
 @Composable fun TrainingsScreenLayout( uiState: TrainingsScreenState
 ){
+    lg("TrainingsScreenLayout")
     Column(
         modifier = Modifier.fillMaxHeight(),
         content = { TrainingsLazyColumn( uiState = uiState) }
@@ -89,15 +94,20 @@ import com.example.count_out.ui.view_components.TextApp
 @Composable
 fun TrainingsLazyColumn(uiState: TrainingsScreenState,
 ){
+    lg("TrainingsLazyColumn")
     LazyList(uiState)
     Spacer(modifier = Modifier.height(8.dp))
 }
 @OptIn(ExperimentalFoundationApi::class)
 @Composable fun LazyList(uiState: TrainingsScreenState)
 {
+    lg("LazyList")
     LazyColumn(
         state = rememberLazyListState(),
-        modifier = Modifier.testTag("1").animateContentSize().padding(horizontal = Dimen.paddingAppHor)
+        modifier = Modifier
+            .testTag("1")
+            .animateContentSize()
+            .padding(horizontal = Dimen.paddingAppHor)
     ){
         items( items = uiState.trainings, key = { it.idTraining })
         { item ->
@@ -113,6 +123,7 @@ fun TrainingsLazyColumn(uiState: TrainingsScreenState,
 }
 @Composable fun RowLazy(item: Training, uiState: TrainingsScreenState, modifier: Modifier)
 {
+    lg("RowLazy")
     Card(elevation = elevationTraining(), shape = MaterialTheme.shapes.extraSmall
     ){
         Row(
@@ -129,6 +140,7 @@ fun TrainingsLazyColumn(uiState: TrainingsScreenState,
     }
 }
 @Composable fun IconStart(item: Training, uiState: TrainingsScreenState){
+    lg("IconStart")
     IconButton(onClick = { uiState.onStartWorkout(item.idTraining)}) {
         Icon(imageVector = Icons.Default.PlayCircleOutline, contentDescription = "")}
 }

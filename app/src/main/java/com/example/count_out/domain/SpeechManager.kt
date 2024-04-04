@@ -63,7 +63,7 @@ class SpeechManager(val context: Context) {
                 variablesOut.addMessage(speechText)
                 speakOutAdd(speechText, variablesOut.stateRunning)
                 while (speeching.value ||
-                        variablesOut.stateRunning.value == StateRunning.Pause ||
+                        variablesOut.stateRunning.value == StateRunning.Paused ||
                         tts?.isSpeaking == true)
                 { delay(100L) }
                 if( speech.duration == 0L && speech.idSpeech > 0 && duration > 0 ){

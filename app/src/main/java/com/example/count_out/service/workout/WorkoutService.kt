@@ -7,17 +7,15 @@ import android.content.pm.ServiceInfo.FOREGROUND_SERVICE_TYPE_SPECIAL_USE
 import android.os.Binder
 import android.os.Build
 import android.os.IBinder
+import com.example.count_out.entity.Const.NOTIFICATION_EXTRA
 import com.example.count_out.entity.Const.NOTIFICATION_ID
-import com.example.count_out.entity.Const.STOPWATCH_STATE
 import com.example.count_out.entity.StateRunning
-import com.example.count_out.entity.StopwatchState
 import com.example.count_out.entity.TickTime
 import com.example.count_out.entity.VariablesInService
 import com.example.count_out.entity.VariablesOutService
 import com.example.count_out.helpers.NotificationHelper
 import com.example.count_out.service.player.PlayerWorkOut
 import com.example.count_out.service.stopwatch.StopWatch
-import com.example.count_out.ui.view_components.lg
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -41,37 +39,34 @@ class WorkoutService @Inject constructor(): Service(), WorkOutAPI
     inner class WorkoutServiceBinder : Binder() { fun getService(): WorkoutService = this@WorkoutService }
     override fun onBind(p0: Intent?): IBinder = WorkoutServiceBinder()
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        when (intent?.getStringExtra(STOPWATCH_STATE)) {
-            StopwatchState.Started.name -> continueWorkout()
-            StopwatchState.Paused.name -> pauseWorkout()
-            StopwatchState.Stopped.name -> stopWatch.onStop()
+        when (intent?.getStringExtra(NOTIFICATION_EXTRA)) {
+            StateRunning.Started.name -> continueWorkout()
+            StateRunning.Paused.name -> pauseWorkout()
+            StateRunning.Stopped.name -> stopWorkout()
         }
         return super.onStartCommand(intent, flags, startId)
     }
     @SuppressLint("ForegroundServiceType")
     override fun startWorkout() {
         variablesOut.startTime = System.currentTimeMillis()
-        if (variablesOut.stateRunning.value == StateRunning.Pause){
-            continueWorkout()
-        } else if (variablesOut.stateRunning.value == StateRunning.Stopped ||
-                variablesOut.stateRunning.value == StateRunning.Created)
-        {
-            startForegroundService()
-            variablesOut.stateRunning.value = StateRunning.Started
-            scopeSpeech = CoroutineScope(Dispatchers.Default)
-            notificationHelper.setPauseButton(this)
-            stopWatch.onStart(variablesOut.stateRunning) { countTime -> sendCountTime(countTime) }
-            playTraining()
+        variablesOut.stateRunning.value.let {
+            if (it == StateRunning.Stopped || it == StateRunning.Created)
+            {
+                startForegroundService()
+                variablesOut.stateRunning.value = StateRunning.Started
+                scopeSpeech = CoroutineScope(Dispatchers.Default)
+                stopWatch.onStart(variablesOut.stateRunning) { countTime -> sendCountTime(countTime) }
+                playTraining()
+            } else if (it == StateRunning.Paused) { continueWorkout() }
         }
     }
     override fun continueWorkout(){
         variablesOut.stateRunning.value = StateRunning.Started
-        notificationHelper.setContinueButton(this)
+        notificationHelper.setPauseButton()
     }
     override fun pauseWorkout() {
-        lg("notification pause")
-        variablesOut.stateRunning.value = StateRunning.Pause
-        notificationHelper.setContinueButton(this)
+        variablesOut.stateRunning.value = StateRunning.Paused
+        notificationHelper.setContinueButton()
     }
     override fun stopWorkout(){
         stopWatch.onStop()

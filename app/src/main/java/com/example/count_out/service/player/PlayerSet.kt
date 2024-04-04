@@ -41,7 +41,7 @@ class PlayerSet @Inject constructor(val speechManager:SpeechManager)
         when (template.getSet().goal){
             GoalSet.COUNT -> playSetCount(template, variablesOut)
             GoalSet.DURATION -> playSetDURATION(template, variablesOut)
-            GoalSet.DISTANCE -> playSetDESTINATION(template, variablesOut)
+            GoalSet.DISTANCE -> playSetDISTANCE(template, variablesOut)
             GoalSet.COUNT_GROUP -> playSetCOUNTGROUP(template, variablesOut)
         }
     }
@@ -61,14 +61,21 @@ class PlayerSet @Inject constructor(val speechManager:SpeechManager)
         variablesOut: VariablesOutService,
     ){
         val duration = template.getSet().duration * 60
-        if (duration > 19 && duration <= 119) {
+        if (duration < 20) {
+            for ( count in 1..duration.toInt()){
+                if ( count % 5 == 0) {
+                    speechManager.speakOutFlush(text = count.toString(), variablesOut.stateRunning)
+                }
+                delayMy(1000L, variablesOut.stateRunning)
+            }
+        }
+        else if (duration > 19 && duration <= 119) {
             for ( count in 1..duration.toInt()){
                 if ( count % 10 == 0) {
                     speechManager.speakOutFlush(text = count.toString(), variablesOut.stateRunning)
                 }
                 delayMy(1000L, variablesOut.stateRunning)
             }
-
         }
         else if (duration > 119 ) {
             for ( count in 1..duration.toInt()){
@@ -96,7 +103,7 @@ class PlayerSet @Inject constructor(val speechManager:SpeechManager)
             variablesOut.set.value = SetDB()
         }
     }
-    private suspend fun playSetDESTINATION(
+    private suspend fun playSetDISTANCE(
         template: VariablesInService,
         variablesOut: VariablesOutService,
     ){

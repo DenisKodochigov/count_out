@@ -36,7 +36,9 @@ class DataSource @Inject constructor(private val dataDao: DataDao) {
             }
         }
     }
-    fun getTrainings(): List<Training> = dataDao.getTrainingsRel().map { it.toTraining() }
+    fun getTrainings(): List<Training> = dataDao.getTrainingsRel().map {
+        it.toTraining()
+    }
     fun updateTraining(trainingDB: TrainingDB): Int = dataDao.updateTraining(trainingDB)
     fun addTraining(): List<Training> {
         createTraining()

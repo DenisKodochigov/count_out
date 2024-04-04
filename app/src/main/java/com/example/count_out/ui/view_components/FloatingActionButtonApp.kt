@@ -66,7 +66,7 @@ import java.math.RoundingMode
                 StateRunning.Started -> FabStartedService(onClickStop, onClickPause)
                 StateRunning.Stopped -> FabStoppedService(onClickStart)
                 StateRunning.Created -> FabStoppedService(onClickStart)
-                StateRunning.Pause -> FabPauseService(onClickStart, onClickStop)
+                StateRunning.Paused -> FabPauseService(onClickStart, onClickStop)
             }
         }
         Spacer(modifier = Modifier.height(12.dp))

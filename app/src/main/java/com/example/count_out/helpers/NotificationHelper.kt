@@ -7,38 +7,29 @@ import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import androidx.core.app.NotificationCompat
-import com.example.count_out.MainActivity
 import com.example.count_out.R
 import com.example.count_out.domain.formatTime
-import com.example.count_out.entity.Const.CLICK_REQUEST_CODE
 import com.example.count_out.entity.Const.NOTIFICATION_CHANNEL_DESCRIPTION
 import com.example.count_out.entity.Const.NOTIFICATION_CHANNEL_ID
 import com.example.count_out.entity.Const.NOTIFICATION_CHANNEL_NAME
+import com.example.count_out.entity.Const.NOTIFICATION_EXTRA
 import com.example.count_out.entity.Const.NOTIFICATION_ID
+import com.example.count_out.entity.Const.PAUSE_REQUEST_CODE
 import com.example.count_out.entity.Const.SET_CONTENT_TITLE
-import com.example.count_out.entity.Const.STOPWATCH_STATE
-import com.example.count_out.entity.StopwatchState
+import com.example.count_out.entity.Const.START_REQUEST_CODE
+import com.example.count_out.entity.Const.STOP_REQUEST_CODE
+import com.example.count_out.entity.StateRunning
 import com.example.count_out.service.workout.WorkoutService
-import com.example.count_out.ui.view_components.lg
-import kotlinx.coroutines.flow.MutableStateFlow
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
 class NotificationHelper @Inject constructor(private val context: Context)
 {
-    private var stateButton: MutableStateFlow<Boolean> = MutableStateFlow(true)
     private val notificationManager by lazy {
         context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager }
-    private val pendingIntent by lazy {
-        PendingIntent.getActivity(
-            context,
-            CLICK_REQUEST_CODE,
-            Intent(context, MainActivity::class.java).apply {
-                putExtra(STOPWATCH_STATE, StopwatchState.Started.name) },
-            PendingIntent.FLAG_IMMUTABLE
-        )
-    }
+
+    private val pendingIntent by lazy { intentAction( StateRunning.Started.name, START_REQUEST_CODE)}
 
     private val notificationBuilder: NotificationCompat.Builder by lazy {
         NotificationCompat.Builder(context, NOTIFICATION_CHANNEL_ID)
@@ -49,8 +40,8 @@ class NotificationHelper @Inject constructor(private val context: Context)
             .setContentIntent(pendingIntent)
             .setSmallIcon(R.drawable.ic_timer)
             .setPriority(NotificationCompat.PRIORITY_HIGH)
-            .addAction(0, "Pause", onPauseAction(context))
-            .addAction(0, "Stop", onStopAction(context))
+            .addAction(0, "Pause", intentAction(StateRunning.Paused.name, PAUSE_REQUEST_CODE))
+            .addAction(0, "Stop", intentAction(StateRunning.Stopped.name, STOP_REQUEST_CODE))
             .setAutoCancel(true)
     }
     fun createChannel() {
@@ -65,51 +56,40 @@ class NotificationHelper @Inject constructor(private val context: Context)
         notificationManager.createNotificationChannel(channel)
     }
     fun build() = notificationBuilder.build()
-
-    fun cancel(){
-        notificationManager.cancel(NOTIFICATION_ID)
-    }
+    fun cancel(){ notificationManager.cancel(NOTIFICATION_ID) }
     fun updateNotification(hours: String, minutes: String, seconds: String) {
         notificationManager.notify(
             NOTIFICATION_ID, notificationBuilder.setContentText(
                 formatTime(hours = hours, minutes = minutes, seconds = seconds,)).build()
         )
     }
+
     @SuppressLint("RestrictedApi")
-    fun setContinueButton(context: Context) {
-        stateButton.value = false
+    fun setContinueButton() {
         notificationBuilder.mActions.removeAt(0)
         notificationBuilder.mActions.add(
-            0, NotificationCompat.Action(0, "Continue", onPauseAction(context)))
+            0, NotificationCompat.Action(0, "Continue", intentAction(StateRunning.Started.name, START_REQUEST_CODE)))
         notificationManager.notify(NOTIFICATION_ID, notificationBuilder.build())
     }
     @SuppressLint("RestrictedApi")
-    fun setPauseButton(context: Context) {
-        stateButton.value = true
+    fun setPauseButton() {
         notificationBuilder.mActions.removeAt(0)
-        notificationBuilder.mActions.add(
-            0, NotificationCompat.Action(0, "Pause", onPauseAction(context)))
+        notificationBuilder.mActions.add(0,
+            NotificationCompat.Action(0, "Pause", intentAction(StateRunning.Paused.name, PAUSE_REQUEST_CODE)))
         notificationManager.notify(NOTIFICATION_ID, notificationBuilder.build())
-    }
-    private fun onPauseAction(context: Context): PendingIntent {
-        lg("NotificationHelper onPauseAction")
-        return PendingIntent.getService(
-            context, 0,
-            Intent(context, WorkoutService::class.java).apply {
-                putExtra(STOPWATCH_STATE,
-                    if (stateButton.value) StopwatchState.Paused.name else StopwatchState.Started.name) },
-            PendingIntent.FLAG_IMMUTABLE )
     }
 
-    private fun onStopAction(context: Context): PendingIntent = PendingIntent.getService(
-        context, 0,
-        Intent(context, WorkoutService::class.java).apply {
-            putExtra(STOPWATCH_STATE, StopwatchState.Stopped.name) },
-        PendingIntent.FLAG_IMMUTABLE )
+    private fun intentAction(value: String, code: Int):PendingIntent =
+        PendingIntent.getService(context, code,
+            Intent(context, WorkoutService::class.java).apply { putExtra(NOTIFICATION_EXTRA, value ) },
+            PendingIntent.FLAG_IMMUTABLE
+        )
+
 
     fun channelExist(): Boolean{
         return if (notificationManager.getNotificationChannel(NOTIFICATION_ID.toString()) != null) {
-            notificationManager.getNotificationChannel(NOTIFICATION_ID.toString()).importance != NotificationManager.IMPORTANCE_NONE
+            notificationManager.getNotificationChannel(NOTIFICATION_ID.toString()).importance !=
+                    NotificationManager.IMPORTANCE_NONE
         } else false
     }
 }

@@ -32,9 +32,9 @@ import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.example.count_out.entity.Const.TabFadeInAnimationDelay
-import com.example.count_out.entity.Const.TabFadeInAnimationDuration
-import com.example.count_out.entity.Const.TabFadeOutAnimationDuration
+import com.example.count_out.entity.Const.TAB_FADE_IN_ANIMATION_DELAY
+import com.example.count_out.entity.Const.TAB_FADE_IN_ANIMATION_DURATION
+import com.example.count_out.entity.Const.TAB_FADE_OUT_ANIMATION_DURATION
 import com.example.count_out.entity.TagsTesting.BOTTOM_APP_BAR
 import com.example.count_out.navigation.ScreenDestination
 import com.example.count_out.navigation.TrainingsDestination
@@ -93,9 +93,9 @@ private fun ItemBottomBar(
     val animationSpec = remember {
         tween<Color>(
             easing = LinearEasing,
-            delayMillis = TabFadeInAnimationDelay,
-            durationMillis = if (selected) TabFadeInAnimationDuration
-                                else TabFadeOutAnimationDuration
+            delayMillis = TAB_FADE_IN_ANIMATION_DELAY,
+            durationMillis = if (selected) TAB_FADE_IN_ANIMATION_DURATION
+                                else TAB_FADE_OUT_ANIMATION_DURATION
         )
     }
     val colorIcon = MaterialTheme.colorScheme.onSurface

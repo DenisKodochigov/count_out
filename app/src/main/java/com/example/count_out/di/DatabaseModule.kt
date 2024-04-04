@@ -28,7 +28,7 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 class DatabaseModule {
     lateinit var database: AppDatabase
-    private var mode: Int = 2
+    private var mode: Int = 1
     @Provides
     @Singleton
     fun provideDatabase(@ApplicationContext appContext: Context): AppDatabase {
@@ -39,7 +39,7 @@ class DatabaseModule {
                     .addCallback(object : RoomDatabase.Callback() {
                         override fun onCreate(db: SupportSQLiteDatabase) {
                             super.onCreate(db)
-                            Thread { prepopulateDb(database) }.start()
+                            Thread { prepopulateTestDb(database) }.start()
                         }
                     })
                     .build()
@@ -49,7 +49,7 @@ class DatabaseModule {
                     .addCallback( object: RoomDatabase.Callback(){
                         override fun onCreate(db: SupportSQLiteDatabase) {
                             super.onCreate(db)
-                            Thread { prepopulateDb(database) }.start()
+                            Thread { prepopulateRealDb(database) }.start()
 //                            Executors.newSingleThreadExecutor().execute {
 //                                database.dataDao().newBasket(BasketEntity(nameBasket = "Test")) }
                         }
@@ -57,14 +57,23 @@ class DatabaseModule {
                     .build()
             }
             else -> {
-                database = Room
-                    .databaseBuilder( appContext, AppDatabase::class.java, "data.db").build()
+                database = Room.databaseBuilder( appContext, AppDatabase::class.java, "data.db").build()
             }
         }
         return database
     }
 
-    private fun prepopulateDb( db: AppDatabase) {
+    private fun prepopulateRealDb( db: AppDatabase) {
+        createSetting(db)
+        createActivity(db)
+        createTrainingPlansReal(db)
+    }
+    private fun prepopulateTestDb( db: AppDatabase) {
+        createSetting(db)
+        createActivity(db)
+        createTrainingPlansTesting(db)
+    }
+    private fun createActivity( db: AppDatabase){
         db.dataDao().addActivity(ActivityDB(idActivity = 1, name = "Бег", icon = R.drawable.ic_setka))
         db.dataDao().addActivity(ActivityDB(idActivity = 2, name = "Беговые лыжи", icon = R.drawable.ic_setka))
         db.dataDao().addActivity(ActivityDB(idActivity = 3, name = "Простучать бедра", icon = R.drawable.ic_setka,
@@ -103,12 +112,7 @@ class DatabaseModule {
             description = "Руки опущены вдоль тела. Поднимите перед собой, разведите в стороны и поворотом оси гантелей из вертикального в горизонтальное положение. Опустите руки в исходное стостояние."))
         db.dataDao().addActivity(ActivityDB(idActivity = 21, name = "Гантели. Плечи. Обартный ход", icon = R.drawable.ic_setka,
             description = "Руки опущены вдоль тела. Разведите руки в стороны. Сведите перед собой с изменением оси гантелей с горизонтального в вертикальное положение. Опустите руки в исходное положение."))
-
-        createSetting(db)
-//        createTrainingPlansTesting(db)
-        createTrainingPlansReal(db)
     }
-
     private fun createSetting( db: AppDatabase){
         db.dataDao().addSetting(SettingDB(parameter = R.string.speech_description, value = 1))
     }
@@ -121,7 +125,7 @@ class DatabaseModule {
             speechId = addSpeechKit(db, bs = "", ast = "", be = "", ae = "",)))
         //Упражнение 1
         var idExercise = db.dataDao().addExercise(ExerciseDB(roundId = idRound, activityId = 3,
-            speechId = addSpeechKit(db, bs = "", ast = "", be = "", ae = "о",)))
+            speechId = addSpeechKit(db, bs = "", ast = "", be = "", ae = "",)))
         db.dataDao().addSet(SetDB(exerciseId = idExercise, name = "Set 1", reps = 10, intervalReps = 1.5, timeRest = 0, goal = GoalSet.COUNT,
             speechId = addSpeechKit(db, bs = "Подход ", ast = "", be = "", ae = "",)))
     }

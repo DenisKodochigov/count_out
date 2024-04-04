@@ -16,9 +16,9 @@ import androidx.navigation.NamedNavArgument
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
+import com.example.count_out.entity.Const.DELAY_SCREEN
+import com.example.count_out.entity.Const.DURATION_SCREEN
 import com.example.count_out.entity.Const.defaultScreen
-import com.example.count_out.entity.Const.delayScreen
-import com.example.count_out.entity.Const.durationScreen
 import com.example.count_out.ui.screens.play_workout.PlayWorkoutScreen
 import com.example.count_out.ui.screens.settings.SettingScreen
 import com.example.count_out.ui.screens.training.TrainingScreen
@@ -113,5 +113,5 @@ val popExitTransition: AnimatedContentTransitionScope<NavBackStackEntry>.() -> E
     slideOutHorizontally(targetOffsetX = { (it * direction).toInt() }, animationSpec = tweenM())
 }
 fun <T>tweenM(): TweenSpec<T> =
-    tween( durationMillis = durationScreen, delayMillis = delayScreen, easing = LinearOutSlowInEasing)
+    tween( durationMillis = DURATION_SCREEN, delayMillis = DELAY_SCREEN, easing = LinearOutSlowInEasing)
 
