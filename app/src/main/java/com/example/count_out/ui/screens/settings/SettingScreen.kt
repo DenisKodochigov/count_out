@@ -35,7 +35,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.count_out.R
 import com.example.count_out.data.room.tables.ActivityDB
 import com.example.count_out.data.room.tables.SettingDB
-import com.example.count_out.domain.toInt
+import com.example.count_out.domain.to01
 import com.example.count_out.ui.bottomsheet.BottomSheetAddActivity
 import com.example.count_out.ui.bottomsheet.CardActivity
 import com.example.count_out.ui.theme.Dimen
@@ -87,7 +87,7 @@ import com.example.count_out.ui.view_components.TextApp
         it.parameter == R.string.speech_description}?.let { setting->
             TemplateSwitch(
                 setting = setting,
-                change = { checked-> uiState.onUpdateSetting(setting.copy(value = checked.toInt()))
+                change = { checked-> uiState.onUpdateSetting(setting.copy(value = checked.to01()))
             })
     }
 }
