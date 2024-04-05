@@ -51,15 +51,12 @@ fun NavGraphBuilder.training(onBaskScreen: () -> Unit) {
         }
     )
 }
-fun NavGraphBuilder.playWorkout(onBaskScreen: () -> Unit) {
+fun NavGraphBuilder.playWorkout() {
     template(
         routeTo = PlayWorkoutDestination.routeWithArgs,
         argument = TrainingDestination.arguments,
         content = { navBackStackEntry ->
-            PlayWorkoutScreen(
-                trainingId = navBackStackEntry.arguments?.getLong(TrainingDestination.ARG) ?: 0,
-                onBaskScreen = onBaskScreen
-            )
+            PlayWorkoutScreen(trainingId = navBackStackEntry.arguments?.getLong(TrainingDestination.ARG) ?: 0)
         }
     )
 }

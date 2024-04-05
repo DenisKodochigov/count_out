@@ -33,27 +33,21 @@ import com.example.count_out.ui.theme.interLight12
 import com.example.count_out.ui.view_components.FABCorrectInterval
 import com.example.count_out.ui.view_components.FABStartStopWorkOut
 import com.example.count_out.ui.view_components.TextApp
-import com.example.count_out.ui.view_components.lg
 import kotlinx.coroutines.launch
 
 @SuppressLint("UnrememberedMutableState")
 @Composable
-fun PlayWorkoutScreen(
-    trainingId: Long,
-    onBaskScreen:() -> Unit
-){
+fun PlayWorkoutScreen(trainingId: Long ){
     val viewModel: PlayWorkoutViewModel = hiltViewModel()
     LaunchedEffect( key1 = true, block = { viewModel.getTraining(trainingId) })
-    PlayWorkoutScreenCreateView( viewModel = viewModel, onBaskScreen = onBaskScreen)
+    PlayWorkoutScreenCreateView( viewModel = viewModel)
 }
 @Composable
-fun PlayWorkoutScreenCreateView( viewModel: PlayWorkoutViewModel, onBaskScreen:() -> Unit
+fun PlayWorkoutScreenCreateView( viewModel: PlayWorkoutViewModel,
 ){
     val uiState by viewModel.playWorkoutScreenState.collectAsState()
-    uiState.onBaskScreen = onBaskScreen
     PlayWorkoutScreenLayout(uiState = uiState)
 }
-
 @Composable fun PlayWorkoutScreenLayout( uiState: PlayWorkoutScreenState
 ){
     Box {

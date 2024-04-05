@@ -22,7 +22,6 @@ data class PlayWorkoutScreenState(
     val startWorkOutService: (Training)->Unit = {},
     val stopWorkOutService: ()->Unit = {},
     val pauseWorkOutService: ()->Unit = {},
-    @Stable var onBaskScreen: () ->Unit = {},
     @Stable var startTime: Long = 0L,
 ){
     fun findSet(setId: Long): Set?{
