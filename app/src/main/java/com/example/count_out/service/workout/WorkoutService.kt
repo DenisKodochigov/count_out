@@ -30,11 +30,10 @@ class WorkoutService @Inject constructor(): Service(), WorkOutAPI
     override var variablesOut: VariablesOutService = VariablesOutService()
     override var variablesIn: VariablesInService = VariablesInService()
 
-//    @Inject lateinit var stopWatch: StopWatch
     @Inject lateinit var notificationHelper: NotificationHelper
     @Inject lateinit var playerWorkOut: PlayerWorkOut
     private lateinit var scopeSpeech: CoroutineScope
-    private lateinit var scope: CoroutineScope
+    private lateinit var scopeTick: CoroutineScope
 
     inner class WorkoutServiceBinder : Binder() { fun getService(): WorkoutService = this@WorkoutService }
     override fun onBind(p0: Intent?): IBinder = WorkoutServiceBinder()
@@ -50,10 +49,8 @@ class WorkoutService @Inject constructor(): Service(), WorkOutAPI
     override fun startWorkout() {
         variablesOut.stateRunning.value.let {
             if (it == StateRunning.Stopped || it == StateRunning.Created){
-                variablesOut.startTime = System.currentTimeMillis()
-                startForegroundService()
                 variablesOut.stateRunning.value = StateRunning.Started
-//                stopWatch.onStart(variablesOut.stateRunning) { countTime -> sendCountTime(countTime) }
+                startForegroundService()
                 getTick()
                 playTraining()
             } else if (it == StateRunning.Paused) { continueWorkout() }
@@ -68,17 +65,17 @@ class WorkoutService @Inject constructor(): Service(), WorkOutAPI
         notificationHelper.setContinueButton()
     }
     override fun stopWorkout(){
-//        stopWatch.onStop()
         StopWatchNew.stop()
         variablesOut.cancel()
         stopForeground(STOP_FOREGROUND_REMOVE)
         notificationHelper.cancel()
         scopeSpeech.cancel()
+        scopeTick.cancel()
     }
     private fun getTick(){
         StopWatchNew.start(variablesOut.stateRunning)
-        scope = CoroutineScope(Dispatchers.Default)
-        scope.launch {
+        scopeTick = CoroutineScope(Dispatchers.Default)
+        scopeTick.launch {
             StopWatchNew.getTickTime().collect{ tick ->
                 notificationHelper.updateNotification(hours = tick.hour, minutes = tick.min, seconds = tick.sec)
                 variablesOut.flowTick.value = tick

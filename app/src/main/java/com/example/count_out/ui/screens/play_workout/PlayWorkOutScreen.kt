@@ -94,7 +94,6 @@ fun PlayWorkoutScreenCreateView( viewModel: PlayWorkoutViewModel,
     CountTime(uiState)
     ListState(uiState)
 }
-
 @Composable fun CountTime(uiState: PlayWorkoutScreenState){
 
     val tickTime = uiState.tickTime
@@ -122,7 +121,7 @@ fun PlayWorkoutScreenCreateView( viewModel: PlayWorkoutViewModel,
         items(items = uiState.statesWorkout.value ){ item->
             Row(modifier = Modifier.padding(horizontal = 12.dp, vertical = 4.dp)) {
                 TextApp(
-                    text = getDuration( time = item.time!!),
+                    text = "${item.tickTime.hour}:${item.tickTime.min}:${item.tickTime.sec}",
                     modifier = Modifier.width(70.dp),
                     style = interLight12
                 )
@@ -141,13 +140,6 @@ fun PlayWorkoutScreenCreateView( viewModel: PlayWorkoutViewModel,
 }
 fun listSize(list: List<MessageWorkOut>): Int = if (list.isEmpty()) 0 else list.size - 1
 
-fun getDuration(time: Long): String{
-    val duration: Long = time
-    val hour = duration / 1000 / 60 / 60
-    val minutes = duration / 1000 / 60
-    val seconds = duration / 1000 % 60
-    return String.format("%02d:%02d:%02d",hour, minutes, seconds)
-}
 fun onButtonStart(uiState:PlayWorkoutScreenState){
     uiState.training?.let { uiState.startWorkOutService(it) }
 }
