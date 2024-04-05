@@ -24,6 +24,7 @@ class SettingViewModel @Inject constructor(
 ): ViewModel() {
     private val _settingScreenState = MutableStateFlow(
         SettingScreenState(
+            settings =mutableStateOf(emptyList()),
             onAddActivity = { activity-> onAddActivity( activity )},
             onUpdateActivity = { activity-> onUpdateActivity( activity )},
             onDeleteActivity = { activityId-> onDeleteActivity( activityId )},
@@ -34,10 +35,10 @@ class SettingViewModel @Inject constructor(
         ))
     val settingScreenState: StateFlow<SettingScreenState> = _settingScreenState.asStateFlow()
 
-    fun init(){
+    init {
         getSettings()
-        templateMy{dataRepository.getActivities()} }
-
+        templateMy{dataRepository.getActivities()}
+    }
     private fun onAddActivity(activity: Activity){
         templateMy{
             if (activity.idActivity > 0) dataRepository.onUpdateActivity(activity)

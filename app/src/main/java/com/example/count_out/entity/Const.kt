@@ -4,7 +4,7 @@ import com.example.count_out.navigation.TrainingsDestination
 
 object Const {
 
-    val defaultScreen = TrainingsDestination.route
+    val DEFAULT_SCREEN = TrainingsDestination
 
     const val DURATION_SCREEN = 800
     const val DELAY_SCREEN = 200

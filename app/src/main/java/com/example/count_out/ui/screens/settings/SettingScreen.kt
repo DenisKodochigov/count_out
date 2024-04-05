@@ -20,7 +20,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Switch
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -36,6 +35,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.count_out.R
 import com.example.count_out.data.room.tables.ActivityDB
 import com.example.count_out.data.room.tables.SettingDB
+import com.example.count_out.domain.toInt
 import com.example.count_out.ui.bottomsheet.BottomSheetAddActivity
 import com.example.count_out.ui.bottomsheet.CardActivity
 import com.example.count_out.ui.theme.Dimen
@@ -47,10 +47,8 @@ import com.example.count_out.ui.view_components.IconsCollapsing
 import com.example.count_out.ui.view_components.TextApp
 
 @SuppressLint("UnrememberedMutableState")
-@Composable fun SettingScreen( onBaskScreen:() -> Unit
-){
+@Composable fun SettingScreen(){
     val viewModel: SettingViewModel = hiltViewModel()
-    LaunchedEffect( key1 = true, block = { viewModel.init() })
     SettingScreenCreateView( viewModel = viewModel )
 }
 @Composable fun SettingScreenCreateView( viewModel: SettingViewModel
@@ -83,10 +81,14 @@ import com.example.count_out.ui.view_components.TextApp
     SettingSpeechDescription(uiState)
 }
 @Composable fun SettingSpeechDescription(uiState: SettingScreenState){
-    uiState.settings.value.find{ it.parameter == R.string.speech_description}?.let {setting->
-        TemplateSwitch(setting = setting, change = { checked->
-            uiState.onUpdateSetting(setting.copy(value = if (checked) 1 else 0))
-        })
+    var enableValue = true
+    try { val test = uiState.settings.value } catch (e: IllegalStateException){ enableValue = false}
+    if (enableValue) uiState.settings.value.find{
+        it.parameter == R.string.speech_description}?.let { setting->
+            TemplateSwitch(
+                setting = setting,
+                change = { checked-> uiState.onUpdateSetting(setting.copy(value = checked.toInt()))
+            })
     }
 }
 @Composable fun TemplateSwitch(setting: SettingDB, change:(Boolean)->Unit)

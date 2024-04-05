@@ -5,7 +5,6 @@ import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.tween
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -52,7 +51,6 @@ fun BottomBarApp(
         contentPadding = PaddingValues(0.dp),
         tonalElevation = 6.dp,
         modifier = modifier
-            .background(color = Color.Transparent)  //MaterialTheme.colorScheme.surface)
             .testTag(BOTTOM_APP_BAR)
             .clip(shape = bottomBarShape),
         content = { BottomBarContent( currentScreen = currentScreen, onTabSelection = onTabSelection )}

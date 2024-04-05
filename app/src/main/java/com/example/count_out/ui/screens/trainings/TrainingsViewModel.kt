@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.count_out.data.DataRepository
 import com.example.count_out.entity.ErrorApp
 import com.example.count_out.entity.Training
+import com.example.count_out.ui.view_components.lg
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -29,6 +30,9 @@ class TrainingsViewModel @Inject constructor(
     )
     val trainingsScreenState: StateFlow<TrainingsScreenState> = _trainingsScreenState.asStateFlow()
 
+    init {
+        templateMy { dataRepository.getTrainings() }
+    }
     fun getTrainings(){ templateMy { dataRepository.getTrainings() } }
     private fun addTraining(){ templateMy { dataRepository.addTraining() } }
     private fun deleteTraining(id: Long){ templateMy { dataRepository.deleteTraining(id) } }

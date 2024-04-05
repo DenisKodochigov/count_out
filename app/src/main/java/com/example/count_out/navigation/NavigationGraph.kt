@@ -16,9 +16,9 @@ import androidx.navigation.NamedNavArgument
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
+import com.example.count_out.entity.Const.DEFAULT_SCREEN
 import com.example.count_out.entity.Const.DELAY_SCREEN
 import com.example.count_out.entity.Const.DURATION_SCREEN
-import com.example.count_out.entity.Const.defaultScreen
 import com.example.count_out.ui.screens.play_workout.PlayWorkoutScreen
 import com.example.count_out.ui.screens.settings.SettingScreen
 import com.example.count_out.ui.screens.training.TrainingScreen
@@ -39,7 +39,6 @@ fun NavGraphBuilder.trainings(
         }
     )
 }
-
 fun NavGraphBuilder.training(onBaskScreen: () -> Unit) {
     template(
         routeTo = TrainingDestination.routeWithArgs,
@@ -52,7 +51,6 @@ fun NavGraphBuilder.training(onBaskScreen: () -> Unit) {
         }
     )
 }
-
 fun NavGraphBuilder.playWorkout(onBaskScreen: () -> Unit) {
     template(
         routeTo = PlayWorkoutDestination.routeWithArgs,
@@ -65,11 +63,10 @@ fun NavGraphBuilder.playWorkout(onBaskScreen: () -> Unit) {
         }
     )
 }
-
-fun NavGraphBuilder.settings(onBaskScreen: () -> Unit) {
+fun NavGraphBuilder.settings() {
     template(
         routeTo = SettingDestination.route,
-        content = { SettingScreen(onBaskScreen = onBaskScreen) }
+        content = { SettingScreen() }
     )
 }
 
@@ -83,33 +80,33 @@ fun NavGraphBuilder.template(
         arguments = argument,
         enterTransition = enterTransition,
         exitTransition = exitTransition,
-//        popEnterTransition = popEnterTransition,
-//        popExitTransition = popExitTransition,
+        popEnterTransition = popEnterTransition,
+        popExitTransition = popExitTransition,
         content = content
     )
 }
 
 val enterTransition: AnimatedContentTransitionScope<NavBackStackEntry>.() -> EnterTransition = {
-    val targetScreen = targetState.destination.route ?: defaultScreen
-    val direction: Double = if (targetScreen == defaultScreen) -1.0 else 1.0
+    val targetScreen = targetState.destination.route ?: DEFAULT_SCREEN.route
+    val direction: Double = if (targetScreen == DEFAULT_SCREEN.route) -1.0 else 1.0
     slideInHorizontally(animationSpec =tweenM(), initialOffsetX = { (it * direction).toInt() }) +
         fadeIn( animationSpec = tweenM() )
 }
 val exitTransition: AnimatedContentTransitionScope<NavBackStackEntry>.() -> ExitTransition = {
-    val targetScreen = targetState.destination.route ?: defaultScreen
-    val direction: Double = if (targetScreen == defaultScreen) 1.0 else -1.0
+    val targetScreen = targetState.destination.route ?: DEFAULT_SCREEN.route
+    val direction: Double = if (targetScreen == DEFAULT_SCREEN.route) 1.0 else -1.0
     slideOutHorizontally(animationSpec = tweenM(), targetOffsetX = { (it * direction).toInt() }) +
     fadeOut(animationSpec = tweenM())
 }
 val popEnterTransition: AnimatedContentTransitionScope<NavBackStackEntry>.() -> EnterTransition = {
-    val targetScreen = targetState.destination.route ?: defaultScreen
-    val direction: Double = if (targetScreen == defaultScreen) (1/3.0) else (1/3.0)
+    val targetScreen = targetState.destination.route ?: DEFAULT_SCREEN.route
+    val direction: Double = if (targetScreen == DEFAULT_SCREEN.route) (1/3.0) else (1/3.0)
     slideInHorizontally(initialOffsetX = { (it * direction).toInt() }, animationSpec = tweenM())
 }
 
 val popExitTransition: AnimatedContentTransitionScope<NavBackStackEntry>.() -> ExitTransition = {
-    val targetScreen = targetState.destination.route ?: defaultScreen
-    val direction: Double = if (targetScreen == defaultScreen) (1/3.0) else (1/3.0)
+    val targetScreen = targetState.destination.route ?: DEFAULT_SCREEN.route
+    val direction: Double = if (targetScreen == DEFAULT_SCREEN.route) (1/3.0) else (1/3.0)
     slideOutHorizontally(targetOffsetX = { (it * direction).toInt() }, animationSpec = tweenM())
 }
 fun <T>tweenM(): TweenSpec<T> =

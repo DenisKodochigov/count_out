@@ -19,6 +19,7 @@ fun formatTime(
 fun Int.pad(): String = this.toString().padStart(2, '0')
 fun String.toDoubleMy(): Double = if (this.isNotEmpty()) this.toDouble() else 0.0
 fun String.toIntMy(): Int = if (this.isNotEmpty()) this.toInt() else 0
+fun Boolean.toInt(): Int = if (this) 1 else 0
 fun Double.toPositive(): Double = if (this < 0) 0.0 else this
 fun String.toNumeric(): Double{
     var result = ""

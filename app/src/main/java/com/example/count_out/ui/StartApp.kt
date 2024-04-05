@@ -14,14 +14,13 @@ import androidx.compose.ui.semantics.testTagsAsResourceId
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.rememberNavController
 import com.example.count_out.navigation.NavHostApp
-import com.example.count_out.navigation.backStack
+import com.example.count_out.navigation.backScreenDestination
 import com.example.count_out.navigation.navigateToScreen
 import com.example.count_out.permission.RequestPermission
 import com.example.count_out.ui.theme.AppTheme
 import com.example.count_out.ui.view_components.BottomBarApp
 import com.example.count_out.ui.view_components.CollapsingToolbar
 import com.example.count_out.ui.view_components.ExtendedFAB
-import com.example.count_out.ui.view_components.lg
 
 @OptIn(ExperimentalComposeUiApi::class)
 @SuppressLint("RememberReturnType", "UnrememberedMutableState", "SuspiciousIndentation",
@@ -35,7 +34,7 @@ fun StartApp() {
 //        val currentDestination = currentBackStack?.destination
 //        val currentScreen = listScreens.find {
 //            it.routeWithArgs == currentDestination?.route } ?: TrainingsDestination
-        val currentScreen = navController.backStack()
+        val currentScreen = navController.backScreenDestination()
         Scaffold(
             modifier = Modifier.semantics { testTagsAsResourceId = true },
             topBar = {
@@ -56,7 +55,6 @@ fun StartApp() {
             },
             floatingActionButtonPosition = FabPosition.End,
             content = { innerPadding ->
-                lg("StartApp")
                 NavHostApp(navController = navController, modifier = Modifier.padding(innerPadding))
                 RequestPermission(Manifest.permission.POST_NOTIFICATIONS, 31)
                 RequestPermission(Manifest.permission.FOREGROUND_SERVICE, 28)
