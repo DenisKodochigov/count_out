@@ -8,7 +8,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -83,7 +83,7 @@ import com.example.count_out.ui.view_components.TextApp
 ){
 //    lg("TrainingsScreenLayout")
     Column(
-        modifier = Modifier.fillMaxHeight(),
+        modifier = Modifier.fillMaxSize(),
         content = { TrainingsLazyColumn( uiState = uiState) }
     )
 }

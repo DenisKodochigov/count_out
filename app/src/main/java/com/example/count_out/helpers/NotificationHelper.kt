@@ -60,7 +60,7 @@ class NotificationHelper @Inject constructor(private val context: Context)
     fun updateNotification(hours: String, minutes: String, seconds: String) {
         notificationManager.notify(
             NOTIFICATION_ID, notificationBuilder.setContentText(
-                formatTime(hours = hours, minutes = minutes, seconds = seconds,)).build()
+                formatTime(hours = hours, min = minutes, sec = seconds,)).build()
         )
     }
 

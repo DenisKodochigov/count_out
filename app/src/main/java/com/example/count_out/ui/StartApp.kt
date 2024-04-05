@@ -30,10 +30,6 @@ import com.example.count_out.ui.view_components.ExtendedFAB
 fun StartApp() {
     AppTheme {
         val navController = rememberNavController()
-//        val currentBackStack by navController.currentBackStackEntryAsState()
-//        val currentDestination = currentBackStack?.destination
-//        val currentScreen = listScreens.find {
-//            it.routeWithArgs == currentDestination?.route } ?: TrainingsDestination
         val currentScreen = navController.backScreenDestination()
         Scaffold(
             modifier = Modifier.semantics { testTagsAsResourceId = true },

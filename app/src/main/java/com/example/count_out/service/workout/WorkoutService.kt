@@ -10,12 +10,11 @@ import android.os.IBinder
 import com.example.count_out.entity.Const.NOTIFICATION_EXTRA
 import com.example.count_out.entity.Const.NOTIFICATION_ID
 import com.example.count_out.entity.StateRunning
-import com.example.count_out.entity.TickTime
 import com.example.count_out.entity.VariablesInService
 import com.example.count_out.entity.VariablesOutService
 import com.example.count_out.helpers.NotificationHelper
 import com.example.count_out.service.player.PlayerWorkOut
-import com.example.count_out.service.stopwatch.StopWatch
+import com.example.count_out.service.stopwatch.StopWatchNew
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -31,10 +30,11 @@ class WorkoutService @Inject constructor(): Service(), WorkOutAPI
     override var variablesOut: VariablesOutService = VariablesOutService()
     override var variablesIn: VariablesInService = VariablesInService()
 
-    @Inject lateinit var stopWatch: StopWatch
+//    @Inject lateinit var stopWatch: StopWatch
     @Inject lateinit var notificationHelper: NotificationHelper
     @Inject lateinit var playerWorkOut: PlayerWorkOut
     private lateinit var scopeSpeech: CoroutineScope
+    private lateinit var scope: CoroutineScope
 
     inner class WorkoutServiceBinder : Binder() { fun getService(): WorkoutService = this@WorkoutService }
     override fun onBind(p0: Intent?): IBinder = WorkoutServiceBinder()
@@ -48,14 +48,13 @@ class WorkoutService @Inject constructor(): Service(), WorkOutAPI
     }
     @SuppressLint("ForegroundServiceType")
     override fun startWorkout() {
-        variablesOut.startTime = System.currentTimeMillis()
         variablesOut.stateRunning.value.let {
-            if (it == StateRunning.Stopped || it == StateRunning.Created)
-            {
+            if (it == StateRunning.Stopped || it == StateRunning.Created){
+                variablesOut.startTime = System.currentTimeMillis()
                 startForegroundService()
                 variablesOut.stateRunning.value = StateRunning.Started
-                scopeSpeech = CoroutineScope(Dispatchers.Default)
-                stopWatch.onStart(variablesOut.stateRunning) { countTime -> sendCountTime(countTime) }
+//                stopWatch.onStart(variablesOut.stateRunning) { countTime -> sendCountTime(countTime) }
+                getTick()
                 playTraining()
             } else if (it == StateRunning.Paused) { continueWorkout() }
         }
@@ -69,17 +68,25 @@ class WorkoutService @Inject constructor(): Service(), WorkOutAPI
         notificationHelper.setContinueButton()
     }
     override fun stopWorkout(){
-        stopWatch.onStop()
+//        stopWatch.onStop()
+        StopWatchNew.stop()
         variablesOut.cancel()
         stopForeground(STOP_FOREGROUND_REMOVE)
         notificationHelper.cancel()
         scopeSpeech.cancel()
     }
-    private fun sendCountTime(tick: TickTime){
-        notificationHelper.updateNotification(hours = tick.hour, minutes = tick.min, seconds = tick.sec)
-        variablesOut.flowTick.value = tick
+    private fun getTick(){
+        StopWatchNew.start(variablesOut.stateRunning)
+        scope = CoroutineScope(Dispatchers.Default)
+        scope.launch {
+            StopWatchNew.getTickTime().collect{ tick ->
+                notificationHelper.updateNotification(hours = tick.hour, minutes = tick.min, seconds = tick.sec)
+                variablesOut.flowTick.value = tick
+            }
+        }
     }
     private fun playTraining() {
+        scopeSpeech = CoroutineScope(Dispatchers.Default)
         scopeSpeech.launch {
             playerWorkOut.playingWorkOut(variablesIn, variablesOut)
             stopWorkout()
@@ -92,5 +99,8 @@ class WorkoutService @Inject constructor(): Service(), WorkOutAPI
         else startForeground(NOTIFICATION_ID, notificationHelper.build())
     }
 }
-
+//    private fun sendCountTime(tick: TickTime){
+//        notificationHelper.updateNotification(hours = tick.hour, minutes = tick.min, seconds = tick.sec)
+//        variablesOut.flowTick.value = tick
+//    }
 

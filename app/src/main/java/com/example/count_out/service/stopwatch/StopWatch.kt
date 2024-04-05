@@ -21,8 +21,7 @@ class StopWatch {
                     onTick(TickTime(hour = h.toInt().pad(), min = m.pad(), sec = s.pad()))
                 }
             } else if (pause.value == StateRunning.Stopped){
-                duration = Duration.ZERO
-                timer.cancel()
+                onStop()
             }
         }
     }
