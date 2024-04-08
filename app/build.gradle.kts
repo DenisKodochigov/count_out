@@ -68,7 +68,7 @@ dependencies {
 
     implementation("androidx.core:core-ktx:1.12.0")
     implementation("androidx.activity:activity-compose:1.8.2")
-    implementation(platform("androidx.compose:compose-bom:2024.03.00"))
+    implementation(platform("androidx.compose:compose-bom:2024.09.00"))
     //Hilt
     implementation ("com.google.dagger:hilt-android:$daggerVersion")
     implementation ("androidx.hilt:hilt-navigation-compose:1.2.0")
@@ -79,7 +79,7 @@ dependencies {
     implementation ("androidx.compose.ui:ui:$composeVersion")
     implementation("com.google.accompanist:accompanist-permissions:0.34.0")
     debugImplementation("androidx.compose.ui:ui-tooling")
-    debugImplementation("androidx.compose.ui:ui-test-manifest:1.6.4")
+    debugImplementation("androidx.compose.ui:ui-test-manifest:1.6.5")
     //Tooling support (Previews, etc.)
     implementation ("androidx.compose.ui:ui-graphics:$composeVersion")
     implementation ("androidx.compose.ui:ui-tooling-preview:$composeVersion")
@@ -93,7 +93,7 @@ dependencies {
     implementation ("androidx.compose.foundation:foundation-layout:$composeVersion")
     // Material Design
     implementation("androidx.compose.material3:material3:1.2.1")
-    implementation ("androidx.compose.ui:ui-text-google-fonts:1.6.4")
+    implementation ("androidx.compose.ui:ui-text-google-fonts:1.6.5")
     implementation ("androidx.compose.material:material-icons-core:$composeVersion")
     implementation ("androidx.compose.material:material-icons-extended:$composeVersion")
     //Adaptive
@@ -116,6 +116,11 @@ dependencies {
     implementation ("com.squareup.moshi:moshi:1.15.0")
     implementation ("com.squareup.moshi:moshi-kotlin:1.15.0")
     ksp ("com.squareup.moshi:moshi-kotlin-codegen:1.15.0")
+    //DataStory
+//    implementation("androidx.datastore:datastore-preferences-core:1.0.0")
+//    implementation("androidx.datastore:datastore-preferences:1.0.0")
+//    implementation("androidx.datastore:datastore-core:1.0.0")
+//    implementation("androidx.datastore:datastore:1.0.0")
     // Import the Firebase BoM
 //    implementation(platform("com.google.firebase:firebase-bom:32.6.0"))
 //    implementation("com.google.firebase:firebase-analytics-ktx")
@@ -129,6 +134,6 @@ dependencies {
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
-    androidTestImplementation(platform("androidx.compose:compose-bom:2024.03.00"))
+    androidTestImplementation(platform("androidx.compose:compose-bom:2024.09.00"))
     androidTestImplementation("androidx.compose.ui:ui-test-junit4")
 }

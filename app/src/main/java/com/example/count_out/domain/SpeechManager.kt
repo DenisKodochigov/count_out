@@ -11,6 +11,7 @@ import com.example.count_out.entity.VariablesOutService
 import com.example.count_out.ui.view_components.lg
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
+import java.io.File
 import java.util.Locale
 import javax.inject.Singleton
 
@@ -86,6 +87,46 @@ class SpeechManager(val context: Context) {
             speeching.value = true
             tts?.speak(text, TextToSpeech.QUEUE_FLUSH, null,"speakOut$idSpeech")
         }
+    }
+    fun writeToFile(text: String){
+        tts?.synthesizeToFile(text, null, File("test"), "test")
+    }
+    fun writeFile(filename: String, fileContents: String){
+        try {
+            context.openFileOutput(filename, Context.MODE_PRIVATE).use {
+                it.write(fileContents.toByteArray())}
+        }catch(e: Exception){
+            e.printStackTrace()
+        }
+    }
+    fun readFile(filename: String){
+//        var fileInputStream: FileInputStream? = null
+//        fileInputStream = openFileInput(filename)
+//        var inputStreamReader: InputStreamReader = InputStreamReader(fileInputStream)
+//        val bufferedReader: BufferedReader = BufferedReader(inputStreamReader)
+//        val stringBuilder: StringBuilder = StringBuilder()
+//        var text: String? = null
+//        while({ text = bufferedReader.readLine(); text }() != null) {
+//            stringBuilder.append(text)
+//        }
+////Displaying data on EditText
+//        fileData.setText(stringBuilder.toString()).toString()
+
+        context.openFileInput(filename).bufferedReader().useLines { lines ->
+            lines.fold("") { some, text ->
+                "$some\n$text"
+            }
+        }
+        val audioFile = File("path/to/audio/file.wav")
+        val audioInputStream = AudioSystem.getAudioInputStream(audioFile)
+        val audioFormat = audioInputStream.format
+        val buffer = ByteArray(audioInputStream.available())
+        audioInputStream.read(buffer)
+
+    }
+    fun existFile(filename: String): Boolean{
+        val files: Array<String> = context.fileList()
+        return files.find { it == filename }?.isNotEmpty() ?: false
     }
     fun getDuration() = durationEnd
 
