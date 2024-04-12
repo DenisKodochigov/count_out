@@ -96,8 +96,5 @@ class WorkoutService @Inject constructor(): Service(), WorkOutAPI
         else startForeground(NOTIFICATION_ID, notificationHelper.build())
     }
 }
-//    private fun sendCountTime(tick: TickTime){
-//        notificationHelper.updateNotification(hours = tick.hour, minutes = tick.min, seconds = tick.sec)
-//        variablesOut.flowTick.value = tick
-//    }
+
 

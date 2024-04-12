@@ -128,7 +128,14 @@ fun SwitchGoal(uiState: TrainingScreenState, set: Set)
             onClick = {
                 state.intValue = 1
                 uiState.onChangeSet ((set as SetDB).copy(goal = GoalSet.DISTANCE)) },
-            contextRight = { RadioButtonDistanceRight(uiState = uiState, set = set, visible = state.intValue == 1)},
+            contextRight = {
+                TextStringAndField(
+                    placeholder = set.distance.toString(),
+                    onChangeValue = { uiState.onChangeSet ((set as SetDB).copy(distance = it.toDoubleMy())) },
+                    editing = true,
+                    visibleField = state.intValue == 1,
+                    text = "${stringResource(id = R.string.distance)} (${stringResource(id = R.string.km)}):"
+                )},
             contextBottom = { },
         )
         Spacer(modifier = Modifier.height(6.dp))
@@ -138,7 +145,14 @@ fun SwitchGoal(uiState: TrainingScreenState, set: Set)
             onClick = {
                 state.intValue = 2
                 uiState.onChangeSet ((set as SetDB).copy(goal = GoalSet.DURATION)) },
-            contextRight = { RadioButtonDurationRight(uiState = uiState, set = set, visible = state.intValue == 2)},
+            contextRight = {
+                TextStringAndField(
+                    placeholder = set.duration.toString(),
+                    onChangeValue = { uiState.onChangeSet ((set as SetDB).copy(duration = it.toDoubleMy())) },
+                    editing = true,
+                    visibleField = state.intValue == 2,
+                    text = "${stringResource(id = R.string.duration)} (${stringResource(id = R.string.min)})")
+            },
             contextBottom = { RadioButtonDurationBottom(uiState = uiState, set = set, visible = state.intValue == 2)},
         )
         Spacer(modifier = Modifier.height(6.dp))
@@ -148,7 +162,14 @@ fun SwitchGoal(uiState: TrainingScreenState, set: Set)
             onClick = {
                 state.intValue = 3
                 uiState.onChangeSet ((set as SetDB).copy(goal = GoalSet.COUNT)) },
-            contextRight = { RadioButtonCountRight(uiState = uiState, set = set, visible = state.intValue == 3)},
+            contextRight = {
+                TextStringAndField(
+                    placeholder = set.reps.toString(),
+                    onChangeValue = { uiState.onChangeSet ((set as SetDB).copy(reps = it.toIntMy())) },
+                    editing = true,
+                    visibleField = state.intValue == 3,
+                    text = stringResource(id = R.string.quantity_reps))
+            },
             contextBottom = { RadioButtonCountBottom(uiState = uiState, set = set, visible = state.intValue == 3)},
         )
         Spacer(modifier = Modifier.height(6.dp))
@@ -159,23 +180,25 @@ fun SwitchGoal(uiState: TrainingScreenState, set: Set)
                 state.intValue = 4
                 uiState.onChangeSet ((set as SetDB).copy(goal = GoalSet.COUNT_GROUP)) },
             contextRight = {
-                RadioButtonCountGroupRight(uiState = uiState, set = set, visible = state.intValue == 4)},
+                TextStringAndField(
+                    placeholder = set.reps.toString(),
+                    onChangeValue = { uiState.onChangeSet ((set as SetDB).copy(reps = it.toIntMy())) },
+                    editing = true,
+                    visibleField = state.intValue == 4,
+                    text = stringResource(id = R.string.quantity_group_reps)
+                )},
             contextBottom = {
                 RadioButtonCountGroupBottom(uiState = uiState, set = set, visible = state.intValue == 4)},
         )
     }
 }
+
+
 @Composable
-fun RadioButtonDistanceRight(uiState: TrainingScreenState, set: Set, visible: Boolean)
+fun RadioButtonDurationBottom(uiState: TrainingScreenState, set: Set, visible: Boolean)
 {
-    RadioButtonRight(uiState = uiState,set = set,visible = visible,
-        text = "${stringResource(id = R.string.distance)} (${stringResource(id = R.string.km)}):")
-}
-@Composable
-fun RadioButtonCountRight(uiState: TrainingScreenState, set: Set, visible: Boolean)
-{
-    RadioButtonRight(uiState = uiState,set = set,visible = visible,
-        text = stringResource(id = R.string.quantity_reps))
+    RadioButtonBottom(uiState = uiState,set = set,visible = visible,
+        text = "${stringResource(id = R.string.weight)} (${stringResource(id = R.string.kg)}):")
 }
 @Composable
 fun RadioButtonCountBottom(uiState: TrainingScreenState, set: Set, visible: Boolean)
@@ -197,24 +220,6 @@ fun RadioButtonCountBottom(uiState: TrainingScreenState, set: Set, visible: Bool
                 text = stringResource(id = R.string.slowing_down_counts) )
         }
     }
-}
-@Composable
-fun RadioButtonDurationRight(uiState: TrainingScreenState, set: Set, visible: Boolean)
-{
-    RadioButtonRight(uiState = uiState,set = set,visible = visible,
-        text = "${stringResource(id = R.string.duration)} (${stringResource(id = R.string.min)})")
-}
-@Composable
-fun RadioButtonDurationBottom(uiState: TrainingScreenState, set: Set, visible: Boolean)
-{
-    RadioButtonBottom(uiState = uiState,set = set,visible = visible,
-        text = "${stringResource(id = R.string.weight)} (${stringResource(id = R.string.kg)}):")
-}
-@Composable
-fun RadioButtonCountGroupRight(uiState: TrainingScreenState, set: Set, visible: Boolean)
-{
-    RadioButtonRight(uiState = uiState,set = set,visible = visible,
-        text = stringResource(id = R.string.quantity_group_reps))
 }
 @Composable
 fun RadioButtonCountGroupBottom(uiState: TrainingScreenState, set: Set, visible: Boolean)
@@ -262,17 +267,7 @@ fun RadioButtonBottom(uiState: TrainingScreenState, set: Set, visible: Boolean, 
         )
     }
 }
-@Composable
-fun RadioButtonRight(uiState: TrainingScreenState, set: Set, visible: Boolean, text: String)
-{
-    TextStringAndField(
-        placeholder = set.duration.toString(),
-        onChangeValue = { uiState.onChangeSet ((set as SetDB).copy(duration = it.toDoubleMy())) },
-        editing = true,
-        visibleField = visible,
-        text = text
-    )
-}
+
 fun setCollapsing(uiState: TrainingScreenState, set: Set): Boolean
 {
     val listCollapsingSet = uiState.listCollapsingSet.value.toMutableList()

@@ -43,3 +43,86 @@ fun vibrate(context: Context){
     }
     vibrateApp.vibrate(VibrationEffect.createOneShot(300, VibrationEffect.DEFAULT_AMPLITUDE) )
 }
+
+//class TestTTSFile @Inject constructor(val context: Context, val speechManager: SpeechManager) {
+//    fun writeToFile(text: String, nameFile: String){
+//        speechManager.writeToFile(text, nameFile)
+//        context.fileList().forEach { lg("file: $it") }
+//    }
+
+//    fun readFile(filename: String){
+//        var fileInputStream: FileInputStream? = null
+//        fileInputStream = openFileInput(filename)
+//        var inputStreamReader: InputStreamReader = InputStreamReader(fileInputStream)
+//        val bufferedReader: BufferedReader = BufferedReader(inputStreamReader)
+//        val stringBuilder: StringBuilder = StringBuilder()
+//        var text: String? = null
+//        while({ text = bufferedReader.readLine(); text }() != null) {
+//            stringBuilder.append(text)
+//        }
+////Displaying data on EditText
+//        fileData.setText(stringBuilder.toString()).toString()
+
+//        context.openFileInput(filename).bufferedReader().useLines { lines ->
+//            lines.fold("") { some, text ->
+//                "$some\n$text"
+//            }
+//        }
+//        val audioFile = File("path/to/audio/file.wav")
+//        val audioInputStream = AudioSystem.getAudioInputStream(audioFile)
+//        val audioFormat = audioInputStream.format
+//        val buffer = ByteArray(audioInputStream.available())
+//        audioInputStream.read(buffer)
+
+//    }
+//    fun existFile(filename: String): Boolean{
+//        val files: Array<String> = context.fileList()
+//        return files.find { it == filename }?.isNotEmpty() ?: false
+//    }
+
+//    fun fileCreate(fileUri: Uri){
+//        val envPath: String = Environment.getExternalStorageDirectory().getAbsolutePath() + "/Download";
+//        val mp = MediaPlayer.create(context, fileUri)
+//        val inputText = "DASDASDFASD"
+//        val myHashRender = HashMap<String, String>()
+//        myHashRender[TextToSpeech.Engine.KEY_PARAM_UTTERANCE_ID] = inputText
+//        val destFileName: String = envPath + "/" + "tts_file.wav"
+//        val sr: Int = tts.synthesizeToFile(inputText, myHashRender, destFileName)
+//        Log.d("TAG", "synthesize returns = $sr")
+//        val fileTTS: File = File(destFileName)
+//
+//
+//        if (fileTTS.exists()) Log.d("TAG", "successfully created fileTTS")
+//        else Log.d("TAG", "failed while creating fileTTS")
+
+//        val fileUri = Uri.fromFile(fileTTS)
+//        Log.d("TAG", "successfully created uri link: " + fileUri.path)
+//        btnRead.setOnClickListener(new OnClickListener() {
+//
+//            @Override
+//            public void onClick(View arg0) {
+//                if (mp.isPlaying()) {
+//                    mp.pause();
+//                    Log.d(TAG, "successfully paused");
+//                } else {
+//                    mp.start();
+//                    Log.d(TAG, "successfully started");
+//                }
+//            }
+//        });
+//    }
+//}
+
+//fun writeToFile(text: String, nameFile: String){
+//        lg("getFeatures ${tts?.getVoices()}")
+//        var response: Int? = 0
+//        val utteranceId = "utteranceId12345"
+//        val textWrite = " Speech text"
+//        val fileName = "tts_file" //getFilesDir()
+//        val file = File( context.filesDir, fileName )
+//        val params = Bundle()
+//        params.putString( TextToSpeech.Engine.KEY_PARAM_UTTERANCE_ID, utteranceId)
+//        try { response = tts?.synthesizeToFile( textWrite, params, file, utteranceId) }
+//        catch (e: Exception ) { lg ("error $e")}
+//        lg(("response $response"))
+//    }

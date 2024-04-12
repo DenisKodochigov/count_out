@@ -2,7 +2,6 @@ package com.example.count_out.di
 
 import android.content.Context
 import com.example.count_out.helpers.NotificationHelper
-import com.example.count_out.service.stopwatch.StopWatch
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -17,10 +16,5 @@ class NotificationModule {
     @Provides
     fun provideNotificationApp(@ApplicationContext appContext: Context): NotificationHelper {
         return NotificationHelper( appContext )
-    }
-    @Singleton
-    @Provides
-    fun provideStopWatch(): StopWatch {
-        return StopWatch()
     }
 }

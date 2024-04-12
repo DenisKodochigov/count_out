@@ -45,9 +45,7 @@ class PlayerSet @Inject constructor(val speechManager:SpeechManager)
             GoalSet.COUNT_GROUP -> playSetCOUNTGROUP(template, variablesOut)
         }
     }
-    private suspend fun playSetCount(
-        template: VariablesInService,
-        variablesOut: VariablesOutService,
+    private suspend fun playSetCount(template: VariablesInService, variablesOut: VariablesOutService,
     ){
         for (count in 1..template.getSet().reps){
             variablesOut.set.value = template.getSet()
@@ -56,9 +54,7 @@ class PlayerSet @Inject constructor(val speechManager:SpeechManager)
         }
         variablesOut.set.value = SetDB()
     }
-    private suspend fun playSetDURATION(
-        template: VariablesInService,
-        variablesOut: VariablesOutService,
+    private suspend fun playSetDURATION(template: VariablesInService, variablesOut: VariablesOutService,
     ){
         val duration = template.getSet().duration * 60
         if (duration < 20) {
@@ -94,8 +90,8 @@ class PlayerSet @Inject constructor(val speechManager:SpeechManager)
     ){
         val listWordCount = template.getSet().groupCount.split(",")
         if ( listWordCount.isNotEmpty()){
-            for (count in 1..template.getSet().reps){
-                lg("Count group ${listWordCount[count%listWordCount.size]}")
+            for (count in 0..< template.getSet().reps){
+                lg("Count group $count: ${listWordCount[count%listWordCount.size]}")
                 variablesOut.set.value = template.getSet()
                 speechManager.speakOutFlush(text = listWordCount[count%listWordCount.size], variablesOut.stateRunning)
                 delayMy((template.getSetIntervalReps() * 1000).toLong(), variablesOut.stateRunning)
