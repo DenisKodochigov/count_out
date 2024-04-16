@@ -69,14 +69,12 @@ class PlayWorkoutViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             variablesOut.stateRunning.collect{
                 _playWorkoutScreenState.update { screenState ->
-                    screenState.copy(switchState = mutableStateOf(it)) }
-            }
+                    screenState.copy(switchState = mutableStateOf(it)) } }
         }
         viewModelScope.launch(Dispatchers.IO) {
             variablesOut.set.collect{ set->
                 _playWorkoutScreenState.update { currentState ->
-                    currentState.copy( playerSet = mutableStateOf(set) )}
-            }
+                    currentState.copy( playerSet = mutableStateOf(set) )}}
         }
         viewModelScope.launch(Dispatchers.IO) {
             variablesOut.flowTick.collect { tick ->
@@ -89,8 +87,7 @@ class PlayWorkoutViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             variablesOut.messageList.collect { state ->
                 _playWorkoutScreenState.update { screenState ->
-                    screenState.copy( statesWorkout = mutableStateOf( state )) }
-            }
+                    screenState.copy( statesWorkout = mutableStateOf( state )) } }
         }
     }
     private fun stopWorkOutService(){
