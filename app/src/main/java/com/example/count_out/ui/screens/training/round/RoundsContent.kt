@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Card
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -31,8 +32,7 @@ fun Round(uiState: TrainingScreenState, roundType: RoundType)
 {
     Card( elevation = elevationTraining(), shape = MaterialTheme.shapes.extraSmall
     ){
-        Box() //modifier = Modifier.background(color = MaterialTheme.colorScheme.primary))
-        {
+        Box{
             Column( modifier = Modifier.padding(start = 6.dp),)
             {
                 Row1Round(uiState = uiState, roundType)
@@ -47,9 +47,11 @@ fun Row1Round(uiState: TrainingScreenState, roundType: RoundType)
 {
     Row(
         verticalAlignment = Alignment.CenterVertically,
-        modifier = Modifier.fillMaxWidth().padding(bottom = 6.dp, end = 8.dp)
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(bottom = 6.dp, end = 8.dp)
     ){
-        TextApp(text = nameRound( uiState, roundType, stringResource(id = roundType.strId)), style = interBold14)
+        TextApp(text = stringResource(id = roundType.strId), style = interBold14)
         Spacer(modifier = Modifier.weight(1f))
         IconCollapsingSpeech(
             idIconCollapsing = getIconCollapsing(uiState, roundType),
@@ -58,12 +60,12 @@ fun Row1Round(uiState: TrainingScreenState, roundType: RoundType)
         )
     }
 }
-fun nameRound(uiState: TrainingScreenState, roundType: RoundType, name: String): String =
-    "$name: ${(uiState.training.rounds.find { it.roundType == roundType }?.idRound ?: 0)}"
 @Composable
 fun Row2Round(uiState: TrainingScreenState, roundType: RoundType) {
     val amountExercise = stringResource(id = R.string.exercises) + ": " + amountExercise(uiState, roundType)
     val txtDuration = stringResource(id = R.string.duration) + ": " + uiState.durationRound.value.toString()
+    HorizontalDivider()
+    Spacer(modifier = Modifier.height(4.dp))
     Row(modifier = Modifier.padding(end = 8.dp)) {
         TextApp(text = amountExercise, style = interLight12)
         Spacer(modifier = Modifier.weight(1f))
@@ -131,6 +133,14 @@ fun PoleAddExercise(uiState: TrainingScreenState, roundType: RoundType)
 {
     val nameNewSet = stringResource(id = R.string.set)
     IconAddItem(textId = R.string.add_activity, onAdd = {
+        uiState.onAddExercise(getIdRound(uiState, roundType), SetDB(name = nameNewSet))
+    })
+}
+@Composable
+fun PoleCreateRing(uiState: TrainingScreenState, roundType: RoundType)
+{
+    val nameNewSet = stringResource(id = R.string.set)
+    IconAddItem(textId = R.string.create_ring, onAdd = {
         uiState.onAddExercise(getIdRound(uiState, roundType), SetDB(name = nameNewSet))
     })
 }

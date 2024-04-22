@@ -12,6 +12,7 @@ import com.example.count_out.entity.SpeechKit
 data class RoundDB(
     @PrimaryKey(autoGenerate = true) override var idRound: Long = 0L,
     override var trainingId: Long = 0,
+    override var countRing: Int = 0,
     override var speechId: Long = 0,
     override var roundType: RoundType = RoundType.OUT,
     override var sequenceExercise: String = "",

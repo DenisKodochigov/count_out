@@ -93,6 +93,7 @@ data class RoundRel(
     fun toRound(): RoundDB{
         return RoundDB(
             exercise = sortExercise(round.sequenceExercise, exercise),
+            countRing = 1,
             idRound = round.idRound,
             roundType = round.roundType,
             speechId = round.speechId,

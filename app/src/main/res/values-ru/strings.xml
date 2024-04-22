@@ -71,4 +71,5 @@
     <string name="description">Описание</string>
     <string name="null_s">""</string>
     <string name="speech_description">Описание</string>
+    <string name="create_ring">Create ring</string>
 </resources>

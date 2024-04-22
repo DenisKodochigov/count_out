@@ -130,9 +130,7 @@ fun NameTraining( uiState: TrainingScreenState )
 {
     Row(
         verticalAlignment = Alignment.CenterVertically,
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(bottom = 6.dp)
+        modifier = Modifier.fillMaxWidth().padding(bottom = 6.dp)
     )
     {
         TextFieldApp(
