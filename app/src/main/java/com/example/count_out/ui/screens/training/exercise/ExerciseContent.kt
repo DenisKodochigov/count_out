@@ -92,11 +92,11 @@ fun SelectActivity(uiState: TrainingScreenState, exercise: Exercise)
 
 @Composable
 fun BodyExercise(uiState: TrainingScreenState, exercise: Exercise){
-    Column(
-        modifier = Modifier
+    val visibleLazy =
+        uiState.listCollapsingExercise.value.find { it == exercise.idExercise } != null
+    Column(modifier = Modifier
     ){
-        AnimatedVisibility(modifier = Modifier.padding(0.dp),
-            visible = uiState.listCollapsingExercise.value.find { it == exercise.idExercise } != null
+        AnimatedVisibility(modifier = Modifier.padding(0.dp), visible = visibleLazy
         ){
             Column (modifier = Modifier.fillMaxWidth().padding(6.dp),
                 content = {
@@ -119,9 +119,9 @@ fun ListSets(uiState: TrainingScreenState)
                     color = MaterialTheme.colorScheme.surface,
                     shape = MaterialTheme.shapes.extraSmall
                 )
-                .padding(vertical = 8.dp)
+                .padding(vertical = 6.dp)
                 .fillMaxWidth(),
-            content = { SetContent(uiState,set) }
+            content = { SetContent(uiState,set, uiState.exercise.sets.size) }
         )
         Spacer(modifier = Modifier.height(1.dp))
     }

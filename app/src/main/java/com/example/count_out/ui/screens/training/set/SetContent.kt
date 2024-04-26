@@ -43,14 +43,16 @@ import com.example.count_out.ui.view_components.TextApp
 import com.example.count_out.ui.view_components.TextAppLines
 import com.example.count_out.ui.view_components.TextFieldApp
 import com.example.count_out.ui.view_components.TextStringAndField
+import com.example.count_out.ui.view_components.lg
 
 @Composable
-fun SetContent(uiState: TrainingScreenState, set: Set)
+fun SetContent(uiState: TrainingScreenState, set: Set, amountSet: Int)
 {
+    lg("Update screen set")
     Column{
         Spacer(modifier = Modifier.height(Dimen.width4))
-        NameSet(uiState,set)
-        AdditionalInformation(uiState,set)
+        if (amountSet > 1) NameSet(uiState, set)
+        AdditionalInformation(uiState,set, amountSet)
         Spacer(modifier = Modifier.height(Dimen.width4))
     }
 }
@@ -83,17 +85,17 @@ fun NameSet(uiState: TrainingScreenState, set: Set)
     }
 }
 @Composable
-fun AdditionalInformation(uiState: TrainingScreenState, set: Set)
+fun AdditionalInformation(uiState: TrainingScreenState, set: Set, amountSet: Int)
 {
-    val visibleLazy = uiState.listCollapsingSet.value.find { it == set.idSet } != null
-    Column(modifier = Modifier
-        .testTag("1")
-        .padding(start = 8.dp))
+    val visibleLazy = (uiState.listCollapsingSet.value.find { it == set.idSet } != null) || (amountSet == 1)
+    Column(modifier = Modifier.testTag("1"))
     {
         AnimatedVisibility(modifier = Modifier.padding(0.dp), visible = visibleLazy
         ){
-            Row {
-                Column(modifier = Modifier.weight(1f)){
+            Row(modifier = Modifier.testTag("1").padding(start = 8.dp))
+            {
+                Column(modifier = Modifier.weight(1f))
+                {
                     Spacer(modifier = Modifier.height(8.dp))
                     TextApp(text = stringResource(id = R.string.task_in_approach), style = interReg14)
                     Spacer(modifier = Modifier.height(8.dp))
@@ -107,9 +109,7 @@ fun AdditionalInformation(uiState: TrainingScreenState, set: Set)
                 }
                 Column(
                     horizontalAlignment = Alignment.CenterHorizontally,
-                    modifier = Modifier
-                        .width(65.dp)
-                        .padding(top = 12.dp),
+                    modifier = Modifier.width(65.dp).padding(top = 12.dp),
                     content = { SelectZone(uiState, set) })
             }
         }
@@ -268,18 +268,16 @@ fun RadioButtonBottom(uiState: TrainingScreenState, set: Set, visible: Boolean, 
     }
 }
 
-fun setCollapsing(uiState: TrainingScreenState, set: Set): Boolean
+fun setCollapsing(uiState: TrainingScreenState, set: Set)
 {
     val listCollapsingSet = uiState.listCollapsingSet.value.toMutableList()
     val itemList = listCollapsingSet.find { it == set.idSet }
-    return if ( itemList != null) {
+    if ( itemList != null) {
         listCollapsingSet.remove(itemList)
         uiState.listCollapsingSet.value = listCollapsingSet
-        false
     } else {
         listCollapsingSet.add(set.idSet)
         uiState.listCollapsingSet.value = listCollapsingSet
-        true
     }
 }
 @Composable

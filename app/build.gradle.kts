@@ -1,21 +1,21 @@
 
 plugins {
-    id ("com.android.application")
-    id ("org.jetbrains.kotlin.android")
-    id ("kotlin-parcelize")
-    id ("com.google.devtools.ksp")
-    id ("dagger.hilt.android.plugin")
-//    id ("com.google.firebase.crashlytics")
-}
+//    id ("kotlin-parcelize")
+    alias(libs.plugins.androidApplication)
+    alias(libs.plugins.jetbrainsKotlinAndroid)
+    alias(libs.plugins.hilt)
+    alias(libs.plugins.ksp)
+//    alias(libs.plugins.firebase)
+    }
 
 android {
     namespace = "com.example.count_out"
-    compileSdk = rootProject.extra["targetSdk"] as Int
+    compileSdk = 34
 
     defaultConfig {
         applicationId = "com.example.count_out"
-        minSdk = rootProject.extra["minSdk"] as Int
-        targetSdk = rootProject.extra["targetSdk"] as Int
+        minSdk = 26
+        targetSdk = 34
         versionCode = 1
         versionName = "1.0"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
@@ -29,10 +29,10 @@ android {
             // Enables code shrinking, obfuscation, and optimization for only
             // your project's release build type. Make sure to use a build
             // variant with `isDebuggable=false`.
-            isMinifyEnabled = true
+            isMinifyEnabled = false
             // Enables resource shrinking, which is performed by the
             // Android Gradle plugin.
-            isShrinkResources = true
+//            isShrinkResources = true
             // Includes the default ProGuard rules files that are packaged with
             // the Android Gradle plugin. To learn more, go to the section about
             // R8 configuration files.
@@ -51,7 +51,7 @@ android {
         compose = true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.9"
+        kotlinCompilerExtensionVersion = "1.5.12"
     }
     packaging {
         resources {
@@ -61,79 +61,67 @@ android {
 }
 
 dependencies {
-    val composeVersion = rootProject.extra["composeVersion"] as String
-    val daggerVersion = rootProject.extra["daggerVersion"] as String
-    val roomVersion = "2.6.1"
-    val lifecycleVersion = "2.7.0"
-
-    implementation("androidx.core:core-ktx:1.12.0")
-    implementation("androidx.activity:activity-compose:1.8.2")
-    implementation(platform("androidx.compose:compose-bom:2024.04.00"))
+    implementation(libs.androidx.core.ktx)
+    implementation(libs.androidx.activity.compose)
+    implementation(platform(libs.androidx.compose.bom))
     //Hilt
-    implementation ("com.google.dagger:hilt-android:$daggerVersion")
-    implementation ("androidx.hilt:hilt-navigation-compose:1.2.0")
-    ksp ("com.google.dagger:dagger-compiler:$daggerVersion")
-    ksp ("com.google.dagger:hilt-compiler:$daggerVersion")
-    testImplementation ("com.google.dagger:hilt-android-testing:$daggerVersion")
+    implementation (libs.hilt.android)
+    implementation (libs.androidx.hilt.navigation.compose)
+    ksp (libs.dagger.compiler)
+    ksp (libs.hilt.compiler)
+    testImplementation (libs.hilt.android.testing)
     //Jetpack  Compose
-    implementation ("androidx.compose.ui:ui:$composeVersion")
-    implementation("com.google.accompanist:accompanist-permissions:0.34.0")
-    debugImplementation("androidx.compose.ui:ui-tooling")
-    debugImplementation("androidx.compose.ui:ui-test-manifest:1.6.5")
-    //Tooling support (Previews, etc.)
-    implementation ("androidx.compose.ui:ui-graphics:$composeVersion")
-    implementation ("androidx.compose.ui:ui-tooling-preview:$composeVersion")
-    debugImplementation ("androidx.compose.ui:ui-tooling:$composeVersion")
-    //Integration with observables
-    implementation ("androidx.compose.runtime:runtime:$composeVersion")
-    //noinspection GradleDependency
-    implementation ("androidx.compose.runtime:runtime-rxjava2:$composeVersion")
+    implementation (libs.androidx.ui)
+    implementation(libs.accompanist.permissions)
     //Foundation (Border, Background, Box, Image, Scroll, shapes, animations, etc.)
-    implementation ("androidx.compose.foundation:foundation:$composeVersion")
-    implementation ("androidx.compose.foundation:foundation-layout:$composeVersion")
-    // Material Design
-    implementation("androidx.compose.material3:material3:1.2.1")
-    implementation ("androidx.compose.ui:ui-text-google-fonts:1.6.5")
-    implementation ("androidx.compose.material:material-icons-core:$composeVersion")
-    implementation ("androidx.compose.material:material-icons-extended:$composeVersion")
-    //Adaptive
-    implementation ("androidx.compose.material3:material3-window-size-class:1.2.1")
+    implementation (libs.androidx.foundation)
+    implementation (libs.androidx.foundation.layout)
     //Navigation
-    implementation ("androidx.navigation:navigation-compose:2.7.7")
+    implementation (libs.androidx.navigation.compose)
+    //Tooling support (Previews, etc.)
+    implementation (libs.androidx.ui.graphics)
+    implementation (libs.androidx.ui.tooling.preview)
+    debugImplementation (libs.androidx.ui.tooling)
+    //Integration with observables
+    implementation (libs.androidx.runtime)
+    // Material Design
+    implementation (libs.androidx.material3)
+    implementation (libs.androidx.ui.text.google.fonts)
+    implementation (libs.androidx.material.icons.core)
+    implementation (libs.androidx.material.icons.extended)
     //Color Palette
-    implementation ("androidx.palette:palette-ktx:1.0.0")
+    implementation (libs.androidx.palette.ktx)
     //LifeCycle
-    implementation ("androidx.lifecycle:lifecycle-runtime-ktx:$lifecycleVersion")
-    implementation ("androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycleVersion")
-    implementation ("androidx.lifecycle:lifecycle-viewmodel-compose:$lifecycleVersion")
-    implementation ("androidx.fragment:fragment-ktx:1.6.2")
+    implementation (libs.androidx.lifecycle.runtime.ktx)
+    implementation (libs.androidx.lifecycle.viewmodel.ktx)
+    implementation (libs.androidx.lifecycle.viewmodel.compose)
+    implementation (libs.androidx.fragment.ktx)
     // Room
-    implementation ("androidx.room:room-runtime:$roomVersion")
-    implementation ("androidx.room:room-ktx:$roomVersion")
-    implementation ("androidx.room:room-rxjava2:$roomVersion")
-    ksp ("androidx.room:room-compiler:$roomVersion")
+    implementation (libs.androidx.room.runtime)
+    implementation (libs.androidx.room.ktx)
+    ksp (libs.androidx.room.compiler)
     //Moshi
-    implementation ("com.squareup.moshi:moshi:1.15.0")
-    implementation ("com.squareup.moshi:moshi-kotlin:1.15.0")
-    ksp ("com.squareup.moshi:moshi-kotlin-codegen:1.15.0")
+    implementation (libs.moshi)
+    implementation (libs.moshi.kotlin)
+    ksp (libs.moshi.kotlin.codegen)
     //DataStory
-//    implementation("androidx.datastore:datastore-preferences-core:1.0.0")
-//    implementation("androidx.datastore:datastore-preferences:1.0.0")
-//    implementation("androidx.datastore:datastore-core:1.0.0")
-//    implementation("androidx.datastore:datastore:1.0.0")
+    implementation (libs.androidx.datastore.preferences.core)
+    implementation (libs.androidx.datastore.preferences)
+    implementation (libs.androidx.datastore.core)
+    implementation (libs.androidx.datastore)
     // Import the Firebase BoM
-//    implementation(platform("com.google.firebase:firebase-bom:32.6.0"))
-//    implementation("com.google.firebase:firebase-analytics-ktx")
-//    implementation("com.google.firebase:firebase-crashlytics")
-
-
+//    implementation (platform(libs.firebase.bom))
+//    implementation (libs.firebase.analytics)
+//    implementation (libs.firebase.crashlytics)
     //Warning logcat
-//    implementation("com.google.maps.android:android-maps-utils:2.3.0")
-//    implementation("com.google.maps.android:maps-utils-ktx:3.4.0")
+//    implementation(libs.maps.utils)
+//    implementation(libs.maps.utils.ktx)
+    //noinspection UseTomlInstead
+    debugImplementation(libs.androidx.ui.test.manifest)
 //Testing
-    testImplementation("junit:junit:4.13.2")
-    androidTestImplementation("androidx.test.ext:junit:1.1.5")
-    androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
-    androidTestImplementation(platform("androidx.compose:compose-bom:2024.04.00"))
-    androidTestImplementation("androidx.compose.ui:ui-test-junit4")
+    testImplementation (libs.junit)
+    androidTestImplementation (libs.androidx.junit)
+    androidTestImplementation (libs.androidx.espresso.core)
+    androidTestImplementation (platform(libs.androidx.compose.bom))
+    androidTestImplementation (libs.androidx.ui.test.junit4)
 }
