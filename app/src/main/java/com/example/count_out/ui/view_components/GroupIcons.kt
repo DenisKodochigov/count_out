@@ -18,23 +18,26 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.example.count_out.R
 import com.example.count_out.ui.theme.Dimen
+import com.example.count_out.ui.theme.Dimen.sizeBetweenIcon
 import com.example.count_out.ui.theme.interLight12
 
 @Composable fun IconsCopySpeechDel(onCopy: ()->Unit, onSpeech: ()->Unit, onDel: ()->Unit ) {
     Icon(
         painter = painterResource(id = R.drawable.ic_copy),
         contentDescription = "",
-        modifier = Modifier.padding(4.dp).size(Dimen.sizeIcon).clickable{ onCopy() }
+        modifier = Modifier.padding(0.dp).size(Dimen.sizeIcon).clickable{ onCopy() }
     )
+    Spacer(modifier = Modifier.width(sizeBetweenIcon))
     Icon(
         painter = painterResource(id = R.drawable.ic_speech),
         contentDescription = "",
-        modifier = Modifier.padding(4.dp).size(Dimen.sizeIcon).clickable{ onSpeech() }
+        modifier = Modifier.padding(0.dp).size(Dimen.sizeIcon).clickable{ onSpeech() }
     )
+    Spacer(modifier = Modifier.width(sizeBetweenIcon))
     Icon(
         painter = painterResource(id = R.drawable.ic_del),
         contentDescription = "",
-        modifier = Modifier.padding(4.dp).size(Dimen.sizeIcon).clickable{ onDel() }
+        modifier = Modifier.padding(0.dp).size(Dimen.sizeIcon).clickable{ onDel() }
     )
 }
 
@@ -46,6 +49,7 @@ import com.example.count_out.ui.theme.interLight12
     wrap: Boolean)
 {
     IconsCollapsing( onCollapsing = onCollapsing, wrap = wrap)
+    Spacer(modifier = Modifier.width(sizeBetweenIcon))
     IconsCopySpeechDel(onCopy, onSpeech, onDel)
 }
 @Composable fun IconsCollapsing(
@@ -56,7 +60,7 @@ import com.example.count_out.ui.theme.interLight12
     Icon(
         painter = painterResource(id = idIcon),
         contentDescription = "",
-        modifier = Modifier.padding(4.dp).size(Dimen.sizeIcon).clickable{ onCollapsing() }
+        modifier = Modifier.padding(0.dp).size(Dimen.sizeIcon).clickable{ onCollapsing() }
     )
 }
 @Composable
@@ -70,7 +74,7 @@ fun IconCollapsingSpeech(
         contentDescription = "",
         modifier = Modifier.padding(4.dp).size(Dimen.sizeIcon).clickable{ onCollapsing() }
     )
-    Spacer(modifier = Modifier.width(8.dp))
+    Spacer(modifier = Modifier.width(sizeBetweenIcon))
     Icon(
         painter = painterResource(id = R.drawable.ic_speech), contentDescription = "",
         modifier = Modifier.padding(4.dp).size(Dimen.sizeIcon).clickable{ onSpeech() }

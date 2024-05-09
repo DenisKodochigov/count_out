@@ -1,5 +1,7 @@
 package com.example.count_out.service.player
 
+import android.content.Context
+import com.example.count_out.R
 import com.example.count_out.data.room.tables.SetDB
 import com.example.count_out.data.room.tables.SpeechDB
 import com.example.count_out.domain.SpeechManager
@@ -11,7 +13,7 @@ import com.example.count_out.helpers.delayMy
 import com.example.count_out.ui.view_components.lg
 import javax.inject.Inject
 
-class PlayerSet @Inject constructor(val speechManager:SpeechManager)
+class PlayerSet @Inject constructor(val speechManager:SpeechManager, val context: Context)
 {
     suspend fun playingSet(
         template: VariablesInService,
@@ -24,14 +26,30 @@ class PlayerSet @Inject constructor(val speechManager:SpeechManager)
             speechManager.speech(variablesOut, template.getSet().speech.afterStart)
 
             bodyPlayingSet(template, variablesOut)
+            nextExerciseSpeech(template = template, variablesOut = variablesOut )
+            playRest(template, variablesOut)
 
-            if (template.getSet().timeRest > 0) {
-                speechManager.speech(variablesOut,
-                    SpeechDB( addMessage = template.getSet().timeRest.toString() + " секунд отдыха."))
-                delayMy((template.getSet().timeRest * 1000).toLong(), variablesOut.stateRunning)
-            }
             speechManager.speech(variablesOut, template.getSet().speech.beforeEnd)
             speechManager.speech(variablesOut, template.getSet().speech.afterEnd)
+        }
+    }
+    private suspend fun playRest(
+        template: VariablesInService,
+        variablesOut: VariablesOutService,
+    ){
+        val message = template.getSet().timeRest.toString() + " " + context.getString(R.string.rest_time)
+        if (template.getSet().timeRest > 0) {
+            speechManager.speech(variablesOut, SpeechDB( addMessage = message) )
+            playDelay( duration = template.getSet().timeRest, variablesOut = variablesOut)
+        }
+    }
+    private suspend fun nextExerciseSpeech(template: VariablesInService, variablesOut: VariablesOutService,
+    ){
+        if (template.lastSet()) {
+            val nextExercise = template.getNextExercise()?.activity?.name ?: ""
+            val message = if (nextExercise != "") {
+                context.getString(R.string.next_exercise) + " " + nextExercise } else ""
+            speechManager.speech(variablesOut, SpeechDB( message = message ) )
         }
     }
     private suspend fun bodyPlayingSet(
@@ -39,13 +57,13 @@ class PlayerSet @Inject constructor(val speechManager:SpeechManager)
         variablesOut: VariablesOutService,
     ){
         when (template.getSet().goal){
-            GoalSet.COUNT -> playSetCount(template, variablesOut)
+            GoalSet.COUNT -> playSetCOUNT(template, variablesOut)
             GoalSet.DURATION -> playSetDURATION(template, variablesOut)
             GoalSet.DISTANCE -> playSetDISTANCE(template, variablesOut)
             GoalSet.COUNT_GROUP -> playSetCOUNTGROUP(template, variablesOut)
         }
     }
-    private suspend fun playSetCount(template: VariablesInService, variablesOut: VariablesOutService,
+    private suspend fun playSetCOUNT(template: VariablesInService, variablesOut: VariablesOutService,
     ){
         for (count in 1..template.getSet().reps){
             variablesOut.set.value = template.getSet()
@@ -56,37 +74,9 @@ class PlayerSet @Inject constructor(val speechManager:SpeechManager)
     }
     private suspend fun playSetDURATION(template: VariablesInService, variablesOut: VariablesOutService,
     ){
-        val duration = template.getSet().duration * 60
-        if (duration < 20) {
-            for ( count in 1..duration.toInt()){
-                if ( count % 5 == 0) {
-                    speechManager.speakOutFlush(text = count.toString(), variablesOut.stateRunning)
-                }
-                delayMy(1000L, variablesOut.stateRunning)
-            }
-        }
-        else if (duration > 19 && duration <= 119) {
-            for ( count in 1..duration.toInt()){
-                if ( count % 10 == 0) {
-                    speechManager.speakOutFlush(text = count.toString(), variablesOut.stateRunning)
-                }
-                delayMy(1000L, variablesOut.stateRunning)
-            }
-        }
-        else if (duration > 119 ) {
-            for ( count in 1..duration.toInt()){
-                if ( count % 60 == 0) {
-                    speechManager.speakOutFlush(text = count.toString(), variablesOut.stateRunning)
-                }
-                delayMy(1000L, variablesOut.stateRunning)
-            }
-        } else {
-            delayMy((duration * 1000).toLong(), variablesOut.stateRunning)
-        }
+        playDelay( duration = (template.getSet().duration * 60).toInt(), variablesOut = variablesOut)
     }
-    private suspend fun playSetCOUNTGROUP(
-        template: VariablesInService,
-        variablesOut: VariablesOutService,
+    private suspend fun playSetCOUNTGROUP(template: VariablesInService, variablesOut: VariablesOutService,
     ){
         val listWordCount = template.getSet().groupCount.split(",")
         if ( listWordCount.isNotEmpty()){
@@ -99,13 +89,26 @@ class PlayerSet @Inject constructor(val speechManager:SpeechManager)
             variablesOut.set.value = SetDB()
         }
     }
-    private suspend fun playSetDISTANCE(
-        template: VariablesInService,
-        variablesOut: VariablesOutService,
+    private suspend fun playSetDISTANCE(template: VariablesInService, variablesOut: VariablesOutService,
     ){
-
+    }
+    private suspend fun playDelay(duration: Int, variablesOut: VariablesOutService,
+    ){
+        if (duration < 20) {
+            countDelay(duration = duration, divider = 5, variablesOut = variablesOut) }
+        else if (duration in 20..119) {
+            countDelay(duration = duration, divider = 10, variablesOut = variablesOut) }
+        else { countDelay(duration = duration, divider = 60, variablesOut = variablesOut) }
     }
 
+    private suspend fun countDelay(duration: Int, divider: Int, variablesOut: VariablesOutService){
+        for ( count in 1..duration){
+            if ( count % divider == 0) {
+                speechManager.speakOutFlush(text = count.toString(), variablesOut.stateRunning)
+            }
+            delayMy(1000L, variablesOut.stateRunning)
+        }
+    }
     private fun textBeforeSet(template: VariablesInService,): String{
         return when (template.getSet().goal){
             GoalSet.COUNT -> " " + template.getSet().reps.toString() + " повторений"

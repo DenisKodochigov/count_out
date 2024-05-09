@@ -6,7 +6,9 @@ import com.example.count_out.entity.VariablesInService
 import com.example.count_out.entity.VariablesOutService
 import javax.inject.Inject
 
-class PlayerExercise @Inject constructor(val speechManager:SpeechManager, private val playerSet: PlayerSet)
+class PlayerExercise @Inject constructor(
+    val speechManager:SpeechManager,
+    private val playerSet: PlayerSet,)
 {
     suspend fun playingExercise(
         template: VariablesInService,

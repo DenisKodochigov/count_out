@@ -35,14 +35,18 @@ import com.example.count_out.ui.view_components.drag_drop_column.ColumnDD
 import com.example.count_out.ui.view_components.lg
 
 @Composable
-fun ListExercises(uiState: TrainingScreenState, roundType: RoundType, showExercises: Boolean)
+fun ListExercises(
+    uiState: TrainingScreenState,
+    roundType: RoundType,
+    modifier: Modifier = Modifier,
+    showExercises: Boolean)
 {
     val listExercise = uiState.training.rounds.find { it.roundType == roundType }?.exercise ?: emptyList()
     val roundId = if (listExercise.isNotEmpty()) listExercise[0].roundId else 0
 
     ColumnDD(
         items = listExercise,
-        modifier = Modifier,
+        modifier = modifier,
         showList = showExercises,
         viewItem = { item -> ElementColum( item, uiState = uiState) },
         onMoveItem = { from, to-> lg("from: $from; to: $to")

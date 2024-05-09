@@ -153,7 +153,7 @@ fun TrainingsLazyColumn(uiState: TrainingsScreenState,
 {
 //    lg("TrainingInformation")
     Column (modifier = modifier.clickable { uiState.onSelectItem(item.idTraining) }){
-        TextApp( text = "${item.name}:${item.idTraining}", style = interReg14)
+        TextApp( text = item.name, style = interReg14)
         TextApp(
             text = stringResource(id = R.string.exercise)+ ": " + item.amountActivity,
             style = interLight12 )

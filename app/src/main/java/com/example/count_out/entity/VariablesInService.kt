@@ -14,6 +14,12 @@ data class VariablesInService(
     fun getTraining() = training.value
     fun getRound() = training.value.rounds[indexRound]
     fun getExercise() = training.value.rounds[indexRound].exercise[indexExercise]
+    fun getNextExercise() =
+        if (indexExercise < training.value.rounds[indexRound].exercise.size -1)
+            training.value.rounds[indexRound].exercise[indexExercise + 1]
+        else null
+    fun lastSet() = indexSet == training.value.rounds[indexRound].exercise[indexExercise].sets.size - 1
+
     fun getSet() = training.value.rounds[indexRound].exercise[indexExercise].sets[indexSet]
     fun getSetIntervalReps() = training.value.rounds[indexRound].exercise[indexExercise].sets[indexSet].intervalReps
 }

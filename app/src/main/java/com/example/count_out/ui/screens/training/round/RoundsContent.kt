@@ -38,6 +38,7 @@ fun Round(uiState: TrainingScreenState, roundType: RoundType)
                 Row1Round(uiState = uiState, roundType)
                 Row2Round(uiState = uiState, roundType)
                 Row3Round(uiState = uiState, roundType)
+                Row4Round(uiState = uiState, roundType)
             }
         }
     }
@@ -47,9 +48,7 @@ fun Row1Round(uiState: TrainingScreenState, roundType: RoundType)
 {
     Row(
         verticalAlignment = Alignment.CenterVertically,
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(bottom = 6.dp, end = 8.dp)
+        modifier = Modifier.fillMaxWidth().padding(bottom = 6.dp, end = 8.dp)
     ){
         TextApp(text = stringResource(id = roundType.strId), style = interBold14)
         Spacer(modifier = Modifier.weight(1f))
@@ -75,20 +74,24 @@ fun Row2Round(uiState: TrainingScreenState, roundType: RoundType) {
 @Composable
 fun Row3Round(uiState: TrainingScreenState, roundType: RoundType)
 {
-    Column(modifier = Modifier.padding(end = 8.dp)){
-        ListExercises(
-            uiState = uiState,
-            roundType = roundType,
-            showExercises = getCollapsing(uiState, roundType) && amountExercise(uiState, roundType) > 0)
-        Spacer(modifier = Modifier.height(4.dp))
-        Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.fillMaxWidth())
-        {
-            Spacer(modifier = Modifier.weight(1f))
-            PoleAddExercise(uiState = uiState, roundType = roundType)
-        }
+    ListExercises(
+        uiState = uiState,
+        roundType = roundType,
+        modifier = Modifier.padding(end = 8.dp),
+        showExercises = getCollapsing(uiState, roundType) && amountExercise(uiState, roundType) > 0)
+}
+@Composable
+fun Row4Round(uiState: TrainingScreenState, roundType: RoundType)
+{
+    Spacer(modifier = Modifier.height(4.dp))
+    Row(verticalAlignment = Alignment.CenterVertically,
+        modifier = Modifier.fillMaxWidth().padding(end = 8.dp))
+    {
+        PoleAddRing(uiState = uiState, roundType = roundType)
+        Spacer(modifier = Modifier.weight(1f))
+        PoleAddExercise(uiState = uiState, roundType = roundType)
     }
 }
-
 fun setCollapsing(uiState: TrainingScreenState, roundType: RoundType)
 {
     if (amountExercise(uiState, roundType) > 0) {
@@ -133,6 +136,14 @@ fun PoleAddExercise(uiState: TrainingScreenState, roundType: RoundType)
 {
     val nameNewSet = stringResource(id = R.string.set)
     IconAddItem(textId = R.string.add_activity, onAdd = {
+        uiState.onAddExercise(getIdRound(uiState, roundType), SetDB(name = nameNewSet))
+    })
+}
+@Composable
+fun PoleAddRing(uiState: TrainingScreenState, roundType: RoundType)
+{
+    val nameNewSet = stringResource(id = R.string.set)
+    IconAddItem(textId = R.string.add_ring, onAdd = {
         uiState.onAddExercise(getIdRound(uiState, roundType), SetDB(name = nameNewSet))
     })
 }

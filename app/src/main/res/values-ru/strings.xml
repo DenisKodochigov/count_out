@@ -72,4 +72,8 @@
     <string name="null_s">""</string>
     <string name="speech_description">Описание</string>
     <string name="create_ring">Create ring</string>
+    <string name="add_ring">Add ring</string>
+    <string name="count">count</string>
+    <string name="next_exercise">Подготовьтесь к следующему упражнению</string>
+    <string name="rest_time">секунд отдыха.</string>
 </resources>

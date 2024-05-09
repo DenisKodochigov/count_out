@@ -105,10 +105,8 @@ dependencies {
     implementation (libs.moshi.kotlin)
     ksp (libs.moshi.kotlin.codegen)
     //DataStory
-    implementation (libs.androidx.datastore.preferences.core)
-    implementation (libs.androidx.datastore.preferences)
-    implementation (libs.androidx.datastore.core)
-    implementation (libs.androidx.datastore)
+//    implementation (libs.androidx.datastore.core)
+//    implementation (libs.androidx.datastore)
     // Import the Firebase BoM
 //    implementation (platform(libs.firebase.bom))
 //    implementation (libs.firebase.analytics)

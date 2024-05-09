@@ -1,5 +1,6 @@
 package com.example.count_out.di
 
+import android.content.Context
 import com.example.count_out.domain.SpeechManager
 import com.example.count_out.service.player.PlayerExercise
 import com.example.count_out.service.player.PlayerRound
@@ -8,6 +9,7 @@ import com.example.count_out.service.player.PlayerWorkOut
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 
@@ -26,12 +28,16 @@ class PlayersModule {
     }
     @Singleton
     @Provides
-    fun providePlayerExercise(speechManager: SpeechManager, playerSet: PlayerSet): PlayerExercise {
+    fun providePlayerExercise(
+        speechManager: SpeechManager,
+        playerSet: PlayerSet,
+        @ApplicationContext appContext: Context
+    ): PlayerExercise {
         return PlayerExercise(speechManager, playerSet)
     }
     @Singleton
     @Provides
-    fun providePlayerSet(speechManager: SpeechManager): PlayerSet {
-        return PlayerSet(speechManager)
+    fun providePlayerSet(speechManager: SpeechManager, @ApplicationContext appContext: Context): PlayerSet {
+        return PlayerSet(speechManager, appContext)
     }
 }

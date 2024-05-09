@@ -59,9 +59,13 @@ fun SetContent(uiState: TrainingScreenState, set: Set, amountSet: Int)
 @Composable
 fun NameSet(uiState: TrainingScreenState, set: Set)
 {
-    val distance = if (set.distance > 0.0) "( ${set.distance} " + stringResource(id = R.string.km) + " )" else ""
-    val duration = if (set.duration > 0)  "(${set.duration} " + stringResource(id = R.string.min) + ")" else ""
+    val textSetName = when (set.goal) {
+        GoalSet.DISTANCE -> "( ${set.distance} " + stringResource(id = R.string.km) + " )"
+        GoalSet.DURATION -> "( ${set.distance} " + stringResource(id = R.string.min) + " )"
+        GoalSet.COUNT -> "( ${set.reps} " + stringResource(id = R.string.count) + " )"
+        GoalSet.COUNT_GROUP -> "( ${set.distance} " + stringResource(id = R.string.count) + " )"
 
+    }
     Row (verticalAlignment = Alignment.CenterVertically){
         TextApp(
             text = set.name,
@@ -69,7 +73,7 @@ fun NameSet(uiState: TrainingScreenState, set: Set)
             textAlign = TextAlign.Start,
             modifier = Modifier.padding(start = 8.dp))
         TextApp(
-            text = if (set.distance > 0) distance else duration,
+            text = textSetName,
             style = interReg14,
             textAlign = TextAlign.Start,)
         Spacer(modifier = Modifier.weight(1f))
