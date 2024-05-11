@@ -11,6 +11,10 @@ import com.example.count_out.entity.VariablesInService
 import com.example.count_out.entity.VariablesOutService
 import com.example.count_out.helpers.delayMy
 import com.example.count_out.ui.view_components.lg
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.cancelAndJoin
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class PlayerSet @Inject constructor(val speechManager:SpeechManager, val context: Context)
@@ -26,23 +30,42 @@ class PlayerSet @Inject constructor(val speechManager:SpeechManager, val context
             speechManager.speech(variablesOut, template.getSet().speech.afterStart)
 
             bodyPlayingSet(template, variablesOut)
-            nextExerciseSpeech(template = template, variablesOut = variablesOut )
             playRest(template, variablesOut)
-
+        }
+    }
+    private suspend fun playRest(template: VariablesInService, variablesOut: VariablesOutService,
+    ){
+        val job = CoroutineScope(Dispatchers.IO).launch {
+            playRestNextExercise(template = template, variablesOut = variablesOut) }
+        delayAndPlayEndSet(template = template, variablesOut = variablesOut)
+        job.cancelAndJoin()
+    }
+    private suspend fun delayAndPlayEndSet(template: VariablesInService, variablesOut: VariablesOutService,
+    ){
+        if (template.getSet().timeRest > 0){
+            playDelay( duration = template.getSet().timeRest, variablesOut = variablesOut)
+        }
+        playEndSet(template = template, variablesOut = variablesOut)
+    }
+    private suspend fun playRestNextExercise(template: VariablesInService, variablesOut: VariablesOutService,
+    ){
+        if (template.getSet().timeRest > 0){
+            speechManager.speech(variablesOut, SpeechDB( addMessage =
+                    template.getSet().timeRest.toString() + " " + context.getString(R.string.rest_time)) )
+            nextExerciseSpeech(template = template, variablesOut = variablesOut )
+        }
+    }
+    private suspend fun playEndSet(template: VariablesInService, variablesOut: VariablesOutService,
+    ){
+        if (template.lastSet()) {
+            speechManager.speech(variablesOut, template.getExercise().speech.beforeEnd)
+            speechManager.speech(variablesOut, template.getExercise().speech.afterEnd)
+        } else {
             speechManager.speech(variablesOut, template.getSet().speech.beforeEnd)
             speechManager.speech(variablesOut, template.getSet().speech.afterEnd)
         }
     }
-    private suspend fun playRest(
-        template: VariablesInService,
-        variablesOut: VariablesOutService,
-    ){
-        val message = template.getSet().timeRest.toString() + " " + context.getString(R.string.rest_time)
-        if (template.getSet().timeRest > 0) {
-            speechManager.speech(variablesOut, SpeechDB( addMessage = message) )
-            playDelay( duration = template.getSet().timeRest, variablesOut = variablesOut)
-        }
-    }
+
     private suspend fun nextExerciseSpeech(template: VariablesInService, variablesOut: VariablesOutService,
     ){
         if (template.lastSet()) {
@@ -104,7 +127,9 @@ class PlayerSet @Inject constructor(val speechManager:SpeechManager, val context
     private suspend fun countDelay(duration: Int, divider: Int, variablesOut: VariablesOutService){
         for ( count in 1..duration){
             if ( count % divider == 0) {
-                speechManager.speakOutFlush(text = count.toString(), variablesOut.stateRunning)
+                if(!speechManager.getSpeeching()) {
+                    speechManager.speakOutFlush(text = count.toString(), variablesOut.stateRunning)
+                }
             }
             delayMy(1000L, variablesOut.stateRunning)
         }

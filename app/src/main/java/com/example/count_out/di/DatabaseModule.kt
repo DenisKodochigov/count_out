@@ -15,6 +15,7 @@ import com.example.count_out.data.room.tables.SettingDB
 import com.example.count_out.data.room.tables.SpeechDB
 import com.example.count_out.data.room.tables.SpeechKitDB
 import com.example.count_out.data.room.tables.TrainingDB
+import com.example.count_out.entity.Const.MODE_DATABASE
 import com.example.count_out.entity.GoalSet
 import com.example.count_out.entity.RoundType
 import dagger.Module
@@ -28,7 +29,7 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 class DatabaseModule {
     lateinit var database: AppDatabase
-    private var mode: Int = 2
+    private var mode: Int = MODE_DATABASE
     @Provides
     @Singleton
     fun provideDatabase(@ApplicationContext appContext: Context): AppDatabase {
@@ -121,7 +122,6 @@ class DatabaseModule {
         db.dataDao().addSetting(SettingDB(parameter = R.string.speech_description, value = 1))
     }
     private fun createTrainingPlansTesting( db: AppDatabase) {
-
         val idTraining = db.dataDao().addTraining(TrainingDB(name = "Тестовая", idTraining = 1,
             speechId = addSpeechKit(db, bs = "До начала тренировки", ast = "После начала тренировки", be = "До конца тренировки", ae = "После конца тренировки",)))
 //Разминка
@@ -130,7 +130,12 @@ class DatabaseModule {
         //Упражнение 1
         var idExercise = db.dataDao().addExercise(ExerciseDB(roundId = idRound, activityId = 3,
             speechId = addSpeechKit(db, bs = "", ast = "", be = "", ae = "",)))
-        db.dataDao().addSet(SetDB(exerciseId = idExercise, name = "Set 1", reps = 10, intervalReps = 1.5, timeRest = 0, goal = GoalSet.COUNT,
+        db.dataDao().addSet(SetDB(exerciseId = idExercise, name = "Set 1", reps = 3, intervalReps = 1.5, timeRest = 10, goal = GoalSet.COUNT,
+            speechId = addSpeechKit(db, bs = "", ast = "", be = "", ae = "",)))
+        //Упражнение 2
+        idExercise = db.dataDao().addExercise(ExerciseDB(roundId = idRound, activityId = 4,
+            speechId = addSpeechKit(db, bs = "", ast = "", be = "", ae = "",)))
+        db.dataDao().addSet(SetDB(exerciseId = idExercise, name = "Set 1", reps = 3, intervalReps = 1.5, timeRest = 0, goal = GoalSet.COUNT,
             speechId = addSpeechKit(db, bs = "", ast = "", be = "", ae = "",)))
     }
     private fun createTrainingPlansReal( db: AppDatabase) {

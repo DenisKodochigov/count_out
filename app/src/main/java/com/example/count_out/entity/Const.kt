@@ -5,6 +5,7 @@ import com.example.count_out.navigation.TrainingsDestination
 object Const {
 
     val DEFAULT_SCREEN = TrainingsDestination
+    const val MODE_DATABASE = 2
 
     const val DURATION_SCREEN = 800
     const val DELAY_SCREEN = 200

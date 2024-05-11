@@ -5,7 +5,6 @@ import androidx.lifecycle.viewModelScope
 import com.example.count_out.data.DataRepository
 import com.example.count_out.entity.ErrorApp
 import com.example.count_out.entity.Training
-import com.example.count_out.ui.view_components.lg
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -40,8 +39,8 @@ class TrainingsViewModel @Inject constructor(
     private fun templateMy( funDataRepository:() -> List<Training> ){
         viewModelScope.launch(Dispatchers.IO) {
             kotlin.runCatching { funDataRepository() }.fold(
-                onSuccess = {  _trainingsScreenState.update {
-                    currentState -> currentState.copy( trainings = it ) } },
+                onSuccess = {  _trainingsScreenState.update { currentState ->
+                    currentState.copy( trainings = it ) } },
                 onFailure = { errorApp.errorApi(it.message!!) }
             )
         }

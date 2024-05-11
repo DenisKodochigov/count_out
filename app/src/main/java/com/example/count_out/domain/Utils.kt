@@ -41,7 +41,7 @@ fun vibrate(context: Context){
         @Suppress("DEPRECATION")
         context.getSystemService(VIBRATOR_SERVICE) as Vibrator
     }
-    vibrateApp.vibrate(VibrationEffect.createOneShot(300, VibrationEffect.DEFAULT_AMPLITUDE) )
+    vibrateApp.vibrate(VibrationEffect.createOneShot(50, 10) )
 }
 
 //class TestTTSFile @Inject constructor(val context: Context, val speechManager: SpeechManager) {

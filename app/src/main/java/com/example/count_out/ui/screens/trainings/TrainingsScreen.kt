@@ -76,7 +76,6 @@ import com.example.count_out.ui.view_components.TextApp
         uiState.triggerRunOnClickFAB.value = false
         uiState.onAddTraining()
     }
-//    lg("TrainingsScreenCreateView")
     TrainingsScreenLayout(uiState = uiState)
 }
 @Composable fun TrainingsScreenLayout( uiState: TrainingsScreenState

@@ -23,8 +23,8 @@ class PlayerExercise @Inject constructor(
             template.getExercise().sets.forEachIndexed { index, _->
                 playerSet.playingSet(template.apply { indexSet = index }, variablesOut)
             }
-            speechManager.speech(variablesOut, template.getExercise().speech.beforeEnd)
-            speechManager.speech(variablesOut, template.getExercise().speech.afterEnd)
+//            speechManager.speech(variablesOut, template.getExercise().speech.beforeEnd)
+//            speechManager.speech(variablesOut, template.getExercise().speech.afterEnd)
         }
     }
 }

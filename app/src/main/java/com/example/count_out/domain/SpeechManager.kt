@@ -89,6 +89,7 @@ class SpeechManager(val context: Context) {
     }
 
     fun getDuration() = durationEnd
+    fun getSpeeching() = speeching.value
     private fun stopTts(){
         tts!!.stop()
         tts!!.shutdown()
