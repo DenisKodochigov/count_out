@@ -32,7 +32,6 @@ class TrainingsViewModel @Inject constructor(
     init {
         templateMy { dataRepository.getTrainings() }
     }
-    fun getTrainings(){ templateMy { dataRepository.getTrainings() } }
     private fun addTraining(){ templateMy { dataRepository.addTraining() } }
     private fun deleteTraining(id: Long){ templateMy { dataRepository.deleteTraining(id) } }
     private fun copyTraining(id: Long){ templateMy { dataRepository.copyTraining(id) } }

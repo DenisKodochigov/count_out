@@ -51,7 +51,7 @@
     <string name="time_to_rest">Время на отдых</string>
     <string name="trainings_">Тренировки</string>
     <string name="setting">Настройки</string>
-    <string name="duration">"Длительность: "</string>
+    <string name="duration">"Длительность"</string>
     <string name="part_work">Сеция тренировки.</string>
     <string name="time">Время</string>
     <string name="km">км</string>

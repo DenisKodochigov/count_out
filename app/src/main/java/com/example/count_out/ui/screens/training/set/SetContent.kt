@@ -48,7 +48,6 @@ import com.example.count_out.ui.view_components.lg
 @Composable
 fun SetContent(uiState: TrainingScreenState, set: Set, amountSet: Int)
 {
-    lg("Update screen set")
     Column{
         Spacer(modifier = Modifier.height(Dimen.width4))
         if (amountSet > 1) NameSet(uiState, set)
@@ -196,8 +195,6 @@ fun SwitchGoal(uiState: TrainingScreenState, set: Set)
         )
     }
 }
-
-
 @Composable
 fun RadioButtonDurationBottom(uiState: TrainingScreenState, set: Set, visible: Boolean)
 {

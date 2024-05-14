@@ -15,6 +15,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -118,11 +119,11 @@ fun TrainingScreenLayout( uiState: TrainingScreenState
         Spacer(modifier = Modifier.height(Dimen.width8))
         NameTraining(uiState = uiState)
         Spacer(modifier = Modifier.height(Dimen.width8))
-        Round(uiState = uiState, roundType = RoundType.UP)
+        Round(uiState = uiState, roundType = mutableStateOf(RoundType.UP))
         Spacer(modifier = Modifier.height(Dimen.width8))
-        Round(uiState = uiState, roundType = RoundType.OUT)
+        Round(uiState = uiState, roundType = mutableStateOf(RoundType.OUT))
         Spacer(modifier = Modifier.height(Dimen.width8))
-        Round(uiState = uiState, roundType = RoundType.DOWN)
+        Round(uiState = uiState, roundType = mutableStateOf(RoundType.DOWN))
     }
 }
 @Composable

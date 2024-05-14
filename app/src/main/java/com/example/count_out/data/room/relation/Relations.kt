@@ -122,9 +122,12 @@ data class TrainingRel(
     @Relation(parentColumn = "speechId", entityColumn = "idSpeechKit", entity = SpeechKitDB::class) val speechKit: SpeechKitRel?,
 ){
     fun toTraining(): TrainingDB{
+        var amountActivity = 0
+        this.rounds?.forEach { round-> amountActivity += (round.exercise?.size ?: -1) + 1 }
         return TrainingDB(
             idTraining = training.idTraining,
             isSelected = training.isSelected,
+            amountActivity = amountActivity,
             name = training.name,
             rounds = rounds?.map { it.toRound() } ?: emptyList(),
             speech = speechKit?.toSpeechKit() ?: SpeechKitDB(),

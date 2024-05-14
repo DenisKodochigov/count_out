@@ -40,7 +40,7 @@ class DataSource @Inject constructor(private val dataDao: DataDao) {
     fun getTrainings(): List<Training> {
         if (MODE_DATABASE == 1) {
             dataDao.getTrainingsRel()
-            Thread.sleep(500)
+            Thread.sleep(800)
         }
         return dataDao.getTrainingsRel().map { it.toTraining() }
     }
@@ -175,7 +175,7 @@ class DataSource @Inject constructor(private val dataDao: DataDao) {
     private fun copySpeechKit(speech: SpeechKitDB): Long{
         val newSpeechKit = speech.copy(idSpeechKit = 0L)
         newSpeechKit.idBeforeStart = dataDao.addSpeech(dataDao.getSpeech(speech.idBeforeStart).copy(idSpeech = 0L))
-        newSpeechKit.idAfterStart = dataDao.addSpeech(dataDao.getSpeech(speech.idBeforeStart).copy(idSpeech = 0L))
+        newSpeechKit.idAfterStart = dataDao.addSpeech(dataDao.getSpeech(speech.idAfterStart).copy(idSpeech = 0L))
         newSpeechKit.idBeforeEnd = dataDao.addSpeech(dataDao.getSpeech(speech.idBeforeEnd).copy(idSpeech = 0L))
         newSpeechKit.idAfterEnd = dataDao.addSpeech(dataDao.getSpeech(speech.idAfterEnd).copy(idSpeech = 0L))
         return dataDao.addSpeechKit(newSpeechKit)
@@ -197,7 +197,9 @@ class DataSource @Inject constructor(private val dataDao: DataDao) {
 
 //Sets
     fun addUpdateSet(exerciseId:Long, set: Set): Exercise{
-        if (set.idSet < 1) { dataDao.addSet(set as SetDB) }
+        if (set.idSet < 1) {
+            (set as SetDB).speechId = newSpeechKit()
+            dataDao.addSet(set) }
         else { dataDao.updateSet( set as SetDB) }
         return dataDao.getExerciseRel(exerciseId).toExercise()
     }
@@ -205,7 +207,7 @@ class DataSource @Inject constructor(private val dataDao: DataDao) {
         dataDao.updateSet( set as SetDB)
     }
     fun copySet( setId: Long){
-        copySet(dataDao.getSet(setId), 0)
+        copySet(dataDao.getSetRel(setId).toSet(), 0)
     }
 
     private fun deleteSets(exerciseId: Long){

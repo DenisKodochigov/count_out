@@ -11,12 +11,14 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.example.count_out.R
 import com.example.count_out.data.room.tables.SetDB
+import com.example.count_out.entity.GoalSet
 import com.example.count_out.entity.RoundType
 import com.example.count_out.ui.screens.training.TrainingScreenState
 import com.example.count_out.ui.screens.training.exercise.ListExercises
@@ -26,10 +28,13 @@ import com.example.count_out.ui.theme.interLight12
 import com.example.count_out.ui.view_components.IconAddItem
 import com.example.count_out.ui.view_components.IconCollapsingSpeech
 import com.example.count_out.ui.view_components.TextApp
+import kotlin.math.roundToInt
 
 @Composable
-fun Round(uiState: TrainingScreenState, roundType: RoundType)
+fun Round(uiState: TrainingScreenState, roundType: MutableState<RoundType>)
 {
+    roundType.value.amount = amountExercise(uiState, roundType)
+    roundType.value.duration = durationRound(uiState, roundType)
     Card( elevation = elevationTraining(), shape = MaterialTheme.shapes.extraSmall
     ){
         Box{
@@ -44,13 +49,13 @@ fun Round(uiState: TrainingScreenState, roundType: RoundType)
     }
 }
 @Composable
-fun Row1Round(uiState: TrainingScreenState, roundType: RoundType)
+fun Row1Round(uiState: TrainingScreenState, roundType: MutableState<RoundType>)
 {
     Row(
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier.fillMaxWidth().padding(bottom = 6.dp, end = 8.dp)
     ){
-        TextApp(text = stringResource(id = roundType.strId), style = interBold14)
+        TextApp(text = stringResource(id = roundType.value.strId), style = interBold14)
         Spacer(modifier = Modifier.weight(1f))
         IconCollapsingSpeech(
             idIconCollapsing = getIconCollapsing(uiState, roundType),
@@ -60,28 +65,32 @@ fun Row1Round(uiState: TrainingScreenState, roundType: RoundType)
     }
 }
 @Composable
-fun Row2Round(uiState: TrainingScreenState, roundType: RoundType) {
-    val amountExercise = stringResource(id = R.string.exercises) + ": " + amountExercise(uiState, roundType)
-    val txtDuration = stringResource(id = R.string.duration) + ": " + uiState.durationRound.value.toString()
+fun Row2Round(uiState: TrainingScreenState, roundType: MutableState<RoundType>
+){
     HorizontalDivider()
     Spacer(modifier = Modifier.height(4.dp))
     Row(modifier = Modifier.padding(end = 8.dp)) {
-        TextApp(text = amountExercise, style = interLight12)
+        TextApp(
+            text = stringResource(id = R.string.exercises) + ": " + roundType.value.amount,
+            style = interLight12)
         Spacer(modifier = Modifier.weight(1f))
-        TextApp(text = txtDuration, style = interLight12)
+        TextApp(
+            text = stringResource(id = R.string.duration) + ": " + roundType.value.duration + " " +
+                    stringResource(id = R.string.min),
+            style = interLight12)
     }
 }
 @Composable
-fun Row3Round(uiState: TrainingScreenState, roundType: RoundType)
+fun Row3Round(uiState: TrainingScreenState, roundType: MutableState<RoundType>)
 {
     ListExercises(
         uiState = uiState,
-        roundType = roundType,
+        roundType = roundType.value,
         modifier = Modifier.padding(end = 8.dp),
-        showExercises = getCollapsing(uiState, roundType) && amountExercise(uiState, roundType) > 0)
+        showExercises = getCollapsing(uiState, roundType) && roundType.value.amount > 0)
 }
 @Composable
-fun Row4Round(uiState: TrainingScreenState, roundType: RoundType)
+fun Row4Round(uiState: TrainingScreenState, roundType: MutableState<RoundType>)
 {
     Spacer(modifier = Modifier.height(4.dp))
     Row(verticalAlignment = Alignment.CenterVertically,
@@ -92,38 +101,53 @@ fun Row4Round(uiState: TrainingScreenState, roundType: RoundType)
         PoleAddExercise(uiState = uiState, roundType = roundType)
     }
 }
-fun setCollapsing(uiState: TrainingScreenState, roundType: RoundType)
+fun setCollapsing(uiState: TrainingScreenState, roundType: MutableState<RoundType>)
 {
-    if (amountExercise(uiState, roundType) > 0) {
-        when (roundType) {
+    if (roundType.value.amount > 0) {
+        when (roundType.value) {
             RoundType.UP -> uiState.workUpCollapsing.value = !uiState.workUpCollapsing.value
             RoundType.OUT -> uiState.workOutCollapsing.value = !uiState.workOutCollapsing.value
             RoundType.DOWN -> uiState.workDownCollapsing.value = !uiState.workDownCollapsing.value
         }
     }
 }
-fun showSpeechRound(uiState: TrainingScreenState, roundType: RoundType)
+fun showSpeechRound(uiState: TrainingScreenState, roundType: MutableState<RoundType>)
 {
-    when (roundType) {
+    when (roundType.value) {
         RoundType.UP -> uiState.showSpeechWorkUp.value = true
         RoundType.OUT -> uiState.showSpeechWorkOut.value = true
         RoundType.DOWN -> uiState.showSpeechWorkDown.value = true
     }
 }
-fun amountExercise(uiState: TrainingScreenState, roundType: RoundType) =
-    uiState.training.rounds.find{ it.roundType == roundType }?.exercise?.size ?: 0
+fun amountExercise(uiState: TrainingScreenState, roundType: MutableState<RoundType>) =
+    uiState.training.rounds.find{ it.roundType == roundType.value }?.exercise?.size ?: 0
 
-fun getCollapsing(uiState: TrainingScreenState, roundType: RoundType): Boolean
+fun durationRound(uiState: TrainingScreenState, roundType: MutableState<RoundType>): Int{
+    var durationRound = 0.0
+    uiState.training.rounds.find{ it.roundType == roundType.value }?.exercise?.forEach { exercise ->
+        exercise.sets.forEach { set->
+            durationRound += when (set.goal){
+                GoalSet.DURATION-> set.duration * 60
+                GoalSet.COUNT-> set.reps * set.intervalReps
+                GoalSet.COUNT_GROUP -> set.reps * set.intervalReps
+                GoalSet.DISTANCE -> set.distance * 600
+            } + set.timeRest
+        }
+    } ?: 0
+    return ( durationRound / 60).roundToInt()
+}
+//    uiState.training.rounds.find{ it.roundType == roundType }?.exercise?.size ?: 0
+fun getCollapsing(uiState: TrainingScreenState, roundType: MutableState<RoundType>): Boolean
 {
-    return when (roundType) {
+    return when (roundType.value) {
         RoundType.UP -> uiState.workUpCollapsing.value
         RoundType.OUT -> uiState.workOutCollapsing.value
         RoundType.DOWN -> uiState.workDownCollapsing.value
     }
 }
-fun getIconCollapsing(uiState: TrainingScreenState, roundType: RoundType): Int
+fun getIconCollapsing(uiState: TrainingScreenState, roundType: MutableState<RoundType>): Int
 {
-    return when (roundType) {
+    return when (roundType.value) {
         RoundType.UP -> getIcon(uiState.workUpCollapsing.value)
         RoundType.OUT -> getIcon(uiState.workOutCollapsing.value)
         RoundType.DOWN -> getIcon(uiState.workDownCollapsing.value)
@@ -132,7 +156,7 @@ fun getIconCollapsing(uiState: TrainingScreenState, roundType: RoundType): Int
 
 fun getIcon(collapsing: Boolean): Int = if (collapsing) R.drawable.ic_wrap1 else R.drawable.ic_wrap
 @Composable
-fun PoleAddExercise(uiState: TrainingScreenState, roundType: RoundType)
+fun PoleAddExercise(uiState: TrainingScreenState, roundType: MutableState<RoundType>)
 {
     val nameNewSet = stringResource(id = R.string.set)
     IconAddItem(textId = R.string.add_activity, onAdd = {
@@ -140,7 +164,7 @@ fun PoleAddExercise(uiState: TrainingScreenState, roundType: RoundType)
     })
 }
 @Composable
-fun PoleAddRing(uiState: TrainingScreenState, roundType: RoundType)
+fun PoleAddRing(uiState: TrainingScreenState, roundType: MutableState<RoundType>)
 {
     val nameNewSet = stringResource(id = R.string.set)
     IconAddItem(textId = R.string.add_ring, onAdd = {
@@ -148,12 +172,12 @@ fun PoleAddRing(uiState: TrainingScreenState, roundType: RoundType)
     })
 }
 @Composable
-fun PoleCreateRing(uiState: TrainingScreenState, roundType: RoundType)
+fun PoleCreateRing(uiState: TrainingScreenState, roundType: MutableState<RoundType>)
 {
     val nameNewSet = stringResource(id = R.string.set)
     IconAddItem(textId = R.string.create_ring, onAdd = {
         uiState.onAddExercise(getIdRound(uiState, roundType), SetDB(name = nameNewSet))
     })
 }
-fun getIdRound(uiState: TrainingScreenState, roundType: RoundType) =
-    uiState.training.rounds.find { it.roundType == roundType }?.idRound ?: 0
+fun getIdRound(uiState: TrainingScreenState, roundType: MutableState<RoundType>) =
+    uiState.training.rounds.find { it.roundType == roundType.value }?.idRound ?: 0

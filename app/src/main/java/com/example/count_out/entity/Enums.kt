@@ -45,10 +45,10 @@ enum class Zone(val id: Int, var maxPulse: Int){
     MAX(id = 5, maxPulse = 180)
 }
 
-enum class RoundType(val strId: Int){
-    UP (R.string.work_up),
-    OUT (R.string.work_out),
-    DOWN (R.string.work_down);
+enum class RoundType(val strId: Int, var amount: Int, var duration: Int){
+    UP (R.string.work_up,0,0),
+    OUT (R.string.work_out,0,0),
+    DOWN (R.string.work_down,0,0);
 }
 enum class GoalSet(val id: Int){
     DISTANCE(1),
