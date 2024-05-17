@@ -18,6 +18,9 @@ object Dimen {
 
     val width8 = 8.dp
     val width4 = 4.dp
+    val height4 = 4.dp
+    val height6 = 6.dp
+    val height8 = 8.dp
 
     val sizeIcon = 24.dp
     val sizeBetweenIcon = 10.dp

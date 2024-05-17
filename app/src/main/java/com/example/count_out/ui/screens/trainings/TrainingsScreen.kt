@@ -19,7 +19,6 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.PlayCircleOutline
 import androidx.compose.material3.Card
-import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
@@ -41,6 +40,7 @@ import com.example.count_out.ui.theme.elevationTraining
 import com.example.count_out.ui.theme.getIdImage
 import com.example.count_out.ui.theme.interLight12
 import com.example.count_out.ui.theme.interReg14
+import com.example.count_out.ui.view_components.IconSingle
 import com.example.count_out.ui.view_components.ItemSwipe
 import com.example.count_out.ui.view_components.TextApp
 
@@ -125,7 +125,7 @@ fun TrainingsLazyColumn(uiState: TrainingsScreenState,
         Row(
             horizontalArrangement = Arrangement.Start,
             verticalAlignment = Alignment.CenterVertically,
-            modifier = modifier.fillMaxWidth()//.background(color = MaterialTheme.colorScheme.primary)
+            modifier = modifier.fillMaxWidth()
         ){
             IconStart(item = item, uiState = uiState)
             Spacer(modifier = Modifier.width(Dimen.width4))
@@ -138,12 +138,11 @@ fun TrainingsLazyColumn(uiState: TrainingsScreenState,
 @Composable fun IconStart(item: Training, uiState: TrainingsScreenState){
 //    lg("IconStart")
     IconButton(onClick = { uiState.onStartWorkout(item.idTraining)}) {
-        Icon(imageVector = Icons.Default.PlayCircleOutline, contentDescription = "")}
+        IconSingle(image = Icons.Default.PlayCircleOutline)}
 }
 @Composable fun IconEnd(item: Training, uiState: TrainingsScreenState){
     IconButton(onClick = { uiState.onCopyTraining(item.idTraining)}) {
-        Icon(painter = painterResource(R.drawable.ic_copy), contentDescription = "")
-    }
+        IconSingle(image = painterResource(R.drawable.ic_copy)) }
 }
 @Composable fun TrainingInformation(
     item: Training,
@@ -153,6 +152,7 @@ fun TrainingsLazyColumn(uiState: TrainingsScreenState,
 //    lg("TrainingInformation")
     Column (modifier = modifier.clickable { uiState.onSelectItem(item.idTraining) }){
         TextApp( text = item.name, style = interReg14)
+        Spacer(modifier = Modifier.height(Dimen.height4))
         TextApp(
             text = stringResource(id = R.string.exercise)+ ": " + item.amountActivity,
             style = interLight12 )

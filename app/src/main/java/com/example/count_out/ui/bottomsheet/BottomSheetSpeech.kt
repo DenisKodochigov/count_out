@@ -30,8 +30,8 @@ import com.example.count_out.entity.Set
 import com.example.count_out.entity.Training
 import com.example.count_out.entity.TypeKeyboard
 import com.example.count_out.ui.theme.Dimen
-import com.example.count_out.ui.theme.interLight12Start
-import com.example.count_out.ui.theme.interThin10Start
+import com.example.count_out.ui.theme.interLight14Start
+import com.example.count_out.ui.theme.interThin12Start
 import com.example.count_out.ui.theme.shapesApp
 import com.example.count_out.ui.view_components.ButtonConfirm
 import com.example.count_out.ui.view_components.TextApp
@@ -108,7 +108,7 @@ fun BottomSheetSpeechContent(uiState: BottomSheetState)
 @Composable fun FieldTextForSpeech(enterValue: MutableState<String>, nameSection: String){
     Column {
         TextFieldApp(
-            textStyle = interLight12Start,
+            textStyle = interLight14Start,
             showLine = true,
             onLossFocus = false,
             maxLines = 3,
@@ -118,7 +118,7 @@ fun BottomSheetSpeechContent(uiState: BottomSheetState)
             placeholder = enterValue.value,
             onChangeValue = { enterValue.value = it },
             typeKeyboard = TypeKeyboard.TEXT )
-        TextApp(text = nameSection, style = interThin10Start,
+        TextApp(text = nameSection, style = interThin12Start,
             modifier = Modifier.padding(start = Dimen.bsItemPaddingHor))
     }
 }

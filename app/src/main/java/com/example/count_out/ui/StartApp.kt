@@ -56,6 +56,9 @@ fun StartApp() {
                 RequestPermission(Manifest.permission.FOREGROUND_SERVICE, 28)
                 RequestPermission(Manifest.permission.FOREGROUND_SERVICE_SPECIAL_USE, 34)
                 RequestPermission(Manifest.permission.RECORD_AUDIO, 26)
+                RequestPermission(Manifest.permission.BLUETOOTH_SCAN, 31)
+                RequestPermission(Manifest.permission.BLUETOOTH_CONNECT, 31)
+                RequestPermission(Manifest.permission.ACCESS_BACKGROUND_LOCATION, 29)
             }
         )
     }

@@ -13,6 +13,8 @@ import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -25,19 +27,28 @@ import com.example.count_out.ui.theme.interLight12
     Icon(
         painter = painterResource(id = R.drawable.ic_copy),
         contentDescription = "",
-        modifier = Modifier.padding(0.dp).size(Dimen.sizeIcon).clickable{ onCopy() }
+        modifier = Modifier
+            .padding(0.dp)
+            .size(Dimen.sizeIcon)
+            .clickable { onCopy() }
     )
     Spacer(modifier = Modifier.width(sizeBetweenIcon))
     Icon(
         painter = painterResource(id = R.drawable.ic_speech),
         contentDescription = "",
-        modifier = Modifier.padding(0.dp).size(Dimen.sizeIcon).clickable{ onSpeech() }
+        modifier = Modifier
+            .padding(0.dp)
+            .size(Dimen.sizeIcon)
+            .clickable { onSpeech() }
     )
     Spacer(modifier = Modifier.width(sizeBetweenIcon))
     Icon(
         painter = painterResource(id = R.drawable.ic_del),
         contentDescription = "",
-        modifier = Modifier.padding(0.dp).size(Dimen.sizeIcon).clickable{ onDel() }
+        modifier = Modifier
+            .padding(0.dp)
+            .size(Dimen.sizeIcon)
+            .clickable { onDel() }
     )
 }
 
@@ -60,7 +71,10 @@ import com.example.count_out.ui.theme.interLight12
     Icon(
         painter = painterResource(id = idIcon),
         contentDescription = "",
-        modifier = Modifier.padding(0.dp).size(Dimen.sizeIcon).clickable{ onCollapsing() }
+        modifier = Modifier
+            .padding(0.dp)
+            .size(Dimen.sizeIcon)
+            .clickable { onCollapsing() }
     )
 }
 @Composable
@@ -72,12 +86,18 @@ fun IconCollapsingSpeech(
     Icon(
         painter = painterResource(id = idIconCollapsing),
         contentDescription = "",
-        modifier = Modifier.padding(4.dp).size(Dimen.sizeIcon).clickable{ onCollapsing() }
+        modifier = Modifier
+            .padding(4.dp)
+            .size(Dimen.sizeIcon)
+            .clickable { onCollapsing() }
     )
     Spacer(modifier = Modifier.width(sizeBetweenIcon))
     Icon(
         painter = painterResource(id = R.drawable.ic_speech), contentDescription = "",
-        modifier = Modifier.padding(4.dp).size(Dimen.sizeIcon).clickable{ onSpeech() }
+        modifier = Modifier
+            .padding(4.dp)
+            .size(Dimen.sizeIcon)
+            .clickable { onSpeech() }
     )
 
 }
@@ -89,12 +109,18 @@ fun IconSpeechDel(
     Icon(
         painter = painterResource(id = R.drawable.ic_speech),
         contentDescription = "",
-        modifier = Modifier.padding(4.dp).size(Dimen.sizeIcon).clickable{ onSpeech() }
+        modifier = Modifier
+            .padding(4.dp)
+            .size(Dimen.sizeIcon)
+            .clickable { onSpeech() }
     )
     Spacer(modifier = Modifier.width(8.dp))
     Icon(
         painter = painterResource(id = R.drawable.ic_del1), contentDescription = "",
-        modifier = Modifier.padding(4.dp).size(Dimen.sizeIcon).clickable{ onDelete() }
+        modifier = Modifier
+            .padding(4.dp)
+            .size(Dimen.sizeIcon)
+            .clickable { onDelete() }
     )
 }
 
@@ -102,7 +128,10 @@ fun IconSpeechDel(
 fun IconSelectActivity(onClick: ()->Unit)
 {
     Icon(imageVector = Icons.Filled.ArrowDropDown, contentDescription = "",
-        modifier = Modifier.padding(4.dp).size(Dimen.sizeIcon).clickable{ onClick() }
+        modifier = Modifier
+            .padding(4.dp)
+            .size(Dimen.sizeIcon)
+            .clickable { onClick() }
     )
 }
 
@@ -120,7 +149,16 @@ fun IconSelectActivity(onClick: ()->Unit)
         Icon(
             painter = painterResource(id = R.drawable.ic_add),
             contentDescription = "",
-            modifier = Modifier.padding(4.dp).size(Dimen.sizeIcon)
+            modifier = Modifier
+                .padding(4.dp)
+                .size(Dimen.sizeIcon)
         )
     }
+}
+
+@Composable fun IconSingle(image: ImageVector){
+    Icon(imageVector = image, contentDescription = "", modifier = Modifier.size(Dimen.sizeIcon))
+}
+@Composable fun IconSingle(image: Painter){
+    Icon(painter = image, contentDescription = "", modifier = Modifier.size(Dimen.sizeIcon))
 }
