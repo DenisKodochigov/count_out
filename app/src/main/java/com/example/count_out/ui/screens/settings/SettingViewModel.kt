@@ -7,6 +7,7 @@ import com.example.count_out.data.DataRepository
 import com.example.count_out.data.room.tables.SettingDB
 import com.example.count_out.entity.Activity
 import com.example.count_out.entity.ErrorApp
+import com.example.count_out.service.bluetooth.BluetoothApp
 import com.example.count_out.ui.view_components.log
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -20,6 +21,7 @@ import javax.inject.Inject
 @HiltViewModel
 class SettingViewModel @Inject constructor(
     private val errorApp: ErrorApp,
+    private val bluetoothApp: BluetoothApp,
     private val dataRepository: DataRepository
 ): ViewModel() {
     private val _settingScreenState = MutableStateFlow(
@@ -30,6 +32,7 @@ class SettingViewModel @Inject constructor(
             onDeleteActivity = { activityId-> onDeleteActivity( activityId )},
             onUpdateSetting = { setting-> updateSetting( setting )},
             onGetSettings = { getSettings()},
+            onGetDevices = { getBluetoothDevices() },
             onSetColorActivity = { activityId, color ->
                 onSetColorActivityForSettings( activityId = activityId, color = color) },
         ))
@@ -37,7 +40,9 @@ class SettingViewModel @Inject constructor(
 
     init {
         getSettings()
+        getBluetoothDevices()
         templateMy{dataRepository.getActivities()}
+        receiveBluetooth()
     }
     private fun onAddActivity(activity: Activity){
         templateMy{
@@ -77,6 +82,21 @@ class SettingViewModel @Inject constructor(
                     currentState.copy(settings = mutableStateOf(it) ) } },
                 onFailure = { errorApp.errorApi(it.message!!) }
             )
+        }
+    }
+    private fun getBluetoothDevices(){
+        viewModelScope.launch(Dispatchers.IO) {
+            kotlin.runCatching { bluetoothApp.queryPairedDevices() }.fold(
+                onSuccess = { },
+                onFailure = { errorApp.errorApi(it.message!!) }
+            )
+        }
+    }
+    private fun receiveBluetooth(){
+        viewModelScope.launch(Dispatchers.IO) {
+            bluetoothApp.getDevices().collect{
+                _settingScreenState.update { currentState ->
+                    currentState.copy(bluetoothDevices = mutableStateOf(it)) } }
         }
     }
 }

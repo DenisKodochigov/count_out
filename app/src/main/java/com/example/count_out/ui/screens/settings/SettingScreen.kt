@@ -13,6 +13,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Card
@@ -79,6 +82,19 @@ import com.example.count_out.ui.view_components.TextApp
 {
     Spacer(modifier = Modifier.height(12.dp))
     SettingSpeechDescription(uiState)
+    SettingsBluetooth(uiState)
+}
+@Composable fun SettingsBluetooth(uiState: SettingScreenState){
+    uiState.onGetDevices
+    LazyColumn( state = rememberLazyListState(), modifier = Modifier.height(200.dp)
+    ){
+        items(items = uiState.bluetoothDevices.value){ item->
+            Row {
+                TextApp(text = item.name, style = interReg14)
+                TextApp(text = item.address, style = interReg14)
+            }
+        }
+    }
 }
 @Composable fun SettingSpeechDescription(uiState: SettingScreenState){
     var enableValue = true
