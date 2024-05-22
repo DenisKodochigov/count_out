@@ -67,6 +67,7 @@ dependencies {
     //Hilt
     implementation (libs.hilt.android)
     implementation (libs.androidx.hilt.navigation.compose)
+    implementation(libs.play.services.location)
     ksp (libs.dagger.compiler)
     ksp (libs.hilt.compiler)
     testImplementation (libs.hilt.android.testing)
@@ -104,17 +105,7 @@ dependencies {
     implementation (libs.moshi)
     implementation (libs.moshi.kotlin)
     ksp (libs.moshi.kotlin.codegen)
-    //DataStory
-//    implementation (libs.androidx.datastore.core)
-//    implementation (libs.androidx.datastore)
-    // Import the Firebase BoM
-//    implementation (platform(libs.firebase.bom))
-//    implementation (libs.firebase.analytics)
-//    implementation (libs.firebase.crashlytics)
-    //Warning logcat
-//    implementation(libs.maps.utils)
-//    implementation(libs.maps.utils.ktx)
-    //noinspection UseTomlInstead
+
     debugImplementation(libs.androidx.ui.test.manifest)
 //Testing
     testImplementation (libs.junit)

@@ -5,7 +5,6 @@ import android.widget.Toast
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.platform.LocalContext
-import androidx.core.app.ActivityCompat
 import com.example.count_out.MainActivity
 import com.example.count_out.ui.view_components.ToastApp
 import com.example.count_out.ui.view_components.lg
@@ -44,7 +43,7 @@ fun RequestPermission1(activity: MainActivity, permission: String, requiredSDK: 
             } else {
 //                ToastApp("Please, get permission on $permission.")
                 lg("ActivityCompat.requestPermissions $permission")
-                ActivityCompat.requestPermissions(activity, arrayOf(permission), 1)
+                LaunchedEffect(key1 = Unit ){ permissionState.launchPermissionRequest() }
             }
         }
     }
