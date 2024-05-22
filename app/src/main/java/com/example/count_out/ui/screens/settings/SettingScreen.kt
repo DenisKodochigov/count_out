@@ -2,6 +2,7 @@ package com.example.count_out.ui.screens.settings
 
 import android.annotation.SuppressLint
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -30,6 +31,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -39,6 +41,7 @@ import com.example.count_out.R
 import com.example.count_out.data.room.tables.ActivityDB
 import com.example.count_out.data.room.tables.SettingDB
 import com.example.count_out.domain.to01
+import com.example.count_out.entity.BluetoothDev
 import com.example.count_out.ui.bottomsheet.BottomSheetAddActivity
 import com.example.count_out.ui.bottomsheet.CardActivity
 import com.example.count_out.ui.theme.Dimen
@@ -48,6 +51,7 @@ import com.example.count_out.ui.theme.interLight12
 import com.example.count_out.ui.theme.interReg14
 import com.example.count_out.ui.view_components.IconsCollapsing
 import com.example.count_out.ui.view_components.TextApp
+import com.example.count_out.ui.view_components.lg
 
 @SuppressLint("UnrememberedMutableState")
 @Composable fun SettingScreen(){
@@ -85,10 +89,16 @@ import com.example.count_out.ui.view_components.TextApp
     SettingsBluetooth(uiState)
 }
 @Composable fun SettingsBluetooth(uiState: SettingScreenState){
-    uiState.onGetDevices
-    LazyColumn( state = rememberLazyListState(), modifier = Modifier.height(200.dp)
+    val listBluetoothDev: List<BluetoothDev>
+    try {
+        listBluetoothDev = uiState.bluetoothDevices.value
+    } catch (e: IllegalStateException) {
+        return
+    }
+    lg("SettingsBluetooth $listBluetoothDev")
+    LazyColumn( state = rememberLazyListState(), modifier = Modifier.height(200.dp).background(Color.LightGray)
     ){
-        items(items = uiState.bluetoothDevices.value){ item->
+        items(items = listBluetoothDev){ item->
             Row {
                 TextApp(text = item.name, style = interReg14)
                 TextApp(text = item.address, style = interReg14)

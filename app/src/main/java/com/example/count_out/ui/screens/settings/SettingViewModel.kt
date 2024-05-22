@@ -40,8 +40,8 @@ class SettingViewModel @Inject constructor(
 
     init {
         getSettings()
-        getBluetoothDevices()
         templateMy{dataRepository.getActivities()}
+        getBluetoothDevices()
         receiveBluetooth()
     }
     private fun onAddActivity(activity: Activity){

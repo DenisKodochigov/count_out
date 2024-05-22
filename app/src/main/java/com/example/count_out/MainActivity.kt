@@ -23,7 +23,7 @@ class MainActivity: ComponentActivity()
         super.onCreate(savedInstanceState)
         setContent { StartApp() }
         sensorsManager.onCreate()
-        bluetoothApp.init()
+        bluetoothApp.init(this)
     }
 
     override fun onStart() {

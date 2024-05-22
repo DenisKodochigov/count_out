@@ -10,6 +10,7 @@ import androidx.core.app.ActivityCompat
 import androidx.core.app.ActivityCompat.startActivityForResult
 import com.example.count_out.MainActivity
 import com.example.count_out.entity.BluetoothDev
+import com.example.count_out.ui.view_components.lg
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.cancelAndJoin
@@ -20,7 +21,7 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class BluetoothApp @Inject constructor(val context: Context, val activity: MainActivity) {
+class BluetoothApp @Inject constructor(val context: Context) {
     private lateinit var bluetoothManager: BluetoothManager
     private lateinit var bluetoothAdapter: BluetoothAdapter
     private val devices: MutableStateFlow<List<BluetoothDev>> = MutableStateFlow(emptyList())
@@ -46,8 +47,14 @@ class BluetoothApp @Inject constructor(val context: Context, val activity: MainA
         ) { notGranted
         } else granted
     }
+    private fun <T>checkPermissionTest(granted: T, notGranted: T): T{
+        return if (ActivityCompat.checkSelfPermission(
+                context, Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED
+        ) { notGranted
+        } else  { granted }
+    }
 
-    fun init(){
+    fun init(activity: MainActivity){
 //        val bluetoothAvailable = PackageManager.hasSystemFeature(PackageManager.FEATURE_BLUETOOTH)
 //        val bluetoothLEAvailable = PackageManager.hasSystemFeature(PackageManager.FEATURE_BLUETOOTH_LE)
         bluetoothManager = context.getSystemService(Context.BLUETOOTH_SERVICE) as BluetoothManager
@@ -72,8 +79,14 @@ class BluetoothApp @Inject constructor(val context: Context, val activity: MainA
     fun getDevices() = devices
 
     suspend fun queryPairedDevices() {
+        lg("BluetoothApp.queryPairedDevices state: ${bluetoothAdapter.state} (12=STATE_ON), permission: ${checkPermissionTest( true, false)}")
+        devices.value = checkPermission( bluetoothAdapter.bondedDevices, emptySet()).map {
+            lg("BluetoothApp.queryPairedDevices $it")
+            BluetoothDev(name = it.name, address = it.address)
+        }
         val job = CoroutineScope(Dispatchers.IO).launch {
             devices.value = checkPermission( bluetoothAdapter.bondedDevices, emptySet()).map {
+                lg("BluetoothApp.queryPairedDevices $it")
                 BluetoothDev(name = it.name, address = it.address)
             }
             delay(5000L)
