@@ -2,7 +2,6 @@ package com.example.count_out.ui.screens.settings
 
 import android.annotation.SuppressLint
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -31,7 +30,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -51,7 +49,6 @@ import com.example.count_out.ui.theme.interLight12
 import com.example.count_out.ui.theme.interReg14
 import com.example.count_out.ui.view_components.IconsCollapsing
 import com.example.count_out.ui.view_components.TextApp
-import com.example.count_out.ui.view_components.lg
 
 @SuppressLint("UnrememberedMutableState")
 @Composable fun SettingScreen(){
@@ -95,8 +92,8 @@ import com.example.count_out.ui.view_components.lg
     } catch (e: IllegalStateException) {
         return
     }
-    lg("SettingsBluetooth $listBluetoothDev")
-    LazyColumn( state = rememberLazyListState(), modifier = Modifier.height(200.dp).background(Color.LightGray)
+//    lg("SettingsBluetooth $listBluetoothDev")
+    LazyColumn( state = rememberLazyListState(), modifier = Modifier.height(200.dp).fillMaxWidth()
     ){
         items(items = listBluetoothDev){ item->
             Row {

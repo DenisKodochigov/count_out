@@ -1,5 +1,6 @@
 package com.example.count_out.entity
 
+import android.Manifest
 import com.example.count_out.navigation.TrainingsDestination
 
 object Const {
@@ -25,4 +26,24 @@ object Const {
     const val START_REQUEST_CODE = 100
     const val PAUSE_REQUEST_CODE = 101
     const val STOP_REQUEST_CODE = 102
+
+    val permissions1 = listOf(
+        Manifest.permission.FOREGROUND_SERVICE,
+        Manifest.permission.BLUETOOTH,
+        Manifest.permission.BLUETOOTH_SCAN,
+        Manifest.permission.BLUETOOTH_ADMIN,
+        Manifest.permission.BLUETOOTH_CONNECT,
+        Manifest.permission.BLUETOOTH_PRIVILEGED,
+        Manifest.permission.ACCESS_COARSE_LOCATION, ///
+        Manifest.permission.ACCESS_FINE_LOCATION,   ///
+        Manifest.permission.ACTIVITY_RECOGNITION,
+        Manifest.permission.POST_NOTIFICATIONS,
+        Manifest.permission.FOREGROUND_SERVICE_SPECIAL_USE,
+        Manifest.permission.INTERNET,
+        Manifest.permission.ACCESS_NETWORK_STATE,
+        Manifest.permission.READ_PHONE_STATE,
+        Manifest.permission.VIBRATE,)
+    val permissions2 = listOf(
+        Manifest.permission.ACCESS_BACKGROUND_LOCATION,
+        Manifest.permission.VIBRATE,)
 }

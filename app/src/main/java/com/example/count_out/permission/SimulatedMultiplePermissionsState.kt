@@ -1,4 +1,4 @@
-package com.example.count_out.domain.permission
+package com.example.count_out.permission
 
 import android.Manifest
 import android.annotation.SuppressLint

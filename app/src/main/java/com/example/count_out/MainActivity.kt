@@ -3,6 +3,7 @@ package com.example.count_out
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import com.example.count_out.permission.RequestPermissions
 import com.example.count_out.service.bluetooth.BluetoothApp
 import com.example.count_out.service.sensors.SensorsApp
 import com.example.count_out.service.workout.ServiceManager
@@ -21,7 +22,10 @@ class MainActivity: ComponentActivity()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContent { StartApp() }
+        setContent {
+            RequestPermissions()
+            StartApp()
+        }
         sensorsManager.onCreate()
         bluetoothApp.init(this)
     }
