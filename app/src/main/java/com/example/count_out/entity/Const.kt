@@ -33,7 +33,6 @@ object Const {
         Manifest.permission.BLUETOOTH_SCAN,
         Manifest.permission.BLUETOOTH_ADMIN,
         Manifest.permission.BLUETOOTH_CONNECT,
-        Manifest.permission.BLUETOOTH_PRIVILEGED,
         Manifest.permission.ACCESS_COARSE_LOCATION, ///
         Manifest.permission.ACCESS_FINE_LOCATION,   ///
         Manifest.permission.ACTIVITY_RECOGNITION,
@@ -41,7 +40,6 @@ object Const {
         Manifest.permission.FOREGROUND_SERVICE_SPECIAL_USE,
         Manifest.permission.INTERNET,
         Manifest.permission.ACCESS_NETWORK_STATE,
-        Manifest.permission.READ_PHONE_STATE,
         Manifest.permission.VIBRATE,)
     val permissions2 = listOf(
         Manifest.permission.ACCESS_BACKGROUND_LOCATION,

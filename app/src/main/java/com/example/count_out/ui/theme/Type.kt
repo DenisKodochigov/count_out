@@ -34,6 +34,7 @@ val interReg = TextStyle(fontFamily = FontFamily(Font(R.font.inter_regular)))
 val interReg12 = interReg.copy(fontSize = 12.sp)
 val interReg14 = interReg.copy(fontSize = 14.sp)
 val interReg16 = interReg.copy(fontSize = 16.sp)
+val interReg18 = interReg.copy(fontSize = 18.sp)
 
 val alumnisans = TextStyle(fontFamily = FontFamily(Font(R.font.alumnisans_regular)))
 val alumniReg12 = alumnisans.copy(fontSize = 12.sp)

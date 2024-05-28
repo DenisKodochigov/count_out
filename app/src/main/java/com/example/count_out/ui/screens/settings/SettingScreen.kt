@@ -2,6 +2,7 @@ package com.example.count_out.ui.screens.settings
 
 import android.annotation.SuppressLint
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -13,6 +14,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
@@ -47,6 +49,7 @@ import com.example.count_out.ui.theme.elevationTraining
 import com.example.count_out.ui.theme.interBold14
 import com.example.count_out.ui.theme.interLight12
 import com.example.count_out.ui.theme.interReg14
+import com.example.count_out.ui.theme.interReg18
 import com.example.count_out.ui.view_components.IconsCollapsing
 import com.example.count_out.ui.view_components.TextApp
 
@@ -93,12 +96,25 @@ import com.example.count_out.ui.view_components.TextApp
         return
     }
 //    lg("SettingsBluetooth $listBluetoothDev")
-    LazyColumn( state = rememberLazyListState(), modifier = Modifier.height(200.dp).fillMaxWidth()
+    Column (
+        modifier = Modifier
+            .border(width = 1.dp,
+                color = MaterialTheme.colorScheme.onTertiaryContainer,
+                shape = MaterialTheme.shapes.small)
+            .height(200.dp)
+            .padding(8.dp)
+            .fillMaxWidth()
     ){
-        items(items = listBluetoothDev){ item->
-            Row {
-                TextApp(text = item.name, style = interReg14)
-                TextApp(text = item.address, style = interReg14)
+        TextApp(text = stringResource(id = R.string.section_head_rate), style = interReg18)
+        Spacer(modifier = Modifier.height(8.dp))
+        LazyColumn( state = rememberLazyListState(), modifier = Modifier.fillMaxSize()
+        ){
+            items(items = listBluetoothDev){ item->
+                Row (modifier = Modifier.padding(vertical = 2.dp).clickable { uiState.onSelectDevice(item) }) {
+                    TextApp(text = item.address, style = interReg14)
+                    Spacer(modifier = Modifier.width(8.dp))
+                    TextApp(text = item.name, style = interReg14)
+                }
             }
         }
     }

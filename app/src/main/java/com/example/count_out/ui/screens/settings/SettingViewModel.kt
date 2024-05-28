@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.count_out.data.DataRepository
 import com.example.count_out.data.room.tables.SettingDB
 import com.example.count_out.entity.Activity
+import com.example.count_out.entity.BluetoothDev
 import com.example.count_out.entity.ErrorApp
 import com.example.count_out.service.bluetooth.BluetoothApp
 import com.example.count_out.ui.view_components.log
@@ -33,6 +34,7 @@ class SettingViewModel @Inject constructor(
             onUpdateSetting = { setting-> updateSetting( setting )},
             onGetSettings = { getSettings()},
             onGetDevices = { getBluetoothDevices() },
+            onSelectDevice = { device-> selectDevice(device) },
             onSetColorActivity = { activityId, color ->
                 onSetColorActivityForSettings( activityId = activityId, color = color) },
         ))
@@ -91,6 +93,10 @@ class SettingViewModel @Inject constructor(
                 onFailure = { errorApp.errorApi(it.message!!) }
             )
         }
+    }
+
+    private fun selectDevice(device: BluetoothDev) {
+        bluetoothApp.connectDevice(device)
     }
     private fun receiveBluetooth(){
         viewModelScope.launch(Dispatchers.IO) {

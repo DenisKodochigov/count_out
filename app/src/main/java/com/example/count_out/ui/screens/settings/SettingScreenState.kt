@@ -20,6 +20,7 @@ data class SettingScreenState(
     @Stable val onAddActivity: (Activity) ->Unit = {},
     @Stable val onUpdateActivity: (Activity) ->Unit = {},
     @Stable val onDeleteActivity: (Long) ->Unit = {},
+    @Stable val onSelectDevice: (BluetoothDev) ->Unit = {},
 
     @Stable val onUpdateSetting: (SettingDB) ->Unit = {},
     @Stable val onGetSettings: () ->Unit = {},

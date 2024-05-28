@@ -69,7 +69,6 @@ class BluetoothApp @Inject constructor(val context: Context) {
     private fun scanFilters(): List<ScanFilter> {
         val filters = mutableListOf<ScanFilter>()
         val serviceUUIDs = listOf(
-            UUID.fromString("0000fef3-0000-0000-0000-000000000000"),
             UUID.fromString("00001809-0000-0000-0000-000000000000"),
             UUID.fromString("00001810-0000-1000-8000-00805f9b34fb"),
             UUID.fromString("0000180D-0000-0000-0000-000000000000"),
@@ -85,7 +84,8 @@ class BluetoothApp @Inject constructor(val context: Context) {
             UUID.fromString("00001840-0000-0000-0000-000000000000"),
             )
         for(serviceUUID in serviceUUIDs){
-            val filter = ScanFilter.Builder().setServiceUuid(ParcelUuid(serviceUUID)).build()
+            val filter = ScanFilter.Builder().setServiceUuid(ParcelUuid(serviceUUID),
+                ParcelUuid(UUID.fromString("11111111-0000-0000-0000-000000000000"))).build()
 //            val filter = ScanFilter.Builder().setDeviceName("name").build()
 //            val filter = ScanFilter.Builder().setDeviceAddress("mac address").build()
             filters.add(filter)
@@ -106,27 +106,9 @@ class BluetoothApp @Inject constructor(val context: Context) {
     fun queryPairedDevices() {
         checkPermission (context, BLUETOOTH_SCAN, 30)
         { bluetoothAdapter.bluetoothLeScanner.startScan(scanFilters(), scanSettings(), scanCallback) }
-//        lg("BluetoothApp.queryPairedDevices state: ${bluetoothAdapter.state} (12=STATE_ON), " +
-//                "permission: ${checkPermissionBluetoothConnect( true, false, context)}")
-//        if ( ActivityCompat.checkSelfPermission( context, Manifest.permission.BLUETOOTH_CONNECT) !=
-//            PackageManager.PERMISSION_GRANTED
-//        ) {
-//            devices.value = bluetoothAdapter.bondedDevices.map {
-//                lg("BluetoothApp.queryPairedDevices $it")
-//                BluetoothDev(name = it.name, address = it.address)
-//            }
-//        } else {
-//            devices.value = emptyList()
-//        }
-//
-//        val job = CoroutineScope(Dispatchers.IO).launch {
-//            devices.value = checkPermissionBluetoothConnect( bluetoothAdapter.bondedDevices, emptySet(), context).map {
-//                lg("BluetoothApp.queryPairedDevices $it")
-//                BluetoothDev(name = it.name, address = it.address)
-//            }
-//            delay(5000L)
-//        }
-//        job.cancelAndJoin()
+    }
+    fun connectDevice(device: BluetoothDev){
+
     }
     fun discoverDevices(){
 
