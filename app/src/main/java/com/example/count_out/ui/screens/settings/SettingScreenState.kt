@@ -1,17 +1,17 @@
 package com.example.count_out.ui.screens.settings
 
+import android.bluetooth.BluetoothDevice
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.mutableStateOf
 import com.example.count_out.data.room.tables.ActivityDB
 import com.example.count_out.data.room.tables.SettingDB
 import com.example.count_out.entity.Activity
-import com.example.count_out.entity.BluetoothDev
 
 data class SettingScreenState(
     val showBottomSheetAddActivity: MutableState<Boolean> = mutableStateOf(false),
     val settings: MutableState<List<SettingDB>> = mutableStateOf(emptyList()),
-    val bluetoothDevices: MutableState<List<BluetoothDev>> = mutableStateOf(emptyList()),
+    val bluetoothDevices: MutableState<List<BluetoothDevice>> = mutableStateOf(emptyList()),
     val collapsingActivity: MutableState<Boolean> = mutableStateOf(false),
     val activities: List<Activity> = emptyList(),
     val activity: MutableState<Activity> = mutableStateOf(ActivityDB()),
@@ -20,7 +20,7 @@ data class SettingScreenState(
     @Stable val onAddActivity: (Activity) ->Unit = {},
     @Stable val onUpdateActivity: (Activity) ->Unit = {},
     @Stable val onDeleteActivity: (Long) ->Unit = {},
-    @Stable val onSelectDevice: (BluetoothDev) ->Unit = {},
+    @Stable val onSelectDevice: (BluetoothDevice) ->Unit = {},
 
     @Stable val onUpdateSetting: (SettingDB) ->Unit = {},
     @Stable val onGetSettings: () ->Unit = {},

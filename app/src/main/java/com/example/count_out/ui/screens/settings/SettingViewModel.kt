@@ -1,14 +1,15 @@
 package com.example.count_out.ui.screens.settings
 
+import android.bluetooth.BluetoothDevice
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.count_out.data.DataRepository
 import com.example.count_out.data.room.tables.SettingDB
 import com.example.count_out.entity.Activity
-import com.example.count_out.entity.BluetoothDev
 import com.example.count_out.entity.ErrorApp
 import com.example.count_out.service.bluetooth.BluetoothApp
+import com.example.count_out.ui.view_components.lg
 import com.example.count_out.ui.view_components.log
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -95,7 +96,7 @@ class SettingViewModel @Inject constructor(
         }
     }
 
-    private fun selectDevice(device: BluetoothDev) {
+    private fun selectDevice(device: BluetoothDevice) {
         bluetoothApp.connectDevice(device)
     }
     private fun receiveBluetooth(){
@@ -104,5 +105,9 @@ class SettingViewModel @Inject constructor(
                 _settingScreenState.update { currentState ->
                     currentState.copy(bluetoothDevices = mutableStateOf(it)) } }
         }
+    }
+    override fun onCleared(){
+        lg(" Viewmodel cleared")
+        bluetoothApp.stopScanner()
     }
 }

@@ -1,6 +1,8 @@
 package com.example.count_out.ui.screens.settings
 
+import android.Manifest.permission.BLUETOOTH_SCAN
 import android.annotation.SuppressLint
+import android.bluetooth.BluetoothDevice
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -41,7 +43,7 @@ import com.example.count_out.R
 import com.example.count_out.data.room.tables.ActivityDB
 import com.example.count_out.data.room.tables.SettingDB
 import com.example.count_out.domain.to01
-import com.example.count_out.entity.BluetoothDev
+import com.example.count_out.permission.checkPermission
 import com.example.count_out.ui.bottomsheet.BottomSheetAddActivity
 import com.example.count_out.ui.bottomsheet.CardActivity
 import com.example.count_out.ui.theme.Dimen
@@ -89,7 +91,7 @@ import com.example.count_out.ui.view_components.TextApp
     SettingsBluetooth(uiState)
 }
 @Composable fun SettingsBluetooth(uiState: SettingScreenState){
-    val listBluetoothDev: List<BluetoothDev>
+    val listBluetoothDev: List<BluetoothDevice>
     try {
         listBluetoothDev = uiState.bluetoothDevices.value
     } catch (e: IllegalStateException) {
@@ -113,7 +115,7 @@ import com.example.count_out.ui.view_components.TextApp
                 Row (modifier = Modifier.padding(vertical = 2.dp).clickable { uiState.onSelectDevice(item) }) {
                     TextApp(text = item.address, style = interReg14)
                     Spacer(modifier = Modifier.width(8.dp))
-                    TextApp(text = item.name, style = interReg14)
+                    TextApp(text = checkPermission ( BLUETOOTH_SCAN, 30) {item.name}, style = interReg14)
                 }
             }
         }

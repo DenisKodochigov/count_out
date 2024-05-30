@@ -67,3 +67,8 @@ fun checkPermission(context: Context, permission: String, requiredBuild: Int, gr
         ActivityCompat.checkSelfPermission( context, permission) == PackageManager.PERMISSION_GRANTED
     ) { granted() }
 }
+@OptIn(ExperimentalPermissionsApi::class)
+@Composable fun checkPermission( permission: String, requiredBuild: Int, granted: @Composable ()-> String): String{
+    val permissionsState = rememberPermissionState(permission = permission)
+    return if ( Build.VERSION.SDK_INT <= requiredBuild || permissionsState.status.isGranted) { granted() } else ""
+}
