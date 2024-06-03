@@ -2,6 +2,7 @@ package com.example.count_out.entity
 
 import android.Manifest
 import com.example.count_out.navigation.TrainingsDestination
+import java.util.UUID
 
 object Const {
 
@@ -44,4 +45,19 @@ object Const {
     val permissions2 = listOf(
         Manifest.permission.ACCESS_BACKGROUND_LOCATION,
         Manifest.permission.VIBRATE,)
+    val serviceUUIDs = listOf(
+        UUID.fromString("00001809-0000-0000-0000-000000000000"),
+        UUID.fromString("00001810-0000-1000-8000-000000000000"),
+        UUID.fromString("0000180D-0000-0000-0000-000000000000"),
+        UUID.fromString("0000180E-0000-0000-0000-000000000000"),
+        UUID.fromString("00001812-0000-0000-0000-000000000000"),
+        UUID.fromString("00001814-0000-0000-0000-000000000000"),
+        UUID.fromString("00001816-0000-0000-0000-000000000000"),
+        UUID.fromString("00001818-0000-0000-0000-000000000000"),
+        UUID.fromString("00001819-0000-0000-0000-000000000000"),
+        UUID.fromString("00001822-0000-0000-0000-000000000000"),
+        UUID.fromString("00001826-0000-0000-0000-000000000000"),
+        UUID.fromString("0000183E-0000-0000-0000-000000000000"),
+        UUID.fromString("00001840-0000-0000-0000-000000000000"),
+    )
 }

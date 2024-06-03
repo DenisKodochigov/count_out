@@ -4,8 +4,10 @@ import android.Manifest.permission.BLUETOOTH_SCAN
 import android.annotation.SuppressLint
 import android.bluetooth.BluetoothAdapter
 import android.bluetooth.BluetoothDevice
+import android.bluetooth.BluetoothDevice.DEVICE_TYPE_UNKNOWN
 import android.bluetooth.BluetoothDevice.TRANSPORT_LE
 import android.bluetooth.BluetoothGatt
+import android.bluetooth.BluetoothGatt.GATT_SUCCESS
 import android.bluetooth.BluetoothGattCallback
 import android.bluetooth.BluetoothManager
 import android.bluetooth.le.ScanCallback
@@ -17,23 +19,27 @@ import android.content.Intent
 import android.os.ParcelUuid
 import androidx.core.app.ActivityCompat.startActivityForResult
 import com.example.count_out.MainActivity
+import com.example.count_out.entity.Const.serviceUUIDs
 import com.example.count_out.permission.checkPermission
 import com.example.count_out.ui.view_components.lg
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.launch
 import java.util.UUID
 import javax.inject.Inject
 import javax.inject.Singleton
+
 
 @Singleton
 class BluetoothApp @Inject constructor(val context: Context) {
     private lateinit var bluetoothManager: BluetoothManager
     private lateinit var bluetoothAdapter: BluetoothAdapter
+    private lateinit var scope: CoroutineScope
+    private lateinit var gatt: BluetoothGatt
     private val devices: MutableStateFlow<List<BluetoothDevice>> = MutableStateFlow(emptyList())
 
-    private val leScanCallback =
-        BluetoothAdapter.LeScanCallback { device, rssi, scanRecord ->
-            // Handle the discovered device here
-        }
     private val scanCallback = object:ScanCallback() {
         override fun onScanResult(callbackType: Int, result: ScanResult?) {
             super.onScanResult(callbackType, result)
@@ -46,14 +52,35 @@ class BluetoothApp @Inject constructor(val context: Context) {
         override fun onBatchScanResults(results: MutableList<ScanResult>?) {
             super.onBatchScanResults(results)
         }
+        override fun onScanFailed(errorCode: Int) {
+            lg("Error scan BLE device. $errorCode")
+        }
     }
-
-    fun addDevice(result: ScanResult,  devices: MutableStateFlow<List<BluetoothDevice>>): MutableList<BluetoothDevice>{
-        val listDevice: MutableList<BluetoothDevice> = devices.value.toMutableList()
-        checkPermission (context, BLUETOOTH_SCAN, 30) {
-            listDevice.find { it.address == result.device.address } ?: listDevice.add(result.device)}
-//                BluetoothDev(name = result.device.name ?: "", address = result.device.address)) }
-        return listDevice
+    private val bluetoothGattCallback = object : BluetoothGattCallback() {
+        @SuppressLint("MissingPermission")
+        override fun onConnectionStateChange(gatt: BluetoothGatt?, status: Int, newState: Int) {
+            super.onConnectionStateChange(gatt, status, newState)
+            lg("onConnectionStateChange status $status; newState: $newState")
+            if(status == GATT_SUCCESS) {
+                if (newState == BluetoothGatt.STATE_CONNECTED) {
+                    lg("onConnectionStateChange NOT BluetoothGatt.GATT_SUCCESS")
+                    scope = CoroutineScope(Dispatchers.Default)
+                    scope.launch { gatt?.discoverServices()}
+                }
+                else if (newState == BluetoothGatt.STATE_DISCONNECTED) {
+                    lg("onConnectionStateChange BluetoothGatt.STATE_DISCONNECTED")
+                    gatt?.close()
+                }
+                else { lg("onConnectionStateChange BluetoothGatt.GATT_SUCCESS") }
+            }
+            // Произошла ошибка... разбираемся, что случилось!
+            else { gatt?.close() }
+        }
+        override fun onServicesDiscovered(gatt: BluetoothGatt?, status: Int) {
+            super.onServicesDiscovered(gatt, status)
+            if (status != BluetoothGatt.GATT_SUCCESS) lg("onServicesDiscovered NOT BluetoothGatt.GATT_SUCCESS")
+            else lg("onServicesDiscovered BluetoothGatt.GATT_SUCCESS")
+        }
     }
     fun init(activity: MainActivity){
         bluetoothManager = context.getSystemService(Context.BLUETOOTH_SERVICE) as BluetoothManager
@@ -70,23 +97,15 @@ class BluetoothApp @Inject constructor(val context: Context) {
             startActivityForResult( activity, enableBtIntent, 1, null)
         }
     }
+    fun addDevice(result: ScanResult,  devices: MutableStateFlow<List<BluetoothDevice>>): MutableList<BluetoothDevice>{
+        val listDevice: MutableList<BluetoothDevice> = devices.value.toMutableList()
+        checkPermission (context, BLUETOOTH_SCAN, 31) {
+            listDevice.find { it.address == result.device.address } ?: listDevice.add(result.device)}
+        return listDevice
+    }
+
     private fun scanFilters(): List<ScanFilter> {
         val filters = mutableListOf<ScanFilter>()
-        val serviceUUIDs = listOf(
-            UUID.fromString("00001809-0000-0000-0000-000000000000"),
-            UUID.fromString("00001810-0000-1000-8000-000000000000"),
-            UUID.fromString("0000180D-0000-0000-0000-000000000000"),
-            UUID.fromString("0000180E-0000-0000-0000-000000000000"),
-            UUID.fromString("00001812-0000-0000-0000-000000000000"),
-            UUID.fromString("00001814-0000-0000-0000-000000000000"),
-            UUID.fromString("00001816-0000-0000-0000-000000000000"),
-            UUID.fromString("00001818-0000-0000-0000-000000000000"),
-            UUID.fromString("00001819-0000-0000-0000-000000000000"),
-            UUID.fromString("00001822-0000-0000-0000-000000000000"),
-            UUID.fromString("00001826-0000-0000-0000-000000000000"),
-            UUID.fromString("0000183E-0000-0000-0000-000000000000"),
-            UUID.fromString("00001840-0000-0000-0000-000000000000"),
-            )
         for(serviceUUID in serviceUUIDs){
             val filter = ScanFilter.Builder().setServiceUuid(ParcelUuid(serviceUUID),
                 ParcelUuid(UUID.fromString("11111111-0000-0000-0000-000000000000"))).build()
@@ -108,43 +127,29 @@ class BluetoothApp @Inject constructor(val context: Context) {
     fun getDevices() = devices
 
     fun queryPairedDevices() {
-        checkPermission (context, BLUETOOTH_SCAN, 30)
+        checkPermission (context, BLUETOOTH_SCAN, requiredBuild = 31)
         { bluetoothAdapter.bluetoothLeScanner.startScan(scanFilters(), scanSettings(), scanCallback) }
     }
     fun connectDevice(device: BluetoothDevice){
-        checkPermission (context, BLUETOOTH_SCAN, 30){
-            val bluetoothGattCallback = object : BluetoothGattCallback() {
-                @SuppressLint("MissingPermission")
-                override fun onConnectionStateChange(gatt: BluetoothGatt?, status: Int, newState: Int) {
-                    super.onConnectionStateChange(gatt, status, newState)
-                    lg("onConnectionStateChange: ")
-                    if (status != BluetoothGatt.GATT_SUCCESS) {
-                        lg("onConnectionStateChange NOT BluetoothGatt.GATT_SUCCESS")
-                        gatt?.discoverServices()
-                    }
-                    else {
-                        lg("onConnectionStateChange BluetoothGatt.GATT_SUCCESS")
-                        gatt?.close()
-                    }
-                }
-
-                override fun onServicesDiscovered(gatt: BluetoothGatt?, status: Int) {
-                    super.onServicesDiscovered(gatt, status)
-                    if (status != BluetoothGatt.GATT_SUCCESS) lg("onServicesDiscovered NOT BluetoothGatt.GATT_SUCCESS")
-                    else lg("onServicesDiscovered BluetoothGatt.GATT_SUCCESS")
-                }
-            }
-
-            val gatt: BluetoothGatt = device.connectGatt(context, false, bluetoothGattCallback, TRANSPORT_LE)
-        }
+        gatt = checkPermission (context, BLUETOOTH_SCAN, requiredBuild = 31){
+            device.connectGatt(context, true, bluetoothGattCallback, TRANSPORT_LE)
+        } as BluetoothGatt
     }
+
     fun stopScanner(){
         lg("Stop scanner")
-        checkPermission (context, BLUETOOTH_SCAN, 30){
+        checkPermission (context, BLUETOOTH_SCAN, requiredBuild = 31){
             bluetoothAdapter.bluetoothLeScanner.stopScan(scanCallback)}
     }
-    fun discoverDevices(){
 
+    fun deviceCached(device: BluetoothDevice): Boolean {
+        return checkPermission (context, BLUETOOTH_SCAN, requiredBuild = 31){
+            device.type == DEVICE_TYPE_UNKNOWN
+        } as Boolean
+    }
+    fun onCancel(){
+        stopScanner()
+        scope.cancel()
     }
 
 }
