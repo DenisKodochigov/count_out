@@ -9,7 +9,6 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.core.app.ActivityCompat
 import com.example.count_out.entity.Const.permissions1
 import com.example.count_out.entity.Const.permissions2
-import com.example.count_out.ui.view_components.ShowSnackBar
 import com.example.count_out.ui.view_components.lg
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.isGranted
@@ -31,11 +30,11 @@ fun RequestPermission(permissions: List<String>){
     val permissionsState = rememberMultiplePermissionsState(permissions = permissions)
     LaunchedEffect(key1 = Unit ){ permissionsState.launchMultiplePermissionRequest() }
     if (!permissionsState.allPermissionsGranted || permissionsState.shouldShowRationale) {
-        ShowSnackBar(
-            message = "Missing required permissions",
-            actionLabel = "Grant",
-            actionPerformed = { permissionsState.launchMultiplePermissionRequest() }
-        )
+//        ShowSnackBar(
+//            message = "Missing required permissions",
+//            actionLabel = "Grant",
+//            actionPerformed = { permissionsState.launchMultiplePermissionRequest() }
+//        )
     }
 }
 
@@ -56,5 +55,5 @@ fun checkPermission(context: Context, permission: String, requiredBuild: Int, gr
 @OptIn(ExperimentalPermissionsApi::class)
 @Composable fun checkPermission( permission: String, requiredBuild: Int, granted: @Composable ()-> String): String{
     val permissionsState = rememberPermissionState(permission = permission)
-    return if ( Build.VERSION.SDK_INT <= requiredBuild || permissionsState.status.isGranted) { granted() } else ""
+    return if ( Build.VERSION.SDK_INT < requiredBuild || permissionsState.status.isGranted) { granted() } else ""
 }

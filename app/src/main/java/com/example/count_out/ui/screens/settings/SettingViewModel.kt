@@ -89,7 +89,7 @@ class SettingViewModel @Inject constructor(
     }
     private fun getBluetoothDevices(){
         viewModelScope.launch(Dispatchers.IO) {
-            kotlin.runCatching { bluetoothApp.queryPairedDevices() }.fold(
+            kotlin.runCatching { bluetoothApp.startScannerBLEDevices() }.fold(
                 onSuccess = { },
                 onFailure = { errorApp.errorApi(it.message!!) }
             )
@@ -108,6 +108,6 @@ class SettingViewModel @Inject constructor(
     }
     override fun onCleared(){
         lg(" Viewmodel cleared")
-        bluetoothApp.stopScanner()
+        bluetoothApp.stopScannerBLEDevices()
     }
 }

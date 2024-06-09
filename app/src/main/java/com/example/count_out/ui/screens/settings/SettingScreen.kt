@@ -115,7 +115,7 @@ import com.example.count_out.ui.view_components.TextApp
                 Row (modifier = Modifier.padding(vertical = 2.dp).clickable { uiState.onSelectDevice(item) }) {
                     TextApp(text = item.address, style = interReg14)
                     Spacer(modifier = Modifier.width(8.dp))
-                    TextApp(text = checkPermission ( BLUETOOTH_SCAN, 30){ item.name }, style = interReg14)
+                    item.name?.let {  TextApp(text = checkPermission ( BLUETOOTH_SCAN, 31){ it }, style = interReg14)}
                 }
             }
         }
