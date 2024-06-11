@@ -1,5 +1,6 @@
 package com.example.count_out.data
 
+import androidx.datastore.core.DataStore
 import com.example.count_out.data.room.DataSource
 import com.example.count_out.data.room.tables.ActivityDB
 import com.example.count_out.data.room.tables.ExerciseDB
@@ -9,6 +10,7 @@ import com.example.count_out.data.room.tables.SettingDB
 import com.example.count_out.data.room.tables.SpeechKitDB
 import com.example.count_out.data.room.tables.TrainingDB
 import com.example.count_out.entity.Activity
+import com.example.count_out.entity.BleDev
 import com.example.count_out.entity.Exercise
 import com.example.count_out.entity.Plugins
 import com.example.count_out.entity.Round
@@ -19,7 +21,9 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class DataRepository  @Inject constructor(private val dataSource: DataSource){
+class DataRepository  @Inject constructor(private val dataSource: DataSource,
+                                          private val dataStoreBle: DataStore<BleDev>
+){
 
     fun getTrainings(): List<Training> = dataSource.getTrainings()
     fun getTraining(id: Long): Training = dataSource.getTraining(id)
@@ -30,6 +34,10 @@ class DataRepository  @Inject constructor(private val dataSource: DataSource){
     fun deleteTrainingNothing(id: Long){
         Plugins.listTr.remove(Plugins.listTr.find { it.idTraining == id })
     }
+    suspend fun storeSelectBleDev(bleDev: BleDev) {
+        dataStoreBle.updateData { it.copy( name = bleDev.name, mac = bleDev.mac) }
+    }
+    fun getBleDevStoreFlow() = dataStoreBle.data
     fun setSpeech(trainingId: Long, speech: SpeechKit, item: Any?): Training
     {
         val speechId = if (speech.idSpeechKit == 0L) dataSource.addSpeechKit(speech as SpeechKitDB)

@@ -14,6 +14,7 @@ data class SettingScreenState(
     val bluetoothDevices: MutableState<List<BluetoothDevice>> = mutableStateOf(emptyList()),
     val collapsingActivity: MutableState<Boolean> = mutableStateOf(false),
     val activities: List<Activity> = emptyList(),
+    val lastConnectHearthRate :BluetoothDevice? = null,
     val activity: MutableState<Activity> = mutableStateOf(ActivityDB()),
 
     @Stable val onSetColorActivity: (Long, Int) -> Unit = { _, _ ->},

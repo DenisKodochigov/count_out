@@ -39,25 +39,22 @@ class BluetoothConnect @Inject constructor( val context: Context
         }
     }
     fun bluetoothGattCallbackConnectionStateChange(gatt: BluetoothGatt?, status: Int, newState: Int){
-        lg("0")
         if (status == GATT_SUCCESS) {
-            lg("1")
             when (newState) {
                 BluetoothGatt.STATE_CONNECTED -> {
-                    lg("2")
                     val bondState = checkPermission (context, BLUETOOTH_SCAN, requiredBuild = 31){
                         deviceLocal?.bondState ?: BOND_BONDING }
                     if (bondState == BOND_NONE || bondState == BOND_BONDED) {
-                        lg("bond device SUCCESS")
+                        lg("Bond device SUCCESS")
                         gatt?.let { startDiscoverService(it) }
                     }
                     else { lg("waiting for bonding to complete") }
                 }
                 BluetoothGatt.STATE_DISCONNECTED -> {
-                    lg("onConnectionStateChange BluetoothGatt.STATE_DISCONNECTED")
+                    lg("Connection state Bluetooth Gatt STATE_DISCONNECTED")
                     gattClose(gatt)
                 }
-                else -> { lg("onConnectionStateChange BluetoothGatt.GATT_SUCCESS") }
+                else -> { lg("Connection state Bluetooth Gatt GATT_SUCCESS") }
             }
         }
         else {
@@ -69,7 +66,7 @@ class BluetoothConnect @Inject constructor( val context: Context
         gatt?.let { gattV ->
             if (status == GATT_SUCCESS) {
                 val services = gattV.services
-                lg("Discovered ${services.size} services for $services")
+                lg("Discovered ${services.size} services")
             }
             else if (status != GATT_SUCCESS) {
                 lg("Service discovery failed")

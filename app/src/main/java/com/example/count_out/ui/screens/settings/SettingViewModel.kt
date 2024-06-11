@@ -43,6 +43,7 @@ class SettingViewModel @Inject constructor(
 
     init {
         getSettings()
+        getStoreBleDev()
         templateMy{dataRepository.getActivities()}
         getBluetoothDevices()
         receiveBluetooth()
@@ -95,7 +96,14 @@ class SettingViewModel @Inject constructor(
             )
         }
     }
-
+    private fun getStoreBleDev() {
+        viewModelScope.launch(Dispatchers.IO) {
+            dataRepository.getBleDevStoreFlow().collect{
+                bluetoothApp.findBleDeviceByMac(it.mac)
+            }
+        }
+        receiveBluetoothDeviceOnMac()
+    }
     private fun selectDevice(device: BluetoothDevice) {
         bluetoothApp.connectDevice(device)
     }
@@ -104,6 +112,18 @@ class SettingViewModel @Inject constructor(
             bluetoothApp.getDevices().collect{
                 _settingScreenState.update { currentState ->
                     currentState.copy(bluetoothDevices = mutableStateOf(it)) } }
+        }
+    }
+    private fun receiveBluetoothDeviceOnMac(){
+        viewModelScope.launch(Dispatchers.IO) {
+            bluetoothApp.getDeviceOnMac().collect{ bluetoothDevice ->
+                bluetoothDevice.device?.let { device->
+                    bluetoothApp.stopScannerBLEDevicesByMac()
+                    bluetoothApp.connectDevice(device)
+                    _settingScreenState.update { currentState ->
+                        currentState.copy(lastConnectHearthRate = device) }
+                }
+            }
         }
     }
     override fun onCleared(){

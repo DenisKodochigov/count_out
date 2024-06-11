@@ -3,6 +3,7 @@ plugins {
 //    id ("kotlin-parcelize")
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.jetbrainsKotlinAndroid)
+    alias(libs.plugins.serialization)
     alias(libs.plugins.hilt)
     alias(libs.plugins.ksp)
 //    alias(libs.plugins.firebase)
@@ -105,7 +106,11 @@ dependencies {
     implementation (libs.moshi)
     implementation (libs.moshi.kotlin)
     ksp (libs.moshi.kotlin.codegen)
-
+    //DataStore
+    implementation(libs.androidx.datastore)
+//    implementation(libs.androidx.datastore.core)
+    implementation(libs.serialization.json)
+    implementation(libs.immutable)
     debugImplementation(libs.androidx.ui.test.manifest)
 //Testing
     testImplementation (libs.junit)
