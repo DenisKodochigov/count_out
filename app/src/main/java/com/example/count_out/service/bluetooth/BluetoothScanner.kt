@@ -60,7 +60,7 @@ class BluetoothScanner @Inject constructor(
     }
     @SuppressLint("MissingPermission")
     fun stopScannerBLEDevicesByMac(){
-        lg("Stop scanner")
+        lg("Stop scanner ByMac")
         permissionApp.checkBleScan{
             bluetoothAdapter.bluetoothLeScanner.stopScan(scanCallbackByMac)}
     }
