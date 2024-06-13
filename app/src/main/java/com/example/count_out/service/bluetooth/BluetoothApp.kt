@@ -28,6 +28,8 @@ class BluetoothApp @Inject constructor(
         }
     }
     fun startScannerBLEDevices(){
+        bluetoothScanner.stopScannerBLEDevices()
+        bluetoothScanner.stopScannerBLEDevicesByMac()
         bluetoothScanner.startScannerBLEDevices()
     }
     fun stopScannerBLEDevices(){
@@ -41,7 +43,12 @@ class BluetoothApp @Inject constructor(
         bluetoothConnect.connectDevice(device)
     }
     fun findBleDeviceByMac(mac: String){
-        bluetoothScanner.findBleDeviceByMac(mac)
+        bluetoothScanner.stopScannerBLEDevices()
+        bluetoothScanner.stopScannerBLEDevicesByMac()
+        bluetoothScanner.startScannerBLEDevicesByMac(mac)
+    }
+    fun onClearCacheBLE(){
+        bluetoothConnect.clearServicesCache()
     }
     fun disconnectDevice(){
         bluetoothConnect.disconnectDevice()

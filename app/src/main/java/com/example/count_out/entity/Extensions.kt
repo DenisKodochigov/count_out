@@ -1,12 +1,14 @@
 package com.example.count_out.entity
 
-import android.Manifest.permission.BLUETOOTH_SCAN
+import android.annotation.SuppressLint
 import android.bluetooth.BluetoothDevice
 import android.content.Context
-import com.example.count_out.permission.checkPermission
+import com.example.count_out.permission.PermissionApp
 
+@SuppressLint("MissingPermission")
 fun BluetoothDevice.cached(context: Context): Boolean{
-    return checkPermission (context, BLUETOOTH_SCAN, requiredBuild = 31){
+    val  permissionApp = PermissionApp(context)
+    return permissionApp.checkBleScan{
         this.type == BluetoothDevice.DEVICE_TYPE_UNKNOWN
     } as Boolean
 }

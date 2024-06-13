@@ -26,7 +26,7 @@
     <string name="min">мин</string>
     <string name="s">с</string>
     <string name="sec">сек</string>
-    <string name="message">"Message "</string>
+    <string name="message">"Сообщение "</string>
     <string name="message_before_start">Сообщение до начала</string>
     <string name="message_after_start">Сообщение после начала</string>
     <string name="message_before_end">Сообщение до окончания</string>
@@ -64,17 +64,19 @@
     <string name="time_between_counts">Интервал между отстчетами</string>
     <string name="slowing_down_counts">Замедление отсчетов</string>
     <string name="counts_by_group_add">Введите группу отсчетов (каждое слово соответствует одному отсчету)</string>
-    <string name="screen_play_workou">Play work out</string>
+    <string name="screen_play_workou">Запустить тренировку</string>
     <string name="channel_name">count_out_notification</string>
     <string name="audio_track">Звуковая дорожка</string>
     <string name="video_clip">Видеоклип</string>
     <string name="description">Описание</string>
     <string name="null_s">""</string>
     <string name="speech_description">Описание</string>
-    <string name="create_ring">Create ring</string>
-    <string name="add_ring">Add ring</string>
-    <string name="count">count</string>
+    <string name="create_ring">Создать круг</string>
+    <string name="add_ring">Добавить круг</string>
+    <string name="count">отсчеты</string>
     <string name="next_exercise">Подготовьтесь к следующему упражнению</string>
     <string name="rest_time">секунд отдыха.</string>
-    <string name="section_head_rate">Доступные устройства</string>
+    <string name="section_heart_rate">Доступные устройства</string>
+    <string name="heart_rate_device">Измеритель пульса</string>
+    <string name="not_select_device">Нет выбранных устройств</string>
 </resources>

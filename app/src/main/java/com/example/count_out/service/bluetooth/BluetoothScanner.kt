@@ -1,6 +1,6 @@
 package com.example.count_out.service.bluetooth
 
-import android.Manifest.permission.BLUETOOTH_SCAN
+import android.annotation.SuppressLint
 import android.bluetooth.BluetoothAdapter
 import android.bluetooth.BluetoothDevice
 import android.bluetooth.le.ScanCallback
@@ -11,7 +11,7 @@ import android.content.Context
 import android.os.ParcelUuid
 import com.example.count_out.entity.BluetoothDeviceApp
 import com.example.count_out.entity.Const
-import com.example.count_out.permission.checkPermission
+import com.example.count_out.permission.PermissionApp
 import com.example.count_out.ui.view_components.lg
 import kotlinx.coroutines.flow.MutableStateFlow
 import java.util.UUID
@@ -20,7 +20,9 @@ import javax.inject.Singleton
 
 @Singleton
 class BluetoothScanner @Inject constructor(
-    val context: Context, private val bluetoothAdapter: BluetoothAdapter
+    val context: Context,
+    private val bluetoothAdapter: BluetoothAdapter,
+    private val permissionApp: PermissionApp
 ){
     private val devices: MutableStateFlow<List<BluetoothDevice>> = MutableStateFlow(emptyList())
     private val devicesByMac: MutableStateFlow<BluetoothDeviceApp> = MutableStateFlow(BluetoothDeviceApp())
@@ -47,15 +49,19 @@ class BluetoothScanner @Inject constructor(
             lg("Error scan BLE device. $errorCode")
         }
     }
-    fun findBleDeviceByMac(mac: String){
+    @SuppressLint("MissingPermission")
+    fun startScannerBLEDevicesByMac(mac: String){
         devices.value = emptyList()
-        val scanFilterMac = listOf(ScanFilter.Builder().setDeviceAddress(mac).build())
-        checkPermission (context, BLUETOOTH_SCAN, requiredBuild = 31)
-        { bluetoothAdapter.bluetoothLeScanner.startScan( scanFilterMac, scanSettings(), scanCallbackByMac) }
+        if (mac != "") {
+            val scanFilterMac = listOf(ScanFilter.Builder().setDeviceAddress(mac).build())
+            permissionApp.checkBleScan{
+                bluetoothAdapter.bluetoothLeScanner.startScan( scanFilterMac, scanSettings(), scanCallbackByMac) }
+        }
     }
+    @SuppressLint("MissingPermission")
     fun stopScannerBLEDevicesByMac(){
         lg("Stop scanner")
-        checkPermission (context, BLUETOOTH_SCAN, requiredBuild = 31){
+        permissionApp.checkBleScan{
             bluetoothAdapter.bluetoothLeScanner.stopScan(scanCallbackByMac)}
     }
     fun getDeviceBYMac() = devicesByMac
@@ -88,20 +94,21 @@ class BluetoothScanner @Inject constructor(
             lg("Error scan BLE device. $errorCode")
         }
     }
+    @SuppressLint("MissingPermission")
     fun startScannerBLEDevices() {
-        checkPermission (context, BLUETOOTH_SCAN, requiredBuild = 31)
-        { bluetoothAdapter.bluetoothLeScanner.startScan(scanFilters(), scanSettings(), scanCallback) }
+        permissionApp.checkBleScan{
+            bluetoothAdapter.bluetoothLeScanner.startScan(scanFilters(), scanSettings(), scanCallback) }
     }
+    @SuppressLint("MissingPermission")
     fun stopScannerBLEDevices(){
         lg("Stop scanner")
-        checkPermission (context, BLUETOOTH_SCAN, requiredBuild = 31){
-            bluetoothAdapter.bluetoothLeScanner.stopScan(scanCallback)}
+        permissionApp.checkBleScan{ bluetoothAdapter.bluetoothLeScanner.stopScan(scanCallback)}
     }
     fun getDevices() = devices
 
     fun addDevice(result: ScanResult, devices: MutableStateFlow<List<BluetoothDevice>>): MutableList<BluetoothDevice>{
         val listDevice: MutableList<BluetoothDevice> = devices.value.toMutableList()
-        checkPermission (context, BLUETOOTH_SCAN, 31) {
+        permissionApp.checkBleScan{
             listDevice.find { it.address == result.device.address } ?: listDevice.add(result.device)}
         return listDevice
     }

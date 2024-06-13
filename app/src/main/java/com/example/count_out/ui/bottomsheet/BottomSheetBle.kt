@@ -1,6 +1,6 @@
 package com.example.count_out.ui.bottomsheet
 
-import android.Manifest
+import android.annotation.SuppressLint
 import android.bluetooth.BluetoothDevice
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -28,15 +28,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.example.count_out.R
-import com.example.count_out.permission.checkPermission
 import com.example.count_out.ui.screens.settings.SettingScreenState
 import com.example.count_out.ui.theme.Dimen
 import com.example.count_out.ui.theme.interReg14
 import com.example.count_out.ui.theme.interReg18
 import com.example.count_out.ui.theme.shapesApp
-import com.example.count_out.ui.view_components.ButtonConfirm
 import com.example.count_out.ui.view_components.TextApp
-import com.example.count_out.ui.view_components.lg
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -54,38 +51,26 @@ fun BottomSheetBle(uiState: SettingScreenState) {
         dragHandle = { BottomSheetDefaults.DragHandle() },
         windowInsets = BottomSheetDefaults.windowInsets,
         sheetState = sheetState,
-        content = { BottomSheetBluetoothContent(uiState) })
+        content = { BottomSheetBleContent(uiState) })
 }
 @Composable
-fun BottomSheetBluetoothContent(uiState: SettingScreenState)
+fun BottomSheetBleContent(uiState: SettingScreenState)
 {
-    lg("BottomSheetBluetoothContent")
     Column( horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier
             .fillMaxWidth()
             .padding(Dimen.bsItemPaddingHor)
     ) {
         Spacer(Modifier.height(Dimen.bsSpacerHeight))
-        ActivityValueFull(
-            activity = uiState.activity,
-            onChange = { uiState.onUpdateActivity(it) },
-            onChangeColor = { uiState.onSetColorActivity(uiState.activity.value.idActivity, it ) }
-        )
-        Spacer(Modifier.height(Dimen.bsSpacerHeight))
-        ButtonConfirm( onConfirm = {
-            uiState.onConfirmAddActivity(uiState.activity.value)
-        } )
+        SettingsBluetooth(uiState)
         Spacer(Modifier.height(Dimen.bsSpacerBottomHeight))
     }
 }
+@SuppressLint("MissingPermission")
 @Composable fun SettingsBluetooth(uiState: SettingScreenState){
     val listBluetoothDev: List<BluetoothDevice>
-    try {
-        listBluetoothDev = uiState.bluetoothDevices.value
-    } catch (e: IllegalStateException) {
-        return
-    }
-//    lg("SettingsBluetooth $listBluetoothDev")
+    try { listBluetoothDev = uiState.bluetoothDevices.value }
+    catch (e: IllegalStateException) { return }
     Column (
         modifier = Modifier
             .border(width = 1.dp,
@@ -95,7 +80,7 @@ fun BottomSheetBluetoothContent(uiState: SettingScreenState)
             .padding(8.dp)
             .fillMaxWidth()
     ){
-        TextApp(text = stringResource(id = R.string.section_head_rate), style = interReg18)
+        TextApp(text = stringResource(id = R.string.section_heart_rate), style = interReg18)
         Spacer(modifier = Modifier.height(8.dp))
         LazyColumn( state = rememberLazyListState(), modifier = Modifier.fillMaxSize()
         ){
@@ -103,7 +88,7 @@ fun BottomSheetBluetoothContent(uiState: SettingScreenState)
                 Row (modifier = Modifier.padding(vertical = 2.dp).clickable { uiState.onSelectDevice(item) }) {
                     TextApp(text = item.address, style = interReg14)
                     Spacer(modifier = Modifier.width(8.dp))
-                    item.name?.let {  TextApp(text = checkPermission ( Manifest.permission.BLUETOOTH_SCAN, 31){ it }, style = interReg14) }
+                    item.name?.let {  TextApp(text =  it, style = interReg14) }
                 }
             }
         }

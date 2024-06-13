@@ -1,5 +1,6 @@
 package com.example.count_out.ui.screens.settings
 
+import android.annotation.SuppressLint
 import android.bluetooth.BluetoothDevice
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
@@ -7,7 +8,9 @@ import androidx.lifecycle.viewModelScope
 import com.example.count_out.data.DataRepository
 import com.example.count_out.data.room.tables.SettingDB
 import com.example.count_out.entity.Activity
+import com.example.count_out.entity.BleDev
 import com.example.count_out.entity.ErrorApp
+import com.example.count_out.permission.PermissionApp
 import com.example.count_out.service.bluetooth.BluetoothApp
 import com.example.count_out.ui.view_components.lg
 import com.example.count_out.ui.view_components.log
@@ -24,7 +27,8 @@ import javax.inject.Inject
 class SettingViewModel @Inject constructor(
     private val errorApp: ErrorApp,
     private val bluetoothApp: BluetoothApp,
-    private val dataRepository: DataRepository
+    private val dataRepository: DataRepository,
+    private val permissionApp: PermissionApp
 ): ViewModel() {
     private val _settingScreenState = MutableStateFlow(
         SettingScreenState(
@@ -34,7 +38,9 @@ class SettingViewModel @Inject constructor(
             onDeleteActivity = { activityId-> onDeleteActivity( activityId )},
             onUpdateSetting = { setting-> updateSetting( setting )},
             onGetSettings = { getSettings()},
-            onGetDevices = { getBluetoothDevices() },
+            onStartScanBLE = { onStartScanBLE() },
+            onStopScanBLE = { onStopScanBLE() },
+            onClearCacheBLE = { onClearCacheBLE() },
             onSelectDevice = { device-> selectDevice(device) },
             onSetColorActivity = { activityId, color ->
                 onSetColorActivityForSettings( activityId = activityId, color = color) },
@@ -45,8 +51,6 @@ class SettingViewModel @Inject constructor(
         getSettings()
         getStoreBleDev()
         templateMy{dataRepository.getActivities()}
-        getBluetoothDevices()
-        receiveBluetooth()
     }
     private fun onAddActivity(activity: Activity){
         templateMy{
@@ -66,35 +70,38 @@ class SettingViewModel @Inject constructor(
 //    fun changeNameWorkout(workout: Workout){ templateMy { dataRepository.changeNameWorkout(workout) } }
 //    fun deleteWorkout(id: Long){ templateMy { dataRepository.deleteWorkout(id) } }
 //    fun addWorkout(name: String){ templateMy { dataRepository.addWorkout(name) } }
-    private fun templateMy( funDataRepository:() -> List<Activity> ){
-        viewModelScope.launch(Dispatchers.IO) {
-            kotlin.runCatching { funDataRepository() }.fold(
-                onSuccess = { _settingScreenState.update { currentState ->
-                    currentState.copy(activities = it ) } },
-                onFailure = { errorApp.errorApi(it.message!!) }
-            )
-        }
-    }
+
     private fun getSettings(){
         templateSetting {dataRepository.getSettings()} }
     private fun updateSetting( setting: SettingDB ){
         templateSetting {dataRepository.updateSetting(setting)} }
-    private fun templateSetting( funDataRepository:() -> List<SettingDB> ){
-        viewModelScope.launch(Dispatchers.IO) {
-            kotlin.runCatching { funDataRepository() }.fold(
-                onSuccess = { _settingScreenState.update { currentState ->
-                    currentState.copy(settings = mutableStateOf(it) ) } },
-                onFailure = { errorApp.errorApi(it.message!!) }
-            )
-        }
-    }
-    private fun getBluetoothDevices(){
+
+
+    private fun onStartScanBLE(){
         viewModelScope.launch(Dispatchers.IO) {
             kotlin.runCatching { bluetoothApp.startScannerBLEDevices() }.fold(
                 onSuccess = { },
                 onFailure = { errorApp.errorApi(it.message!!) }
             )
         }
+        receiveBluetooth()
+    }
+    private fun onStopScanBLE(){
+        viewModelScope.launch(Dispatchers.IO) {
+            kotlin.runCatching { bluetoothApp.stopScannerBLEDevices() }.fold(
+                onSuccess = { },
+                onFailure = { errorApp.errorApi(it.message!!) }
+            )
+        }
+    }
+    private fun onClearCacheBLE(){
+        viewModelScope.launch(Dispatchers.IO) {
+            kotlin.runCatching { bluetoothApp.onClearCacheBLE() }.fold(
+                onSuccess = { },
+                onFailure = { errorApp.errorApi(it.message!!) }
+            )
+        }
+        receiveBluetooth()
     }
     private fun getStoreBleDev() {
         viewModelScope.launch(Dispatchers.IO) {
@@ -102,9 +109,14 @@ class SettingViewModel @Inject constructor(
                 bluetoothApp.findBleDeviceByMac(it.mac)
             }
         }
-        receiveBluetoothDeviceOnMac()
+        receiveBluetoothDeviceByMac()
     }
+    @SuppressLint("MissingPermission")
     private fun selectDevice(device: BluetoothDevice) {
+        val nameDevice= permissionApp.checkBleScan { device.name } as String
+        viewModelScope.launch(Dispatchers.IO) {
+            bluetoothApp.stopScannerBLEDevices()
+            dataRepository.storeSelectBleDev(BleDev( name = nameDevice, mac = device.address)) }
         bluetoothApp.connectDevice(device)
     }
     private fun receiveBluetooth(){
@@ -114,16 +126,34 @@ class SettingViewModel @Inject constructor(
                     currentState.copy(bluetoothDevices = mutableStateOf(it)) } }
         }
     }
-    private fun receiveBluetoothDeviceOnMac(){
+    private fun receiveBluetoothDeviceByMac(){
         viewModelScope.launch(Dispatchers.IO) {
             bluetoothApp.getDeviceOnMac().collect{ bluetoothDevice ->
                 bluetoothDevice.device?.let { device->
                     bluetoothApp.stopScannerBLEDevicesByMac()
                     bluetoothApp.connectDevice(device)
                     _settingScreenState.update { currentState ->
-                        currentState.copy(lastConnectHearthRate = device) }
+                        currentState.copy(lastConnectHearthRate = mutableStateOf(device)) }
                 }
             }
+        }
+    }
+    private fun templateSetting( funDataRepository:() -> List<SettingDB> ){
+        viewModelScope.launch(Dispatchers.IO) {
+            kotlin.runCatching { funDataRepository() }.fold(
+                onSuccess = { _settingScreenState.update { currentState ->
+                    currentState.copy(settings = mutableStateOf(it) ) } },
+                onFailure = { errorApp.errorApi(it.message!!) }
+            )
+        }
+    }
+    private fun templateMy( funDataRepository:() -> List<Activity> ){
+        viewModelScope.launch(Dispatchers.IO) {
+            kotlin.runCatching { funDataRepository() }.fold(
+                onSuccess = { _settingScreenState.update { currentState ->
+                    currentState.copy(activities = it ) } },
+                onFailure = { errorApp.errorApi(it.message!!) }
+            )
         }
     }
     override fun onCleared(){

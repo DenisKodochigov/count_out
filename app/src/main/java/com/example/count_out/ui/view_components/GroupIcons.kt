@@ -4,6 +4,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -17,6 +18,7 @@ import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import com.example.count_out.R
 import com.example.count_out.ui.theme.Dimen
@@ -153,6 +155,53 @@ fun IconSelectActivity(onClick: ()->Unit)
                 .padding(4.dp)
                 .size(Dimen.sizeIcon)
         )
+    }
+}
+@Composable fun Text_Icon(
+    text: String,
+    style: TextStyle,
+    icon1: ImageVector,
+    icon2: ImageVector? = null,
+    icon3: ImageVector? = null,
+    icon4: ImageVector? = null,
+    onClickIcon1: ()->Unit,
+    onClickIcon2: ()->Unit = {},
+    onClickIcon3: ()->Unit = {},
+    onClickIcon4: ()->Unit = {}) {
+    val paddingIcon = 8.dp
+    Row(
+        horizontalArrangement = Arrangement.Start,
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = Modifier.fillMaxWidth()
+    ) {
+        if (text != "") TextApp(text = text, style = style, modifier = Modifier.padding(horizontal = 4.dp))
+        Spacer(modifier = Modifier.weight(1f))
+        Icon(
+            imageVector = icon1,
+            contentDescription = "",
+            modifier = Modifier.padding(paddingIcon).size(Dimen.sizeIcon).clickable { onClickIcon1() }
+        )
+        if (icon2 != null) {
+            Icon(
+                imageVector = icon2,
+                contentDescription = "",
+                modifier = Modifier.padding(paddingIcon).size(Dimen.sizeIcon).clickable { onClickIcon2() }
+            )
+        }
+        if (icon3 != null) {
+            Icon(
+                imageVector = icon3,
+                contentDescription = "",
+                modifier = Modifier.padding(paddingIcon).size(Dimen.sizeIcon).clickable { onClickIcon3() }
+            )
+        }
+        if (icon4 != null) {
+            Icon(
+                imageVector = icon4,
+                contentDescription = "",
+                modifier = Modifier.padding(paddingIcon).size(Dimen.sizeIcon).clickable { onClickIcon4() }
+            )
+        }
     }
 }
 
