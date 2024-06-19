@@ -14,7 +14,7 @@ import com.example.count_out.entity.VariablesInService
 import com.example.count_out.entity.VariablesOutService
 import com.example.count_out.helpers.NotificationHelper
 import com.example.count_out.service.player.PlayerWorkOut
-import com.example.count_out.service.stopwatch.StopWatchNew
+import com.example.count_out.service.stopwatch.StopWatchObj
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -65,7 +65,7 @@ class WorkoutService @Inject constructor(): Service(), WorkOutAPI
         notificationHelper.setContinueButton()
     }
     override fun stopWorkout(){
-        StopWatchNew.stop()
+        StopWatchObj.stop()
         variablesOut.cancel()
         stopForeground(STOP_FOREGROUND_REMOVE)
         notificationHelper.cancel()
@@ -73,10 +73,10 @@ class WorkoutService @Inject constructor(): Service(), WorkOutAPI
         scopeTick.cancel()
     }
     private fun getTick(){
-        StopWatchNew.start(variablesOut.stateRunning)
+        StopWatchObj.start(variablesOut.stateRunning)
         scopeTick = CoroutineScope(Dispatchers.Default)
         scopeTick.launch {
-            StopWatchNew.getTickTime().collect{ tick ->
+            StopWatchObj.getTickTime().collect{ tick ->
                 notificationHelper.updateNotification(hours = tick.hour, minutes = tick.min, seconds = tick.sec)
                 variablesOut.flowTick.value = tick
             }

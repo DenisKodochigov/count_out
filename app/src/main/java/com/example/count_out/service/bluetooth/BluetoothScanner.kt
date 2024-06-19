@@ -9,7 +9,6 @@ import android.bluetooth.le.ScanResult
 import android.bluetooth.le.ScanSettings
 import android.content.Context
 import android.os.ParcelUuid
-import com.example.count_out.entity.BluetoothDeviceApp
 import com.example.count_out.entity.Const
 import com.example.count_out.permission.PermissionApp
 import com.example.count_out.ui.view_components.lg
@@ -25,7 +24,7 @@ class BluetoothScanner @Inject constructor(
     private val permissionApp: PermissionApp
 ){
     private val devices: MutableStateFlow<List<BluetoothDevice>> = MutableStateFlow(emptyList())
-    private val devicesByMac: MutableStateFlow<BluetoothDeviceApp> = MutableStateFlow(BluetoothDeviceApp())
+    private val devicesByMac: MutableStateFlow<List<BluetoothDevice>> = MutableStateFlow(emptyList())
      private fun scanSettings(): ScanSettings {
         return ScanSettings.Builder()
             .setScanMode(ScanSettings.SCAN_MODE_BALANCED)
@@ -40,7 +39,12 @@ class BluetoothScanner @Inject constructor(
     private val scanCallbackByMac = object: ScanCallback() {
         override fun onScanResult(callbackType: Int, result: ScanResult?) {
             super.onScanResult(callbackType, result)
-            if (result != null) { devicesByMac.value.device =  result.device }
+            if (result != null) {
+                devicesByMac.value = addDevice(result, devices)
+                if (devicesByMac.value.isNotEmpty()) {
+                    lg("BluetoothScanner.scanCallbackByMac ${devicesByMac.value[0]}")
+                }
+            }
         }
         override fun onBatchScanResults(results: MutableList<ScanResult>?) {
             super.onBatchScanResults(results)
@@ -64,7 +68,7 @@ class BluetoothScanner @Inject constructor(
         permissionApp.checkBleScan{
             bluetoothAdapter.bluetoothLeScanner.stopScan(scanCallbackByMac)}
     }
-    fun getDeviceBYMac() = devicesByMac
+    fun getDeviceByMac(): MutableStateFlow<List<BluetoothDevice>> = devicesByMac
 
     /** Scan all device*/
     private fun scanFilters(): List<ScanFilter> {
@@ -81,12 +85,8 @@ class BluetoothScanner @Inject constructor(
     private val scanCallback = object: ScanCallback() {
         override fun onScanResult(callbackType: Int, result: ScanResult?) {
             super.onScanResult(callbackType, result)
-            if (result != null) {
-                devices.value = addDevice(result, devices)
-//                lg(" devices: ${result}")
-            }
+            if (result != null) { devices.value = addDevice(result, devices) }
         }
-
         override fun onBatchScanResults(results: MutableList<ScanResult>?) {
             super.onBatchScanResults(results)
         }

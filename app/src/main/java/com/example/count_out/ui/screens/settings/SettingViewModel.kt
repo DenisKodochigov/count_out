@@ -9,6 +9,7 @@ import com.example.count_out.data.DataRepository
 import com.example.count_out.data.room.tables.SettingDB
 import com.example.count_out.entity.Activity
 import com.example.count_out.entity.BleDev
+import com.example.count_out.entity.BluetoothDeviceApp
 import com.example.count_out.entity.ErrorApp
 import com.example.count_out.permission.PermissionApp
 import com.example.count_out.service.bluetooth.BluetoothApp
@@ -46,11 +47,12 @@ class SettingViewModel @Inject constructor(
                 onSetColorActivityForSettings( activityId = activityId, color = color) },
         ))
     val settingScreenState: StateFlow<SettingScreenState> = _settingScreenState.asStateFlow()
+    val currentBleDevice: MutableStateFlow<BluetoothDeviceApp> = MutableStateFlow(BluetoothDeviceApp())
 
     init {
         getSettings()
         getStoreBleDev()
-        templateMy{dataRepository.getActivities()}
+        templateMy {dataRepository.getActivities()}
     }
     private fun onAddActivity(activity: Activity){
         templateMy{
@@ -78,6 +80,7 @@ class SettingViewModel @Inject constructor(
 
 
     private fun onStartScanBLE(){
+        lg("SettingViewModel onStartScanBLE")
         viewModelScope.launch(Dispatchers.IO) {
             kotlin.runCatching { bluetoothApp.startScannerBLEDevices() }.fold(
                 onSuccess = { },
@@ -104,6 +107,7 @@ class SettingViewModel @Inject constructor(
         receiveBluetooth()
     }
     private fun getStoreBleDev() {
+        lg("SettingViewModel getStoreBleDev")
         viewModelScope.launch(Dispatchers.IO) {
             dataRepository.getBleDevStoreFlow().collect{
                 bluetoothApp.findBleDeviceByMac(it.mac)
@@ -127,13 +131,18 @@ class SettingViewModel @Inject constructor(
         }
     }
     private fun receiveBluetoothDeviceByMac(){
+        lg("SettingViewModel.receiveBluetoothDeviceByMac")
         viewModelScope.launch(Dispatchers.IO) {
-            bluetoothApp.getDeviceOnMac().collect{ bluetoothDevice ->
-                bluetoothDevice.device?.let { device->
-                    bluetoothApp.stopScannerBLEDevicesByMac()
-                    bluetoothApp.connectDevice(device)
-                    _settingScreenState.update { currentState ->
-                        currentState.copy(lastConnectHearthRate = mutableStateOf(device)) }
+            bluetoothApp.getDeviceByMac().collect{ listDeviceBle ->
+                if (listDeviceBle.isNotEmpty()) {
+                    listDeviceBle[0].let { device ->
+                        lg("SettingViewModel.receiveBluetoothDeviceByMac ${device.address}")
+                        bluetoothApp.stopScannerBLEDevicesByMac()
+                        bluetoothApp.connectDevice(device)
+                        _settingScreenState.update { currentState ->
+                            currentState.copy(lastConnectHearthRate = mutableStateOf(device))
+                        }
+                    }
                 }
             }
         }
@@ -157,7 +166,7 @@ class SettingViewModel @Inject constructor(
         }
     }
     override fun onCleared(){
-        lg(" Viewmodel cleared")
+        lg("SettingViewModel cleared")
         bluetoothApp.stopScannerBLEDevices()
     }
 }

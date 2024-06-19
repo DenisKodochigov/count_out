@@ -2,7 +2,7 @@ package com.example.count_out.entity
 
 import com.example.count_out.data.room.tables.SetDB
 import com.example.count_out.entity.no_use.MessageWorkOut
-import com.example.count_out.service.stopwatch.StopWatchNew
+import com.example.count_out.service.stopwatch.StopWatchObj
 import kotlinx.coroutines.flow.MutableStateFlow
 
 data class VariablesOutService (
@@ -14,7 +14,7 @@ data class VariablesOutService (
 ){
     fun addMessage(text: String){
         val list: MutableList<MessageWorkOut> = messageList.value.toMutableList()
-        list.add( MessageWorkOut(message = text, tickTime = StopWatchNew.getTickTime().value))
+        list.add( MessageWorkOut(message = text, tickTime = StopWatchObj.getTickTime().value))
         messageList.value = list
     }
     fun cancel(){

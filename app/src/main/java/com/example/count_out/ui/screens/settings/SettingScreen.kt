@@ -24,6 +24,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Switch
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -77,8 +78,8 @@ import com.example.count_out.ui.view_components.Text_Icon
     SettingScreenLayout( uiState = uiState.value)
     if (uiState.value.showBottomSheetAddActivity.value) BottomSheetAddActivity(uiState.value)
     if (uiState.value.showBottomSheetBLE.value) {
-        uiState.value.onStartScanBLE()
         BottomSheetBle(uiState.value)
+        LaunchedEffect(uiState.value.showBottomSheetBLE.value) { uiState.value.onStartScanBLE() }
     }
 }
 @SuppressLint("UnrememberedMutableState")

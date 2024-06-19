@@ -45,6 +45,11 @@ enum class Zone(val id: Int, var maxPulse: Int){
     MAX(id = 5, maxPulse = 180)
 }
 
+enum class TimerState {
+    COUNTING,
+    STOPPED,
+    END,
+}
 enum class RoundType(val strId: Int, var amount: Int, var duration: Int){
     UP (R.string.work_up,0,0),
     OUT (R.string.work_out,0,0),

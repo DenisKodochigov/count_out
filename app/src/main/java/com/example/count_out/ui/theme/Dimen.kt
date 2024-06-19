@@ -13,7 +13,7 @@ object Dimen {
 
     val bsConfirmationButtonTopHeight = 30.dp
     val bsSpacerBottomHeight = 50.dp
-
+    val bsHeightWindowsListBle = 350.dp
     val bsItemPaddingVer = 4.dp
 
     val width8 = 8.dp
