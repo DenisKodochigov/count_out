@@ -4,7 +4,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import com.example.count_out.permission.PermissionApp
-import com.example.count_out.service.bluetooth.BluetoothApp
+import com.example.count_out.service.bluetooth.BleApp
 import com.example.count_out.service.sensors.SensorsApp
 import com.example.count_out.service.workout.ServiceManager
 import com.example.count_out.service.workout.WorkoutService
@@ -18,7 +18,7 @@ class MainActivity: ComponentActivity()
     @Inject lateinit var serviceManager: ServiceManager
     @Inject lateinit var permissionApp: PermissionApp
     @Inject lateinit var sensorsManager: SensorsApp
-    @Inject lateinit var bluetoothApp: BluetoothApp
+    @Inject lateinit var bleApp: BleApp
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -28,7 +28,7 @@ class MainActivity: ComponentActivity()
             StartApp()
         }
         sensorsManager.onCreate()
-        bluetoothApp.init(this)
+        bleApp.init(this)
     }
 
     override fun onStart() {

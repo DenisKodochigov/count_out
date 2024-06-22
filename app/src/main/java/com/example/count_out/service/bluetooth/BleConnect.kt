@@ -19,7 +19,7 @@ import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-class BluetoothConnect @Inject constructor(val context: Context, private val permissionApp: PermissionApp
+class BleConnect @Inject constructor(val context: Context, private val permissionApp: PermissionApp
 ){
     private lateinit var scope: CoroutineScope
     private lateinit var gatt: BluetoothGatt

@@ -50,6 +50,10 @@ enum class TimerState {
     STOPPED,
     END,
 }
+enum class ScannerState {
+    COUNTING,
+    END,
+}
 enum class RoundType(val strId: Int, var amount: Int, var duration: Int){
     UP (R.string.work_up,0,0),
     OUT (R.string.work_out,0,0),

@@ -12,7 +12,7 @@ import com.example.count_out.entity.BleDev
 import com.example.count_out.entity.BluetoothDeviceApp
 import com.example.count_out.entity.ErrorApp
 import com.example.count_out.permission.PermissionApp
-import com.example.count_out.service.bluetooth.BluetoothApp
+import com.example.count_out.service.bluetooth.BleApp
 import com.example.count_out.ui.view_components.lg
 import com.example.count_out.ui.view_components.log
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -27,7 +27,7 @@ import javax.inject.Inject
 @HiltViewModel
 class SettingViewModel @Inject constructor(
     private val errorApp: ErrorApp,
-    private val bluetoothApp: BluetoothApp,
+    private val bleApp: BleApp,
     private val dataRepository: DataRepository,
     private val permissionApp: PermissionApp
 ): ViewModel() {
@@ -82,7 +82,7 @@ class SettingViewModel @Inject constructor(
     private fun onStartScanBLE(){
         lg("SettingViewModel onStartScanBLE")
         viewModelScope.launch(Dispatchers.IO) {
-            kotlin.runCatching { bluetoothApp.startScannerBLEDevices() }.fold(
+            kotlin.runCatching { bleApp.startScannerBLEDevices() }.fold(
                 onSuccess = { },
                 onFailure = { errorApp.errorApi(it.message!!) }
             )
@@ -91,7 +91,7 @@ class SettingViewModel @Inject constructor(
     }
     private fun onStopScanBLE(){
         viewModelScope.launch(Dispatchers.IO) {
-            kotlin.runCatching { bluetoothApp.stopScannerBLEDevices() }.fold(
+            kotlin.runCatching { bleApp.stopScannerBLEDevices() }.fold(
                 onSuccess = { },
                 onFailure = { errorApp.errorApi(it.message!!) }
             )
@@ -99,7 +99,7 @@ class SettingViewModel @Inject constructor(
     }
     private fun onClearCacheBLE(){
         viewModelScope.launch(Dispatchers.IO) {
-            kotlin.runCatching { bluetoothApp.onClearCacheBLE() }.fold(
+            kotlin.runCatching { bleApp.onClearCacheBLE() }.fold(
                 onSuccess = { },
                 onFailure = { errorApp.errorApi(it.message!!) }
             )
@@ -110,7 +110,7 @@ class SettingViewModel @Inject constructor(
         lg("SettingViewModel getStoreBleDev")
         viewModelScope.launch(Dispatchers.IO) {
             dataRepository.getBleDevStoreFlow().collect{
-                bluetoothApp.findBleDeviceByMac(it.mac)
+                bleApp.startScannerBleDeviceByMac(it.mac)
             }
         }
         receiveBluetoothDeviceByMac()
@@ -119,13 +119,13 @@ class SettingViewModel @Inject constructor(
     private fun selectDevice(device: BluetoothDevice) {
         val nameDevice= permissionApp.checkBleScan { device.name } as String
         viewModelScope.launch(Dispatchers.IO) {
-            bluetoothApp.stopScannerBLEDevices()
+            bleApp.stopScannerBLEDevices()
             dataRepository.storeSelectBleDev(BleDev( name = nameDevice, mac = device.address)) }
-        bluetoothApp.connectDevice(device)
+        bleApp.connectDevice(device)
     }
     private fun receiveBluetooth(){
         viewModelScope.launch(Dispatchers.IO) {
-            bluetoothApp.getDevices().collect{
+            bleApp.getDevices().collect{
                 _settingScreenState.update { currentState ->
                     currentState.copy(bluetoothDevices = mutableStateOf(it)) } }
         }
@@ -133,12 +133,12 @@ class SettingViewModel @Inject constructor(
     private fun receiveBluetoothDeviceByMac(){
         lg("SettingViewModel.receiveBluetoothDeviceByMac")
         viewModelScope.launch(Dispatchers.IO) {
-            bluetoothApp.getDeviceByMac().collect{ listDeviceBle ->
+            bleApp.getDeviceByMac().collect{ listDeviceBle ->
                 if (listDeviceBle.isNotEmpty()) {
                     listDeviceBle[0].let { device ->
                         lg("SettingViewModel.receiveBluetoothDeviceByMac ${device.address}")
-                        bluetoothApp.stopScannerBLEDevicesByMac()
-                        bluetoothApp.connectDevice(device)
+                        bleApp.stopScannerBLEDevicesByMac()
+                        bleApp.connectDevice(device)
                         _settingScreenState.update { currentState ->
                             currentState.copy(lastConnectHearthRate = mutableStateOf(device))
                         }
@@ -167,6 +167,6 @@ class SettingViewModel @Inject constructor(
     }
     override fun onCleared(){
         lg("SettingViewModel cleared")
-        bluetoothApp.stopScannerBLEDevices()
+        bleApp.stopScannerBLEDevices()
     }
 }

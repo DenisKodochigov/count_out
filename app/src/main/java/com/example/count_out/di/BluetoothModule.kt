@@ -4,9 +4,9 @@ import android.bluetooth.BluetoothAdapter
 import android.bluetooth.BluetoothManager
 import android.content.Context
 import com.example.count_out.permission.PermissionApp
-import com.example.count_out.service.bluetooth.BluetoothApp
-import com.example.count_out.service.bluetooth.BluetoothConnect
-import com.example.count_out.service.bluetooth.BluetoothScanner
+import com.example.count_out.service.bluetooth.BleApp
+import com.example.count_out.service.bluetooth.BleConnect
+import com.example.count_out.service.bluetooth.BleScanner
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -33,22 +33,22 @@ class BluetoothModule {
     @Provides
     fun provideBluetoothScanner(
         @ApplicationContext context: Context, bluetoothAdapter: BluetoothAdapter, permissionApp: PermissionApp
-    ): BluetoothScanner {
-        return BluetoothScanner(context, bluetoothAdapter, permissionApp)
+    ): BleScanner {
+        return BleScanner(context, bluetoothAdapter, permissionApp)
     }
     @Singleton
     @Provides
-    fun provideBluetoothConnect(@ApplicationContext context: Context, permissionApp: PermissionApp): BluetoothConnect {
-        return BluetoothConnect(context, permissionApp)
+    fun provideBluetoothConnect(@ApplicationContext context: Context, permissionApp: PermissionApp): BleConnect {
+        return BleConnect(context, permissionApp)
     }
     @Singleton
     @Provides
     fun provideBluetoothApp(
         @ApplicationContext context: Context,
         bluetoothAdapter: BluetoothAdapter,
-        bluetoothScanner: BluetoothScanner,
-        bluetoothConnect: BluetoothConnect
-    ): BluetoothApp {
-        return BluetoothApp(context, bluetoothAdapter, bluetoothScanner, bluetoothConnect)
+        bleScanner: BleScanner,
+        bleConnect: BleConnect
+    ): BleApp {
+        return BleApp(context, bluetoothAdapter, bleScanner, bleConnect)
     }
 }
