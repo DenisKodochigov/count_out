@@ -60,4 +60,12 @@ object Const {
         UUID.fromString("0000183E-0000-0000-0000-000000000000"),
         UUID.fromString("00001840-0000-0000-0000-000000000000"),
     )
+    val uuidHeartRate = UUIDBle(
+        serviceUuid = UUID.fromString("0000180D-0000-1000-8000-00805f9b34fb"),
+        charUuid = UUID.fromString("0000180D-0000-1000-8000-00805f9b34fb")
+    )
+    val uuidBatteryLevel = UUIDBle(
+        serviceUuid = UUID.fromString("0000180f-0000-1000-8000-00805f9b34fb"),
+        charUuid = UUID.fromString("00002a19-0000-1000-8000-00805f9b34fb")
+    )
 }

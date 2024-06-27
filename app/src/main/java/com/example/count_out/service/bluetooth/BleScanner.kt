@@ -85,5 +85,4 @@ class BleScanner @Inject constructor(
     }
 
     fun getDevices() = scannerBleAll.getDevices()
-
 }

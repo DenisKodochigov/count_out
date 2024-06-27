@@ -1,13 +1,14 @@
 package com.example.count_out.service.bluetooth
 
 import android.bluetooth.BluetoothDevice
+import android.bluetooth.BluetoothGatt
 import android.bluetooth.le.ScanCallback
 import android.bluetooth.le.ScanResult
 import android.bluetooth.le.ScanSettings
+import android.util.Log
 import com.example.count_out.permission.PermissionApp
 import com.example.count_out.ui.view_components.lg
 import kotlinx.coroutines.flow.MutableStateFlow
-
 
 fun addDevice(
     result: ScanResult,
@@ -20,6 +21,7 @@ fun addDevice(
     }
     return listDevice
 }
+
 fun scanSettings(reportDelay: Long): ScanSettings {
     return ScanSettings.Builder()
         .setScanMode(ScanSettings.SCAN_MODE_BALANCED)
@@ -50,5 +52,20 @@ fun objectScanCallback(
     }
     override fun onScanFailed(errorCode: Int) {
         lg("Error scan BLE device. $errorCode")
+    }
+}
+
+fun BluetoothGatt.printCharacteristicsTable() {
+    if (services.isEmpty()) {
+        Log.i("printGattTable", "No service and characteristic available, call discoverServices() first?")
+        return
+    }
+    services.forEach { service ->
+        val characteristicsTable = service.characteristics.joinToString(
+            separator = "\n|--",
+            prefix = "|--"
+        ) { it.uuid.toString() }
+        Log.i("printGattTable", "\nService ${service.uuid}\nCharacteristics:\n$characteristicsTable"
+        )
     }
 }

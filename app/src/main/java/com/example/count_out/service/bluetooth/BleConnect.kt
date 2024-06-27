@@ -11,6 +11,7 @@ import android.bluetooth.BluetoothGatt.GATT_SUCCESS
 import android.bluetooth.BluetoothGattCallback
 import android.bluetooth.BluetoothGattCharacteristic
 import android.content.Context
+import com.example.count_out.entity.UUIDBle
 import com.example.count_out.entity.hciStatusFromValue
 import com.example.count_out.permission.PermissionApp
 import com.example.count_out.ui.view_components.lg
@@ -20,7 +21,9 @@ import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-class BleConnect @Inject constructor(val context: Context, private val permissionApp: PermissionApp
+
+class BleConnect @Inject constructor(
+    val context: Context, private val permissionApp: PermissionApp,
 ){
     private lateinit var scope: CoroutineScope
     private var gatt: BluetoothGatt? = null
@@ -44,7 +47,7 @@ class BleConnect @Inject constructor(val context: Context, private val permissio
             gatt: BluetoothGatt,
             characteristic: BluetoothGattCharacteristic,
             value: ByteArray,
-            status: Int
+            status: Int,
         ) {
             super.onCharacteristicRead(gatt, characteristic, value, status)
             if (status != GATT_SUCCESS) {
@@ -103,7 +106,9 @@ class BleConnect @Inject constructor(val context: Context, private val permissio
         scope = CoroutineScope(Dispatchers.Default)
         scope.launch {
             permissionApp.checkBleScan {
-                if (!gatt.discoverServices()) { lg("discoverServices failed to start") } }
+                if (gatt.discoverServices()) {
+                    gatt.printCharacteristicsTable()
+                } else { lg("discoverServices failed to start") } }
         }
     }
 
@@ -143,4 +148,7 @@ class BleConnect @Inject constructor(val context: Context, private val permissio
         scope.cancel()
     }
 
+    fun readParameterForBle(uuidBle: UUIDBle){
+        bleQueueCommand.readCharacteristic( gatt, permissionApp, uuidBle)
+    }
 }
