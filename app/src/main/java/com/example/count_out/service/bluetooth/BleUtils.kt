@@ -42,11 +42,9 @@ fun objectScanCallback(
     override fun onBatchScanResults(results: MutableList<ScanResult>?) {
         super.onBatchScanResults(results)
         if (!results.isNullOrEmpty()) {
-            results?.let{ resultsLoc->
-                resultsLoc.forEach{ result->
-                    lg("objectScanCallback ${result.device}")
-                    devices.value = addDevice(result, permissionApp, devices)
-                }
+            results.forEach{ result->
+                lg("objectScanCallback ${result.device}")
+                devices.value = addDevice(result, permissionApp, devices)
             }
         }
     }

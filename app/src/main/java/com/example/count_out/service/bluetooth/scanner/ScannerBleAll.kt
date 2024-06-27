@@ -35,7 +35,7 @@ class ScannerBleAll(
     fun startScannerBLEDevices() {
         devices.value = emptyList()
         permissionApp.checkBleScan{
-            bluetoothAdapter.bluetoothLeScanner.startScan(scanFilters(), scanSettings(500L), scanCallback) }
+            bluetoothAdapter.bluetoothLeScanner.startScan(scanFilters(), scanSettings(0L), scanCallback) }
     }
     @SuppressLint("MissingPermission")
     fun stopScannerBLEDevices(){

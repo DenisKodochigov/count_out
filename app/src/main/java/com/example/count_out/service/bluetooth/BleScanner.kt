@@ -29,6 +29,7 @@ class BleScanner @Inject constructor(
     private val timer = Timer()
     private val scannerBleAll = ScannerBleAll(bluetoothAdapter, permissionApp)
     private val scannerBleByMac = ScannerBleByMac(bluetoothAdapter, permissionApp)
+    private val timeScanning = 60000L
 
     /** Scan device by MAC address*/
     @SuppressLint("MissingPermission")
@@ -37,7 +38,7 @@ class BleScanner @Inject constructor(
             CoroutineScope(Dispatchers.Default).launch {
                 if (scannerState.value == ScannerState.END) {
                     scannerState.value = ScannerState.COUNTING
-                    timer.changeState(TimerState.COUNTING, 50000L)
+                    timer.changeState(TimerState.COUNTING, timeScanning)
                     scannerBleByMac.startScannerBLEDevices( mac )
                 }
                 timer.endCounting {
@@ -64,7 +65,7 @@ class BleScanner @Inject constructor(
         CoroutineScope(Dispatchers.Default).launch {
             if (scannerState.value == ScannerState.END) {
                 scannerState.value = ScannerState.COUNTING
-                timer.changeState(TimerState.COUNTING, 50000L)
+                timer.changeState(TimerState.COUNTING, timeScanning)
                 scannerBleAll.startScannerBLEDevices()
             }
             timer.endCounting {

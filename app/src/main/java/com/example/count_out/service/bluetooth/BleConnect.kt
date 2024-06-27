@@ -9,6 +9,7 @@ import android.bluetooth.BluetoothGatt
 import android.bluetooth.BluetoothGatt.GATT_FAILURE
 import android.bluetooth.BluetoothGatt.GATT_SUCCESS
 import android.bluetooth.BluetoothGattCallback
+import android.bluetooth.BluetoothGattCharacteristic
 import android.content.Context
 import com.example.count_out.entity.hciStatusFromValue
 import com.example.count_out.permission.PermissionApp
@@ -22,8 +23,10 @@ import javax.inject.Inject
 class BleConnect @Inject constructor(val context: Context, private val permissionApp: PermissionApp
 ){
     private lateinit var scope: CoroutineScope
-    private lateinit var gatt: BluetoothGatt
-    private var deviceLocal: BluetoothDevice? = null
+    private var gatt: BluetoothGatt? = null
+    private var deviceConnect: BluetoothDevice? = null
+    private val bleQueueCommand = BleQueueCommand()
+
 
     private val bluetoothGattCallback = object : BluetoothGattCallback() {
         @SuppressLint("MissingPermission")
@@ -36,13 +39,32 @@ class BleConnect @Inject constructor(val context: Context, private val permissio
             super.onServicesDiscovered(gatt, status)
             bluetoothGattCallbackServicesDiscovered(gatt, status)
         }
+
+        override fun onCharacteristicRead(
+            gatt: BluetoothGatt,
+            characteristic: BluetoothGattCharacteristic,
+            value: ByteArray,
+            status: Int
+        ) {
+            super.onCharacteristicRead(gatt, characteristic, value, status)
+            if (status != GATT_SUCCESS) {
+                lg( "ERROR: Read failed for characteristic: ${characteristic.uuid}, status $status")
+                bleQueueCommand.completedCommand(gatt);
+                return;
+            }
+            // Characteristic has been read so processes it
+            //...
+            // We done, complete the command
+            bleQueueCommand.completedCommand(gatt);
+        }
     }
+
     @SuppressLint("MissingPermission")
     fun bluetoothGattCallbackConnectionStateChange(gatt: BluetoothGatt?, status: Int, newState: Int){
         if (status == GATT_SUCCESS) {
             when (newState) {
                 BluetoothGatt.STATE_CONNECTED -> {
-                    val bondState = permissionApp.checkBleScan { deviceLocal?.bondState ?: BOND_BONDING }
+                    val bondState = permissionApp.checkBleScan { deviceConnect?.bondState ?: BOND_BONDING }
                     if (bondState == BOND_NONE || bondState == BOND_BONDED) {
                         lg("Bond device SUCCESS")
                         gatt?.let { startDiscoverService(it) }
@@ -61,6 +83,7 @@ class BleConnect @Inject constructor(val context: Context, private val permissio
             gattClose(gatt)
         }
     }
+
     @SuppressLint("MissingPermission")
     fun bluetoothGattCallbackServicesDiscovered(gatt: BluetoothGatt?, status: Int){
         gatt?.let { gattV ->
@@ -68,13 +91,13 @@ class BleConnect @Inject constructor(val context: Context, private val permissio
                 val services = gattV.services
                 lg("Discovered ${services.size} services")
             }
-            else if (status != GATT_SUCCESS) {
+            else {
                 lg("Service discovery failed")
                 if (status == GATT_FAILURE) permissionApp.checkBleScan { gattV.disconnect() }
             }
-            else lg("Service discovery failed")
         }
     }
+
     @SuppressLint("MissingPermission")
     private fun startDiscoverService(gatt: BluetoothGatt){
         scope = CoroutineScope(Dispatchers.Default)
@@ -83,33 +106,41 @@ class BleConnect @Inject constructor(val context: Context, private val permissio
                 if (!gatt.discoverServices()) { lg("discoverServices failed to start") } }
         }
     }
+
     @SuppressLint("MissingPermission")
     fun connectDevice(device: BluetoothDevice){
-        deviceLocal = device
+        deviceConnect = device
         gatt = permissionApp.checkBleScan {
             device.connectGatt(context, true, bluetoothGattCallback, BluetoothDevice.TRANSPORT_LE)
         } as BluetoothGatt
     }
+
     @SuppressLint("MissingPermission")
     fun disconnectDevice(){
-        permissionApp.checkBleScan { gatt.disconnect()}
+        gatt?.let { permissionApp.checkBleScan { it.disconnect()} }
     }
+
     fun clearServicesCache(): Boolean{
         var result = false
-        try {
-            val refreshMethod = gatt.javaClass.getMethod("refresh")
-            result = refreshMethod.invoke(gatt) as Boolean
-        } catch (e: Exception){
-            lg("ERROR: Could not invoke refresh method: $e")
+        gatt?.let{ gattV->
+            try {
+                val refreshMethod = gattV.javaClass.getMethod("refresh")
+                result = refreshMethod.invoke(gatt) as Boolean
+            } catch (e: Exception){
+                lg("ERROR: Could not invoke refresh method: $e")
+            }
         }
         return result
     }
+
     @SuppressLint("MissingPermission")
     private fun gattClose(gatt: BluetoothGatt?){
         onCancelDiscoverService()
         gatt?.let {permissionApp.checkBleScan { it.close()}}
     }
+
     private fun onCancelDiscoverService(){
         scope.cancel()
     }
+
 }
