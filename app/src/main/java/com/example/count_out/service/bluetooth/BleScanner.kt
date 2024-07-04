@@ -2,7 +2,6 @@ package com.example.count_out.service.bluetooth
 
 import android.annotation.SuppressLint
 import android.bluetooth.BluetoothAdapter
-import android.bluetooth.BluetoothDevice
 import android.content.Context
 import com.example.count_out.entity.ScannerState
 import com.example.count_out.entity.TimerState
@@ -27,17 +26,18 @@ class BleScanner @Inject constructor(
 ){
     private val scannerState: MutableStateFlow<ScannerState> = MutableStateFlow(ScannerState.END)
     private val timer = Timer()
-    private val scannerBleAll = ScannerBleAll(bluetoothAdapter, permissionApp)
-    private val scannerBleByMac = ScannerBleByMac(bluetoothAdapter, permissionApp)
+    val scannerBleAll = ScannerBleAll(bluetoothAdapter, permissionApp)
+    val scannerBleByMac = ScannerBleByMac(bluetoothAdapter, permissionApp)
     private val timeScanning = 60000L
 
     /** Scan device by MAC address*/
     @SuppressLint("MissingPermission")
-    fun startScannerBLEDevicesByMac(mac: String){
+    fun startScannerBLEDevicesByMac(mac: String)
+    {
         if (mac != "") {
             CoroutineScope(Dispatchers.Default).launch {
                 if (scannerState.value == ScannerState.END) {
-                    scannerState.value = ScannerState.COUNTING
+                    scannerState.value = ScannerState.RUNNING
                     timer.changeState(TimerState.COUNTING, timeScanning)
                     scannerBleByMac.startScannerBLEDevices( mac )
                 }
@@ -50,21 +50,22 @@ class BleScanner @Inject constructor(
         }
     }
     @SuppressLint("MissingPermission")
-    fun stopScannerBLEDevicesByMac(){
-        if (scannerState.value == ScannerState.COUNTING) {
+    fun stopScannerBLEDevicesByMac()
+    {
+        if (scannerState.value == ScannerState.RUNNING) {
             lg("Stop scanner ByMac")
             scannerState.value = ScannerState.END
             scannerBleByMac.stopScannerBLEDevices()
         }
     }
-    fun getDeviceByMac(): MutableStateFlow<List<BluetoothDevice>> = scannerBleByMac.getDevices()
 
     /** Scan all device*/
     @SuppressLint("MissingPermission")
-    fun startScannerBLEDevices() {
+    fun startScannerBLEDevices()
+    {
         CoroutineScope(Dispatchers.Default).launch {
             if (scannerState.value == ScannerState.END) {
-                scannerState.value = ScannerState.COUNTING
+                scannerState.value = ScannerState.RUNNING
                 timer.changeState(TimerState.COUNTING, timeScanning)
                 scannerBleAll.startScannerBLEDevices()
             }
@@ -76,13 +77,12 @@ class BleScanner @Inject constructor(
         }
     }
     @SuppressLint("MissingPermission")
-    fun stopScannerBLEDevices(){
-        if (scannerState.value == ScannerState.COUNTING) {
+    fun stopScannerBLEDevices()
+    {
+        if (scannerState.value == ScannerState.RUNNING) {
             lg("Stop scanner ByMac")
             scannerState.value = ScannerState.END
             scannerBleAll.stopScannerBLEDevices()
         }
     }
-
-    fun getDevices() = scannerBleAll.getDevices()
 }

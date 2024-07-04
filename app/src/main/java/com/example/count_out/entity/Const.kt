@@ -1,6 +1,7 @@
 package com.example.count_out.entity
 
 import android.Manifest
+import com.example.count_out.entity.bluetooth.UUIDBle
 import com.example.count_out.navigation.TrainingsDestination
 import java.util.UUID
 
@@ -24,10 +25,14 @@ object Const {
     const val NOTIFICATION_CHANNEL_NAME = "WORKOUT_NOTIFICATION"
     const val NOTIFICATION_CHANNEL_DESCRIPTION = "WORKOUT_CHANNEL_DESCRIPTION"
 
+    const val MAX_TRIES = 4
+
+    const val DELAY_CANCELED_COROUTINE = 100L
+
     const val START_REQUEST_CODE = 100
     const val PAUSE_REQUEST_CODE = 101
     const val STOP_REQUEST_CODE = 102
-
+    const val PERMISSION_REQUEST_CODE = 1
     val permissions1 = listOf(
         Manifest.permission.FOREGROUND_SERVICE,
         Manifest.permission.BLUETOOTH,

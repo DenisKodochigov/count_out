@@ -1,4 +1,4 @@
-package com.example.count_out.entity
+package com.example.count_out.entity.bluetooth
 
 import java.util.UUID
 

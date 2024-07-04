@@ -1,9 +1,9 @@
-package com.example.count_out.entity
+package com.example.count_out.entity.bluetooth
 
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class BleDev(
+data class BleDevSerializable(
     val name: String = "",
     val mac: String = ""
 )

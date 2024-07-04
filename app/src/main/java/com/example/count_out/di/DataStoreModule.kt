@@ -5,7 +5,7 @@ import androidx.datastore.core.DataStore
 import androidx.datastore.core.DataStoreFactory
 import androidx.datastore.dataStoreFile
 import com.example.count_out.data.datastore.BleDevSerializer
-import com.example.count_out.entity.BleDev
+import com.example.count_out.entity.bluetooth.BleDevSerializable
 import com.example.count_out.entity.Const.DATA_STORE_FILE_NAME
 import dagger.Module
 import dagger.Provides
@@ -21,7 +21,7 @@ import javax.inject.Singleton
 class DataStoreModule {
     @Provides
     @Singleton
-    fun provideDataStore(@ApplicationContext appContext: Context): DataStore<BleDev> {
+    fun provideDataStore(@ApplicationContext appContext: Context): DataStore<BleDevSerializable> {
         return DataStoreFactory.create(
             serializer = BleDevSerializer,
             scope = CoroutineScope(Dispatchers.IO),

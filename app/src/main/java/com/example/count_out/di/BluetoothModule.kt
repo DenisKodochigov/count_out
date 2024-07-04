@@ -4,8 +4,8 @@ import android.bluetooth.BluetoothAdapter
 import android.bluetooth.BluetoothManager
 import android.content.Context
 import com.example.count_out.permission.PermissionApp
-import com.example.count_out.service.bluetooth.BleApp
-import com.example.count_out.service.bluetooth.BleConnect
+import com.example.count_out.service.bluetooth.BleConnecting
+import com.example.count_out.service.bluetooth.BleManager
 import com.example.count_out.service.bluetooth.BleScanner
 import dagger.Module
 import dagger.Provides
@@ -38,17 +38,10 @@ class BluetoothModule {
     }
     @Singleton
     @Provides
-    fun provideBluetoothConnect(@ApplicationContext context: Context, permissionApp: PermissionApp): BleConnect {
-        return BleConnect(context, permissionApp)
+    fun provideBluetoothConnect(@ApplicationContext context: Context, permissionApp: PermissionApp): BleConnecting {
+        return BleConnecting(context, permissionApp)
     }
     @Singleton
     @Provides
-    fun provideBluetoothApp(
-        @ApplicationContext context: Context,
-        bluetoothAdapter: BluetoothAdapter,
-        bleScanner: BleScanner,
-        bleConnect: BleConnect
-    ): BleApp {
-        return BleApp(context, bluetoothAdapter, bleScanner, bleConnect)
-    }
+    fun provideBluetoothApp(@ApplicationContext context: Context, ) = BleManager(context)
 }

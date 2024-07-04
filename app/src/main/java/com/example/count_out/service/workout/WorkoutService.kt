@@ -37,6 +37,7 @@ class WorkoutService @Inject constructor(): Service(), WorkOutAPI
 
     inner class WorkoutServiceBinder : Binder() { fun getService(): WorkoutService = this@WorkoutService }
     override fun onBind(p0: Intent?): IBinder = WorkoutServiceBinder()
+
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         when (intent?.getStringExtra(NOTIFICATION_EXTRA)) {
             StateRunning.Started.name -> continueWorkout()

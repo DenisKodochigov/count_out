@@ -27,27 +27,34 @@ class ServiceManager @Inject constructor(val context: Context
             isBound  = false
         }
     }
+
     fun startWorkout(){
         if (isBound ) {
             workOutService.startWorkout()
         }
     }
+
     fun connectingToService(variablesIn: VariablesInService): VariablesOutService{
         workOutService.variablesIn = variablesIn
         return workOutService.variablesOut
     }
+
     fun pauseWorkout(){
         if (isBound ) {
             workOutService.pauseWorkout()
         }
     }
+
     fun stateRunningService() = workOutService.variablesOut.stateRunning.value
+
     fun stopWorkout(){
         workOutService.stopWorkout()
     }
+
     fun <T>bindService( clazz: Class<T>) {
         context.bindService( Intent(context, clazz), serviceConnection, Context.BIND_AUTO_CREATE)
     }
+
     fun unbindService() {
         if (isBound) context.unbindService(serviceConnection)
     }

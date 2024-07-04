@@ -17,7 +17,8 @@ class ScannerBleAll(
     private val bluetoothAdapter: BluetoothAdapter,
     val permissionApp: PermissionApp
 ){
-    private val devices: MutableStateFlow<List<BluetoothDevice>> = MutableStateFlow(emptyList())
+    private val bleScanner by lazy { bluetoothAdapter.bluetoothLeScanner }
+    val devices: MutableStateFlow<List<BluetoothDevice>> = MutableStateFlow(emptyList())
 
     private fun scanFilters(): List<ScanFilter> {
         val filters = mutableListOf<ScanFilter>()
@@ -35,12 +36,11 @@ class ScannerBleAll(
     fun startScannerBLEDevices() {
         devices.value = emptyList()
         permissionApp.checkBleScan{
-            bluetoothAdapter.bluetoothLeScanner.startScan(scanFilters(), scanSettings(0L), scanCallback) }
+            bleScanner.startScan( scanFilters(), scanSettings(0L), scanCallback) }
     }
     @SuppressLint("MissingPermission")
     fun stopScannerBLEDevices(){
         lg("Stop scanner")
-        permissionApp.checkBleScan{ bluetoothAdapter.bluetoothLeScanner.stopScan(scanCallback)}
+        permissionApp.checkBleScan{ bleScanner.stopScan(scanCallback)}
     }
-    fun getDevices(): MutableStateFlow<List<BluetoothDevice>> = devices
 }

@@ -51,7 +51,7 @@ enum class TimerState {
     END,
 }
 enum class ScannerState {
-    COUNTING,
+    RUNNING,
     END,
 }
 enum class RoundType(val strId: Int, var amount: Int, var duration: Int){

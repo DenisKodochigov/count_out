@@ -1,9 +1,9 @@
-package com.example.count_out.entity
+package com.example.count_out.entity.bluetooth
 
 import android.bluetooth.BluetoothDevice
 
-data class BluetoothDeviceApp (
+data class BleDev (
     var device: BluetoothDevice? = null,
     var name: String = "",
-    var address: String = ""
+    var address: String = "",
 )

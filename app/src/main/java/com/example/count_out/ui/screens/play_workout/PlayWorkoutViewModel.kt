@@ -38,14 +38,7 @@ class PlayWorkoutViewModel @Inject constructor(
     val playWorkoutScreenState: StateFlow<PlayWorkoutScreenState> = _playWorkoutScreenState.asStateFlow()
 
     private val variablesInService = VariablesInService()
-    init {
-        viewModelScope.launch(Dispatchers.IO) {
-            kotlin.runCatching { serviceManager.connectingToService(variablesInService) }.fold(
-                onSuccess = { receiveStateWorkout(it) },
-                onFailure = { errorApp.errorApi(it.message!!) }
-            )
-        }
-    }
+
     fun getTraining(id: Long) {
         templateMy { dataRepository.getTraining(id) } }
     private fun updateSet(trainingId: Long,set: SetDB) {
@@ -59,8 +52,9 @@ class PlayWorkoutViewModel @Inject constructor(
                 variablesInService.enableSpeechDescription =
                     MutableStateFlow(dataRepository.getSetting(R.string.speech_description).value == 1)
                 serviceManager.startWorkout()
+                serviceManager.connectingToService(variablesInService)
             }.fold(
-                onSuccess = {  },
+                onSuccess = { receiveStateWorkout(it) },
                 onFailure = { errorApp.errorApi(it.message!!) }
             )
         }
