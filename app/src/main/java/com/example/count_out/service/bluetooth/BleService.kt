@@ -8,8 +8,6 @@ import android.content.pm.ServiceInfo.FOREGROUND_SERVICE_TYPE_SPECIAL_USE
 import android.os.Binder
 import android.os.Build
 import android.os.IBinder
-import androidx.core.app.ActivityCompat
-import com.example.count_out.MainActivity
 import com.example.count_out.entity.Const.NOTIFICATION_ID
 import com.example.count_out.entity.Const.uuidHeartRate
 import com.example.count_out.entity.StateRunning
@@ -24,34 +22,19 @@ import javax.inject.Singleton
 
 @Singleton
 @AndroidEntryPoint
-class BleService @Inject constructor(
-    private val bluetoothAdapter: BluetoothAdapter,
-    private val bleScanner: BleScanner,
-    private val bleConnecting: BleConnecting,
-): Service() {
+class BleService @Inject constructor(): Service() {
+
+    @Inject lateinit var bleScanner: BleScanner
+    @Inject lateinit var bleConnecting: BleConnecting
+    @Inject lateinit var bluetoothAdapter: BluetoothAdapter
+    @Inject lateinit var notificationHelper: NotificationHelper
 
     var valIn: ValInBleService = ValInBleService()
     var valOut: ValOutBleService = ValOutBleService()
-    @Inject lateinit var notificationHelper: NotificationHelper
 
     inner class BleServiceBinder: Binder() { fun getService(): BleService = this@BleService }
     override fun onBind(p0: Intent?): IBinder = BleServiceBinder()
 
-    private fun startForegroundService()
-    {
-        if (!notificationHelper.channelExist()) notificationHelper.createChannel()
-        if (Build.VERSION.SDK_INT >= 31)
-            startForeground(NOTIFICATION_ID, notificationHelper.build(), FOREGROUND_SERVICE_TYPE_SPECIAL_USE)
-        else startForeground(NOTIFICATION_ID, notificationHelper.build())
-    }
-    fun checkBluetoothEnable(activity: MainActivity): Boolean
-    {
-        if ( !bluetoothAdapter.isEnabled) {
-            val enableBtIntent = Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE)
-            ActivityCompat.startActivityForResult(activity, enableBtIntent, 1, null)
-        }
-        return bluetoothAdapter.isEnabled
-    }
     @SuppressLint("ForegroundServiceType")
     fun startBleService() {
         valOut.stateRunning.value.let {
@@ -61,6 +44,15 @@ class BleService @Inject constructor(
             } else if (it == StateRunning.Paused) {  }
         }
     }
+
+    private fun startForegroundService()
+    {
+        if (!notificationHelper.channelExist()) notificationHelper.createChannel()
+        if (Build.VERSION.SDK_INT >= 31)
+            startForeground(NOTIFICATION_ID, notificationHelper.build(), FOREGROUND_SERVICE_TYPE_SPECIAL_USE)
+        else startForeground(NOTIFICATION_ID, notificationHelper.build())
+    }
+
     fun stopBleService(){
         valOut.cancel()
         stopForeground(STOP_FOREGROUND_REMOVE)
@@ -74,6 +66,7 @@ class BleService @Inject constructor(
         valOut.listDevice = bleScanner.scannerBleAll.devices
         bleScanner.startScannerBLEDevices()
     }
+
     private fun stopScannerBLEDevices(){
         lg("stopScannerBLEDevices")
         bleScanner.stopScannerBLEDevices()

@@ -54,7 +54,7 @@ class SettingViewModel @Inject constructor(
         getSettings()
         getStoredBleDev()
         templateMy {dataRepository.getActivities()}
-        startServiceBle()
+        connectingToServiceBle()
     }
     private fun onAddActivity(activity: Activity){
         templateMy{
@@ -80,12 +80,10 @@ class SettingViewModel @Inject constructor(
     private fun updateSetting( setting: SettingDB ){
         templateSetting {dataRepository.updateSetting(setting)} }
 
-    private fun startServiceBle(){
-        lg("SettingViewModel startServiceBLE")
+    private fun connectingToServiceBle(){
+        lg("SettingViewModel connectingToServiceBle")
         viewModelScope.launch(Dispatchers.IO) {
-            kotlin.runCatching {
-                bleManager.connectingToServiceBle(valInServiceBle)
-            }.fold(
+            kotlin.runCatching { bleManager.connectingToServiceBle(valInServiceBle) }.fold(
                 onSuccess = { _settingScreenState.update { currentState ->
                     currentState.copy(bluetoothDevices = mutableStateOf( it.listDevice.value)) }},
                 onFailure = { errorApp.errorApi(it.message!!) }

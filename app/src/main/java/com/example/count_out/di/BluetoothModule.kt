@@ -4,9 +4,11 @@ import android.bluetooth.BluetoothAdapter
 import android.bluetooth.BluetoothManager
 import android.content.Context
 import com.example.count_out.permission.PermissionApp
+import com.example.count_out.service.ServiceUtils
 import com.example.count_out.service.bluetooth.BleConnecting
 import com.example.count_out.service.bluetooth.BleManager
 import com.example.count_out.service.bluetooth.BleScanner
+import com.example.count_out.service.bluetooth.BleService
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -20,9 +22,15 @@ class BluetoothModule {
 
     @Singleton
     @Provides
+    fun provideBluetoothApp(@ApplicationContext context: Context, serviceUtils: ServiceUtils) =
+        BleManager(context, serviceUtils)
+
+    @Singleton
+    @Provides
     fun provideBluetoothManager(@ApplicationContext context: Context): BluetoothManager {
         return context.getSystemService(Context.BLUETOOTH_SERVICE) as BluetoothManager
     }
+
     @Singleton
     @Provides
     fun provideBluetoothAdapter(bluetoothManager: BluetoothManager): BluetoothAdapter {
@@ -32,16 +40,19 @@ class BluetoothModule {
     @Singleton
     @Provides
     fun provideBluetoothScanner(
-        @ApplicationContext context: Context, bluetoothAdapter: BluetoothAdapter, permissionApp: PermissionApp
-    ): BleScanner {
-        return BleScanner(context, bluetoothAdapter, permissionApp)
-    }
+        @ApplicationContext context: Context,
+        bluetoothAdapter: BluetoothAdapter,
+        permissionApp: PermissionApp
+    ): BleScanner = BleScanner(context, bluetoothAdapter, permissionApp)
+
     @Singleton
     @Provides
-    fun provideBluetoothConnect(@ApplicationContext context: Context, permissionApp: PermissionApp): BleConnecting {
-        return BleConnecting(context, permissionApp)
-    }
+    fun provideBluetoothConnect(
+        @ApplicationContext context: Context,
+        permissionApp: PermissionApp
+    ): BleConnecting = BleConnecting(context, permissionApp)
+
     @Singleton
     @Provides
-    fun provideBluetoothApp(@ApplicationContext context: Context, ) = BleManager(context)
+    fun provideBleService() = BleService()
 }

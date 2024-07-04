@@ -2,16 +2,16 @@ package com.example.count_out.service.workout
 
 import android.content.ComponentName
 import android.content.Context
-import android.content.Intent
 import android.content.ServiceConnection
 import android.os.IBinder
 import com.example.count_out.entity.VariablesInService
 import com.example.count_out.entity.VariablesOutService
+import com.example.count_out.service.ServiceUtils
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class ServiceManager @Inject constructor(val context: Context
+class ServiceManager @Inject constructor(val context: Context, val serviceUtils: ServiceUtils
 ){
     private lateinit var workOutService: WorkoutService
     var isBound : Boolean = false
@@ -28,34 +28,21 @@ class ServiceManager @Inject constructor(val context: Context
         }
     }
 
-    fun startWorkout(){
-        if (isBound ) {
-            workOutService.startWorkout()
-        }
-    }
+    fun startWorkout(){ if (isBound ) workOutService.startWorkout() }
 
     fun connectingToService(variablesIn: VariablesInService): VariablesOutService{
         workOutService.variablesIn = variablesIn
         return workOutService.variablesOut
     }
 
-    fun pauseWorkout(){
-        if (isBound ) {
-            workOutService.pauseWorkout()
-        }
-    }
+    fun pauseWorkout(){ if (isBound ) workOutService.pauseWorkout() }
 
     fun stateRunningService() = workOutService.variablesOut.stateRunning.value
 
-    fun stopWorkout(){
-        workOutService.stopWorkout()
-    }
+    fun stopWorkout(){ workOutService.stopWorkout() }
 
-    fun <T>bindService( clazz: Class<T>) {
-        context.bindService( Intent(context, clazz), serviceConnection, Context.BIND_AUTO_CREATE)
-    }
+    fun <T>bindService( clazz: Class<T>) { serviceUtils.bindService(clazz, serviceConnection) }
 
-    fun unbindService() {
-        if (isBound) context.unbindService(serviceConnection)
-    }
+    fun unbindService()  { serviceUtils.unbindService(serviceConnection, isBound) }
+
 }

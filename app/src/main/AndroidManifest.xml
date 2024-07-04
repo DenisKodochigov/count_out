@@ -45,6 +45,10 @@
             android:name=".service.workout.WorkoutService"
             android:foregroundServiceType = "specialUse"
             android:exported="false"/>
+        <service
+            android:name=".service.bluetooth.BleService"
+            android:foregroundServiceType = "specialUse"
+            android:exported="false"/>
         <activity
             android:name=".MainActivity"
             android:exported="true"

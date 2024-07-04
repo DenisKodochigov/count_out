@@ -1,6 +1,7 @@
 package com.example.count_out.di
 
 import android.content.Context
+import com.example.count_out.service.ServiceUtils
 import com.example.count_out.service.workout.ServiceManager
 import com.example.count_out.service.workout.WorkoutService
 import dagger.Module
@@ -20,7 +21,7 @@ class WorkOutServiceModule {
     }
     @Singleton
     @Provides
-    fun provideServiceManager(appContext: Context): ServiceManager {
-        return ServiceManager(appContext)
+    fun provideServiceManager(context: Context, serviceUtils: ServiceUtils): ServiceManager {
+        return ServiceManager(context, serviceUtils)
     }
 }
