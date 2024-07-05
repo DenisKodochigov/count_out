@@ -83,12 +83,17 @@ class SettingViewModel @Inject constructor(
         lg("SettingViewModel.connectingToServiceBle")
         viewModelScope.launch(Dispatchers.IO) {
             kotlin.runCatching { bleManager.connectingToServiceBle(valInServiceBle) }.fold(
-                onSuccess = { receiveBluetoothDevices(it) },
+                onSuccess = { receiveValOutBleService(it) },
                 onFailure = { errorApp.errorApi(it.message!!) }
             )
         }
 //        receiveBluetoothDevices()
     }
+    private suspend fun receiveValOutBleService(valOutBleService: ValOutBleService){
+//        receiveBluetoothDevices(valOutBleService)
+        receiveListTest(valOutBleService)
+    }
+
     private suspend fun receiveBluetoothDevices(valOutBleService: ValOutBleService){
 //        lg("SettingViewModel.receiveBluetoothDevices valOutBleService $valOutBleService")
         valOutBleService.listDevice.collect{ listDevice->
@@ -97,6 +102,12 @@ class SettingViewModel @Inject constructor(
             if (listDevice.isNotEmpty()) {
                 lg("SettingViewModel.receiveBluetoothDevices valOut.listDevice: ${listDevice[0].address}")
             }
+        }
+    }
+
+    private suspend fun receiveListTest(valOutBleService: ValOutBleService){
+        valOutBleService.list.collect{ list->
+            lg("SettingViewModel.receiveListTest valOut.list: ${list.size}")
         }
     }
     private fun receiveBluetoothDevices(){

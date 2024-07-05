@@ -67,7 +67,28 @@ class BleService @Inject constructor(): Service() {
         bleScanner.startScannerBLEDevices()
 //        lgF(valOut.listDevice, "BleService.startScannerBLEDevices valOut.listDevice:")
     }
-
+    fun writeListTest(){
+        valOut.list = bleScanner.list
+        bleScanner.writeListTest()
+//        val list: MutableList<Int> = mutableListOf()
+//        valOut.list = flow{
+//
+//            repeat(100) { value ->
+//                delay(1000)
+//                list.add(value)
+//                emit(list)
+//            }
+//        }
+//        CoroutineScope(Dispatchers.Default).launch {
+//            val list: MutableList<Int> = mutableListOf()
+//            for (i in 0..1000){
+//                delay(1000L)
+//                list.add(i)
+//                valOut.list = list
+//                lg(" Add into list test i: $i, valOut.list.size: ${valOut.list.value.size}")
+//            }
+//        }
+    }
     private fun stopScannerBLEDevices(){
         lg("stopScannerBLEDevices")
         bleScanner.stopScannerBLEDevices()

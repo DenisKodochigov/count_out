@@ -42,6 +42,7 @@ class BleManager @Inject constructor(val context: Context, private val serviceUt
         if (isBound ) {
             bleService.valIn = valIn
 //            lg("BleManager.connectingToServiceBle bleService.valOut ${bleService.valOut}")
+            bleService.writeListTest()
             return bleService.valOut
         } else {
             return ValOutBleService()

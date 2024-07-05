@@ -13,7 +13,11 @@ import com.example.count_out.ui.view_components.lg
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.cancel
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -29,6 +33,7 @@ class BleScanner @Inject constructor(
     val scannerBleAll = ScannerBleAll(bluetoothAdapter, permissionApp)
     val scannerBleByMac = ScannerBleByMac(bluetoothAdapter, permissionApp)
     private val timeScanning = 60000L
+    var list: Flow<List<Int>> = flowOf(emptyList())
 
     /** Scan device by MAC address*/
     @SuppressLint("MissingPermission")
@@ -48,6 +53,26 @@ class BleScanner @Inject constructor(
                 }
             }
         }
+    }
+    fun writeListTest(){
+        val listM: MutableList<Int> = mutableListOf()
+        list = flow{
+            repeat(100) { value ->
+                delay(1000)
+                listM.add(value)
+                emit(listM)
+                lg("Start writeListTest i:$value")
+            }
+        }
+//        CoroutineScope(Dispatchers.Default).launch {
+//            val list: MutableList<Int> = mutableListOf()
+//            for (i in 0..1000){
+//                delay(1000L)
+//                list.add(i)
+//                valOut.list = list
+//                lg(" Add into list test i: $i, valOut.list.size: ${valOut.list.value.size}")
+//            }
+//        }
     }
     @SuppressLint("MissingPermission")
     fun stopScannerBLEDevicesByMac()
