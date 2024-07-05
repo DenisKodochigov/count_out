@@ -30,14 +30,14 @@ fun objectScanCallback(
     override fun onScanResult(callbackType: Int, result: ScanResult?) {
         super.onScanResult(callbackType, result)
         if (result != null) {
-            lg("objectScanCallback ${result.device}")
+            lg("objectScanCallback onScanResult ${result.device}")
             devices.value = addDevice(result, permissionApp, devices) }
     }
     override fun onBatchScanResults(results: MutableList<ScanResult>?) {
         super.onBatchScanResults(results)
         if (!results.isNullOrEmpty()) {
             results.forEach{ result->
-                lg("objectScanCallback ${result.device}")
+                lg("objectScanCallback onBatchScanResults ${result.device}")
                 devices.value = addDevice(result, permissionApp, devices)
             }
         }

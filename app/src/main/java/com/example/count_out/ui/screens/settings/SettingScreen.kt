@@ -63,16 +63,16 @@ import com.example.count_out.ui.view_components.Text_Icon
 @Composable fun SettingScreenCreateView( viewModel: SettingViewModel
 ){
     val uiState = viewModel.settingScreenState.collectAsState()
-    uiState.value.onDismissAddActivity = { uiState.value.showBottomSheetAddActivity.value = false }
     uiState.value.onConfirmAddActivity = { activity->
         uiState.value.onAddActivity(activity)
         uiState.value.showBottomSheetAddActivity.value = false }
+    uiState.value.onDismissAddActivity = { uiState.value.showBottomSheetAddActivity.value = false }
 
-    uiState.value.onDismissBLEScan = {
-        uiState.value.onStopScanBLE()
-        uiState.value.showBottomSheetBLE.value = false }
     uiState.value.onConfirmBLEScan = { device->
         uiState.value.onSelectDevice(device)
+        uiState.value.showBottomSheetBLE.value = false }
+    uiState.value.onDismissBLEScan = {
+        uiState.value.onStopScanBLE()
         uiState.value.showBottomSheetBLE.value = false }
 
     SettingScreenLayout( uiState = uiState.value)

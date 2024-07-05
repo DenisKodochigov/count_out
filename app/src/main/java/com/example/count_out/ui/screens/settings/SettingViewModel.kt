@@ -11,6 +11,7 @@ import com.example.count_out.entity.Activity
 import com.example.count_out.entity.ErrorApp
 import com.example.count_out.entity.bluetooth.BleDevSerializable
 import com.example.count_out.entity.bluetooth.ValInBleService
+import com.example.count_out.entity.bluetooth.ValOutBleService
 import com.example.count_out.permission.PermissionApp
 import com.example.count_out.service.bluetooth.BleManager
 import com.example.count_out.ui.view_components.lg
@@ -49,12 +50,13 @@ class SettingViewModel @Inject constructor(
     val settingScreenState: StateFlow<SettingScreenState> = _settingScreenState.asStateFlow()
 
     private val valInServiceBle = ValInBleService()
+    private var valOutServiceBle = ValOutBleService()
 
     init {
+        connectingToServiceBle()
         getSettings()
         getStoredBleDev()
         templateMy {dataRepository.getActivities()}
-        connectingToServiceBle()
     }
     private fun onAddActivity(activity: Activity){
         templateMy{
@@ -70,28 +72,47 @@ class SettingViewModel @Inject constructor(
     private fun onSetColorActivityForSettings(activityId: Long, color: Int){
         log(true, "onSetColorActivityForSettings: $this")
         templateMy{ dataRepository.onSetColorActivityForSettings(activityId, color) } }
-//    fun getWorkouts(){ templateMy { dataRepository.getWorkouts() } }
-//    fun changeNameWorkout(workout: Workout){ templateMy { dataRepository.changeNameWorkout(workout) } }
-//    fun deleteWorkout(id: Long){ templateMy { dataRepository.deleteWorkout(id) } }
-//    fun addWorkout(name: String){ templateMy { dataRepository.addWorkout(name) } }
 
     private fun getSettings(){
         templateSetting {dataRepository.getSettings()} }
+
     private fun updateSetting( setting: SettingDB ){
         templateSetting {dataRepository.updateSetting(setting)} }
 
     private fun connectingToServiceBle(){
-        lg("SettingViewModel connectingToServiceBle")
+        lg("SettingViewModel.connectingToServiceBle")
         viewModelScope.launch(Dispatchers.IO) {
             kotlin.runCatching { bleManager.connectingToServiceBle(valInServiceBle) }.fold(
-                onSuccess = { _settingScreenState.update { currentState ->
-                    currentState.copy(bluetoothDevices = mutableStateOf( it.listDevice.value)) }},
+                onSuccess = { receiveBluetoothDevices(it) },
                 onFailure = { errorApp.errorApi(it.message!!) }
             )
         }
+//        receiveBluetoothDevices()
+    }
+    private suspend fun receiveBluetoothDevices(valOutBleService: ValOutBleService){
+//        lg("SettingViewModel.receiveBluetoothDevices valOutBleService $valOutBleService")
+        valOutBleService.listDevice.collect{ listDevice->
+            _settingScreenState.update { currentState ->
+                currentState.copy( bluetoothDevices = mutableStateOf( listDevice)) }
+            if (listDevice.isNotEmpty()) {
+                lg("SettingViewModel.receiveBluetoothDevices valOut.listDevice: ${listDevice[0].address}")
+            }
+        }
+    }
+    private fun receiveBluetoothDevices(){
+        viewModelScope.launch(Dispatchers.IO) {
+            valOutServiceBle.listDevice.collect { listDevice ->
+                _settingScreenState.update { currentState ->
+                    currentState.copy(bluetoothDevices = mutableStateOf(listDevice))
+                }
+                if (listDevice.isNotEmpty()) {
+                    lg("SettingViewModel.receiveBluetoothDevices valOut.listDevice: ${listDevice[0].address}")
+                }
+            }
+        }
     }
     private fun onStartScanBLE(){
-        lg("SettingViewModel onStartScanBLE")
+        lg("SettingViewModel.onStartScanBLE")
         viewModelScope.launch(Dispatchers.IO) {
             kotlin.runCatching { bleManager.startScannerBLEDevices() }.fold(
                 onSuccess = { },
@@ -119,6 +140,7 @@ class SettingViewModel @Inject constructor(
             )
         }
     }
+
     private fun onClearCacheBLE(){
         viewModelScope.launch(Dispatchers.IO) {
             kotlin.runCatching { bleManager.onClearCacheBLE() }.fold(
@@ -128,11 +150,13 @@ class SettingViewModel @Inject constructor(
         }
 //        receiveBluetoothDevices()
     }
+
     private fun getStoredBleDev() {
-        lg("SettingViewModel getStoreBleDev")
+//        lg("SettingViewModel getStoreBleDev")
         viewModelScope.launch(Dispatchers.IO) {
             dataRepository.getBleDevStoreFlow().collect{
-                bleManager.startScannerBleDeviceByMac(it.mac)
+                if ( !it.mac.isNullOrEmpty()) bleManager.startScannerBleDeviceByMac(it.mac)
+                lg("SettingViewModel.getStoredBleDev mac: ${it.mac}")
             }
         }
 //        receiveBluetoothDeviceByMac()
@@ -145,6 +169,8 @@ class SettingViewModel @Inject constructor(
             dataRepository.storeSelectBleDev(BleDevSerializable( name = nameDevice, mac = device.address)) }
         bleManager.connectDevice()
     }
+
+
 //    private fun receiveBluetoothDevices(){
 //        viewModelScope.launch(Dispatchers.IO) {
 //            bleManager.getDevices().collect{
@@ -182,7 +208,7 @@ class SettingViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             kotlin.runCatching { funDataRepository() }.fold(
                 onSuccess = { _settingScreenState.update { currentState ->
-                    currentState.copy(activities = it ) } },
+                    currentState.copy( activities = it ) } },
                 onFailure = { errorApp.errorApi(it.message!!) }
             )
         }

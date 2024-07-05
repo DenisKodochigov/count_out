@@ -65,6 +65,7 @@ class BleService @Inject constructor(): Service() {
         lg("startScannerBLEDevices ")
         valOut.listDevice = bleScanner.scannerBleAll.devices
         bleScanner.startScannerBLEDevices()
+//        lgF(valOut.listDevice, "BleService.startScannerBLEDevices valOut.listDevice:")
     }
 
     private fun stopScannerBLEDevices(){

@@ -39,17 +39,20 @@ class BleManager @Inject constructor(val context: Context, private val serviceUt
 //    fun startBleService() = bleService.startBleService()
 
     fun connectingToServiceBle(valIn: ValInBleService): ValOutBleService {
-        return if (isBound ) {
+        if (isBound ) {
             bleService.valIn = valIn
-            bleService.valOut
-        } else { ValOutBleService()}
+//            lg("BleManager.connectingToServiceBle bleService.valOut ${bleService.valOut}")
+            return bleService.valOut
+        } else {
+            return ValOutBleService()
+        }
     }
     fun stopServiceBle(){ if (isBound ) bleService.stopBleService() }
     fun onClearCacheBLE() {}
     fun startScannerBLEDevices() = bleService.startScannerBLEDevices()
     fun stopScannerBLEDevices() {}
     fun startScannerBleDeviceByMac(mac: String) {
-        if (isBound ) bleService.startScannerBleDeviceByMac(mac)
+        if ( isBound ) bleService.startScannerBleDeviceByMac(mac)
     }
     fun stopScannerBLEDevicesByMac(){}
     fun connectDevice() { if (isBound )  bleService.connectDevice()}

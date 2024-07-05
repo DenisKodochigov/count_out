@@ -12,3 +12,8 @@ fun BluetoothDevice.cached(context: Context): Boolean{
         this.type == BluetoothDevice.DEVICE_TYPE_UNKNOWN
     } as Boolean
 }
+
+
+//fun <T> StateFlow<T>.logState() =
+//    stateIn(CoroutineScope(Dispatchers.Default), SharingStarted.Eagerly, lg("state flow ${value.toString()}"))
+//suspend fun <T> StateFlow<T>.logState1() = collectLatest { lg("state flow ${it.toString()}") }
