@@ -5,6 +5,7 @@ import com.example.count_out.entity.bluetooth.UUIDBle
 import com.example.count_out.navigation.TrainingsDestination
 import java.util.UUID
 
+
 object Const {
     const val DATA_STORE_FILE_NAME = "ble_device.json"
     val DEFAULT_SCREEN = TrainingsDestination
@@ -46,10 +47,12 @@ object Const {
         Manifest.permission.FOREGROUND_SERVICE_SPECIAL_USE,
         Manifest.permission.INTERNET,
         Manifest.permission.ACCESS_NETWORK_STATE,
-        Manifest.permission.VIBRATE,)
+        Manifest.permission.VIBRATE,
+    )
     val permissions2 = listOf(
         Manifest.permission.ACCESS_BACKGROUND_LOCATION,
-        Manifest.permission.VIBRATE,)
+        Manifest.permission.VIBRATE,
+    )
     val serviceUUIDs = listOf(
         UUID.fromString("00001809-0000-0000-0000-000000000000"),
         UUID.fromString("00001810-0000-1000-8000-000000000000"),
@@ -65,6 +68,13 @@ object Const {
         UUID.fromString("0000183E-0000-0000-0000-000000000000"),
         UUID.fromString("00001840-0000-0000-0000-000000000000"),
     )
+    const val ACTION_GATT_CONNECTED = "com.example.bluetooth.le.ACTION_GATT_CONNECTED"
+    const val ACTION_GATT_DISCONNECTED = "com.example.bluetooth.le.ACTION_GATT_DISCONNECTED"
+    const val ACTION_GATT_SERVICES_DISCOVERED = "com.example.bluetooth.le.ACTION_GATT_SERVICES_DISCOVERED"
+    private const val STATE_DISCONNECTED = 0
+    private const val STATE_CONNECTED = 2
+
+    val UUID_HEART_RATE_MEASUREMENT: UUID = UUID.fromString(SampleGattAttributes.HEART_RATE_MEASUREMENT)
     val uuidHeartRate = UUIDBle(
         serviceUuid = UUID.fromString("0000180D-0000-1000-8000-00805f9b34fb"),
         charUuid = UUID.fromString("0000180D-0000-1000-8000-00805f9b34fb")
@@ -73,4 +83,13 @@ object Const {
         serviceUuid = UUID.fromString("0000180f-0000-1000-8000-00805f9b34fb"),
         charUuid = UUID.fromString("00002a19-0000-1000-8000-00805f9b34fb")
     )
+
+    object SampleGattAttributes {
+        private val attributes: HashMap<String?, String?> = HashMap<String?, String?>()
+        var HEART_RATE_MEASUREMENT: String = "00002a37-0000-1000-8000-00805f9b34fb"
+        init {
+            attributes["0000180d-0000-1000-8000-00805f9b34fb"] = "Heart Rate Service"
+            attributes[HEART_RATE_MEASUREMENT] = "Heart Rate Measurement"
+        }
+    }
 }

@@ -9,8 +9,16 @@ import android.bluetooth.BluetoothGatt.GATT_FAILURE
 import android.bluetooth.BluetoothGatt.GATT_SUCCESS
 import android.bluetooth.BluetoothGattCallback
 import android.bluetooth.BluetoothGattCharacteristic
+import android.bluetooth.BluetoothGattDescriptor
+import android.bluetooth.BluetoothStatusCodes
 import android.content.Context
+import android.content.Intent
+import android.nfc.NfcAdapter.EXTRA_DATA
+import android.os.Build
 import com.example.count_out.entity.Const.DELAY_CANCELED_COROUTINE
+import com.example.count_out.entity.Const.UUID_HEART_RATE_MEASUREMENT
+import com.example.count_out.entity.bluetooth.BleConnection
+import com.example.count_out.entity.bluetooth.ListConnection
 import com.example.count_out.entity.bluetooth.UUIDBle
 import com.example.count_out.entity.bluetooth.ValInBleService
 import com.example.count_out.entity.hciStatusFromValue
@@ -21,7 +29,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import javax.inject.Inject
@@ -32,12 +39,65 @@ class BleConnecting @Inject constructor(
 ) {
     private lateinit var jobDiscoverService: Job
     private lateinit var jobReadBleCharacteristic: Job
-    private var gatt: BluetoothGatt? = null
-    private var deviceConnect: BluetoothDevice? = null
     private val bleQueue = BleQueue()
-    private val newStateLoc = MutableStateFlow(BluetoothGatt.STATE_DISCONNECTED)
-    private val connectionStatus = MutableStateFlow(0)
-    private val bluetoothGattCallback = object : BluetoothGattCallback() {
+    private val listConnection = ListConnection()
+    private lateinit var connection: BleConnection
+
+    fun connectDevice(valIn: ValInBleService) {
+        valIn.device.value.device?.let { device->
+            bleQueue.addCommandInQueue { commandConnectingGatt(device) }
+            bleQueue.addCommandInQueue { commandStartDiscoverService(device) }
+        }
+    }
+
+    @SuppressLint("MissingPermission")
+    fun commandConnectingGatt(device: BluetoothDevice): Boolean{
+        connection = listConnection.findConnection(device)
+        connection.gatt = permissionApp.checkBleScan {
+            device.connectGatt(context, true, bluetoothGattCallback, BluetoothDevice.TRANSPORT_LE)
+        } as BluetoothGatt
+        return connection.gatt != null
+    }
+
+    @SuppressLint("MissingPermission")
+    fun commandStartDiscoverService(device: BluetoothDevice): Boolean{
+        var result = false
+        if ( connection.newState.value == BluetoothGatt.STATE_CONNECTED) {
+            val bondState = permissionApp.checkBleScan { device.bondState }
+            if (bondState == BOND_NONE || bondState == BOND_BONDED) {
+                lg("Bond device SUCCESS")
+                result = true
+                connection.gatt?.let { startDiscoverService(it) }
+            } else {
+                lg("waiting for bonding to complete")
+            }
+        }
+        return result
+    }
+
+    @SuppressLint("MissingPermission")
+    fun setCharacteristicNotification(): Boolean {
+        lg("setCharacteristicNotification")
+        val enable =true
+        var result = false
+        connection.characteristic?.let{ charact->
+            connection.gatt?.setCharacteristicNotification(charact, enable)
+            val descriptor = charact.getDescriptor(connection.descriptorUuid)
+            descriptor.value =(
+                if (enable) BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE
+                else byteArrayOf(0x00, 0x00)
+            )
+            result = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                connection.gatt?.writeDescriptor(descriptor, byteArrayOf(0x00, 0x00)) == BluetoothStatusCodes.SUCCESS
+            } else {
+                connection.gatt?.writeDescriptor(descriptor) ?: false
+            }
+        }
+
+        return result //descriptor write operation successfully started?
+    }
+
+    private val bluetoothGattCallback = object: BluetoothGattCallback() {
         @SuppressLint("MissingPermission")
         override fun onConnectionStateChange(gatt: BluetoothGatt?, status: Int, newState: Int)
         {
@@ -64,12 +124,17 @@ class BleConnecting @Inject constructor(
     }
 
     @SuppressLint("MissingPermission")
-    fun bluetoothGattCallbackConnectionStateChange(gatt: BluetoothGatt?, status: Int, newState: Int,
+    fun bluetoothGattCallbackConnectionStateChange(
+        gatt: BluetoothGatt?, status: Int, newState: Int,
     ) {
-        connectionStatus.value = status
-        newStateLoc.value = newState
+        connection.connectStatus.value = status
+        connection.newState.value = newState
         if (status == GATT_SUCCESS) {
             when (newState) {
+                BluetoothGatt.STATE_CONNECTED -> {
+                    lg("Connection state Bluetooth Gatt STATE_CONNECTED")
+//                    broadcastUpdate(ACTION_GATT_CONNECTED)
+                }
                 BluetoothGatt.STATE_DISCONNECTED -> {
                     lg("Connection state Bluetooth Gatt STATE_DISCONNECTED")
                     bluetoothGattCallbackGattClose(gatt)
@@ -85,13 +150,14 @@ class BleConnecting @Inject constructor(
     @SuppressLint("MissingPermission")
     fun bluetoothGattCallbackServicesDiscovered(gatt: BluetoothGatt?, status: Int)
     {
-        gatt?.let { gattV ->
+        connection.connectStatus.value = status
+        gatt?.let { gattL ->
             if (status == GATT_SUCCESS) {
-                val services = gattV.services
+                val services = gattL.services
                 lg("Discovered ${services.size} services")
             } else {
                 lg("Service discovery failed")
-                if (status == GATT_FAILURE) permissionApp.checkBleScan { gattV.disconnect() }
+                if (status == GATT_FAILURE) permissionApp.checkBleScan { gattL.disconnect() }
             }
         }
     }
@@ -101,6 +167,7 @@ class BleConnecting @Inject constructor(
         value: ByteArray,
         characteristic: BluetoothGattCharacteristic,
     ) {
+        connection.connectStatus.value = status
         if (status != GATT_SUCCESS) {
             lg("ERROR: Read failed for characteristic: ${characteristic.uuid}, status $status")
             bleQueue.completedCommand();
@@ -112,53 +179,28 @@ class BleConnecting @Inject constructor(
         bleQueue.completedCommand();
     }
 
-    @SuppressLint("MissingPermission")
-    fun boundDevice(device: BluetoothDevice){
-         if ( newStateLoc.value == BluetoothGatt.STATE_CONNECTED) {
-            val bondState = permissionApp.checkBleScan { device.bondState }
-            if (bondState == BOND_NONE || bondState == BOND_BONDED) {
-                lg("Bond device SUCCESS")
-                gatt?.let { startDiscoverService(it) }
-            } else {
-                lg("waiting for bonding to complete")
-            }
-        }
-    }
-    @SuppressLint("MissingPermission")
-    private fun startDiscoverService(gatt: BluetoothGatt,
-    ) {
-        jobDiscoverService = CoroutineScope(Dispatchers.Default).launch {
-            permissionApp.checkBleScan {
-                if (gatt.discoverServices()) {
-                    gatt.printCharacteristicsTable()
-                } else {
-                    lg("discoverServices failed to start")
-                }
-            }
-        }
-    }
 
     @SuppressLint("MissingPermission")
-    fun connectDevice(valIn: ValInBleService) {
-        valIn.device.value.device?.let { deviceIn->
-            deviceConnect = deviceIn
-            gatt = permissionApp.checkBleScan {
-                deviceIn.connectGatt(context, true, bluetoothGattCallback, BluetoothDevice.TRANSPORT_LE)
-            } as BluetoothGatt
+    private fun startDiscoverService(gatt: BluetoothGatt) {
+        jobDiscoverService = CoroutineScope(Dispatchers.Default).launch {
+            permissionApp.checkBleScan {
+                if (gatt.discoverServices()) { gatt.printCharacteristicsTable() }
+                else { lg("discoverServices failed to start") }
+            }
         }
     }
 
     @SuppressLint("MissingPermission")
     fun disconnectDevice() {
-        gatt?.let { permissionApp.checkBleScan { it.disconnect() } }
+        connection.gatt?.let { permissionApp.checkBleScan { it.disconnect() } }
     }
 
     fun clearServicesCache(): Boolean {
         var result = false
-        gatt?.let { gattV ->
+        connection.gatt?.let { gattL ->
             try {
-                val refreshMethod = gattV.javaClass.getMethod("refresh")
-                result = refreshMethod.invoke(gatt) as Boolean
+                val refreshMethod = gattL.javaClass.getMethod("refresh")
+                result = refreshMethod.invoke(connection.gatt) as Boolean
             } catch (e: Exception) {
                 lg("ERROR: Could not invoke refresh method: $e")
             }
@@ -176,6 +218,7 @@ class BleConnecting @Inject constructor(
         jobDiscoverService.cancel()
         while(jobReadBleCharacteristic.isCancelled){ delay(DELAY_CANCELED_COROUTINE)}
     }
+
     private suspend fun onCancelReadBleCharacteristic() {
         jobReadBleCharacteristic.cancel()
         while(jobReadBleCharacteristic.isCancelled) { delay(DELAY_CANCELED_COROUTINE)}
@@ -188,7 +231,7 @@ class BleConnecting @Inject constructor(
 
     fun readParameterForBle(uuidBle: UUIDBle) {
         jobReadBleCharacteristic = CoroutineScope(Dispatchers.Default).launch {
-            bleQueue.addCommandInQueue { readCharacteristicFun(permissionApp, gatt, uuidBle) }
+            bleQueue.addCommandInQueue { readCharacteristicFun(permissionApp, connection.gatt, uuidBle) }
         }.also {
             it.invokeOnCompletion { error ->
                 when ( error ){
@@ -227,7 +270,43 @@ class BleConnecting @Inject constructor(
             onCancelReadBleCharacteristic()
             disconnectDevice()
             onCancelDiscoverService()
-            gattCansel( gatt )
+            gattCansel( connection.gatt )
         }
+    }
+
+    private fun broadcastUpdate(action: String, characteristic: BluetoothGattCharacteristic) {
+        val intent = Intent(action)
+
+        // This is special handling for the Heart Rate Measurement profile. Data
+        // parsing is carried out as per profile specifications.
+        when (characteristic.uuid) {
+            UUID_HEART_RATE_MEASUREMENT -> {
+                val flag = characteristic.properties
+                val format = when (flag and 0x01) {
+                    0x01 -> {
+                        lg( "Heart rate format UINT16.")
+                        BluetoothGattCharacteristic.FORMAT_UINT16
+                    }
+                    else -> {
+                        lg(  "Heart rate format UINT8.")
+                        BluetoothGattCharacteristic.FORMAT_UINT8
+                    }
+                }
+                val heartRate = characteristic.getIntValue(format, 1)
+                lg( String.format("Received heart rate: %d", heartRate))
+                intent.putExtra(EXTRA_DATA, (heartRate).toString())
+            }
+            else -> {
+                // For all other profiles, writes the data formatted in HEX.
+                val data: ByteArray? = characteristic.value
+                if (data?.isNotEmpty() == true) {
+                    val hexString: String = data.joinToString(separator = " ") {
+                        String.format("%02X", it)
+                    }
+                    intent.putExtra(EXTRA_DATA, "$data\n$hexString")
+                }
+            }
+        }
+//        sendBroadcast(intent)
     }
 }

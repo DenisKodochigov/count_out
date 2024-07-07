@@ -1,16 +1,16 @@
 package com.example.count_out.service.bluetooth
 
-import android.bluetooth.BluetoothDevice
 import android.bluetooth.BluetoothGatt
 import android.bluetooth.BluetoothGattCharacteristic
 import android.bluetooth.le.ScanCallback
 import android.bluetooth.le.ScanResult
 import android.bluetooth.le.ScanSettings
 import android.util.Log
-import com.example.count_out.permission.PermissionApp
+import com.example.count_out.entity.StateScanner
+import com.example.count_out.entity.bluetooth.ValOutBleService
 import com.example.count_out.ui.view_components.lg
 import kotlinx.coroutines.flow.MutableStateFlow
-
+import kotlinx.coroutines.flow.update
 
 fun scanSettings(reportDelay: Long): ScanSettings {
     return ScanSettings.Builder()
@@ -22,42 +22,34 @@ fun scanSettings(reportDelay: Long): ScanSettings {
         .build()
 }
 
-fun objectScanCallback(
-    permissionApp: PermissionApp,
-    devices: MutableStateFlow<List<BluetoothDevice>>): ScanCallback = object: ScanCallback()
+fun objectScanCallback( valOut: ValOutBleService
+): ScanCallback = object: ScanCallback()
 {
-
     override fun onScanResult(callbackType: Int, result: ScanResult?) {
         super.onScanResult(callbackType, result)
         if (result != null) {
-//            lg("objectScanCallback onScanResult ${result.device}")
-            devices.value = addDevice(result, permissionApp, devices) }
+            valOut.listDevice.value.find { it.address == result.device.address }
+                ?: valOut.listDevice.addApp(result.device)
+//            lg("objectScanCallback devices.value ${devices.value}")
+        }
+        valOut.stateScanner.value = StateScanner.RUNNING
     }
     override fun onBatchScanResults(results: MutableList<ScanResult>?) {
         super.onBatchScanResults(results)
         if (!results.isNullOrEmpty()) {
             results.forEach{ result->
-//                lg("objectScanCallback onBatchScanResults ${result.device}")
-                devices.value = addDevice(result, permissionApp, devices)
+                valOut.listDevice.value.find { it.address == result.device.address }
+                    ?: valOut.listDevice.addApp(result.device)
             }
         }
+        valOut.stateScanner.value = StateScanner.RUNNING
     }
     override fun onScanFailed(errorCode: Int) {
         lg("Error scan BLE device. $errorCode")
+        valOut.stateScanner.value = StateScanner.END
     }
 }
 
-fun addDevice(
-    result: ScanResult,
-    permissionApp: PermissionApp,
-    devices: MutableStateFlow<List<BluetoothDevice>>): MutableList<BluetoothDevice>
-{
-    val listDevice: MutableList<BluetoothDevice> = devices.value.toMutableList()
-    permissionApp.checkBleScan {
-        listDevice.find { it.address == result.device.address } ?: listDevice.add(result.device)
-    }
-    return listDevice
-}
 fun BluetoothGatt.printCharacteristicsTable() {
     if (services.isEmpty()) {
         Log.i("printGattTable", "No service and characteristic available, call discoverServices() first?")
@@ -83,3 +75,7 @@ fun BluetoothGattCharacteristic.isWritable(): Boolean =
 
 fun BluetoothGattCharacteristic.isWritableWithoutResponse(): Boolean =
     containsProperty(BluetoothGattCharacteristic.PROPERTY_WRITE_NO_RESPONSE)
+
+fun <T>MutableStateFlow<List<T>>.addApp(device: T) =
+    update { this.value.toMutableList().apply { this.add(device) } }
+

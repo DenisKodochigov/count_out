@@ -4,7 +4,10 @@ import android.util.Log
 import android.widget.Toast
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 
 fun log(showLog: Boolean, text: String){
@@ -21,7 +24,6 @@ fun ToastApp (text: String){
 fun <T>lgF(flow: Flow<T>){
     runBlocking { flow.collect{ lg("BleService.startScannerBLEDevices valOut.listDevice: $it") } } }
 
-fun <T>lgF(flow: Flow<List<T>>, text: String){
-    runBlocking {
-        flow.collect{
-            if ( !it.isNullOrEmpty()) lg("$text ${it[0]}") } } }
+fun <T>lgF(text: String, flow: Flow<List<T>>){
+    CoroutineScope(Dispatchers.Default).launch {
+        flow.collect{ if ( !it.isNullOrEmpty()) lg("$text $it") } } }

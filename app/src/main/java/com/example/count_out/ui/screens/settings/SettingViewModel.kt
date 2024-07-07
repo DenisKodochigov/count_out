@@ -50,7 +50,7 @@ class SettingViewModel @Inject constructor(
     val settingScreenState: StateFlow<SettingScreenState> = _settingScreenState.asStateFlow()
 
     private val valInServiceBle = ValInBleService()
-    private var valOutServiceBle = ValOutBleService()
+    private var doConnecting = false
 
     init {
         connectingToServiceBle()
@@ -81,47 +81,23 @@ class SettingViewModel @Inject constructor(
 
     private fun connectingToServiceBle(){
         lg("SettingViewModel.connectingToServiceBle")
+        doConnecting = false
         viewModelScope.launch(Dispatchers.IO) {
             kotlin.runCatching { bleManager.connectingToServiceBle(valInServiceBle) }.fold(
                 onSuccess = { receiveValOutBleService(it) },
                 onFailure = { errorApp.errorApi(it.message!!) }
             )
         }
-//        receiveBluetoothDevices()
-    }
-    private suspend fun receiveValOutBleService(valOutBleService: ValOutBleService){
-//        receiveBluetoothDevices(valOutBleService)
-        receiveListTest(valOutBleService)
     }
 
-    private suspend fun receiveBluetoothDevices(valOutBleService: ValOutBleService){
-//        lg("SettingViewModel.receiveBluetoothDevices valOutBleService $valOutBleService")
+    private suspend fun receiveValOutBleService(valOutBleService: ValOutBleService){
         valOutBleService.listDevice.collect{ listDevice->
+//            lg("SettingViewModel.receiveBluetoothDevices valOut.listDevice: $listDevice")
             _settingScreenState.update { currentState ->
                 currentState.copy( bluetoothDevices = mutableStateOf( listDevice)) }
-            if (listDevice.isNotEmpty()) {
-                lg("SettingViewModel.receiveBluetoothDevices valOut.listDevice: ${listDevice[0].address}")
-            }
         }
     }
 
-    private suspend fun receiveListTest(valOutBleService: ValOutBleService){
-        valOutBleService.list.collect{ list->
-            lg("SettingViewModel.receiveListTest valOut.list: ${list.size}")
-        }
-    }
-    private fun receiveBluetoothDevices(){
-        viewModelScope.launch(Dispatchers.IO) {
-            valOutServiceBle.listDevice.collect { listDevice ->
-                _settingScreenState.update { currentState ->
-                    currentState.copy(bluetoothDevices = mutableStateOf(listDevice))
-                }
-                if (listDevice.isNotEmpty()) {
-                    lg("SettingViewModel.receiveBluetoothDevices valOut.listDevice: ${listDevice[0].address}")
-                }
-            }
-        }
-    }
     private fun onStartScanBLE(){
         lg("SettingViewModel.onStartScanBLE")
         viewModelScope.launch(Dispatchers.IO) {
@@ -130,19 +106,8 @@ class SettingViewModel @Inject constructor(
                 onFailure = { errorApp.errorApi(it.message!!) }
             )
         }
-//        receiveBluetoothDevices()
     }
-//    private fun onStartScanBLE(){
-//        lg("SettingViewModel onStartScanBLE")
-//        viewModelScope.launch(Dispatchers.IO) {
-//            kotlin.runCatching { bleManager.startScannerBLEDevices() }.fold(
-//                onSuccess = { _settingScreenState.update { currentState ->
-//                    currentState.copy(bluetoothDevices = mutableStateOf(it)) }},
-//                onFailure = { errorApp.errorApi(it.message!!) }
-//            )
-//        }
-////        receiveBluetoothDevices()
-//    }
+
     private fun onStopScanBLE(){
         viewModelScope.launch(Dispatchers.IO) {
             kotlin.runCatching { bleManager.stopScannerBLEDevices() }.fold(
@@ -159,19 +124,19 @@ class SettingViewModel @Inject constructor(
                 onFailure = { errorApp.errorApi(it.message!!) }
             )
         }
-//        receiveBluetoothDevices()
     }
 
     private fun getStoredBleDev() {
 //        lg("SettingViewModel getStoreBleDev")
         viewModelScope.launch(Dispatchers.IO) {
+            doConnecting = true
             dataRepository.getBleDevStoreFlow().collect{
                 if ( !it.mac.isNullOrEmpty()) bleManager.startScannerBleDeviceByMac(it.mac)
                 lg("SettingViewModel.getStoredBleDev mac: ${it.mac}")
             }
         }
-//        receiveBluetoothDeviceByMac()
     }
+
     @SuppressLint("MissingPermission")
     private fun selectDevice(device: BluetoothDevice) {
         val nameDevice= permissionApp.checkBleScan { device.name } as String
@@ -181,7 +146,50 @@ class SettingViewModel @Inject constructor(
         bleManager.connectDevice()
     }
 
+    private fun templateSetting( funDataRepository:() -> List<SettingDB> ){
+        viewModelScope.launch(Dispatchers.IO) {
+            kotlin.runCatching { funDataRepository() }.fold(
+                onSuccess = { _settingScreenState.update { currentState ->
+                    currentState.copy(settings = mutableStateOf(it) ) } },
+                onFailure = { errorApp.errorApi(it.message!!) }
+            )
+        }
+    }
 
+    private fun templateMy( funDataRepository:() -> List<Activity> ){
+        viewModelScope.launch(Dispatchers.IO) {
+            kotlin.runCatching { funDataRepository() }.fold(
+                onSuccess = { _settingScreenState.update { currentState ->
+                    currentState.copy( activities = it ) } },
+                onFailure = { errorApp.errorApi(it.message!!) }
+            )
+        }
+    }
+
+    override fun onCleared(){
+        lg("SettingViewModel cleared")
+        lg("##########################################################################")
+        bleManager.stopScannerBLEDevices()
+        bleManager.stopServiceBle()
+    }
+    //
+//    private suspend fun receiveListTest(valOutBleService: ValOutBleService){
+//        valOutBleService.list.collect{ list->
+//            lg("SettingViewModel.receiveListTest valOut.list: $list")
+//        }
+//    }
+//    private fun receiveBluetoothDevices(){
+//        viewModelScope.launch(Dispatchers.IO) {
+//            valOutServiceBle.listDevice.collect { listDevice ->
+//                _settingScreenState.update { currentState ->
+//                    currentState.copy(bluetoothDevices = mutableStateOf(listDevice))
+//                }
+//                if (listDevice.isNotEmpty()) {
+//                    lg("SettingViewModel.receiveBluetoothDevices valOut.listDevice: ${listDevice[0].address}")
+//                }
+//            }
+//        }
+//    }
 //    private fun receiveBluetoothDevices(){
 //        viewModelScope.launch(Dispatchers.IO) {
 //            bleManager.getDevices().collect{
@@ -206,26 +214,15 @@ class SettingViewModel @Inject constructor(
 //            }
 //        }
 //    }
-    private fun templateSetting( funDataRepository:() -> List<SettingDB> ){
-        viewModelScope.launch(Dispatchers.IO) {
-            kotlin.runCatching { funDataRepository() }.fold(
-                onSuccess = { _settingScreenState.update { currentState ->
-                    currentState.copy(settings = mutableStateOf(it) ) } },
-                onFailure = { errorApp.errorApi(it.message!!) }
-            )
-        }
-    }
-    private fun templateMy( funDataRepository:() -> List<Activity> ){
-        viewModelScope.launch(Dispatchers.IO) {
-            kotlin.runCatching { funDataRepository() }.fold(
-                onSuccess = { _settingScreenState.update { currentState ->
-                    currentState.copy( activities = it ) } },
-                onFailure = { errorApp.errorApi(it.message!!) }
-            )
-        }
-    }
-    override fun onCleared(){
-        lg("SettingViewModel cleared")
-        bleManager.stopScannerBLEDevices()
-    }
+//    private fun onStartScanBLE(){
+//        lg("SettingViewModel onStartScanBLE")
+//        viewModelScope.launch(Dispatchers.IO) {
+//            kotlin.runCatching { bleManager.startScannerBLEDevices() }.fold(
+//                onSuccess = { _settingScreenState.update { currentState ->
+//                    currentState.copy(bluetoothDevices = mutableStateOf(it)) }},
+//                onFailure = { errorApp.errorApi(it.message!!) }
+//            )
+//        }
+////        receiveBluetoothDevices()
+//    }
 }

@@ -2,9 +2,19 @@ package com.example.count_out.permission
 
 import android.Manifest
 import android.Manifest.permission.BLUETOOTH_SCAN
+import android.app.AlertDialog
+import android.content.ActivityNotFoundException
 import android.content.Context
+import android.content.Intent
+import android.net.Uri
 import android.os.Build
+import android.provider.Settings
+import android.widget.Toast
 import androidx.compose.runtime.Composable
+import androidx.core.content.ContextCompat.startActivity
+import com.example.count_out.BuildConfig
+import com.example.count_out.MainActivity
+import com.example.count_out.R
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberPermissionState
@@ -51,6 +61,36 @@ fun checkBleScan(): Boolean = checkPermission(BLUETOOTH_SCAN, 31,)
 @Composable fun checkPermission( permission: String, requiredBuild: Int): Boolean{
     return Build.VERSION.SDK_INT < requiredBuild ||
             rememberPermissionState(permission = permission).status.isGranted
+}
+
+private fun promptManualPermissionGranting(activity: MainActivity) {
+    val context = activity.applicationContext
+    AlertDialog.Builder(context)
+        .setTitle(R.string.please_grant_relevant_permissions)
+        .setMessage(R.string.app_settings_rationale)
+        .setPositiveButton(R.string.app_settings) { _, _ ->
+            try {
+                startActivity(context,
+                    Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
+                        data = Uri.parse("package:${ BuildConfig.APPLICATION_ID}")
+                        addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                    },
+                    null
+                )
+            } catch (e: ActivityNotFoundException) {
+                if (!activity.isFinishing) {
+                    Toast.makeText(
+                        activity,
+                        R.string.cannot_launch_app_settings,
+                        Toast.LENGTH_LONG
+                    ).show()
+                }
+            }
+            activity.finish()
+        }
+        .setNegativeButton(R.string.quit) { _, _ -> activity.finishAndRemoveTask() }
+        .setCancelable(false)
+        .show()
 }
 /**
  * Determine whether the current [Context] has been granted the relevant [Manifest.permission].

@@ -19,24 +19,9 @@ enum class SizeElement{
     OFFSET_FAB,
     HEIGHT_FAB_BOX
 }
-enum class Rainfall{
-    SMALL,
-    MEDIUM,
-    LARGE
-}
-enum class UPDOWN {
-    UP,
-    DOWN,
-    START,
-    END
-}
-enum class TypeKeyboard{
-    DIGIT,
-    TEXT,
-    PASS,
-    OTHER,
-    NONE
-}
+enum class Rainfall{ SMALL, MEDIUM, LARGE }
+enum class UPDOWN { UP, DOWN, START, END }
+enum class TypeKeyboard{ DIGIT, TEXT, PASS, OTHER, NONE }
 enum class Zone(val id: Int, var maxPulse: Int){
     EXTRASLOW( id = 1, maxPulse = 100),
     SLOW(id = 2, maxPulse = 120),
@@ -45,32 +30,31 @@ enum class Zone(val id: Int, var maxPulse: Int){
     MAX(id = 5, maxPulse = 180)
 }
 
-enum class TimerState {
-    COUNTING,
-    STOPPED,
-    END,
-}
-enum class ScannerState {
-    RUNNING,
-    END,
-}
+enum class TimerState { COUNTING, STOPPED, END, }
+enum class StateScanner { RUNNING, END, }
+enum class StateService { DECLARED, CREATED, STARTED, PAUSED, STOPPED, }
+enum class StateRunning { Created, Started, Paused, Stopped }
 enum class RoundType(val strId: Int, var amount: Int, var duration: Int){
     UP (R.string.work_up,0,0),
     OUT (R.string.work_out,0,0),
     DOWN (R.string.work_down,0,0);
 }
-enum class GoalSet(val id: Int){
-    DISTANCE(1),
-    DURATION(2),
-    COUNT(3),
-    COUNT_GROUP(4),
-}
-enum class StateRunning {
-    Created, Started, Paused, Stopped
-}
+enum class GoalSet(val id: Int){ DISTANCE(1), DURATION(2), COUNT(3), COUNT_GROUP(4), }
 /**This class describes the HCI error codes as defined in the Bluetooth Standard, Volume 1, Part F,
  * 1.3 HCI Error Code, pages 364-377.
  * See https://www.bluetooth.org/docman/handlers/downloaddoc.ashx?doc_id=478726,*/
+enum class CharacteristicProperty {
+    Readable, Writable, WritableWithoutResponse, Notifiable, Indicatable;
+
+    val action
+        get() = when (this) {
+            Readable -> "Read"
+            Writable -> "Write"
+            WritableWithoutResponse -> "Write Without Response"
+            Notifiable -> "Toggle Notifications"
+            Indicatable -> "Toggle Indications"
+        }
+}
 enum class HciStatus(val param: Int) {
     UNSUPPORTED_LMP_OR_LL_PARAMETER_VALUE(0x20),
     /** a Controller will not allow a role change at this time.*/

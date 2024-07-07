@@ -1,17 +1,17 @@
 package com.example.count_out.entity.bluetooth
 
+import android.bluetooth.BluetoothDevice
+
 data class ListConnection(
     val listConnection: MutableList<BleConnection> = mutableListOf()
 ){
-    fun findConnection(address: String): BleConnection?
+    fun findConnection(device: BluetoothDevice): BleConnection
     {
-        return listConnection.find{ it.address == address}
-    }
-
-    fun add(bleConnection: BleConnection)
-    {
-        if (findConnection(bleConnection.address) == null) {
-            listConnection.add(bleConnection)
+        var connection: BleConnection? = listConnection.find{ it.address == device.address}
+        if (connection == null){
+            connection = BleConnection(device = device)
+            listConnection.add(connection)
         }
+        return connection
     }
 }
