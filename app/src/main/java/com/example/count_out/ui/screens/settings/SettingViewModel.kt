@@ -131,7 +131,7 @@ class SettingViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             doConnecting = true
             dataRepository.getBleDevStoreFlow().collect{
-                if ( !it.mac.isNullOrEmpty()) bleManager.startScannerBleDeviceByMac(it.mac)
+                if (it.mac.isNotEmpty()) bleManager.startScannerBleDeviceByMac(it.mac)
                 lg("SettingViewModel.getStoredBleDev mac: ${it.mac}")
             }
         }

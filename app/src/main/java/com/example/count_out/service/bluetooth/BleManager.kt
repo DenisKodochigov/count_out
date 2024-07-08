@@ -8,6 +8,7 @@ import com.example.count_out.entity.StateService
 import com.example.count_out.entity.bluetooth.ValInBleService
 import com.example.count_out.entity.bluetooth.ValOutBleService
 import com.example.count_out.service.ServiceUtils
+import com.example.count_out.ui.view_components.lg
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -55,6 +56,7 @@ class BleManager @Inject constructor(val context: Context, private val serviceUt
     fun stopScannerBLEDevices() {}
 
     fun startScannerBleDeviceByMac(mac: String) {
+        lg("BleManager.startScannerBleDeviceByMac isBound: $isBound")
         if ( isBound ) bleService.startScannerBleDeviceByMac(mac)
     }
 

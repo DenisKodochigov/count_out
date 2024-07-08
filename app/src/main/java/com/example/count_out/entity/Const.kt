@@ -35,23 +35,30 @@ object Const {
     const val STOP_REQUEST_CODE = 102
     const val PERMISSION_REQUEST_CODE = 1
     val permissions1 = listOf(
+        Manifest.permission.ACCESS_COARSE_LOCATION, ///
+        Manifest.permission.ACCESS_FINE_LOCATION,   ///
+        Manifest.permission.INTERNET,
+        Manifest.permission.ACCESS_NETWORK_STATE,
         Manifest.permission.FOREGROUND_SERVICE,
+        Manifest.permission.FOREGROUND_SERVICE_DATA_SYNC,
+        Manifest.permission.FOREGROUND_SERVICE_CONNECTED_DEVICE,
+        Manifest.permission.POST_NOTIFICATIONS,
+        Manifest.permission.ACTIVITY_RECOGNITION,
+        Manifest.permission.VIBRATE,
+        Manifest.permission.CHANGE_NETWORK_STATE,
+        Manifest.permission.CHANGE_WIFI_STATE,
+        Manifest.permission.CHANGE_WIFI_MULTICAST_STATE,
+        Manifest.permission.NFC,
+        Manifest.permission.TRANSMIT_IR,
+        Manifest.permission.UWB_RANGING,
         Manifest.permission.BLUETOOTH,
         Manifest.permission.BLUETOOTH_SCAN,
         Manifest.permission.BLUETOOTH_ADMIN,
         Manifest.permission.BLUETOOTH_CONNECT,
-        Manifest.permission.ACCESS_COARSE_LOCATION, ///
-        Manifest.permission.ACCESS_FINE_LOCATION,   ///
-        Manifest.permission.ACTIVITY_RECOGNITION,
-        Manifest.permission.POST_NOTIFICATIONS,
-        Manifest.permission.FOREGROUND_SERVICE_SPECIAL_USE,
-        Manifest.permission.INTERNET,
-        Manifest.permission.ACCESS_NETWORK_STATE,
-        Manifest.permission.VIBRATE,
+        Manifest.permission.BLUETOOTH_ADVERTISE,
     )
     val permissions2 = listOf(
         Manifest.permission.ACCESS_BACKGROUND_LOCATION,
-        Manifest.permission.VIBRATE,
     )
     val serviceUUIDs = listOf(
         UUID.fromString("00001809-0000-0000-0000-000000000000"),

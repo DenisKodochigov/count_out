@@ -3,7 +3,7 @@ package com.example.count_out.service.workout
 import android.annotation.SuppressLint
 import android.app.Service
 import android.content.Intent
-import android.content.pm.ServiceInfo.FOREGROUND_SERVICE_TYPE_SPECIAL_USE
+import android.content.pm.ServiceInfo.FOREGROUND_SERVICE_TYPE_DATA_SYNC
 import android.os.Binder
 import android.os.Build
 import android.os.IBinder
@@ -93,7 +93,7 @@ class WorkoutService @Inject constructor(): Service(), WorkOutAPI
     private fun startForegroundService() {
         if (!notificationHelper.channelExist()) notificationHelper.createChannel()
         if (Build.VERSION.SDK_INT >= 31)
-            startForeground(NOTIFICATION_ID, notificationHelper.build(), FOREGROUND_SERVICE_TYPE_SPECIAL_USE)
+            startForeground(NOTIFICATION_ID, notificationHelper.build(), FOREGROUND_SERVICE_TYPE_DATA_SYNC)
         else startForeground(NOTIFICATION_ID, notificationHelper.build())
     }
 }

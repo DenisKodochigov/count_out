@@ -14,14 +14,15 @@ import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberMultiplePermissionsState
 import com.google.accompanist.permissions.rememberPermissionState
+import com.google.accompanist.permissions.shouldShowRationale
 
 class PermissionApp (val context: Context) {
     @Composable
     fun RequestPermissions(){
         RequestPermission(Const.permissions1)
         Const.permissions1.forEach{ CheckPermission(it) }
-        RequestPermission(Const.permissions2)
-        Const.permissions2.forEach{ CheckPermission(it) }
+//        RequestPermission(Const.permissions2)
+//        Const.permissions2.forEach{ CheckPermission(it) }
     }
     @OptIn(ExperimentalPermissionsApi::class)
     @SuppressLint("MissingPermission")
@@ -36,9 +37,9 @@ class PermissionApp (val context: Context) {
     @OptIn(ExperimentalPermissionsApi::class)
     @Composable fun CheckPermission(permission: String){
     val permissionState = rememberPermissionState(permission = permission)
-//    lg("permission ${permission.padStart(50, ' ')}; " +
-//            "granted: ${permissionState.status.isGranted.toString().padStart(5, ' ')}; " +
-//            "rationale: ${permissionState.status.shouldShowRationale}")
+    lg("permission ${permission.padStart(50, ' ')}; " +
+            "granted: ${permissionState.status.isGranted.toString().padStart(5, ' ')}; " +
+            "rationale: ${permissionState.status.shouldShowRationale}")
 }
     @OptIn(ExperimentalPermissionsApi::class)
     @Composable

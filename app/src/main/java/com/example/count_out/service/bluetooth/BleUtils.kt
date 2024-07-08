@@ -30,7 +30,7 @@ fun objectScanCallback( valOut: ValOutBleService
         if (result != null) {
             valOut.listDevice.value.find { it.address == result.device.address }
                 ?: valOut.listDevice.addApp(result.device)
-//            lg("objectScanCallback devices.value ${devices.value}")
+            lg("objectScanCallback devices.value ${result.device.address}")
         }
         valOut.stateScanner.value = StateScanner.RUNNING
     }

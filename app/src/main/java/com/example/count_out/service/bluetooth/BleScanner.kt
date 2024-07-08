@@ -33,11 +33,9 @@ class BleScanner @Inject constructor(
     @SuppressLint("MissingPermission")
     fun startScannerBLEDevices(valOut: ValOutBleService) {
         CoroutineScope(Dispatchers.Default).launch {
-            if (valOut.stateScanner.value == StateScanner.END) {
-                valOut.stateScanner.value = StateScanner.RUNNING
-                timer.changeState(TimerState.COUNTING, timeScanning)
-                scannerBleAll.startScannerBLEDevices(valOut)
-            }
+            lg("valOut.stateScanner.value ${valOut.stateScanner.value}")
+            timer.changeState(TimerState.COUNTING, timeScanning)
+            scannerBleAll.startScannerBLEDevices(valOut)
             timer.endCounting {
                 valOut.stateScanner.value = StateScanner.END
                 scannerBleAll.stopScannerBLEDevices()
@@ -47,39 +45,27 @@ class BleScanner @Inject constructor(
     }
 
     @SuppressLint("MissingPermission")
-    fun stopScannerBLEDevices(valOut: ValOutBleService) {
-        if (valOut.stateScanner.value == StateScanner.RUNNING) {
-            lg("Stop scanner ByMac")
-            valOut.stateScanner.value = StateScanner.END
-            scannerBleAll.stopScannerBLEDevices()
-        }
+    fun stopScannerBLEDevices() {
+        scannerBleAll.stopScannerBLEDevices()
     }
 
     /** Scan device by MAC address*/
     @SuppressLint("MissingPermission")
     fun startScannerBLEDevicesByMac(mac: String, valOut: ValOutBleService) {
-        if (mac != "") {
-            CoroutineScope(Dispatchers.Default).launch {
-                if (valOut.stateScanner.value == StateScanner.END) {
-                    valOut.stateScanner.value = StateScanner.RUNNING
-                    timer.changeState(TimerState.COUNTING, timeScanning)
-                    scannerBleByMac.startScannerBLEDevices(mac, valOut)
-                }
-                timer.endCounting {
-                    valOut.stateScanner.value = StateScanner.END
-                    scannerBleByMac.stopScannerBLEDevices()
-                    this.cancel()
-                }
+        CoroutineScope(Dispatchers.Default).launch {
+            timer.changeState(TimerState.COUNTING, timeScanning)
+            scannerBleByMac.startScannerBLEDevices(mac, valOut)
+            timer.endCounting {
+                valOut.stateScanner.value = StateScanner.END
+                scannerBleByMac.stopScannerBLEDevices()
+                this.cancel()
             }
         }
     }
 
     @SuppressLint("MissingPermission")
     fun stopScannerBLEDevicesByMac(valOut: ValOutBleService) {
-        if (valOut.stateScanner.value == StateScanner.RUNNING) {
-            lg("Stop scanner ByMac")
-            valOut.stateScanner.value = StateScanner.END
-            scannerBleByMac.stopScannerBLEDevices()
-        }
+        lg("Stop scanner ByMac")
+        scannerBleByMac.stopScannerBLEDevices()
     }
 }

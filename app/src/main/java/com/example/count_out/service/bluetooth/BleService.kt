@@ -4,7 +4,7 @@ import android.annotation.SuppressLint
 import android.app.Service
 import android.bluetooth.BluetoothAdapter
 import android.content.Intent
-import android.content.pm.ServiceInfo.FOREGROUND_SERVICE_TYPE_SPECIAL_USE
+import android.content.pm.ServiceInfo.FOREGROUND_SERVICE_TYPE_CONNECTED_DEVICE
 import android.os.Binder
 import android.os.Build
 import android.os.IBinder
@@ -49,7 +49,7 @@ class BleService @Inject constructor(): Service() {
     private fun startForegroundService() {
         if (!notificationHelper.channelExist()) notificationHelper.createChannel()
         if (Build.VERSION.SDK_INT >= 31)
-            startForeground(NOTIFICATION_ID, notificationHelper.build(), FOREGROUND_SERVICE_TYPE_SPECIAL_USE)
+            startForeground(NOTIFICATION_ID, notificationHelper.build(), FOREGROUND_SERVICE_TYPE_CONNECTED_DEVICE)
         else startForeground(NOTIFICATION_ID, notificationHelper.build())
     }
 
@@ -63,9 +63,9 @@ class BleService @Inject constructor(): Service() {
     }
 
     fun startScannerBLEDevices(){
+        lg("BleService.startScannerBLEDevices valOut.stateScanner.value: ${valOut.stateScanner.value}")
         if (valOut.stateScanner.value == StateScanner.END){
             valOut.stateScanner.value = StateScanner.RUNNING
-            lg("startScannerBLEDevices ")
             bleScanner.startScannerBLEDevices(valOut)
         }
     }
@@ -73,8 +73,8 @@ class BleService @Inject constructor(): Service() {
     private fun stopScannerBLEDevices(){
         if (valOut.stateScanner.value == StateScanner.RUNNING){
             valOut.stateScanner.value = StateScanner.END
+            bleScanner.stopScannerBLEDevices()
             lg("stopScannerBLEDevices")
-            bleScanner.stopScannerBLEDevices(valOut)
         }
     }
 
