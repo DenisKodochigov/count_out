@@ -11,7 +11,15 @@ import com.example.count_out.service.ServiceUtils
 import com.example.count_out.ui.view_components.lg
 import javax.inject.Inject
 import javax.inject.Singleton
+/**
+ * ######################Connect to device #####################################################
+1   initBleService(){}
+2   checkBleAdapter(){}
+3   connectByAddress( address: String){ bleService.connectByAddress( address )}
+4   use callBack BluetoothGattCallback.onConnectionStateChange in BleConnecting
 
+https://developer.android.com/develop/connectivity/bluetooth/ble/transfer-ble-data#kotlin
+ */
 @Singleton
 class BleManager @Inject constructor(val context: Context, private val serviceUtils: ServiceUtils
 ){
@@ -20,8 +28,7 @@ class BleManager @Inject constructor(val context: Context, private val serviceUt
 
     private val bleServiceConnection = object : ServiceConnection {
         override fun onServiceConnected(className: ComponentName, binder: IBinder) {
-            val binderService = binder as BleService.BleServiceBinder
-            bleService = binderService.getService()
+            bleService = (binder as BleService.BleServiceBinder).getService()
             bleService.valOut.stateService = StateService.CREATED
             bleService.startBleService()
             isBound  = true
@@ -62,11 +69,12 @@ class BleManager @Inject constructor(val context: Context, private val serviceUt
 
     fun stopScannerBLEDevicesByMac(){}
 
-    fun connectDevice() { if (isBound )  bleService.connectDevice()}
+    fun connectDevice( address: String ) { if ( isBound )  bleService.connectDevice( address )}
 
     fun disconnectDevice() { if ( isBound )   bleService.disconnectDevice()}
 
     fun readHeartRate() = run { if (isBound )   bleService.readHeartRate() }
+
 
 }
 

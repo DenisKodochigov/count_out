@@ -32,7 +32,7 @@ enum class Zone(val id: Int, var maxPulse: Int){
 
 enum class TimerState { COUNTING, STOPPED, END, }
 enum class StateScanner { RUNNING, END, }
-enum class StateService { DECLARED, CREATED, STARTED, PAUSED, STOPPED, }
+enum class StateService { DECLARED, CREATED, STARTED, PAUSED, STOPPED, CONNECTED, DISCONNECTED }
 enum class StateRunning { Created, Started, Paused, Stopped }
 enum class RoundType(val strId: Int, var amount: Int, var duration: Int){
     UP (R.string.work_up,0,0),
@@ -55,6 +55,10 @@ enum class CharacteristicProperty {
             Indicatable -> "Toggle Indications"
         }
 }
+enum class ErrorBleService{
+    NONE, CONNECT_DEVICE, CONNECT_GATT, DISCOVER_SERVICE
+}
+
 enum class HciStatus(val param: Int) {
     UNSUPPORTED_LMP_OR_LL_PARAMETER_VALUE(0x20),
     /** a Controller will not allow a role change at this time.*/

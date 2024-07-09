@@ -56,12 +56,8 @@ fun BluetoothGatt.printCharacteristicsTable() {
         return
     }
     services.forEach { service ->
-        val characteristicsTable = service.characteristics.joinToString(
-            separator = "\n|--",
-            prefix = "|--"
-        ) { it.uuid.toString() }
-        Log.i("printGattTable", "\nService ${service.uuid}\nCharacteristics:\n$characteristicsTable"
-        )
+        val characteristicsTable = service.characteristics.joinToString(separator = "\n|--", prefix = "|--") { it.uuid.toString() }
+        Log.i("printGattTable", "\nService ${service.uuid}\nCharacteristics:\n$characteristicsTable")
     }
 }
 

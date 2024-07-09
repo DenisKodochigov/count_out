@@ -10,8 +10,10 @@ import android.os.Build
 import android.os.IBinder
 import com.example.count_out.entity.Const.NOTIFICATION_ID
 import com.example.count_out.entity.Const.uuidHeartRate
+import com.example.count_out.entity.ErrorBleService
 import com.example.count_out.entity.StateScanner
 import com.example.count_out.entity.StateService
+import com.example.count_out.entity.bluetooth.BleDev
 import com.example.count_out.entity.bluetooth.ValInBleService
 import com.example.count_out.entity.bluetooth.ValOutBleService
 import com.example.count_out.helpers.NotificationHelper
@@ -42,7 +44,7 @@ class BleService @Inject constructor(): Service() {
             valOut.stateService == StateService.STOPPED
         ){
             startForegroundService()
-            valOut.stateService == StateService.STARTED
+            valOut.stateService = StateService.STARTED
         }
     }
 
@@ -59,7 +61,7 @@ class BleService @Inject constructor(): Service() {
         notificationHelper.cancel()
         stopScannerBLEDevices()
         stopScannerBLEDevicesByMac()
-        valOut.stateService == StateService.STOPPED
+        valOut.stateService = StateService.STOPPED
     }
 
     fun startScannerBLEDevices(){
@@ -94,11 +96,19 @@ class BleService @Inject constructor(): Service() {
         }
     }
 
-    fun connectDevice(){
+    fun connectDevice(address: String){
         if (valOut.stateScanner.value == StateScanner.END) {
-            valIn.device.value.device?.let {
-
-                bleConnecting.connectDevice(valIn) }
+            bluetoothAdapter.let { adapter ->
+                try {
+                    adapter.getRemoteDevice(address)?.let { dv ->
+                        valIn.device.value = BleDev(device = dv)
+                        bleConnecting.connectDevice(valIn, valOut)
+                    }
+                } catch (exception: IllegalArgumentException) {
+                    lg("Device not found with provided address.")
+                    valOut.error.value = ErrorBleService.CONNECT_DEVICE
+                }
+            }
         }
     }
 
@@ -111,4 +121,28 @@ class BleService @Inject constructor(): Service() {
     }
 
     fun readHeartRate() = bleConnecting.readParameterForBle(uuidHeartRate)
+
+//    var bluetoothGatt: BluetoothGatt? = null
+//    bluetoothGatt = device.connectGatt(this, false, gattCallback)
+//    private val gattUpdateReceiver: BroadcastReceiver = object : BroadcastReceiver() {
+//        override fun onReceive(context: Context, intent: Intent) {
+//            when (intent.action) {
+//                ACTION_GATT_CONNECTED -> {
+//                    valOut.stateService = StateService.CONNECTED
+//                    updateConnectionState(R.string.connected)
+//                }
+//                ACTION_GATT_DISCONNECTED -> {
+//                    valOut.stateService = StateService.DISCONNECTED
+//                    updateConnectionState(R.string.disconnected)
+//                }
+//                ACTION_GATT_SERVICES_DISCOVERED -> {
+//                    // Show all the supported services and characteristics on the user interface.
+//                    displayGattServices(bluetoothService?.getSupportedGattServices())
+//                }
+//            }
+//        }
+//    }
+//    fun getSupportedGattServices(): List<BluetoothGattService?>? {
+//        return bluetoothGatt?.services
+//    }
 }
