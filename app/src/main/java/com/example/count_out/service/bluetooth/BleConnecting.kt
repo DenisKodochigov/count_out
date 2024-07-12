@@ -29,8 +29,6 @@ import javax.inject.Inject
 class BleConnecting @Inject constructor(
     val context: Context, private val permissionApp: PermissionApp,
 ) {
-//    private lateinit var jobDiscoverService: Job
-//    private lateinit var jobReadBleCharacteristic: Job
     private val bleQueue = BleQueue()
     private val listConnection = ListConnection()
     private lateinit var connection: BleConnection
@@ -85,17 +83,14 @@ class BleConnecting @Inject constructor(
         connection.characteristic?.let{ charact->
             connection.gatt?.setCharacteristicNotification(charact, enable)
             val descriptor = charact.getDescriptor(connection.descriptorUuid)
-            descriptor.value =(
-                if (enable) BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE
-                else byteArrayOf(0x00, 0x00)
-            )
-            result = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+
+            result = if (Build.VERSION.SDK_INT > Build.VERSION_CODES.TIRAMISU) {
                 connection.gatt?.writeDescriptor(descriptor, byteArrayOf(0x00, 0x00)) == BluetoothStatusCodes.SUCCESS
             } else {
+                descriptor.value = BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE
                 connection.gatt?.writeDescriptor(descriptor) ?: false
             }
         }
-
         return result //descriptor write operation successfully started?
     }
 
@@ -122,6 +117,16 @@ class BleConnecting @Inject constructor(
         ){
             super.onCharacteristicRead(gatt, characteristic, value, status)
             bluetoothGattCallbackCharacteristicRead(status, value, characteristic)
+        }
+
+        override fun onCharacteristicChanged(
+            gatt: BluetoothGatt,
+            characteristic: BluetoothGattCharacteristic,
+            value: ByteArray
+        ) {
+            super.onCharacteristicChanged(gatt, characteristic, value)
+            if (connection.characteristic == characteristic)
+                connection.valueCharacteristic.value = value
         }
     }
 

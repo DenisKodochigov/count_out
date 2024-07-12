@@ -12,6 +12,7 @@ data class BleConnection (
     var gatt: BluetoothGatt? = null,
     var name: String = "",
     var address: String = "",
+    var valueCharacteristic: MutableStateFlow<ByteArray> = MutableStateFlow(byteArrayOf(0)),
     val newState: MutableStateFlow<Int> = MutableStateFlow(BluetoothGatt.STATE_DISCONNECTED),
     val connectStatus: MutableStateFlow<Int> = MutableStateFlow(0),
     val boundState: MutableStateFlow<Int> = MutableStateFlow(0),
