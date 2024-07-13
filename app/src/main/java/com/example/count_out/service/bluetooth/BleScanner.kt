@@ -5,7 +5,9 @@ import android.bluetooth.BluetoothAdapter
 import android.content.Context
 import com.example.count_out.entity.StateScanner
 import com.example.count_out.entity.TimerState
-import com.example.count_out.entity.bluetooth.ValOutBleService
+import com.example.count_out.entity.bluetooth.BleStates
+import com.example.count_out.entity.bluetooth.ReceiveFromUI
+import com.example.count_out.entity.bluetooth.SendToUI
 import com.example.count_out.permission.PermissionApp
 import com.example.count_out.service.bluetooth.scanner.ScannerBleAll
 import com.example.count_out.service.bluetooth.scanner.ScannerBleByMac
@@ -31,13 +33,12 @@ class BleScanner @Inject constructor(
 
     /** Scan all device*/
     @SuppressLint("MissingPermission")
-    fun startScannerBLEDevices(valOut: ValOutBleService) {
+    fun startScannerBLEDevices(sendToUi: SendToUI, bleStates: BleStates) {
         CoroutineScope(Dispatchers.Default).launch {
-            lg("valOut.stateScanner.value ${valOut.stateScanner.value}")
             timer.changeState(TimerState.COUNTING, timeScanning)
-            scannerBleAll.startScannerBLEDevices(valOut)
+            scannerBleAll.startScannerBLEDevices(bleStates, sendToUi)
             timer.endCounting {
-                valOut.stateScanner.value = StateScanner.END
+                bleStates.stateScanner = StateScanner.END
                 scannerBleAll.stopScannerBLEDevices()
                 this.cancel()
             }
@@ -51,12 +52,12 @@ class BleScanner @Inject constructor(
 
     /** Scan device by MAC address*/
     @SuppressLint("MissingPermission")
-    fun startScannerBLEDevicesByMac(mac: String, valOut: ValOutBleService) {
+    fun startScannerBLEDevicesByMac(sendToUi: SendToUI, receiveFromUI: ReceiveFromUI, bleStates: BleStates) {
         CoroutineScope(Dispatchers.Default).launch {
             timer.changeState(TimerState.COUNTING, timeScanning)
-            scannerBleByMac.startScannerBLEDevices(mac, valOut)
+            scannerBleByMac.startScannerBLEDevices(receiveFromUI.addressForSearch, bleStates, sendToUi)
             timer.endCounting {
-                valOut.stateScanner.value = StateScanner.END
+                bleStates.stateScanner = StateScanner.END
                 scannerBleByMac.stopScannerBLEDevices()
                 this.cancel()
             }
@@ -64,7 +65,7 @@ class BleScanner @Inject constructor(
     }
 
     @SuppressLint("MissingPermission")
-    fun stopScannerBLEDevicesByMac(valOut: ValOutBleService) {
+    fun stopScannerBLEDevicesByMac(valOut: SendToUI) {
         lg("Stop scanner ByMac")
         scannerBleByMac.stopScannerBLEDevices()
     }

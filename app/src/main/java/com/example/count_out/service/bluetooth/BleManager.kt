@@ -5,16 +5,17 @@ import android.content.Context
 import android.content.ServiceConnection
 import android.os.IBinder
 import com.example.count_out.entity.StateService
-import com.example.count_out.entity.bluetooth.ValInBleService
-import com.example.count_out.entity.bluetooth.ValOutBleService
+import com.example.count_out.entity.bluetooth.DeviceUI
+import com.example.count_out.entity.bluetooth.ReceiveFromUI
+import com.example.count_out.entity.bluetooth.SendToUI
 import com.example.count_out.service.ServiceUtils
 import com.example.count_out.ui.view_components.lg
 import javax.inject.Inject
 import javax.inject.Singleton
 /**
  * ######################Connect to device #####################################################
-1   initBleService(){}
-2   checkBleAdapter(){}
+1   initBleService(){}:  bleServiceConnection.onServiceConnected.BleService.startBleService()
+2   checkBleAdapter(){}:
 3   connectByAddress( address: String){ bleService.connectByAddress( address )}
 4   use callBack BluetoothGattCallback.onConnectionStateChange in BleConnecting
 
@@ -29,7 +30,7 @@ class BleManager @Inject constructor(val context: Context, private val serviceUt
     private val bleServiceConnection = object : ServiceConnection {
         override fun onServiceConnected(className: ComponentName, binder: IBinder) {
             bleService = (binder as BleService.BleServiceBinder).getService()
-            bleService.valOut.stateService = StateService.CREATED
+            bleService.bleStates.stateService = StateService.CREATED
             bleService.startBleService()
             isBound  = true
         }
@@ -43,12 +44,12 @@ class BleManager @Inject constructor(val context: Context, private val serviceUt
 
     fun unbindService() { serviceUtils.unbindService(bleServiceConnection, isBound) }
 
-    fun connectingToServiceBle(valIn: ValInBleService): ValOutBleService {
+    fun connectingToServiceBle(receiveFromUI: ReceiveFromUI): SendToUI {
         if (isBound ) {
-            bleService.valIn = valIn
-            return bleService.valOut
+            bleService.receiveFromUI = receiveFromUI
+            return bleService.sendToUi
         } else {
-            return ValOutBleService()
+            return SendToUI()
         }
     }
 
@@ -62,14 +63,14 @@ class BleManager @Inject constructor(val context: Context, private val serviceUt
 
     fun stopScannerBLEDevices() {}
 
-    fun startScannerBleDeviceByMac(mac: String) {
+    fun startScannerBleDeviceByMac(deviceUI: DeviceUI) {
         lg("BleManager.startScannerBleDeviceByMac isBound: $isBound")
-        if ( isBound ) bleService.startScannerBleDeviceByMac(mac)
+        if ( isBound ) bleService.startScannerBleDeviceByMac(deviceUI)
     }
 
     fun stopScannerBLEDevicesByMac(){}
 
-    fun connectDevice( address: String ) { if ( isBound )  bleService.connectDevice( address )}
+    fun connectDevice() { if ( isBound )  bleService.connectDevice()}
 
     fun disconnectDevice() { if ( isBound )   bleService.disconnectDevice()}
 

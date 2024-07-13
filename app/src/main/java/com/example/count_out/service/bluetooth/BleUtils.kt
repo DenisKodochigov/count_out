@@ -1,5 +1,6 @@
 package com.example.count_out.service.bluetooth
 
+import android.annotation.SuppressLint
 import android.bluetooth.BluetoothGatt
 import android.bluetooth.BluetoothGattCharacteristic
 import android.bluetooth.le.ScanCallback
@@ -7,7 +8,9 @@ import android.bluetooth.le.ScanResult
 import android.bluetooth.le.ScanSettings
 import android.util.Log
 import com.example.count_out.entity.StateScanner
-import com.example.count_out.entity.bluetooth.ValOutBleService
+import com.example.count_out.entity.bluetooth.BleDevice
+import com.example.count_out.entity.bluetooth.BleStates
+import com.example.count_out.entity.bluetooth.SendToUI
 import com.example.count_out.ui.view_components.lg
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
@@ -22,31 +25,33 @@ fun scanSettings(reportDelay: Long): ScanSettings {
         .build()
 }
 
-fun objectScanCallback( valOut: ValOutBleService
+fun objectScanCallback( bleStates: BleStates, sendToUI: SendToUI
 ): ScanCallback = object: ScanCallback()
 {
+    @SuppressLint("MissingPermission")
     override fun onScanResult(callbackType: Int, result: ScanResult?) {
         super.onScanResult(callbackType, result)
-        if (result != null) {
-            valOut.listDevice.value.find { it.address == result.device.address }
-                ?: valOut.listDevice.addApp(result.device)
+        result?.device?.let { dev ->
+            sendToUI.foundDevices.value.find { it.address == dev.address }
+                ?: sendToUI.foundDevices.addApp(
+                    BleDevice().fromBluetoothDevice(result.device) )
             lg("objectScanCallback devices.value ${result.device.address}")
         }
-        valOut.stateScanner.value = StateScanner.RUNNING
+        bleStates.stateScanner = StateScanner.RUNNING
     }
     override fun onBatchScanResults(results: MutableList<ScanResult>?) {
         super.onBatchScanResults(results)
         if (!results.isNullOrEmpty()) {
             results.forEach{ result->
-                valOut.listDevice.value.find { it.address == result.device.address }
-                    ?: valOut.listDevice.addApp(result.device)
+                sendToUI.foundDevices.value.find { it.address == result.device.address }
+                    ?: sendToUI.foundDevices.addApp(BleDevice().fromBluetoothDevice(result.device))
             }
         }
-        valOut.stateScanner.value = StateScanner.RUNNING
+        bleStates.stateScanner = StateScanner.RUNNING
     }
     override fun onScanFailed(errorCode: Int) {
         lg("Error scan BLE device. $errorCode")
-        valOut.stateScanner.value = StateScanner.END
+        bleStates.stateScanner = StateScanner.END
     }
 }
 

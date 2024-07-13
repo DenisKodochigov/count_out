@@ -10,13 +10,13 @@ import com.example.count_out.data.room.tables.SettingDB
 import com.example.count_out.data.room.tables.SpeechKitDB
 import com.example.count_out.data.room.tables.TrainingDB
 import com.example.count_out.entity.Activity
-import com.example.count_out.entity.bluetooth.BleDevSerializable
 import com.example.count_out.entity.Exercise
 import com.example.count_out.entity.Plugins
 import com.example.count_out.entity.Round
 import com.example.count_out.entity.Set
 import com.example.count_out.entity.SpeechKit
 import com.example.count_out.entity.Training
+import com.example.count_out.entity.bluetooth.BleDevSerializable
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -24,7 +24,6 @@ import javax.inject.Singleton
 class DataRepository  @Inject constructor(private val dataSource: DataSource,
                                           private val dataStoreBle: DataStore<BleDevSerializable>
 ){
-
     fun getTrainings(): List<Training> = dataSource.getTrainings()
     fun getTraining(id: Long): Training = dataSource.getTraining(id)
     fun addTraining(): List<Training> = dataSource.addTraining()
@@ -35,7 +34,7 @@ class DataRepository  @Inject constructor(private val dataSource: DataSource,
         Plugins.listTr.remove(Plugins.listTr.find { it.idTraining == id })
     }
     suspend fun storeSelectBleDev(bleDevSerializable: BleDevSerializable) {
-        dataStoreBle.updateData { it.copy( name = bleDevSerializable.name, mac = bleDevSerializable.mac) }
+        dataStoreBle.updateData { it.copy( address = bleDevSerializable.address) }
     }
     fun getBleDevStoreFlow() = dataStoreBle.data
     fun setSpeech(trainingId: Long, speech: SpeechKit, item: Any?): Training

@@ -6,7 +6,8 @@ import android.bluetooth.le.ScanCallback
 import android.bluetooth.le.ScanFilter
 import android.os.ParcelUuid
 import com.example.count_out.entity.Const
-import com.example.count_out.entity.bluetooth.ValOutBleService
+import com.example.count_out.entity.bluetooth.BleStates
+import com.example.count_out.entity.bluetooth.SendToUI
 import com.example.count_out.permission.PermissionApp
 import com.example.count_out.service.bluetooth.objectScanCallback
 import com.example.count_out.service.bluetooth.scanSettings
@@ -33,8 +34,8 @@ class ScannerBleAll(
     }
 
     @SuppressLint("MissingPermission")
-    fun startScannerBLEDevices(valOut: ValOutBleService) {
-        scanCallback = objectScanCallback(valOut)
+    fun startScannerBLEDevices(bleStates: BleStates, sendToUI: SendToUI) {
+        scanCallback = objectScanCallback(bleStates, sendToUI)
 //        lgF("ScannerBleAll valOut.listDevice:", valOut.listDevice)
         permissionApp.checkBleScan{
             bleScanner.startScan( scanFilters(), scanSettings(0L), scanCallback) }

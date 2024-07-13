@@ -68,8 +68,8 @@ import com.example.count_out.ui.view_components.Text_Icon
         uiState.value.showBottomSheetAddActivity.value = false }
     uiState.value.onDismissAddActivity = { uiState.value.showBottomSheetAddActivity.value = false }
 
-    uiState.value.onConfirmBLEScan = { device->
-        uiState.value.onSelectDevice(device)
+    uiState.value.onConfirmBLEScan = { address->
+        uiState.value.onSelectDevice(address)
         uiState.value.showBottomSheetBLE.value = false }
     uiState.value.onDismissBLEScan = {
         uiState.value.onStopScanBLE()

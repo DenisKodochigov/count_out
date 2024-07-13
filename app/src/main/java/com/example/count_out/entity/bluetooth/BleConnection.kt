@@ -2,22 +2,19 @@ package com.example.count_out.entity.bluetooth
 
 import android.bluetooth.BluetoothDevice
 import android.bluetooth.BluetoothGatt
-import android.bluetooth.BluetoothGattCharacteristic
-import android.bluetooth.BluetoothGattDescriptor
+import com.example.count_out.entity.ErrorBleService
 import kotlinx.coroutines.flow.MutableStateFlow
-import java.util.UUID
 
-data class BleConnection (
-    var device: BluetoothDevice? = null,
+class BleConnection (
+    override var name: String = "",
+    override var address: String = "",
+    override var device: BluetoothDevice? = null,
     var gatt: BluetoothGatt? = null,
-    var name: String = "",
-    var address: String = "",
-    var valueCharacteristic: MutableStateFlow<ByteArray> = MutableStateFlow(byteArrayOf(0)),
+    val parameters: MutableList<ParameterDeviceBle> = mutableListOf(),
+
     val newState: MutableStateFlow<Int> = MutableStateFlow(BluetoothGatt.STATE_DISCONNECTED),
-    val connectStatus: MutableStateFlow<Int> = MutableStateFlow(0),
+    val gattStatus: MutableStateFlow<Int> = MutableStateFlow(0),
+    val deviceStatus: MutableStateFlow<Int> = MutableStateFlow(0),
+    var error: MutableStateFlow<ErrorBleService> = MutableStateFlow(ErrorBleService.NONE),
     val boundState: MutableStateFlow<Int> = MutableStateFlow(0),
-    val characteristic: BluetoothGattCharacteristic? = null,
-    val characteristics: List<BluetoothGattCharacteristic> = emptyList(),
-    val descriptorUuid: UUID = UUID.randomUUID(),
-    val descriptor: BluetoothGattDescriptor? = null,
-)
+): BleDevice()

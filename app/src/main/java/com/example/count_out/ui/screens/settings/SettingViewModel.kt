@@ -1,7 +1,5 @@
 package com.example.count_out.ui.screens.settings
 
-import android.annotation.SuppressLint
-import android.bluetooth.BluetoothDevice
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -10,8 +8,9 @@ import com.example.count_out.data.room.tables.SettingDB
 import com.example.count_out.entity.Activity
 import com.example.count_out.entity.ErrorApp
 import com.example.count_out.entity.bluetooth.BleDevSerializable
-import com.example.count_out.entity.bluetooth.ValInBleService
-import com.example.count_out.entity.bluetooth.ValOutBleService
+import com.example.count_out.entity.bluetooth.DeviceUI
+import com.example.count_out.entity.bluetooth.ReceiveFromUI
+import com.example.count_out.entity.bluetooth.SendToUI
 import com.example.count_out.permission.PermissionApp
 import com.example.count_out.service.bluetooth.BleManager
 import com.example.count_out.ui.view_components.lg
@@ -43,13 +42,13 @@ class SettingViewModel @Inject constructor(
             onStartScanBLE = { onStartScanBLE() },
             onStopScanBLE = { onStopScanBLE() },
             onClearCacheBLE = { onClearCacheBLE() },
-            onSelectDevice = { device-> selectDevice(device) },
+            onSelectDevice = { address-> selectDevice(address) },
             onSetColorActivity = { activityId, color ->
                 onSetColorActivityForSettings( activityId = activityId, color = color) },
         ))
     val settingScreenState: StateFlow<SettingScreenState> = _settingScreenState.asStateFlow()
 
-    private val valInServiceBle = ValInBleService()
+    private val receiveFromUI = ReceiveFromUI()
     private var doConnecting = false
 
     init {
@@ -58,6 +57,7 @@ class SettingViewModel @Inject constructor(
         getStoredBleDev()
         templateMy {dataRepository.getActivities()}
     }
+
     private fun onAddActivity(activity: Activity){
         templateMy{
             if (activity.idActivity > 0) dataRepository.onUpdateActivity(activity)
@@ -83,18 +83,18 @@ class SettingViewModel @Inject constructor(
         lg("SettingViewModel.connectingToServiceBle")
         doConnecting = false
         viewModelScope.launch(Dispatchers.IO) {
-            kotlin.runCatching { bleManager.connectingToServiceBle(valInServiceBle) }.fold(
+            kotlin.runCatching { bleManager.connectingToServiceBle(receiveFromUI) }.fold(
                 onSuccess = { receiveValOutBleService(it) },
                 onFailure = { errorApp.errorApi(it.message!!) }
             )
         }
     }
 
-    private suspend fun receiveValOutBleService(valOutBleService: ValOutBleService){
-        valOutBleService.listDevice.collect{ listDevice->
+    private suspend fun receiveValOutBleService(sendToUI: SendToUI){
+        sendToUI.foundDevices.collect{ listDevice->
 //            lg("SettingViewModel.receiveBluetoothDevices valOut.listDevice: $listDevice")
             _settingScreenState.update { currentState ->
-                currentState.copy( bluetoothDevices = mutableStateOf( listDevice)) }
+                currentState.copy( devicesUI = mutableStateOf( listDevice)) }
         }
     }
 
@@ -127,22 +127,21 @@ class SettingViewModel @Inject constructor(
     }
 
     private fun getStoredBleDev() {
-//        lg("SettingViewModel getStoreBleDev")
         viewModelScope.launch(Dispatchers.IO) {
             doConnecting = true
             dataRepository.getBleDevStoreFlow().collect{
-                if (it.mac.isNotEmpty()) bleManager.startScannerBleDeviceByMac(it.mac)
-                lg("SettingViewModel.getStoredBleDev mac: ${it.mac}")
+                if (it.address.isNotEmpty()) bleManager.startScannerBleDeviceByMac(it as DeviceUI)
+                lg("SettingViewModel.getStoredBleDev mac: ${it.address}")
             }
         }
     }
 
-    @SuppressLint("MissingPermission")
-    private fun selectDevice(device: BluetoothDevice) {
-        val nameDevice= permissionApp.checkBleScan { device.name } as String
+    private fun selectDevice(address: String) {
         viewModelScope.launch(Dispatchers.IO) {
             bleManager.stopScannerBLEDevices()
-            dataRepository.storeSelectBleDev(BleDevSerializable( name = nameDevice, mac = device.address)) }
+            dataRepository.storeSelectBleDev( BleDevSerializable( address = address))
+        }
+        receiveFromUI.addressForSearch = address
         bleManager.connectDevice()
     }
 

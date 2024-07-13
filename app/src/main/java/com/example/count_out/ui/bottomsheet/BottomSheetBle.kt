@@ -73,7 +73,7 @@ fun BottomSheetBleContent(uiState: SettingScreenState)
 @SuppressLint("MissingPermission")
 @Composable fun SettingsBluetooth(uiState: SettingScreenState){
     val listBluetoothDev: List<BluetoothDevice>
-    try { listBluetoothDev = uiState.bluetoothDevices.value }
+    try { listBluetoothDev = uiState.devicesUI.value }
     catch (e: IllegalStateException) { return }
     TextApp(text = stringResource(id = R.string.section_heart_rate), style = interReg18)
     Spacer(modifier = Modifier.height(12.dp))

@@ -7,19 +7,18 @@ import android.bluetooth.BluetoothGatt.GATT_FAILURE
 import android.bluetooth.BluetoothGatt.GATT_SUCCESS
 import android.bluetooth.BluetoothGattCallback
 import android.bluetooth.BluetoothGattCharacteristic
-import android.bluetooth.BluetoothGattDescriptor
-import android.bluetooth.BluetoothStatusCodes
 import android.content.Context
 import android.content.Intent
 import android.nfc.NfcAdapter.EXTRA_DATA
-import android.os.Build
 import com.example.count_out.entity.Const.UUID_HEART_RATE_MEASUREMENT
 import com.example.count_out.entity.ErrorBleService
+import com.example.count_out.entity.StateService
 import com.example.count_out.entity.bluetooth.BleConnection
+import com.example.count_out.entity.bluetooth.BleStates
 import com.example.count_out.entity.bluetooth.ListConnection
+import com.example.count_out.entity.bluetooth.ReceiveFromUI
+import com.example.count_out.entity.bluetooth.SendToUI
 import com.example.count_out.entity.bluetooth.UUIDBle
-import com.example.count_out.entity.bluetooth.ValInBleService
-import com.example.count_out.entity.bluetooth.ValOutBleService
 import com.example.count_out.entity.hciStatusFromValue
 import com.example.count_out.permission.PermissionApp
 import com.example.count_out.ui.view_components.lg
@@ -33,65 +32,87 @@ class BleConnecting @Inject constructor(
     private val listConnection = ListConnection()
     private lateinit var connection: BleConnection
 
-    fun connectDevice(valIn: ValInBleService, valOut: ValOutBleService) {
-        valIn.device.value.device?.let { device->
-            bleQueue.addCommandInQueue { commandConnectingGatt(device, valOut) }
-            bleQueue.addCommandInQueue { commandStartDiscoverService(valOut) }
+    fun getRemoteDevice( commandGetRemoteDevice: ()-> Boolean){
+        bleQueue.addCommandInQueue { commandGetRemoteDevice() }
+    }
+    fun connectingGatt(receiveFromUI: ReceiveFromUI, bleStates: BleStates){
+        bleQueue.addCommandInQueue {
+            commandConnectingGatt(receiveFromUI.currentConnection, bleStates) }
+    }
+    fun startDiscoverService(receiveFromUI: ReceiveFromUI, bleStates: BleStates){
+        bleQueue.addCommandInQueue { commandStartDiscoverService(receiveFromUI.currentConnection, bleStates) }
+    }
+
+    @SuppressLint("MissingPermission")
+    fun commandConnectingGatt(connection: BleConnection, bleStates: BleStates): Boolean{
+        var result = false
+        connection.device?.let { dev->
+            connection.gatt = dev.connectGatt(context,true, bluetoothGattCallback, BluetoothDevice.TRANSPORT_LE)
+            if ( connection.gatt != null) {
+                result = true
+                bleStates.stateService = StateService.CONNECT_GAT
+            }
+            else bleStates.error = ErrorBleService.CONNECT_GATT
         }
+        return result
     }
 
     @SuppressLint("MissingPermission")
-    fun commandConnectingGatt(device: BluetoothDevice, valOut: ValOutBleService): Boolean{
-        connection = listConnection.findConnection(device)
-        return if ( permissionApp.checkBleScan { connectGattAutoConnect(device) } as Boolean){ true }
-                else{
-                    valOut.error.value = ErrorBleService.CONNECT_GATT
-                    false
-                }
-    }
-
-    @SuppressLint("MissingPermission")
-    fun connectGattAutoConnect(device: BluetoothDevice): Boolean {
-        connection.device = device
-        connection.gatt = device.connectGatt(context,true, bluetoothGattCallback, BluetoothDevice.TRANSPORT_LE)
-        return connection.gatt != null
-    }
-
-    @SuppressLint("MissingPermission")
-    fun commandStartDiscoverService(valOut: ValOutBleService): Boolean{
+    fun commandStartDiscoverService(connection: BleConnection, bleStates: BleStates): Boolean{
         var result = false
         if ( connection.newState.value == BluetoothGatt.STATE_CONNECTED) {
             connection.gatt?.let {
-                if (startDiscoverService(it)) result = true
-                else valOut.error.value = ErrorBleService.DISCOVER_SERVICE
+                if (it.discoverServices()) {
+                    it.printCharacteristicsTable()
+                    bleStates.stateService = StateService.GET_DISCOVER_SERVICE
+                    result = true
+                }
+                else {
+                    bleStates.error = ErrorBleService.DISCOVER_SERVICE
+                    lg("discoverServices failed to start")
+                }
             }
         }
         return result
     }
 
     @SuppressLint("MissingPermission")
-    private fun startDiscoverService(gatt: BluetoothGatt): Boolean {
-        return  if (gatt.discoverServices()) { gatt.printCharacteristicsTable(); true }
-        else { lg("discoverServices failed to start"); false }
-    }
-
-    @SuppressLint("MissingPermission")
-    fun setCharacteristicNotification(): Boolean {
-        lg("setCharacteristicNotification")
-        val enable =true
-        var result = false
-        connection.characteristic?.let{ charact->
-            connection.gatt?.setCharacteristicNotification(charact, enable)
-            val descriptor = charact.getDescriptor(connection.descriptorUuid)
-
-            result = if (Build.VERSION.SDK_INT > Build.VERSION_CODES.TIRAMISU) {
-                connection.gatt?.writeDescriptor(descriptor, byteArrayOf(0x00, 0x00)) == BluetoothStatusCodes.SUCCESS
-            } else {
-                descriptor.value = BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE
-                connection.gatt?.writeDescriptor(descriptor) ?: false
-            }
-        }
-        return result //descriptor write operation successfully started?
+    fun setCharacteristicNotification(valOut: SendToUI, bleStates: BleStates): Boolean {
+//        lg("setCharacteristicNotification")
+//        val enable =true
+//        var result = false
+//        connection.characteristic?.let{ characteristic->
+//            connection.gatt?.let { gattL->
+//                gattL.setCharacteristicNotification(characteristic, enable)
+//                var descriptor = characteristic.getDescriptor(connection.descriptorUuid)
+//                descriptor =(
+//                        if (enable) BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE
+//                        else byteArrayOf(0x00, 0x00)
+//                        )
+//                result = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+//                    connection.gatt?.writeDescriptor(descriptor, byteArrayOf(0x00, 0x00)) == BluetoothStatusCodes.SUCCESS
+//                } else {
+//                    gattL.writeDescriptor(descriptor) ?: false
+//                }
+//                connection.characteristic?.let{ charact->
+//                    connection.gatt?.setCharacteristicNotification(charact, enable)
+//                    var descriptor = charact.getDescriptor(connection.descriptorUuid)
+//
+//                    result = if (Build.VERSION.SDK_INT > Build.VERSION_CODES.TIRAMISU) {
+//                        connection.gatt?.writeDescriptor(descriptor, byteArrayOf(0x00, 0x00)) == BluetoothStatusCodes.SUCCESS
+//                    } else {
+//                        descriptor = BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE
+//                        connection.gatt?.writeDescriptor(descriptor) ?: false
+//                    }
+//
+//                } ?: run {
+//                    bleStates.error = ErrorBleService.CONNECT_GATT
+//                    lg("BluetoothGatt not initialized")
+//                }
+//            }
+//        }
+//        return result //descriptor write operation successfully started?
+        return false
     }
 
     private val bluetoothGattCallback = object: BluetoothGattCallback() {
@@ -125,15 +146,15 @@ class BleConnecting @Inject constructor(
             value: ByteArray
         ) {
             super.onCharacteristicChanged(gatt, characteristic, value)
-            if (connection.characteristic == characteristic)
-                connection.valueCharacteristic.value = value
+//            if (connection.characteristic == characteristic)
+//                connection.valueCharacteristic.value = value
         }
     }
 
     @SuppressLint("MissingPermission")
     fun bluetoothGattCallbackConnectionStateChange(gatt: BluetoothGatt?, status: Int, newState: Int,
-    ) {
-        connection.connectStatus.value = status
+    ){
+        connection.gattStatus.value = status
         connection.newState.value = newState
         if (status == GATT_SUCCESS) {
             when (newState) {
@@ -156,7 +177,7 @@ class BleConnecting @Inject constructor(
     @SuppressLint("MissingPermission")
     fun bluetoothGattCallbackServicesDiscovered(gatt: BluetoothGatt?, status: Int)
     {
-        connection.connectStatus.value = status
+        connection.gattStatus.value = status
         if (status == GATT_SUCCESS) {
             lg("Discovered ${gatt?.services?.size ?: 0} services")
         } else {
@@ -170,7 +191,7 @@ class BleConnecting @Inject constructor(
         value: ByteArray,
         characteristic: BluetoothGattCharacteristic,
     ) {
-        connection.connectStatus.value = status
+        connection.gattStatus.value = status
         if (status != GATT_SUCCESS) {
             lg("ERROR: Read failed for characteristic: ${characteristic.uuid}, status $status")
             bleQueue.completedCommand();
@@ -238,15 +259,6 @@ class BleConnecting @Inject constructor(
         gattCansel(gatt)
     }
 
-//    private suspend fun onCancelDiscoverService() {
-//        jobDiscoverService.cancel()
-//        while(jobReadBleCharacteristic.isCancelled){ delay(DELAY_CANCELED_COROUTINE)}
-//    }
-
-//    private suspend fun onCancelReadBleCharacteristic() {
-//        jobReadBleCharacteristic.cancel()
-//        while(jobReadBleCharacteristic.isCancelled) { delay(DELAY_CANCELED_COROUTINE)}
-//    }
 
     @SuppressLint("MissingPermission")
     private fun gattCansel(gatt: BluetoothGatt?) {
@@ -330,5 +342,33 @@ class BleConnecting @Inject constructor(
 //        sendBroadcast(intent)
     }
 
+    //    fun connectDevice(valIn: ValInBleService, valOut: ValOutBleService) {
+//        bleQueue.addCommandInQueue { commandConnectingGatt(valIn.bleDevice.device, valOut) }
+//        bleQueue.addCommandInQueue { commandStartDiscoverService(valOut) }
+//    }
 
+//    @SuppressLint("MissingPermission")
+//    fun commandConnectingDevice(device: BluetoothDevice?, valOut: ValOutBleService): Boolean{
+//        var result = false
+//        device?.let { dev->
+//            listConnection.findConnection(dev.address)?.let { connection->
+//                if ( permissionApp.checkBleScan { connectGattAutoConnect(dev) } as Boolean){ true }
+//                else{
+//                    valOut.error.value = ErrorBleService.CONNECT_GATT
+//                    false
+//                }
+//            }
+//        }
+//        return result
+//    }
+
+//    private suspend fun onCancelDiscoverService() {
+//        jobDiscoverService.cancel()
+//        while(jobReadBleCharacteristic.isCancelled){ delay(DELAY_CANCELED_COROUTINE)}
+//    }
+
+//    private suspend fun onCancelReadBleCharacteristic() {
+//        jobReadBleCharacteristic.cancel()
+//        while(jobReadBleCharacteristic.isCancelled) { delay(DELAY_CANCELED_COROUTINE)}
+//    }
 }

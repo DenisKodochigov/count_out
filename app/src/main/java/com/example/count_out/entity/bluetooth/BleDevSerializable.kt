@@ -4,6 +4,6 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class BleDevSerializable(
-    val name: String = "",
-    val mac: String = ""
-)
+    override var name: String = "",
+    override var address: String = ""
+): DeviceUI
