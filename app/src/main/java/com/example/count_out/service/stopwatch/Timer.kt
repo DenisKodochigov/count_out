@@ -51,6 +51,7 @@ class Timer {
             }
         }
     }
+
     private fun calculateInterval(countMillSec: Long): Long{
         return if (countMillSec % 5 != 0L) 1L
         else if (countMillSec % 10 != 0L) 5L

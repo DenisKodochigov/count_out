@@ -1,7 +1,6 @@
 package com.example.count_out.ui.bottomsheet
 
 import android.annotation.SuppressLint
-import android.bluetooth.BluetoothDevice
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
@@ -29,6 +28,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.example.count_out.R
+import com.example.count_out.entity.bluetooth.DeviceUI
 import com.example.count_out.ui.screens.settings.SettingScreenState
 import com.example.count_out.ui.theme.Dimen
 import com.example.count_out.ui.theme.Dimen.bsHeightWindowsListBle
@@ -72,7 +72,7 @@ fun BottomSheetBleContent(uiState: SettingScreenState)
 }
 @SuppressLint("MissingPermission")
 @Composable fun SettingsBluetooth(uiState: SettingScreenState){
-    val listBluetoothDev: List<BluetoothDevice>
+    val listBluetoothDev: List<DeviceUI>
     try { listBluetoothDev = uiState.devicesUI.value }
     catch (e: IllegalStateException) { return }
     TextApp(text = stringResource(id = R.string.section_heart_rate), style = interReg18)
@@ -88,7 +88,7 @@ fun BottomSheetBleContent(uiState: SettingScreenState)
             Row(
                 modifier = Modifier
                     .padding(vertical = 12.dp, horizontal = 12.dp)
-                    .clickable { uiState.onSelectDevice(item) }) {
+                    .clickable { uiState.onSelectDevice(item.address) }) {
                 TextApp(text = item.address, style = interReg16)
                 Spacer(modifier = Modifier.width(12.dp))
                 item.name?.let { TextApp(text = it, style = interReg14) }

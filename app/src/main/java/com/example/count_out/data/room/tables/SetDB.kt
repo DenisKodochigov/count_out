@@ -19,7 +19,7 @@ data class SetDB(
     override var goal: GoalSet = GoalSet.DISTANCE,
     override var weight: Int = 0,
     override var intervalReps: Double = 0.0,
-    override var intensity: Zone = Zone.EXTRASLOW,
+    override var intensity: Zone = Zone.EXTRA_SLOW,
     override var distance: Double = 0.0,
     override var intervalDown: Int = 0,
     override var groupCount: String = "",

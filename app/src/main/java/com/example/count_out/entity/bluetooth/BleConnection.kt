@@ -16,5 +16,4 @@ class BleConnection (
     val gattStatus: MutableStateFlow<Int> = MutableStateFlow(0),
     val deviceStatus: MutableStateFlow<Int> = MutableStateFlow(0),
     var error: MutableStateFlow<ErrorBleService> = MutableStateFlow(ErrorBleService.NONE),
-    val boundState: MutableStateFlow<Int> = MutableStateFlow(0),
 ): BleDevice()

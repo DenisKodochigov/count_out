@@ -11,7 +11,7 @@ open class BleDevice(
     @SuppressLint("MissingPermission")
     fun fromBluetoothDevice(device: BluetoothDevice): DeviceUI{
         this.device = device
-        this.name = device.name
+        this.name = device.name ?: ""
         this.address = device.address
         return this as DeviceUI
     }

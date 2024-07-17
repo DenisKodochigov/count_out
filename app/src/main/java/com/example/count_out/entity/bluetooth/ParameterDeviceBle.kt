@@ -4,7 +4,7 @@ import java.util.UUID
 
 data class ParameterDeviceBle (
     var serviceUUID: UUID? = null,
-    var charactristicUUID: UUID? = null,
+    var characteristicUUID: UUID? = null,
     var descriptorUUID: UUID? = null,
     var value: ByteArray = byteArrayOf(0)
 )

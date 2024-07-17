@@ -140,9 +140,9 @@ class SettingViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             bleManager.stopScannerBLEDevices()
             dataRepository.storeSelectBleDev( BleDevSerializable( address = address))
+            receiveFromUI.addressForSearch = address
+            bleManager.connectDevice()
         }
-        receiveFromUI.addressForSearch = address
-        bleManager.connectDevice()
     }
 
     private fun templateSetting( funDataRepository:() -> List<SettingDB> ){

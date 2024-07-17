@@ -6,7 +6,6 @@ import android.bluetooth.BluetoothGattCharacteristic
 import android.bluetooth.le.ScanCallback
 import android.bluetooth.le.ScanResult
 import android.bluetooth.le.ScanSettings
-import android.util.Log
 import com.example.count_out.entity.StateScanner
 import com.example.count_out.entity.bluetooth.BleDevice
 import com.example.count_out.entity.bluetooth.BleStates
@@ -14,6 +13,7 @@ import com.example.count_out.entity.bluetooth.SendToUI
 import com.example.count_out.ui.view_components.lg
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
+import java.util.UUID
 
 fun scanSettings(reportDelay: Long): ScanSettings {
     return ScanSettings.Builder()
@@ -32,12 +32,11 @@ fun objectScanCallback( bleStates: BleStates, sendToUI: SendToUI
     override fun onScanResult(callbackType: Int, result: ScanResult?) {
         super.onScanResult(callbackType, result)
         result?.device?.let { dev ->
+//            lg("objectScanCallback devices.value ${dev.address}")
             sendToUI.foundDevices.value.find { it.address == dev.address }
                 ?: sendToUI.foundDevices.addApp(
-                    BleDevice().fromBluetoothDevice(result.device) )
-            lg("objectScanCallback devices.value ${result.device.address}")
+                    BleDevice().fromBluetoothDevice(dev) )
         }
-        bleStates.stateScanner = StateScanner.RUNNING
     }
     override fun onBatchScanResults(results: MutableList<ScanResult>?) {
         super.onBatchScanResults(results)
@@ -47,7 +46,6 @@ fun objectScanCallback( bleStates: BleStates, sendToUI: SendToUI
                     ?: sendToUI.foundDevices.addApp(BleDevice().fromBluetoothDevice(result.device))
             }
         }
-        bleStates.stateScanner = StateScanner.RUNNING
     }
     override fun onScanFailed(errorCode: Int) {
         lg("Error scan BLE device. $errorCode")
@@ -55,15 +53,57 @@ fun objectScanCallback( bleStates: BleStates, sendToUI: SendToUI
     }
 }
 
-fun BluetoothGatt.printCharacteristicsTable() {
-    if (services.isEmpty()) {
-        Log.i("printGattTable", "No service and characteristic available, call discoverServices() first?")
-        return
-    }
+fun BluetoothGatt.findCharacteristic(uuid: UUID): BluetoothGattCharacteristic?{
+    if (services.isEmpty()) return null
+//    var charact: BluetoothGattCharacteristic? = null
     services.forEach { service ->
-        val characteristicsTable = service.characteristics.joinToString(separator = "\n|--", prefix = "|--") { it.uuid.toString() }
-        Log.i("printGattTable", "\nService ${service.uuid}\nCharacteristics:\n$characteristicsTable")
+        service.characteristics.find { ch-> ch.uuid == uuid }.apply { if (this != null) return this }
     }
+    return null
+}
+
+fun BluetoothGatt.printCharacteristicsTable() {
+    if (services.isEmpty()) { return }
+    services.forEach { service ->
+        val characteristicsTable = service.characteristics.joinToString(separator = "\n|--", prefix = "|--") {
+            it.uuid.toString() + " Readable: " + it.isReadable() + " Writable: " + it.isWritable() +
+                    " Notify: " + it.isNotify() + " Indicate: " + it.isIndicatable()
+        }
+        lg("Service ${service.uuid}\nCharacteristics:\n$characteristicsTable")
+    }
+//    Service 00001800-0000-1000-8000-00805f9b34fb
+//    Characteristics:
+//    |--00002a00-0000-1000-8000-00805f9b34fb Readable: true Writable: true
+//    |--00002a01-0000-1000-8000-00805f9b34fb Readable: true Writable: false
+//    |--00002a04-0000-1000-8000-00805f9b34fb Readable: true Writable: false
+//    |--00002aa6-0000-1000-8000-00805f9b34fb Readable: true Writable: false
+//    2024-07-16 22:01:53.867 KDS                      D  printGattTable
+//    Service 00001801-0000-1000-8000-00805f9b34fb
+//    Characteristics:
+//    |--
+//    2024-07-16 22:01:53.869 KDS                      D  printGattTable
+//    Service 0000180d-0000-1000-8000-00805f9b34fb
+//    Characteristics:
+//    |--00002a37-0000-1000-8000-00805f9b34fb Readable: false Writable: false
+//    |--00002a38-0000-1000-8000-00805f9b34fb Readable: true Writable: false
+//    2024-07-16 22:01:53.870 KDS                      D  printGattTable
+//    Service 8ce5cc01-0a4d-11e9-ab14-d663bd873d93
+//    Characteristics:
+//    |--8ce5cc02-0a4d-11e9-ab14-d663bd873d93 Readable: false Writable: true
+//    |--8ce5cc03-0a4d-11e9-ab14-d663bd873d93 Readable: false Writable: true
+//    2024-07-16 22:01:53.870 KDS                      D  printGattTable
+//    Service 0000180f-0000-1000-8000-00805f9b34fb
+//    Characteristics:
+//    |--00002a19-0000-1000-8000-00805f9b34fb Readable: true Writable: false
+//    2024-07-16 22:01:53.872 KDS                      D  printGattTable
+//    Service 0000180a-0000-1000-8000-00805f9b34fb
+//    Characteristics:
+//    |--00002a29-0000-1000-8000-00805f9b34fb Readable: true Writable: false
+//    |--00002a24-0000-1000-8000-00805f9b34fb Readable: true Writable: false
+//    |--00002a25-0000-1000-8000-00805f9b34fb Readable: true Writable: false
+//    |--00002a27-0000-1000-8000-00805f9b34fb Readable: true Writable: false
+//    |--00002a26-0000-1000-8000-00805f9b34fb Readable: true Writable: false
+//    |--00002a28-0000-1000-8000-00805f9b34fb Readable: true Writable: false
 }
 
 fun BluetoothGattCharacteristic.isReadable(): Boolean =
@@ -74,6 +114,11 @@ fun BluetoothGattCharacteristic.containsProperty(property: Int) = properties and
 fun BluetoothGattCharacteristic.isWritable(): Boolean =
     containsProperty(BluetoothGattCharacteristic.PROPERTY_WRITE)
 
+fun BluetoothGattCharacteristic.isNotify(): Boolean =
+    containsProperty(BluetoothGattCharacteristic.PROPERTY_NOTIFY)
+
+fun BluetoothGattCharacteristic.isIndicatable(): Boolean =
+    containsProperty(BluetoothGattCharacteristic.PROPERTY_INDICATE)
 fun BluetoothGattCharacteristic.isWritableWithoutResponse(): Boolean =
     containsProperty(BluetoothGattCharacteristic.PROPERTY_WRITE_NO_RESPONSE)
 

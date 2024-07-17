@@ -23,7 +23,7 @@ enum class Rainfall{ SMALL, MEDIUM, LARGE }
 enum class UPDOWN { UP, DOWN, START, END }
 enum class TypeKeyboard{ DIGIT, TEXT, PASS, OTHER, NONE }
 enum class Zone(val id: Int, var maxPulse: Int){
-    EXTRASLOW( id = 1, maxPulse = 100),
+    EXTRA_SLOW( id = 1, maxPulse = 100),
     SLOW(id = 2, maxPulse = 120),
     MEDIUM(id = 3, maxPulse = 135),
     HIGH(id = 4, maxPulse = 160),
@@ -31,9 +31,10 @@ enum class Zone(val id: Int, var maxPulse: Int){
 }
 
 enum class TimerState { COUNTING, STOPPED, END, }
-enum class StateScanner { RUNNING, END, }
+enum class StateScanner { RUNNING_ALL, RUNNING_MAC, END, }
 enum class StateService { DECLARED, CREATED, STARTED, PAUSED, STOPPED, GET_REMOTE_DEVICE, CONNECT_GAT, GET_DISCOVER_SERVICE, DISCONNECTED }
 enum class StateRunning { Created, Started, Paused, Stopped }
+enum class BleTask{ NONE, CONNECT_DEVICE, NOTIFY_CHARACTERISTIC }
 enum class RoundType(val strId: Int, var amount: Int, var duration: Int){
     UP (R.string.work_up,0,0),
     OUT (R.string.work_out,0,0),
@@ -56,7 +57,7 @@ enum class CharacteristicProperty {
         }
 }
 enum class ErrorBleService{
-    NONE, GET_REMOTE_DEVICE, CONNECT_DEVICE, CONNECT_GATT, DISCOVER_SERVICE
+    NONE, GET_REMOTE_DEVICE, CONNECT_DEVICE, NOT_CONNECT_GATT, DISCOVER_SERVICE
 }
 
 enum class HciStatus(val param: Int) {

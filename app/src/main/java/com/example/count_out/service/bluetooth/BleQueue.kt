@@ -3,6 +3,8 @@ package com.example.count_out.service.bluetooth
 import android.annotation.SuppressLint
 import com.example.count_out.entity.Const.MAX_TRIES
 import com.example.count_out.ui.view_components.lg
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.runBlocking
 import java.util.concurrent.ConcurrentLinkedQueue
 
 class BleQueue {
@@ -22,22 +24,23 @@ class BleQueue {
         if (commandQueue.size > 0) {
             val command: (() -> Boolean) = commandQueue.peek()!!
             commandRunning = true
-            nrTries = 0
             if(! command() ) retryCommand() else completedCommand()
         }
     }
 
     fun completedCommand() {
         commandRunning = false
+        nrTries = 0
         commandQueue.poll()
         nextCommand()
     }
 
     private fun retryCommand() {
         nrTries++
+        runBlocking { delay(1000L) }
         commandRunning = false
         if (nrTries >= MAX_TRIES) {
-            lg( "Max number of tries reached")
+            nrTries = 0
             commandQueue.poll()
         }
         nextCommand()

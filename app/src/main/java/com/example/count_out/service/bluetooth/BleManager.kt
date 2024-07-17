@@ -12,6 +12,7 @@ import com.example.count_out.service.ServiceUtils
 import com.example.count_out.ui.view_components.lg
 import javax.inject.Inject
 import javax.inject.Singleton
+
 /**
  * ######################Connect to device #####################################################
 1   initBleService(){}:  bleServiceConnection.onServiceConnected.BleService.startBleService()
@@ -58,14 +59,22 @@ class BleManager @Inject constructor(val context: Context, private val serviceUt
     fun onClearCacheBLE() {}
 
     fun startScannerBLEDevices() {
-        if ( isBound ) bleService.startScannerBLEDevices()
+        if ( isBound ) {
+            bleService.stopScannerBLEDevices()
+            bleService.stopScannerBLEDevicesByMac()
+            bleService.startScannerBLEDevices()
+        }
     }
 
-    fun stopScannerBLEDevices() {}
+    fun stopScannerBLEDevices() {if (isBound ) bleService.stopScannerBLEDevices()}
 
     fun startScannerBleDeviceByMac(deviceUI: DeviceUI) {
         lg("BleManager.startScannerBleDeviceByMac isBound: $isBound")
-        if ( isBound ) bleService.startScannerBleDeviceByMac(deviceUI)
+        if ( isBound ) {
+            bleService.stopScannerBLEDevices()
+            bleService.stopScannerBLEDevicesByMac()
+            bleService.startScannerBleDeviceByMac(deviceUI)
+        }
     }
 
     fun stopScannerBLEDevicesByMac(){}

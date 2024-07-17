@@ -36,6 +36,7 @@ class MainActivity: ComponentActivity()
 
     override fun onStart() {
         super.onStart()
+        lg("onStart ${Thread.currentThread().name}")
         workOutManager.bindService( WorkoutService::class.java)
 //        sensorsManager.onCreate()
         if (checkBluetoothEnable()) bleManager.bindBleService(BleService::class.java)

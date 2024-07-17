@@ -61,19 +61,20 @@ object Const {
         Manifest.permission.ACCESS_BACKGROUND_LOCATION,
     )
     val serviceUUIDs = listOf(
-        UUID.fromString("00001809-0000-0000-0000-000000000000"),
-        UUID.fromString("00001810-0000-1000-8000-000000000000"),
+//        UUID.fromString("00001809-0000-0000-0000-000000000000"),
+//        UUID.fromString("00001810-0000-1000-8000-000000000000"),
+        UUID.fromString("0000180A-0000-0000-0000-000000000000"),
         UUID.fromString("0000180D-0000-0000-0000-000000000000"),
-        UUID.fromString("0000180E-0000-0000-0000-000000000000"),
-        UUID.fromString("00001812-0000-0000-0000-000000000000"),
-        UUID.fromString("00001814-0000-0000-0000-000000000000"),
-        UUID.fromString("00001816-0000-0000-0000-000000000000"),
-        UUID.fromString("00001818-0000-0000-0000-000000000000"),
-        UUID.fromString("00001819-0000-0000-0000-000000000000"),
-        UUID.fromString("00001822-0000-0000-0000-000000000000"),
-        UUID.fromString("00001826-0000-0000-0000-000000000000"),
-        UUID.fromString("0000183E-0000-0000-0000-000000000000"),
-        UUID.fromString("00001840-0000-0000-0000-000000000000"),
+        UUID.fromString("0000180F-0000-0000-0000-000000000000"),
+//        UUID.fromString("00001812-0000-0000-0000-000000000000"),
+//        UUID.fromString("00001814-0000-0000-0000-000000000000"),
+//        UUID.fromString("00001816-0000-0000-0000-000000000000"),
+//        UUID.fromString("00001818-0000-0000-0000-000000000000"),
+//        UUID.fromString("00001819-0000-0000-0000-000000000000"),
+//        UUID.fromString("00001822-0000-0000-0000-000000000000"),
+//        UUID.fromString("00001826-0000-0000-0000-000000000000"),
+//        UUID.fromString("0000183E-0000-0000-0000-000000000000"),
+//        UUID.fromString("00001840-0000-0000-0000-000000000000"),
     )
     const val ACTION_GATT_CONNECTED = "com.example.bluetooth.le.ACTION_GATT_CONNECTED"
     const val ACTION_GATT_DISCONNECTED = "com.example.bluetooth.le.ACTION_GATT_DISCONNECTED"
@@ -81,7 +82,7 @@ object Const {
     private const val STATE_DISCONNECTED = 0
     private const val STATE_CONNECTED = 2
 
-    val UUID_HEART_RATE_MEASUREMENT: UUID = UUID.fromString(SampleGattAttributes.HEART_RATE_MEASUREMENT)
+
     val uuidHeartRate = UUIDBle(
         serviceUuid = UUID.fromString("0000180D-0000-1000-8000-00805f9b34fb"),
         charUuid = UUID.fromString("0000180D-0000-1000-8000-00805f9b34fb")
@@ -91,12 +92,31 @@ object Const {
         charUuid = UUID.fromString("00002a19-0000-1000-8000-00805f9b34fb")
     )
 
-    object SampleGattAttributes {
-        private val attributes: HashMap<String?, String?> = HashMap<String?, String?>()
-        var HEART_RATE_MEASUREMENT: String = "00002a37-0000-1000-8000-00805f9b34fb"
+    object GattAttributes {
+        var attributes: HashMap<String, String> = HashMap()
+        var DEVICE_INFORMATION_SERVICE =    "0000180a-0000-1000-8000-00805f9b34fb"
+        var HEART_RATE_SERVICE =            "0000180d-0000-1000-8000-00805f9b34fb"
+        var BATTERY_LEVEL_SERVICE =         "0000180f-0000-1000-8000-00805f9b34fb"
+        var CLIENT_CHARACTERISTIC_CONFIG =  "00002902-0000-1000-8000-00805f9b34fb"
+        var BATTERY_LEVEL =                 "00002a19-0000-1000-8000-00805f9b34fb"
+        var MANUFACTURE_NAME =              "00002a29-0000-1000-8000-00805f9b34fb"
+        var HEART_RATE_MEASUREMENT =        "00002a37-0000-1000-8000-00805f9b34fb"
+        var IO_TANK =                       "19B10000-E8F2-537E-4F6C-D104768A1214"
+
         init {
-            attributes["0000180d-0000-1000-8000-00805f9b34fb"] = "Heart Rate Service"
+            // Sample Services.
+            attributes[DEVICE_INFORMATION_SERVICE] = "Device Information Service"
+            attributes[HEART_RATE_SERVICE] = "Heart Rate Service"
+            attributes[BATTERY_LEVEL_SERVICE] = "Battery level Service"
+            attributes[CLIENT_CHARACTERISTIC_CONFIG] = "Client characteristic config"
+            attributes[BATTERY_LEVEL] = "Battery level"
+            attributes[MANUFACTURE_NAME] = "Manufacture name"
             attributes[HEART_RATE_MEASUREMENT] = "Heart Rate Measurement"
+            attributes[IO_TANK] = "ioTank"
+        }
+        fun lookup(uuid: String, defaultName: String): String {
+            val name = attributes.get(uuid)
+            return name ?: defaultName
         }
     }
 }

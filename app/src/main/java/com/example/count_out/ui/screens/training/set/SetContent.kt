@@ -43,7 +43,6 @@ import com.example.count_out.ui.view_components.TextApp
 import com.example.count_out.ui.view_components.TextAppLines
 import com.example.count_out.ui.view_components.TextFieldApp
 import com.example.count_out.ui.view_components.TextStringAndField
-import com.example.count_out.ui.view_components.lg
 
 @Composable
 fun SetContent(uiState: TrainingScreenState, set: Set, amountSet: Int)
@@ -286,7 +285,7 @@ fun SelectZone(uiState: TrainingScreenState, set: Set){
     TextApp(
         style = interLight12,
         text = stringResource(id = R.string.zone) )
-    ChipZone(Zone.EXTRASLOW, uiState, set)
+    ChipZone(Zone.EXTRA_SLOW, uiState, set)
     ChipZone(Zone.SLOW, uiState, set)
     ChipZone(Zone.MEDIUM, uiState, set)
     ChipZone(Zone.HIGH, uiState, set)
