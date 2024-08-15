@@ -2,23 +2,6 @@ package com.example.count_out.entity
 
 import com.example.count_out.R
 
-enum class TypeText {
-    NAME_SCREEN,
-    NAME_SECTION,
-    TEXT_IN_LIST,
-    TEXT_IN_LIST_SMALL,
-    EDIT_TEXT,
-    EDIT_TEXT_TITLE,
-    TEXT_IN_LIST_SETTING,
-    NAME_SLIDER,
-}
-enum class SizeElement{
-    HEIGHT_BOTTOM_BAR,
-    SIZE_FAB,
-    PADDING_FAB,
-    OFFSET_FAB,
-    HEIGHT_FAB_BOX
-}
 enum class Rainfall{ SMALL, MEDIUM, LARGE }
 enum class UPDOWN { UP, DOWN, START, END }
 enum class TypeKeyboard{ DIGIT, TEXT, PASS, OTHER, NONE }
@@ -29,7 +12,6 @@ enum class Zone(val id: Int, var maxPulse: Int){
     HIGH(id = 4, maxPulse = 160),
     MAX(id = 5, maxPulse = 180)
 }
-
 enum class TimerState { COUNTING, STOPPED, END, }
 enum class StateScanner { RUNNING_ALL, RUNNING_MAC, END, }
 enum class StateService { DECLARED, CREATED, STARTED, PAUSED, STOPPED, GET_REMOTE_DEVICE, CONNECT_GAT, GET_DISCOVER_SERVICE, DISCONNECTED }
@@ -41,25 +23,13 @@ enum class RoundType(val strId: Int, var amount: Int, var duration: Int){
     DOWN (R.string.work_down,0,0);
 }
 enum class GoalSet(val id: Int){ DISTANCE(1), DURATION(2), COUNT(3), COUNT_GROUP(4), }
-/**This class describes the HCI error codes as defined in the Bluetooth Standard, Volume 1, Part F,
- * 1.3 HCI Error Code, pages 364-377.
- * See https://www.bluetooth.org/docman/handlers/downloaddoc.ashx?doc_id=478726,*/
-enum class CharacteristicProperty {
-    Readable, Writable, WritableWithoutResponse, Notifiable, Indicatable;
-
-    val action
-        get() = when (this) {
-            Readable -> "Read"
-            Writable -> "Write"
-            WritableWithoutResponse -> "Write Without Response"
-            Notifiable -> "Toggle Notifications"
-            Indicatable -> "Toggle Indications"
-        }
-}
 enum class ErrorBleService{
     NONE, GET_REMOTE_DEVICE, CONNECT_DEVICE, NOT_CONNECT_GATT, DISCOVER_SERVICE
 }
 
+/**This class describes the HCI error codes as defined in the Bluetooth Standard, Volume 1, Part F,
+ * 1.3 HCI Error Code, pages 364-377.
+ * See https://www.bluetooth.org/docman/handlers/downloaddoc.ashx?doc_id=478726,*/
 enum class HciStatus(val param: Int) {
     UNSUPPORTED_LMP_OR_LL_PARAMETER_VALUE(0x20),
     /** a Controller will not allow a role change at this time.*/

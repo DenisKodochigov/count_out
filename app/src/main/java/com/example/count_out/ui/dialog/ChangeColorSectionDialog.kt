@@ -37,10 +37,10 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.example.count_out.R
 import com.example.count_out.entity.UPDOWN
-import com.example.count_out.ui.theme.colorApp
+import com.example.count_out.ui.theme.colors3
 import com.example.count_out.ui.theme.interBold16
 import com.example.count_out.ui.theme.massColor
-import com.example.count_out.ui.theme.shapesApp
+import com.example.count_out.ui.theme.shapes
 import com.example.count_out.ui.view_components.ArrowDown
 import com.example.count_out.ui.view_components.ArrowLeft
 import com.example.count_out.ui.view_components.ArrowNoneHor
@@ -58,9 +58,9 @@ fun ChangeColorSectionDialog(
 ){
     val color = remember { mutableIntStateOf(colorItem) }
     AlertDialog(
-        modifier = Modifier.border(width = 1.dp, shape = shapesApp.small, color = colorApp.primary),
+        modifier = Modifier.border(width = 1.dp, shape = shapes.small, color = colors3.primary),
         onDismissRequest = onDismiss,
-        shape = shapesApp.small,
+        shape = shapes.small,
         confirmButton = { TextButtonOK( onConfirm = { onConfirm( color.intValue) } ) },
         title = {
             TextApp(
@@ -90,7 +90,7 @@ fun ChangeColorSectionLayout(color: MutableState<Int>)
                 .background(color = selectColor.value, shape = CircleShape)
                 .border(
                     width = 1.dp,
-                    color = colorApp.outline,
+                    color = colors3.outline,
                     shape = CircleShape
                 )
             )
@@ -139,7 +139,7 @@ fun ChangeColorSectionLayout(color: MutableState<Int>)
                             .clickable { doSelectedColor(item.toArgb()) }
                             .border(
                                 width = 1.dp,
-                                color = colorApp.outline,
+                                color = colors3.outline,
                                 shape = CircleShape
                             )
                         )
@@ -161,7 +161,7 @@ fun ChangeColorSectionLayout(color: MutableState<Int>)
     Column(modifier = Modifier.fillMaxWidth()){
         if (direction == UPDOWN.UP && drawLine) HorizontalDivider(
             thickness = 1.dp,
-            color = colorApp.primary
+            color = colors3.primary
         )
 
         Row(modifier = Modifier.fillMaxWidth(),  horizontalArrangement = Arrangement.Center) {
@@ -172,7 +172,7 @@ fun ChangeColorSectionLayout(color: MutableState<Int>)
         }
         if (direction == UPDOWN.DOWN && drawLine) HorizontalDivider(
             thickness = 1.dp,
-            color = colorApp.primary
+            color = colors3.primary
         )
     }
 }
@@ -185,7 +185,7 @@ fun ChangeColorSectionLayout(color: MutableState<Int>)
             HorizontalDivider(
                 modifier = Modifier
                     .fillMaxHeight()
-                    .width(1.dp), color = colorApp.primary
+                    .width(1.dp), color = colors3.primary
             )
         }
 
@@ -193,7 +193,7 @@ fun ChangeColorSectionLayout(color: MutableState<Int>)
         else ArrowNoneHor()
         if (direction == UPDOWN.END && drawLine){
             HorizontalDivider(modifier =
-                Modifier.fillMaxHeight().width(1.dp), color = colorApp.primary)
+                Modifier.fillMaxHeight().width(1.dp), color = colors3.primary)
         }
     }
 }

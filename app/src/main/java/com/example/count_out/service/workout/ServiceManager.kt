@@ -18,8 +18,7 @@ class ServiceManager @Inject constructor(val context: Context, val serviceUtils:
 
     private val serviceConnection = object : ServiceConnection {
         override fun onServiceConnected(className: ComponentName, binder: IBinder) {
-            val binderService = binder as WorkoutService.WorkoutServiceBinder
-            workOutService = binderService.getService()
+            workOutService = (binder as WorkoutService.WorkoutServiceBinder).getService()
             isBound  = true
         }
         override fun onServiceDisconnected(arg0: ComponentName) {

@@ -35,11 +35,13 @@ import com.example.count_out.entity.Activity
 import com.example.count_out.entity.TypeKeyboard
 import com.example.count_out.ui.dialog.ChangeColorSectionDialog
 import com.example.count_out.ui.screens.settings.SettingScreenState
-import com.example.count_out.ui.theme.colorApp
+import com.example.count_out.ui.theme.colors3
 import com.example.count_out.ui.theme.elevationTraining
 import com.example.count_out.ui.theme.interLight12
+import com.example.count_out.ui.theme.typography
 import com.example.count_out.ui.view_components.TextApp
 import com.example.count_out.ui.view_components.TextFieldApp
+
 
 @SuppressLint("UnrememberedMutableState")
 @Composable fun CardActivity(uiState: SettingScreenState, activity: Activity)
@@ -91,10 +93,10 @@ fun ActivityValueShort(
         Spacer(modifier = Modifier.padding(end= 12.dp))
         TextFieldApp(
             modifier = Modifier.weight(1f),
-            placeholder = "${activity.value.idActivity}:${activity.value.name}",
+            placeholder = "${activity.value.name}",
             contentAlignment = Alignment.BottomStart,
             typeKeyboard = typeKeyboard,
-            textStyle = interLight12,
+            textStyle = typography.bodyMedium,
             onLossFocus = false,
             onChangeValue = {
                 activity.value = (activity.value as ActivityDB).copy(name = it)
@@ -105,7 +107,7 @@ fun ActivityValueShort(
             .clip(shape = CircleShape)
             .border(
                 width = 1.dp,
-                color = colorApp.outline,
+                color = colors3.outline,
                 shape = CircleShape
             )
             .clickable { activityChangeColor.value = activity.value }

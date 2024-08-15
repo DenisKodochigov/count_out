@@ -32,7 +32,7 @@ import com.example.count_out.entity.TypeKeyboard
 import com.example.count_out.ui.theme.Dimen
 import com.example.count_out.ui.theme.interLight14Start
 import com.example.count_out.ui.theme.interThin12Start
-import com.example.count_out.ui.theme.shapesApp
+import com.example.count_out.ui.theme.shapes
 import com.example.count_out.ui.view_components.ButtonConfirm
 import com.example.count_out.ui.view_components.TextApp
 import com.example.count_out.ui.view_components.TextFieldApp
@@ -46,7 +46,7 @@ import com.example.count_out.ui.view_components.TextFieldApp
     ModalBottomSheet(
         onDismissRequest = {uiState.onDismissSpeech.invoke()},
         modifier = Modifier.padding(horizontal = Dimen.bsPaddingHor1),
-        shape = shapesApp.small,
+        shape = shapes.small,
         containerColor = BottomSheetDefaults.ContainerColor,
         contentColor = contentColorFor(BottomAppBarDefaults.containerColor),
         tonalElevation = BottomSheetDefaults.Elevation,

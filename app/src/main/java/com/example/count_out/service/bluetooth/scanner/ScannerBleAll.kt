@@ -12,11 +12,13 @@ import com.example.count_out.permission.PermissionApp
 import com.example.count_out.service.bluetooth.objectScanCallback
 import com.example.count_out.service.bluetooth.scanSettings
 import com.example.count_out.ui.view_components.lg
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.update
 import java.util.UUID
 
 class ScannerBleAll(
     private val bluetoothAdapter: BluetoothAdapter,
-    val permissionApp: PermissionApp
+    private val permissionApp: PermissionApp
 ){
     private lateinit var scanCallback: ScanCallback
     private val bleScanner by lazy { bluetoothAdapter.bluetoothLeScanner }
@@ -34,16 +36,18 @@ class ScannerBleAll(
     }
 
     @SuppressLint("MissingPermission")
-    fun startScannerBLEDevices(bleStates: BleStates, sendToUI: SendToUI) {
+    fun startScannerBLEDevices(bleStates: BleStates, sendToUI: MutableStateFlow<SendToUI>) {
         scanCallback = objectScanCallback(bleStates, sendToUI)
-//        lg("ScannerBleAll valOut.listDevice: ${sendToUI.foundDevices}")
+        lg("ScannerBleAll valOut.listDevice: ${sendToUI.value.foundDevices}")
         permissionApp.checkBleScan{
             bleScanner.startScan( scanFilters(), scanSettings(0L), scanCallback) }
+        sendToUI.update { send-> send.copy( scannedBle = true) }
     }
 
     @SuppressLint("MissingPermission")
-    fun stopScannerBLEDevices(){
+    fun stopScannerBLEDevices(sendToUI: MutableStateFlow<SendToUI>){
         lg("Stop scanner")
         permissionApp.checkBleScan{ bleScanner.stopScan(scanCallback)}
+        sendToUI.update { send-> send.copy( scannedBle = false) }
     }
 }

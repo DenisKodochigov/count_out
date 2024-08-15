@@ -1,6 +1,5 @@
 package com.example.count_out.service.bluetooth
 
-import android.annotation.SuppressLint
 import android.bluetooth.BluetoothGatt
 import android.bluetooth.BluetoothGattCharacteristic
 import android.bluetooth.le.ScanCallback
@@ -9,10 +8,15 @@ import android.bluetooth.le.ScanSettings
 import com.example.count_out.entity.StateScanner
 import com.example.count_out.entity.bluetooth.BleDevice
 import com.example.count_out.entity.bluetooth.BleStates
+import com.example.count_out.entity.bluetooth.DeviceUI
 import com.example.count_out.entity.bluetooth.SendToUI
 import com.example.count_out.ui.view_components.lg
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 import java.util.UUID
 
 fun scanSettings(reportDelay: Long): ScanSettings {
@@ -25,30 +29,34 @@ fun scanSettings(reportDelay: Long): ScanSettings {
         .build()
 }
 
-fun objectScanCallback( bleStates: BleStates, sendToUI: SendToUI
+fun objectScanCallback( bleStates: BleStates, sendToUI: MutableStateFlow<SendToUI>
 ): ScanCallback = object: ScanCallback()
 {
-    @SuppressLint("MissingPermission")
     override fun onScanResult(callbackType: Int, result: ScanResult?) {
         super.onScanResult(callbackType, result)
         result?.device?.let { dev ->
-//            lg("objectScanCallback devices.value ${dev.address}")
-            sendToUI.foundDevices.value.find { it.address == dev.address }
-                ?: sendToUI.foundDevices.addApp(
-                    BleDevice().fromBluetoothDevice(dev) )
+            sendToUI.update { send->
+                send.copy( foundDevices = (send.foundDevices.find { it.address == dev.address }
+                    ?: send.foundDevices.addApp(
+                        BleDevice().fromBluetoothDevice(dev) )) as List<DeviceUI>)
+            }
         }
     }
     override fun onBatchScanResults(results: MutableList<ScanResult>?) {
         super.onBatchScanResults(results)
         if (!results.isNullOrEmpty()) {
             results.forEach{ result->
-                sendToUI.foundDevices.value.find { it.address == result.device.address }
-                    ?: sendToUI.foundDevices.addApp(BleDevice().fromBluetoothDevice(result.device))
+                sendToUI.update { send->
+                    send.copy( foundDevices = (send.foundDevices.find { it.address == result.device.address }
+                        ?: send.foundDevices.addApp(
+                            BleDevice().fromBluetoothDevice(result.device))) as List<DeviceUI>)
+                }
             }
         }
     }
     override fun onScanFailed(errorCode: Int) {
         lg("Error scan BLE device. $errorCode")
+        sendToUI.update { send-> send.copy( scannedBle = false) }
         bleStates.stateScanner = StateScanner.END
     }
 }
@@ -105,6 +113,27 @@ fun BluetoothGatt.printCharacteristicsTable() {
 //    |--00002a26-0000-1000-8000-00805f9b34fb Readable: true Writable: false
 //    |--00002a28-0000-1000-8000-00805f9b34fb Readable: true Writable: false
 }
+fun <T>printHR(text: String, hr: MutableStateFlow<T>){
+    CoroutineScope(Dispatchers.Default).launch {
+        hr.collect{ hr->
+            when(hr){
+                is Int-> {lg( "printHR $text: $hr")}
+            }
+        }
+    }
+}
+
+fun generateHR(hr: MutableStateFlow<Int>){
+    CoroutineScope(Dispatchers.Default).launch {
+        var i = 0
+        while (i < 110){
+            delay(2000L)
+            if ( i > 100) i = 0 else i++
+            hr.value = i
+//            lg("generateHR: ${hr.value}")
+        }
+    }
+}
 
 fun BluetoothGattCharacteristic.isReadable(): Boolean =
     containsProperty(BluetoothGattCharacteristic.PROPERTY_READ)
@@ -125,3 +154,4 @@ fun BluetoothGattCharacteristic.isWritableWithoutResponse(): Boolean =
 fun <T>MutableStateFlow<List<T>>.addApp(device: T) =
     update { this.value.toMutableList().apply { this.add(device) } }
 
+fun <T>List<T>.addApp(device: T) = this.toMutableList().apply { this.add(device) }

@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
@@ -31,8 +32,8 @@ import com.example.count_out.ui.bottomsheet.BottomSheetSelectActivity
 import com.example.count_out.ui.bottomsheet.BottomSheetSpeech
 import com.example.count_out.ui.screens.training.round.Round
 import com.example.count_out.ui.theme.Dimen
-import com.example.count_out.ui.theme.interBold16
-import com.example.count_out.ui.view_components.IconSpeechDel
+import com.example.count_out.ui.theme.typography
+import com.example.count_out.ui.view_components.IconsGroup
 import com.example.count_out.ui.view_components.TextFieldApp
 
 @SuppressLint("UnrememberedMutableState")
@@ -107,9 +108,10 @@ fun TrainingScreenLayout( uiState: TrainingScreenState
         modifier = Modifier
             .fillMaxHeight()
             .verticalScroll(rememberScrollState())
-            .padding( horizontal = Dimen.paddingAppHor )
-            .clickable( interactionSource = interactionSource, indication = null
-            ){
+            .padding(horizontal = Dimen.paddingAppHor)
+            .clickable(
+                interactionSource = interactionSource, indication = null
+            ) {
                 if (uiState.training.name != uiState.enteredName.value) {
                     uiState.changeNameTraining(uiState.training, uiState.enteredName.value)
                 }
@@ -131,25 +133,28 @@ fun NameTraining( uiState: TrainingScreenState )
 {
     Row(
         verticalAlignment = Alignment.CenterVertically,
-        modifier = Modifier.fillMaxWidth().padding(bottom = 6.dp)
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(bottom = 6.dp)
     )
     {
         TextFieldApp(
             placeholder = uiState.enteredName.value,
             typeKeyboard = TypeKeyboard.TEXT,
             contentAlignment = Alignment.BottomStart,
-            textStyle = interBold16,
+            textStyle = typography.headlineMedium,
             onChangeValue = {
                 uiState.enteredName.value = it
                 uiState.changeNameTraining(uiState.training, uiState.enteredName.value)}
         )
         Spacer(modifier = Modifier.weight(1f))
-        IconSpeechDel(
-            onSpeech = { uiState.showSpeechTraining.value = true },
-            onDelete = {
+        IconsGroup(
+            onClickSpeech = { uiState.showSpeechTraining.value = true },
+            onClickDelete = {
                 uiState.onDeleteTraining(uiState.training.idTraining)
                 uiState.onBaskScreen.invoke()}
         )
+        Spacer(modifier = Modifier.width(7.dp))
     }
 }
 @Preview(showBackground = true)

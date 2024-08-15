@@ -31,7 +31,6 @@ class PlayersModule {
     fun providePlayerExercise(
         speechManager: SpeechManager,
         playerSet: PlayerSet,
-        @ApplicationContext appContext: Context
     ): PlayerExercise {
         return PlayerExercise(speechManager, playerSet)
     }

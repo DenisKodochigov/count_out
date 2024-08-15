@@ -93,4 +93,7 @@
     <string name="quit">Quit</string>
     <string name="disconnected">Disconnected</string>
     <string name="disconnected_or_unable_to_connect_to_device">Disconnected or unable to connect to %1$s.</string>
+    <string name="list_trainings">Список тренировок</string>
+    <string name="show_Action">Показать действия</string>
+    <string name="title_setting_screen">Настройки приложения</string>
 </resources>

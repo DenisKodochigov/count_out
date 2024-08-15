@@ -10,18 +10,22 @@ import android.os.Build
 import android.os.IBinder
 import com.example.count_out.entity.BleTask
 import com.example.count_out.entity.Const.NOTIFICATION_ID
-import com.example.count_out.entity.Const.uuidHeartRate
 import com.example.count_out.entity.ErrorBleService
 import com.example.count_out.entity.StateScanner
 import com.example.count_out.entity.StateService
+import com.example.count_out.entity.bluetooth.BleConnection
+import com.example.count_out.entity.bluetooth.BleDevice
 import com.example.count_out.entity.bluetooth.BleStates
-import com.example.count_out.entity.bluetooth.DeviceUI
-import com.example.count_out.entity.bluetooth.ListConnection
 import com.example.count_out.entity.bluetooth.ReceiveFromUI
 import com.example.count_out.entity.bluetooth.SendToUI
 import com.example.count_out.helpers.NotificationHelper
 import com.example.count_out.ui.view_components.lg
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -35,9 +39,8 @@ class BleService @Inject constructor(): Service() {
     @Inject lateinit var notificationHelper: NotificationHelper
 
     lateinit var receiveFromUI: ReceiveFromUI
-    val sendToUi: SendToUI = SendToUI()
+    val sendToUi: MutableStateFlow<SendToUI> = MutableStateFlow(SendToUI())
     val bleStates = BleStates()
-    private val listConnection = ListConnection()
 
     /**
      * sendValueToUI - то что бубем отправлять в UI по всем устройствам.
@@ -68,11 +71,11 @@ class BleService @Inject constructor(): Service() {
     }
 
     fun stopBleService(){
-        sendToUi.cancel()
+        sendToUi.value.cancel()
         stopForeground(STOP_FOREGROUND_REMOVE)
         notificationHelper.cancel()
         stopScannerBLEDevices()
-        stopScannerBLEDevicesByMac()
+//        stopScannerBLEDevicesByMac()
         bleStates.stateService = StateService.STOPPED
     }
 
@@ -87,48 +90,30 @@ class BleService @Inject constructor(): Service() {
     fun stopScannerBLEDevices(){
         if (bleStates.stateScanner == StateScanner.RUNNING_ALL){
             bleStates.stateScanner = StateScanner.END
-            bleScanner.stopScannerBLEDevices()
+            bleScanner.stopScannerBLEDevices(sendToUi)
 //            lg("stopScannerBLEDevices")
         }
     }
 
-    fun startScannerBleDeviceByMac(deviceUI: DeviceUI){
-        if (bleStates.stateScanner == StateScanner.END){
-            bleStates.stateScanner = StateScanner.RUNNING_MAC
-            receiveFromUI.addressForSearch = deviceUI.address
-//            lg("startScannerBleDeviceByMac")
-            if (deviceUI.address.isNotEmpty()) {
-                bleScanner.startScannerBLEDevicesByMac(sendToUi, receiveFromUI, bleStates) }
-        }
-    }
-
-    fun stopScannerBLEDevicesByMac(){
-        if (bleStates.stateScanner == StateScanner.RUNNING_MAC){
-            bleStates.stateScanner = StateScanner.END
-//            lg("stopScannerBLEDevicesByMac")
-            bleScanner.stopScannerBLEDevicesByMac(sendToUi)
-        }
-    }
-
-    @SuppressLint("MissingPermission")
     fun connectDevice(){
         bleStates.task = BleTask.CONNECT_DEVICE
-        getRemoteDevice(bluetoothAdapter, listConnection, receiveFromUI,bleStates)
+        getRemoteDevice(bluetoothAdapter, receiveFromUI, bleStates)
+        sendHeartRate(bleConnecting.heartRate)
         if ( receiveFromUI.currentConnection != null ) {
-            bleConnecting.connectDevice(bleStates, receiveFromUI, sendToUi)
+            bleConnecting.connectDevice(bleStates, receiveFromUI)
         }
-//        bleConnecting.getRemoteDevice {
-//            getRemoteDevice(bluetoothAdapter, listConnection, receiveFromUI, bleStates) }
-//        bleConnecting.connectingGatt(receiveFromUI, bleStates)
-//        bleConnecting.startDiscoverService(receiveFromUI, bleStates)
     }
 
-    @SuppressLint("MissingPermission")
+    private fun sendHeartRate(heartRate: MutableStateFlow<Int>){
+        CoroutineScope(Dispatchers.Default).launch {
+            heartRate.collect{ hr-> sendToUi.update { send-> send.copy(heartRate = hr,) } }
+        }
+    }
+
     private fun getRemoteDevice(
         bluetoothAdapter: BluetoothAdapter,
-        listConnection: ListConnection,
         receiveFromUI: ReceiveFromUI,
-        bleStates: BleStates
+        bleStates: BleStates,
     ): Boolean {
         var result = false
         if (bleStates.stateScanner == StateScanner.END){
@@ -136,8 +121,13 @@ class BleService @Inject constructor(): Service() {
             bluetoothAdapter.let { adapter ->
                 try {
                     adapter.getRemoteDevice(receiveFromUI.addressForSearch)?.let { dv ->
-                        listConnection.addConnection(dv)
-                        receiveFromUI.currentConnection = listConnection.addConnection(dv)
+                        sendToUi.update { send->
+                            send.copy(
+                                foundDevices = listOf( BleDevice().fromBluetoothDevice(dv)),
+                                lastConnectHearthRateDevice = BleDevice().fromBluetoothDevice(dv)
+                            )
+                        }
+                        receiveFromUI.currentConnection = BleConnection(device = dv)
                         result = true
                         bleStates.stateService = StateService.GET_REMOTE_DEVICE
                     }
@@ -159,6 +149,4 @@ class BleService @Inject constructor(): Service() {
     fun onClearCacheBLE(){
         bleConnecting.clearServicesCache()
     }
-
-    fun readHeartRate() = bleConnecting.readParameterForBle(uuidHeartRate)
 }

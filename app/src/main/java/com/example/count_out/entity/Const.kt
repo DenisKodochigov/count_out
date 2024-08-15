@@ -1,7 +1,6 @@
 package com.example.count_out.entity
 
 import android.Manifest
-import com.example.count_out.entity.bluetooth.UUIDBle
 import com.example.count_out.navigation.TrainingsDestination
 import java.util.UUID
 
@@ -35,30 +34,30 @@ object Const {
     const val STOP_REQUEST_CODE = 102
     const val PERMISSION_REQUEST_CODE = 1
     val permissions1 = listOf(
-        Manifest.permission.ACCESS_COARSE_LOCATION, ///
-        Manifest.permission.ACCESS_FINE_LOCATION,   ///
+        Manifest.permission.ACCESS_COARSE_LOCATION,
+        Manifest.permission.ACCESS_FINE_LOCATION,
         Manifest.permission.INTERNET,
         Manifest.permission.ACCESS_NETWORK_STATE,
-        Manifest.permission.FOREGROUND_SERVICE,
-        Manifest.permission.FOREGROUND_SERVICE_DATA_SYNC,
-        Manifest.permission.FOREGROUND_SERVICE_CONNECTED_DEVICE,
-        Manifest.permission.POST_NOTIFICATIONS,
-        Manifest.permission.ACTIVITY_RECOGNITION,
+        Manifest.permission.FOREGROUND_SERVICE,                     //with 28
+        Manifest.permission.FOREGROUND_SERVICE_DATA_SYNC,           //with 31
+        Manifest.permission.FOREGROUND_SERVICE_CONNECTED_DEVICE,    //with 34
+        Manifest.permission.POST_NOTIFICATIONS,                     //with 33
+        Manifest.permission.ACTIVITY_RECOGNITION,                   //with 29
         Manifest.permission.VIBRATE,
         Manifest.permission.CHANGE_NETWORK_STATE,
         Manifest.permission.CHANGE_WIFI_STATE,
         Manifest.permission.CHANGE_WIFI_MULTICAST_STATE,
         Manifest.permission.NFC,
         Manifest.permission.TRANSMIT_IR,
-        Manifest.permission.UWB_RANGING,
+        Manifest.permission.UWB_RANGING,            //with 31
         Manifest.permission.BLUETOOTH,
-        Manifest.permission.BLUETOOTH_SCAN,
+        Manifest.permission.BLUETOOTH_SCAN,         //with 31
         Manifest.permission.BLUETOOTH_ADMIN,
-        Manifest.permission.BLUETOOTH_CONNECT,
-        Manifest.permission.BLUETOOTH_ADVERTISE,
+        Manifest.permission.BLUETOOTH_CONNECT,      //with 31
+        Manifest.permission.BLUETOOTH_ADVERTISE,    //with 31
     )
     val permissions2 = listOf(
-        Manifest.permission.ACCESS_BACKGROUND_LOCATION,
+        Manifest.permission.ACCESS_BACKGROUND_LOCATION,//with 29
     )
     val serviceUUIDs = listOf(
 //        UUID.fromString("00001809-0000-0000-0000-000000000000"),
@@ -76,23 +75,8 @@ object Const {
 //        UUID.fromString("0000183E-0000-0000-0000-000000000000"),
 //        UUID.fromString("00001840-0000-0000-0000-000000000000"),
     )
-    const val ACTION_GATT_CONNECTED = "com.example.bluetooth.le.ACTION_GATT_CONNECTED"
-    const val ACTION_GATT_DISCONNECTED = "com.example.bluetooth.le.ACTION_GATT_DISCONNECTED"
-    const val ACTION_GATT_SERVICES_DISCOVERED = "com.example.bluetooth.le.ACTION_GATT_SERVICES_DISCOVERED"
-    private const val STATE_DISCONNECTED = 0
-    private const val STATE_CONNECTED = 2
 
-
-    val uuidHeartRate = UUIDBle(
-        serviceUuid = UUID.fromString("0000180D-0000-1000-8000-00805f9b34fb"),
-        charUuid = UUID.fromString("0000180D-0000-1000-8000-00805f9b34fb")
-    )
-    val uuidBatteryLevel = UUIDBle(
-        serviceUuid = UUID.fromString("0000180f-0000-1000-8000-00805f9b34fb"),
-        charUuid = UUID.fromString("00002a19-0000-1000-8000-00805f9b34fb")
-    )
-
-    object GattAttributes {
+    object UUIDBle {
         var attributes: HashMap<String, String> = HashMap()
         var DEVICE_INFORMATION_SERVICE =    "0000180a-0000-1000-8000-00805f9b34fb"
         var HEART_RATE_SERVICE =            "0000180d-0000-1000-8000-00805f9b34fb"

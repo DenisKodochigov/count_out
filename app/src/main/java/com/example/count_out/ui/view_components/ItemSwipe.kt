@@ -24,7 +24,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
-import com.example.count_out.ui.theme.colorApp
+import com.example.count_out.ui.theme.colors3
 import kotlinx.coroutines.launch
 import kotlin.math.roundToInt
 
@@ -76,12 +76,12 @@ fun ItemSwipe(
     Row(modifier = modifier.fillMaxWidth(). padding(horizontal = 12.dp)) {
         Icon(imageVector = iconLeft,
             contentDescription = "",
-            tint = colorApp.primary,
+            tint = colors3.primary,
             modifier = Modifier.padding(start = 8.dp))
         Spacer(modifier = Modifier.weight(1f))
         Icon(imageVector = iconRight,
             contentDescription = "",
-            tint = colorApp.primary,
+            tint = colors3.primary,
             modifier = Modifier.padding(end = 8.dp))
     }
 }

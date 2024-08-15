@@ -3,6 +3,7 @@ package com.example.count_out.ui.view_components
 import androidx.compose.foundation.background
 import androidx.compose.foundation.focusable
 import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -53,12 +54,11 @@ import androidx.compose.ui.unit.sp
 import com.example.count_out.R
 import com.example.count_out.entity.TagsTesting.BUTTON_OK
 import com.example.count_out.entity.TypeKeyboard
-import com.example.count_out.entity.TypeText
 import com.example.count_out.ui.theme.Dimen
-import com.example.count_out.ui.theme.colorApp
+import com.example.count_out.ui.theme.colors3
 import com.example.count_out.ui.theme.interLight12
 import com.example.count_out.ui.theme.interReg12
-import com.example.count_out.ui.theme.styleApp
+import com.example.count_out.ui.theme.typography
 
 @Composable fun MyOutlinedTextFieldWithoutIcon(
     modifier: Modifier,
@@ -72,10 +72,10 @@ import com.example.count_out.ui.theme.styleApp
     var enterText by remember { mutableStateOf(enterValue.value) }
 
     OutlinedTextField(
-        modifier = modifier.background(color = colorApp.surface),
+        modifier = modifier.background(color = colors3.surface),
         value = enterText,
         singleLine = true,
-        textStyle = styleApp(nameStyle = TypeText.EDIT_TEXT),
+        textStyle = typography.titleMedium,
         label = label,
         onValueChange = {
             enterText = it
@@ -95,6 +95,12 @@ import com.example.count_out.ui.theme.styleApp
     )
 }
 
+@Composable fun NameScreen(id: Int){
+    Row(horizontalArrangement = Arrangement.Center,
+        modifier = Modifier.padding(top=24.dp, bottom =12.dp).fillMaxWidth()){
+        TextApp(text = stringResource(id = id), style = typography.headlineMedium)
+    }
+}
 @Composable fun ButtonApp(
     text: String,
     onClick: () -> Unit,
@@ -105,10 +111,10 @@ import com.example.count_out.ui.theme.styleApp
         onClick = onClick,
         enabled = enabled,
         colors = ButtonDefaults.buttonColors (
-            containerColor= colorApp.tertiaryContainer,
-            contentColor = colorApp.onTertiaryContainer ,
-            disabledContainerColor = colorApp.surface,
-            disabledContentColor = colorApp.onSurface
+            containerColor= colors3.tertiaryContainer,
+            contentColor = colors3.onTertiaryContainer ,
+            disabledContainerColor = colors3.surface,
+            disabledContentColor = colors3.onSurface
         ),
         elevation = ButtonDefaults.buttonElevation(
             defaultElevation = 6.dp,
@@ -133,7 +139,7 @@ import com.example.count_out.ui.theme.styleApp
             TextApp(
                 text = stringResource(R.string.ok),
                 modifier = Modifier.testTag(BUTTON_OK),
-                style = styleApp(nameStyle = TypeText.TEXT_IN_LIST)
+                style = typography.titleMedium
             )
         }
     }

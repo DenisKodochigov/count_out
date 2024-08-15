@@ -29,7 +29,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.example.count_out.entity.StateRunning
 import com.example.count_out.ui.theme.alumniReg14
-import com.example.count_out.ui.theme.colorApp
+import com.example.count_out.ui.theme.colors3
 import com.example.count_out.ui.theme.interLight12
 import java.math.RoundingMode
 
@@ -50,7 +50,7 @@ import java.math.RoundingMode
     Icon(
         imageVector = icon,
         contentDescription = null,
-        tint = colorApp.onPrimaryContainer,
+        tint = colors3.onPrimaryContainer,
     )
 }
 @Composable fun FABStartStopWorkOut(

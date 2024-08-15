@@ -70,14 +70,14 @@
     <string name="video_clip">Видеоклип</string>
     <string name="description">Описание</string>
     <string name="null_s">""</string>
-    <string name="speech_description">Описание</string>
+    <string name="speech_description">Проговаривать описание упражнения</string>
     <string name="create_ring">Создать круг</string>
     <string name="add_ring">Добавить круг</string>
     <string name="count">отсчеты</string>
     <string name="next_exercise">Подготовьтесь к следующему упражнению</string>
     <string name="rest_time">секунд отдыха.</string>
     <string name="section_heart_rate">Доступные устройства</string>
-    <string name="heart_rate_device">Измеритель пульса</string>
+    <string name="heart_rate_device">Датчик пульса</string>
     <string name="not_select_device">Нет выбранных устройств</string>
 
 
@@ -93,4 +93,7 @@
     <string name="quit">Quit</string>
     <string name="disconnected">Disconnected</string>
     <string name="disconnected_or_unable_to_connect_to_device">Disconnected or unable to connect to %1$s.</string>
+    <string name="list_trainings">Список тренировок</string>
+    <string name="show_Action">Показать действия</string>
+    <string name="title_setting_screen">Настройки приложения</string>
 </resources>

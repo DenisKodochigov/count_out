@@ -13,6 +13,6 @@ open class BleDevice(
         this.device = device
         this.name = device.name ?: ""
         this.address = device.address
-        return this as DeviceUI
+        return this
     }
 }

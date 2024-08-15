@@ -46,7 +46,8 @@ class Timer {
     suspend fun endCounting(callBack: ()-> Unit){
         state.collect{
             if ( it == TimerState.END) {
-                lg("End counting timer start: ${startCounting.value} - end: ${endCounting.value} = ${endCounting.value - startCounting.value}")
+                lg("End counting timer start: ${startCounting.value} - end: ${endCounting.value} = " +
+                        "${endCounting.value - startCounting.value}")
                 callBack()
             }
         }

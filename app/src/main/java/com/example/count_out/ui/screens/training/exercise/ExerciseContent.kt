@@ -2,14 +2,12 @@ package com.example.count_out.ui.screens.training.exercise
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.border
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Card
 import androidx.compose.material3.MaterialTheme
@@ -27,9 +25,8 @@ import com.example.count_out.ui.screens.training.TrainingScreenState
 import com.example.count_out.ui.screens.training.set.SetContent
 import com.example.count_out.ui.theme.elevationTraining
 import com.example.count_out.ui.theme.interReg14
-import com.example.count_out.ui.view_components.IconAddItem
-import com.example.count_out.ui.view_components.IconSelectActivity
-import com.example.count_out.ui.view_components.IconsCollapsingCopySpeechDel
+import com.example.count_out.ui.view_components.IconsCollapsing
+import com.example.count_out.ui.view_components.IconsGroup
 import com.example.count_out.ui.view_components.TextApp
 import com.example.count_out.ui.view_components.drag_drop_column.ColumnDD
 import com.example.count_out.ui.view_components.lg
@@ -69,27 +66,29 @@ fun <T>ElementColum (item:T, uiState: TrainingScreenState){
 fun SelectActivity(uiState: TrainingScreenState, exercise: Exercise)
 {
     uiState.exercise = exercise
-    Row( verticalAlignment = Alignment.CenterVertically,
-        modifier = Modifier.padding(horizontal = 4.dp)
-    ){
-        IconSelectActivity(
-            onClick = {
-                uiState.exercise = exercise
-                uiState.showBottomSheetSelectActivity.value = true })
+    Row( verticalAlignment = Alignment.CenterVertically){
+        val nameNewSet = stringResource(id = R.string.set) + " ${exercise.sets.size + 1}"
+        IconsCollapsing(
+            onClick = {exerciseCollapsing(uiState, exercise) },
+            wrap = uiState.listCollapsingExercise.value.find { it == exercise.idExercise } != null )
         Spacer(modifier = Modifier.width(2.dp))
         TextApp(
             text = exercise.activity.name,
             textAlign = TextAlign.Start,
             style = interReg14,
             modifier = Modifier.weight(1f))
-        IconsCollapsingCopySpeechDel(
-            onCopy = { uiState.onCopyExercise(uiState.training.idTraining, exercise.idExercise)},
-            onSpeech = {
+        IconsGroup(
+            onClickCopy = { uiState.onCopyExercise(uiState.training.idTraining, exercise.idExercise)},
+            onClickDelete = { uiState.onDeleteExercise(uiState.training.idTraining, exercise.idExercise) },
+            onClickEdit = {
+                uiState.exercise = exercise
+                uiState.showBottomSheetSelectActivity.value = true },
+            onClickSpeech = {
                 uiState.exercise = exercise
                 uiState.showSpeechExercise.value = true },
-            onDel = { uiState.onDeleteExercise(uiState.training.idTraining, exercise.idExercise) },
-            onCollapsing = { exerciseCollapsing(uiState, exercise)},
-            wrap = uiState.listCollapsingExercise.value.find { it == exercise.idExercise } != null
+            onClickAddSet = {
+                uiState.onAddUpdateSet( exercise.idExercise,
+                    SetDB( name = nameNewSet, exerciseId = exercise.idExercise))},
         )
     }
 }
@@ -98,18 +97,15 @@ fun SelectActivity(uiState: TrainingScreenState, exercise: Exercise)
 fun BodyExercise(uiState: TrainingScreenState, exercise: Exercise){
     val visibleLazy =
         uiState.listCollapsingExercise.value.find { it == exercise.idExercise } != null
-    Column(modifier = Modifier
-    ){
-        AnimatedVisibility(modifier = Modifier.padding(0.dp), visible = visibleLazy
-        ){
-            Column (modifier = Modifier.fillMaxWidth().padding(6.dp),
+    Column{
+        AnimatedVisibility( visible = visibleLazy){
+            Column (modifier = Modifier.fillMaxWidth(),
                 content = {
                     uiState.exercise = exercise
                     ListSets(uiState)
                 }
             )
         }
-        RowAddSet(uiState, exercise)
     }
 }
 @Composable
@@ -123,25 +119,10 @@ fun ListSets(uiState: TrainingScreenState)
                     color = MaterialTheme.colorScheme.surface,
                     shape = MaterialTheme.shapes.extraSmall
                 )
-                .padding(vertical = 6.dp)
                 .fillMaxWidth(),
             content = { SetContent(uiState,set, uiState.exercise.sets.size) }
         )
         Spacer(modifier = Modifier.height(1.dp))
-    }
-}
-@Composable
-fun RowAddSet(uiState: TrainingScreenState, exercise: Exercise)
-{
-    Row (horizontalArrangement = Arrangement.End, modifier = Modifier.fillMaxWidth()){
-        val nameNewSet = stringResource(id = R.string.set) + " ${exercise.sets.size + 1}"
-        IconAddItem(
-            textId = R.string.add_set,
-            onAdd = {
-                uiState.onAddUpdateSet( exercise.idExercise,
-                SetDB(name = nameNewSet, exerciseId = exercise.idExercise))
-            }
-        )
     }
 }
 fun exerciseCollapsing(uiState: TrainingScreenState,  exercise: Exercise): Boolean
@@ -158,3 +139,17 @@ fun exerciseCollapsing(uiState: TrainingScreenState,  exercise: Exercise): Boole
         true
     }
 }
+//@Composable
+//fun RowAddSet(uiState: TrainingScreenState, exercise: Exercise)
+//{
+//    Row (horizontalArrangement = Arrangement.End, modifier = Modifier.fillMaxWidth()){
+//        val nameNewSet = stringResource(id = R.string.set) + " ${exercise.sets.size + 1}"
+//        IconAddItem(
+//            textId = R.string.add_set,
+//            onAdd = {
+//                uiState.onAddUpdateSet( exercise.idExercise,
+//                SetDB(name = nameNewSet, exerciseId = exercise.idExercise))
+//            }
+//        )
+//    }
+//}

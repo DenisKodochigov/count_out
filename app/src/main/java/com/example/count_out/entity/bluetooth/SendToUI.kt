@@ -1,13 +1,13 @@
 package com.example.count_out.entity.bluetooth
 
-import kotlinx.coroutines.flow.MutableStateFlow
-
 data class SendToUI(
-    val rate: MutableStateFlow<Int> = MutableStateFlow(0),
-    val foundDevices:  MutableStateFlow<List<DeviceUI>> = MutableStateFlow(emptyList()),
+    var heartRate: Int = 0,
+    var scannedBle: Boolean = false,
+    var foundDevices: List<DeviceUI> = emptyList(),
+    var lastConnectHearthRateDevice: DeviceUI? = null
 ){
     fun cancel(){
-        rate.value = 0
+        heartRate = 0
     }
 }
 //

@@ -20,6 +20,7 @@ import com.example.count_out.entity.Const.START_REQUEST_CODE
 import com.example.count_out.entity.Const.STOP_REQUEST_CODE
 import com.example.count_out.entity.StateRunning
 import com.example.count_out.service.workout.WorkoutService
+import com.example.count_out.ui.view_components.lg
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -45,6 +46,7 @@ class NotificationHelper @Inject constructor(private val context: Context)
             .setAutoCancel(true)
     }
     fun createChannel() {
+        lg("createChannel")
         val channel = NotificationChannel(
             NOTIFICATION_CHANNEL_ID,
             NOTIFICATION_CHANNEL_NAME,

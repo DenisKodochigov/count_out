@@ -12,11 +12,13 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.CopyAll
 import androidx.compose.material.icons.filled.PlayCircleOutline
 import androidx.compose.material3.Card
 import androidx.compose.material3.IconButton
@@ -28,7 +30,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -36,12 +37,13 @@ import com.example.count_out.R
 import com.example.count_out.entity.Training
 import com.example.count_out.navigation.ScreenDestination
 import com.example.count_out.ui.theme.Dimen
+import com.example.count_out.ui.theme.Dimen.sizeIconLarge
 import com.example.count_out.ui.theme.elevationTraining
 import com.example.count_out.ui.theme.getIdImage
-import com.example.count_out.ui.theme.interLight12
-import com.example.count_out.ui.theme.interReg14
-import com.example.count_out.ui.view_components.IconSingle
+import com.example.count_out.ui.theme.typography
+import com.example.count_out.ui.view_components.IconSingleLarge
 import com.example.count_out.ui.view_components.ItemSwipe
+import com.example.count_out.ui.view_components.NameScreen
 import com.example.count_out.ui.view_components.TextApp
 
 @Composable fun TrainingsScreen(
@@ -83,7 +85,9 @@ import com.example.count_out.ui.view_components.TextApp
 //    lg("TrainingsScreenLayout")
     Column(
         modifier = Modifier.fillMaxSize(),
-        content = { TrainingsLazyColumn( uiState = uiState) }
+        content = {
+            NameScreen(id = R.string.list_trainings)
+            TrainingsLazyColumn( uiState = uiState) }
     )
 }
 @SuppressLint("CoroutineCreationDuringComposition")
@@ -125,24 +129,26 @@ fun TrainingsLazyColumn(uiState: TrainingsScreenState,
         Row(
             horizontalArrangement = Arrangement.Start,
             verticalAlignment = Alignment.CenterVertically,
-            modifier = modifier.fillMaxWidth()
+            modifier = modifier.fillMaxWidth().padding(vertical = 6.dp)
         ){
-            IconStart(item = item, uiState = uiState)
-            Spacer(modifier = Modifier.width(Dimen.width4))
+            Spacer(modifier = Modifier.width(12.dp))
+            IconStart(item = item, uiState = uiState, modifier = Modifier.size(sizeIconLarge))
+            Spacer(modifier = Modifier.width(16.dp))
             TrainingInformation(item = item, uiState = uiState, modifier = Modifier.weight(1f))
-            Spacer(modifier = Modifier.width(Dimen.width4))
+            Spacer(modifier = Modifier.width(Dimen.width6))
             IconEnd(item = item, uiState = uiState)
+            Spacer(modifier = Modifier.width(12.dp))
         }
     }
 }
-@Composable fun IconStart(item: Training, uiState: TrainingsScreenState){
+@Composable fun IconStart(item: Training, uiState: TrainingsScreenState, modifier: Modifier = Modifier){
 //    lg("IconStart")
-    IconButton(onClick = { uiState.onStartWorkout(item.idTraining)}) {
-        IconSingle(image = Icons.Default.PlayCircleOutline)}
+    IconButton(onClick = { uiState.onStartWorkout(item.idTraining)}, modifier = modifier) {
+        IconSingleLarge(image = Icons.Default.PlayCircleOutline)}
 }
-@Composable fun IconEnd(item: Training, uiState: TrainingsScreenState){
-    IconButton(onClick = { uiState.onCopyTraining(item.idTraining)}) {
-        IconSingle(image = painterResource(R.drawable.ic_copy)) }
+@Composable fun IconEnd(item: Training, uiState: TrainingsScreenState, modifier: Modifier = Modifier){
+    IconButton(onClick = { uiState.onCopyTraining(item.idTraining)}, modifier = modifier) {
+        IconSingleLarge(image = Icons.Default.CopyAll) }
 }
 @Composable fun TrainingInformation(
     item: Training,
@@ -151,11 +157,11 @@ fun TrainingsLazyColumn(uiState: TrainingsScreenState,
 {
 //    lg("TrainingInformation")
     Column (modifier = modifier.clickable { uiState.onSelectItem(item.idTraining) }){
-        TextApp( text = item.name, style = interReg14)
+        TextApp( text = item.name, style = typography.titleLarge)
         Spacer(modifier = Modifier.height(Dimen.height4))
         TextApp(
             text = stringResource(id = R.string.exercise)+ ": " + item.amountActivity,
-            style = interLight12 )
+            style = typography.bodyLarge )
     }
 }
 

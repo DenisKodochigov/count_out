@@ -22,10 +22,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.example.count_out.entity.TypeKeyboard
 import com.example.count_out.ui.screens.training.TrainingScreenState
 import com.example.count_out.ui.theme.Dimen
-import com.example.count_out.ui.theme.shapesApp
+import com.example.count_out.ui.theme.shapes
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -36,7 +35,7 @@ fun BottomSheetSelectActivity(uiState: TrainingScreenState)
     ModalBottomSheet(
         onDismissRequest = {uiState.onDismissSelectActivity.invoke()},
         modifier = Modifier.padding(horizontal = Dimen.bsPaddingHor1),
-        shape = shapesApp.small,
+        shape = shapes.small,
         containerColor = BottomSheetDefaults.ContainerColor,
         contentColor = contentColorFor(BottomAppBarDefaults.containerColor),
         tonalElevation = BottomSheetDefaults.Elevation,
@@ -73,7 +72,7 @@ fun BottomSheetSelectActivityContent(uiState: TrainingScreenState)
         items(items = uiState.activities) {item ->
             ActivityValueShort(
                 activity = mutableStateOf(item),
-                typeKeyboard = TypeKeyboard.NONE,
+//                typeKeyboard = TypeKeyboard.NONE,
                 onSelect = { uiState.onSelectActivity(uiState.exercise.idExercise, item.idActivity) },
                 onChangeColor = {uiState.onSetColorActivity(item.idActivity, it ) }
             )

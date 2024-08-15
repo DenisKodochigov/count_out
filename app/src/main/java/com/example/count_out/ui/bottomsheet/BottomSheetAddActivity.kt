@@ -16,7 +16,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import com.example.count_out.ui.screens.settings.SettingScreenState
 import com.example.count_out.ui.theme.Dimen
-import com.example.count_out.ui.theme.shapesApp
+import com.example.count_out.ui.theme.shapes
 import com.example.count_out.ui.view_components.ButtonConfirm
 import com.example.count_out.ui.view_components.lg
 
@@ -29,7 +29,7 @@ fun BottomSheetAddActivity(uiState: SettingScreenState)
     ModalBottomSheet(
         onDismissRequest = { uiState.onDismissAddActivity.invoke() },
         modifier = Modifier.padding(horizontal = Dimen.bsPaddingHor1),
-        shape = shapesApp.small,
+        shape = shapes.small,
         containerColor = BottomSheetDefaults.ContainerColor,
         contentColor = contentColorFor(BottomAppBarDefaults.containerColor),
         tonalElevation = BottomSheetDefaults.Elevation,

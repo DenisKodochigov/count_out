@@ -8,7 +8,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
-import com.example.count_out.ui.theme.colorApp
+import com.example.count_out.ui.theme.colors3
 
 @Composable fun TextApp(
     text: String,
@@ -17,7 +17,7 @@ import com.example.count_out.ui.theme.colorApp
     style: TextStyle,
     maxLines:Int = 1,
     fontWeight: FontWeight = FontWeight.Normal,
-    color: Color = colorApp.onSurface
+    color: Color = colors3.onSurface
 ) {
     Text(
         text = text,

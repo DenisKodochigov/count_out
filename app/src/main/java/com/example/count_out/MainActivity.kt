@@ -5,8 +5,9 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.enableEdgeToEdge
 import androidx.core.app.ActivityCompat
-import com.example.count_out.permission.PermissionApp
+import com.example.count_out.permission.RequestPermissionsAll
 import com.example.count_out.service.bluetooth.BleManager
 import com.example.count_out.service.bluetooth.BleService
 import com.example.count_out.service.sensors.SensorsApp
@@ -21,22 +22,20 @@ import javax.inject.Inject
 class MainActivity: ComponentActivity()
 {
     @Inject lateinit var workOutManager: ServiceManager
-    @Inject lateinit var permissionApp: PermissionApp
     @Inject lateinit var sensorsManager: SensorsApp
     @Inject lateinit var bluetoothAdapter: BluetoothAdapter
     @Inject lateinit var bleManager: BleManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        enableEdgeToEdge()
         setContent {
-            permissionApp.RequestPermissions()
+            RequestPermissionsAll()
             StartApp()
         }
     }
-
     override fun onStart() {
         super.onStart()
-        lg("onStart ${Thread.currentThread().name}")
         workOutManager.bindService( WorkoutService::class.java)
 //        sensorsManager.onCreate()
         if (checkBluetoothEnable()) bleManager.bindBleService(BleService::class.java)

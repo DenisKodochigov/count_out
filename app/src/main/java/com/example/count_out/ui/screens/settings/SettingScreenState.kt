@@ -1,6 +1,5 @@
 package com.example.count_out.ui.screens.settings
 
-import android.bluetooth.BluetoothDevice
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.mutableStateOf
@@ -10,14 +9,18 @@ import com.example.count_out.entity.Activity
 import com.example.count_out.entity.bluetooth.DeviceUI
 
 data class SettingScreenState(
+    //from viewmodel
+    val settings: List<SettingDB> = emptyList(),
+    val heartRate: Int = 0,
+    val devicesUI: List<DeviceUI> = emptyList(),
+    val lastConnectHearthRateDevice: DeviceUI? = null,
+    val activities: List<Activity> = emptyList(),
+    val scannedBle: Boolean = false,
+    //for screen
     val showBottomSheetAddActivity: MutableState<Boolean> = mutableStateOf(false),
     val showBottomSheetBLE: MutableState<Boolean> = mutableStateOf(false),
-    val settings: MutableState<List<SettingDB>> = mutableStateOf(emptyList()),
-    val devicesUI: MutableState<List<DeviceUI>> = mutableStateOf(emptyList()),
-    val collapsingActivity: MutableState<Boolean> = mutableStateOf(false),
-    val activities: List<Activity> = emptyList(),
-    val lastConnectHearthRate: MutableState<BluetoothDevice?> = mutableStateOf(value = null),
     val activity: MutableState<Activity> = mutableStateOf(ActivityDB()),
+    val collapsingActivity: MutableState<Boolean> = mutableStateOf(false),
 
     @Stable val onSetColorActivity: (Long, Int) -> Unit = { _, _ ->},
     @Stable val onAddActivity: (Activity) ->Unit = {},

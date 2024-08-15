@@ -8,7 +8,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
-import com.example.count_out.ui.theme.colorApp
+import com.example.count_out.ui.theme.colors3
 
 const val strokeWidth = 3f
 const val arrowWidthHor = 2f
@@ -23,7 +23,7 @@ const val  widthVer = 40f
 
 @Composable fun ArrowLeft()
 {
-    val colorLine = colorApp.primary
+    val colorLine = colors3.primary
     Canvas(modifier = Modifier.height(Dp(heightHor)).width(Dp(widthHor))) {
         drawLine(
             color = colorLine,
@@ -39,7 +39,7 @@ const val  widthVer = 40f
 }
 @Composable fun ArrowRight()
 {
-    val colorLine = colorApp.primary
+    val colorLine = colors3.primary
     Canvas(modifier = Modifier.height(Dp(heightHor)).width(Dp(widthHor))) {
         drawLine(
             color = colorLine,
@@ -55,7 +55,7 @@ const val  widthVer = 40f
 }
 @Composable fun ArrowUp()
 {
-    val colorLine = colorApp.primary
+    val colorLine = colors3.primary
     Canvas(modifier = Modifier.height(Dp(heightVer)).width(Dp(widthVer))) {
 
         drawLine(
@@ -73,7 +73,7 @@ const val  widthVer = 40f
 }
 @Composable fun ArrowDown()
 {
-    val colorLine = colorApp.primary
+    val colorLine = colors3.primary
     Canvas(modifier = Modifier.height(Dp(heightVer)).width(Dp(widthVer))) {
         drawLine(
             color = colorLine,

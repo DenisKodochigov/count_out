@@ -7,6 +7,10 @@ import android.os.Build
 import android.os.VibrationEffect
 import android.os.Vibrator
 import android.os.VibratorManager
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -43,6 +47,8 @@ fun vibrate(context: Context){
     }
     vibrateApp.vibrate(VibrationEffect.createOneShot(50, 10) )
 }
+@Composable
+fun <T>rememberMutableState(value: T): MutableState<T> = remember {mutableStateOf(value)}
 
 //class TestTTSFile @Inject constructor(val context: Context, val speechManager: SpeechManager) {
 //    fun writeToFile(text: String, nameFile: String){

@@ -18,9 +18,9 @@ suspend fun playReps(){
     if (durationNextMessage > 0 && durationNextMessage < timeReps){
         delay (timeReps - durationNextMessage)
     }
-    speech(textMessage)
+//    speech(textMessage)
 }
 
-fun speech( textMessage: String){
-    //Проигрываем textMessage
-}
+//fun speech( textMessage: String){
+//    //Проигрываем textMessage
+//}

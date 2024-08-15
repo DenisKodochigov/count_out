@@ -15,7 +15,7 @@ android {
 
     defaultConfig {
         applicationId = "com.example.count_out"
-        minSdk = 26
+        minSdk = 27
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
@@ -75,6 +75,8 @@ dependencies {
     implementation (libs.hilt.android)
     implementation (libs.androidx.hilt.navigation.compose)
     implementation(libs.play.services.location)
+    implementation(libs.androidx.lifecycle.runtime.compose.android)
+    implementation(libs.androidx.animation.graphics.android)
     ksp (libs.dagger.compiler)
     ksp (libs.hilt.compiler)
     testImplementation (libs.hilt.android.testing)

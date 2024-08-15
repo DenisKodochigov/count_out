@@ -3,6 +3,8 @@ package com.example.count_out.ui.theme
 import androidx.compose.ui.unit.dp
 
 object Dimen {
+
+    val width6 = 6.dp
     val paddingAppHor = 8.dp
     val paddingAppVer = 12.dp
 
@@ -22,6 +24,7 @@ object Dimen {
     val height6 = 6.dp
     val height8 = 8.dp
 
-    val sizeIcon = 24.dp
-    val sizeBetweenIcon = 10.dp
+    val sizeIcon = 32.dp
+    val sizeIconLarge = 64.dp
+    val sizeBetweenIcon = 16.dp
 }

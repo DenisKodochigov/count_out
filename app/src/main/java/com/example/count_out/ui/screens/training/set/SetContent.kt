@@ -32,12 +32,12 @@ import com.example.count_out.entity.Set
 import com.example.count_out.entity.TypeKeyboard
 import com.example.count_out.entity.Zone
 import com.example.count_out.ui.screens.training.TrainingScreenState
-import com.example.count_out.ui.theme.Dimen
 import com.example.count_out.ui.theme.elevationTraining
 import com.example.count_out.ui.theme.interLight12
 import com.example.count_out.ui.theme.interReg12
 import com.example.count_out.ui.theme.interReg14
-import com.example.count_out.ui.view_components.IconsCollapsingCopySpeechDel
+import com.example.count_out.ui.view_components.IconsCollapsing
+import com.example.count_out.ui.view_components.IconsGroup
 import com.example.count_out.ui.view_components.RadioButtonApp
 import com.example.count_out.ui.view_components.TextApp
 import com.example.count_out.ui.view_components.TextAppLines
@@ -48,10 +48,10 @@ import com.example.count_out.ui.view_components.TextStringAndField
 fun SetContent(uiState: TrainingScreenState, set: Set, amountSet: Int)
 {
     Column{
-        Spacer(modifier = Modifier.height(Dimen.width4))
+//        Spacer(modifier = Modifier.height(Dimen.width4))
         if (amountSet > 1) NameSet(uiState, set)
         AdditionalInformation(uiState,set, amountSet)
-        Spacer(modifier = Modifier.height(Dimen.width4))
+//        Spacer(modifier = Modifier.height(Dimen.width4))
     }
 }
 @Composable
@@ -65,6 +65,9 @@ fun NameSet(uiState: TrainingScreenState, set: Set)
 
     }
     Row (verticalAlignment = Alignment.CenterVertically){
+        IconsCollapsing(
+            onClick = { setCollapsing(uiState, set) },
+            wrap = uiState.listCollapsingSet.value.find { it == set.idSet } != null )
         TextApp(
             text = set.name,
             style = interReg14,
@@ -75,14 +78,12 @@ fun NameSet(uiState: TrainingScreenState, set: Set)
             style = interReg14,
             textAlign = TextAlign.Start,)
         Spacer(modifier = Modifier.weight(1f))
-        IconsCollapsingCopySpeechDel(
-            onCopy = { uiState.onCopySet(uiState.training.idTraining, set.idSet) },
-            onSpeech = {
+        IconsGroup(
+            onClickCopy = { uiState.onCopySet(uiState.training.idTraining, set.idSet) },
+            onClickDelete = { uiState.onDeleteSet(uiState.training.idTraining, set.idSet) },
+            onClickSpeech = {
                 uiState.set = set
-                uiState.showSpeechSet.value = true },
-            onDel = {  uiState.onDeleteSet(uiState.training.idTraining, set.idSet)  },
-            onCollapsing = { setCollapsing(uiState, set) },
-            wrap = uiState.listCollapsingSet.value.find { it == set.idSet } != null
+                uiState.showSpeechSet.value = true},
         )
     }
 }
@@ -94,7 +95,9 @@ fun AdditionalInformation(uiState: TrainingScreenState, set: Set, amountSet: Int
     {
         AnimatedVisibility(modifier = Modifier.padding(0.dp), visible = visibleLazy
         ){
-            Row(modifier = Modifier.testTag("1").padding(start = 8.dp))
+            Row(modifier = Modifier
+                .testTag("1")
+                .padding(start = 8.dp))
             {
                 Column(modifier = Modifier.weight(1f))
                 {
@@ -108,10 +111,13 @@ fun AdditionalInformation(uiState: TrainingScreenState, set: Set, amountSet: Int
                         onChangeValue = { uiState.onChangeSet ((set as SetDB).copy(timeRest = it.toIntMy())) },
                         editing = visibleLazy,
                         text = stringResource(id = R.string.time_to_rest) + " (" + stringResource(id = R.string.sec) + "): ",)
+                    Spacer(modifier = Modifier.height(16.dp))
                 }
                 Column(
                     horizontalAlignment = Alignment.CenterHorizontally,
-                    modifier = Modifier.width(65.dp).padding(top = 12.dp),
+                    modifier = Modifier
+                        .width(65.dp)
+                        .padding(top = 12.dp),
                     content = { SelectZone(uiState, set) })
             }
         }
