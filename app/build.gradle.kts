@@ -76,7 +76,6 @@ dependencies {
     implementation (libs.androidx.hilt.navigation.compose)
     implementation(libs.play.services.location)
     implementation(libs.androidx.lifecycle.runtime.compose.android)
-    implementation(libs.androidx.animation.graphics.android)
     ksp (libs.dagger.compiler)
     ksp (libs.hilt.compiler)
     testImplementation (libs.hilt.android.testing)

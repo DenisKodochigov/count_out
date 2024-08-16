@@ -42,13 +42,12 @@ import com.example.count_out.ui.bottomsheet.BottomSheetBle
 import com.example.count_out.ui.bottomsheet.CardActivity
 import com.example.count_out.ui.theme.elevationTraining
 import com.example.count_out.ui.theme.typography
-import com.example.count_out.ui.view_components.IconLarge
+import com.example.count_out.ui.view_components.AnimateIcon
+import com.example.count_out.ui.view_components.IconSingle
 import com.example.count_out.ui.view_components.IconsCollapsing
 import com.example.count_out.ui.view_components.NameScreen
 import com.example.count_out.ui.view_components.SwitchApp
-import com.example.count_out.ui.view_components.TextAndIcons
 import com.example.count_out.ui.view_components.TextApp
-import com.example.count_out.ui.view_components.lg
 
 @Composable fun SettingScreen(){
     val viewModel: SettingViewModel = hiltViewModel()
@@ -113,7 +112,7 @@ import com.example.count_out.ui.view_components.lg
             wrap = uiState.collapsingActivity.value )
         TextApp(text = stringResource(id = R.string.list_activity), style = typography.titleMedium)
         Spacer(modifier = Modifier.weight(1f))
-        IconLarge(
+        IconSingle(
             image = Icons.Default.Add,
             onClick = {
                 uiState.activity.value = ActivityDB()
@@ -163,32 +162,41 @@ import com.example.count_out.ui.view_components.lg
             .padding(start = 4.dp, top = 12.dp, bottom = 12.dp)
             .fillMaxWidth()
         ){
-            TextAndIcons(
-                text = stringResource(id = R.string.heart_rate_device),
-                style = typography.titleMedium,
-                icon1 = Icons.AutoMirrored.Rounded.BluetoothSearching,
-                onClickIcon1 = { uiState.showBottomSheetBLE.value = true },
-                icon2 = Icons.Rounded.CleaningServices,
-                onClickIcon2 = { uiState.onClearCacheBLE },
-            )
+            SettingBluetoothTitle(uiState)
             RowBleDevice(uiState)
         }
     }
 }
+@Composable fun SettingBluetoothTitle(uiState: SettingScreenState){
+    Row(
+        horizontalArrangement = Arrangement.Start,
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = Modifier.fillMaxWidth()
+    ) {
+        TextApp(
+            text = stringResource(id = R.string.heart_rate_device),
+            style = typography.titleMedium,
+            modifier = Modifier.padding(horizontal = 4.dp)
+        )
+        Spacer(modifier = Modifier.weight(1f))
+        AnimateIcon(
+            icon = Icons.AutoMirrored.Rounded.BluetoothSearching,
+            animate = uiState.connectingDevice,
+            onClick = {uiState.showBottomSheetBLE.value = true},
+        )
+        Spacer(modifier = Modifier.width(12.dp))
+        IconSingle(
+            image = Icons.Rounded.CleaningServices,
+            onClick = { uiState.onClearCacheBLE }
+        )
+        Spacer(modifier = Modifier.width(12.dp))
+    }
+}
+
 @Composable fun RowBleDevice(uiState: SettingScreenState){
     val lastHeartDevice: DeviceUI? = uiState.lastConnectHearthRateDevice
     val heartRate = uiState.heartRate
 
-//    val heartRate by remember { mutableIntStateOf( uiState.heartRate.value) }
-//    val alpha = remember { Animatable(1f) }
-//    LaunchedEffect(pulseRateMs) { // Restart the effect when the pulse rate changes
-//        while (isActive) {
-//            delay(pulseRateMs) // Pulse the alpha every pulseRateMs to alert the user
-//            alpha.animateTo(0f)
-//            alpha.animateTo(1f)
-//        }
-//    }
-    lg("RowBleDevice heartRate: $heartRate")
     Spacer(modifier = Modifier.height(12.dp))
     Row (
         horizontalArrangement = Arrangement.Start,
@@ -199,9 +207,10 @@ import com.example.count_out.ui.view_components.lg
             else typography.bodyMedium.copy(fontWeight = FontWeight.Bold),
             modifier = Modifier.padding(start = 12.dp))
         Spacer(modifier = Modifier.weight(1f))
-        TextApp(text = (if (heartRate > 0) heartRate else "").toString(),
-            style = typography.bodyMedium
-        )
+        if (!uiState.showBottomSheetBLE.value) TextApp(
+            text = (if (heartRate > 0) heartRate else "").toString(),
+            modifier = Modifier.padding(end = 24.dp),
+            style = typography.bodyLarge)
     }
 }
 

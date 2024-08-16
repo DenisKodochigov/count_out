@@ -16,6 +16,7 @@ data class SettingScreenState(
     val lastConnectHearthRateDevice: DeviceUI? = null,
     val activities: List<Activity> = emptyList(),
     val scannedBle: Boolean = false,
+    val connectingDevice: Boolean = false,
     //for screen
     val showBottomSheetAddActivity: MutableState<Boolean> = mutableStateOf(false),
     val showBottomSheetBLE: MutableState<Boolean> = mutableStateOf(false),

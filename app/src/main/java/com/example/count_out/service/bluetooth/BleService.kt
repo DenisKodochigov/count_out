@@ -96,6 +96,8 @@ class BleService @Inject constructor(): Service() {
     }
 
     fun connectDevice(){
+        sendToUi.update { send-> send.copy(connectingDevice = true) }
+        lg("sendToUi ${sendToUi.value.connectingDevice}")
         bleStates.task = BleTask.CONNECT_DEVICE
         getRemoteDevice(bluetoothAdapter, receiveFromUI, bleStates)
         sendHeartRate(bleConnecting.heartRate)
@@ -129,6 +131,8 @@ class BleService @Inject constructor(): Service() {
                         }
                         receiveFromUI.currentConnection = BleConnection(device = dv)
                         result = true
+                        sendToUi.update { send-> send.copy(connectingDevice = false) }
+                        lg("sendToUi ${sendToUi.value.connectingDevice}")
                         bleStates.stateService = StateService.GET_REMOTE_DEVICE
                     }
                 } catch (exception: IllegalArgumentException) {

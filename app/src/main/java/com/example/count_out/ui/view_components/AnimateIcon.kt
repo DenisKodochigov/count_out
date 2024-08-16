@@ -4,6 +4,7 @@ import androidx.compose.animation.core.RepeatMode
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.repeatable
 import androidx.compose.animation.core.tween
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Bluetooth
@@ -20,12 +21,14 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import com.example.count_out.ui.theme.Dimen
 
 @Composable fun AnimateIcon(
-    initValue: Dp = 30.dp,
+    initValue: Dp = Dimen.sizeIcon,
     targetValue: Dp = 17.dp,
     icon: ImageVector = Icons.Default.Bluetooth,
-    animate: Boolean = false
+    animate: Boolean = false,
+    onClick: ()->Unit = {},
 ){
     var target by remember { mutableStateOf(initValue) }
     var iteration by remember { mutableIntStateOf(1) }
@@ -42,10 +45,18 @@ import androidx.compose.ui.unit.dp
             repeatMode = RepeatMode.Reverse
         )
     )
-    Icon(imageVector = icon, contentDescription = "", modifier = Modifier.size(size))
+    Icon(imageVector = icon, contentDescription = "", modifier = Modifier.size(size).clickable { onClick() })
 }
 
 @Preview(showBackground = true)
 @Composable fun searchBluetoothPreview(){
     AnimateIcon()
 }
+//    val alpha = remember { Animatable(1f) }
+//    LaunchedEffect(PULSE_RATE_MS) { // Restart the effect when the pulse rate changes
+//        while (true) {
+//            delay(PULSE_RATE_MS) // Pulse the alpha every pulseRateMs to alert the user
+//            alpha.animateTo(0f)
+//            alpha.animateTo(1f)
+//        }
+//    }

@@ -90,6 +90,7 @@ class SettingViewModel @Inject constructor(
                 _settingScreenState.update { currentState ->
                     currentState.copy(
                         lastConnectHearthRateDevice = send.lastConnectHearthRateDevice,
+                        connectingDevice = send.connectingDevice,
                         scannedBle = send.scannedBle,
                         devicesUI = send.foundDevices,
                         heartRate = send.heartRate,)

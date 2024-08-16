@@ -189,14 +189,14 @@ class BleConnecting @Inject constructor(
 
     @SuppressLint("MissingPermission")
     fun setCharacteristicNotification(gatt: BluetoothGatt, uuid: UUID, enabled: Boolean) {
-        lg("setCharacteristicNotification ")
+//        lg("setCharacteristicNotification ")
         gatt.findCharacteristic(uuid)?.let{ characteristic->
-            lg("setCharacteristicNotification $characteristic")
+//            lg("setCharacteristicNotification $characteristic")
             gatt.setCharacteristicNotification(characteristic, enabled)
             val descriptor = characteristic.getDescriptor(UUID_CLIENT_CHARACTERISTIC_CONFIG)
             val descriptorValue = if (characteristic.isNotify()) { ENABLE_NOTIFICATION_VALUE
             } else { ENABLE_INDICATION_VALUE }
-            lg("setCharacteristicNotification ${Build.VERSION.SDK_INT} descriptor: $descriptor")
+//            lg("setCharacteristicNotification ${Build.VERSION.SDK_INT} descriptor: $descriptor")
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                 gatt.writeDescriptor(descriptor, descriptorValue)
             } else {
