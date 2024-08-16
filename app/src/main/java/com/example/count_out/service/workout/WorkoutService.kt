@@ -9,9 +9,9 @@ import android.os.Build
 import android.os.IBinder
 import com.example.count_out.entity.Const.NOTIFICATION_EXTRA
 import com.example.count_out.entity.Const.NOTIFICATION_ID
+import com.example.count_out.entity.SendToUI
+import com.example.count_out.entity.SendToWorkService
 import com.example.count_out.entity.StateRunning
-import com.example.count_out.entity.VariablesInService
-import com.example.count_out.entity.VariablesOutService
 import com.example.count_out.helpers.NotificationHelper
 import com.example.count_out.service.player.PlayerWorkOut
 import com.example.count_out.service.stopwatch.StopWatchObj
@@ -28,8 +28,8 @@ import javax.inject.Singleton
 @AndroidEntryPoint
 class WorkoutService @Inject constructor(): Service(), WorkOutAPI
 {
-    override var variablesOut: VariablesOutService = VariablesOutService()
-    override var variablesIn: VariablesInService = VariablesInService()
+    override var variablesOut: SendToUI = SendToUI()
+    override var variablesIn: SendToWorkService = SendToWorkService()
 
     @Inject lateinit var notificationHelper: NotificationHelper
     @Inject lateinit var playerWorkOut: PlayerWorkOut

@@ -21,7 +21,8 @@ fun Int.pad(): String = this.toString().padStart(2, '0')
 fun String.toDoubleMy(): Double = if (this.isNotEmpty()) this.toDouble() else 0.0
 fun String.toIntMy(): Int = if (this.isNotEmpty()) this.toInt() else 0
 fun Boolean.to01(): Int = if (this) 1 else 0
-fun Double.toPositive(): Double = if (this < 0) 0.0 else this
+fun Double.Minus(): Double = if (this - 0.1 < 0) 0.0 else ((this * 10).toInt() - 1).toDouble()/10
+fun Double.Plus(): Double = ((this * 10).toInt() + 1).toDouble()/10
 fun String.toNumeric(): Double{
     var result = ""
     return if (this.isNotEmpty()){

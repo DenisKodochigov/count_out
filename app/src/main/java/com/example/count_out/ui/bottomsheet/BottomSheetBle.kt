@@ -23,21 +23,17 @@ import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.contentColorFor
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.example.count_out.R
-import com.example.count_out.entity.bluetooth.DeviceUI
 import com.example.count_out.ui.screens.settings.SettingScreenState
 import com.example.count_out.ui.theme.Dimen
 import com.example.count_out.ui.theme.Dimen.bsHeightWindowsListBle
 import com.example.count_out.ui.theme.Dimen.bsSpacerBottomHeight
-import com.example.count_out.ui.theme.interReg14
-import com.example.count_out.ui.theme.interReg16
-import com.example.count_out.ui.theme.interReg18
 import com.example.count_out.ui.theme.shapes
+import com.example.count_out.ui.theme.typography
 import com.example.count_out.ui.view_components.AnimateIcon
 import com.example.count_out.ui.view_components.TextApp
 
@@ -74,10 +70,12 @@ fun BottomSheetBleContent(uiState: SettingScreenState)
 }
 @SuppressLint("MissingPermission")
 @Composable fun SettingsBluetooth(uiState: SettingScreenState){
-    val listBluetoothDev: List<DeviceUI> = remember {uiState.devicesUI}
     Row(horizontalArrangement = Arrangement.Center,
-        modifier = Modifier.fillMaxWidth().padding(horizontal = 12.dp).height(30.dp)) {
-        TextApp(text = stringResource(id = R.string.section_heart_rate), style = interReg18)
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 12.dp)
+            .height(30.dp)) {
+        TextApp(text = stringResource(id = R.string.section_heart_rate), style = typography.bodyLarge)
         Spacer(modifier = Modifier.weight(1f))
         AnimateIcon(animate = uiState.scannedBle)
     }
@@ -86,17 +84,17 @@ fun BottomSheetBleContent(uiState: SettingScreenState)
         state = rememberLazyListState(),
         modifier = Modifier
             .fillMaxSize()
-            .padding(8.dp)
+            .padding(6.dp)
             .border(width = 1.dp, color = colorScheme.onTertiaryContainer, shape = shapes.small)
     ) {
-        items(items = listBluetoothDev) { item ->
-            Row(
-                modifier = Modifier
-                    .padding(vertical = 12.dp, horizontal = 12.dp)
-                    .clickable { uiState.onSelectDevice(item.address) }) {
-                TextApp(text = item.address, style = interReg16)
+        items(items = uiState.devicesUI) { item ->
+            Spacer(modifier = Modifier.height(0.dp))
+            Row(modifier = Modifier
+                .padding(top = 16.dp, start = 12.dp, end = 12.dp)
+                .clickable { uiState.onSelectDevice(item.address) }) {
+                TextApp(text = item.address, style = typography.bodyMedium)
                 Spacer(modifier = Modifier.width(12.dp))
-                TextApp(text = item.name.ifEmpty { "not name" }, style = interReg14)
+                TextApp(text = item.name.ifEmpty { "not name" }, style = typography.bodyMedium)
             }
         }
     }

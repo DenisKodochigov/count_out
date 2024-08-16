@@ -82,7 +82,6 @@ import com.example.count_out.ui.view_components.TextApp
 }
 @Composable fun TrainingsScreenLayout( uiState: TrainingsScreenState
 ){
-//    lg("TrainingsScreenLayout")
     Column(
         modifier = Modifier.fillMaxSize(),
         content = {
@@ -94,7 +93,6 @@ import com.example.count_out.ui.view_components.TextApp
 @Composable
 fun TrainingsLazyColumn(uiState: TrainingsScreenState,
 ){
-//    lg("TrainingsLazyColumn")
     LazyList(uiState)
     Spacer(modifier = Modifier.height(8.dp))
 }
@@ -142,7 +140,6 @@ fun TrainingsLazyColumn(uiState: TrainingsScreenState,
     }
 }
 @Composable fun IconStart(item: Training, uiState: TrainingsScreenState, modifier: Modifier = Modifier){
-//    lg("IconStart")
     IconButton(onClick = { uiState.onStartWorkout(item.idTraining)}, modifier = modifier) {
         IconSingleLarge(image = Icons.Default.PlayCircleOutline)}
 }

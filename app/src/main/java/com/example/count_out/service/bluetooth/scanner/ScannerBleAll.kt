@@ -6,8 +6,8 @@ import android.bluetooth.le.ScanCallback
 import android.bluetooth.le.ScanFilter
 import android.os.ParcelUuid
 import com.example.count_out.entity.Const
+import com.example.count_out.entity.SendToUI
 import com.example.count_out.entity.bluetooth.BleStates
-import com.example.count_out.entity.bluetooth.SendToUI
 import com.example.count_out.permission.PermissionApp
 import com.example.count_out.service.bluetooth.objectScanCallback
 import com.example.count_out.service.bluetooth.scanSettings

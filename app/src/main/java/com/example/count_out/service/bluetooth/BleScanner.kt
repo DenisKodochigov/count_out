@@ -2,10 +2,10 @@ package com.example.count_out.service.bluetooth
 
 import android.bluetooth.BluetoothAdapter
 import android.content.Context
+import com.example.count_out.entity.SendToUI
 import com.example.count_out.entity.StateScanner
 import com.example.count_out.entity.TimerState
 import com.example.count_out.entity.bluetooth.BleStates
-import com.example.count_out.entity.bluetooth.SendToUI
 import com.example.count_out.permission.PermissionApp
 import com.example.count_out.service.bluetooth.scanner.ScannerBleAll
 import com.example.count_out.service.stopwatch.Timer

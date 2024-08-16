@@ -15,11 +15,11 @@ object Plugins
 {
     val listRound = mutableListOf<RoundDB>()
     val listTr = mutableListOf<TrainingDB>()
-    val listEx = mutableListOf<ExerciseDB>()
-    val listSpeech = mutableListOf<SpeechDB>()
-    val listActivity = listOf<Activity>(
-        ActivityDB(idActivity = 0, name = "Run", icon = R.drawable.ic_setka),
-        ActivityDB(idActivity = 1, name = "Ski", icon = R.drawable.ic_setka))
+//    val listEx = mutableListOf<ExerciseDB>()
+//    val listSpeech = mutableListOf<SpeechDB>()
+//    val listActivity = listOf<Activity>(
+//        ActivityDB(idActivity = 0, name = "Run", icon = R.drawable.ic_setka),
+//        ActivityDB(idActivity = 1, name = "Ski", icon = R.drawable.ic_setka))
 
     val listSets = mutableListOf<Set>()
     fun init(){

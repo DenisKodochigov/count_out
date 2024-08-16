@@ -1,15 +1,15 @@
 package com.example.count_out.service.bluetooth
 
+import android.annotation.SuppressLint
 import android.bluetooth.BluetoothGatt
 import android.bluetooth.BluetoothGattCharacteristic
 import android.bluetooth.le.ScanCallback
 import android.bluetooth.le.ScanResult
 import android.bluetooth.le.ScanSettings
+import com.example.count_out.entity.SendToUI
 import com.example.count_out.entity.StateScanner
 import com.example.count_out.entity.bluetooth.BleDevice
 import com.example.count_out.entity.bluetooth.BleStates
-import com.example.count_out.entity.bluetooth.DeviceUI
-import com.example.count_out.entity.bluetooth.SendToUI
 import com.example.count_out.ui.view_components.lg
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -32,13 +32,15 @@ fun scanSettings(reportDelay: Long): ScanSettings {
 fun objectScanCallback( bleStates: BleStates, sendToUI: MutableStateFlow<SendToUI>
 ): ScanCallback = object: ScanCallback()
 {
+    @SuppressLint("MissingPermission")
     override fun onScanResult(callbackType: Int, result: ScanResult?) {
         super.onScanResult(callbackType, result)
         result?.device?.let { dev ->
-            sendToUI.update { send->
-                send.copy( foundDevices = (send.foundDevices.find { it.address == dev.address }
-                    ?: send.foundDevices.addApp(
-                        BleDevice().fromBluetoothDevice(dev) )) as List<DeviceUI>)
+            if (sendToUI.value.foundDevices.find { it.address == dev.address } == null){
+                sendToUI.update { send->
+                    send.copy( foundDevices = send.foundDevices
+                        .addApp(BleDevice().fromBluetoothDevice(dev) ))
+                }
             }
         }
     }
@@ -46,10 +48,12 @@ fun objectScanCallback( bleStates: BleStates, sendToUI: MutableStateFlow<SendToU
         super.onBatchScanResults(results)
         if (!results.isNullOrEmpty()) {
             results.forEach{ result->
-                sendToUI.update { send->
-                    send.copy( foundDevices = (send.foundDevices.find { it.address == result.device.address }
-                        ?: send.foundDevices.addApp(
-                            BleDevice().fromBluetoothDevice(result.device))) as List<DeviceUI>)
+                if (sendToUI.value.foundDevices.find { it.address == result.device.address } == null){
+                    sendToUI.update { send->
+                        send.copy( foundDevices = send.foundDevices
+                            .addApp(BleDevice().fromBluetoothDevice(result.device) ))
+
+                    }
                 }
             }
         }
@@ -154,4 +158,4 @@ fun BluetoothGattCharacteristic.isWritableWithoutResponse(): Boolean =
 fun <T>MutableStateFlow<List<T>>.addApp(device: T) =
     update { this.value.toMutableList().apply { this.add(device) } }
 
-fun <T>List<T>.addApp(device: T) = this.toMutableList().apply { this.add(device) }
+fun <T>List<T>.addApp(device: T): List<T> = this.toMutableList().apply { this.add(device) }

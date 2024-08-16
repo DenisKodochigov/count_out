@@ -12,6 +12,7 @@ enum class Zone(val id: Int, var maxPulse: Int){
     HIGH(id = 4, maxPulse = 160),
     MAX(id = 5, maxPulse = 180)
 }
+enum class ConnectState { NOT_CONNECTED , CONNECTING, CONNECTED}
 enum class TimerState { COUNTING, STOPPED, END, }
 enum class StateScanner { RUNNING_ALL, RUNNING_MAC, END, }
 enum class StateService { DECLARED, CREATED, STARTED, PAUSED, STOPPED, GET_REMOTE_DEVICE, CONNECT_GAT, GET_DISCOVER_SERVICE, DISCONNECTED }

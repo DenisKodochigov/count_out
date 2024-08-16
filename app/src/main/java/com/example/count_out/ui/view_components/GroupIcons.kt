@@ -1,16 +1,17 @@
 package com.example.count_out.ui.view_components
 
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AddCircleOutline
 import androidx.compose.material.icons.filled.AddRoad
@@ -32,15 +33,18 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import com.example.count_out.R
 import com.example.count_out.ui.theme.Dimen
 import com.example.count_out.ui.theme.Dimen.sizeBetweenIcon
+import com.example.count_out.ui.theme.Dimen.sizeIcon
+import com.example.count_out.ui.theme.colors3
 import com.example.count_out.ui.theme.shapes
+import com.example.count_out.ui.theme.typography
 
 @Composable fun IconsGroup(
     onClickEdit: (() -> Unit)? = null,
@@ -53,7 +57,7 @@ import com.example.count_out.ui.theme.shapes
 ){
     var expanded by remember { mutableStateOf(false) }
     Box() {
-        IconLarge(image = Icons.Default.MoreVert, onClick = { expanded = true }, idDescription = R.string.show_Action)
+        IconSingle(image = Icons.Default.MoreVert, onClick = { expanded = true }, idDescription = R.string.show_Action)
         MaterialTheme( shapes = shapes.copy(extraSmall = shapes.large)) {
             DropdownMenu(
                 modifier = Modifier.padding(8.dp),
@@ -87,31 +91,31 @@ import com.example.count_out.ui.theme.shapes
 ){
     Row(horizontalArrangement = Arrangement.Center, verticalAlignment = Alignment.CenterVertically){
         Spacer(modifier = Modifier.width(sizeBetweenIcon))
-        onClickEdit?.let {  IconLarge(
+        onClickEdit?.let {  IconSingle(
             image = Icons.Default.Edit,
             onClick = { it(); expanded()} )
             Spacer(modifier = Modifier.width(sizeBetweenIcon)) }
-        onClickCopy?.let {  IconLarge(
+        onClickCopy?.let {  IconSingle(
             image = Icons.Default.CopyAll,
             onClick = { it(); expanded()} )
             Spacer(modifier = Modifier.width(sizeBetweenIcon)) }
-        onClickSpeech?.let {  IconLarge(
+        onClickSpeech?.let {  IconSingle(
             image = Icons.Default.GraphicEq,
             onClick = { it(); expanded()} )
             Spacer(modifier = Modifier.width(sizeBetweenIcon)) }
-        onClickDelete?.let {  IconLarge(
+        onClickDelete?.let {  IconSingle(
             image = Icons.Default.DeleteOutline,
             onClick = { it(); expanded()} )
             Spacer(modifier = Modifier.width(sizeBetweenIcon)) }
-        onClickAddSet?.let {  IconLarge(
+        onClickAddSet?.let {  IconSingle(
             image = Icons.Default.AddRoad,
             onClick = { it(); expanded()} )
             Spacer(modifier = Modifier.width(sizeBetweenIcon))}
-        onClickAddRing?.let {  IconLarge(
+        onClickAddRing?.let {  IconSingle(
             image = Icons.Default.AddCircleOutline,
             onClick = { it();expanded()} )
             Spacer(modifier = Modifier.width(sizeBetweenIcon))}
-        onClickAddExercise?.let {  IconLarge(
+        onClickAddExercise?.let {  IconSingle(
             image = Icons.Default.LibraryAdd,
             onClick = { it(); expanded()} )
             Spacer(modifier = Modifier.width(sizeBetweenIcon)) }
@@ -130,41 +134,48 @@ import com.example.count_out.ui.theme.shapes
 ){
     Column( verticalArrangement = Arrangement.SpaceBetween){
 //        Spacer(modifier = Modifier.height(sizeBetweenIcon))
-        onClickAddSet?.let {  IconLarge(
-            image = Icons.Default.AddRoad,
-            onClick = { it(); expanded()} )
+        onClickAddSet?.let {
+            IconAddSet(onClick = { it(); expanded()})
             Spacer(modifier = Modifier.height(sizeBetweenIcon))}
-        onClickAddRing?.let {  IconLarge(
-            image = Icons.Default.AddCircleOutline,
-            onClick = { it();expanded()} )
+        onClickAddRing?.let {
+            IconAddRing(onClick = { it(); expanded()})
             Spacer(modifier = Modifier.height(sizeBetweenIcon))}
-        onClickAddExercise?.let {  IconLarge(
-            image = Icons.Default.LibraryAdd,
-            onClick = { it(); expanded()} )
+        onClickAddExercise?.let {
+            IconAddExercise(onClick = { it(); expanded()})
             Spacer(modifier = Modifier.height(sizeBetweenIcon)) }
-        onClickEdit?.let {  IconLarge(
-            image = Icons.Default.Edit,
-            onClick = { it(); expanded()} )
+        onClickEdit?.let {
+            IconSingle(image = Icons.Default.Edit, onClick = { it(); expanded()} )
             Spacer(modifier = Modifier.height(sizeBetweenIcon)) }
-        onClickCopy?.let {  IconLarge(
-            image = Icons.Default.CopyAll,
-            onClick = { it(); expanded()} )
+        onClickCopy?.let {
+            IconSingle(image = Icons.Default.CopyAll, onClick = { it(); expanded()} )
             Spacer(modifier = Modifier.height(sizeBetweenIcon)) }
-        onClickSpeech?.let {  IconLarge(
-            image = Icons.Default.GraphicEq,
-            onClick = { it(); expanded()} )
+        onClickSpeech?.let {
+            IconSingle(image = Icons.Default.GraphicEq, onClick = { it(); expanded()} )
             Spacer(modifier = Modifier.height(sizeBetweenIcon)) }
-        onClickDelete?.let {  IconLarge(
-            image = Icons.Default.DeleteOutline,
-            onClick = { it(); expanded()} )
+        onClickDelete?.let {
+            IconSingle(image = Icons.Default.DeleteOutline, onClick = { it(); expanded()} )
             Spacer(modifier = Modifier.height(sizeBetweenIcon))
         }
     }
 }
-@Composable fun IconLarge(image: ImageVector, onClick:()->Unit,  idDescription: Int = 0){
+@Composable fun IconSingle(image: ImageVector, onClick:()->Unit, idDescription: Int = 0){
     Icon(imageVector = image,
         contentDescription = if ( idDescription == 0) "" else stringResource(id = idDescription),
-        modifier = Modifier.size(Dimen.sizeIcon).clickable { onClick() })
+        modifier = Modifier
+            .size(Dimen.sizeIcon)
+            .clickable { onClick() })
+}
+
+@Composable fun IconSingleLarge(image: ImageVector, onClick:()->Unit){
+    Icon(imageVector = image,
+        contentDescription = "",
+        modifier = Modifier
+            .size(Dimen.sizeIconLarge)
+            .clickable { onClick() })
+}
+
+@Composable fun IconSingleLarge(image: ImageVector){
+    Icon(imageVector = image, contentDescription = "", modifier = Modifier.size(Dimen.sizeIconLarge))
 }
 
 @Composable
@@ -178,69 +189,29 @@ fun IconsCollapsing(onClick: ()->Unit, wrap: Boolean)
             .clickable { onClick() }
     )
 }
+@Composable fun IconAddSet(onClick:()->Unit) = IconAdd(onClick = onClick, text = "S+" )
+@Composable fun IconAddRing(onClick:()->Unit) = IconAdd(onClick = onClick, text = "R+" )
+@Composable fun IconAddExercise(onClick:()->Unit) = IconAdd(onClick = onClick, text = "E+" )
+@Composable fun IconAddActivity(onClick:()->Unit) = IconAdd(onClick = onClick, text = "A+" )
 
-@Composable fun TextAndIcons(
-    text: String,
-    style: TextStyle,
-    icon1: ImageVector,
-    icon2: ImageVector? = null,
-    icon3: ImageVector? = null,
-    icon4: ImageVector? = null,
-    onClickIcon1: ()->Unit,
-    onClickIcon2: ()->Unit = {},
-    onClickIcon3: ()->Unit = {},
-    onClickIcon4: ()->Unit = {}) {
-    val paddingIcon = 8.dp
-    Row(
-        horizontalArrangement = Arrangement.Start,
-        verticalAlignment = Alignment.CenterVertically,
-        modifier = Modifier.fillMaxWidth()
-    ) {
-        if (text != "") TextApp(text = text, style = style, modifier = Modifier.padding(horizontal = 4.dp))
-        Spacer(modifier = Modifier.weight(1f))
-        Icon(
-            imageVector = icon1,
-            contentDescription = "",
-            modifier = Modifier
-                .padding(horizontal = paddingIcon)
-                .size(Dimen.sizeIcon)
-                .clickable { onClickIcon1() }
+@Composable fun IconAdd(onClick:()->Unit, text: String = "+", idDescription: Int = 0) {
+    Box(modifier = Modifier){
+        Spacer(modifier = Modifier.align(alignment = Alignment.Center)
+            .size(size = sizeIcon)
+            .clickable { onClick() }
+            .clip(shape = CircleShape)
+            .border(
+                width = 1.dp,
+                color = colors3.outline,
+                shape = CircleShape
+            )
+//        .background(color = Color(activity.value.color), shape = CircleShape))
         )
-        if (icon2 != null) {
-            Icon(
-                imageVector = icon2,
-                contentDescription = "",
-                modifier = Modifier
-                    .padding(horizontal = paddingIcon)
-                    .size(Dimen.sizeIcon)
-                    .clickable { onClickIcon2() }
-            )
-        }
-        if (icon3 != null) {
-            Icon(
-                imageVector = icon3,
-                contentDescription = "",
-                modifier = Modifier
-                    .padding(paddingIcon)
-                    .size(Dimen.sizeIcon)
-                    .clickable { onClickIcon3() }
-            )
-        }
-        if (icon4 != null) {
-            Icon(
-                imageVector = icon4,
-                contentDescription = "",
-                modifier = Modifier
-                    .padding(paddingIcon)
-                    .size(Dimen.sizeIcon)
-                    .clickable { onClickIcon4() }
-            )
-        }
+        TextApp(text = text, style = typography.titleMedium, modifier = Modifier.align(alignment = Alignment.Center))
     }
+
 }
-@Composable fun IconSingleLarge(image: ImageVector){
-    Icon(imageVector = image, contentDescription = "", modifier = Modifier.size(Dimen.sizeIconLarge))
-}
+
 //@Composable fun IconsCopySpeechDel(onCopy: ()->Unit, onSpeech: ()->Unit, onDel: ()->Unit ) {
 //    Icon(
 //        painter = painterResource(id = R.drawable.ic_copy),

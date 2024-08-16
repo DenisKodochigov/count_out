@@ -17,8 +17,7 @@
     <string name="exercise">Упражнения</string>
     <string name="exercises">Упражнений</string>
     <string name="exercise1">упражнение</string>
-    <string name="set">Подход</string>
-    <string name="serts">Подходы</string>
+
     <string name="timing">Длителность</string>
     <string name="h">ч</string>
     <string name="hour">час</string>
@@ -96,4 +95,27 @@
     <string name="list_trainings">Список тренировок</string>
     <string name="show_Action">Показать действия</string>
     <string name="title_setting_screen">Настройки приложения</string>
+    <string name="not_connected">не подключен</string>
+    <string name="connected">подключен</string>
+    <string name="connecting">подключение</string>
+    <string name="runs_treining">Выполняется тренировка</string>
+
+    <string name="set">Подход</string>
+    <string name="sets">Подходы</string>
+    <string name="from">из</string>
+    <string name="setFrom">Подходов</string>
+    <string name="slower">Медленее</string>
+    <string name="faster">Быстрее</string>
+    <plurals name="set_1">
+        <item quantity="one">%1$d = подход</item>
+        <item quantity="few">%1$d = подхода</item>
+        <item quantity="many">%1$d = подходов</item>
+        <item quantity="other">подходы</item>
+    </plurals>
+    <plurals name="set_2">
+        <item quantity="one">%d подход</item>
+        <item quantity="few">%d = подхода</item>
+        <item quantity="many">%d = подходов</item>
+        <item quantity="other">подходы</item>
+    </plurals>
 </resources>

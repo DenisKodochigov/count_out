@@ -4,9 +4,8 @@ import android.content.ComponentName
 import android.content.Context
 import android.content.ServiceConnection
 import android.os.IBinder
-import com.example.count_out.entity.StateService
-import com.example.count_out.entity.bluetooth.ReceiveFromUI
-import com.example.count_out.entity.bluetooth.SendToUI
+import com.example.count_out.entity.SendToUI
+import com.example.count_out.entity.bluetooth.SendToBle
 import com.example.count_out.service.ServiceUtils
 import com.example.count_out.ui.view_components.lg
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -39,18 +38,14 @@ class BleManager @Inject constructor(val context: Context, private val serviceUt
         }
     }
 
-    fun startBleService(){
-        bleService.bleStates.stateService = StateService.CREATED
-        bleService.startBleService()
-    }
     fun <T>bindBleService(clazz: Class<T>) { serviceUtils.bindService(clazz, bleServiceConnection) }
 
     fun unbindService() { serviceUtils.unbindService(bleServiceConnection, isBound) }
 
-    fun startBleService(receiveFromUI: ReceiveFromUI): MutableStateFlow<SendToUI> {
+    fun startBleService(sendToBle: SendToBle): MutableStateFlow<SendToUI> {
         if (isBound ) {
             bleService.startBleService()
-            bleService.receiveFromUI = receiveFromUI
+            bleService.sendToBle = sendToBle
             lg( "BleManager ${bleService.sendToUi}: ")
             return bleService.sendToUi
         } else {

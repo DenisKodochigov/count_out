@@ -47,7 +47,7 @@ fun TextAppLines(
     )
 }
 @Composable
-fun TextAppColor(
+fun TextAppEllipsis(
     text: String,
     modifier: Modifier = Modifier,
     textAlign: TextAlign = TextAlign.Center,

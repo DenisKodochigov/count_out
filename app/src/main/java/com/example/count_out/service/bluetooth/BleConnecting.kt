@@ -11,16 +11,19 @@ import android.bluetooth.BluetoothGattDescriptor.ENABLE_INDICATION_VALUE
 import android.bluetooth.BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE
 import android.content.Context
 import android.os.Build
+import com.example.count_out.entity.ConnectState
 import com.example.count_out.entity.Const.UUIDBle
 import com.example.count_out.entity.ErrorBleService
+import com.example.count_out.entity.SendToUI
 import com.example.count_out.entity.StateService
 import com.example.count_out.entity.bluetooth.BleConnection
 import com.example.count_out.entity.bluetooth.BleStates
-import com.example.count_out.entity.bluetooth.ReceiveFromUI
+import com.example.count_out.entity.bluetooth.SendToBle
 import com.example.count_out.entity.hciStatusFromValue
 import com.example.count_out.permission.PermissionApp
 import com.example.count_out.ui.view_components.lg
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.update
 import java.util.UUID
 import javax.inject.Inject
 
@@ -35,16 +38,16 @@ class BleConnecting @Inject constructor(
     private val UUID_CLIENT_CHARACTERISTIC_CONFIG = UUID.fromString(UUIDBle.CLIENT_CHARACTERISTIC_CONFIG)
 
 /*################################################################################################ */
-    fun connectDevice(bleStates: BleStates, receiveFromUI: ReceiveFromUI,){
+    fun connectDevice(bleStates: BleStates, sendToBle: SendToBle, sendToUi: MutableStateFlow<SendToUI>){
 //        generateHR(heartRate)
-        receiveFromUI.currentConnection?.let {
+        sendToBle.currentConnection?.let {
             connection = it
-            connectingGatt( bleStates )
+            connectingGatt( bleStates, sendToUi )
         }
     }
 
     @SuppressLint("MissingPermission")
-    fun connectingGatt(bleStates: BleStates): Boolean{
+    fun connectingGatt(bleStates: BleStates, sendToUi: MutableStateFlow<SendToUI>): Boolean{
         var result = false
         if (bleStates.stateService == StateService.GET_REMOTE_DEVICE) {
             connection.device?.let { dev->
@@ -53,6 +56,8 @@ class BleConnecting @Inject constructor(
                 {
                     result = true
                     bleStates.stateService = StateService.CONNECT_GAT
+                    sendToUi.update { send-> send.copy(connectingDevice = ConnectState.CONNECTED) }
+                    lg("sendToUi ${sendToUi.value.connectingDevice}")
                 }
                 else bleStates.error = ErrorBleService.NOT_CONNECT_GATT
             }
@@ -189,14 +194,14 @@ class BleConnecting @Inject constructor(
 
     @SuppressLint("MissingPermission")
     fun setCharacteristicNotification(gatt: BluetoothGatt, uuid: UUID, enabled: Boolean) {
-        lg("setCharacteristicNotification ")
+//        lg("setCharacteristicNotification ")
         gatt.findCharacteristic(uuid)?.let{ characteristic->
-            lg("setCharacteristicNotification $characteristic")
+//            lg("setCharacteristicNotification $characteristic")
             gatt.setCharacteristicNotification(characteristic, enabled)
             val descriptor = characteristic.getDescriptor(UUID_CLIENT_CHARACTERISTIC_CONFIG)
             val descriptorValue = if (characteristic.isNotify()) { ENABLE_NOTIFICATION_VALUE
             } else { ENABLE_INDICATION_VALUE }
-            lg("setCharacteristicNotification ${Build.VERSION.SDK_INT} descriptor: $descriptor")
+//            lg("setCharacteristicNotification ${Build.VERSION.SDK_INT} descriptor: $descriptor")
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                 gatt.writeDescriptor(descriptor, descriptorValue)
             } else {

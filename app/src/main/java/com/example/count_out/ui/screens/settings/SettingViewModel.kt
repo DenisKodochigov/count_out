@@ -6,9 +6,9 @@ import com.example.count_out.data.DataRepository
 import com.example.count_out.data.room.tables.SettingDB
 import com.example.count_out.entity.Activity
 import com.example.count_out.entity.ErrorApp
+import com.example.count_out.entity.SendToUI
 import com.example.count_out.entity.bluetooth.BleDevSerializable
-import com.example.count_out.entity.bluetooth.ReceiveFromUI
-import com.example.count_out.entity.bluetooth.SendToUI
+import com.example.count_out.entity.bluetooth.SendToBle
 import com.example.count_out.service.bluetooth.BleManager
 import com.example.count_out.ui.view_components.lg
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -45,7 +45,7 @@ class SettingViewModel @Inject constructor(
         ))
     val settingScreenState: StateFlow<SettingScreenState> = _settingScreenState.asStateFlow()
 
-    private val receiveFromUI = ReceiveFromUI()
+    private val sendToBle = SendToBle()
 
     init {
         startBleService()
@@ -77,7 +77,7 @@ class SettingViewModel @Inject constructor(
     private fun startBleService(){
         lg("SettingViewModel.startBleService")
         viewModelScope.launch(Dispatchers.IO) {
-            kotlin.runCatching { bleManager.startBleService(receiveFromUI) }.fold(
+            kotlin.runCatching { bleManager.startBleService(sendToBle) }.fold(
                 onSuccess = { receiveDevicesUIBleService(it)},
                 onFailure = { errorApp.errorApi(it.message!!) }
             )
@@ -90,6 +90,7 @@ class SettingViewModel @Inject constructor(
                 _settingScreenState.update { currentState ->
                     currentState.copy(
                         lastConnectHearthRateDevice = send.lastConnectHearthRateDevice,
+                        connectingDevice = send.connectingDevice,
                         scannedBle = send.scannedBle,
                         devicesUI = send.foundDevices,
                         heartRate = send.heartRate,)
@@ -129,7 +130,7 @@ class SettingViewModel @Inject constructor(
     private fun selectDevice(address: String) {
         viewModelScope.launch(Dispatchers.IO) {
             dataRepository.storeSelectBleDev( BleDevSerializable( address = address))
-            receiveFromUI.addressForSearch = address
+            sendToBle.addressForSearch = address
             bleManager.connectDevice()
         }
     }
@@ -138,7 +139,7 @@ class SettingViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             dataRepository.getBleDevStoreFlow().collect{
                 if (it.address.isNotEmpty()) {
-                    receiveFromUI.addressForSearch = it.address
+                    sendToBle.addressForSearch = it.address
                     bleManager.connectDevice()
                 }
             }

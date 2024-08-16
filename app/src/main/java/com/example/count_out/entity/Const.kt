@@ -27,6 +27,8 @@ object Const {
 
     const val MAX_TRIES = 4
 
+    const val PULSE_RATE_MS = 1000L
+
     const val DELAY_CANCELED_COROUTINE = 100L
 
     const val START_REQUEST_CODE = 100

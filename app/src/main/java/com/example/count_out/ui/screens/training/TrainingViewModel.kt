@@ -94,7 +94,6 @@ class TrainingViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             kotlin.runCatching { funDataRepository() }.fold(
                 onSuccess = { _trainingScreenState.update { currentState ->
-//                    lg("$it")
                     currentState.copy(
                         training = it,
                         showBottomSheetSelectActivity = mutableStateOf(false),

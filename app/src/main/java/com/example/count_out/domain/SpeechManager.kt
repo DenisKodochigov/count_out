@@ -7,7 +7,7 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import com.example.count_out.entity.Speech
 import com.example.count_out.entity.StateRunning
-import com.example.count_out.entity.VariablesOutService
+import com.example.count_out.entity.SendToUI
 import com.example.count_out.ui.view_components.lg
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -55,7 +55,7 @@ class SpeechManager(val context: Context) {
             } else { tts = null }
         }
     }
-    suspend fun speech(variablesOut: VariablesOutService, speech: Speech): Long
+    suspend fun speech(variablesOut: SendToUI, speech: Speech): Long
     {
         if (variablesOut.stateRunning.value != StateRunning.Stopped){
             val speechText = speech.message + " " + speech.addMessage

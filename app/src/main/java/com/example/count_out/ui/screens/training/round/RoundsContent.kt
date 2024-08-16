@@ -29,6 +29,7 @@ import com.example.count_out.ui.theme.interLight12
 import com.example.count_out.ui.view_components.IconsCollapsing
 import com.example.count_out.ui.view_components.IconsGroup
 import com.example.count_out.ui.view_components.TextApp
+import com.example.count_out.ui.view_components.lg
 import kotlin.math.roundToInt
 
 @Composable
@@ -64,15 +65,11 @@ fun Row1Round(uiState: TrainingScreenState, roundType: MutableState<RoundType>)
         Spacer(modifier = Modifier.weight(1f))
         IconsGroup(
             onClickSpeech = {showSpeechRound(uiState, roundType)},
-            onClickAddRing = { uiState.onAddExercise(getIdRound(uiState, roundType), SetDB(name = nameNewSet)) },
-            onClickAddExercise = {uiState.onAddExercise(getIdRound(uiState, roundType), SetDB(name = nameNewSet))}
+            onClickAddExercise = {
+                lg("getIdRound IdRound ${getIdRound(uiState, roundType)} roundType: $roundType")
+                uiState.onAddExercise(getIdRound(uiState, roundType), SetDB(name = nameNewSet))}
         )
         Spacer(modifier = Modifier.width(6.dp))
-//        IconCollapsingSpeech(
-//            idIconCollapsing = getIconCollapsing(uiState, roundType),
-//            onCollapsing = { setCollapsing(uiState, roundType) },
-//            onSpeech = {  showSpeechRound(uiState, roundType) }
-//        )
     }
 }
 @Composable

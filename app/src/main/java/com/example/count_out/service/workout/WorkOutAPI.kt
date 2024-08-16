@@ -1,11 +1,11 @@
 package com.example.count_out.service.workout
 
-import com.example.count_out.entity.VariablesInService
-import com.example.count_out.entity.VariablesOutService
+import com.example.count_out.entity.SendToWorkService
+import com.example.count_out.entity.SendToUI
 
 interface WorkOutAPI {
-    var variablesOut: VariablesOutService
-    var variablesIn: VariablesInService
+    var variablesOut: SendToUI
+    var variablesIn: SendToWorkService
 
     fun startWorkout()
     fun stopWorkout()

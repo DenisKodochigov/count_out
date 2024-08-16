@@ -10,10 +10,8 @@ import androidx.core.app.ActivityCompat
 import com.example.count_out.entity.Const
 import com.example.count_out.ui.view_components.lg
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
-import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberMultiplePermissionsState
 import com.google.accompanist.permissions.rememberPermissionState
-import com.google.accompanist.permissions.shouldShowRationale
 
 class PermissionApp (val context: Context) {
 
@@ -36,9 +34,9 @@ fun RequestPermissionsAll(){
 @OptIn(ExperimentalPermissionsApi::class)
 @Composable fun PrintPermission(permission: String){
     val permissionState = rememberPermissionState(permission = permission)
-    lg("permission ${permission.padStart(55, ' ')}; " +
-            "granted: ${permissionState.status.isGranted.toString().padStart(5, ' ')}; " +
-            "rationale: ${permissionState.status.shouldShowRationale}")
+//    lg("permission ${permission.padStart(55, ' ')}; " +
+//            "granted: ${permissionState.status.isGranted.toString().padStart(5, ' ')}; " +
+//            "rationale: ${permissionState.status.shouldShowRationale}")
 }
 
 @OptIn(ExperimentalPermissionsApi::class)

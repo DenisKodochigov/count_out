@@ -6,6 +6,7 @@ import androidx.compose.runtime.mutableStateOf
 import com.example.count_out.data.room.tables.ActivityDB
 import com.example.count_out.data.room.tables.SettingDB
 import com.example.count_out.entity.Activity
+import com.example.count_out.entity.ConnectState
 import com.example.count_out.entity.bluetooth.DeviceUI
 
 data class SettingScreenState(
@@ -16,6 +17,7 @@ data class SettingScreenState(
     val lastConnectHearthRateDevice: DeviceUI? = null,
     val activities: List<Activity> = emptyList(),
     val scannedBle: Boolean = false,
+    val connectingDevice: ConnectState = ConnectState.NOT_CONNECTED,
     //for screen
     val showBottomSheetAddActivity: MutableState<Boolean> = mutableStateOf(false),
     val showBottomSheetBLE: MutableState<Boolean> = mutableStateOf(false),

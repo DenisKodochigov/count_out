@@ -34,7 +34,7 @@ fun CollapsingToolbar(
                 contentDescription = null,
                 tint = MaterialTheme.colorScheme.onSurface)
         }
-        TextAppColor(
+        TextAppEllipsis(
             text = text,
             style = interReg16,
             modifier = Modifier.weight(1f).fillMaxWidth()

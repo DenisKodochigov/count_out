@@ -1,9 +1,9 @@
 package com.example.count_out.service.player
 
 import com.example.count_out.domain.SpeechManager
+import com.example.count_out.entity.SendToUI
+import com.example.count_out.entity.SendToWorkService
 import com.example.count_out.entity.StateRunning
-import com.example.count_out.entity.VariablesInService
-import com.example.count_out.entity.VariablesOutService
 import javax.inject.Inject
 
 class PlayerRound @Inject constructor(
@@ -11,17 +11,16 @@ class PlayerRound @Inject constructor(
     private val playerExercise: PlayerExercise)
 {
     suspend fun playingRound(
-        template: VariablesInService,
-        variablesOut: VariablesOutService,
+        template: SendToWorkService,
+        variablesOut: SendToUI,
     ){
         if (variablesOut.stateRunning.value == StateRunning.Started) {
-            speechManager.speech(variablesOut, template.getRound().speech.beforeStart)
-            speechManager.speech(variablesOut, template.getRound().speech.afterStart)
-            template.getRound().exercise.forEachIndexed { index, _->
-                playerExercise.playingExercise( template.apply { indexExercise = index }, variablesOut)
-            }
-            speechManager.speech(variablesOut, template.getRound().speech.beforeEnd)
-            speechManager.speech(variablesOut, template.getRound().speech.afterEnd)
+            template.getRound()?.speech?.beforeStart?.let { speechManager.speech(variablesOut, it) }
+            template.getRound()?.speech?.afterStart?.let { speechManager.speech(variablesOut, it) }
+            template.getRound()?.exercise?.forEachIndexed { index, _->
+                playerExercise.playingExercise( template.apply { indexExercise = index }, variablesOut) }
+            template.getRound()?.speech?.beforeEnd?.let { speechManager.speech(variablesOut, it) }
+            template.getRound()?.speech?.afterEnd?.let { speechManager.speech(variablesOut, it) }
         }
     }
 }

@@ -28,6 +28,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.example.count_out.R
 import com.example.count_out.data.room.tables.ActivityDB
@@ -83,25 +84,18 @@ fun ActivityValueShort(
         )
     }
     Row( modifier = Modifier
-            .padding( start = 12.dp)
-            .clickable { onSelect() }
-            .fillMaxWidth(),
+        .padding(start = 12.dp)
+        .clickable { onSelect() }
+        .fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Start
     ){
         Icon(painter = painterResource(id = activity.value.icon), contentDescription = null)
         Spacer(modifier = Modifier.padding(end= 12.dp))
-        TextFieldApp(
-            modifier = Modifier.weight(1f),
-            placeholder = "${activity.value.name}",
-            contentAlignment = Alignment.BottomStart,
-            typeKeyboard = typeKeyboard,
-            textStyle = typography.bodyMedium,
-            onLossFocus = false,
-            onChangeValue = {
-                activity.value = (activity.value as ActivityDB).copy(name = it)
-                onChange(activity.value as ActivityDB) }
-        )
+        TextApp(
+            text = activity.value.name,
+            style = typography.bodyMedium,
+            modifier = Modifier.weight(1f), textAlign = TextAlign.Start)
         Spacer(modifier = Modifier
             .size(size = 32.dp)
             .clip(shape = CircleShape)
