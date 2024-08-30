@@ -6,7 +6,6 @@ import androidx.compose.runtime.mutableStateOf
 import com.example.count_out.data.room.tables.ActivityDB
 import com.example.count_out.data.room.tables.SettingDB
 import com.example.count_out.entity.Activity
-import com.example.count_out.entity.ConnectState
 import com.example.count_out.entity.bluetooth.DeviceUI
 
 data class SettingScreenState(

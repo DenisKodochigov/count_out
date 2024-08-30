@@ -178,6 +178,10 @@ import com.example.count_out.ui.theme.typography
     Icon(imageVector = image, contentDescription = "", modifier = Modifier.size(Dimen.sizeIconLarge))
 }
 
+@Composable fun IconSingleLarge(image: ImageVector){
+    Icon(imageVector = image, contentDescription = "", modifier = Modifier.size(Dimen.sizeIconLarge))
+}
+
 @Composable
 fun IconsCollapsing(onClick: ()->Unit, wrap: Boolean)
 {

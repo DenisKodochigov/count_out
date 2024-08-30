@@ -1,15 +1,15 @@
 package com.example.count_out.service.bluetooth
 
-import android.annotation.SuppressLint
 import android.bluetooth.BluetoothGatt
 import android.bluetooth.BluetoothGattCharacteristic
 import android.bluetooth.le.ScanCallback
 import android.bluetooth.le.ScanResult
 import android.bluetooth.le.ScanSettings
-import com.example.count_out.entity.SendToUI
 import com.example.count_out.entity.StateScanner
 import com.example.count_out.entity.bluetooth.BleDevice
 import com.example.count_out.entity.bluetooth.BleStates
+import com.example.count_out.entity.bluetooth.DeviceUI
+import com.example.count_out.entity.bluetooth.SendToUI
 import com.example.count_out.ui.view_components.lg
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -32,7 +32,6 @@ fun scanSettings(reportDelay: Long): ScanSettings {
 fun objectScanCallback( bleStates: BleStates, sendToUI: MutableStateFlow<SendToUI>
 ): ScanCallback = object: ScanCallback()
 {
-    @SuppressLint("MissingPermission")
     override fun onScanResult(callbackType: Int, result: ScanResult?) {
         super.onScanResult(callbackType, result)
         result?.device?.let { dev ->
