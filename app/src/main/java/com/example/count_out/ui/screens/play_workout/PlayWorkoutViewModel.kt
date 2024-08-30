@@ -1,6 +1,5 @@
 package com.example.count_out.ui.screens.play_workout
 
-import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.count_out.R
@@ -15,6 +14,7 @@ import com.example.count_out.entity.Training
 import com.example.count_out.entity.bluetooth.SendToBle
 import com.example.count_out.service.bluetooth.BleManager
 import com.example.count_out.service.workout.ServiceManager
+import com.example.count_out.ui.view_components.lg
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -26,7 +26,6 @@ import javax.inject.Inject
 
 @HiltViewModel
 class PlayWorkoutViewModel @Inject constructor(
-    private val context: Context,
     private val errorApp: ErrorApp,
     private val dataRepository: DataRepository,
     private val bleManager: BleManager,
@@ -81,10 +80,9 @@ class PlayWorkoutViewModel @Inject constructor(
                 sendToWorkService.stateRunning = MutableStateFlow(StateRunning.Started)
                 sendToWorkService.enableSpeechDescription =
                     MutableStateFlow(dataRepository.getSetting(R.string.speech_description).value == 1)
-                serviceManager.startWorkout()
-                serviceManager.connectingToService(sendToWorkService)
+                serviceManager.startWorkout(sendToWorkService)
             }.fold(
-                onSuccess = { receiveStateWorkout(it) },
+                onSuccess = { it?.let { receiveStateWorkout(it) }  },
                 onFailure = { errorApp.errorApi(it.message!!) }
             )
         }
@@ -128,10 +126,15 @@ class PlayWorkoutViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             sendToUI.set.collect{ set->
                 _playWorkoutScreenState.update { currentState ->
+                    currentState.copy( playerSet = set )}}
+        }
+        viewModelScope.launch(Dispatchers.IO) {
+            sendToUI.nextSet.collect{ set->
+                lg("receiveStateWorkout ${set?.idSet}")
+                _playWorkoutScreenState.update { currentState ->
                     currentState.copy(
-                        listActivity = if (set == null ) currentState.listActivity
-                                        else currentState.activityList(set.idSet, context),
-                        playerSet = set )}}
+                        listActivity = if (set != null ) currentState.activityList(set.idSet)
+                                        else currentState.listActivity)}}
         }
         viewModelScope.launch(Dispatchers.IO) {
             sendToUI.flowTick.collect { tick ->

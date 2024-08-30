@@ -8,8 +8,7 @@ import android.bluetooth.le.ScanSettings
 import com.example.count_out.entity.StateScanner
 import com.example.count_out.entity.bluetooth.BleDevice
 import com.example.count_out.entity.bluetooth.BleStates
-import com.example.count_out.entity.bluetooth.DeviceUI
-import com.example.count_out.entity.bluetooth.SendToUI
+import com.example.count_out.entity.SendToUI
 import com.example.count_out.ui.view_components.lg
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers

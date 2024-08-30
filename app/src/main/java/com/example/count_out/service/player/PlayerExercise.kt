@@ -12,16 +12,16 @@ class PlayerExercise @Inject constructor(
 {
     suspend fun playingExercise(
         template: SendToWorkService,
-        variablesOut: SendToUI,
+        sendToUI: SendToUI,
     ){
-        if (variablesOut.stateRunning.value == StateRunning.Started) {
+        if (sendToUI.stateRunning.value == StateRunning.Started) {
             template.getExercise()?.speech?.beforeStart?.addMessage = template.getExercise()?.activity?.name + "."
             if (template.enableSpeechDescription.value)
                 template.getExercise()?.speech?.beforeStart?.addMessage += template.getExercise()?.activity?.description
-            template.getExercise()?.speech?.beforeStart?.let { speechManager.speech(variablesOut, it)}
-            template.getExercise()?.speech?.afterStart?.let { speechManager.speech(variablesOut,it) }
+            template.getExercise()?.speech?.beforeStart?.let { speechManager.speech(sendToUI, it)}
+            template.getExercise()?.speech?.afterStart?.let { speechManager.speech(sendToUI,it) }
             template.getExercise()?.sets?.forEachIndexed { index, _->
-                playerSet.playingSet(template.apply { indexSet = index }, variablesOut)
+                playerSet.playingSet( template.apply { indexSet = index }, sendToUI)
             }
 //            speechManager.speech(variablesOut, template.getExercise().speech.beforeEnd)
 //            speechManager.speech(variablesOut, template.getExercise().speech.afterEnd)

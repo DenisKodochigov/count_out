@@ -1,8 +1,6 @@
 package com.example.count_out.ui.screens.play_workout
 
-import android.content.Context
 import androidx.compose.runtime.Stable
-import com.example.count_out.R
 import com.example.count_out.data.room.tables.SetDB
 import com.example.count_out.entity.ConnectState
 import com.example.count_out.entity.ListActivityForPlayer
@@ -20,6 +18,7 @@ data class PlayWorkoutScreenState(
     val statesWorkout: List<MessageWorkOut> = emptyList(),
     val switchState: StateRunning = StateRunning.Stopped,
     val playerSet: Set? = null,
+    val nextSet: Set? = null,
     var listActivity: List< ListActivityForPlayer> = emptyList(),
     val lastConnectHearthRateDevice: DeviceUI? = null,
     val connectingDevice: ConnectState = ConnectState.NOT_CONNECTED,
@@ -33,7 +32,7 @@ data class PlayWorkoutScreenState(
     @Stable var startTime: Long = 0L,
 ){
 
-    fun activityList(setId: Long = -1, context: Context): List<ListActivityForPlayer>{
+    fun activityList(setId: Long = -1): List<ListActivityForPlayer>{
 
         var findingSet = false
         var currentSet = 0
@@ -46,11 +45,9 @@ data class PlayWorkoutScreenState(
                         exercise.sets.forEachIndexed{ indexSet, set ->
                             if (findingSet){
                                 resultList.add(ListActivityForPlayer(
-                                    roundNameId =round.roundType.strId,
                                     roundName =round.roundType.name,
                                     activityName = exercise.activity.name,
-                                    setDescription = "${context.getString(R.string.set).lowercase()} " +
-                                        "${currentSet + 1} ${context.getString(R.string.from)} ${exercise.sets.count()}",
+                                    typeDescription = true,
                                     countSet = exercise.sets.count(),
                                     currentSet = currentSet,
                                     countRing = 0,
@@ -61,13 +58,11 @@ data class PlayWorkoutScreenState(
                             if (set.idSet == setId) {
                                 findingSet = true
                                 currentSet = indexSet
-//                                currentRound = round.roundType.name
                                 resultList.add(ListActivityForPlayer(roundName = round.roundType.name))
                                 resultList.add(ListActivityForPlayer(
-                                    roundNameId =round.roundType.strId,
                                     roundName =round.roundType.name,
                                     activityName = exercise.activity.name,
-                                    setDescription = "${context.getString(R.string.setFrom).lowercase()}: ${exercise.sets.count()}" ,
+                                    typeDescription = false,
                                     countSet = exercise.sets.count(),
                                     currentSet = currentSet,
                                     countRing = 0,
@@ -84,10 +79,9 @@ data class PlayWorkoutScreenState(
                     resultList.add(ListActivityForPlayer(roundName = round.roundType.name))
                     round.exercise.forEachIndexed{ indexExercise, exercise ->
                         resultList.add(ListActivityForPlayer(
-                            roundNameId =round.roundType.strId,
                             roundName =round.roundType.name,
                             activityName = exercise.activity.name,
-                            setDescription = "${context.getString(R.string.setFrom).lowercase()}: ${exercise.sets.count()}" ,
+                            typeDescription = true,
                             countSet = exercise.sets.count(),
                             currentSet = 0,
                             countRing = 0,
@@ -101,68 +95,3 @@ data class PlayWorkoutScreenState(
         return resultList
     }
 }
-
-//    fun findSet(setId: Long = 0): Set?{
-//        if (playerSet.idSet > -1 || setId > -1){
-//            return training?.let { trainingIt->
-//                trainingIt.rounds.forEachIndexed { indexRound, round ->
-//                    round.exercise.forEachIndexed{ indexExercise, exercise ->
-//                        exercise.sets.forEachIndexed{ indexSet, set ->
-//                            if (set.idSet == setId) {
-//                                return@let training.rounds[indexRound].exercise[indexExercise].sets[indexSet]
-//                            }
-//                        }
-//                    }
-//                }
-//                null
-//            }
-//        } else return null
-//    }
-//    fun findExercise(setId: Long = 0): Exercise?{
-//        if (playerSet.idSet > -1 || setId > -1){
-//            return training?.let { trainingIt->
-//                trainingIt.rounds.forEachIndexed { indexRound, round ->
-//                    round.exercise.forEachIndexed{ indexExercise, exercise ->
-//                        exercise.sets.forEachIndexed{ indexSet, set ->
-//                            if (set.idSet == setId) {
-//                                return@let training.rounds[indexRound].exercise[indexExercise]
-//                            }
-//                        }
-//                    }
-//                }
-//                null
-//            }
-//        } else return null
-//    }
-//    fun findNext(setId: Long = 0): TrainingMap?{
-//        var findingSet = false
-//        if (playerSet.idSet > -1 || setId > -1){
-//            return training?.let { trainingIt->
-//                trainingIt.rounds.forEachIndexed { indexRound, round ->
-//                    round.exercise.forEachIndexed{ indexExercise, exercise ->
-//                        exercise.sets.forEachIndexed{ indexSet, set ->
-//                            if (findingSet){
-//                                return@let TrainingMap(idRound = indexRound, idExercise = indexExercise, idSet = indexSet)
-//                            }
-//                            if (set.idSet == setId) findingSet = true
-//                        }
-//                    }
-//                }
-//                null
-//            }
-//        } else return null
-//    }
-//    fun countSet(setId: Long = 0): Int?{
-//        if (playerSet.idSet > -1 || setId > -1){
-//            return training?.let { trainingIt->
-//                trainingIt.rounds.forEachIndexed { indexRound, round ->
-//                    round.exercise.forEachIndexed{ indexExercise, exercise ->
-//                        exercise.sets.forEachIndexed{ indexSet, set ->
-//                            if (set.idSet == setId) exercise.sets.count()
-//                        }
-//                    }
-//                }
-//                null
-//            }
-//        } else return null
-//    }

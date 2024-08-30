@@ -4,8 +4,9 @@ import android.content.ComponentName
 import android.content.Context
 import android.content.ServiceConnection
 import android.os.IBinder
-import com.example.count_out.entity.SendToWorkService
 import com.example.count_out.entity.SendToUI
+import com.example.count_out.entity.SendToWorkService
+import com.example.count_out.entity.StateRunning
 import com.example.count_out.service.ServiceUtils
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -27,16 +28,15 @@ class ServiceManager @Inject constructor(val context: Context, val serviceUtils:
         }
     }
 
-    fun startWorkout(){ if (isBound ) workOutService.startWorkout() }
-
-    fun connectingToService(variablesIn: SendToWorkService): SendToUI{
-        workOutService.variablesIn = variablesIn
-        return workOutService.variablesOut
+    fun startWorkout(sendToWork: SendToWorkService): SendToUI?{
+        workOutService.sendToWork = sendToWork
+        if (isBound) workOutService.startWorkout()
+        return workOutService.sendToUI
     }
 
     fun pauseWorkout(){ if (isBound ) workOutService.pauseWorkout() }
 
-    fun stateRunningService() = workOutService.variablesOut.stateRunning.value
+    fun stateRunningService() = workOutService.sendToUI?.stateRunning?.value ?: StateRunning.Stopped
 
     fun stopWorkout(){ workOutService.stopWorkout() }
 

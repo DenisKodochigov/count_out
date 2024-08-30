@@ -14,7 +14,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Pause
@@ -27,7 +26,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -40,9 +38,7 @@ import com.example.count_out.domain.Minus
 import com.example.count_out.domain.Plus
 import com.example.count_out.entity.ListActivityForPlayer
 import com.example.count_out.entity.StateRunning
-import com.example.count_out.entity.no_use.MessageWorkOut
 import com.example.count_out.ui.theme.colors3
-import com.example.count_out.ui.theme.interLight12
 import com.example.count_out.ui.theme.shapes
 import com.example.count_out.ui.theme.typography
 import com.example.count_out.ui.view_components.ButtonApp
@@ -68,56 +64,48 @@ fun PlayWorkoutScreenCreateView( viewModel: PlayWorkoutViewModel,
 @Composable fun PlayWorkoutScreenLayout( uiState: PlayWorkoutScreenState
 ){
     if(uiState.listActivity.isEmpty()) {
-        uiState.listActivity = uiState.activityList(context = LocalContext.current) }
+        uiState.listActivity = uiState.activityList() }
 
     Column(
         modifier = Modifier.fillMaxSize(),
         content = {
             NameScreen(id = R.string.runs_treining)
-            ListState(uiState)
-            Spacer(modifier = Modifier.weight(1f))
+            ListState(uiState, Modifier.weight(1f))
             Indication(uiState = uiState)}
     )
 }
-
-@SuppressLint("MutableCollectionMutableState")
-@Composable fun ListState(uiState: PlayWorkoutScreenState) {
+@Composable fun ListState(uiState: PlayWorkoutScreenState, modifier: Modifier = Modifier) {
     val coroutineScope = rememberCoroutineScope()
     val lazyState = rememberLazyListState()
-
     LazyColumn(
         state = lazyState,
-        modifier = Modifier
-            .fillMaxWidth()
-            .animateContentSize(),
+        modifier = modifier.fillMaxWidth().animateContentSize(),
         horizontalAlignment = Alignment.Start,
-        verticalArrangement = Arrangement.Center
+        verticalArrangement = Arrangement.Top
     ){
         items(items = uiState.statesWorkout ){ item->
             Row(modifier = Modifier.padding(horizontal = 12.dp, vertical = 4.dp)) {
                 TextApp(
                     text = "${item.tickTime.hour}:${item.tickTime.min}:${item.tickTime.sec}",
                     modifier = Modifier.width(70.dp),
-                    style = interLight12
+                    style = typography.bodySmall
                 )
                 Spacer(modifier = Modifier.width(12.dp))
-                TextApp(text = item.message, style = interLight12)
+                TextApp(text = item.message, style = typography.bodySmall)
             }
         }
     }
     LaunchedEffect(lazyState.canScrollForward){
         if (lazyState.canScrollForward) {
             coroutineScope.launch {
-                lazyState.animateScrollToItem(index = listSize( uiState.statesWorkout ))
+                lazyState.animateScrollToItem(index =
+                if (uiState.statesWorkout.isEmpty()) 0 else uiState.statesWorkout.size - 1)
             }
         }
     }
 }
 
-fun listSize(list: List<MessageWorkOut>): Int = if (list.isEmpty()) 0 else list.size - 1
-
 @Composable fun Indication(uiState: PlayWorkoutScreenState){
-//    lg(" training ${uiState.training}")
     Column( modifier = Modifier
         .fillMaxWidth()
         .background(color = colors3.surfaceContainer, shape = shapes.extraSmall),) {
@@ -133,40 +121,6 @@ fun listSize(list: List<MessageWorkOut>): Int = if (list.isEmpty()) 0 else list.
         )
     }
 }
-
-@Composable fun ButtonFasterSlower(uiState: PlayWorkoutScreenState){
-
-    var downInterval = {}
-    var upInterval = {}
-    uiState.training?.let { training ->
-        uiState.playerSet?.let { set ->
-            downInterval = { uiState.updateSet(
-                training.idTraining, (set as SetDB).copy(intervalReps = set.intervalReps.Minus())) }
-            upInterval = { uiState.updateSet(
-                training.idTraining, (set as SetDB).copy(intervalReps = set.intervalReps.Plus())) }
-        }
-    }
-
-    Row(verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.Center,
-        modifier = Modifier
-            .padding(horizontal = 24.dp, vertical = 12.dp)
-            .fillMaxWidth()){
-        ButtonApp( modifier = Modifier.width(150.dp),
-            text = stringResource(id = R.string.slower),
-            enabled = uiState.playerSet != null,
-            onClick = { upInterval() })
-        Spacer(modifier = Modifier.weight(1f))
-        uiState.playerSet?.intervalReps?.toBigDecimal()?.setScale(1, RoundingMode.UP)?.let {
-            TextApp(text = it.toString(), style = typography.titleLarge)}
-        Spacer(modifier = Modifier.weight(1f))
-        ButtonApp( modifier = Modifier.width(150.dp),
-            text = stringResource(id = R.string.faster),
-            enabled = uiState.playerSet != null,
-            onClick = { downInterval() })
-    }
-}
-
 @Composable fun CurrentTimePulse(uiState: PlayWorkoutScreenState) {
     Row( modifier = Modifier
         .fillMaxWidth()
@@ -192,8 +146,6 @@ fun listSize(list: List<MessageWorkOut>): Int = if (list.isEmpty()) 0 else list.
 }
 
 @Composable fun ListExercise(uiState: PlayWorkoutScreenState) {
-//    lg("ListExercise ${uiState.playerSet}")
-    var roundId = 0
     LazyColumn(
         state = rememberLazyListState(),
         modifier = Modifier
@@ -203,28 +155,62 @@ fun listSize(list: List<MessageWorkOut>): Int = if (list.isEmpty()) 0 else list.
             .animateContentSize(),
         horizontalAlignment = Alignment.Start,
         verticalArrangement = Arrangement.Top
-    ) {
-        itemsIndexed(items = uiState.listActivity){ _, item ->
-            ListExerciseContent(item = item)
+    ) { items(items = uiState.listActivity){ item -> ListExerciseContent(item = item) } }
+}
+@Composable fun ListExerciseContent(item: ListActivityForPlayer) {
+    Column(modifier = Modifier.padding(horizontal = 12.dp)) {
+        val setDescription = when(item.typeDescription){
+            true -> "${stringResource(R.string.setFrom).lowercase()}: ${item.countSet}"
+            false -> "${stringResource(R.string.set).lowercase()} ${item.currentSet + 1} " +
+                    "${stringResource(R.string.from)} ${item.countSet}"
+            null -> ""
+        }
+        if (item.roundName.isNotEmpty() && setDescription == ""){
+            Spacer(modifier = Modifier.height(12.dp))
+            TextApp(text = item.roundName, style = typography.bodyLarge, fontWeight = FontWeight.Bold)
+        } else {
+            Row {
+                TextApp(
+                    text = item.activityName + " ",
+                    style = typography.bodyLarge,
+                    textAlign = TextAlign.Start,
+                    modifier = Modifier.padding(start = 12.dp).weight(1f))
+                TextApp(text = setDescription, style = typography.bodyLarge)
+            }
         }
     }
 }
 
-@Composable
-fun ListExerciseContent(item: ListActivityForPlayer) {
-    Column(modifier = Modifier.padding(horizontal = 12.dp)) {
-        if (item.roundName.isNotEmpty() && item.setDescription == ""){
-            Spacer(modifier = Modifier.height(12.dp))
-            TextApp(text = item.roundName, style = typography.bodyLarge, fontWeight = FontWeight.Bold)
+@Composable fun ButtonFasterSlower(uiState: PlayWorkoutScreenState){
+
+    var downInterval = {}
+    var upInterval = {}
+    uiState.training?.let { training ->
+        uiState.playerSet?.let { set ->
+            downInterval = { uiState.updateSet(
+                training.idTraining, (set as SetDB).copy(intervalReps = set.intervalReps.Minus())) }
+            upInterval = { uiState.updateSet(
+                training.idTraining, (set as SetDB).copy(intervalReps = set.intervalReps.Plus())) }
         }
-        Row {
-            TextApp(
-                text = item.activityName + " ",
-                style = typography.bodyLarge,
-                textAlign = TextAlign.Start,
-                modifier = Modifier.padding(start = 12.dp).weight(1f))
-            TextApp(text = item.setDescription, style = typography.bodyLarge)
-        }
+    }
+
+    Row(verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.Center,
+        modifier = Modifier
+            .padding(horizontal = 24.dp, vertical = 12.dp)
+            .fillMaxWidth()){
+        ButtonApp( modifier = Modifier.width(140.dp),
+            text = stringResource(id = R.string.slower),
+            enabled = uiState.playerSet != null,
+            onClick = { upInterval() })
+        Spacer(modifier = Modifier.weight(1f))
+        uiState.playerSet?.intervalReps?.toBigDecimal()?.setScale(1, RoundingMode.UP)?.let {
+            TextApp(text = it.toString(), style = typography.titleLarge)}
+        Spacer(modifier = Modifier.weight(1f))
+        ButtonApp( modifier = Modifier.width(150.dp),
+            text = stringResource(id = R.string.faster),
+            enabled = uiState.playerSet != null,
+            onClick = { downInterval() })
     }
 }
 
@@ -244,7 +230,6 @@ fun ListExerciseContent(item: ListActivityForPlayer) {
     }
     Spacer(modifier = Modifier.height(12.dp))
 }
-
 @Composable fun StartedService(onClickStop: () -> Unit, onClickPause: () -> Unit,){
     IconSingleLarge(Icons.Filled.Pause, onClickPause)
     Spacer(modifier = Modifier.width(12.dp))
@@ -253,7 +238,6 @@ fun ListExerciseContent(item: ListActivityForPlayer) {
 @Composable fun StoppedService(onClickStart: () -> Unit,){
     IconSingleLarge(Icons.Filled.PlayArrow, onClickStart )
 }
-
 @Composable fun PauseService(onClickStart: () -> Unit, onClickStop: () -> Unit){
     IconSingleLarge(Icons.Filled.PlayArrow, onClickStart )
     Spacer(modifier = Modifier.width(12.dp))

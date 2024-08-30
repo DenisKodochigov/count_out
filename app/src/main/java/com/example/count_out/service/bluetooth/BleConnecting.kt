@@ -31,7 +31,6 @@ import javax.inject.Inject
 class BleConnecting @Inject constructor(
     val context: Context, private val permissionApp: PermissionApp,
 ) {
-//    private val bleQueue = BleQueue()
     private var connection = BleConnection()
     val heartRate: MutableStateFlow<Int> = MutableStateFlow(0)
     private val UUID_HEART_RATE_MEASUREMENT = UUID.fromString(UUIDBle.HEART_RATE_MEASUREMENT)
@@ -39,7 +38,6 @@ class BleConnecting @Inject constructor(
 
 /*################################################################################################ */
     fun connectDevice(bleStates: BleStates, sendToBle: SendToBle, sendToUi: MutableStateFlow<SendToUI>){
-//        generateHR(heartRate)
         sendToBle.currentConnection?.let {
             connection = it
             connectingGatt( bleStates, sendToUi )
@@ -210,5 +208,4 @@ class BleConnecting @Inject constructor(
             }
         }
     }
-
 }

@@ -27,6 +27,7 @@ class PlayerSet @Inject constructor(val speechManager:SpeechManager, val context
 
             bodyPlayingSet(template, sendToUI)
             sendToUI.set.value = null
+            sendToUI.nextSet.value = template.getNextSet()
             playRest(template, sendToUI)
         }
     }
@@ -40,17 +41,15 @@ class PlayerSet @Inject constructor(val speechManager:SpeechManager, val context
         }
     }
     private suspend fun playRest(template: SendToWorkService, sendToUI: SendToUI, ){
-        val job = CoroutineScope(Dispatchers.IO).launch {
+        CoroutineScope(Dispatchers.IO).launch {
             playRestNextExercise(template = template, sendToUI = sendToUI) }
         delayAndPlayEndSet(template = template, sendToUI = sendToUI)
-//        job.cancelAndJoin()
     }
 
     private suspend fun playSetCOUNT(template: SendToWorkService, variablesOut: SendToUI, ){
         template.getSet()?.let {
             for (count in 1..it.reps){
                 speechManager.speakOutFlush(text = count.toString(), variablesOut.stateRunning)
-                lg("playSetCOUNT ${template.getSetIntervalReps()}")
                 delayMy((template.getSetIntervalReps() * 1000).toLong(), variablesOut.stateRunning)
             }
         }

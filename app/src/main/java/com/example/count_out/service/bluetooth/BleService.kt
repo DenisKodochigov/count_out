@@ -11,13 +11,13 @@ import android.os.IBinder
 import com.example.count_out.entity.BleTask
 import com.example.count_out.entity.Const.NOTIFICATION_ID
 import com.example.count_out.entity.ErrorBleService
+import com.example.count_out.entity.SendToUI
 import com.example.count_out.entity.StateScanner
 import com.example.count_out.entity.StateService
 import com.example.count_out.entity.bluetooth.BleConnection
 import com.example.count_out.entity.bluetooth.BleDevice
 import com.example.count_out.entity.bluetooth.BleStates
-import com.example.count_out.entity.bluetooth.ReceiveFromUI
-import com.example.count_out.entity.bluetooth.SendToUI
+import com.example.count_out.entity.bluetooth.SendToBle
 import com.example.count_out.helpers.NotificationHelper
 import com.example.count_out.ui.view_components.lg
 import dagger.hilt.android.AndroidEntryPoint
@@ -38,7 +38,7 @@ class BleService @Inject constructor(): Service() {
     @Inject lateinit var bluetoothAdapter: BluetoothAdapter
     @Inject lateinit var notificationHelper: NotificationHelper
 
-    lateinit var receiveFromUI: ReceiveFromUI
+    lateinit var sendToBle: SendToBle
     val sendToUi: MutableStateFlow<SendToUI> = MutableStateFlow(SendToUI())
     val bleStates = BleStates()
 
@@ -97,10 +97,10 @@ class BleService @Inject constructor(): Service() {
 
     fun connectDevice(){
         bleStates.task = BleTask.CONNECT_DEVICE
-        getRemoteDevice(bluetoothAdapter, receiveFromUI, bleStates)
+        getRemoteDevice(bluetoothAdapter, sendToBle, bleStates)
         sendHeartRate(bleConnecting.heartRate)
-        if ( receiveFromUI.currentConnection != null ) {
-            bleConnecting.connectDevice(bleStates, receiveFromUI)
+        if ( sendToBle.currentConnection != null ) {
+            bleConnecting.connectDevice(bleStates, sendToBle, sendToUi)
         }
     }
 
@@ -112,7 +112,7 @@ class BleService @Inject constructor(): Service() {
 
     private fun getRemoteDevice(
         bluetoothAdapter: BluetoothAdapter,
-        receiveFromUI: ReceiveFromUI,
+        sendToBle: SendToBle,
         bleStates: BleStates,
     ): Boolean {
         var result = false
@@ -120,14 +120,14 @@ class BleService @Inject constructor(): Service() {
             lg("getRemoteDevice")
             bluetoothAdapter.let { adapter ->
                 try {
-                    adapter.getRemoteDevice(receiveFromUI.addressForSearch)?.let { dv ->
+                    adapter.getRemoteDevice(sendToBle.addressForSearch)?.let { dv ->
                         sendToUi.update { send->
                             send.copy(
                                 foundDevices = listOf( BleDevice().fromBluetoothDevice(dv)),
                                 lastConnectHearthRateDevice = BleDevice().fromBluetoothDevice(dv)
                             )
                         }
-                        receiveFromUI.currentConnection = BleConnection(device = dv)
+                        sendToBle.currentConnection = BleConnection(device = dv)
                         result = true
                         bleStates.stateService = StateService.GET_REMOTE_DEVICE
                     }

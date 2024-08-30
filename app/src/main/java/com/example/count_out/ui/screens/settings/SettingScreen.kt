@@ -208,12 +208,7 @@ import com.example.count_out.ui.view_components.TextApp
             else typography.bodyMedium.copy(fontWeight = FontWeight.Bold),
             modifier = Modifier.padding(start = 12.dp))
         Spacer(modifier = Modifier.weight(1f))
-        val textConnect = when (uiState.connectingDevice){
-            ConnectState.NOT_CONNECTED-> stringResource(id = R.string.not_connected)
-            ConnectState.CONNECTED-> stringResource(id = R.string.connected)
-            ConnectState.CONNECTING-> stringResource(id = R.string.connecting)
-        }
-        TextApp(text = textConnect, style = typography.bodyLarge)
+        TextApp(text = stringResource(uiState.connectingDevice.strId), style = typography.bodyLarge)
         Spacer(modifier = Modifier.width(12.dp))
         if (!uiState.showBottomSheetBLE.value) {
             TextApp(

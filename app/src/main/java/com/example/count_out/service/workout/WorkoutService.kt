@@ -28,8 +28,8 @@ import javax.inject.Singleton
 @AndroidEntryPoint
 class WorkoutService @Inject constructor(): Service(), WorkOutAPI
 {
-    override var variablesOut: SendToUI = SendToUI()
-    override var variablesIn: SendToWorkService = SendToWorkService()
+    override var sendToUI: SendToUI? = null
+    override var sendToWork: SendToWorkService? = null
 
     @Inject lateinit var notificationHelper: NotificationHelper
     @Inject lateinit var playerWorkOut: PlayerWorkOut
@@ -49,48 +49,59 @@ class WorkoutService @Inject constructor(): Service(), WorkOutAPI
     }
     @SuppressLint("ForegroundServiceType")
     override fun startWorkout() {
-        lg("startWorkout")
-        variablesOut.stateRunning.value.let {
-            if (it == StateRunning.Stopped || it == StateRunning.Created){
-                variablesOut.stateRunning.value = StateRunning.Started
+        sendToUI = SendToUI()
+        lg("startWorkout $sendToUI")
+        sendToUI?.let {
+            if (it.stateRunning.value == StateRunning.Stopped || it.stateRunning.value == StateRunning.Created){
+                it.stateRunning.value = StateRunning.Started
+                it.nextSet.value = sendToWork?.getSet(0)
                 startForegroundService()
                 getTick()
                 playTraining()
-            } else if (it == StateRunning.Paused) { continueWorkout() }
+            } else if (it.stateRunning.value == StateRunning.Paused) { continueWorkout() }
         }
     }
     override fun continueWorkout(){
-        variablesOut.stateRunning.value = StateRunning.Started
+        sendToUI?.let { it.stateRunning.value = StateRunning.Started }
         notificationHelper.setPauseButton()
     }
     override fun pauseWorkout() {
-        variablesOut.stateRunning.value = StateRunning.Paused
+        sendToUI?.let { it.stateRunning.value = StateRunning.Paused }
         notificationHelper.setContinueButton()
     }
     override fun stopWorkout(){
+        lg("stopWorkout")
         StopWatchObj.stop()
-        variablesOut.cancel()
+        sendToUI?.let { it.cancel() }
+        sendToUI = null
         stopForeground(STOP_FOREGROUND_REMOVE)
         notificationHelper.cancel()
         scopeSpeech.cancel()
         scopeTick.cancel()
     }
     private fun getTick(){
-        StopWatchObj.start(variablesOut.stateRunning)
-        scopeTick = CoroutineScope(Dispatchers.Default)
-        scopeTick.launch {
-            StopWatchObj.getTickTime().collect{ tick ->
-                notificationHelper.updateNotification(hours = tick.hour, minutes = tick.min, seconds = tick.sec)
-                variablesOut.flowTick.value = tick
+        sendToUI?.let {
+            StopWatchObj.start(it.stateRunning)
+            scopeTick = CoroutineScope(Dispatchers.Default)
+            scopeTick.launch {
+                StopWatchObj.getTickTime().collect{ tick ->
+                    notificationHelper.updateNotification(hours = tick.hour, minutes = tick.min, seconds = tick.sec)
+                    it.flowTick.value = tick
+                }
             }
         }
     }
     private fun playTraining() {
         scopeSpeech = CoroutineScope(Dispatchers.Default)
-        scopeSpeech.launch {
-            playerWorkOut.playingWorkOut(variablesIn, variablesOut)
-            stopWorkout()
+        sendToUI?.let { toUI->
+            sendToWork?.let { toWork->
+                scopeSpeech.launch {
+                    playerWorkOut.playingWorkOut(toWork, toUI)
+                    stopWorkout()
+                }
+            }
         }
+
     }
     private fun startForegroundService() {
         if (!notificationHelper.channelExist()) notificationHelper.createChannel()
