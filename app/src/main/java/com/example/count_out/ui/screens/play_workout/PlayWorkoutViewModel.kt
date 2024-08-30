@@ -1,5 +1,6 @@
 package com.example.count_out.ui.screens.play_workout
 
+import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.count_out.R
@@ -25,6 +26,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class PlayWorkoutViewModel @Inject constructor(
+    private val context: Context,
     private val errorApp: ErrorApp,
     private val dataRepository: DataRepository,
     private val bleManager: BleManager,
@@ -128,7 +130,7 @@ class PlayWorkoutViewModel @Inject constructor(
                 _playWorkoutScreenState.update { currentState ->
                     currentState.copy(
                         listActivity = if (set == null ) currentState.listActivity
-                                        else currentState.activityList(set.idSet),
+                                        else currentState.activityList(set.idSet, context),
                         playerSet = set )}}
         }
         viewModelScope.launch(Dispatchers.IO) {

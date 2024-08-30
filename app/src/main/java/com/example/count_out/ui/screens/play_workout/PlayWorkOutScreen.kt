@@ -20,7 +20,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Pause
 import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material.icons.filled.Stop
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -28,6 +27,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -49,7 +49,6 @@ import com.example.count_out.ui.view_components.ButtonApp
 import com.example.count_out.ui.view_components.IconSingleLarge
 import com.example.count_out.ui.view_components.NameScreen
 import com.example.count_out.ui.view_components.TextApp
-import com.example.count_out.ui.view_components.lg
 import kotlinx.coroutines.launch
 import java.math.RoundingMode
 
@@ -68,11 +67,9 @@ fun PlayWorkoutScreenCreateView( viewModel: PlayWorkoutViewModel,
 }
 @Composable fun PlayWorkoutScreenLayout( uiState: PlayWorkoutScreenState
 ){
-    if(uiState.listActivity.isEmpty()) { uiState.listActivity = uiState.activityList() }
+    if(uiState.listActivity.isEmpty()) {
+        uiState.listActivity = uiState.activityList(context = LocalContext.current) }
 
-    uiState.training?.let {
-        lg("ScreenLayout ${it.rounds[0].exercise[0].sets[0].intervalReps}  ${it.rounds[0].exercise[1].sets[0].intervalReps}")
-    }
     Column(
         modifier = Modifier.fillMaxSize(),
         content = {
@@ -207,26 +204,18 @@ fun listSize(list: List<MessageWorkOut>): Int = if (list.isEmpty()) 0 else list.
         horizontalAlignment = Alignment.Start,
         verticalArrangement = Arrangement.Top
     ) {
-        itemsIndexed(items = uiState.listActivity){ index, item ->
-            val roundName = if ( roundId != item.roundNameId) {
-                roundId = item.roundNameId
-                stringResource(id = item.roundNameId)
-            } else ""
-            ListExerciseContent(item = item, roundName, index = index)
+        itemsIndexed(items = uiState.listActivity){ _, item ->
+            ListExerciseContent(item = item)
         }
     }
 }
 
 @Composable
-fun ListExerciseContent(
-    item: ListActivityForPlayer,
-    roundName: String,
-    index: Int,
-) {
+fun ListExerciseContent(item: ListActivityForPlayer) {
     Column(modifier = Modifier.padding(horizontal = 12.dp)) {
-        if (roundName.isNotEmpty()){
+        if (item.roundName.isNotEmpty() && item.setDescription == ""){
             Spacer(modifier = Modifier.height(12.dp))
-            TextApp(text = roundName, style = typography.bodyLarge, fontWeight = FontWeight.Bold)
+            TextApp(text = item.roundName, style = typography.bodyLarge, fontWeight = FontWeight.Bold)
         }
         Row {
             TextApp(
@@ -234,13 +223,7 @@ fun ListExerciseContent(
                 style = typography.bodyLarge,
                 textAlign = TextAlign.Start,
                 modifier = Modifier.padding(start = 12.dp).weight(1f))
-
-            val setDescription =
-                if (index == 0){ "${stringResource(id = R.string.set).lowercase()} " +
-                    "${item.currentSet + 1} ${stringResource(id = R.string.from)} ${item.countSet}"
-                } else { "${stringResource(id = R.string.setFrom).lowercase()}: ${item.countSet}" }
-
-            Text(text = setDescription, style = typography.bodyLarge)
+            TextApp(text = item.setDescription, style = typography.bodyLarge)
         }
     }
 }
