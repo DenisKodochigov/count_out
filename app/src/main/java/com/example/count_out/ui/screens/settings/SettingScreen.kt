@@ -29,7 +29,9 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -37,10 +39,10 @@ import com.example.count_out.R
 import com.example.count_out.data.room.tables.ActivityDB
 import com.example.count_out.domain.to01
 import com.example.count_out.entity.ConnectState
-import com.example.count_out.entity.bluetooth.DeviceUI
 import com.example.count_out.ui.bottomsheet.BottomSheetAddActivity
 import com.example.count_out.ui.bottomsheet.BottomSheetBle
 import com.example.count_out.ui.bottomsheet.CardActivity
+import com.example.count_out.ui.theme.alumBodySmall
 import com.example.count_out.ui.theme.elevationTraining
 import com.example.count_out.ui.theme.typography
 import com.example.count_out.ui.view_components.AnimateIcon
@@ -159,10 +161,7 @@ import com.example.count_out.ui.view_components.TextApp
 @Composable fun SettingsBluetooth(uiState: SettingScreenState){
     Spacer(modifier = Modifier.height(12.dp))
     Card ( elevation = elevationTraining(), shape = MaterialTheme.shapes.extraSmall){
-        Column (modifier = Modifier
-            .padding(start = 4.dp, top = 12.dp, bottom = 12.dp)
-            .fillMaxWidth()
-        ){
+        Column (modifier = Modifier.padding(start = 4.dp, top = 12.dp, bottom = 12.dp).fillMaxWidth()){
             SettingBluetoothTitle(uiState)
             RowBleDevice(uiState)
         }
@@ -180,46 +179,46 @@ import com.example.count_out.ui.view_components.TextApp
             modifier = Modifier.padding(horizontal = 4.dp)
         )
         Spacer(modifier = Modifier.weight(1f))
+        IconSingle(image = Icons.Rounded.CleaningServices, onClick = { uiState.onClearCacheBLE })
+        Spacer(modifier = Modifier.width(12.dp))
         AnimateIcon(
             icon = Icons.AutoMirrored.Rounded.BluetoothSearching,
             animate = uiState.connectingDevice != ConnectState.CONNECTED,
             onClick = {uiState.showBottomSheetBLE.value = true},
         )
         Spacer(modifier = Modifier.width(12.dp))
-        IconSingle(
-            image = Icons.Rounded.CleaningServices,
-            onClick = { uiState.onClearCacheBLE }
-        )
-        Spacer(modifier = Modifier.width(12.dp))
     }
 }
 
 @Composable fun RowBleDevice(uiState: SettingScreenState){
-    val lastHeartDevice: DeviceUI? = uiState.lastConnectHearthRateDevice
-    val heartRate = uiState.heartRate
 
     Spacer(modifier = Modifier.height(12.dp))
     Row (
+        modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.Start,
         verticalAlignment = Alignment.CenterVertically
     ){
-        TextApp(text = lastHeartDevice?.name ?: stringResource(id = R.string.not_select_device),
-            style = if (heartRate > 0) typography.titleMedium
-            else typography.bodyMedium.copy(fontWeight = FontWeight.Bold),
-            modifier = Modifier.padding(start = 12.dp))
-        Spacer(modifier = Modifier.weight(1f))
-        TextApp(text = stringResource(uiState.connectingDevice.strId), style = typography.bodyLarge)
-        Spacer(modifier = Modifier.width(12.dp))
-        if (!uiState.showBottomSheetBLE.value) {
-            TextApp(
-                text = (if (heartRate > 0) heartRate else "").toString(),
-                modifier = Modifier.padding(end = 24.dp),
-                style = typography.bodyLarge
-            )
+        if (uiState.connectingDevice == ConnectState.CONNECTED) {
+            RowBleDeviceItem(modifier = Modifier.weight(1f),
+                uiState = uiState,
+                style = typography.bodyMedium.copy(fontWeight = FontWeight.Bold))
+        } else {
+            RowBleDeviceItem(modifier = Modifier.weight(1f),
+                uiState = uiState,
+                style = typography.titleMedium)
         }
     }
 }
+@Composable fun RowBleDeviceItem(modifier: Modifier, uiState: SettingScreenState, style: TextStyle){
 
+    val nameDevice = uiState.lastConnectHearthRateDevice?.name ?: stringResource(id = R.string.not_select_device)
+    val heartRate = if (uiState.heartRate > 0) uiState.heartRate.toString() else ""
+    Column (modifier = modifier.padding(start = 12.dp, end = 12.dp).fillMaxWidth()) {
+        TextApp(text = nameDevice, textAlign = TextAlign.Start, style = style)
+        TextApp(text = stringResource(id = uiState.connectingDevice.strId), style = alumBodySmall)
+    }
+    TextApp(text = heartRate, style = typography.displayMedium, modifier = Modifier.padding(start = 12.dp, end = 12.dp))
+}
 
 
 

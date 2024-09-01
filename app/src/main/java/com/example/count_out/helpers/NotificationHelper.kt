@@ -46,7 +46,7 @@ class NotificationHelper @Inject constructor(private val context: Context)
             .setAutoCancel(true)
     }
     fun createChannel() {
-        lg("createChannel")
+//        lg("createChannel")
         val channel = NotificationChannel(
             NOTIFICATION_CHANNEL_ID,
             NOTIFICATION_CHANNEL_NAME,

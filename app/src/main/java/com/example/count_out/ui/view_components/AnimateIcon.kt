@@ -5,6 +5,7 @@ import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.repeatable
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Bluetooth
@@ -16,6 +17,7 @@ import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.tooling.preview.Preview
@@ -45,7 +47,10 @@ import com.example.count_out.ui.theme.Dimen
             repeatMode = RepeatMode.Reverse
         )
     )
-    Icon(imageVector = icon, contentDescription = "", modifier = Modifier.size(size).clickable { onClick() })
+    Box(modifier = Modifier.size(Dimen.sizeIcon)){
+        Icon(imageVector = icon, contentDescription = "",
+            modifier = Modifier.align(Alignment.Center).size(size).clickable { onClick() })
+    }
 }
 
 @Preview(showBackground = true)

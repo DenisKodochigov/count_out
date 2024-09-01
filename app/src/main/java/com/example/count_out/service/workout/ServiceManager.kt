@@ -12,8 +12,7 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class ServiceManager @Inject constructor(val context: Context, val serviceUtils: ServiceUtils
-){
+class ServiceManager @Inject constructor(val context: Context, val serviceUtils: ServiceUtils){
     private lateinit var workOutService: WorkoutService
     var isBound : Boolean = false
 
@@ -43,5 +42,4 @@ class ServiceManager @Inject constructor(val context: Context, val serviceUtils:
     fun <T>bindService( clazz: Class<T>) { serviceUtils.bindService(clazz, serviceConnection) }
 
     fun unbindService()  { serviceUtils.unbindService(serviceConnection, isBound) }
-
 }

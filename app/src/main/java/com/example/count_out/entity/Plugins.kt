@@ -104,41 +104,44 @@ private fun createSetting( db: AppDatabase){
     db.dataDao().addSetting(SettingDB(parameter = R.string.speech_description, value = 1))
 }
 private fun createTrainingPlansTesting( db: AppDatabase) {
+
+    val rest = 1
+    val reps = 3
     val idTraining = db.dataDao().addTraining(TrainingDB(name = "Тестовая", idTraining = 1,
         speechId = addSpeechKit(db, bs = "Начало тренировки", ast = "", be = "", ae = "Тренировка окончена",)))
 //Разминка
     var idRound = db.dataDao().addRound(RoundDB(trainingId = idTraining, roundType = RoundType.UP, countRing = 1,
         speechId = addSpeechKit(db, bs = "", ast = "", be = "", ae = "",)))
     //Упражнение 1
-    var idExercise = db.dataDao().addExercise(ExerciseDB(roundId = idRound, activityId = 3,
+    var idExercise = db.dataDao().addExercise(ExerciseDB(roundId = idRound, activityId = 4,
         speechId = addSpeechKit(db, bs = "", ast = "", be = "", ae = "",)))
     db.dataDao().addSet(
-        SetDB(exerciseId = idExercise, name = "Set 1", reps = 3, intervalReps = 1.5, timeRest = 1, goal = GoalSet.COUNT,
+        SetDB(exerciseId = idExercise, name = "Set 1", reps = reps, intervalReps = 1.0, timeRest = rest, goal = GoalSet.COUNT,
         speechId = addSpeechKit(db, bs = "", ast = "", be = "", ae = "",)))
     //Упражнение 2
-    idExercise = db.dataDao().addExercise(ExerciseDB(roundId = idRound, activityId = 4,
+    idExercise = db.dataDao().addExercise(ExerciseDB(roundId = idRound, activityId = 5,
         speechId = addSpeechKit(db, bs = "", ast = "", be = "", ae = "",)))
     db.dataDao().addSet(
-        SetDB(exerciseId = idExercise, name = "Set 1", reps = 3, intervalReps = 1.5, timeRest = 1, goal = GoalSet.COUNT,
+        SetDB(exerciseId = idExercise, name = "Set 2", reps = reps, intervalReps = 1.0, timeRest = rest, goal = GoalSet.COUNT,
         speechId = addSpeechKit(db, bs = "", ast = "", be = "", ae = "",)))
 
 //Основная
     idRound = db.dataDao().addRound(RoundDB(trainingId = idTraining, roundType = RoundType.OUT, countRing = 1,
         speechId = addSpeechKit(db, bs = "", ast = "", be = "", ae = "",)))
     //Упражнение 1
-    idExercise = db.dataDao().addExercise(ExerciseDB(roundId = idRound, activityId = 3,
+    idExercise = db.dataDao().addExercise(ExerciseDB(roundId = idRound, activityId = 6,
         speechId = addSpeechKit(db, bs = "", ast = "", be = "", ae = "",)))
     db.dataDao().addSet(
-        SetDB(exerciseId = idExercise, name = "Set 1", reps = 3, intervalReps = 1.5, timeRest = 1, goal = GoalSet.COUNT,
+        SetDB(exerciseId = idExercise, name = "Set 3", reps = reps, intervalReps = 1.0, timeRest = rest, goal = GoalSet.COUNT,
             speechId = addSpeechKit(db, bs = "", ast = "", be = "", ae = "",)))
 //Заминка
     idRound = db.dataDao().addRound(RoundDB(trainingId = idTraining, roundType = RoundType.DOWN, countRing = 1,
         speechId = addSpeechKit(db, bs = "", ast = "", be = "", ae = "",)))
     //Упражнение 1
-    idExercise = db.dataDao().addExercise(ExerciseDB(roundId = idRound, activityId = 3,
+    idExercise = db.dataDao().addExercise(ExerciseDB(roundId = idRound, activityId = 7,
         speechId = addSpeechKit(db, bs = "", ast = "", be = "", ae = "",)))
     db.dataDao().addSet(
-        SetDB(exerciseId = idExercise, name = "Set 1", reps = 3, intervalReps = 1.5, timeRest = 1, goal = GoalSet.COUNT,
+        SetDB(exerciseId = idExercise, name = "Set 4", reps = reps, intervalReps = 1.0, timeRest = rest, goal = GoalSet.COUNT,
             speechId = addSpeechKit(db, bs = "", ast = "", be = "", ae = "",)))
 }
 private fun createTrainingPlansReal( db: AppDatabase

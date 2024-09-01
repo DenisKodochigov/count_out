@@ -49,10 +49,9 @@ class WorkoutService @Inject constructor(): Service(), WorkOutAPI
     }
     @SuppressLint("ForegroundServiceType")
     override fun startWorkout() {
-        sendToUI = SendToUI()
-        lg("startWorkout $sendToUI")
+        if (sendToUI == null) { sendToUI = SendToUI() }
         sendToUI?.let {
-            if (it.stateRunning.value == StateRunning.Stopped || it.stateRunning.value == StateRunning.Created){
+            if (it.stateRunning.value == StateRunning.Stopped){
                 it.stateRunning.value = StateRunning.Started
                 it.nextSet.value = sendToWork?.getSet(0)
                 startForegroundService()
@@ -70,10 +69,10 @@ class WorkoutService @Inject constructor(): Service(), WorkOutAPI
         notificationHelper.setContinueButton()
     }
     override fun stopWorkout(){
-        lg("stopWorkout")
         StopWatchObj.stop()
         sendToUI?.let { it.cancel() }
         sendToUI = null
+        sendToWork = null
         stopForeground(STOP_FOREGROUND_REMOVE)
         notificationHelper.cancel()
         scopeSpeech.cancel()

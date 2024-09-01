@@ -14,7 +14,6 @@ import com.example.count_out.entity.Training
 import com.example.count_out.entity.bluetooth.SendToBle
 import com.example.count_out.service.bluetooth.BleManager
 import com.example.count_out.service.workout.ServiceManager
-import com.example.count_out.ui.view_components.lg
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -41,7 +40,7 @@ class PlayWorkoutViewModel @Inject constructor(
     val playWorkoutScreenState: StateFlow<PlayWorkoutScreenState> =
         _playWorkoutScreenState.asStateFlow()
     private val sendToBle = SendToBle()
-    private val sendToWorkService = SendToWorkService()
+    private var sendToWorkService = SendToWorkService()
 
     init {
         startBleService()
@@ -73,20 +72,6 @@ class PlayWorkoutViewModel @Inject constructor(
         }
     }
 
-    private fun startWorkOutService(training: Training) {
-        viewModelScope.launch(Dispatchers.IO) {
-            kotlin.runCatching {
-                sendToWorkService.training = MutableStateFlow(training)
-                sendToWorkService.stateRunning = MutableStateFlow(StateRunning.Started)
-                sendToWorkService.enableSpeechDescription =
-                    MutableStateFlow(dataRepository.getSetting(R.string.speech_description).value == 1)
-                serviceManager.startWorkout(sendToWorkService)
-            }.fold(
-                onSuccess = { it?.let { receiveStateWorkout(it) }  },
-                onFailure = { errorApp.errorApi(it.message!!) }
-            )
-        }
-    }
     private fun startBleService(){
         viewModelScope.launch(Dispatchers.IO) {
             kotlin.runCatching { bleManager.startBleService(sendToBle) }.fold(
@@ -117,9 +102,27 @@ class PlayWorkoutViewModel @Inject constructor(
             }
         }
     }
+    private fun startWorkOutService(training: Training) {
+        viewModelScope.launch(Dispatchers.IO) {
+            kotlin.runCatching {
+                sendToWorkService.training = MutableStateFlow(training)
+                sendToWorkService.stateRunning = MutableStateFlow(StateRunning.Started )
+                sendToWorkService.enableSpeechDescription =
+                    MutableStateFlow(dataRepository.getSetting(R.string.speech_description).value == 1)
+                serviceManager.startWorkout(sendToWorkService)
+            }.fold(
+                onSuccess = { it?.let { receiveStateWorkout(it) }  },
+                onFailure = { errorApp.errorApi(it.message!!) }
+            )
+        }
+    }
     private fun receiveStateWorkout(sendToUI: SendToUI){
         viewModelScope.launch(Dispatchers.IO) {
             sendToUI.stateRunning.collect{
+                sendToWorkService.stateRunning.value = it
+                if (it == StateRunning.Stopped) {
+                    sendToWorkService = SendToWorkService()
+                }
                 _playWorkoutScreenState.update { currentState ->
                     currentState.copy(switchState = it) } }
         }
@@ -130,7 +133,6 @@ class PlayWorkoutViewModel @Inject constructor(
         }
         viewModelScope.launch(Dispatchers.IO) {
             sendToUI.nextSet.collect{ set->
-                lg("receiveStateWorkout ${set?.idSet}")
                 _playWorkoutScreenState.update { currentState ->
                     currentState.copy(
                         listActivity = if (set != null ) currentState.activityList(set.idSet)

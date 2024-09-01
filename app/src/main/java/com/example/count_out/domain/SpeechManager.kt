@@ -5,9 +5,9 @@ import android.speech.tts.TextToSpeech
 import android.speech.tts.UtteranceProgressListener
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
+import com.example.count_out.entity.SendToUI
 import com.example.count_out.entity.Speech
 import com.example.count_out.entity.StateRunning
-import com.example.count_out.entity.SendToUI
 import com.example.count_out.ui.view_components.lg
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -55,23 +55,20 @@ class SpeechManager(val context: Context) {
             } else { tts = null }
         }
     }
-    suspend fun speech(variablesOut: SendToUI, speech: Speech): Long
+    suspend fun speech(sendToUI: SendToUI, speech: Speech): Long
     {
-        if (variablesOut.stateRunning.value != StateRunning.Stopped){
+        if (sendToUI.stateRunning.value != StateRunning.Stopped){
             val speechText = speech.message + " " + speech.addMessage
             if ((speechText).length > 1) {
-                variablesOut.addMessage(speechText)
-                speakOutAdd(speechText, variablesOut.stateRunning)
-                while (speeching.value ||
-                        variablesOut.stateRunning.value == StateRunning.Paused ||
+                sendToUI.addMessage(speechText)
+                speakOutAdd(speechText, sendToUI.stateRunning)
+                while (speeching.value || sendToUI.stateRunning.value == StateRunning.Paused ||
                         tts?.isSpeaking == true)
                 { delay(100L) }
                 if( speech.duration == 0L && speech.idSpeech > 0 && duration > 0 ){
-                    variablesOut.durationSpeech.value = speech.idSpeech to duration
+                    sendToUI.durationSpeech.value = speech.idSpeech to duration
                 }
             }
-        } else {
-            stopTts()
         }
         return durationEnd
     }
@@ -90,7 +87,7 @@ class SpeechManager(val context: Context) {
 
     fun getDuration() = durationEnd
     fun getSpeeching() = speeching.value
-    private fun stopTts(){
+    fun stopTts(){
         tts!!.stop()
         tts!!.shutdown()
         tts = null

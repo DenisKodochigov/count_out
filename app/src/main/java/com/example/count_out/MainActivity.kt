@@ -7,6 +7,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.core.app.ActivityCompat
+import com.example.count_out.domain.SpeechManager
 import com.example.count_out.permission.RequestPermissionsAll
 import com.example.count_out.service.bluetooth.BleManager
 import com.example.count_out.service.bluetooth.BleService
@@ -25,6 +26,7 @@ class MainActivity: ComponentActivity()
     @Inject lateinit var sensorsManager: SensorsApp
     @Inject lateinit var bluetoothAdapter: BluetoothAdapter
     @Inject lateinit var bleManager: BleManager
+    @Inject lateinit var speechManager: SpeechManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,6 +49,7 @@ class MainActivity: ComponentActivity()
     }
     override fun onStop() {
         super.onStop()
+        speechManager.stopTts()
         workOutManager.unbindService()
         bleManager.unbindService()
     }

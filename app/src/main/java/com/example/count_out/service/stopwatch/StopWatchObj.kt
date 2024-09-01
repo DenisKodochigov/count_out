@@ -13,7 +13,7 @@ import kotlinx.coroutines.launch
 object StopWatchObj {
     private lateinit var scope: CoroutineScope
     private val currentTickTime: MutableStateFlow<TickTime> =  MutableStateFlow(TickTime())
-    private var stateTimer: MutableStateFlow<StateRunning> =  MutableStateFlow(StateRunning.Created)
+    private var stateTimer: MutableStateFlow<StateRunning> =  MutableStateFlow(StateRunning.Stopped)
     private fun engineStopWatch(){
         scope = CoroutineScope(Dispatchers.Default)
         scope.launch {
@@ -34,6 +34,9 @@ object StopWatchObj {
         stateTimer = state
         engineStopWatch()
     }
-    fun stop(){ scope.cancel() }
+    fun stop(){
+        currentTickTime.value = TickTime()
+        scope.cancel()
+    }
     fun getTickTime(): MutableStateFlow<TickTime> = currentTickTime
 }

@@ -11,7 +11,7 @@ data class SendToUI (
     val set: MutableStateFlow<Set?> = MutableStateFlow(null),
     val nextSet: MutableStateFlow<Set?> = MutableStateFlow(null),
     val durationSpeech:MutableStateFlow<Pair<Long, Long>> = MutableStateFlow(Pair(0,0)),
-    val stateRunning: MutableStateFlow<StateRunning> = MutableStateFlow(StateRunning.Created),
+    val stateRunning: MutableStateFlow<StateRunning> = MutableStateFlow(StateRunning.Stopped),
     var heartRate: Int = 0,
     var scannedBle: Boolean = false,
     val connectingDevice: ConnectState = ConnectState.NOT_CONNECTED,

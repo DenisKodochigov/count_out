@@ -38,6 +38,7 @@ import com.example.count_out.domain.Minus
 import com.example.count_out.domain.Plus
 import com.example.count_out.entity.ListActivityForPlayer
 import com.example.count_out.entity.StateRunning
+import com.example.count_out.ui.theme.alumBodySmall
 import com.example.count_out.ui.theme.colors3
 import com.example.count_out.ui.theme.shapes
 import com.example.count_out.ui.theme.typography
@@ -55,14 +56,11 @@ fun PlayWorkoutScreen(trainingId: Long ){
     LaunchedEffect( key1 = true, block = { viewModel.getTraining(trainingId) })
     PlayWorkoutScreenCreateView( viewModel = viewModel)
 }
-@Composable
-fun PlayWorkoutScreenCreateView( viewModel: PlayWorkoutViewModel,
-){
+@Composable fun PlayWorkoutScreenCreateView( viewModel: PlayWorkoutViewModel, ){
     val uiState by viewModel.playWorkoutScreenState.collectAsState()
     PlayWorkoutScreenLayout(uiState = uiState)
 }
-@Composable fun PlayWorkoutScreenLayout( uiState: PlayWorkoutScreenState
-){
+@Composable fun PlayWorkoutScreenLayout( uiState: PlayWorkoutScreenState){
     if(uiState.listActivity.isEmpty()) {
         uiState.listActivity = uiState.activityList() }
 
@@ -79,7 +77,9 @@ fun PlayWorkoutScreenCreateView( viewModel: PlayWorkoutViewModel,
     val lazyState = rememberLazyListState()
     LazyColumn(
         state = lazyState,
-        modifier = modifier.fillMaxWidth().animateContentSize(),
+        modifier = modifier
+            .fillMaxWidth()
+            .animateContentSize(),
         horizontalAlignment = Alignment.Start,
         verticalArrangement = Arrangement.Top
     ){
@@ -126,7 +126,7 @@ fun PlayWorkoutScreenCreateView( viewModel: PlayWorkoutViewModel,
         .fillMaxWidth()
         .padding(vertical = 12.dp, horizontal = 18.dp),
         horizontalArrangement = Arrangement.Center,
-        verticalAlignment = Alignment.CenterVertically)
+        verticalAlignment = Alignment.Top)
     {
         CountTime(uiState = uiState)
         Spacer(modifier = Modifier.weight(1f))
@@ -142,7 +142,11 @@ fun PlayWorkoutScreenCreateView( viewModel: PlayWorkoutViewModel,
     TextApp(text = uiState.tickTime.sec, style = style)
 }
 @Composable fun HearthRate(uiState: PlayWorkoutScreenState) {
-    TextApp(text = uiState.heartRate.toString(), style = typography.displayLarge)
+
+    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+        TextApp(text = uiState.heartRate.toString(), style = typography.displayLarge)
+        TextApp(text = stringResource(uiState.connectingDevice.strId), style = alumBodySmall)
+    }
 }
 
 @Composable fun ListExercise(uiState: PlayWorkoutScreenState) {
@@ -174,7 +178,9 @@ fun PlayWorkoutScreenCreateView( viewModel: PlayWorkoutViewModel,
                     text = item.activityName + " ",
                     style = typography.bodyLarge,
                     textAlign = TextAlign.Start,
-                    modifier = Modifier.padding(start = 12.dp).weight(1f))
+                    modifier = Modifier
+                        .padding(start = 12.dp)
+                        .weight(1f))
                 TextApp(text = setDescription, style = typography.bodyLarge)
             }
         }
@@ -224,7 +230,6 @@ fun PlayWorkoutScreenCreateView( viewModel: PlayWorkoutViewModel,
         when (switchState){
             StateRunning.Started -> StartedService(onClickStop, onClickPause)
             StateRunning.Stopped -> StoppedService(onClickStart)
-            StateRunning.Created -> StoppedService(onClickStart)
             StateRunning.Paused -> PauseService(onClickStart, onClickStop)
         }
     }

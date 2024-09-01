@@ -75,9 +75,9 @@
     <string name="count">отсчеты</string>
     <string name="next_exercise">Подготовьтесь к следующему упражнению</string>
     <string name="rest_time">секунд отдыха.</string>
-    <string name="section_heart_rate">Доступные устройства</string>
-    <string name="heart_rate_device">Датчик пульса</string>
-    <string name="not_select_device">Нет выбранных устройств</string>
+    <string name="section_heart_rate">Доступные устройства.</string>
+    <string name="heart_rate_device">Датчик пульса.</string>
+    <string name="not_select_device">Нет выбранных устройств.</string>
 
 
     <string name="ble_playground">BLE Playground</string>
