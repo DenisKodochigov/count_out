@@ -40,16 +40,16 @@ data class PlayWorkoutScreenState(
         if (setId > -1){
             training?.let { trainingIt->
                 trainingIt.rounds.forEachIndexed { _, round ->
-                    if (findingSet) resultList.add(ListActivityForPlayer(roundName = round.roundType.name))
+                    if (findingSet) resultList.add(ListActivityForPlayer(roundNameId = round.roundType.strId))
                     round.exercise.forEachIndexed{ _, exercise ->
                         exercise.sets.forEachIndexed{ indexSet, set ->
                             if (findingSet){
                                 resultList.add(ListActivityForPlayer(
-                                    roundName =round.roundType.name,
+                                    roundNameId = round.roundType.strId,
                                     activityName = exercise.activity.name,
                                     typeDescription = true,
                                     countSet = exercise.sets.count(),
-                                    currentSet = currentSet,
+                                    currentIndSet = currentSet,
                                     countRing = 0,
                                     currentRing = 0,
                                 ))
@@ -58,13 +58,13 @@ data class PlayWorkoutScreenState(
                             if (set.idSet == setId) {
                                 findingSet = true
                                 currentSet = indexSet
-                                resultList.add(ListActivityForPlayer(roundName = round.roundType.name))
+                                resultList.add(ListActivityForPlayer(roundNameId = round.roundType.strId))
                                 resultList.add(ListActivityForPlayer(
-                                    roundName =round.roundType.name,
+                                    roundNameId =round.roundType.strId,
                                     activityName = exercise.activity.name,
                                     typeDescription = false,
                                     countSet = exercise.sets.count(),
-                                    currentSet = currentSet,
+                                    currentIndSet = currentSet,
                                     countRing = 0,
                                     currentRing = 0,
                                 ))
@@ -75,15 +75,15 @@ data class PlayWorkoutScreenState(
             }
         } else {
             training?.let { trainingIt->
-                trainingIt.rounds.forEachIndexed { indexRound, round ->
-                    resultList.add(ListActivityForPlayer(roundName = round.roundType.name))
-                    round.exercise.forEachIndexed{ indexExercise, exercise ->
+                trainingIt.rounds.forEachIndexed { _, round ->
+                    resultList.add(ListActivityForPlayer(roundNameId = round.roundType.strId))
+                    round.exercise.forEachIndexed{ _, exercise ->
                         resultList.add(ListActivityForPlayer(
-                            roundName =round.roundType.name,
+                            roundNameId =round.roundType.strId,
                             activityName = exercise.activity.name,
                             typeDescription = true,
                             countSet = exercise.sets.count(),
-                            currentSet = 0,
+                            currentIndSet = 0,
                             countRing = 0,
                             currentRing = 0,
                         ))

@@ -10,31 +10,20 @@ import androidx.compose.ui.unit.sp
 import com.example.count_out.R
 
 val interBold = TextStyle(fontFamily = FontFamily(Font(R.font.inter_bold)))
-val interBold12 = interBold.copy(fontSize = 12.sp)
 val interBold14 = interBold.copy(fontSize = 14.sp)
 val interBold16 = interBold.copy(fontSize = 16.sp)
-val interBold48 = interBold.copy(fontSize = 48.sp)
-
-val interExtraLight = TextStyle(fontFamily = FontFamily(Font(R.font.inter_extralight)))
-val interExtraLight12 = interExtraLight.copy(fontSize = 12.sp)
 
 val interLight = TextStyle(fontFamily = FontFamily(Font(R.font.inter_light)))
 val interLight12 = interLight.copy(fontSize = 12.sp)
-val interLight12Start = interLight.copy(fontSize = 12.sp, textAlign = TextAlign.Start, textDecoration = TextDecoration.None)
 val interLight14Start = interLight.copy(fontSize = 14.sp, textAlign = TextAlign.Start, textDecoration = TextDecoration.None)
-val interLight16 = interLight.copy(fontSize = 16.sp)
 
 val interThin = TextStyle(fontFamily = FontFamily(Font(R.font.inter_thin)))
-val interThin12 = interThin.copy(fontSize = 12.sp)
 val interThin12Start = interThin.copy(fontSize = 12.sp, textAlign = TextAlign.Start)
-val interThin14 = interThin.copy(fontSize = 14.sp)
-val interThin14Start = interThin.copy(fontSize = 14.sp, textAlign = TextAlign.Start)
 
 val interReg = TextStyle(fontFamily = FontFamily(Font(R.font.inter_regular)))
 val interReg12 = interReg.copy(fontSize = 12.sp)
 val interReg14 = interReg.copy(fontSize = 14.sp)
 val interReg16 = interReg.copy(fontSize = 16.sp)
-val interReg18 = interReg.copy(fontSize = 18.sp)
 
 val alumnisans = TextStyle(fontFamily = FontFamily(Font(R.font.alumnisans_regular)))
 val alumniReg12 = alumnisans.copy(fontSize = 12.sp)

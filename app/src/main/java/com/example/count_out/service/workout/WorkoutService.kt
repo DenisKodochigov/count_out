@@ -15,7 +15,6 @@ import com.example.count_out.entity.StateRunning
 import com.example.count_out.helpers.NotificationHelper
 import com.example.count_out.service.player.PlayerWorkOut
 import com.example.count_out.service.stopwatch.StopWatchObj
-import com.example.count_out.ui.view_components.lg
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -70,7 +69,7 @@ class WorkoutService @Inject constructor(): Service(), WorkOutAPI
     }
     override fun stopWorkout(){
         StopWatchObj.stop()
-        sendToUI?.let { it.cancel() }
+        sendToUI?.cancel()
         sendToUI = null
         sendToWork = null
         stopForeground(STOP_FOREGROUND_REMOVE)

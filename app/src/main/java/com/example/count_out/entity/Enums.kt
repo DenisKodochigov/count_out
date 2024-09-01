@@ -4,7 +4,7 @@ import com.example.count_out.R
 
 enum class Rainfall{ SMALL, MEDIUM, LARGE }
 enum class UPDOWN { UP, DOWN, START, END }
-enum class TypeKeyboard{ DIGIT, TEXT, PASS, OTHER, NONE }
+enum class TypeKeyboard{ DIGIT, TEXT, PASS, NONE }
 enum class Zone(val id: Int, var maxPulse: Int){
     EXTRA_SLOW( id = 1, maxPulse = 100),
     SLOW(id = 2, maxPulse = 120),
@@ -14,10 +14,10 @@ enum class Zone(val id: Int, var maxPulse: Int){
 }
 enum class ConnectState(val strId: Int) {
     NOT_CONNECTED(R.string.not_connected) ,
-    CONNECTING(R.string.connected),
-    CONNECTED(R.string.connecting) }
+    CONNECTING(R.string.connecting),
+    CONNECTED(R.string.connected) }
 enum class TimerState { COUNTING, STOPPED, END, }
-enum class StateScanner { RUNNING_ALL, RUNNING_MAC, END, }
+enum class StateScanner { RUNNING_ALL, END, }
 enum class StateService { DECLARED, CREATED, STARTED, PAUSED, STOPPED, GET_REMOTE_DEVICE, CONNECT_GAT, GET_DISCOVER_SERVICE, DISCONNECTED }
 enum class StateRunning { Started, Paused, Stopped }
 enum class BleTask{ NONE, CONNECT_DEVICE, NOTIFY_CHARACTERISTIC }

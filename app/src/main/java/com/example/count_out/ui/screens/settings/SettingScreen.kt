@@ -23,9 +23,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -79,7 +76,6 @@ import com.example.count_out.ui.view_components.TextApp
 }
 @SuppressLint("UnrememberedMutableState")
 @Composable fun SettingScreenLayout(uiState: SettingScreenState){
-    var animated by remember { mutableStateOf(false) }
     Column(
         modifier = Modifier
             .verticalScroll(rememberScrollState())

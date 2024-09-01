@@ -4,7 +4,6 @@ import com.example.count_out.domain.SpeechManager
 import com.example.count_out.entity.SendToUI
 import com.example.count_out.entity.SendToWorkService
 import com.example.count_out.entity.StateRunning
-import com.example.count_out.ui.view_components.lg
 import javax.inject.Inject
 
 class PlayerRound @Inject constructor(

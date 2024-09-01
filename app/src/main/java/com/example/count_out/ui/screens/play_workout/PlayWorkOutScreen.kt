@@ -36,6 +36,7 @@ import com.example.count_out.R
 import com.example.count_out.data.room.tables.SetDB
 import com.example.count_out.domain.Minus
 import com.example.count_out.domain.Plus
+import com.example.count_out.entity.GoalSet
 import com.example.count_out.entity.ListActivityForPlayer
 import com.example.count_out.entity.StateRunning
 import com.example.count_out.ui.theme.alumBodySmall
@@ -46,6 +47,7 @@ import com.example.count_out.ui.view_components.ButtonApp
 import com.example.count_out.ui.view_components.IconSingleLarge
 import com.example.count_out.ui.view_components.NameScreen
 import com.example.count_out.ui.view_components.TextApp
+import com.example.count_out.ui.view_components.lg
 import kotlinx.coroutines.launch
 import java.math.RoundingMode
 
@@ -165,13 +167,15 @@ fun PlayWorkoutScreen(trainingId: Long ){
     Column(modifier = Modifier.padding(horizontal = 12.dp)) {
         val setDescription = when(item.typeDescription){
             true -> "${stringResource(R.string.setFrom).lowercase()}: ${item.countSet}"
-            false -> "${stringResource(R.string.set).lowercase()} ${item.currentSet + 1} " +
+            false -> "${stringResource(R.string.set).lowercase()} ${item.currentIndSet + 1} " +
                     "${stringResource(R.string.from)} ${item.countSet}"
             null -> ""
         }
-        if (item.roundName.isNotEmpty() && setDescription == ""){
+        if (item.roundNameId != 0 && setDescription == ""){
             Spacer(modifier = Modifier.height(12.dp))
-            TextApp(text = item.roundName, style = typography.bodyLarge, fontWeight = FontWeight.Bold)
+            lg(" ListExerciseContent ${item.roundNameId}")
+            TextApp(text = stringResource(id = item.roundNameId),
+                style = typography.bodyLarge, fontWeight = FontWeight.Bold)
         } else {
             Row {
                 TextApp(
@@ -199,7 +203,8 @@ fun PlayWorkoutScreen(trainingId: Long ){
                 training.idTraining, (set as SetDB).copy(intervalReps = set.intervalReps.Plus())) }
         }
     }
-
+    val enabledButton = uiState.playerSet != null &&
+            ( uiState.playerSet.goal == GoalSet.COUNT || uiState.playerSet.goal == GoalSet.COUNT_GROUP)
     Row(verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Center,
         modifier = Modifier
@@ -207,15 +212,17 @@ fun PlayWorkoutScreen(trainingId: Long ){
             .fillMaxWidth()){
         ButtonApp( modifier = Modifier.width(140.dp),
             text = stringResource(id = R.string.slower),
-            enabled = uiState.playerSet != null,
+            enabled = enabledButton,
             onClick = { upInterval() })
         Spacer(modifier = Modifier.weight(1f))
-        uiState.playerSet?.intervalReps?.toBigDecimal()?.setScale(1, RoundingMode.UP)?.let {
-            TextApp(text = it.toString(), style = typography.titleLarge)}
+        if (enabledButton){
+            uiState.playerSet?.intervalReps?.toBigDecimal()?.setScale(1, RoundingMode.UP)?.let {
+                TextApp(text = it.toString(), style = typography.titleLarge)}
+        }
         Spacer(modifier = Modifier.weight(1f))
         ButtonApp( modifier = Modifier.width(150.dp),
             text = stringResource(id = R.string.faster),
-            enabled = uiState.playerSet != null,
+            enabled = enabledButton,
             onClick = { downInterval() })
     }
 }

@@ -9,6 +9,7 @@ import android.os.Binder
 import android.os.Build
 import android.os.IBinder
 import com.example.count_out.entity.BleTask
+import com.example.count_out.entity.ConnectState
 import com.example.count_out.entity.Const.NOTIFICATION_ID
 import com.example.count_out.entity.ErrorBleService
 import com.example.count_out.entity.SendToUI
@@ -96,6 +97,7 @@ class BleService @Inject constructor(): Service() {
     }
 
     fun connectDevice(){
+        sendToUi.update { send-> send.copy(connectingDevice = ConnectState.CONNECTING) }
         bleStates.task = BleTask.CONNECT_DEVICE
         getRemoteDevice(bluetoothAdapter, sendToBle, bleStates)
         sendHeartRate(bleConnecting.heartRate)

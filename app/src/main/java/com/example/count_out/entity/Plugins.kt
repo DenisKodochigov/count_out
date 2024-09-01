@@ -21,7 +21,6 @@ object Plugins
 //        ActivityDB(idActivity = 0, name = "Run", icon = R.drawable.ic_setka),
 //        ActivityDB(idActivity = 1, name = "Ski", icon = R.drawable.ic_setka))
 
-    val listSets = mutableListOf<Set>()
     fun init(){
         var idR = 0L
         for (t in 0..10L){

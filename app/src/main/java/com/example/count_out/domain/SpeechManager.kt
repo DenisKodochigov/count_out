@@ -84,8 +84,6 @@ class SpeechManager(val context: Context) {
             tts?.speak(text, TextToSpeech.QUEUE_FLUSH, null,"speakOut$idSpeech")
         }
     }
-
-    fun getDuration() = durationEnd
     fun getSpeeching() = speeching.value
     fun stopTts(){
         tts!!.stop()

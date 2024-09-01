@@ -54,7 +54,7 @@ import com.example.count_out.ui.theme.Dimen
 }
 
 @Preview(showBackground = true)
-@Composable fun searchBluetoothPreview(){
+@Composable fun SearchBluetoothPreview(){
     AnimateIcon()
 }
 //    val alpha = remember { Animatable(1f) }

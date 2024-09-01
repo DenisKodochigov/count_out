@@ -5,23 +5,18 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.AddCircleOutline
-import androidx.compose.material.icons.filled.AddRoad
 import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.filled.ArrowDropUp
 import androidx.compose.material.icons.filled.CopyAll
 import androidx.compose.material.icons.filled.DeleteOutline
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.GraphicEq
-import androidx.compose.material.icons.filled.LibraryAdd
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.Icon
@@ -79,48 +74,48 @@ import com.example.count_out.ui.theme.typography
     }
 }
 
-@Composable fun HorIcons(
-    onClickEdit: (() -> Unit)? = null,
-    onClickCopy: (() -> Unit)? = null,
-    onClickSpeech: (() -> Unit)? = null,
-    onClickDelete: (() -> Unit)? = null,
-    onClickAddSet: (() -> Unit)? = null,
-    onClickAddRing: (() -> Unit)? = null,
-    onClickAddExercise: (() -> Unit)? = null,
-    expanded: ()->Unit
-){
-    Row(horizontalArrangement = Arrangement.Center, verticalAlignment = Alignment.CenterVertically){
-        Spacer(modifier = Modifier.width(sizeBetweenIcon))
-        onClickEdit?.let {  IconSingle(
-            image = Icons.Default.Edit,
-            onClick = { it(); expanded()} )
-            Spacer(modifier = Modifier.width(sizeBetweenIcon)) }
-        onClickCopy?.let {  IconSingle(
-            image = Icons.Default.CopyAll,
-            onClick = { it(); expanded()} )
-            Spacer(modifier = Modifier.width(sizeBetweenIcon)) }
-        onClickSpeech?.let {  IconSingle(
-            image = Icons.Default.GraphicEq,
-            onClick = { it(); expanded()} )
-            Spacer(modifier = Modifier.width(sizeBetweenIcon)) }
-        onClickDelete?.let {  IconSingle(
-            image = Icons.Default.DeleteOutline,
-            onClick = { it(); expanded()} )
-            Spacer(modifier = Modifier.width(sizeBetweenIcon)) }
-        onClickAddSet?.let {  IconSingle(
-            image = Icons.Default.AddRoad,
-            onClick = { it(); expanded()} )
-            Spacer(modifier = Modifier.width(sizeBetweenIcon))}
-        onClickAddRing?.let {  IconSingle(
-            image = Icons.Default.AddCircleOutline,
-            onClick = { it();expanded()} )
-            Spacer(modifier = Modifier.width(sizeBetweenIcon))}
-        onClickAddExercise?.let {  IconSingle(
-            image = Icons.Default.LibraryAdd,
-            onClick = { it(); expanded()} )
-            Spacer(modifier = Modifier.width(sizeBetweenIcon)) }
-    }
-}
+//@Composable fun HorIcons(
+//    onClickEdit: (() -> Unit)? = null,
+//    onClickCopy: (() -> Unit)? = null,
+//    onClickSpeech: (() -> Unit)? = null,
+//    onClickDelete: (() -> Unit)? = null,
+//    onClickAddSet: (() -> Unit)? = null,
+//    onClickAddRing: (() -> Unit)? = null,
+//    onClickAddExercise: (() -> Unit)? = null,
+//    expanded: ()->Unit
+//){
+//    Row(horizontalArrangement = Arrangement.Center, verticalAlignment = Alignment.CenterVertically){
+//        Spacer(modifier = Modifier.width(sizeBetweenIcon))
+//        onClickEdit?.let {  IconSingle(
+//            image = Icons.Default.Edit,
+//            onClick = { it(); expanded()} )
+//            Spacer(modifier = Modifier.width(sizeBetweenIcon)) }
+//        onClickCopy?.let {  IconSingle(
+//            image = Icons.Default.CopyAll,
+//            onClick = { it(); expanded()} )
+//            Spacer(modifier = Modifier.width(sizeBetweenIcon)) }
+//        onClickSpeech?.let {  IconSingle(
+//            image = Icons.Default.GraphicEq,
+//            onClick = { it(); expanded()} )
+//            Spacer(modifier = Modifier.width(sizeBetweenIcon)) }
+//        onClickDelete?.let {  IconSingle(
+//            image = Icons.Default.DeleteOutline,
+//            onClick = { it(); expanded()} )
+//            Spacer(modifier = Modifier.width(sizeBetweenIcon)) }
+//        onClickAddSet?.let {  IconSingle(
+//            image = Icons.Default.AddRoad,
+//            onClick = { it(); expanded()} )
+//            Spacer(modifier = Modifier.width(sizeBetweenIcon))}
+//        onClickAddRing?.let {  IconSingle(
+//            image = Icons.Default.AddCircleOutline,
+//            onClick = { it();expanded()} )
+//            Spacer(modifier = Modifier.width(sizeBetweenIcon))}
+//        onClickAddExercise?.let {  IconSingle(
+//            image = Icons.Default.LibraryAdd,
+//            onClick = { it(); expanded()} )
+//            Spacer(modifier = Modifier.width(sizeBetweenIcon)) }
+//    }
+//}
 
 @Composable fun VerIcons(
     onClickEdit: (() -> Unit)? = null,
@@ -162,7 +157,7 @@ import com.example.count_out.ui.theme.typography
     Icon(imageVector = image,
         contentDescription = if ( idDescription == 0) "" else stringResource(id = idDescription),
         modifier = Modifier
-            .size(Dimen.sizeIcon)
+            .size(sizeIcon)
             .clickable { onClick() })
 }
 
@@ -185,7 +180,7 @@ fun IconsCollapsing(onClick: ()->Unit, wrap: Boolean)
         contentDescription = "",
         modifier = Modifier
             .padding(4.dp)
-            .size(Dimen.sizeIcon)
+            .size(sizeIcon)
             .clickable { onClick() }
     )
 }
@@ -194,7 +189,7 @@ fun IconsCollapsing(onClick: ()->Unit, wrap: Boolean)
 @Composable fun IconAddExercise(onClick:()->Unit) = IconAdd(onClick = onClick, text = "E+" )
 @Composable fun IconAddActivity(onClick:()->Unit) = IconAdd(onClick = onClick, text = "A+" )
 
-@Composable fun IconAdd(onClick:()->Unit, text: String = "+", idDescription: Int = 0) {
+@Composable fun IconAdd(onClick:()->Unit, text: String = "+") {
     Box(modifier = Modifier){
         Spacer(modifier = Modifier.align(alignment = Alignment.Center)
             .size(size = sizeIcon)
@@ -205,7 +200,6 @@ fun IconsCollapsing(onClick: ()->Unit, wrap: Boolean)
                 color = colors3.outline,
                 shape = CircleShape
             )
-//        .background(color = Color(activity.value.color), shape = CircleShape))
         )
         TextApp(text = text, style = typography.titleMedium, modifier = Modifier.align(alignment = Alignment.Center))
     }
