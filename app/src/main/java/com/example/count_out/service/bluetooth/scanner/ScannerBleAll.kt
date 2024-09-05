@@ -38,7 +38,6 @@ class ScannerBleAll(
     @SuppressLint("MissingPermission")
     fun startScannerBLEDevices(bleStates: BleStates, sendToUI: MutableStateFlow<SendToUI>) {
         scanCallback = objectScanCallback(bleStates, sendToUI)
-        lg("ScannerBleAll valOut.listDevice: ${sendToUI.value.foundDevices}")
         permissionApp.checkBleScan{
             bleScanner.startScan( scanFilters(), scanSettings(0L), scanCallback) }
         sendToUI.update { send-> send.copy( scannedBle = true) }

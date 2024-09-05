@@ -7,7 +7,6 @@ import android.os.IBinder
 import com.example.count_out.entity.SendToUI
 import com.example.count_out.entity.bluetooth.SendToBle
 import com.example.count_out.service.ServiceUtils
-import com.example.count_out.ui.view_components.lg
 import kotlinx.coroutines.flow.MutableStateFlow
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -46,7 +45,6 @@ class BleManager @Inject constructor(val context: Context, private val serviceUt
         if (isBound ) {
             bleService.startBleService()
             bleService.sendToBle = sendToBle
-            lg( "BleManager ${bleService.sendToUi}: ")
             return bleService.sendToUi
         } else {
             return MutableStateFlow(SendToUI())

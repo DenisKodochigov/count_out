@@ -5,10 +5,10 @@ import com.example.count_out.R
 import com.example.count_out.data.room.tables.SpeechDB
 import com.example.count_out.domain.SpeechManager
 import com.example.count_out.entity.GoalSet
+import com.example.count_out.entity.RunningState
 import com.example.count_out.entity.SendToUI
 import com.example.count_out.entity.SendToWorkService
 import com.example.count_out.entity.Set
-import com.example.count_out.entity.StateRunning
 import com.example.count_out.helpers.delayMy
 import com.example.count_out.ui.view_components.lg
 import kotlinx.coroutines.CoroutineScope
@@ -19,7 +19,8 @@ import javax.inject.Inject
 class PlayerSet @Inject constructor(val speechManager:SpeechManager, val context: Context)
 {
     suspend fun playingSet(template: SendToWorkService, sendToUI: SendToUI, ){
-        if (sendToUI.stateRunning.value == StateRunning.Started) {
+        lg("playingSet ${sendToUI.runningState.value}")
+        if (sendToUI.runningState.value == RunningState.Started) {
             sendToUI.set.value = template.getSet()
             template.getSet()?.let { it.speech.beforeStart.addMessage = textBeforeSet(it)}
             template.getSet()?.speech?.beforeStart?.let { speechManager.speech(sendToUI, it) }
@@ -49,8 +50,8 @@ class PlayerSet @Inject constructor(val speechManager:SpeechManager, val context
     private suspend fun playSetCOUNT(template: SendToWorkService, variablesOut: SendToUI, ){
         template.getSet()?.let {
             for (count in 1..it.reps){
-                speechManager.speakOutFlush(text = count.toString(), variablesOut.stateRunning)
-                delayMy((template.getSetIntervalReps() * 1000).toLong(), variablesOut.stateRunning)
+                speechManager.speakOutFlush(text = count.toString(), variablesOut.runningState)
+                delayMy((template.getSetIntervalReps() * 1000).toLong(), variablesOut.runningState)
             }
         }
     }
@@ -64,8 +65,8 @@ class PlayerSet @Inject constructor(val speechManager:SpeechManager, val context
             if ( listWordCount.isNotEmpty()){
                 for (count in 0..< it.reps){
                     lg("Count group $count: ${listWordCount[count%listWordCount.size]}")
-                    speechManager.speakOutFlush(text = listWordCount[count%listWordCount.size], variablesOut.stateRunning)
-                    delayMy((template.getSetIntervalReps() * 1000).toLong(), variablesOut.stateRunning)
+                    speechManager.speakOutFlush(text = listWordCount[count%listWordCount.size], variablesOut.runningState)
+                    delayMy((template.getSetIntervalReps() * 1000).toLong(), variablesOut.runningState)
                 }
             }
         }
@@ -113,9 +114,10 @@ class PlayerSet @Inject constructor(val speechManager:SpeechManager, val context
     }
     private suspend fun countDelay(duration: Int, divider: Int, sendToUI: SendToUI){
         for ( count in 1..duration){
+//            if (sendToUI.runningState.value == RunningState.Stopped) return
             if ( count % divider == 0 && !speechManager.getSpeeching())
-                speechManager.speakOutFlush(text = count.toString(), sendToUI.stateRunning)
-            delayMy(1000L, sendToUI.stateRunning)
+                speechManager.speakOutFlush(text = count.toString(), sendToUI.runningState)
+            delayMy(1000L, sendToUI.runningState)
         }
     }
     private fun textBeforeSet(set: Set): String{

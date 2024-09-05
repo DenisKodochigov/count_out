@@ -49,13 +49,11 @@ import com.example.count_out.ui.view_components.TextFieldApp
 {
     Card( elevation = elevationTraining(), shape = MaterialTheme.shapes.extraSmall
     ){
-        ActivityValueShort(
+        ActivityValueSelect(
             activity = mutableStateOf(activity),
-            typeKeyboard = TypeKeyboard.NONE,
             onSelect = {
                 uiState.activity.value = activity
                 uiState.showBottomSheetAddActivity.value = true },
-            onChange = { uiState.onUpdateActivity(it) },
             onChangeColor = { uiState.onSetColorActivity(activity.idActivity, it ) },
             onDeleteActivity = { uiState.onDeleteActivity( it ) },
         )
@@ -63,11 +61,9 @@ import com.example.count_out.ui.view_components.TextFieldApp
 }
 @SuppressLint("UnrememberedMutableState")
 @Composable
-fun ActivityValueShort(
+fun ActivityValueSelect(
     activity: MutableState<Activity>,
-    typeKeyboard: TypeKeyboard = TypeKeyboard.TEXT,
     onSelect: () -> Unit = {},
-    onChange: (ActivityDB) -> Unit = {},
     onChangeColor: (Int) -> Unit = {},
     onDeleteActivity:(Long)-> Unit = {}
 ){
@@ -124,7 +120,7 @@ fun ActivityValueFull(
             .fillMaxWidth()
             .padding(horizontal = 0.dp))
     {
-        ActivityValueShort(
+        ActivityValueEdit(
             activity = activity,
             typeKeyboard = TypeKeyboard.TEXT,
             onChange = onChange,
@@ -167,6 +163,63 @@ fun ActivityValueFull(
                 textStyle = interLight12,
                 onChangeValue = { onChange( (activity.value as ActivityDB).copy(description = it)) }
             )
+        }
+    }
+}
+@SuppressLint("UnrememberedMutableState")
+@Composable
+fun ActivityValueEdit(
+    activity: MutableState<Activity>,
+    typeKeyboard: TypeKeyboard = TypeKeyboard.TEXT,
+    onSelect: () -> Unit = {},
+    onChange: (ActivityDB) -> Unit = {},
+    onChangeColor: (Int) -> Unit = {},
+    onDeleteActivity:(Long)-> Unit = {}
+){
+    val activityChangeColor: MutableState<Activity?> = remember { mutableStateOf(null) }
+    if (activityChangeColor.value != null) {
+        ChangeColorSectionDialog(
+            colorItem = activityChangeColor.value!!.color,
+            onDismiss = { activityChangeColor.value = null},
+            onConfirm = {
+                onChangeColor(it)
+                activity.value = ( activity.value as ActivityDB ).copy(color = it)
+                activityChangeColor.value = null
+            },
+        )
+    }
+    Row( modifier = Modifier
+        .padding( start = 12.dp)
+        .clickable { onSelect() }
+        .fillMaxWidth(),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.Start
+    ){
+        Icon(painter = painterResource(id = activity.value.icon), contentDescription = null)
+        Spacer(modifier = Modifier.padding(end= 12.dp))
+        TextFieldApp(
+            modifier = Modifier.weight(1f),
+            placeholder = "${activity.value.idActivity}:${activity.value.name}",
+            contentAlignment = Alignment.BottomStart,
+            typeKeyboard = typeKeyboard,
+            textStyle = interLight12,
+            onLossFocus = false,
+            onChangeValue = {
+                activity.value = (activity.value as ActivityDB).copy(name = it)
+                onChange(activity.value as ActivityDB) }
+        )
+        Spacer(modifier = Modifier
+            .size(size = 32.dp)
+            .clip(shape = CircleShape)
+            .border(
+                width = 1.dp,
+                color = colors3.outline,
+                shape = CircleShape
+            )
+            .clickable { activityChangeColor.value = activity.value }
+            .background(color = Color(activity.value.color), shape = CircleShape))
+        IconButton( onClick = { onDeleteActivity(activity.value.idActivity) }) {
+            Icon(imageVector = Icons.Filled.DeleteSweep, contentDescription = null)
         }
     }
 }

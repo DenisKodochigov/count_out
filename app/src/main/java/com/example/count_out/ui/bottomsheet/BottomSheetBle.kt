@@ -93,10 +93,11 @@ fun BottomSheetBleContent(uiState: SettingScreenState)
                 .padding(top = 16.dp, start = 12.dp, end = 12.dp)
                 .clickable {
                     uiState.showBottomSheetBLE.value = false
-                    uiState.onSelectDevice(item.address) }) {
+                    uiState.onSelectDevice(item.address)
+                }) {
                 TextApp(text = item.address, style = typography.bodyMedium)
                 Spacer(modifier = Modifier.width(12.dp))
-                TextApp(text = item.name.ifEmpty { "not name" }, style = typography.bodyMedium)
+                TextApp(text = item.name.ifEmpty { stringResource(id = R.string.no_name)}, style = typography.bodyMedium)
             }
         }
     }

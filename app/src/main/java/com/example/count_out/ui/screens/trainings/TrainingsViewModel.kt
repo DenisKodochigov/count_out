@@ -3,7 +3,7 @@ package com.example.count_out.ui.screens.trainings
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.count_out.data.DataRepository
-import com.example.count_out.entity.ErrorApp
+import com.example.count_out.entity.MessageApp
 import com.example.count_out.entity.Training
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -16,7 +16,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class TrainingsViewModel @Inject constructor(
-    private val errorApp: ErrorApp,
+    private val messageApp: MessageApp,
     private val dataRepository: DataRepository
 ): ViewModel() {
     private val _trainingsScreenState = MutableStateFlow(
@@ -40,7 +40,7 @@ class TrainingsViewModel @Inject constructor(
             kotlin.runCatching { funDataRepository() }.fold(
                 onSuccess = {  _trainingsScreenState.update { currentState ->
                     currentState.copy( trainings = it ) } },
-                onFailure = { errorApp.errorApi(it.message!!) }
+                onFailure = { messageApp.errorApi(it.message!!) }
             )
         }
     }

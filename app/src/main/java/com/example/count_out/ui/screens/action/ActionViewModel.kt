@@ -2,7 +2,7 @@ package com.example.count_out.ui.screens.action
 
 import androidx.lifecycle.ViewModel
 import com.example.count_out.data.DataRepository
-import com.example.count_out.entity.ErrorApp
+import com.example.count_out.entity.MessageApp
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -11,7 +11,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ActionViewModel @Inject constructor(
-    private val errorApp: ErrorApp,
+    private val messageApp: MessageApp,
     private val dataRepository: DataRepository
 ): ViewModel() {
     private val _actionScreenState = MutableStateFlow(ActionScreenState())

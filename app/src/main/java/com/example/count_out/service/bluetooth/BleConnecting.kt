@@ -1,7 +1,7 @@
 package com.example.count_out.service.bluetooth
 
 import android.annotation.SuppressLint
-import android.bluetooth.BluetoothDevice
+import android.bluetooth.BluetoothDevice.TRANSPORT_LE
 import android.bluetooth.BluetoothGatt
 import android.bluetooth.BluetoothGatt.GATT_FAILURE
 import android.bluetooth.BluetoothGatt.GATT_SUCCESS
@@ -11,10 +11,9 @@ import android.bluetooth.BluetoothGattDescriptor.ENABLE_INDICATION_VALUE
 import android.bluetooth.BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE
 import android.content.Context
 import android.os.Build
-import com.example.count_out.entity.ConnectState
 import com.example.count_out.entity.Const.UUIDBle
 import com.example.count_out.entity.ErrorBleService
-import com.example.count_out.entity.SendToUI
+import com.example.count_out.entity.MessageApp
 import com.example.count_out.entity.StateService
 import com.example.count_out.entity.bluetooth.BleConnection
 import com.example.count_out.entity.bluetooth.BleStates
@@ -23,44 +22,40 @@ import com.example.count_out.entity.hciStatusFromValue
 import com.example.count_out.permission.PermissionApp
 import com.example.count_out.ui.view_components.lg
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.update
 import java.util.UUID
 import javax.inject.Inject
 
 
 class BleConnecting @Inject constructor(
-    val context: Context, private val permissionApp: PermissionApp,
+    val context: Context,
+    private val permissionApp: PermissionApp,
+    private val messengerA: MessageApp
 ) {
     private var connection = BleConnection()
     val heartRate: MutableStateFlow<Int> = MutableStateFlow(0)
     private val UUID_HEART_RATE_MEASUREMENT = UUID.fromString(UUIDBle.HEART_RATE_MEASUREMENT)
     private val UUID_CLIENT_CHARACTERISTIC_CONFIG = UUID.fromString(UUIDBle.CLIENT_CHARACTERISTIC_CONFIG)
 
-/*################################################################################################ */
-    fun connectDevice(bleStates: BleStates, sendToBle: SendToBle, sendToUi: MutableStateFlow<SendToUI>){
+    fun connectDevice(bleStates: BleStates, sendToBle: SendToBle){
         sendToBle.currentConnection?.let {
             connection = it
-            connectingGatt( bleStates, sendToUi )
+            connectingGatt( bleStates )
+            if (bleStates.error == ErrorBleService.NOT_CONNECT_GATT)  connectingGatt( bleStates )
         }
     }
 
     @SuppressLint("MissingPermission")
-    fun connectingGatt(bleStates: BleStates, sendToUi: MutableStateFlow<SendToUI>): Boolean{
-        var result = false
+    fun connectingGatt(bleStates: BleStates){
         if (bleStates.stateService == StateService.GET_REMOTE_DEVICE) {
             connection.device?.let { dev->
-                if ( dev.connectGatt(
-                        context, true, bluetoothGattCallback, BluetoothDevice.TRANSPORT_LE) != null)
-                {
-                    result = true
+                if ( dev.connectGatt(context, true, bluetoothGattCallback, TRANSPORT_LE) != null)
                     bleStates.stateService = StateService.CONNECT_GAT
-                    sendToUi.update { send-> send.copy(connectingDevice = ConnectState.CONNECTED) }
-                    lg("sendToUi ${sendToUi.value.connectingDevice}")
+                else {
+                    bleStates.error = ErrorBleService.NOT_CONNECT_GATT
+                    messengerA.errorApi("Error connecting GATT")
                 }
-                else bleStates.error = ErrorBleService.NOT_CONNECT_GATT
             }
         }
-        return result
     }
 
     private val bluetoothGattCallback = object: BluetoothGattCallback() {
@@ -103,7 +98,6 @@ class BleConnecting @Inject constructor(
                 bluetoothGattCallbackCharacteristicChanged(ByteArray(0), characteristic)}
         }
     }
-
     @SuppressLint("MissingPermission")
     fun bluetoothGattCallbackConnectionStateChange(gatt: BluetoothGatt?, status: Int, newState: Int, ){
         connection.gattStatus.value = status
@@ -113,44 +107,36 @@ class BleConnecting @Inject constructor(
             when (newState) {
                 BluetoothGatt.STATE_CONNECTED -> { gatt?.discoverServices() }
                 BluetoothGatt.STATE_DISCONNECTED -> {
-                    lg("Connection state Bluetooth Gatt STATE_DISCONNECTED")
+                    messengerA.messageApi("Connection state Bluetooth Gatt STATE_DISCONNECTED")
                     bluetoothGattCallbackGattClose(gatt)
                 }
-                else -> { lg("Connection state Bluetooth Gatt GATT_SUCCESS") }
+                else -> { messengerA.messageApi("Connection state Bluetooth Gatt GATT_SUCCESS") }
             }
         } else {
             lg("BluetoothGatt status: $status (${hciStatusFromValue(status)})")
             bluetoothGattCallbackGattClose(gatt)
         }
     }
-
     @SuppressLint("MissingPermission")
     fun bluetoothGattCallbackServicesDiscovered(gatt: BluetoothGatt?, status: Int) {
         connection.gattStatus.value = status
         if (status == GATT_SUCCESS) {
-            gatt?.let {
-                it.printCharacteristicsTable()
-                setCharacteristicNotification(it, UUID_HEART_RATE_MEASUREMENT, true)
-            }
+            gatt?.let { setCharacteristicNotification(it, UUID_HEART_RATE_MEASUREMENT, true) }
         } else {
-            lg("Service discovery failed")
+            messengerA.errorApi("BLE Service discovery failed")
             connection.error.value = ErrorBleService.DISCOVER_SERVICE
             if (status == GATT_FAILURE) disconnectDevice(gatt)
         }
     }
-
     fun bluetoothGattCallbackCharacteristicRead(
         status: Int, value: ByteArray, characteristic: BluetoothGattCharacteristic, ) {
         connection.gattStatus.value = status
         if (status != GATT_SUCCESS) receiveValue(value, characteristic)
-        else lg("ERROR: Read failed for characteristic: ${characteristic.uuid}, status $status")
+        else messengerA.errorApi("ERROR: Read failed for characteristic: ${characteristic.uuid}, status $status")
     }
-
-    fun bluetoothGattCallbackCharacteristicChanged(
-        value: ByteArray, characteristic: BluetoothGattCharacteristic,
-    ) {
-        receiveValue(value, characteristic)
-    }
+    fun bluetoothGattCallbackCharacteristicChanged(value: ByteArray,
+                                                   characteristic: BluetoothGattCharacteristic, ){
+        receiveValue( value, characteristic) }
 
     private fun receiveValue(value: ByteArray, characteristic: BluetoothGattCharacteristic){
         when (characteristic.uuid) {
@@ -160,7 +146,7 @@ class BleConnecting @Inject constructor(
     }
     private fun heartRateSDK(value: ByteArray, characteristic: BluetoothGattCharacteristic): Int{
         val heartRate = if ( Build.VERSION.SDK_INT >= 33 ) value[1].dec().toInt()
-        else characteristic.value[1].dec().toInt()
+                        else characteristic.value[1].dec().toInt()
         return heartRate
     }
 
@@ -171,7 +157,7 @@ class BleConnecting @Inject constructor(
                 val refreshMethod = gattL.javaClass.getMethod("refresh")
                 result = refreshMethod.invoke(gattL) as Boolean
             } catch (e: Exception) {
-                lg("ERROR: Could not invoke refresh method: $e")
+                messengerA.errorApi("ERROR: Could not invoke refresh method: $e")
             }
         }
         return result
@@ -192,14 +178,11 @@ class BleConnecting @Inject constructor(
 
     @SuppressLint("MissingPermission")
     fun setCharacteristicNotification(gatt: BluetoothGatt, uuid: UUID, enabled: Boolean) {
-//        lg("setCharacteristicNotification ")
         gatt.findCharacteristic(uuid)?.let{ characteristic->
-//            lg("setCharacteristicNotification $characteristic")
             gatt.setCharacteristicNotification(characteristic, enabled)
             val descriptor = characteristic.getDescriptor(UUID_CLIENT_CHARACTERISTIC_CONFIG)
             val descriptorValue = if (characteristic.isNotify()) { ENABLE_NOTIFICATION_VALUE
             } else { ENABLE_INDICATION_VALUE }
-//            lg("setCharacteristicNotification ${Build.VERSION.SDK_INT} descriptor: $descriptor")
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                 gatt.writeDescriptor(descriptor, descriptorValue)
             } else {

@@ -106,6 +106,7 @@
     <string name="setFrom">Подходов</string>
     <string name="slower">Медленее</string>
     <string name="faster">Быстрее</string>
+    <string name="no_name">нет имени.</string>
     <plurals name="set_1">
         <item quantity="one">%1$d = подход</item>
         <item quantity="few">%1$d = подхода</item>

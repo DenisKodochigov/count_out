@@ -3,6 +3,7 @@ package com.example.count_out.di
 import android.bluetooth.BluetoothAdapter
 import android.bluetooth.BluetoothManager
 import android.content.Context
+import com.example.count_out.entity.MessageApp
 import com.example.count_out.permission.PermissionApp
 import com.example.count_out.service.ServiceUtils
 import com.example.count_out.service.bluetooth.BleConnecting
@@ -49,8 +50,9 @@ class BluetoothModule {
     @Provides
     fun provideBluetoothConnect(
         @ApplicationContext context: Context,
-        permissionApp: PermissionApp
-    ): BleConnecting = BleConnecting(context, permissionApp)
+        permissionApp: PermissionApp,
+        messengerA: MessageApp
+    ): BleConnecting = BleConnecting(context, permissionApp, messengerA)
 
     @Singleton
     @Provides

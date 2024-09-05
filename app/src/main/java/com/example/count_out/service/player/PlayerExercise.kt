@@ -1,9 +1,10 @@
 package com.example.count_out.service.player
 
 import com.example.count_out.domain.SpeechManager
+import com.example.count_out.entity.RunningState
 import com.example.count_out.entity.SendToUI
 import com.example.count_out.entity.SendToWorkService
-import com.example.count_out.entity.StateRunning
+import com.example.count_out.ui.view_components.lg
 import javax.inject.Inject
 
 class PlayerExercise @Inject constructor(
@@ -14,7 +15,8 @@ class PlayerExercise @Inject constructor(
         template: SendToWorkService,
         sendToUI: SendToUI,
     ){
-        if (sendToUI.stateRunning.value == StateRunning.Started) {
+        lg("playingExercise ${sendToUI.runningState.value}")
+        if (sendToUI.runningState.value == RunningState.Started) {
             template.getExercise()?.speech?.beforeStart?.addMessage = template.getExercise()?.activity?.name + "."
             if (template.enableSpeechDescription.value)
                 template.getExercise()?.speech?.beforeStart?.addMessage += template.getExercise()?.activity?.description

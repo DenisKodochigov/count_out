@@ -17,6 +17,7 @@ import com.example.count_out.entity.Set
 import com.example.count_out.entity.SpeechKit
 import com.example.count_out.entity.Training
 import com.example.count_out.entity.bluetooth.BleDevSerializable
+import com.example.count_out.ui.view_components.lg
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -34,11 +35,14 @@ class DataRepository  @Inject constructor(private val dataSource: DataSource,
         Plugins.listTr.remove(Plugins.listTr.find { it.idTraining == id })
     }
     suspend fun storeSelectBleDev(bleDevSerializable: BleDevSerializable) {
-        dataStoreBle.updateData { it.copy( address = bleDevSerializable.address) }
+        lg("storeSelectBleDev ${bleDevSerializable.address}, ${bleDevSerializable.name}")
+        if (bleDevSerializable.name.isNotEmpty()){
+            dataStoreBle.updateData {
+                it.copy( address = bleDevSerializable.address, name = bleDevSerializable.name) }
+        } else dataStoreBle.updateData { it.copy( address = bleDevSerializable.address) }
     }
     fun getBleDevStoreFlow() = dataStoreBle.data
-    fun setSpeech(trainingId: Long, speech: SpeechKit, item: Any?): Training
-    {
+    fun setSpeech(trainingId: Long, speech: SpeechKit, item: Any?): Training {
         val speechId = if (speech.idSpeechKit == 0L) dataSource.addSpeechKit(speech as SpeechKitDB)
                         else dataSource.updateSpeechKit(speech as SpeechKitDB).idSpeechKit
         return when (item) {

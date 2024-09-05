@@ -11,10 +11,10 @@ data class SendToUI (
     val set: MutableStateFlow<Set?> = MutableStateFlow(null),
     val nextSet: MutableStateFlow<Set?> = MutableStateFlow(null),
     val durationSpeech:MutableStateFlow<Pair<Long, Long>> = MutableStateFlow(Pair(0,0)),
-    val stateRunning: MutableStateFlow<StateRunning> = MutableStateFlow(StateRunning.Stopped),
+    val runningState: MutableStateFlow<RunningState> = MutableStateFlow(RunningState.Stopped),
     var heartRate: Int = 0,
     var scannedBle: Boolean = false,
-    val connectingDevice: ConnectState = ConnectState.NOT_CONNECTED,
+    val connectingState: ConnectState = ConnectState.NOT_CONNECTED,
     var foundDevices: List<DeviceUI> = emptyList(),
     var lastConnectHearthRateDevice: DeviceUI? = null
 ){
@@ -29,7 +29,7 @@ data class SendToUI (
         set.value = null
         nextSet.value = null
         durationSpeech.value = Pair(0,0)
-        stateRunning.value = StateRunning.Stopped
+        runningState.value = RunningState.Stopped
         heartRate = 0
     }
 }

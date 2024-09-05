@@ -29,12 +29,10 @@ import com.example.count_out.ui.theme.interLight12
 import com.example.count_out.ui.view_components.IconsCollapsing
 import com.example.count_out.ui.view_components.IconsGroup
 import com.example.count_out.ui.view_components.TextApp
-import com.example.count_out.ui.view_components.lg
 import kotlin.math.roundToInt
 
 @Composable
-fun Round(uiState: TrainingScreenState, roundType: MutableState<RoundType>)
-{
+fun Round(uiState: TrainingScreenState, roundType: MutableState<RoundType>){
     roundType.value.amount = amountExercise(uiState, roundType)
     roundType.value.duration = durationRound(uiState, roundType)
     Card( elevation = elevationTraining(), shape = MaterialTheme.shapes.extraSmall
@@ -43,7 +41,7 @@ fun Round(uiState: TrainingScreenState, roundType: MutableState<RoundType>)
             Column( modifier = Modifier.padding(start = 6.dp, bottom=6.dp),)
             {
                 Row1Round(uiState = uiState, roundType)
-                Row2Round(uiState = uiState, roundType)
+                Row2Round(roundType)
                 Row3Round(uiState = uiState, roundType)
 //                Row4Round(uiState = uiState, roundType)
             }
@@ -51,8 +49,7 @@ fun Round(uiState: TrainingScreenState, roundType: MutableState<RoundType>)
     }
 }
 @Composable
-fun Row1Round(uiState: TrainingScreenState, roundType: MutableState<RoundType>)
-{
+fun Row1Round(uiState: TrainingScreenState, roundType: MutableState<RoundType>){
     val nameNewSet = stringResource(id = R.string.set)
     Row(
         verticalAlignment = Alignment.CenterVertically,
@@ -66,15 +63,13 @@ fun Row1Round(uiState: TrainingScreenState, roundType: MutableState<RoundType>)
         IconsGroup(
             onClickSpeech = {showSpeechRound(uiState, roundType)},
             onClickAddExercise = {
-                lg("getIdRound IdRound ${getIdRound(uiState, roundType)} roundType: $roundType")
                 uiState.onAddExercise(getIdRound(uiState, roundType), SetDB(name = nameNewSet))}
         )
         Spacer(modifier = Modifier.width(6.dp))
     }
 }
 @Composable
-fun Row2Round(uiState: TrainingScreenState, roundType: MutableState<RoundType>
-){
+fun Row2Round( roundType: MutableState<RoundType>){
     HorizontalDivider()
     Spacer(modifier = Modifier.height(4.dp))
     Row(modifier = Modifier.padding(end = 8.dp)) {
@@ -89,8 +84,7 @@ fun Row2Round(uiState: TrainingScreenState, roundType: MutableState<RoundType>
     }
 }
 @Composable
-fun Row3Round(uiState: TrainingScreenState, roundType: MutableState<RoundType>)
-{
+fun Row3Round(uiState: TrainingScreenState, roundType: MutableState<RoundType>){
     ListExercises(
         uiState = uiState,
         roundType = roundType.value,
@@ -98,8 +92,7 @@ fun Row3Round(uiState: TrainingScreenState, roundType: MutableState<RoundType>)
         showExercises = getCollapsing(uiState, roundType) && roundType.value.amount > 0)
 }
 
-fun showSpeechRound(uiState: TrainingScreenState, roundType: MutableState<RoundType>)
-{
+fun showSpeechRound(uiState: TrainingScreenState, roundType: MutableState<RoundType>){
     when (roundType.value) {
         RoundType.UP -> uiState.showSpeechWorkUp.value = true
         RoundType.OUT -> uiState.showSpeechWorkOut.value = true
@@ -124,8 +117,7 @@ fun durationRound(uiState: TrainingScreenState, roundType: MutableState<RoundTyp
     return ( durationRound / 60).roundToInt()
 }
 //    uiState.training.rounds.find{ it.roundType == roundType }?.exercise?.size ?: 0
-fun setCollapsing(uiState: TrainingScreenState, roundType: MutableState<RoundType>)
-{
+fun setCollapsing(uiState: TrainingScreenState, roundType: MutableState<RoundType>) {
     if (roundType.value.amount > 0) {
         when (roundType.value) {
             RoundType.UP -> uiState.workUpCollapsing.value = !uiState.workUpCollapsing.value
@@ -134,53 +126,12 @@ fun setCollapsing(uiState: TrainingScreenState, roundType: MutableState<RoundTyp
         }
     }
 }
-fun getCollapsing(uiState: TrainingScreenState, roundType: MutableState<RoundType>): Boolean
-{
+fun getCollapsing(uiState: TrainingScreenState, roundType: MutableState<RoundType>): Boolean {
     return when (roundType.value) {
         RoundType.UP -> uiState.workUpCollapsing.value
         RoundType.OUT -> uiState.workOutCollapsing.value
         RoundType.DOWN -> uiState.workDownCollapsing.value
     }
 }
-//fun getIconCollapsing(uiState: TrainingScreenState, roundType: MutableState<RoundType>): Int
-//{
-//    return when (roundType.value) {
-//        RoundType.UP -> getIcon(uiState.workUpCollapsing.value)
-//        RoundType.OUT -> getIcon(uiState.workOutCollapsing.value)
-//        RoundType.DOWN -> getIcon(uiState.workDownCollapsing.value)
-//    }
-//}
-
-//fun getIcon(collapsing: Boolean): Int = if (collapsing) R.drawable.ic_wrap1 else R.drawable.ic_wrap
-//@Composable
-//fun PoleAddExercise(uiState: TrainingScreenState, roundType: MutableState<RoundType>)
-//{
-//    val nameNewSet = stringResource(id = R.string.set)
-//    IconAddItem(textId = R.string.add_activity, onAdd = {
-//        uiState.onAddExercise(getIdRound(uiState, roundType), SetDB(name = nameNewSet))
-//    })
-//}
-//@Composable
-//fun Row4Round(uiState: TrainingScreenState, roundType: MutableState<RoundType>)
-//{
-//    Spacer(modifier = Modifier.height(4.dp))
-//    Row(verticalAlignment = Alignment.CenterVertically,
-//        modifier = Modifier
-//            .fillMaxWidth()
-//            .padding(end = 8.dp))
-//    {
-//        PoleAddRing(uiState = uiState, roundType = roundType)
-//        Spacer(modifier = Modifier.weight(1f))
-//        PoleAddExercise(uiState = uiState, roundType = roundType)
-//    }
-//}
-//@Composable
-//fun PoleAddRing(uiState: TrainingScreenState, roundType: MutableState<RoundType>)
-//{
-//    val nameNewSet = stringResource(id = R.string.set)
-//    IconAddItem(textId = R.string.add_ring, onAdd = {
-//        uiState.onAddExercise(getIdRound(uiState, roundType), SetDB(name = nameNewSet))
-//    })
-//}
 fun getIdRound(uiState: TrainingScreenState, roundType: MutableState<RoundType>) =
     uiState.training.rounds.find { it.roundType == roundType.value }?.idRound ?: 0

@@ -48,6 +48,7 @@ import com.example.count_out.ui.view_components.IconsCollapsing
 import com.example.count_out.ui.view_components.NameScreen
 import com.example.count_out.ui.view_components.SwitchApp
 import com.example.count_out.ui.view_components.TextApp
+import com.example.count_out.ui.view_components.lg
 
 @Composable fun SettingScreen(){
     val viewModel: SettingViewModel = hiltViewModel()
@@ -179,7 +180,7 @@ import com.example.count_out.ui.view_components.TextApp
         Spacer(modifier = Modifier.width(12.dp))
         AnimateIcon(
             icon = Icons.AutoMirrored.Rounded.BluetoothSearching,
-            animate = uiState.connectingDevice != ConnectState.CONNECTED,
+            animate = uiState.connectingStatus != ConnectState.CONNECTED,
             onClick = {uiState.showBottomSheetBLE.value = true},
         )
         Spacer(modifier = Modifier.width(12.dp))
@@ -194,7 +195,7 @@ import com.example.count_out.ui.view_components.TextApp
         horizontalArrangement = Arrangement.Start,
         verticalAlignment = Alignment.CenterVertically
     ){
-        if (uiState.connectingDevice == ConnectState.CONNECTED) {
+        if (uiState.connectingStatus == ConnectState.CONNECTED) {
             RowBleDeviceItem(modifier = Modifier.weight(1f),
                 uiState = uiState,
                 style = typography.bodyMedium.copy(fontWeight = FontWeight.Bold))
@@ -206,12 +207,12 @@ import com.example.count_out.ui.view_components.TextApp
     }
 }
 @Composable fun RowBleDeviceItem(modifier: Modifier, uiState: SettingScreenState, style: TextStyle){
-
-    val nameDevice = uiState.lastConnectHearthRateDevice?.name ?: stringResource(id = R.string.not_select_device)
+    val nameDevice = uiState.lastConnectHearthRateDevice?.name?.ifEmpty { stringResource(id = R.string.no_name)}
+        ?: stringResource(id = R.string.not_select_device)
     val heartRate = if (uiState.heartRate > 0) uiState.heartRate.toString() else ""
     Column (modifier = modifier.padding(start = 12.dp, end = 12.dp).fillMaxWidth()) {
         TextApp(text = nameDevice, textAlign = TextAlign.Start, style = style)
-        TextApp(text = stringResource(id = uiState.connectingDevice.strId), style = alumBodySmall)
+        TextApp(text = stringResource(id = uiState.connectingStatus.strId), style = alumBodySmall)
     }
     TextApp(text = heartRate, style = typography.displayMedium, modifier = Modifier.padding(start = 12.dp, end = 12.dp))
 }

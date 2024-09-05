@@ -105,7 +105,7 @@ private fun createSetting( db: AppDatabase){
 private fun createTrainingPlansTesting( db: AppDatabase) {
 
     val rest = 1
-    val reps = 3
+    val reps = 30
     val idTraining = db.dataDao().addTraining(TrainingDB(name = "Тестовая", idTraining = 1,
         speechId = addSpeechKit(db, bs = "Начало тренировки", ast = "", be = "", ae = "Тренировка окончена",)))
 //Разминка
@@ -146,7 +146,7 @@ private fun createTrainingPlansTesting( db: AppDatabase) {
 private fun createTrainingPlansReal( db: AppDatabase
 ) {
     val idTraining = db.dataDao().addTraining(TrainingDB(name = "Зарядка", idTraining = 1,
-        speechId = addSpeechKit(db, bs = "Начинаем ", ast = "", be = "", ae = "Тренировка закончена.",)))
+        speechId = addSpeechKit(db, bs = "Начинаем", ast = "", be = "", ae = "Тренировка закончена.",)))
     workUp( db, idTraining)
     workOut( db, idTraining)
     workDown( db, idTraining)
@@ -154,7 +154,7 @@ private fun createTrainingPlansReal( db: AppDatabase
 private fun createTrainingPlansArm( db: AppDatabase
 ) {
     val idTraining = db.dataDao().addTraining(TrainingDB(name = "Зарядка. Руки", idTraining = 2,
-        speechId = addSpeechKit(db, bs = "Начинаем ", ast = "", be = "", ae = "Тренировка закончена.",)))
+        speechId = addSpeechKit(db, bs = "Начинаем", ast = "", be = "", ae = "Тренировка закончена.",)))
     workUp( db, idTraining)
     workOutArm( db, idTraining)
     workDown( db, idTraining)

@@ -4,7 +4,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 
 data class SendToWorkService(
     var training: MutableStateFlow<Training?> = MutableStateFlow(null),
-    var stateRunning: MutableStateFlow<StateRunning> = MutableStateFlow(StateRunning.Stopped),
+    var runningState: MutableStateFlow<RunningState> = MutableStateFlow(RunningState.Stopped),
     var enableSpeechDescription: MutableStateFlow<Boolean> = MutableStateFlow(true),
     var indexRound: Int = 0,
     var indexExercise: Int = 0,

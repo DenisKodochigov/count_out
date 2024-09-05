@@ -7,18 +7,19 @@ import android.content.pm.ServiceInfo.FOREGROUND_SERVICE_TYPE_DATA_SYNC
 import android.os.Binder
 import android.os.Build
 import android.os.IBinder
+import com.example.count_out.domain.SpeechManager
 import com.example.count_out.entity.Const.NOTIFICATION_EXTRA
 import com.example.count_out.entity.Const.NOTIFICATION_ID
+import com.example.count_out.entity.MessageApp
+import com.example.count_out.entity.RunningState
 import com.example.count_out.entity.SendToUI
 import com.example.count_out.entity.SendToWorkService
-import com.example.count_out.entity.StateRunning
 import com.example.count_out.helpers.NotificationHelper
 import com.example.count_out.service.player.PlayerWorkOut
 import com.example.count_out.service.stopwatch.StopWatchObj
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -31,18 +32,18 @@ class WorkoutService @Inject constructor(): Service(), WorkOutAPI
     override var sendToWork: SendToWorkService? = null
 
     @Inject lateinit var notificationHelper: NotificationHelper
+    @Inject lateinit var speechManager: SpeechManager
     @Inject lateinit var playerWorkOut: PlayerWorkOut
-    private lateinit var scopeSpeech: CoroutineScope
-    private lateinit var scopeTick: CoroutineScope
+    @Inject lateinit var messageApp: MessageApp
 
     inner class WorkoutServiceBinder : Binder() { fun getService(): WorkoutService = this@WorkoutService }
     override fun onBind(p0: Intent?): IBinder = WorkoutServiceBinder()
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         when (intent?.getStringExtra(NOTIFICATION_EXTRA)) {
-            StateRunning.Started.name -> continueWorkout()
-            StateRunning.Paused.name -> pauseWorkout()
-            StateRunning.Stopped.name -> stopWorkout()
+            RunningState.Started.name -> continueWorkout()
+            RunningState.Paused.name -> pauseWorkout()
+            RunningState.Stopped.name -> stopWorkout()
         }
         return super.onStartCommand(intent, flags, startId)
     }
@@ -50,38 +51,43 @@ class WorkoutService @Inject constructor(): Service(), WorkOutAPI
     override fun startWorkout() {
         if (sendToUI == null) { sendToUI = SendToUI() }
         sendToUI?.let {
-            if (it.stateRunning.value == StateRunning.Stopped){
-                it.stateRunning.value = StateRunning.Started
+            if (it.runningState.value == RunningState.Stopped){
+                messageApp.messageApi("Start WorkOut")
+                it.runningState.value = RunningState.Started
                 it.nextSet.value = sendToWork?.getSet(0)
                 startForegroundService()
-                getTick()
-                playTraining()
-            } else if (it.stateRunning.value == StateRunning.Paused) { continueWorkout() }
+                speechManager.init {
+                    getTick()
+                    playTraining() }
+            } else if (it.runningState.value == RunningState.Paused) { continueWorkout() }
         }
     }
     override fun continueWorkout(){
-        sendToUI?.let { it.stateRunning.value = StateRunning.Started }
+        sendToUI?.let { it.runningState.value = RunningState.Started }
         notificationHelper.setPauseButton()
     }
     override fun pauseWorkout() {
-        sendToUI?.let { it.stateRunning.value = StateRunning.Paused }
+        sendToUI?.let { it.runningState.value = RunningState.Paused }
         notificationHelper.setContinueButton()
     }
     override fun stopWorkout(){
+        messageApp.messageApi("Stop WorkOut")
         StopWatchObj.stop()
+        speechManager.stopTts()
+        stopForeground(STOP_FOREGROUND_REMOVE)
+        notificationHelper.cancel()
         sendToUI?.cancel()
         sendToUI = null
         sendToWork = null
-        stopForeground(STOP_FOREGROUND_REMOVE)
-        notificationHelper.cancel()
-        scopeSpeech.cancel()
-        scopeTick.cancel()
+    }
+    fun stopWorkoutCommand(){
+        messageApp.messageApi("Command Stop WorkOut")
+        sendToUI?.let { it.runningState.value = RunningState.Stopped }
     }
     private fun getTick(){
         sendToUI?.let {
-            StopWatchObj.start(it.stateRunning)
-            scopeTick = CoroutineScope(Dispatchers.Default)
-            scopeTick.launch {
+            StopWatchObj.start(it.runningState)
+            CoroutineScope(Dispatchers.Default).launch {
                 StopWatchObj.getTickTime().collect{ tick ->
                     notificationHelper.updateNotification(hours = tick.hour, minutes = tick.min, seconds = tick.sec)
                     it.flowTick.value = tick
@@ -90,16 +96,16 @@ class WorkoutService @Inject constructor(): Service(), WorkOutAPI
         }
     }
     private fun playTraining() {
-        scopeSpeech = CoroutineScope(Dispatchers.Default)
         sendToUI?.let { toUI->
             sendToWork?.let { toWork->
-                scopeSpeech.launch {
+                CoroutineScope(Dispatchers.Default).launch {
+                    messageApp.messageApi("Begin training")
                     playerWorkOut.playingWorkOut(toWork, toUI)
+                    messageApp.messageApi("End training")
                     stopWorkout()
                 }
             }
         }
-
     }
     private fun startForegroundService() {
         if (!notificationHelper.channelExist()) notificationHelper.createChannel()

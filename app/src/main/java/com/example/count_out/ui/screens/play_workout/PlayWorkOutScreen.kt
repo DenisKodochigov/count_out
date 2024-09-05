@@ -38,7 +38,7 @@ import com.example.count_out.domain.Minus
 import com.example.count_out.domain.Plus
 import com.example.count_out.entity.GoalSet
 import com.example.count_out.entity.ListActivityForPlayer
-import com.example.count_out.entity.StateRunning
+import com.example.count_out.entity.RunningState
 import com.example.count_out.ui.theme.alumBodySmall
 import com.example.count_out.ui.theme.colors3
 import com.example.count_out.ui.theme.shapes
@@ -117,8 +117,12 @@ fun PlayWorkoutScreen(trainingId: Long ){
         ButtonFasterSlower(uiState)
         ButtonsStartStopWorkOut(
             switchState= uiState.switchState,
-            onClickStart = { uiState.training?.let { uiState.startWorkOutService(it) } },
-            onClickStop = { uiState.stopWorkOutService() },
+            onClickStart = { uiState.training?.let {
+                lg("#################### PlayWorkoutScreen Start Service ##########################")
+                uiState.startWorkOutService(it) } },
+            onClickStop = {
+                lg("#################### PlayWorkoutScreen StoppedService ##########################")
+                uiState.stopWorkOutService() },
             onClickPause = { uiState.pauseWorkOutService() },
         )
     }
@@ -173,7 +177,6 @@ fun PlayWorkoutScreen(trainingId: Long ){
         }
         if (item.roundNameId != 0 && setDescription == ""){
             Spacer(modifier = Modifier.height(12.dp))
-            lg(" ListExerciseContent ${item.roundNameId}")
             TextApp(text = stringResource(id = item.roundNameId),
                 style = typography.bodyLarge, fontWeight = FontWeight.Bold)
         } else {
@@ -231,13 +234,13 @@ fun PlayWorkoutScreen(trainingId: Long ){
     onClickStart: () -> Unit,
     onClickStop: () -> Unit,
     onClickPause: () -> Unit,
-    switchState: StateRunning,
+    switchState: RunningState,
 ){
     Row( horizontalArrangement = Arrangement.Center, modifier = Modifier.fillMaxWidth()) {
         when (switchState){
-            StateRunning.Started -> StartedService(onClickStop, onClickPause)
-            StateRunning.Stopped -> StoppedService(onClickStart)
-            StateRunning.Paused -> PauseService(onClickStart, onClickStop)
+            RunningState.Started -> StartedService(onClickStop, onClickPause)
+            RunningState.Stopped -> StoppedService(onClickStart)
+            RunningState.Paused -> PauseService(onClickStart, onClickStop)
         }
     }
     Spacer(modifier = Modifier.height(12.dp))

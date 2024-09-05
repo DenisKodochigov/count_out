@@ -3,68 +3,66 @@ package com.example.count_out.domain
 import android.content.Context
 import android.speech.tts.TextToSpeech
 import android.speech.tts.UtteranceProgressListener
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.mutableStateOf
+import com.example.count_out.entity.MessageApp
+import com.example.count_out.entity.RunningState
 import com.example.count_out.entity.SendToUI
 import com.example.count_out.entity.Speech
-import com.example.count_out.entity.StateRunning
-import com.example.count_out.ui.view_components.lg
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import java.util.Locale
 import javax.inject.Singleton
 
-
 @Singleton
 class SpeechManager(val context: Context) {
 
+    private val messengerA = MessageApp(context)
     private var durationStart: Long = 0L
     private var durationEnd: Long = 0L
     private var duration: Long = 0L
     private var tts:TextToSpeech? = null
     private var idSpeech: Int = 0
-    private val speeching: MutableState<Boolean> = mutableStateOf(true)
 
-    fun init(){
+    fun init(callBack: ()-> Unit){
         tts = TextToSpeech(context){ status ->
+            messengerA.messageApi("TextToSpeech(context).status $status")
             if ( status == TextToSpeech.SUCCESS) {
                 val result = tts?.setLanguage( Locale.getDefault() )
                 if ( result  == TextToSpeech.LANG_MISSING_DATA || result == TextToSpeech.LANG_NOT_SUPPORTED){
+                    messengerA.errorApi("TextToSpeech not support locale language.")
                     tts = null
                 } else {
+                    messengerA.messageApi("TextToSpeech.setOnUtteranceProgressListener")
                     tts?.setOnUtteranceProgressListener(
                         object : UtteranceProgressListener(){
                             override fun onStart(utteranceId: String) {
                                 durationStart = System.currentTimeMillis()
-                                speeching.value = true
+//                                messengerA.messageApi("TextToSpeech onStart")
                             }
                             override fun onDone(utteranceId: String) {
                                 durationEnd = System.currentTimeMillis()
                                 duration = durationEnd - durationStart
-                                speeching.value = false
+//                                messengerA.messageApi("TextToSpeech onDone")
                             }
-                            @Deprecated("Deprecated in Java",
-                                ReplaceWith("Log.i(\"TextToSpeech\", \"On Error\")", "android.util.Log")
-                            )
+                            @Deprecated("Deprecated in Java", ReplaceWith("Log.i(\"TextToSpeech\", \"On Error\")", "android.util.Log"))
                             override fun onError(utteranceId: String) {
-                                lg("SpeechManager.On Error $utteranceId")
-                            }
+                                messengerA.errorApi("SpeechManager.On Error $utteranceId")}
                         }
                     )
+                    callBack()
                 }
-            } else { tts = null }
+            } else {
+                messengerA.messageApi("TextToSpeech not created")
+                tts = null }
         }
     }
-    suspend fun speech(sendToUI: SendToUI, speech: Speech): Long
-    {
-        if (sendToUI.stateRunning.value != StateRunning.Stopped){
+    suspend fun speech(sendToUI: SendToUI, speech: Speech): Long {
+        if (sendToUI.runningState.value != RunningState.Stopped){
             val speechText = speech.message + " " + speech.addMessage
             if ((speechText).length > 1) {
                 sendToUI.addMessage(speechText)
-                speakOutAdd(speechText, sendToUI.stateRunning)
-                while (speeching.value || sendToUI.stateRunning.value == StateRunning.Paused ||
-                        tts?.isSpeaking == true)
-                { delay(100L) }
+                speakOutAdd(speechText, sendToUI.runningState)
+                while (tts?.isSpeaking == true || sendToUI.runningState.value == RunningState.Paused)
+                    { delay(500L) }
                 if( speech.duration == 0L && speech.idSpeech > 0 && duration > 0 ){
                     sendToUI.durationSpeech.value = speech.idSpeech to duration
                 }
@@ -72,19 +70,19 @@ class SpeechManager(val context: Context) {
         }
         return durationEnd
     }
-    private fun speakOutAdd(text: String, speakEnabled: MutableStateFlow<StateRunning>){
-        if (speakEnabled.value != StateRunning.Stopped){
-            speeching.value = true
+    private fun speakOutAdd(text: String, speakEnabled: MutableStateFlow<RunningState>){
+//        messengerA.messageApi("SpeechManager.speakOutAdd $text")
+        if (speakEnabled.value != RunningState.Stopped){
             tts?.speak(text, TextToSpeech.QUEUE_ADD, null,"speakOut$idSpeech")
         }
     }
-    fun speakOutFlush(text: String, speakEnabled: MutableStateFlow<StateRunning>){
-        if (speakEnabled.value != StateRunning.Stopped){
-            speeching.value = true
+    fun speakOutFlush(text: String, speakEnabled: MutableStateFlow<RunningState>){
+//        messengerA.messageApi("SpeechManager.speakOutFlush")
+        if (speakEnabled.value != RunningState.Stopped){
             tts?.speak(text, TextToSpeech.QUEUE_FLUSH, null,"speakOut$idSpeech")
         }
     }
-    fun getSpeeching() = speeching.value
+    fun getSpeeching() = tts?.isSpeaking ?: false
     fun stopTts(){
         tts!!.stop()
         tts!!.shutdown()

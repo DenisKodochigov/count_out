@@ -5,7 +5,7 @@ import com.example.count_out.data.room.tables.SetDB
 import com.example.count_out.entity.ConnectState
 import com.example.count_out.entity.ListActivityForPlayer
 import com.example.count_out.entity.Set
-import com.example.count_out.entity.StateRunning
+import com.example.count_out.entity.RunningState
 import com.example.count_out.entity.TickTime
 import com.example.count_out.entity.Training
 import com.example.count_out.entity.bluetooth.DeviceUI
@@ -16,7 +16,7 @@ import javax.inject.Singleton
 data class PlayWorkoutScreenState(
     val training: Training? = null,
     val statesWorkout: List<MessageWorkOut> = emptyList(),
-    val switchState: StateRunning = StateRunning.Stopped,
+    val switchState: RunningState = RunningState.Stopped,
     val playerSet: Set? = null,
     val nextSet: Set? = null,
     var listActivity: List< ListActivityForPlayer> = emptyList(),

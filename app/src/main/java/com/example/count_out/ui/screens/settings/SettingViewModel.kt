@@ -5,7 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.count_out.data.DataRepository
 import com.example.count_out.data.room.tables.SettingDB
 import com.example.count_out.entity.Activity
-import com.example.count_out.entity.ErrorApp
+import com.example.count_out.entity.MessageApp
 import com.example.count_out.entity.SendToUI
 import com.example.count_out.entity.bluetooth.BleDevSerializable
 import com.example.count_out.entity.bluetooth.SendToBle
@@ -23,7 +23,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SettingViewModel @Inject constructor(
-    private val errorApp: ErrorApp,
+    private val messageApp: MessageApp,
     private val bleManager: BleManager,
     private val dataRepository: DataRepository
 ): ViewModel() {
@@ -79,7 +79,7 @@ class SettingViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             kotlin.runCatching { bleManager.startBleService(sendToBle) }.fold(
                 onSuccess = { receiveDevicesUIBleService(it)},
-                onFailure = { errorApp.errorApi(it.message!!) }
+                onFailure = { messageApp.errorApi(it.message!!) }
             )
         }
     }
@@ -90,7 +90,7 @@ class SettingViewModel @Inject constructor(
                 _settingScreenState.update { currentState ->
                     currentState.copy(
                         lastConnectHearthRateDevice = send.lastConnectHearthRateDevice,
-                        connectingDevice = send.connectingDevice,
+                        connectingStatus = send.connectingState,
                         scannedBle = send.scannedBle,
                         devicesUI = send.foundDevices,
                         heartRate = send.heartRate,)
@@ -104,7 +104,7 @@ class SettingViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             kotlin.runCatching { bleManager.startScannerBLEDevices() }.fold(
                 onSuccess = {  },
-                onFailure = { errorApp.errorApi(it.message!!) }
+                onFailure = { messageApp.errorApi(it.message!!) }
             )
         }
     }
@@ -113,7 +113,7 @@ class SettingViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             kotlin.runCatching { bleManager.stopScannerBLEDevices() }.fold(
                 onSuccess = { },
-                onFailure = { errorApp.errorApi(it.message!!) }
+                onFailure = { messageApp.errorApi(it.message!!) }
             )
         }
     }
@@ -122,7 +122,7 @@ class SettingViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             kotlin.runCatching { bleManager.onClearCacheBLE() }.fold(
                 onSuccess = { },
-                onFailure = { errorApp.errorApi(it.message!!) }
+                onFailure = { messageApp.errorApi(it.message!!) }
             )
         }
     }
@@ -151,7 +151,7 @@ class SettingViewModel @Inject constructor(
             kotlin.runCatching { funDataRepository() }.fold(
                 onSuccess = { _settingScreenState.update { currentState ->
                     currentState.copy( settings = it ) } },
-                onFailure = { errorApp.errorApi(it.message!!) }
+                onFailure = { messageApp.errorApi(it.message!!) }
             )
         }
     }
@@ -161,7 +161,7 @@ class SettingViewModel @Inject constructor(
             kotlin.runCatching { funDataRepository() }.fold(
                 onSuccess = { _settingScreenState.update { currentState ->
                     currentState.copy( activities = it ) } },
-                onFailure = { errorApp.errorApi(it.message!!) }
+                onFailure = { messageApp.errorApi(it.message!!) }
             )
         }
     }

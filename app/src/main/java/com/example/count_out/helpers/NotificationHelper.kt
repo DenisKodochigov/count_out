@@ -18,7 +18,7 @@ import com.example.count_out.entity.Const.PAUSE_REQUEST_CODE
 import com.example.count_out.entity.Const.SET_CONTENT_TITLE
 import com.example.count_out.entity.Const.START_REQUEST_CODE
 import com.example.count_out.entity.Const.STOP_REQUEST_CODE
-import com.example.count_out.entity.StateRunning
+import com.example.count_out.entity.RunningState
 import com.example.count_out.service.workout.WorkoutService
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -29,7 +29,7 @@ class NotificationHelper @Inject constructor(private val context: Context)
     private val notificationManager by lazy {
         context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager }
 
-    private val pendingIntent by lazy { intentAction( StateRunning.Started.name, START_REQUEST_CODE)}
+    private val pendingIntent by lazy { intentAction( RunningState.Started.name, START_REQUEST_CODE)}
 
     private val notificationBuilder: NotificationCompat.Builder by lazy {
         NotificationCompat.Builder(context, NOTIFICATION_CHANNEL_ID)
@@ -40,8 +40,8 @@ class NotificationHelper @Inject constructor(private val context: Context)
             .setContentIntent(pendingIntent)
             .setSmallIcon(R.drawable.ic_timer)
             .setPriority(NotificationCompat.PRIORITY_HIGH)
-            .addAction(0, "Pause", intentAction(StateRunning.Paused.name, PAUSE_REQUEST_CODE))
-            .addAction(0, "Stop", intentAction(StateRunning.Stopped.name, STOP_REQUEST_CODE))
+            .addAction(0, "Pause", intentAction(RunningState.Paused.name, PAUSE_REQUEST_CODE))
+            .addAction(0, "Stop", intentAction(RunningState.Stopped.name, STOP_REQUEST_CODE))
             .setAutoCancel(true)
     }
     fun createChannel() {
@@ -69,14 +69,14 @@ class NotificationHelper @Inject constructor(private val context: Context)
     fun setContinueButton() {
         notificationBuilder.mActions.removeAt(0)
         notificationBuilder.mActions.add(
-            0, NotificationCompat.Action(0, "Continue", intentAction(StateRunning.Started.name, START_REQUEST_CODE)))
+            0, NotificationCompat.Action(0, "Continue", intentAction(RunningState.Started.name, START_REQUEST_CODE)))
         notificationManager.notify(NOTIFICATION_ID, notificationBuilder.build())
     }
     @SuppressLint("RestrictedApi")
     fun setPauseButton() {
         notificationBuilder.mActions.removeAt(0)
         notificationBuilder.mActions.add(0,
-            NotificationCompat.Action(0, "Pause", intentAction(StateRunning.Paused.name, PAUSE_REQUEST_CODE)))
+            NotificationCompat.Action(0, "Pause", intentAction(RunningState.Paused.name, PAUSE_REQUEST_CODE)))
         notificationManager.notify(NOTIFICATION_ID, notificationBuilder.build())
     }
 

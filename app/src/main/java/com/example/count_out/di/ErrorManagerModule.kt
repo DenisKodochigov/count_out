@@ -1,7 +1,7 @@
 package com.example.count_out.di
 
 import android.content.Context
-import com.example.count_out.domain.SpeechManager
+import com.example.count_out.entity.MessageApp
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -11,9 +11,10 @@ import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-class SpeechManagerModule {
+class ErrorManagerModule {
     @Singleton
     @Provides
-    fun provideSpeechManager(@ApplicationContext appContext: Context): SpeechManager =
-        SpeechManager(appContext)
+    fun provideErrorManager(@ApplicationContext appContext: Context): MessageApp {
+        return MessageApp(appContext)
+    }
 }

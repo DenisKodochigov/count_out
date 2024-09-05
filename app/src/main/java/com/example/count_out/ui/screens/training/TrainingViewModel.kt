@@ -6,7 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.count_out.data.DataRepository
 import com.example.count_out.data.room.tables.SetDB
 import com.example.count_out.data.room.tables.TrainingDB
-import com.example.count_out.entity.ErrorApp
+import com.example.count_out.entity.MessageApp
 import com.example.count_out.entity.Set
 import com.example.count_out.entity.SpeechKit
 import com.example.count_out.entity.Training
@@ -21,7 +21,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class TrainingViewModel @Inject constructor(
-    private val errorApp: ErrorApp,
+    private val messageApp: MessageApp,
     private val dataRepository: DataRepository
 ): ViewModel() {
     private val _trainingScreenState = MutableStateFlow(
@@ -53,7 +53,7 @@ class TrainingViewModel @Inject constructor(
             kotlin.runCatching { dataRepository.getActivities() }.fold(
                 onSuccess = {
                     _trainingScreenState.update { currentState -> currentState.copy(activities = it) } },
-                onFailure = { errorApp.errorApi(it.message!!) }
+                onFailure = { messageApp.errorApi(it.message!!) }
             )
         }
         templateMy { dataRepository.getTraining(id) }
@@ -87,7 +87,7 @@ class TrainingViewModel @Inject constructor(
     private fun onSetColorActivity(activityId: Long, color: Int) {
         viewModelScope.launch(Dispatchers.IO) {
             kotlin.runCatching { dataRepository.onSetColorActivity( activityId, color) }
-                .fold( onSuccess = { }, onFailure = { errorApp.errorApi(it.message!!) })
+                .fold( onSuccess = { }, onFailure = { messageApp.errorApi(it.message!!) })
         }
     }
     private fun templateMy( funDataRepository:() -> Training){
@@ -98,7 +98,7 @@ class TrainingViewModel @Inject constructor(
                         training = it,
                         showBottomSheetSelectActivity = mutableStateOf(false),
                         enteredName = mutableStateOf(it.name) ) } },
-                onFailure = { errorApp.errorApi(it.message!!) }
+                onFailure = { messageApp.errorApi(it.message!!) }
             )
         }
     }
@@ -106,7 +106,7 @@ class TrainingViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             kotlin.runCatching { funDataRepository() }.fold(
                 onSuccess = {  },
-                onFailure = { errorApp.errorApi(it.message!!) }
+                onFailure = { messageApp.errorApi(it.message!!) }
             )
         }
     }

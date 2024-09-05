@@ -5,10 +5,10 @@ import android.bluetooth.BluetoothGattCharacteristic
 import android.bluetooth.le.ScanCallback
 import android.bluetooth.le.ScanResult
 import android.bluetooth.le.ScanSettings
+import com.example.count_out.entity.SendToUI
 import com.example.count_out.entity.StateScanner
 import com.example.count_out.entity.bluetooth.BleDevice
 import com.example.count_out.entity.bluetooth.BleStates
-import com.example.count_out.entity.SendToUI
 import com.example.count_out.ui.view_components.lg
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -29,8 +29,7 @@ fun scanSettings(reportDelay: Long): ScanSettings {
 }
 
 fun objectScanCallback( bleStates: BleStates, sendToUI: MutableStateFlow<SendToUI>
-): ScanCallback = object: ScanCallback()
-{
+): ScanCallback = object: ScanCallback() {
     override fun onScanResult(callbackType: Int, result: ScanResult?) {
         super.onScanResult(callbackType, result)
         result?.device?.let { dev ->
@@ -71,6 +70,27 @@ fun BluetoothGatt.findCharacteristic(uuid: UUID): BluetoothGattCharacteristic?{
     }
     return null
 }
+
+fun BluetoothGattCharacteristic.isReadable(): Boolean =
+    containsProperty(BluetoothGattCharacteristic.PROPERTY_READ)
+
+fun BluetoothGattCharacteristic.containsProperty(property: Int) = properties and property != 0
+
+fun BluetoothGattCharacteristic.isWritable(): Boolean =
+    containsProperty(BluetoothGattCharacteristic.PROPERTY_WRITE)
+
+fun BluetoothGattCharacteristic.isNotify(): Boolean =
+    containsProperty(BluetoothGattCharacteristic.PROPERTY_NOTIFY)
+
+fun BluetoothGattCharacteristic.isIndicatable(): Boolean =
+    containsProperty(BluetoothGattCharacteristic.PROPERTY_INDICATE)
+fun BluetoothGattCharacteristic.isWritableWithoutResponse(): Boolean =
+    containsProperty(BluetoothGattCharacteristic.PROPERTY_WRITE_NO_RESPONSE)
+
+fun <T>MutableStateFlow<List<T>>.addApp(device: T) =
+    update { this.value.toMutableList().apply { this.add(device) } }
+
+fun <T>List<T>.addApp(device: T): List<T> = this.toMutableList().apply { this.add(device) }
 
 fun BluetoothGatt.printCharacteristicsTable() {
     if (services.isEmpty()) { return }
@@ -124,7 +144,6 @@ fun <T>printHR(text: String, hr: MutableStateFlow<T>){
         }
     }
 }
-
 fun generateHR(hr: MutableStateFlow<Int>){
     CoroutineScope(Dispatchers.Default).launch {
         var i = 0
@@ -136,24 +155,3 @@ fun generateHR(hr: MutableStateFlow<Int>){
         }
     }
 }
-
-fun BluetoothGattCharacteristic.isReadable(): Boolean =
-    containsProperty(BluetoothGattCharacteristic.PROPERTY_READ)
-
-fun BluetoothGattCharacteristic.containsProperty(property: Int) = properties and property != 0
-
-fun BluetoothGattCharacteristic.isWritable(): Boolean =
-    containsProperty(BluetoothGattCharacteristic.PROPERTY_WRITE)
-
-fun BluetoothGattCharacteristic.isNotify(): Boolean =
-    containsProperty(BluetoothGattCharacteristic.PROPERTY_NOTIFY)
-
-fun BluetoothGattCharacteristic.isIndicatable(): Boolean =
-    containsProperty(BluetoothGattCharacteristic.PROPERTY_INDICATE)
-fun BluetoothGattCharacteristic.isWritableWithoutResponse(): Boolean =
-    containsProperty(BluetoothGattCharacteristic.PROPERTY_WRITE_NO_RESPONSE)
-
-fun <T>MutableStateFlow<List<T>>.addApp(device: T) =
-    update { this.value.toMutableList().apply { this.add(device) } }
-
-fun <T>List<T>.addApp(device: T): List<T> = this.toMutableList().apply { this.add(device) }

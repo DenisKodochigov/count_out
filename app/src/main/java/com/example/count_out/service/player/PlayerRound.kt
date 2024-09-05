@@ -1,9 +1,10 @@
 package com.example.count_out.service.player
 
 import com.example.count_out.domain.SpeechManager
+import com.example.count_out.entity.RunningState
 import com.example.count_out.entity.SendToUI
 import com.example.count_out.entity.SendToWorkService
-import com.example.count_out.entity.StateRunning
+import com.example.count_out.ui.view_components.lg
 import javax.inject.Inject
 
 class PlayerRound @Inject constructor(
@@ -11,7 +12,8 @@ class PlayerRound @Inject constructor(
     private val playerExercise: PlayerExercise)
 {
     suspend fun playingRound(template: SendToWorkService, sendToUI: SendToUI, ){
-        if (sendToUI.stateRunning.value == StateRunning.Started) {
+        lg("playingRound ${sendToUI.runningState.value}")
+        if (sendToUI.runningState.value == RunningState.Started) {
             template.getRound()?.speech?.beforeStart?.let { speechManager.speech(sendToUI, it) }
             template.getRound()?.speech?.afterStart?.let { speechManager.speech(sendToUI, it) }
             template.getRound()?.exercise?.forEachIndexed { index, _->
