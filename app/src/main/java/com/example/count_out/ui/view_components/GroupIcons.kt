@@ -103,7 +103,7 @@ import com.example.count_out.ui.theme.typography
             repeatMode = RepeatMode.Reverse
         )
     )
-    Box(modifier = Modifier.size(Dimen.sizeIcon)){
+    Box(modifier = Modifier.size( sizeIcon)){
         Icon(imageVector = icon, contentDescription = "",
             modifier = Modifier.align(Alignment.Center).size(size).clickable { onClick() })
     }
@@ -222,7 +222,7 @@ fun IconsCollapsing(onClick: ()->Unit, wrap: Boolean)
 @Composable fun IconAddSet(onClick:()->Unit) = IconAdd(onClick = onClick, text = "S+" )
 @Composable fun IconAddRing(onClick:()->Unit) = IconAdd(onClick = onClick, text = "R+" )
 @Composable fun IconAddExercise(onClick:()->Unit) = IconAdd(onClick = onClick, text = "E+" )
-@Composable fun IconAddActivity(onClick:()->Unit) = IconAdd(onClick = onClick, text = "A+" )
+//@Composable fun IconAddActivity(onClick:()->Unit) = IconAdd(onClick = onClick, text = "A+" )
 
 @Composable fun IconAdd(onClick:()->Unit, text: String = "+") {
     Box(modifier = Modifier){
