@@ -4,14 +4,12 @@ import android.bluetooth.BluetoothAdapter
 import android.content.Context
 import com.example.count_out.entity.SendToUI
 import com.example.count_out.entity.StateScanner
-import com.example.count_out.entity.TimerState
 import com.example.count_out.entity.bluetooth.BleStates
 import com.example.count_out.permission.PermissionApp
 import com.example.count_out.service.bluetooth.scanner.ScannerBleAll
-import com.example.count_out.service.stopwatch.Timer
+import com.example.count_out.service.stopwatch.TimerMy
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -23,24 +21,25 @@ class BleScanner @Inject constructor(
     val bluetoothAdapter: BluetoothAdapter,
     private val permissionApp: PermissionApp
 ) {
-    private val timer = Timer()
+    private val timer = TimerMy()
     private val scannerBleAll = ScannerBleAll(bluetoothAdapter, permissionApp)
-    private val timeScanning = 120000L
+    private val timeScanning = 120
 
     /** Scan all device*/
     fun startScannerBLEDevices(sendToUi: MutableStateFlow<SendToUI>, bleStates: BleStates) {
         CoroutineScope(Dispatchers.Default).launch {
-            timer.changeState(TimerState.COUNTING, timeScanning)
             scannerBleAll.startScannerBLEDevices(bleStates, sendToUi)
-            timer.endCounting {
-                bleStates.stateScanner = StateScanner.END
-                scannerBleAll.stopScannerBLEDevices(sendToUi)
-                this.cancel()
-            }
+            timer.start(
+                sec = timeScanning,
+                endCommand = {
+                    bleStates.stateScanner = StateScanner.END
+                    scannerBleAll.stopScannerBLEDevices(sendToUi)
+                }
+            )
         }
     }
     fun stopScannerBLEDevices(sendToUi: MutableStateFlow<SendToUI>) {
-        timer.changeState(TimerState.END, timeScanning)
+        timer.cancel()
         scannerBleAll.stopScannerBLEDevices(sendToUi)
     }
 }

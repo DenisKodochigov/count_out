@@ -149,7 +149,7 @@ class PlayWorkoutViewModel @Inject constructor(
         }
         viewModelScope.launch(Dispatchers.IO) {
             sendToUI.messageList.collect { state ->
-                messageApp.messageApi("PlayWorkoutViewModel.messageList.collect $state")
+//                messageApp.messageApi("PlayWorkoutViewModel.messageList.collect $state")
                 _playWorkoutScreenState.update { currentState ->
                     currentState.copy( statesWorkout = state ) } }
         }

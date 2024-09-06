@@ -9,7 +9,7 @@ import com.example.count_out.entity.RunningState
 import com.example.count_out.entity.SendToUI
 import com.example.count_out.entity.SendToWorkService
 import com.example.count_out.entity.Set
-import com.example.count_out.helpers.delayMy
+import com.example.count_out.service.stopwatch.delayMy
 import com.example.count_out.ui.view_components.lg
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -70,7 +70,6 @@ class PlayerSet @Inject constructor(val speechManager:SpeechManager, val context
                 }
             }
         }
-
     }
     private suspend fun playSetDISTANCE(template: SendToWorkService, sendToUI: SendToUI, ){}
 

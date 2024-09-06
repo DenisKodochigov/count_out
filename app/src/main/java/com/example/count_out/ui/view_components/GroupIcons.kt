@@ -1,5 +1,9 @@
 package com.example.count_out.ui.view_components
 
+import androidx.compose.animation.core.RepeatMode
+import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.animation.core.repeatable
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -13,6 +17,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.filled.ArrowDropUp
+import androidx.compose.material.icons.filled.Bluetooth
 import androidx.compose.material.icons.filled.CopyAll
 import androidx.compose.material.icons.filled.DeleteOutline
 import androidx.compose.material.icons.filled.Edit
@@ -22,7 +27,9 @@ import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -31,6 +38,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import com.example.count_out.R
@@ -71,6 +79,33 @@ import com.example.count_out.ui.theme.typography
                 ) { expanded = false }
             }
         }
+    }
+}
+@Composable fun AnimateIcon(
+    initValue: Dp = sizeIcon,
+    targetValue: Dp = 17.dp,
+    icon: ImageVector = Icons.Default.Bluetooth,
+    animate: Boolean = false,
+    onClick: ()->Unit = {},
+){
+    var target by remember { mutableStateOf(initValue) }
+    var iteration by remember { mutableIntStateOf(1) }
+    LaunchedEffect(animate) {
+        iteration = if (animate) 1000 else 1
+        target = if (animate) if (target == initValue) targetValue else initValue else initValue
+    }
+    val size by animateDpAsState(
+        label = "size",
+        targetValue = target,
+        animationSpec = repeatable(
+            iterations = iteration,
+            animation = tween(durationMillis = 1000),
+            repeatMode = RepeatMode.Reverse
+        )
+    )
+    Box(modifier = Modifier.size(Dimen.sizeIcon)){
+        Icon(imageVector = icon, contentDescription = "",
+            modifier = Modifier.align(Alignment.Center).size(size).clickable { onClick() })
     }
 }
 
@@ -205,119 +240,4 @@ fun IconsCollapsing(onClick: ()->Unit, wrap: Boolean)
     }
 
 }
-
-//@Composable fun IconsCopySpeechDel(onCopy: ()->Unit, onSpeech: ()->Unit, onDel: ()->Unit ) {
-//    Icon(
-//        painter = painterResource(id = R.drawable.ic_copy),
-//        contentDescription = "",
-//        modifier = Modifier
-//            .padding(0.dp)
-//            .size(Dimen.sizeIcon)
-//            .clickable { onCopy() }
-//    )
-//    Spacer(modifier = Modifier.width(sizeBetweenIcon))
-//    Icon(
-//        painter = painterResource(id = R.drawable.ic_speech),
-//        contentDescription = "",
-//        modifier = Modifier
-//            .padding(0.dp)
-//            .size(Dimen.sizeIcon)
-//            .clickable { onSpeech() }
-//    )
-//    Spacer(modifier = Modifier.width(sizeBetweenIcon))
-//    Icon(
-//        painter = painterResource(id = R.drawable.ic_del),
-//        contentDescription = "",
-//        modifier = Modifier
-//            .padding(0.dp)
-//            .size(Dimen.sizeIcon)
-//            .clickable { onDel() }
-//    )
-//}
-
-//@Composable fun IconsCollapsingCopySpeechDel(
-//    onCopy: ()->Unit,
-//    onSpeech: ()->Unit,
-//    onDel: ()->Unit,
-//    onCollapsing:()->Unit,
-//    wrap: Boolean)
-//{
-//    IconsCollapsing1( onCollapsing = onCollapsing, wrap = wrap)
-//    Spacer(modifier = Modifier.width(sizeBetweenIcon))
-//    IconsCopySpeechDel(onCopy, onSpeech, onDel)
-//}
-//@Composable
-//fun IconCollapsingSpeech(
-//    onSpeech: ()->Unit,
-//    onCollapsing:() -> Unit,
-//    idIconCollapsing: Int
-//){
-//    Icon(
-//        painter = painterResource(id = idIconCollapsing),
-//        contentDescription = "",
-//        modifier = Modifier
-//            .padding(4.dp)
-//            .size(Dimen.sizeIcon)
-//            .clickable { onCollapsing() }
-//    )
-//    Spacer(modifier = Modifier.width(sizeBetweenIcon))
-//    Icon(
-//        painter = painterResource(id = R.drawable.ic_speech), contentDescription = "",
-//        modifier = Modifier
-//            .padding(4.dp)
-//            .size(Dimen.sizeIcon)
-//            .clickable { onSpeech() }
-//    )
-//
-//}
-//@Composable
-//fun IconSpeechDel(
-//    onSpeech: ()->Unit,
-//    onDelete:() -> Unit,
-//){
-//    Icon(
-//        painter = painterResource(id = R.drawable.ic_speech),
-//        contentDescription = "",
-//        modifier = Modifier
-//            .padding(4.dp)
-//            .size(Dimen.sizeIcon)
-//            .clickable { onSpeech() }
-//    )
-//    Spacer(modifier = Modifier.width(8.dp))
-//    Icon(
-//        painter = painterResource(id = R.drawable.ic_del1), contentDescription = "",
-//        modifier = Modifier
-//            .padding(4.dp)
-//            .size(Dimen.sizeIcon)
-//            .clickable { onDelete() }
-//    )
-//}
-
-//@Composable fun IconAddItem(textId: Int, onAdd: ()->Unit){
-//    Row(
-//        horizontalArrangement = Arrangement.Center,
-//        verticalAlignment = Alignment.CenterVertically,
-//        modifier = Modifier.clickable { onAdd.invoke() }
-//    ) {
-//        TextApp(
-//            text = stringResource(id = textId),
-//            style = interLight12,
-//            modifier = Modifier.padding(horizontal = 4.dp)
-//        )
-//        Icon(
-//            painter = painterResource(id = R.drawable.ic_add),
-//            contentDescription = "",
-//            modifier = Modifier
-//                .padding(4.dp)
-//                .size(Dimen.sizeIcon)
-//        )
-//    }
-//}
-//
-//@Composable fun IconSingle(image: ImageVector){
-//    Icon(imageVector = image, contentDescription = "", modifier = Modifier.size(Dimen.sizeIcon))
-//}
-//@Composable fun IconSingle(image: Painter){
-//    Icon(painter = image, contentDescription = "", modifier = Modifier.size(Dimen.sizeIcon))
-//}
 

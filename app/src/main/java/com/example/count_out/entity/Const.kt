@@ -1,6 +1,28 @@
 package com.example.count_out.entity
 
-import android.Manifest
+import android.Manifest.permission.ACCESS_BACKGROUND_LOCATION
+import android.Manifest.permission.ACCESS_COARSE_LOCATION
+import android.Manifest.permission.ACCESS_FINE_LOCATION
+import android.Manifest.permission.ACCESS_NETWORK_STATE
+import android.Manifest.permission.ACTIVITY_RECOGNITION
+import android.Manifest.permission.BLUETOOTH
+import android.Manifest.permission.BLUETOOTH_ADMIN
+import android.Manifest.permission.BLUETOOTH_ADVERTISE
+import android.Manifest.permission.BLUETOOTH_CONNECT
+import android.Manifest.permission.BLUETOOTH_SCAN
+import android.Manifest.permission.CHANGE_NETWORK_STATE
+import android.Manifest.permission.CHANGE_WIFI_MULTICAST_STATE
+import android.Manifest.permission.CHANGE_WIFI_STATE
+import android.Manifest.permission.FOREGROUND_SERVICE
+import android.Manifest.permission.FOREGROUND_SERVICE_CONNECTED_DEVICE
+import android.Manifest.permission.FOREGROUND_SERVICE_DATA_SYNC
+import android.Manifest.permission.INTERNET
+import android.Manifest.permission.NFC
+import android.Manifest.permission.POST_NOTIFICATIONS
+import android.Manifest.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS
+import android.Manifest.permission.TRANSMIT_IR
+import android.Manifest.permission.UWB_RANGING
+import android.Manifest.permission.VIBRATE
 import com.example.count_out.navigation.TrainingsDestination
 import java.util.UUID
 
@@ -25,42 +47,36 @@ object Const {
     const val NOTIFICATION_CHANNEL_NAME = "WORKOUT_NOTIFICATION"
     const val NOTIFICATION_CHANNEL_DESCRIPTION = "WORKOUT_CHANNEL_DESCRIPTION"
 
-    const val MAX_TRIES = 4
-
-    const val PULSE_RATE_MS = 1000L
-
-    const val DELAY_CANCELED_COROUTINE = 100L
-
     const val START_REQUEST_CODE = 100
     const val PAUSE_REQUEST_CODE = 101
     const val STOP_REQUEST_CODE = 102
-    const val PERMISSION_REQUEST_CODE = 1
+
     val permissions1 = listOf(
-        Manifest.permission.ACCESS_COARSE_LOCATION,
-        Manifest.permission.ACCESS_FINE_LOCATION,
-        Manifest.permission.INTERNET,
-        Manifest.permission.ACCESS_NETWORK_STATE,
-        Manifest.permission.FOREGROUND_SERVICE,                     //with 28
-        Manifest.permission.FOREGROUND_SERVICE_DATA_SYNC,           //with 34
-        Manifest.permission.FOREGROUND_SERVICE_CONNECTED_DEVICE,    //with 34
-        Manifest.permission.POST_NOTIFICATIONS,                     //with 33
-        Manifest.permission.ACTIVITY_RECOGNITION,                   //with 29
-        Manifest.permission.VIBRATE,
-        Manifest.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS,
-        Manifest.permission.CHANGE_NETWORK_STATE,
-        Manifest.permission.CHANGE_WIFI_STATE,
-        Manifest.permission.CHANGE_WIFI_MULTICAST_STATE,
-        Manifest.permission.NFC,
-        Manifest.permission.TRANSMIT_IR,
-        Manifest.permission.UWB_RANGING,            //with 31
-        Manifest.permission.BLUETOOTH,
-        Manifest.permission.BLUETOOTH_SCAN,         //with 31
-        Manifest.permission.BLUETOOTH_ADMIN,
-        Manifest.permission.BLUETOOTH_CONNECT,      //with 31
-        Manifest.permission.BLUETOOTH_ADVERTISE,    //with 31
+        ACCESS_COARSE_LOCATION,
+        ACCESS_FINE_LOCATION,
+        INTERNET,
+        ACCESS_NETWORK_STATE,
+        FOREGROUND_SERVICE,                     //with 28
+        FOREGROUND_SERVICE_DATA_SYNC,           //with 34
+        FOREGROUND_SERVICE_CONNECTED_DEVICE,    //with 34
+        POST_NOTIFICATIONS,                     //with 33
+        ACTIVITY_RECOGNITION,                   //with 29
+        VIBRATE,
+        REQUEST_IGNORE_BATTERY_OPTIMIZATIONS,
+        CHANGE_NETWORK_STATE,
+        CHANGE_WIFI_STATE,
+        CHANGE_WIFI_MULTICAST_STATE,
+        NFC,
+        TRANSMIT_IR,
+        UWB_RANGING,                             //with 31
+        BLUETOOTH,
+        BLUETOOTH_SCAN,                          //with 31
+        BLUETOOTH_ADMIN,
+        BLUETOOTH_CONNECT,                      //with 31
+        BLUETOOTH_ADVERTISE,                    //with 31
     )
     val permissions2 = listOf(
-        Manifest.permission.ACCESS_BACKGROUND_LOCATION,//with 29
+        ACCESS_BACKGROUND_LOCATION,//with 29
     )
     val serviceUUIDs = listOf(
 //        UUID.fromString("00001809-0000-0000-0000-000000000000"),

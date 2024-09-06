@@ -2,7 +2,7 @@ package com.example.count_out.entity
 
 import com.example.count_out.entity.bluetooth.DeviceUI
 import com.example.count_out.entity.no_use.MessageWorkOut
-import com.example.count_out.service.stopwatch.StopWatchObj
+import com.example.count_out.service.stopwatch.Watcher
 import kotlinx.coroutines.flow.MutableStateFlow
 
 data class SendToUI (
@@ -20,7 +20,7 @@ data class SendToUI (
 ){
     fun addMessage(text: String){
         val list: MutableList<MessageWorkOut> = messageList.value.toMutableList()
-        list.add( MessageWorkOut(message = text, tickTime = StopWatchObj.getTickTime().value))
+        list.add( MessageWorkOut(message = text, tickTime = Watcher.getTickTime().value))
         messageList.value = list
     }
     fun cancel(){

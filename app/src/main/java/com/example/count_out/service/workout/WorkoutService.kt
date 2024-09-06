@@ -16,7 +16,7 @@ import com.example.count_out.entity.SendToUI
 import com.example.count_out.entity.SendToWorkService
 import com.example.count_out.helpers.NotificationHelper
 import com.example.count_out.service.player.PlayerWorkOut
-import com.example.count_out.service.stopwatch.StopWatchObj
+import com.example.count_out.service.stopwatch.Watcher
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -72,7 +72,7 @@ class WorkoutService @Inject constructor(): Service(), WorkOutAPI
     }
     override fun stopWorkout(){
         messageApp.messageApi("Stop WorkOut")
-        StopWatchObj.stop()
+        Watcher.stop()
         speechManager.stopTts()
         stopForeground(STOP_FOREGROUND_REMOVE)
         notificationHelper.cancel()
@@ -86,9 +86,9 @@ class WorkoutService @Inject constructor(): Service(), WorkOutAPI
     }
     private fun getTick(){
         sendToUI?.let {
-            StopWatchObj.start(it.runningState)
+            Watcher.start(it.runningState)
             CoroutineScope(Dispatchers.Default).launch {
-                StopWatchObj.getTickTime().collect{ tick ->
+                Watcher.getTickTime().collect{ tick ->
                     notificationHelper.updateNotification(hours = tick.hour, minutes = tick.min, seconds = tick.sec)
                     it.flowTick.value = tick
                 }
