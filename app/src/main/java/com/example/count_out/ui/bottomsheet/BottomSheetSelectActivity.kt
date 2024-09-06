@@ -11,11 +11,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.material3.BottomAppBarDefaults
-import androidx.compose.material3.BottomSheetDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.ModalBottomSheet
-import androidx.compose.material3.contentColorFor
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
@@ -25,6 +21,7 @@ import androidx.compose.ui.unit.dp
 import com.example.count_out.ui.screens.training.TrainingScreenState
 import com.example.count_out.ui.theme.Dimen
 import com.example.count_out.ui.theme.shapes
+import com.example.count_out.ui.view_components.ModalBottomSheetApp
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -32,18 +29,14 @@ fun BottomSheetSelectActivity(uiState: TrainingScreenState)
 {
     val sheetState = rememberModalBottomSheetState(
         skipPartiallyExpanded = true, confirmValueChange = { true },)
-    ModalBottomSheet(
+
+    ModalBottomSheetApp(
         onDismissRequest = {uiState.onDismissSelectActivity.invoke()},
         modifier = Modifier.padding(horizontal = Dimen.bsPaddingHor1),
         shape = shapes.small,
-        containerColor = BottomSheetDefaults.ContainerColor,
-        contentColor = contentColorFor(BottomAppBarDefaults.containerColor),
-        tonalElevation = BottomSheetDefaults.Elevation,
-        scrimColor = BottomSheetDefaults.ScrimColor,
-        dragHandle = { BottomSheetDefaults.DragHandle() },
-        windowInsets = BottomSheetDefaults.windowInsets,
         sheetState = sheetState,
-        content = { BottomSheetSelectActivityContent(uiState) })
+        content = { BottomSheetSelectActivityContent(uiState) }
+    )
 }
 
 @Composable

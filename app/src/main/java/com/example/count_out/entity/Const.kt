@@ -41,11 +41,12 @@ object Const {
         Manifest.permission.INTERNET,
         Manifest.permission.ACCESS_NETWORK_STATE,
         Manifest.permission.FOREGROUND_SERVICE,                     //with 28
-        Manifest.permission.FOREGROUND_SERVICE_DATA_SYNC,           //with 31
+        Manifest.permission.FOREGROUND_SERVICE_DATA_SYNC,           //with 34
         Manifest.permission.FOREGROUND_SERVICE_CONNECTED_DEVICE,    //with 34
         Manifest.permission.POST_NOTIFICATIONS,                     //with 33
         Manifest.permission.ACTIVITY_RECOGNITION,                   //with 29
         Manifest.permission.VIBRATE,
+        Manifest.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS,
         Manifest.permission.CHANGE_NETWORK_STATE,
         Manifest.permission.CHANGE_WIFI_STATE,
         Manifest.permission.CHANGE_WIFI_MULTICAST_STATE,

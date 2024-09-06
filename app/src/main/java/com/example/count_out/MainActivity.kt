@@ -1,8 +1,11 @@
 package com.example.count_out
 
+import android.annotation.SuppressLint
 import android.bluetooth.BluetoothAdapter
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
+import android.provider.Settings
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -38,6 +41,7 @@ class MainActivity: ComponentActivity()
         super.onStart()
         workOutManager.bindService( WorkoutService::class.java)
 //        sensorsManager.onCreate()
+        ignoreBatteryOptimisation()
         if (checkBluetoothEnable()) bleManager.bindBleService(BleService::class.java)
         else lg(" Bluetooth not enable")
     }
@@ -55,12 +59,17 @@ class MainActivity: ComponentActivity()
         super.onResume()
 //        sensorsManager.onResume()
     }
-    private fun checkBluetoothEnable(): Boolean
-    {
+    private fun checkBluetoothEnable(): Boolean {
         if ( !bluetoothAdapter.isEnabled) {
             val enableBtIntent = Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE)
             ActivityCompat.startActivityForResult(this, enableBtIntent, 1, null)
         }
         return bluetoothAdapter.isEnabled
+    }
+    @SuppressLint("BatteryLife")
+    private fun ignoreBatteryOptimisation(){
+        val intent = Intent(Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS)
+        intent.data = Uri.parse("package:" + this.packageName)
+        ActivityCompat.startActivityForResult(this, intent, 1, null)
     }
 }

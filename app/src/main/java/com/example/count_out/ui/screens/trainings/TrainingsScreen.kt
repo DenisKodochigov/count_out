@@ -111,7 +111,7 @@ fun TrainingsLazyColumn(uiState: TrainingsScreenState,
         { item ->
             Spacer(modifier = Modifier.height(Dimen.width4))
             ItemSwipe(
-                frontView = { RowLazy(item, uiState, modifier = Modifier.animateItemPlacement()) },
+                frontView = { RowLazy(item, uiState, modifier = Modifier.animateItem()) },
                 actionDragLeft = { uiState.onDeleteTraining( item.idTraining )},
                 actionDragRight = { uiState.editTraining(item) },
             )

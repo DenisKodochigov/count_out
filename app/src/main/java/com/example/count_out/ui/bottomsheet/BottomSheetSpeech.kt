@@ -5,11 +5,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.BottomAppBarDefaults
-import androidx.compose.material3.BottomSheetDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.ModalBottomSheet
-import androidx.compose.material3.contentColorFor
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
@@ -34,6 +30,7 @@ import com.example.count_out.ui.theme.interLight14Start
 import com.example.count_out.ui.theme.interThin12Start
 import com.example.count_out.ui.theme.shapes
 import com.example.count_out.ui.view_components.ButtonConfirm
+import com.example.count_out.ui.view_components.ModalBottomSheetApp
 import com.example.count_out.ui.view_components.TextApp
 import com.example.count_out.ui.view_components.TextFieldApp
 
@@ -42,19 +39,13 @@ import com.example.count_out.ui.view_components.TextFieldApp
 {
     val uiState by remember{ mutableStateOf( bottomSheetStateNew(itemSpeech)) }
     val sheetState = rememberModalBottomSheetState( skipPartiallyExpanded = true, )
-
-    ModalBottomSheet(
+    ModalBottomSheetApp(
         onDismissRequest = {uiState.onDismissSpeech.invoke()},
         modifier = Modifier.padding(horizontal = Dimen.bsPaddingHor1),
         shape = shapes.small,
-        containerColor = BottomSheetDefaults.ContainerColor,
-        contentColor = contentColorFor(BottomAppBarDefaults.containerColor),
-        tonalElevation = BottomSheetDefaults.Elevation,
-        scrimColor = BottomSheetDefaults.ScrimColor,
-        dragHandle = { BottomSheetDefaults.DragHandle() },
-        windowInsets = BottomSheetDefaults.windowInsets,
         sheetState = sheetState,
-        content = { BottomSheetSpeechContent(uiState) })
+        content = { BottomSheetSpeechContent(uiState) }
+    )
 }
 
 fun bottomSheetStateNew(itemSpeech: BottomSheetInterface): BottomSheetState{
