@@ -7,6 +7,8 @@ import com.example.count_out.entity.MessageApp
 import com.example.count_out.entity.RunningState
 import com.example.count_out.entity.SendToUI
 import com.example.count_out.entity.Speech
+import com.example.count_out.entity.no_use.MessageWorkOut
+import com.example.count_out.service.stopwatch.Watcher
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import java.util.Locale
@@ -24,14 +26,14 @@ class SpeechManager(val context: Context) {
 
     fun init(callBack: ()-> Unit){
         tts = TextToSpeech(context){ status ->
-            messengerA.messageApi("TextToSpeech(context).status $status")
+//            messengerA.messageApi("TextToSpeech(context).status $status")
             if ( status == TextToSpeech.SUCCESS) {
                 val result = tts?.setLanguage( Locale.getDefault() )
                 if ( result  == TextToSpeech.LANG_MISSING_DATA || result == TextToSpeech.LANG_NOT_SUPPORTED){
-                    messengerA.errorApi("TextToSpeech not support locale language.")
+//                    messengerA.errorApi("TextToSpeech not support locale language.")
                     tts = null
                 } else {
-                    messengerA.messageApi("TextToSpeech.setOnUtteranceProgressListener")
+//                    messengerA.messageApi("TextToSpeech.setOnUtteranceProgressListener")
                     tts?.setOnUtteranceProgressListener(
                         object : UtteranceProgressListener(){
                             override fun onStart(utteranceId: String) {
@@ -59,7 +61,7 @@ class SpeechManager(val context: Context) {
         if (sendToUI.runningState.value != RunningState.Stopped){
             val speechText = speech.message + " " + speech.addMessage
             if ((speechText).length > 1) {
-                sendToUI.addMessage(speechText)
+                sendToUI.message.value = MessageWorkOut(message = speechText, tickTime = Watcher.getTickTime().value)
                 speakOutAdd(speechText, sendToUI.runningState)
                 while (tts?.isSpeaking == true || sendToUI.runningState.value == RunningState.Paused)
                     { delay(500L) }

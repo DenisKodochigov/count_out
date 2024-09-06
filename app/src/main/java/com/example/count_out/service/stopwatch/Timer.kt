@@ -3,9 +3,52 @@ package com.example.count_out.service.stopwatch
 import android.os.CountDownTimer
 import android.os.SystemClock
 import com.example.count_out.entity.RunningState
-import com.example.count_out.ui.view_components.lg
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
+
+
+suspend fun delayMy(delay: Long, pause: MutableStateFlow<RunningState>){
+    val state: MutableStateFlow <RunningState> = pause
+    val startTime: Long = SystemClock.elapsedRealtime()
+    var pauseTime: Long = 0
+    val endTime: MutableStateFlow<Long> = MutableStateFlow(startTime + delay)
+    while (endTime.value > SystemClock.elapsedRealtime() ) {
+        when (state.value){
+            RunningState.Started -> {
+                if (pauseTime != 0L) {
+                    endTime.value = pauseTime + (SystemClock.elapsedRealtime() - pauseTime)
+                    pauseTime = 0L
+                }
+            }
+            RunningState.Stopped -> {
+                endTime.value = SystemClock.elapsedRealtime()
+            }
+            RunningState.Paused -> {
+                if (pauseTime == 0L) {
+                    pauseTime = endTime.value
+                    endTime.value += 100000000000L
+                }
+            }
+        }
+        delay(1)
+    }
+}
+
+class TimerMy {
+    private lateinit var timer: CountDownTimer
+
+    fun start(sec: Int, endCommand: ()-> Unit) {
+        if (!this::timer.isInitialized) {
+            timer = object : CountDownTimer(sec * 1000L, 1000) {
+                override fun onTick(millisUntilFinished: Long) {}
+                override fun onFinish() { endCommand() }
+            }
+            timer.start()
+        }
+    }
+    fun cancel() { timer.cancel() }
+}
+
 
 //class Timer {
 //    val state: MutableStateFlow <TimerState> = MutableStateFlow(TimerState.END)
@@ -65,68 +108,3 @@ import kotlinx.coroutines.flow.MutableStateFlow
 //
 //    fun state() = state
 //}
-
-suspend fun delayMy(delay: Long, pause: MutableStateFlow<RunningState>){
-//    var count = 0
-//    val delta = (delay / Const.INTERVAL_DELAY).toInt()
-//    while (count <= delta){
-//        if (pause.value == RunningState.Stopped) return
-//        if (pause.value != RunningState.Paused) count++
-//        delay(Const.INTERVAL_DELAY)
-//    }
-    DelMy().start(delay, pause)
-}
-
-class TimerMy {
-    private lateinit var timer: CountDownTimer
-
-    fun start(sec: Int, endCommand: ()-> Unit) {
-        if (!this::timer.isInitialized) {
-            timer = object : CountDownTimer(sec * 1000L, 1000) {
-                override fun onTick(millisUntilFinished: Long) {}
-                override fun onFinish() { endCommand() }
-            }
-            timer.start()
-        }
-    }
-    fun cancel() { timer.cancel() }
-}
-class DelMy {
-    var state: MutableStateFlow <RunningState> = MutableStateFlow(RunningState.Stopped)
-    private var startTime: Long = 0
-    private var pauseTime: Long = 0
-    private var endTime: MutableStateFlow<Long> = MutableStateFlow(0)
-
-    suspend fun start(milliSec: Long, stateF: MutableStateFlow<RunningState> ) {
-        state = stateF
-        startTime = SystemClock.elapsedRealtime()
-        endTime.value = startTime + milliSec
-        engine()
-    }
-    private suspend fun engine(){
-        while (endTime.value > SystemClock.elapsedRealtime() ) {
-            when (state.value){
-                RunningState.Started -> {
-                    if (pauseTime != 0L) {
-                        endTime.value = pauseTime + (SystemClock.elapsedRealtime() - pauseTime)
-                        pauseTime = 0L
-                    }
-                    lg("DelMy startTime=${startTime}, pauseTime=$pauseTime, endTime=${endTime.value}")
-                }
-                RunningState.Stopped -> {
-                    endTime.value = SystemClock.elapsedRealtime()
-                    lg("DelMy startTime=${startTime}, pauseTime=$pauseTime, endTime=${endTime.value}")
-                }
-                RunningState.Paused -> {
-                    if (pauseTime == 0L) {
-                        pauseTime = endTime.value
-                        endTime.value += 100000000000L
-                    }
-                    lg("DelMy startTime=${startTime}, pauseTime=$pauseTime, endTime=${endTime.value}")
-                }
-            }
-            delay(1)
-        }
-    }
-    fun getTimerState() = state
-}

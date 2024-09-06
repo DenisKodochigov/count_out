@@ -59,8 +59,12 @@ class WorkoutService @Inject constructor(): Service(), WorkOutAPI
                 speechManager.init {
                     getTick()
                     playTraining() }
-            } else if (it.runningState.value == RunningState.Paused) { continueWorkout() }
+            } //else if (it.runningState.value == RunningState.Paused) { continueWorkout() }
         }
+    }
+    @SuppressLint("ForegroundServiceType")
+    fun goOnWorkout() {
+        sendToUI?.let { if (it.runningState.value == RunningState.Paused){ continueWorkout() } }
     }
     override fun continueWorkout(){
         sendToUI?.let { it.runningState.value = RunningState.Started }

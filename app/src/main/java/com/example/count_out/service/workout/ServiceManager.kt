@@ -32,7 +32,9 @@ class ServiceManager @Inject constructor(val context: Context, val serviceUtils:
         if (isBound) workOutService.startWorkout()
         return workOutService.sendToUI
     }
-
+    fun goOnWorkout(){
+        if (isBound) workOutService.goOnWorkout()
+    }
     fun pauseWorkout(){ if (isBound ) workOutService.pauseWorkout() }
 
     fun stateRunningService() = workOutService.sendToUI?.runningState?.value ?: RunningState.Stopped

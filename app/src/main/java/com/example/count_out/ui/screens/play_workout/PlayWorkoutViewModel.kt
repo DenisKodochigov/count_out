@@ -32,7 +32,7 @@ class PlayWorkoutViewModel @Inject constructor(
 ): ViewModel() {
     private val _playWorkoutScreenState = MutableStateFlow(
         PlayWorkoutScreenState(
-            startWorkOutService = { startWorkOutService(it) },
+            startWorkOutService = { startWorkOut(it) },
             stopWorkOutService = { stopWorkOutService() },
             pauseWorkOutService = { pauseWorkOutService() },
             updateSet = { trainingId, setDB -> updateSet(trainingId, setDB) }
@@ -102,6 +102,13 @@ class PlayWorkoutViewModel @Inject constructor(
             }
         }
     }
+    private fun startWorkOut(training: Training){
+        if (sendToWorkService.runningState.value == RunningState.Paused){
+            goOnWorkOutService()
+        } else {
+            startWorkOutService(training)
+        }
+    }
     private fun startWorkOutService(training: Training) {
         viewModelScope.launch(Dispatchers.IO) {
             kotlin.runCatching {
@@ -116,20 +123,24 @@ class PlayWorkoutViewModel @Inject constructor(
             )
         }
     }
+    private fun goOnWorkOutService() {
+        viewModelScope.launch(Dispatchers.IO) {
+            kotlin.runCatching { serviceManager.goOnWorkout() }.fold(
+                onSuccess = { },
+                onFailure = { messageApp.errorApi(it.message!!) }
+            )
+        }
+    }
     private fun receiveStateWorkout(sendToUI: SendToUI){
         viewModelScope.launch(Dispatchers.IO) {
             sendToUI.runningState.collect{
                 sendToWorkService.runningState.value = it
-                if (it == RunningState.Stopped) {
-                    sendToWorkService = SendToWorkService()
-                }
-                _playWorkoutScreenState.update { currentState ->
-                    currentState.copy(switchState = it) } }
+                if (it == RunningState.Stopped) { sendToWorkService = SendToWorkService() }
+                _playWorkoutScreenState.update { currentState -> currentState.copy(switchState = it) } }
         }
         viewModelScope.launch(Dispatchers.IO) {
             sendToUI.set.collect{ set->
-                _playWorkoutScreenState.update { currentState ->
-                    currentState.copy( playerSet = set )}}
+                _playWorkoutScreenState.update { currentState -> currentState.copy( playerSet = set )}}
         }
         viewModelScope.launch(Dispatchers.IO) {
             sendToUI.nextSet.collect{ set->
@@ -148,10 +159,11 @@ class PlayWorkoutViewModel @Inject constructor(
                 dataRepository.updateDuration(duration)}
         }
         viewModelScope.launch(Dispatchers.IO) {
-            sendToUI.messageList.collect { state ->
-//                messageApp.messageApi("PlayWorkoutViewModel.messageList.collect $state")
-                _playWorkoutScreenState.update { currentState ->
-                    currentState.copy( statesWorkout = state ) } }
+            sendToUI.message.collect { message ->
+                message?.let { mes->
+                    _playWorkoutScreenState.update { currentState ->
+                        currentState.copy( messageWorkout = currentState.addMessage(mes) ) } }
+                }
         }
     }
     private fun stopWorkOutService(){
@@ -162,7 +174,7 @@ class PlayWorkoutViewModel @Inject constructor(
                         currentState.copy(
                             startTime = 0L,
                             tickTime = TickTime(hour = "00", min = "00", sec = "00"),
-                            statesWorkout = emptyList(),
+                            messageWorkout = emptyList(),
                             switchState = serviceManager.stateRunningService(),
                         )
                     }

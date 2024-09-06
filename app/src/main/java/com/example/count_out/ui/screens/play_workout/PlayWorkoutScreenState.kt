@@ -4,8 +4,8 @@ import androidx.compose.runtime.Stable
 import com.example.count_out.data.room.tables.SetDB
 import com.example.count_out.entity.ConnectState
 import com.example.count_out.entity.ListActivityForPlayer
-import com.example.count_out.entity.Set
 import com.example.count_out.entity.RunningState
+import com.example.count_out.entity.Set
 import com.example.count_out.entity.TickTime
 import com.example.count_out.entity.Training
 import com.example.count_out.entity.bluetooth.DeviceUI
@@ -15,7 +15,7 @@ import javax.inject.Singleton
 @Singleton
 data class PlayWorkoutScreenState(
     val training: Training? = null,
-    val statesWorkout: List<MessageWorkOut> = emptyList(),
+    val messageWorkout: List<MessageWorkOut> = emptyList(),
     val switchState: RunningState = RunningState.Stopped,
     val playerSet: Set? = null,
     val nextSet: Set? = null,
@@ -31,7 +31,9 @@ data class PlayWorkoutScreenState(
     val pauseWorkOutService: ()->Unit = {},
     @Stable var startTime: Long = 0L,
 ){
-
+    fun addMessage(messageWorkOut: MessageWorkOut):List<MessageWorkOut>{
+        return messageWorkout.toMutableList().apply { this.add(messageWorkOut) }
+    }
     fun activityList(setId: Long = -1): List<ListActivityForPlayer>{
 
         var findingSet = false

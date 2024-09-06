@@ -85,7 +85,7 @@ fun PlayWorkoutScreen(trainingId: Long ){
         horizontalAlignment = Alignment.Start,
         verticalArrangement = Arrangement.Top
     ){
-        items(items = uiState.statesWorkout ){ item->
+        items(items = uiState.messageWorkout ){ item->
             Row(modifier = Modifier.padding(horizontal = 12.dp, vertical = 4.dp)) {
                 TextApp(
                     text = "${item.tickTime.hour}:${item.tickTime.min}:${item.tickTime.sec}",
@@ -101,7 +101,7 @@ fun PlayWorkoutScreen(trainingId: Long ){
         if (lazyState.canScrollForward) {
             coroutineScope.launch {
                 lazyState.animateScrollToItem(index =
-                if (uiState.statesWorkout.isEmpty()) 0 else uiState.statesWorkout.size - 1)
+                if (uiState.messageWorkout.isEmpty()) 0 else uiState.messageWorkout.size - 1)
             }
         }
     }
