@@ -93,6 +93,7 @@ class WorkoutService @Inject constructor(): Service(), WorkOutAPI
             Watcher.start(it.runningState)
             CoroutineScope(Dispatchers.Default).launch {
                 Watcher.getTickTime().collect{ tick ->
+                    if (sendToUI?.runningState?.value == RunningState.Stopped) return@collect
                     notificationHelper.updateNotification(hours = tick.hour, minutes = tick.min, seconds = tick.sec)
                     it.flowTick.value = tick
                 }
@@ -113,8 +114,9 @@ class WorkoutService @Inject constructor(): Service(), WorkOutAPI
     }
     private fun startForegroundService() {
         if (!notificationHelper.channelExist()) notificationHelper.createChannel()
-        if (Build.VERSION.SDK_INT >= 31)
+        if (Build.VERSION.SDK_INT >= 31) {
             startForeground(NOTIFICATION_ID, notificationHelper.build(), FOREGROUND_SERVICE_TYPE_DATA_SYNC)
+        }
         else startForeground(NOTIFICATION_ID, notificationHelper.build())
     }
 }

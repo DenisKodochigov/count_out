@@ -5,18 +5,15 @@ import com.example.count_out.entity.RunningState
 import com.example.count_out.entity.TickTime
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.cancel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 
 object Watcher {
-    private lateinit var scope: CoroutineScope
     private val currentTickTime: MutableStateFlow<TickTime> =  MutableStateFlow(TickTime())
     private var stateTimer: MutableStateFlow<RunningState> =  MutableStateFlow(RunningState.Stopped)
     private fun engineWatcher(){
-        scope = CoroutineScope(Dispatchers.Default)
-        scope.launch {
+        CoroutineScope(Dispatchers.Default).launch {
             var currentTime = 0L
             while (stateTimer.value != RunningState.Stopped){
                 if (stateTimer.value == RunningState.Started){
@@ -34,9 +31,6 @@ object Watcher {
         stateTimer = state
         engineWatcher()
     }
-    fun stop(){
-        currentTickTime.value = TickTime()
-        scope.cancel()
-    }
+    fun stop(){ currentTickTime.value = TickTime() }
     fun getTickTime(): MutableStateFlow<TickTime> = currentTickTime
 }

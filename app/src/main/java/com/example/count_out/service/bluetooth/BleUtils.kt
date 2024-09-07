@@ -135,23 +135,23 @@ fun BluetoothGatt.printCharacteristicsTable() {
 //    |--00002a26-0000-1000-8000-00805f9b34fb Readable: true Writable: false
 //    |--00002a28-0000-1000-8000-00805f9b34fb Readable: true Writable: false
 }
-fun <T>printHR(text: String, hr: MutableStateFlow<T>){
-    CoroutineScope(Dispatchers.Default).launch {
-        hr.collect{ hr->
-            when(hr){
-                is Int-> {lg( "printHR $text: $hr")}
-            }
-        }
-    }
-}
-fun generateHR(hr: MutableStateFlow<Int>){
-    CoroutineScope(Dispatchers.Default).launch {
-        var i = 0
-        while (i < 110){
-            delay(2000L)
-            if ( i > 100) i = 0 else i++
-            hr.value = i
-//            lg("generateHR: ${hr.value}")
-        }
-    }
-}
+//fun <T>printHR(text: String, hr: MutableStateFlow<T>){
+//    CoroutineScope(Dispatchers.Default).launch {
+//        hr.collect{ hr->
+//            when(hr){
+//                is Int-> {lg( "printHR $text: $hr")}
+//            }
+//        }
+//    }
+//}
+//fun generateHR(hr: MutableStateFlow<Int>){
+//    CoroutineScope(Dispatchers.Default).launch {
+//        var i = 0
+//        while (i < 110){
+//            delay(2000L)
+//            if ( i > 100) i = 0 else i++
+//            hr.value = i
+////            lg("generateHR: ${hr.value}")
+//        }
+//    }
+//}

@@ -16,7 +16,6 @@ import javax.inject.Singleton
 data class PlayWorkoutScreenState(
     val training: Training? = null,
     val messageWorkout: List<MessageWorkOut> = emptyList(),
-    val switchState: RunningState = RunningState.Stopped,
     val playerSet: Set? = null,
     val nextSet: Set? = null,
     var listActivity: List< ListActivityForPlayer> = emptyList(),
@@ -26,6 +25,7 @@ data class PlayWorkoutScreenState(
 
     val tickTime: TickTime = TickTime(hour = "00", min="00", sec= "00"),
     val updateSet: (Long, SetDB)->Unit = { _, _->},
+    val stateWorkOutService: RunningState = RunningState.Stopped,
     val startWorkOutService: (Training)->Unit = {},
     val stopWorkOutService: ()->Unit = {},
     val pauseWorkOutService: ()->Unit = {},

@@ -13,6 +13,7 @@ import com.example.count_out.entity.ConnectState
 import com.example.count_out.entity.Const.NOTIFICATION_ID
 import com.example.count_out.entity.ErrorBleService
 import com.example.count_out.entity.MessageApp
+import com.example.count_out.entity.RunningState
 import com.example.count_out.entity.SendToUI
 import com.example.count_out.entity.StateScanner
 import com.example.count_out.entity.StateService
@@ -101,6 +102,7 @@ class BleService @Inject constructor(): Service() {
     private fun sendHeartRate(heartRate: MutableStateFlow<Int>){
         CoroutineScope(Dispatchers.Default).launch {
             heartRate.collect{ hr->
+                if(sendToUi.value.runningState.value == RunningState.Stopped) return@collect
                 sendToUi.update { send-> send.copy( heartRate = hr,) }
                 if ( hr > 0) sendToUi.update { send-> send.copy( connectingState = ConnectState.CONNECTED) }
             }

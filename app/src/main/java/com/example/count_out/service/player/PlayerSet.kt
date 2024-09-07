@@ -19,7 +19,7 @@ import javax.inject.Inject
 class PlayerSet @Inject constructor(val speechManager:SpeechManager, val context: Context)
 {
     suspend fun playingSet(template: SendToWorkService, sendToUI: SendToUI, ){
-        lg("playingSet ${sendToUI.runningState.value}")
+//        lg("playingSet ${sendToUI.runningState.value}")
         if (sendToUI.runningState.value == RunningState.Started) {
             sendToUI.set.value = template.getSet()
             template.getSet()?.let { it.speech.beforeStart.addMessage = textBeforeSet(it)}

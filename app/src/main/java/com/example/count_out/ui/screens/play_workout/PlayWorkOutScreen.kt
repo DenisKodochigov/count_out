@@ -116,7 +116,7 @@ fun PlayWorkoutScreen(trainingId: Long ){
         Spacer(modifier = Modifier.height(24.dp))
         ButtonFasterSlower(uiState)
         ButtonsStartStopWorkOut(
-            switchState= uiState.switchState,
+            switchState= uiState.stateWorkOutService,
             onClickStart = { uiState.training?.let {
                 lg("#################### PlayWorkoutScreen Start Service ##########################")
                 uiState.startWorkOutService(it) } },

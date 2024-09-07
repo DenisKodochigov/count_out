@@ -35,8 +35,7 @@ class NotificationHelper @Inject constructor(private val context: Context)
         NotificationCompat.Builder(context, NOTIFICATION_CHANNEL_ID)
             .setContentTitle(SET_CONTENT_TITLE)
             .setContentText("00:00:00")
-            .setOngoing(true)
-            .setSound(null)
+//            .setOngoing(true)
             .setContentIntent(pendingIntent)
             .setSmallIcon(R.drawable.ic_timer)
             .setPriority(NotificationCompat.PRIORITY_HIGH)
@@ -45,26 +44,22 @@ class NotificationHelper @Inject constructor(private val context: Context)
             .setAutoCancel(true)
     }
     fun createChannel() {
-//        lg("createChannel")
         val channel = NotificationChannel(
             NOTIFICATION_CHANNEL_ID,
             NOTIFICATION_CHANNEL_NAME,
             NotificationManager.IMPORTANCE_DEFAULT
-        ).apply {
-            description = NOTIFICATION_CHANNEL_DESCRIPTION
-            setSound(null, null)
-        }
+        ).apply { description = NOTIFICATION_CHANNEL_DESCRIPTION }
         notificationManager.createNotificationChannel(channel)
     }
     fun build() = notificationBuilder.build()
     fun cancel(){ notificationManager.cancel(NOTIFICATION_ID) }
     fun updateNotification(hours: String, minutes: String, seconds: String) {
+//        lg("updateNotification")
         notificationManager.notify(
             NOTIFICATION_ID, notificationBuilder.setContentText(
                 formatTime(hours = hours, min = minutes, sec = seconds,)).build()
         )
     }
-
     @SuppressLint("RestrictedApi")
     fun setContinueButton() {
         notificationBuilder.mActions.removeAt(0)
@@ -85,8 +80,6 @@ class NotificationHelper @Inject constructor(private val context: Context)
             Intent(context, WorkoutService::class.java).apply { putExtra(NOTIFICATION_EXTRA, value ) },
             PendingIntent.FLAG_IMMUTABLE
         )
-
-
     fun channelExist(): Boolean{
         return if (notificationManager.getNotificationChannel(NOTIFICATION_ID.toString()) != null) {
             notificationManager.getNotificationChannel(NOTIFICATION_ID.toString()).importance !=

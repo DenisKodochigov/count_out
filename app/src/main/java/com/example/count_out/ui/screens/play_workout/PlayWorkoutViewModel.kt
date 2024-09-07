@@ -83,6 +83,7 @@ class PlayWorkoutViewModel @Inject constructor(
     private suspend fun receiveDevicesUIBleService(sendToUI: MutableStateFlow<SendToUI>){
         viewModelScope.launch(Dispatchers.IO) {
             sendToUI.collect { send ->
+                if (send.runningState.value == RunningState.Stopped) return@collect
                 _playWorkoutScreenState.update { currentState ->
                     currentState.copy(
                         lastConnectHearthRateDevice = send.lastConnectHearthRateDevice,
@@ -135,24 +136,31 @@ class PlayWorkoutViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             sendToUI.runningState.collect{
                 sendToWorkService.runningState.value = it
-                if (it == RunningState.Stopped) { sendToWorkService = SendToWorkService() }
-                _playWorkoutScreenState.update { currentState -> currentState.copy(switchState = it) } }
+                _playWorkoutScreenState.update { currentState -> currentState.copy(stateWorkOutService = it) }
+                if (it == RunningState.Stopped) {
+                    sendToWorkService = SendToWorkService()
+                    return@collect
+                }
+            }
         }
         viewModelScope.launch(Dispatchers.IO) {
             sendToUI.set.collect{ set->
-                _playWorkoutScreenState.update { currentState -> currentState.copy( playerSet = set )}}
+                _playWorkoutScreenState.update { currentState -> currentState.copy( playerSet = set )}
+                if (playWorkoutScreenState.value.stateWorkOutService == RunningState.Stopped) return@collect}
         }
         viewModelScope.launch(Dispatchers.IO) {
             sendToUI.nextSet.collect{ set->
                 _playWorkoutScreenState.update { currentState ->
                     currentState.copy(
                         listActivity = if (set != null ) currentState.activityList(set.idSet)
-                                        else currentState.listActivity)}}
+                                        else currentState.listActivity)}
+                if (playWorkoutScreenState.value.stateWorkOutService == RunningState.Stopped) return@collect}
         }
         viewModelScope.launch(Dispatchers.IO) {
             sendToUI.flowTick.collect { tick ->
                 _playWorkoutScreenState.update { currentState ->
-                    currentState.copy( tickTime = tick )}}
+                    currentState.copy( tickTime = tick )}
+                if (playWorkoutScreenState.value.stateWorkOutService == RunningState.Stopped) return@collect}
         }
         viewModelScope.launch(Dispatchers.IO) {
             sendToUI.durationSpeech.collect { duration ->
@@ -162,7 +170,8 @@ class PlayWorkoutViewModel @Inject constructor(
             sendToUI.message.collect { message ->
                 message?.let { mes->
                     _playWorkoutScreenState.update { currentState ->
-                        currentState.copy( messageWorkout = currentState.addMessage(mes) ) } }
+                        currentState.copy( messageWorkout = currentState.addMessage(mes) ) }
+                    if (playWorkoutScreenState.value.stateWorkOutService == RunningState.Stopped) return@collect}
                 }
         }
     }
@@ -175,7 +184,7 @@ class PlayWorkoutViewModel @Inject constructor(
                             startTime = 0L,
                             tickTime = TickTime(hour = "00", min = "00", sec = "00"),
                             messageWorkout = emptyList(),
-                            switchState = serviceManager.stateRunningService(),
+                            stateWorkOutService = serviceManager.stateRunningService(),
                         )
                     }
                 },
@@ -187,7 +196,7 @@ class PlayWorkoutViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             kotlin.runCatching { serviceManager.pauseWorkout() }.fold(
                 onSuccess = { _playWorkoutScreenState.update { currentState ->
-                    currentState.copy( switchState = serviceManager.stateRunningService(),) } },
+                    currentState.copy( stateWorkOutService = serviceManager.stateRunningService(),) } },
                 onFailure = { messageApp.errorApi(it.message!!) }
             )
         }
