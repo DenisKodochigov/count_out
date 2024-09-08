@@ -8,16 +8,16 @@ import javax.inject.Inject
 
 class PlayerWorkOut @Inject constructor(val speechManager:SpeechManager, private val playerRound: PlayerRound)
 {
-    suspend fun playingWorkOut( template: SendToWorkService, sendToUI: SendToUI ){
+    suspend fun playingWorkOut( sendToWS: SendToWorkService, sendToUI: SendToUI ){
 //        lg("playingWorkOut ${sendToUI.runningState.value}")
         if (sendToUI.runningState.value == RunningState.Started) {
-            template.training.value?.speech?.beforeStart?.addMessage = ". " + template.training.value?.name
-            template.training.value?.speech?.beforeStart?.let { speechManager.speech(sendToUI, it) }
-            template.training.value?.speech?.afterStart?.let { speechManager.speech(sendToUI, it) }
-            template.training.value?.rounds?.forEachIndexed { index, _->
-                playerRound.playingRound( template.apply { indexRound = index }, sendToUI) }
-            template.training.value?.speech?.beforeEnd?.let { speechManager.speech(sendToUI, it)}
-            template.training.value?.speech?.afterEnd?.let { speechManager.speech(sendToUI, it) }
+            sendToWS.training.value?.speech?.beforeStart?.addMessage = ". " + sendToWS.training.value?.name
+            sendToWS.training.value?.speech?.beforeStart?.let { speechManager.speech(sendToUI, it) }
+            sendToWS.training.value?.speech?.afterStart?.let { speechManager.speech(sendToUI, it) }
+            sendToWS.training.value?.rounds?.forEachIndexed { index, _->
+                playerRound.playingRound( sendToWS.apply { indexRound = index }, sendToUI) }
+            sendToWS.training.value?.speech?.beforeEnd?.let { speechManager.speech(sendToUI, it)}
+            sendToWS.training.value?.speech?.afterEnd?.let { speechManager.speech(sendToUI, it) }
             sendToUI.runningState.value =RunningState.Stopped
         }
     }

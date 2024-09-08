@@ -104,9 +104,9 @@ class WorkoutService @Inject constructor(): Service(), WorkOutAPI
         sendToUI?.let { toUI->
             sendToWork?.let { toWork->
                 CoroutineScope(Dispatchers.Default).launch {
-                    messageApp.messageApi("Begin training")
-                    playerWorkOut.playingWorkOut(toWork, toUI)
-                    messageApp.messageApi("End training")
+//                    messageApp.messageApi("Begin training")
+                    playerWorkOut.playingWorkOut( toWork, toUI)
+//                    messageApp.messageApi("End training")
                     stopWorkout()
                 }
             }

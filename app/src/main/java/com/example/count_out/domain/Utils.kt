@@ -15,6 +15,8 @@ import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 import java.util.TimeZone
+import kotlin.math.pow
+import kotlin.math.roundToInt
 
 fun formatTime( sec: String, min: String, hours: String): String = "$hours:$min:$sec"
 fun Int.pad(): String = this.toString().padStart(2, '0')
@@ -31,6 +33,10 @@ fun String.toNumeric(): Double{
         }
         if (result.isNotEmpty()) result.toDouble() else 0.0
     } else 0.0
+}
+fun Double.rnd(count: Int): Double {
+    val dec = 10.0.pow(count+1)
+    return (this * dec).roundToInt() / dec
 }
 fun Long.getTime(): String {
     val date = Date(this)

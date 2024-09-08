@@ -86,7 +86,7 @@ import com.example.count_out.ui.view_components.TextApp
         modifier = Modifier.fillMaxSize(),
         content = {
             NameScreen(id = R.string.list_trainings)
-            TrainingsLazyColumn( uiState = uiState) }
+            TrainingsLazyColumn( uiState = uiState)}
     )
 }
 @SuppressLint("CoroutineCreationDuringComposition")
@@ -127,7 +127,9 @@ fun TrainingsLazyColumn(uiState: TrainingsScreenState,
         Row(
             horizontalArrangement = Arrangement.Start,
             verticalAlignment = Alignment.CenterVertically,
-            modifier = modifier.fillMaxWidth().padding(vertical = 6.dp)
+            modifier = modifier
+                .fillMaxWidth()
+                .padding(vertical = 6.dp)
         ){
             Spacer(modifier = Modifier.width(12.dp))
             IconStart(item = item, uiState = uiState, modifier = Modifier.size(sizeIconLarge))

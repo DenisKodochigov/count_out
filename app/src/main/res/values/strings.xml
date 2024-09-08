@@ -120,4 +120,39 @@
         <item quantity="many">%d = set</item>
         <item quantity="other">sets</item>
     </plurals>
+    <plurals name="repeat">
+        <item quantity="one">%d repeat</item>
+        <item quantity="two">%d repetitions</item>
+        <item quantity="few">%d repetitions</item>
+        <item quantity="many">%d repetitions</item>
+        <item quantity="other">repetitions</item>
+    </plurals>
+    <plurals name="minutes">
+        <item quantity="one">%d minute</item>
+        <item quantity="two">%d minutes</item>
+        <item quantity="few">%d minutes</item>
+        <item quantity="many">%d minutes</item>
+        <item quantity="other">minutes</item>
+    </plurals>
+    <plurals name="second">
+        <item quantity="one">%d second</item>
+        <item quantity="two">%d seconds</item>
+        <item quantity="few">%d seconds</item>
+        <item quantity="many">%d seconds</item>
+        <item quantity="other">seconds</item>
+    </plurals>
+    <plurals name="km">
+        <item quantity="one">%d kilometer</item>
+        <item quantity="two">%d kilometers</item>
+        <item quantity="few">%d kilometers</item>
+        <item quantity="many">%d kilometers</item>
+        <item quantity="other">kilometers</item>
+    </plurals>
+    <plurals name="metr">
+        <item quantity="one">%d meter</item>
+        <item quantity="two">%d meters</item>
+        <item quantity="few">%d meters</item>
+        <item quantity="many">%d meters</item>
+        <item quantity="other">meters</item>
+    </plurals>
 </resources>

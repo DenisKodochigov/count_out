@@ -10,22 +10,19 @@ class PlayerExercise @Inject constructor(
     val speechManager:SpeechManager,
     private val playerSet: PlayerSet,)
 {
-    suspend fun playingExercise(
-        template: SendToWorkService,
-        sendToUI: SendToUI,
-    ){
+    suspend fun playingExercise(sendToWS: SendToWorkService, sendToUI: SendToUI, ){
 //        lg("playingExercise ${sendToUI.runningState.value}")
         if (sendToUI.runningState.value == RunningState.Started) {
-            template.getExercise()?.speech?.beforeStart?.addMessage = template.getExercise()?.activity?.name + "."
-            if (template.enableSpeechDescription.value)
-                template.getExercise()?.speech?.beforeStart?.addMessage += template.getExercise()?.activity?.description
-            template.getExercise()?.speech?.beforeStart?.let { speechManager.speech(sendToUI, it)}
-            template.getExercise()?.speech?.afterStart?.let { speechManager.speech(sendToUI,it) }
-            template.getExercise()?.sets?.forEachIndexed { index, _->
-                playerSet.playingSet( template.apply { indexSet = index }, sendToUI)
+            sendToWS.getExercise()?.speech?.beforeStart?.addMessage = sendToWS.getExercise()?.activity?.name + "."
+            if (sendToWS.enableSpeechDescription.value)
+                sendToWS.getExercise()?.speech?.beforeStart?.addMessage += sendToWS.getExercise()?.activity?.description
+            sendToWS.getExercise()?.speech?.beforeStart?.let { speechManager.speech(sendToUI, it)}
+            sendToWS.getExercise()?.speech?.afterStart?.let { speechManager.speech(sendToUI,it) }
+            sendToWS.getExercise()?.sets?.forEachIndexed { index, _->
+                playerSet.playingSet( sendToWS.apply { indexSet = index }, sendToUI)
             }
-//            speechManager.speech(variablesOut, template.getExercise().speech.beforeEnd)
-//            speechManager.speech(variablesOut, template.getExercise().speech.afterEnd)
+//            speechManager.speech(variablesOut, sendToWS.getExercise().speech.beforeEnd)
+//            speechManager.speech(variablesOut, sendToWS.getExercise().speech.afterEnd)
         }
     }
 }
