@@ -16,6 +16,7 @@ class PlayerRound @Inject constructor(
             sendToWS.getRound()?.speech?.beforeStart?.let { speechManager.speech(sendToUI, it) }
             sendToWS.getRound()?.speech?.afterStart?.let { speechManager.speech(sendToUI, it) }
             sendToWS.getRound()?.exercise?.forEachIndexed { index, _->
+                sendToUI.mark.value = sendToUI.mark.value.copy(idExercise = index)
                 playerExercise.playingExercise( sendToWS.apply { indexExercise = index }, sendToUI) }
             sendToWS.getRound()?.speech?.beforeEnd?.let { speechManager.speech(sendToUI, it) }
             sendToWS.getRound()?.speech?.afterEnd?.let { speechManager.speech(sendToUI, it) }

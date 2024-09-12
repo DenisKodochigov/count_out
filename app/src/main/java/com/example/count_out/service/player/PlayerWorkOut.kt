@@ -15,6 +15,7 @@ class PlayerWorkOut @Inject constructor(val speechManager:SpeechManager, private
             sendToWS.training.value?.speech?.beforeStart?.let { speechManager.speech(sendToUI, it) }
             sendToWS.training.value?.speech?.afterStart?.let { speechManager.speech(sendToUI, it) }
             sendToWS.training.value?.rounds?.forEachIndexed { index, _->
+                sendToUI.mark.value = sendToUI.mark.value.copy(idRound = index)
                 playerRound.playingRound( sendToWS.apply { indexRound = index }, sendToUI) }
             sendToWS.training.value?.speech?.beforeEnd?.let { speechManager.speech(sendToUI, it)}
             sendToWS.training.value?.speech?.afterEnd?.let { speechManager.speech(sendToUI, it) }

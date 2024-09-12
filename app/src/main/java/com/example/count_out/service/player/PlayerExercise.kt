@@ -19,6 +19,7 @@ class PlayerExercise @Inject constructor(
             sendToWS.getExercise()?.speech?.beforeStart?.let { speechManager.speech(sendToUI, it)}
             sendToWS.getExercise()?.speech?.afterStart?.let { speechManager.speech(sendToUI,it) }
             sendToWS.getExercise()?.sets?.forEachIndexed { index, _->
+                sendToUI.mark.value = sendToUI.mark.value.copy(idSet = index)
                 playerSet.playingSet( sendToWS.apply { indexSet = index }, sendToUI)
             }
 //            speechManager.speech(variablesOut, sendToWS.getExercise().speech.beforeEnd)

@@ -11,11 +11,13 @@ data class SendToUI (
     val nextSet: MutableStateFlow<Set?> = MutableStateFlow(null),
     val durationSpeech:MutableStateFlow<Pair<Long, Long>> = MutableStateFlow(Pair(0,0)),
     val runningState: MutableStateFlow<RunningState> = MutableStateFlow(RunningState.Stopped),
+    var mark: MutableStateFlow<Mark> = MutableStateFlow(Mark()),
+
     var heartRate: Int = 0,
     var scannedBle: Boolean = false,
     val connectingState: ConnectState = ConnectState.NOT_CONNECTED,
     var foundDevices: List<DeviceUI> = emptyList(),
-    var lastConnectHearthRateDevice: DeviceUI? = null
+    var lastConnectHearthRateDevice: DeviceUI? = null,
 ){
 
     fun cancel(){

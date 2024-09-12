@@ -39,6 +39,7 @@ class PlayerSet @Inject constructor(val speechManager:SpeechManager, val context
         }
     }
     private suspend fun speakSetBody(sendToWS: SendToWorkService, sendToUI: SendToUI, ){
+        sendToUI.mark.value = sendToUI.mark.value.copy(set = 1)
         when (sendToWS.getSet()?.goal){
             GoalSet.COUNT -> playSetCOUNT(sendToWS, sendToUI)
             GoalSet.DURATION -> playSetDURATION(sendToWS, sendToUI)
@@ -46,6 +47,7 @@ class PlayerSet @Inject constructor(val speechManager:SpeechManager, val context
             GoalSet.COUNT_GROUP -> playSetCOUNTGROUP(sendToWS, sendToUI)
             null -> {}
         }
+        sendToUI.mark.value = sendToUI.mark.value.copy(set = 0)
     }
     private suspend fun playSetDURATION(sendToWS: SendToWorkService, sendToUI: SendToUI){
         sendToWS.getSet()?.let{
@@ -67,12 +69,14 @@ class PlayerSet @Inject constructor(val speechManager:SpeechManager, val context
     private suspend fun speakSetRest(sendToWS: SendToWorkService, sendToUI: SendToUI, ){
         sendToWS.getSet()?.let {
             if (it.timeRest > 0){
+                sendToUI.mark.value = sendToUI.mark.value.copy(rest = 1)
                 CoroutineScope(Dispatchers.IO).launch {
                     speechManager.speech(sendToUI, SpeechDB( addMessage = it.timeRest.toString() + " "
                             + context.getString(R.string.rest_time)) )
                     speakNextExercise(sendToWS = sendToWS, sendToUI = sendToUI )
                 }
                 speakInterval( duration = it.timeRest, sendToUI = sendToUI)
+                sendToUI.mark.value = sendToUI.mark.value.copy(rest = 0)
             }
         }
     }
