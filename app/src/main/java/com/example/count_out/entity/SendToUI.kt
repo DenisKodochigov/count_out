@@ -18,6 +18,12 @@ data class SendToUI (
     val connectingState: ConnectState = ConnectState.NOT_CONNECTED,
     var foundDevices: List<DeviceUI> = emptyList(),
     var lastConnectHearthRateDevice: DeviceUI? = null,
+
+    val heartRateF: MutableStateFlow<Int> = MutableStateFlow(0),
+    var scannedBleF: MutableStateFlow<Boolean> = MutableStateFlow(false),
+    val connectingStateF: MutableStateFlow<ConnectState> = MutableStateFlow(ConnectState.NOT_CONNECTED),
+    var foundDevicesF: MutableStateFlow<List<DeviceUI>> = MutableStateFlow(emptyList()),
+    var lastConnectHearthRateDeviceF: MutableStateFlow<DeviceUI?> = MutableStateFlow(null),
 ){
 
     fun cancel(){

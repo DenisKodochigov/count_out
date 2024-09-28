@@ -42,4 +42,23 @@ class BleScanner @Inject constructor(
         timer.cancel()
         scannerBleAll.stopScannerBLEDevices(sendToUi)
     }
+
+
+    /** Scan all device*/
+    fun startScannerBLEDevicesF(sendToUi: SendToUI, bleStates: BleStates) {
+        CoroutineScope(Dispatchers.Default).launch {
+            scannerBleAll.startScannerBLEDevicesF(bleStates, sendToUi)
+            timer.start(
+                sec = timeScanning,
+                endCommand = {
+                    bleStates.stateScanner = StateScanner.END
+                    scannerBleAll.stopScannerBLEDevicesF(sendToUi)
+                }
+            )
+        }
+    }
+    fun stopScannerBLEDevicesF(sendToUi: SendToUI) {
+        timer.cancel()
+        scannerBleAll.stopScannerBLEDevicesF(sendToUi)
+    }
 }

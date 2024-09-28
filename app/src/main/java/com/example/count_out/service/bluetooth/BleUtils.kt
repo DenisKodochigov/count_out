@@ -10,12 +10,8 @@ import com.example.count_out.entity.StateScanner
 import com.example.count_out.entity.bluetooth.BleDevice
 import com.example.count_out.entity.bluetooth.BleStates
 import com.example.count_out.ui.view_components.lg
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
-import kotlinx.coroutines.launch
 import java.util.UUID
 
 fun scanSettings(reportDelay: Long): ScanSettings {
@@ -62,26 +58,48 @@ fun objectScanCallback( bleStates: BleStates, sendToUI: MutableStateFlow<SendToU
     }
 }
 
+fun objectScanCallbackF( bleStates: BleStates, sendToUI: SendToUI
+): ScanCallback = object: ScanCallback() {
+    override fun onScanResult(callbackType: Int, result: ScanResult?) {
+        super.onScanResult(callbackType, result)
+        result?.device?.let { dev ->
+            if (sendToUI.foundDevicesF.value.find { it.address == dev.address } == null){
+                sendToUI.foundDevicesF.value = sendToUI.foundDevicesF.value.addApp(BleDevice().fromBluetoothDevice(dev))
+            }
+        }
+    }
+    override fun onBatchScanResults(results: MutableList<ScanResult>?) {
+        super.onBatchScanResults(results)
+        if (!results.isNullOrEmpty()) {
+            results.forEach{ result->
+                if (sendToUI.foundDevicesF.value.find { it.address == result.device.address } == null){
+                    sendToUI.foundDevicesF.value = sendToUI.foundDevicesF.value.addApp(BleDevice().fromBluetoothDevice(result.device))
+                }
+            }
+        }
+    }
+    override fun onScanFailed(errorCode: Int) {
+        lg("Error scan BLE device. $errorCode")
+        sendToUI.scannedBleF.value = false
+        bleStates.stateScanner = StateScanner.END
+    }
+}
+
 fun BluetoothGatt.findCharacteristic(uuid: UUID): BluetoothGattCharacteristic?{
     if (services.isEmpty()) return null
-//    var charact: BluetoothGattCharacteristic? = null
     services.forEach { service ->
         service.characteristics.find { ch-> ch.uuid == uuid }.apply { if (this != null) return this }
     }
     return null
 }
 
+fun BluetoothGattCharacteristic.containsProperty(property: Int) = properties and property != 0
 fun BluetoothGattCharacteristic.isReadable(): Boolean =
     containsProperty(BluetoothGattCharacteristic.PROPERTY_READ)
-
-fun BluetoothGattCharacteristic.containsProperty(property: Int) = properties and property != 0
-
 fun BluetoothGattCharacteristic.isWritable(): Boolean =
     containsProperty(BluetoothGattCharacteristic.PROPERTY_WRITE)
-
 fun BluetoothGattCharacteristic.isNotify(): Boolean =
     containsProperty(BluetoothGattCharacteristic.PROPERTY_NOTIFY)
-
 fun BluetoothGattCharacteristic.isIndicatable(): Boolean =
     containsProperty(BluetoothGattCharacteristic.PROPERTY_INDICATE)
 fun BluetoothGattCharacteristic.isWritableWithoutResponse(): Boolean =

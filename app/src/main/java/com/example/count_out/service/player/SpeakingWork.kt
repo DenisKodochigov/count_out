@@ -6,7 +6,7 @@ import com.example.count_out.entity.SendToUI
 import com.example.count_out.entity.SendToWorkService
 import javax.inject.Inject
 
-class PlayerWorkOut @Inject constructor(val speechManager:SpeechManager, private val playerRound: PlayerRound)
+class SpeakingWork @Inject constructor(val speechManager:SpeechManager, private val playerRound: PlayerRound)
 {
     suspend fun playingWorkOut( sendToWS: SendToWorkService, sendToUI: SendToUI ){
 //        lg("playingWorkOut ${sendToUI.runningState.value}")

@@ -7,7 +7,7 @@ import com.example.count_out.entity.MessageApp
 import com.example.count_out.permission.PermissionApp
 import com.example.count_out.service.ServiceUtils
 import com.example.count_out.service.bluetooth.BleConnecting
-import com.example.count_out.service.bluetooth.BleManager
+import com.example.count_out.service.bluetooth.BleBind
 import com.example.count_out.service.bluetooth.BleScanner
 import com.example.count_out.service.bluetooth.BleService
 import dagger.Module
@@ -24,7 +24,7 @@ class BluetoothModule {
     @Singleton
     @Provides
     fun provideBluetoothApp(@ApplicationContext context: Context, serviceUtils: ServiceUtils) =
-        BleManager(context, serviceUtils)
+        BleBind(context, serviceUtils)
 
     @Singleton
     @Provides

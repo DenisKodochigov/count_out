@@ -15,7 +15,7 @@ import com.example.count_out.entity.RunningState
 import com.example.count_out.entity.SendToUI
 import com.example.count_out.entity.SendToWorkService
 import com.example.count_out.helpers.NotificationHelper
-import com.example.count_out.service.player.PlayerWorkOut
+import com.example.count_out.service.player.SpeakingWork
 import com.example.count_out.service.stopwatch.Watcher
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
@@ -33,7 +33,7 @@ class WorkoutService @Inject constructor(): Service(), WorkOutAPI
 
     @Inject lateinit var notificationHelper: NotificationHelper
     @Inject lateinit var speechManager: SpeechManager
-    @Inject lateinit var playerWorkOut: PlayerWorkOut
+    @Inject lateinit var speakingWork: SpeakingWork
     @Inject lateinit var messageApp: MessageApp
 
     inner class WorkoutServiceBinder : Binder() { fun getService(): WorkoutService = this@WorkoutService }
@@ -47,6 +47,7 @@ class WorkoutService @Inject constructor(): Service(), WorkOutAPI
         }
         return super.onStartCommand(intent, flags, startId)
     }
+
     @SuppressLint("ForegroundServiceType")
     override fun startWorkout() {
         if (sendToUI == null) { sendToUI = SendToUI() }
@@ -106,7 +107,7 @@ class WorkoutService @Inject constructor(): Service(), WorkOutAPI
                 CoroutineScope(Dispatchers.Default).launch {
                     toUI.mark.value = toWork.training.value?.let {
                         toUI.mark.value.copy(idTraining = it.idTraining.toInt()) }!!
-                    playerWorkOut.playingWorkOut( toWork, toUI)
+                    speakingWork.playingWorkOut( toWork, toUI)
                     stopWorkout()
                 }
             }

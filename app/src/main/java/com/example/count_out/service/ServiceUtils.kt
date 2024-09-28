@@ -12,6 +12,8 @@ class ServiceUtils@Inject constructor(val context: Context) {
     fun <T>bindService(clazz: Class<T>, serviceConnection: ServiceConnection) {
         context.bindService(Intent(context, clazz), serviceConnection, Context.BIND_AUTO_CREATE)
     }
-    fun unbindService(serviceConnection: ServiceConnection, isBound: Boolean)
-    { if (isBound) context.unbindService(serviceConnection) }
+
+    fun unbindService(serviceConnection: ServiceConnection, isBound: Boolean) {
+        if (isBound) context.unbindService(serviceConnection)
+    }
 }

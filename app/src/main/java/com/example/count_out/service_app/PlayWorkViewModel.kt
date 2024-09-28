@@ -1,4 +1,4 @@
-package com.example.count_out.ui.screens.play_workout
+package com.example.count_out.service_app
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -7,13 +7,12 @@ import com.example.count_out.data.DataRepository
 import com.example.count_out.data.room.tables.SetDB
 import com.example.count_out.entity.MessageApp
 import com.example.count_out.entity.RunningState
+import com.example.count_out.entity.SendToService
 import com.example.count_out.entity.SendToUI
-import com.example.count_out.entity.SendToWorkService
 import com.example.count_out.entity.TickTime
 import com.example.count_out.entity.Training
-import com.example.count_out.entity.bluetooth.SendToBle
-import com.example.count_out.service.bluetooth.BleBind
-import com.example.count_out.service.workout.ServiceManager
+import com.example.count_out.ui.screens.play_workout.PlayWorkoutScreenState
+import com.example.count_out.ui.view_components.lg
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -24,35 +23,103 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class PlayWorkoutViewModel @Inject constructor(
+class PlayWorkViewModel @Inject constructor(
     private val messageApp: MessageApp,
     private val dataRepository: DataRepository,
-    private val bleBind: BleBind,
-    private val serviceManager: ServiceManager,
+    private val serviceApp: DistributionServiceBind
 ): ViewModel() {
     private val _playWorkoutScreenState = MutableStateFlow(
         PlayWorkoutScreenState(
-            startWorkOutService = { startWorkOut(it) },
-            stopWorkOutService = { stopWorkOutService() },
-            pauseWorkOutService = { pauseWorkOutService() },
+            startWorkOutService = { startWork(it) },
+            stopWorkOutService = { stopWork() },
+            pauseWorkOutService = { pauseWork() },
             updateSet = { trainingId, setDB -> updateSet(trainingId, setDB) }
         ))
     val playWorkoutScreenState: StateFlow<PlayWorkoutScreenState> =
         _playWorkoutScreenState.asStateFlow()
-    private val sendToBle = SendToBle()
-    private var sendToWorkService = SendToWorkService()
+
+    private var sendToService = SendToService()
 
     init {
-        startBleService()
+        initServiceApp()
         connectToStoredBleDev()
     }
+    private fun initServiceApp(){
+        viewModelScope.launch(Dispatchers.IO) {
+            kotlin.runCatching {
+                if ( !serviceApp.isBound.value ) {
+                    serviceApp.bindService()
+                    serviceApp.service.startDistributionService(sendToService)
+                }
+            }.fold(
+                onSuccess = { },
+                onFailure = { messageApp.errorApi("initServiceApp ${it.message!!}") }
+            )
+        }
+    }
 
+    private fun startWork(training: Training){
+        if (sendToService.runningState.value == RunningState.Paused) goonWork()
+        else  startWorkOut(training)
+    }
+    private fun startWorkOut(training: Training) {
+        viewModelScope.launch(Dispatchers.IO) {
+            kotlin.runCatching {
+                sendToService.training = MutableStateFlow(training)
+                sendToService.runningState = MutableStateFlow(RunningState.Started )
+                sendToService.enableSpeechDescription =
+                    MutableStateFlow(dataRepository.getSetting(R.string.speech_description).value == 1)
+                serviceApp.service.startWork()
+            }.fold(
+                onSuccess = { it?.let { receiveStateWorkout(it) }  },
+                onFailure = { messageApp.errorApi(it.message!!) }
+            )
+        }
+    }
+    private fun goonWork() {
+        viewModelScope.launch(Dispatchers.IO) {
+            kotlin.runCatching { serviceApp.service.goonWork() }.fold(
+                onSuccess = { },
+                onFailure = { messageApp.errorApi(it.message!!) }
+            )
+        }
+    }
+    private fun stopWork(){
+        viewModelScope.launch(Dispatchers.IO) {
+            kotlin.runCatching { serviceApp.service.stopWorkSignal() }.fold(
+                onSuccess = {
+                    _playWorkoutScreenState.update { currentState ->
+                        currentState.copy(
+                            startTime = 0L,
+                            tickTime = TickTime(hour = "00", min = "00", sec = "00"),
+                            messageWorkout = emptyList(),
+//                            stateWorkOutService = service.sendToService(),
+                        )
+                    }
+                },
+                onFailure = { messageApp.errorApi(it.message!!) }
+            )
+        }
+    }
+    private fun pauseWork(){
+        viewModelScope.launch(Dispatchers.IO) {
+            kotlin.runCatching { serviceApp.service.pauseWork() }.fold(
+                onSuccess = { _playWorkoutScreenState.update { currentState ->
+                    currentState.copy( stateWorkOutService =
+                    serviceApp.service.sendToUI?.runningState?.value ?:
+                        RunningState.Stopped,)
+                    }
+                },
+                onFailure = { messageApp.errorApi(it.message!!) }
+            )
+        }
+    }
     fun getTraining(id: Long) {
         viewModelScope.launch(Dispatchers.IO) {
             kotlin.runCatching { dataRepository.getTraining(id) }.fold(
                 onSuccess = {
                     _playWorkoutScreenState.update { currentState -> currentState.copy( training = it ) }
-                    sendToWorkService.training.value = it
+                    sendToService.training.value = it
                 },
                 onFailure = { messageApp.errorApi(it.message!!) }
             )
@@ -65,21 +132,32 @@ class PlayWorkoutViewModel @Inject constructor(
                 onSuccess = {
                     _playWorkoutScreenState.update { currentState ->
                         currentState.copy(training = it, playerSet = set) }
-                    sendToWorkService.training.value = it
+                    sendToService.training.value = it
                 },
                 onFailure = { messageApp.errorApi(it.message!!) }
             )
         }
     }
 
-    private fun startBleService(){
+    private fun connectToStoredBleDev() {
         viewModelScope.launch(Dispatchers.IO) {
-            kotlin.runCatching { bleBind.startBleService(sendToBle) }.fold(
-                onSuccess = { receiveDevicesUIBleService(it)},
-                onFailure = { messageApp.errorApi(it.message!!) }
-            )
+            dataRepository.getBleDevStoreFlow().collect{
+                if (it.address.isNotEmpty()) {
+                    sendToService.addressForSearch = it.address
+                    serviceApp.service.connectDevice()
+                }
+            }
         }
     }
+
+    //    private fun startBleService(){
+//        viewModelScope.launch(Dispatchers.IO) {
+//            kotlin.runCatching { (service as DistributionService).startBleService() }.fold(
+//                onSuccess = { receiveDevicesUIBleService(it)},
+//                onFailure = { messageApp.errorApi(it.message!!) }
+//            )
+//        }
+//    }
     private suspend fun receiveDevicesUIBleService(sendToUI: MutableStateFlow<SendToUI>){
         viewModelScope.launch(Dispatchers.IO) {
             sendToUI.collect { send ->
@@ -93,52 +171,13 @@ class PlayWorkoutViewModel @Inject constructor(
             }
         }
     }
-    private fun connectToStoredBleDev() {
-        viewModelScope.launch(Dispatchers.IO) {
-            dataRepository.getBleDevStoreFlow().collect{
-                if (it.address.isNotEmpty()) {
-                    sendToBle.addressForSearch = it.address
-                    bleBind.connectDevice()
-                }
-            }
-        }
-    }
-    private fun startWorkOut(training: Training){
-        if (sendToWorkService.runningState.value == RunningState.Paused){
-            goOnWorkOutService()
-        } else {
-            startWorkOutService(training)
-        }
-    }
-    private fun startWorkOutService(training: Training) {
-        viewModelScope.launch(Dispatchers.IO) {
-            kotlin.runCatching {
-                sendToWorkService.training = MutableStateFlow(training)
-                sendToWorkService.runningState = MutableStateFlow(RunningState.Started )
-                sendToWorkService.enableSpeechDescription =
-                    MutableStateFlow(dataRepository.getSetting(R.string.speech_description).value == 1)
-                serviceManager.startWorkout(sendToWorkService)
-            }.fold(
-                onSuccess = { it?.let { receiveStateWorkout(it) }  },
-                onFailure = { messageApp.errorApi(it.message!!) }
-            )
-        }
-    }
-    private fun goOnWorkOutService() {
-        viewModelScope.launch(Dispatchers.IO) {
-            kotlin.runCatching { serviceManager.goOnWorkout() }.fold(
-                onSuccess = { },
-                onFailure = { messageApp.errorApi(it.message!!) }
-            )
-        }
-    }
     private fun receiveStateWorkout(sendToUI: SendToUI){
         viewModelScope.launch(Dispatchers.IO) {
             sendToUI.runningState.collect{
-                sendToWorkService.runningState.value = it
+                sendToService.runningState.value = it
                 _playWorkoutScreenState.update { currentState -> currentState.copy(stateWorkOutService = it) }
                 if (it == RunningState.Stopped) {
-                    sendToWorkService = SendToWorkService()
+                    sendToService = SendToService()
                     return@collect
                 }
             }
@@ -175,37 +214,12 @@ class PlayWorkoutViewModel @Inject constructor(
                 }
         }
     }
-    private fun stopWorkOutService(){
-        viewModelScope.launch(Dispatchers.IO) {
-            kotlin.runCatching { serviceManager.stopWorkout() }.fold(
-                onSuccess = {
-                    _playWorkoutScreenState.update { currentState ->
-                        currentState.copy(
-                            startTime = 0L,
-                            tickTime = TickTime(hour = "00", min = "00", sec = "00"),
-                            messageWorkout = emptyList(),
-                            stateWorkOutService = serviceManager.stateRunningService(),
-                        )
-                    }
-                },
-                onFailure = { messageApp.errorApi(it.message!!) }
-            )
-        }
-    }
-    private fun pauseWorkOutService(){
-        viewModelScope.launch(Dispatchers.IO) {
-            kotlin.runCatching { serviceManager.pauseWorkout() }.fold(
-                onSuccess = { _playWorkoutScreenState.update { currentState ->
-                    currentState.copy( stateWorkOutService = serviceManager.stateRunningService(),) } },
-                onFailure = { messageApp.errorApi(it.message!!) }
-            )
-        }
-    }
 
-    override fun onCleared(){
-        messageApp.messageApi("PlayWorkoutViewModel.onCleared")
-        super.onCleared()
-        bleBind.disconnectDevice()
-        bleBind.stopServiceBle()
-    }
+//
+//    override fun onCleared(){
+//        messageApp.messageApi("PlayWorkoutViewModel.onCleared")
+//        super.onCleared()
+//        bleManager.disconnectDevice()
+//        bleManager.stopServiceBle()
+//    }
 }

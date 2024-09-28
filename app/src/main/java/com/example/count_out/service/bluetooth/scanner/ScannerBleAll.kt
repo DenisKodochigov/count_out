@@ -10,6 +10,7 @@ import com.example.count_out.entity.SendToUI
 import com.example.count_out.entity.bluetooth.BleStates
 import com.example.count_out.permission.PermissionApp
 import com.example.count_out.service.bluetooth.objectScanCallback
+import com.example.count_out.service.bluetooth.objectScanCallbackF
 import com.example.count_out.service.bluetooth.scanSettings
 import com.example.count_out.ui.view_components.lg
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -48,5 +49,22 @@ class ScannerBleAll(
         lg("Stop scanner")
         permissionApp.checkBleScan{ bleScanner.stopScan(scanCallback)}
         sendToUI.update { send-> send.copy( scannedBle = false) }
+    }
+
+    @SuppressLint("MissingPermission")
+    fun startScannerBLEDevicesF(bleStates: BleStates, sendToUI: SendToUI) {
+        scanCallback = objectScanCallbackF(bleStates, sendToUI)
+        permissionApp.checkBleScan{
+            bleScanner.startScan( scanFilters(), scanSettings(0L), scanCallback) }
+//        sendToUI.update { send-> send.copy( scannedBle = true) }
+        sendToUI.scannedBleF.value = true
+    }
+
+    @SuppressLint("MissingPermission")
+    fun stopScannerBLEDevicesF(sendToUI: SendToUI){
+        lg("Stop scanner")
+        permissionApp.checkBleScan{ bleScanner.stopScan(scanCallback)}
+//        sendToUI.update { send-> send.copy( scannedBle = false) }
+        sendToUI.scannedBleF.value = false
     }
 }

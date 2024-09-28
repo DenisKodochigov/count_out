@@ -14,6 +14,7 @@ import android.os.Build
 import com.example.count_out.entity.Const.UUIDBle
 import com.example.count_out.entity.ErrorBleService
 import com.example.count_out.entity.MessageApp
+import com.example.count_out.entity.SendToService
 import com.example.count_out.entity.StateService
 import com.example.count_out.entity.bluetooth.BleConnection
 import com.example.count_out.entity.bluetooth.BleStates
@@ -43,7 +44,13 @@ class BleConnecting @Inject constructor(
             if (bleStates.error == ErrorBleService.NOT_CONNECT_GATT)  connectingGatt( bleStates )
         }
     }
-
+    fun connectDevice(bleStates: BleStates, sendToBle: SendToService){
+        sendToBle.currentConnection?.let {
+            connection = it
+            connectingGatt( bleStates )
+            if (bleStates.error == ErrorBleService.NOT_CONNECT_GATT)  connectingGatt( bleStates )
+        }
+    }
     @SuppressLint("MissingPermission")
     fun connectingGatt(bleStates: BleStates){
         if (bleStates.stateService == StateService.GET_REMOTE_DEVICE) {

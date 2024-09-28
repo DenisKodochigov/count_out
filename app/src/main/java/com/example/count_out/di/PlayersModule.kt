@@ -5,7 +5,7 @@ import com.example.count_out.domain.SpeechManager
 import com.example.count_out.service.player.PlayerExercise
 import com.example.count_out.service.player.PlayerRound
 import com.example.count_out.service.player.PlayerSet
-import com.example.count_out.service.player.PlayerWorkOut
+import com.example.count_out.service.player.SpeakingWork
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -18,8 +18,8 @@ import javax.inject.Singleton
 class PlayersModule {
     @Singleton
     @Provides
-    fun providePlayerWorkOut(speechManager: SpeechManager, playerRound: PlayerRound): PlayerWorkOut {
-        return PlayerWorkOut(speechManager, playerRound)
+    fun providePlayerWorkOut(speechManager: SpeechManager, playerRound: PlayerRound): SpeakingWork {
+        return SpeakingWork(speechManager, playerRound)
     }
     @Singleton
     @Provides

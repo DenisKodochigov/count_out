@@ -7,6 +7,7 @@ import com.example.count_out.service.workout.WorkoutService
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 
@@ -21,7 +22,7 @@ class WorkOutServiceModule {
     }
     @Singleton
     @Provides
-    fun provideServiceManager(context: Context, serviceUtils: ServiceUtils): ServiceManager {
+    fun provideServiceManager(@ApplicationContext context: Context, serviceUtils: ServiceUtils): ServiceManager {
         return ServiceManager(context, serviceUtils)
     }
 }

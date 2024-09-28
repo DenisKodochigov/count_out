@@ -39,6 +39,7 @@ import com.example.count_out.domain.Plus
 import com.example.count_out.entity.GoalSet
 import com.example.count_out.entity.ListActivityForPlayer
 import com.example.count_out.entity.RunningState
+import com.example.count_out.service_app.PlayWorkViewModel
 import com.example.count_out.ui.theme.alumBodySmall
 import com.example.count_out.ui.theme.colors3
 import com.example.count_out.ui.theme.shapes
@@ -54,11 +55,11 @@ import java.math.RoundingMode
 @SuppressLint("UnrememberedMutableState")
 @Composable
 fun PlayWorkoutScreen(trainingId: Long ){
-    val viewModel: PlayWorkoutViewModel = hiltViewModel()
+    val viewModel: PlayWorkViewModel = hiltViewModel()
     LaunchedEffect( key1 = true, block = { viewModel.getTraining(trainingId) })
     PlayWorkoutScreenCreateView( viewModel = viewModel)
 }
-@Composable fun PlayWorkoutScreenCreateView( viewModel: PlayWorkoutViewModel, ){
+@Composable fun PlayWorkoutScreenCreateView( viewModel: PlayWorkViewModel, ){
     val uiState by viewModel.playWorkoutScreenState.collectAsState()
     PlayWorkoutScreenLayout(uiState = uiState)
 }
