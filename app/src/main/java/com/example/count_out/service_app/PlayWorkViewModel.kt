@@ -12,7 +12,6 @@ import com.example.count_out.entity.SendToUI
 import com.example.count_out.entity.TickTime
 import com.example.count_out.entity.Training
 import com.example.count_out.ui.screens.play_workout.PlayWorkoutScreenState
-import com.example.count_out.ui.view_components.lg
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -50,9 +49,9 @@ class PlayWorkViewModel @Inject constructor(
                 if ( !serviceApp.isBound.value ) {
                     serviceApp.bindService()
                     serviceApp.service.startDistributionService(sendToService)
-                }
+                } else null
             }.fold(
-                onSuccess = { },
+                onSuccess = { it?.let { senUI ->  receiveState(senUI)}},
                 onFailure = { messageApp.errorApi("initServiceApp ${it.message!!}") }
             )
         }
@@ -71,7 +70,7 @@ class PlayWorkViewModel @Inject constructor(
                     MutableStateFlow(dataRepository.getSetting(R.string.speech_description).value == 1)
                 serviceApp.service.startWork()
             }.fold(
-                onSuccess = { it?.let { receiveStateWorkout(it) }  },
+                onSuccess = {  },
                 onFailure = { messageApp.errorApi(it.message!!) }
             )
         }
@@ -114,6 +113,7 @@ class PlayWorkViewModel @Inject constructor(
             )
         }
     }
+
     fun getTraining(id: Long) {
         viewModelScope.launch(Dispatchers.IO) {
             kotlin.runCatching { dataRepository.getTraining(id) }.fold(
@@ -150,28 +150,7 @@ class PlayWorkViewModel @Inject constructor(
         }
     }
 
-    //    private fun startBleService(){
-//        viewModelScope.launch(Dispatchers.IO) {
-//            kotlin.runCatching { (service as DistributionService).startBleService() }.fold(
-//                onSuccess = { receiveDevicesUIBleService(it)},
-//                onFailure = { messageApp.errorApi(it.message!!) }
-//            )
-//        }
-//    }
-    private suspend fun receiveDevicesUIBleService(sendToUI: MutableStateFlow<SendToUI>){
-        viewModelScope.launch(Dispatchers.IO) {
-            sendToUI.collect { send ->
-                if (send.runningState.value == RunningState.Stopped) return@collect
-                _playWorkoutScreenState.update { currentState ->
-                    currentState.copy(
-                        lastConnectHearthRateDevice = send.lastConnectHearthRateDevice,
-                        connectingDevice = send.connectingState,
-                        heartRate = send.heartRate,)
-                }
-            }
-        }
-    }
-    private fun receiveStateWorkout(sendToUI: SendToUI){
+    private fun receiveState(sendToUI: SendToUI){
         viewModelScope.launch(Dispatchers.IO) {
             sendToUI.runningState.collect{
                 sendToService.runningState.value = it
@@ -192,7 +171,7 @@ class PlayWorkViewModel @Inject constructor(
                 _playWorkoutScreenState.update { currentState ->
                     currentState.copy(
                         listActivity = if (set != null ) currentState.activityList(set.idSet)
-                                        else currentState.listActivity)}
+                        else currentState.listActivity)}
                 if (playWorkoutScreenState.value.stateWorkOutService == RunningState.Stopped) return@collect}
         }
         viewModelScope.launch(Dispatchers.IO) {
@@ -211,15 +190,28 @@ class PlayWorkViewModel @Inject constructor(
                     _playWorkoutScreenState.update { currentState ->
                         currentState.copy( messageWorkout = currentState.addMessage(mes) ) }
                     if (playWorkoutScreenState.value.stateWorkOutService == RunningState.Stopped) return@collect}
-                }
+            }
+        }
+        viewModelScope.launch(Dispatchers.IO) {
+            sendToUI.lastConnectHearthRateDeviceF.collect { lastHR ->
+                if (sendToUI.runningState.value == RunningState.Stopped) return@collect
+                _playWorkoutScreenState.update { currentState ->
+                    currentState.copy(lastConnectHearthRateDevice = lastHR) }
+            }
+        }
+        viewModelScope.launch(Dispatchers.IO) {
+            sendToUI.connectingStateF.collect { state ->
+                if (sendToUI.runningState.value == RunningState.Stopped) return@collect
+                _playWorkoutScreenState.update { currentState ->
+                    currentState.copy( connectingState = state,) }
+            }
+        }
+        viewModelScope.launch(Dispatchers.IO) {
+            sendToUI.heartRateF.collect { hr ->
+                if (sendToUI.runningState.value == RunningState.Stopped) return@collect
+                _playWorkoutScreenState.update { currentState ->
+                    currentState.copy(heartRate = hr) }
+            }
         }
     }
-
-//
-//    override fun onCleared(){
-//        messageApp.messageApi("PlayWorkoutViewModel.onCleared")
-//        super.onCleared()
-//        bleManager.disconnectDevice()
-//        bleManager.stopServiceBle()
-//    }
 }

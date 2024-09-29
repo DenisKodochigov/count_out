@@ -59,7 +59,7 @@
             android:foregroundServiceType="dataSync"
             android:exported="false"/>
         <service
-            android:name=".service.bluetooth.BleService"
+            android:name=".service.bluetooth.BleServiceO"
             android:foregroundServiceType="connectedDevice"
             android:exported="false"/>
         <activity

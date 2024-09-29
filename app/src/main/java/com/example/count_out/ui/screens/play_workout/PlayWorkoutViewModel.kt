@@ -12,7 +12,7 @@ import com.example.count_out.entity.SendToWorkService
 import com.example.count_out.entity.TickTime
 import com.example.count_out.entity.Training
 import com.example.count_out.entity.bluetooth.SendToBle
-import com.example.count_out.service.bluetooth.BleBind
+import com.example.count_out.service.bluetooth.BleBindO
 import com.example.count_out.service.workout.ServiceManager
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -27,7 +27,7 @@ import javax.inject.Inject
 class PlayWorkoutViewModel @Inject constructor(
     private val messageApp: MessageApp,
     private val dataRepository: DataRepository,
-    private val bleBind: BleBind,
+    private val bleBindO: BleBindO,
     private val serviceManager: ServiceManager,
 ): ViewModel() {
     private val _playWorkoutScreenState = MutableStateFlow(
@@ -74,7 +74,7 @@ class PlayWorkoutViewModel @Inject constructor(
 
     private fun startBleService(){
         viewModelScope.launch(Dispatchers.IO) {
-            kotlin.runCatching { bleBind.startBleService(sendToBle) }.fold(
+            kotlin.runCatching { bleBindO.startBleService(sendToBle) }.fold(
                 onSuccess = { receiveDevicesUIBleService(it)},
                 onFailure = { messageApp.errorApi(it.message!!) }
             )
@@ -87,7 +87,7 @@ class PlayWorkoutViewModel @Inject constructor(
                 _playWorkoutScreenState.update { currentState ->
                     currentState.copy(
                         lastConnectHearthRateDevice = send.lastConnectHearthRateDevice,
-                        connectingDevice = send.connectingState,
+                        connectingState = send.connectingState,
                         heartRate = send.heartRate,)
                 }
             }
@@ -98,7 +98,7 @@ class PlayWorkoutViewModel @Inject constructor(
             dataRepository.getBleDevStoreFlow().collect{
                 if (it.address.isNotEmpty()) {
                     sendToBle.addressForSearch = it.address
-                    bleBind.connectDevice()
+                    bleBindO.connectDevice()
                 }
             }
         }
@@ -205,7 +205,7 @@ class PlayWorkoutViewModel @Inject constructor(
     override fun onCleared(){
         messageApp.messageApi("PlayWorkoutViewModel.onCleared")
         super.onCleared()
-        bleBind.disconnectDevice()
-        bleBind.stopServiceBle()
+        bleBindO.disconnectDevice()
+        bleBindO.stopServiceBle()
     }
 }

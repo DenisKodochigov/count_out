@@ -6,10 +6,12 @@ import android.content.Context
 import com.example.count_out.entity.MessageApp
 import com.example.count_out.permission.PermissionApp
 import com.example.count_out.service.ServiceUtils
+import com.example.count_out.service.bluetooth.BleBindO
 import com.example.count_out.service.bluetooth.BleConnecting
-import com.example.count_out.service.bluetooth.BleBind
 import com.example.count_out.service.bluetooth.BleScanner
-import com.example.count_out.service.bluetooth.BleService
+import com.example.count_out.service.bluetooth.BleServiceO
+import com.example.count_out.service_app.BleBind
+import com.example.count_out.service_app.BleService
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -23,8 +25,8 @@ class BluetoothModule {
 
     @Singleton
     @Provides
-    fun provideBluetoothApp(@ApplicationContext context: Context, serviceUtils: ServiceUtils) =
-        BleBind(context, serviceUtils)
+    fun provideBleBindO(@ApplicationContext context: Context, serviceUtils: ServiceUtils) =
+        BleBindO(context, serviceUtils)
 
     @Singleton
     @Provides
@@ -56,5 +58,14 @@ class BluetoothModule {
 
     @Singleton
     @Provides
-    fun provideBleService() = BleService()
+    fun provideBleService() = BleServiceO()
+
+    @Singleton
+    @Provides
+    fun provideBleServ() = BleService()
+
+    @Singleton
+    @Provides
+    fun provideBleBind(@ApplicationContext context: Context, serviceUtils: ServiceUtils) =
+        BleBind(context, serviceUtils)
 }

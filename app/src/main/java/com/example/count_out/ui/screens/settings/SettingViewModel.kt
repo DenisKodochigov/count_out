@@ -9,7 +9,7 @@ import com.example.count_out.entity.MessageApp
 import com.example.count_out.entity.SendToUI
 import com.example.count_out.entity.bluetooth.BleDevSerializable
 import com.example.count_out.entity.bluetooth.SendToBle
-import com.example.count_out.service.bluetooth.BleBind
+import com.example.count_out.service.bluetooth.BleBindO
 import com.example.count_out.ui.view_components.lg
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -24,7 +24,7 @@ import javax.inject.Inject
 @HiltViewModel
 class SettingViewModel @Inject constructor(
     private val messageApp: MessageApp,
-    private val bleBind: BleBind,
+    private val bleBindO: BleBindO,
     private val dataRepository: DataRepository
 ): ViewModel() {
     private val _settingScreenState = MutableStateFlow(
@@ -77,7 +77,7 @@ class SettingViewModel @Inject constructor(
     private fun startBleService(){
         lg("SettingViewModel.startBleService")
         viewModelScope.launch(Dispatchers.IO) {
-            kotlin.runCatching { bleBind.startBleService(sendToBle) }.fold(
+            kotlin.runCatching { bleBindO.startBleService(sendToBle) }.fold(
                 onSuccess = { receiveDevicesUIBleService(it)},
                 onFailure = { messageApp.errorApi(it.message!!) }
             )
@@ -102,7 +102,7 @@ class SettingViewModel @Inject constructor(
     private fun onStartScanBLE(){
         lg("SettingViewModel.onStartScanBLE")
         viewModelScope.launch(Dispatchers.IO) {
-            kotlin.runCatching { bleBind.startScannerBLEDevices() }.fold(
+            kotlin.runCatching { bleBindO.startScannerBLEDevices() }.fold(
                 onSuccess = {  },
                 onFailure = { messageApp.errorApi(it.message!!) }
             )
@@ -111,7 +111,7 @@ class SettingViewModel @Inject constructor(
 
     private fun onStopScanBLE(){
         viewModelScope.launch(Dispatchers.IO) {
-            kotlin.runCatching { bleBind.stopScannerBLEDevices() }.fold(
+            kotlin.runCatching { bleBindO.stopScannerBLEDevices() }.fold(
                 onSuccess = { },
                 onFailure = { messageApp.errorApi(it.message!!) }
             )
@@ -120,7 +120,7 @@ class SettingViewModel @Inject constructor(
 
     private fun onClearCacheBLE(){
         viewModelScope.launch(Dispatchers.IO) {
-            kotlin.runCatching { bleBind.onClearCacheBLE() }.fold(
+            kotlin.runCatching { bleBindO.onClearCacheBLE() }.fold(
                 onSuccess = { },
                 onFailure = { messageApp.errorApi(it.message!!) }
             )
@@ -131,7 +131,7 @@ class SettingViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             dataRepository.storeSelectBleDev( BleDevSerializable( address = address))
             sendToBle.addressForSearch = address
-            bleBind.connectDevice()
+            bleBindO.connectDevice()
         }
     }
 
@@ -140,7 +140,7 @@ class SettingViewModel @Inject constructor(
             dataRepository.getBleDevStoreFlow().collect{
                 if (it.address.isNotEmpty()) {
                     sendToBle.addressForSearch = it.address
-                    bleBind.connectDevice()
+                    bleBindO.connectDevice()
                 }
             }
         }
@@ -169,7 +169,7 @@ class SettingViewModel @Inject constructor(
     override fun onCleared(){
         lg("SettingViewModel cleared")
         lg("##########################################################################")
-        bleBind.stopScannerBLEDevices()
-        bleBind.stopServiceBle()
+        bleBindO.stopScannerBLEDevices()
+        bleBindO.stopServiceBle()
     }
 }

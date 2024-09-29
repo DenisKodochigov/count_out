@@ -14,7 +14,6 @@ import com.example.count_out.entity.SendToService
 import com.example.count_out.entity.SendToUI
 import com.example.count_out.entity.bluetooth.BleStates
 import com.example.count_out.helpers.NotificationHelper
-import com.example.count_out.service.bluetooth.BleBind
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -28,7 +27,7 @@ class DistributionService @Inject constructor(): Service() {
     val stateTraining: TrainingState? = null
     var sendToUI: SendToUI? = null
     private var sendToService: SendToService? = null
-    private var ble: Ble? = null
+    private var bleService: BleService? = null
     private val work: Work? = null
     private val site: Site? = null
     @Inject lateinit var notificationHelper: NotificationHelper
@@ -46,10 +45,10 @@ class DistributionService @Inject constructor(): Service() {
         return super.onStartCommand(intent, flags, startId)
     }
 
-    suspend fun startDistributionService(sendToServ: SendToService){
+    fun startDistributionService(sendToServ: SendToService): SendToUI?{
         sendToService = sendToServ
         startForegroundService()
-        startBleService()
+        return sendToUI
     }
     private fun startForegroundService() {
         if (!notificationHelper.channelExist()) notificationHelper.createChannel()
@@ -65,17 +64,16 @@ class DistributionService @Inject constructor(): Service() {
         stopBleService()
     }
 
-    fun startWork(): SendToUI?{
+    fun startWork(){
         if (sendToUI == null) { sendToUI = SendToUI() }
-        sendToUI?.let {
-            if (it.runningState.value == RunningState.Stopped){
+        sendToUI?.let { sendUI->
+            if (sendUI.runningState.value == RunningState.Stopped){
                 messageApp.messageApi("Start WorkOut")
-                it.runningState.value = RunningState.Started
-                it.nextSet.value = sendToService?.getSet(0)
+                sendUI.runningState.value = RunningState.Started
+                sendUI.nextSet.value = sendToService?.getSet(0)
                 work?.start(sendToUI, sendToService){ stopWork() }
             } //else if (it.runningState.value == RunningState.Paused) { continueWorkout() }
         }
-        return sendToUI
     }
     private fun stopWork(){
         work?.stop()
@@ -103,39 +101,42 @@ class DistributionService @Inject constructor(): Service() {
 
     private suspend fun startBleService(){
         if ( !bleBind.isBound.value ) {
-            bleBind.bindService()
+            bleBind.bindServiceBle()
             bleBind.service.startService()
         }
-        ble = bleBind.service
+        bleService = bleBind.service
     }
     private fun stopBleService(){
-        sendToUI?.let { ble?.stopService(it) }
+        sendToUI?.let { bleService?.stopService(it) }
         bleBind.unbindService()
     }
 
-    fun connectDevice(){
+    suspend fun connectDevice(){
         if ( bleBind.isBound.value ) {
-            sendToUI?.let { ble?.stopScannerBLEDevices(it) }
-            sendToUI?.let { sendToService?.let { it1 -> ble?.connectDevice(it, it1) } }
+            sendToUI?.let { bleService?.stopScannerBLEDevices(it) }
+            sendToUI?.let { sendToService?.let { it1 -> bleService?.connectDevice(it, it1) } }
+        } else {
+            startBleService()
+            sendToUI?.let { sendToService?.let { it1 -> bleService?.connectDevice(it, it1) } }
         }
     }
     fun disconnectDevice() {
-        if ( bleBind.isBound.value ) ble?.disconnectDevice()
+        if ( bleBind.isBound.value ) bleService?.disconnectDevice()
     }
     fun startScanningBle(){
         if ( bleBind.isBound.value ) {
-            sendToUI?.let { ble?.stopScannerBLEDevices(it) }
-            sendToUI?.let { ble?.startScannerBLEDevices(it) }
+            sendToUI?.let { bleService?.stopScannerBLEDevices(it) }
+            sendToUI?.let { bleService?.startScannerBLEDevices(it) }
         }
     }
     fun stopScanningBle() {
-        if ( bleBind.isBound.value ) sendToUI?.let { ble?.stopScannerBLEDevices(it) }
+        if ( bleBind.isBound.value ) sendToUI?.let { bleService?.stopScannerBLEDevices(it) }
     }
-    fun clearCacheBLE() { ble?.onClearCacheBLE()}
+    fun clearCacheBLE() { bleService?.onClearCacheBLE()}
 
     fun receiveDataBle(){}
 
-    fun onClearCacheBLE() { ble?.onClearCacheBLE()}
+    fun onClearCacheBLE() { bleService?.onClearCacheBLE()}
 
     fun startLocation(){site?.start()}
 

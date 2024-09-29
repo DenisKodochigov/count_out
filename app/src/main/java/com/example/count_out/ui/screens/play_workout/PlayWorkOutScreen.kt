@@ -152,7 +152,7 @@ fun PlayWorkoutScreen(trainingId: Long ){
 
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
         TextApp(text = uiState.heartRate.toString(), style = typography.displayLarge)
-        TextApp(text = stringResource(uiState.connectingDevice.strId), style = alumBodySmall)
+        TextApp(text = stringResource(uiState.connectingState.strId), style = alumBodySmall)
     }
 }
 

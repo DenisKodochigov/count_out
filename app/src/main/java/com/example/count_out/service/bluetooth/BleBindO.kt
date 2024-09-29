@@ -7,7 +7,6 @@ import android.os.IBinder
 import com.example.count_out.entity.SendToUI
 import com.example.count_out.entity.bluetooth.SendToBle
 import com.example.count_out.service.ServiceUtils
-import com.example.count_out.service_app.Ble
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import javax.inject.Inject
@@ -23,30 +22,29 @@ import javax.inject.Singleton
 https://developer.android.com/develop/connectivity/bluetooth/ble/transfer-ble-data#kotlin
  */
 @Singleton
-class BleBind @Inject constructor(val context: Context, private val serviceUtils: ServiceUtils
+class BleBindO @Inject constructor(val context: Context, private val serviceUtils: ServiceUtils
 ){
     val isBound : MutableStateFlow<Boolean> = MutableStateFlow(false)
-    private lateinit var bleService: BleService
-    lateinit var service: Ble
+    private lateinit var bleServiceO: BleServiceO
 
-    private val bleServiceConnection = object : ServiceConnection {
+    private val bleServiceOConnection = object : ServiceConnection {
         override fun onServiceConnected(className: ComponentName, binder: IBinder) {
-            bleService = (binder as BleService.BleServiceBinder).getService()
+            bleServiceO = (binder as BleServiceO.BleServiceBinder).getService()
             isBound.value  = true
         }
         override fun onServiceDisconnected(arg0: ComponentName) {
-            bleService.stopSelf()
+            bleServiceO.stopSelf()
             isBound.value = false
         }
     }
     suspend fun bindService(){
-        bind(BleService::class.java)
+        bind(BleServiceO::class.java)
         while (!isBound.value) { delay(100L) }
     }
 
-    private fun <T>bind(clazz: Class<T>) { serviceUtils.bindService(clazz, bleServiceConnection) }
+    private fun <T>bind(clazz: Class<T>) { serviceUtils.bindService(clazz, bleServiceOConnection) }
 
-    fun unbindService() { serviceUtils.unbindService(bleServiceConnection, isBound.value) }
+    fun unbindService() { serviceUtils.unbindService(bleServiceOConnection, isBound.value) }
 
 
 //#################################################################################
@@ -54,34 +52,34 @@ class BleBind @Inject constructor(val context: Context, private val serviceUtils
 
     fun startBleService(sendToBle: SendToBle): MutableStateFlow<SendToUI> {
         if (isBound.value ) {
-            bleService.startBleService()
-            bleService.sendToBle = sendToBle
-            return bleService.sendToUi
+            bleServiceO.startBleService()
+            bleServiceO.sendToBle = sendToBle
+            return bleServiceO.sendToUi
         } else {
             return MutableStateFlow(SendToUI())
         }
     }
 
-    fun stopServiceBle(){ if (isBound.value ) bleService.stopBleService() }
+    fun stopServiceBle(){ if (isBound.value ) bleServiceO.stopBleService() }
 
-    fun onClearCacheBLE() { bleService.onClearCacheBLE()}
+    fun onClearCacheBLE() { bleServiceO.onClearCacheBLE()}
 
     fun startScannerBLEDevices() {
         if ( isBound.value ) {
-            bleService.stopScannerBLEDevices()
-            bleService.startScannerBLEDevices()
+            bleServiceO.stopScannerBLEDevices()
+            bleServiceO.startScannerBLEDevices()
         }
     }
 
-    fun stopScannerBLEDevices() {if (isBound.value ) bleService.stopScannerBLEDevices()}
+    fun stopScannerBLEDevices() {if (isBound.value ) bleServiceO.stopScannerBLEDevices()}
 
     fun connectDevice() {
         if ( isBound.value ) {
-            bleService.stopScannerBLEDevices()
-            bleService.connectDevice()
+            bleServiceO.stopScannerBLEDevices()
+            bleServiceO.connectDevice()
         }
     }
 
-    fun disconnectDevice() { if ( isBound.value )   bleService.disconnectDevice()}
+    fun disconnectDevice() { if ( isBound.value )   bleServiceO.disconnectDevice()}
 }
 

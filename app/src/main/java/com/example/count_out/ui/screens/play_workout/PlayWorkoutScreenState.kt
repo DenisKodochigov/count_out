@@ -20,7 +20,7 @@ data class PlayWorkoutScreenState(
     val nextSet: Set? = null,
     var listActivity: List< ListActivityForPlayer> = emptyList(),
     val lastConnectHearthRateDevice: DeviceUI? = null,
-    val connectingDevice: ConnectState = ConnectState.NOT_CONNECTED,
+    val connectingState: ConnectState = ConnectState.NOT_CONNECTED,
     val heartRate: Int = 0,
 
     val tickTime: TickTime = TickTime(hour = "00", min="00", sec= "00"),
