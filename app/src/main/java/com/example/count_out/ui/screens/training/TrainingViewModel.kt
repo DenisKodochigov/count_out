@@ -53,7 +53,7 @@ class TrainingViewModel @Inject constructor(
             kotlin.runCatching { dataRepository.getActivities() }.fold(
                 onSuccess = {
                     _trainingScreenState.update { currentState -> currentState.copy(activities = it) } },
-                onFailure = { messageApp.errorApi(it.message!!) }
+                onFailure = { messageApp.errorApi(it.message ?: "") }
             )
         }
         templateMy { dataRepository.getTraining(id) }
@@ -87,7 +87,7 @@ class TrainingViewModel @Inject constructor(
     private fun onSetColorActivity(activityId: Long, color: Int) {
         viewModelScope.launch(Dispatchers.IO) {
             kotlin.runCatching { dataRepository.onSetColorActivity( activityId, color) }
-                .fold( onSuccess = { }, onFailure = { messageApp.errorApi(it.message!!) })
+                .fold( onSuccess = { }, onFailure = { messageApp.errorApi(it.message ?: "") })
         }
     }
     private fun templateMy( funDataRepository:() -> Training){
@@ -98,7 +98,7 @@ class TrainingViewModel @Inject constructor(
                         training = it,
                         showBottomSheetSelectActivity = mutableStateOf(false),
                         enteredName = mutableStateOf(it.name) ) } },
-                onFailure = { messageApp.errorApi(it.message!!) }
+                onFailure = { messageApp.errorApi(it.message ?: "") }
             )
         }
     }
@@ -106,7 +106,7 @@ class TrainingViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             kotlin.runCatching { funDataRepository() }.fold(
                 onSuccess = {  },
-                onFailure = { messageApp.errorApi(it.message!!) }
+                onFailure = { messageApp.errorApi(it.message ?: "") }
             )
         }
     }

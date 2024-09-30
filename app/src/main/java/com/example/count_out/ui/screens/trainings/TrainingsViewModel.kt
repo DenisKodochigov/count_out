@@ -40,7 +40,7 @@ class TrainingsViewModel @Inject constructor(
             kotlin.runCatching { funDataRepository() }.fold(
                 onSuccess = {  _trainingsScreenState.update { currentState ->
                     currentState.copy( trainings = it ) } },
-                onFailure = { messageApp.errorApi(it.message!!) }
+                onFailure = { messageApp.errorApi(it.message ?: "") }
             )
         }
     }

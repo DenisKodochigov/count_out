@@ -14,15 +14,6 @@ data class SendToService(
     var addressForSearch: String = "",
     var currentConnection: BleConnection? = null
 ) {
-    fun toSendToWorkService(): SendToWorkService =
-        SendToWorkService(
-            training = this.training,
-            runningState = this.runningState,
-            enableSpeechDescription = this.enableSpeechDescription,
-            indexRound = this.indexRound,
-            indexExercise = this.indexExercise,
-            indexSet = this.indexSet,
-        )
     fun getRound(): Round? {
         return try {
             training.value?.rounds?.get(indexRound)

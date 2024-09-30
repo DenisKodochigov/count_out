@@ -1,7 +1,6 @@
 package com.example.count_out.entity
 
 import com.example.count_out.entity.bluetooth.DeviceUI
-import com.example.count_out.entity.no_use.MessageWorkOut
 import kotlinx.coroutines.flow.MutableStateFlow
 
 data class SendToUI (

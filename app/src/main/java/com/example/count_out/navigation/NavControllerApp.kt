@@ -10,7 +10,7 @@ fun NavHostController.navigateToTraining(trainingId: Long) {
     this.navigateToScreen("${TrainingDestination.route}/$trainingId")
 }
 fun NavHostController.navigateToPlayWorkout( trainingId: Long) {
-    this.navigateToScreen("${PlayWorkoutDestination.route}/$trainingId")
+    this.navigateToScreen("${ExecuteWorkDestination.route}/$trainingId")
 }
 @Composable
 fun NavHostController.backScreenDestination(): ScreenDestination{

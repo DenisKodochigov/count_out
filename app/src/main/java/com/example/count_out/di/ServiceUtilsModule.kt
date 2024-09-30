@@ -1,7 +1,7 @@
 package com.example.count_out.di
 
 import android.content.Context
-import com.example.count_out.service.ServiceUtils
+import com.example.count_out.service_count_out.ServiceUtils
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

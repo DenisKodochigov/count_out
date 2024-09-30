@@ -50,9 +50,9 @@ object TrainingDestination : ScreenDestination {
     override val routeWithArgs = "${route}/{$ARG}"
     val arguments = listOf(navArgument(ARG) { type = NavType.LongType })
 }
-object PlayWorkoutDestination : ScreenDestination {
-    override val route = "playWorkout"
-    override val nameScreen = R.string.screen_play_workou
+object ExecuteWorkDestination : ScreenDestination {
+    override val route = "executeWorkout"
+    override val nameScreen = R.string.screen_execute_work
     override val icon = Icons.Filled.Brightness5
     override val iconText = R.string.trainings_
     override val pictureDay = R.drawable.ic_launcher_background
@@ -78,7 +78,7 @@ object SettingDestination : ScreenDestination {
     override var onClickFAB: () -> Unit = {}
 }
 val navBottomScreens = listOf(TrainingsDestination, SettingDestination)
-val listScreens = listOf(TrainingsDestination, TrainingDestination, PlayWorkoutDestination, SettingDestination)
+val listScreens = listOf(TrainingsDestination, TrainingDestination, ExecuteWorkDestination, SettingDestination)
 
 
 

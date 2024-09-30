@@ -19,7 +19,7 @@ import com.example.count_out.entity.Const.SET_CONTENT_TITLE
 import com.example.count_out.entity.Const.START_REQUEST_CODE
 import com.example.count_out.entity.Const.STOP_REQUEST_CODE
 import com.example.count_out.entity.RunningState
-import com.example.count_out.service.workout.WorkoutService
+import com.example.count_out.service_count_out.CountOutService
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -77,7 +77,7 @@ class NotificationHelper @Inject constructor(private val context: Context)
 
     private fun intentAction(value: String, code: Int):PendingIntent =
         PendingIntent.getService(context, code,
-            Intent(context, WorkoutService::class.java).apply { putExtra(NOTIFICATION_EXTRA, value ) },
+            Intent(context, CountOutService::class.java).apply { putExtra(NOTIFICATION_EXTRA, value ) },
             PendingIntent.FLAG_IMMUTABLE
         )
     fun channelExist(): Boolean{

@@ -64,7 +64,7 @@
     <string name="time_between_counts">The interval between counts</string>
     <string name="slowing_down_counts">Slowing down the counts</string>
     <string name="counts_by_group_add"> Enter a group of counts (each word corresponds to one count)</string>
-    <string name="screen_play_workou">Play work out</string>
+    <string name="screen_execute_work">Execute WorkOut</string>
     <string name="channel_name">count_out_notification</string>
     <string name="audio_track">Audio track</string>
     <string name="video_clip">Video clip</string>

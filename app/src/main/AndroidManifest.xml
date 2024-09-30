@@ -50,17 +50,10 @@
         android:hardwareAccelerated="true"
         android:networkSecurityConfig="@xml/network_security_config"
         tools:targetApi="34">
+
         <service
-            android:name=".service.workout.WorkoutService"
+            android:name=".service_count_out.CountOutService"
             android:foregroundServiceType="dataSync"
-            android:exported="false"/>
-        <service
-            android:name=".service_app.DistributionService"
-            android:foregroundServiceType="dataSync"
-            android:exported="false"/>
-        <service
-            android:name=".service.bluetooth.BleServiceO"
-            android:foregroundServiceType="connectedDevice"
             android:exported="false"/>
         <activity
             android:name=".MainActivity"

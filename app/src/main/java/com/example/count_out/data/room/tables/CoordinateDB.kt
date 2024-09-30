@@ -1,6 +1,6 @@
 package com.example.count_out.data.room.tables
 
-import com.example.count_out.entity.no_use.Coordinate
+import com.example.count_out.entity.Coordinate
 
 data class CoordinateDB(
     override val latitude: Double = 0.0,

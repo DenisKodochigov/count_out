@@ -68,9 +68,9 @@ fun ActivityValueSelect(
     onDeleteActivity:(Long)-> Unit = {}
 ){
     val activityChangeColor: MutableState<Activity?> = remember { mutableStateOf(null) }
-    if (activityChangeColor.value != null) {
+    activityChangeColor.value?.let { changeColor->
         ChangeColorSectionDialog(
-            colorItem = activityChangeColor.value!!.color,
+            colorItem = changeColor.color,
             onDismiss = { activityChangeColor.value = null},
             onConfirm = {
                 onChangeColor(it)
@@ -177,9 +177,9 @@ fun ActivityValueEdit(
     onDeleteActivity:(Long)-> Unit = {}
 ){
     val activityChangeColor: MutableState<Activity?> = remember { mutableStateOf(null) }
-    if (activityChangeColor.value != null) {
+    activityChangeColor.value?.let { changeColor->
         ChangeColorSectionDialog(
-            colorItem = activityChangeColor.value!!.color,
+            colorItem = changeColor.color,
             onDismiss = { activityChangeColor.value = null},
             onConfirm = {
                 onChangeColor(it)
@@ -188,6 +188,7 @@ fun ActivityValueEdit(
             },
         )
     }
+
     Row( modifier = Modifier
         .padding( start = 12.dp)
         .clickable { onSelect() }

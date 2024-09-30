@@ -7,8 +7,8 @@ import com.example.count_out.entity.MessageApp
 import com.example.count_out.entity.RunningState
 import com.example.count_out.entity.SendToUI
 import com.example.count_out.entity.Speech
-import com.example.count_out.entity.no_use.MessageWorkOut
-import com.example.count_out.service.stopwatch.Watcher
+import com.example.count_out.entity.MessageWorkOut
+import com.example.count_out.service_count_out.stopwatch.Watcher
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import java.util.Locale
@@ -86,8 +86,10 @@ class SpeechManager(val context: Context) {
     }
     fun getSpeeching() = tts?.isSpeaking ?: false
     fun stopTts(){
-        tts!!.stop()
-        tts!!.shutdown()
+        tts?.let {
+            it.stop()
+            it.shutdown()
+        }
         tts = null
     }
 }

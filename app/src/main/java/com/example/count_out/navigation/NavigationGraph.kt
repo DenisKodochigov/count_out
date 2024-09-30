@@ -19,7 +19,7 @@ import androidx.navigation.compose.composable
 import com.example.count_out.entity.Const.DEFAULT_SCREEN
 import com.example.count_out.entity.Const.DELAY_SCREEN
 import com.example.count_out.entity.Const.DURATION_SCREEN
-import com.example.count_out.ui.screens.play_workout.PlayWorkoutScreen
+import com.example.count_out.ui.screens.executor.ExecuteWorkoutScreen
 import com.example.count_out.ui.screens.settings.SettingScreen
 import com.example.count_out.ui.screens.training.TrainingScreen
 import com.example.count_out.ui.screens.trainings.TrainingsScreen
@@ -53,10 +53,10 @@ fun NavGraphBuilder.training(onBaskScreen: () -> Unit) {
 }
 fun NavGraphBuilder.playWorkout() {
     template(
-        routeTo = PlayWorkoutDestination.routeWithArgs,
+        routeTo = ExecuteWorkDestination.routeWithArgs,
         argument = TrainingDestination.arguments,
         content = { navBackStackEntry ->
-            PlayWorkoutScreen(trainingId = navBackStackEntry.arguments?.getLong(TrainingDestination.ARG) ?: 0)
+            ExecuteWorkoutScreen(trainingId = navBackStackEntry.arguments?.getLong(TrainingDestination.ARG) ?: 0)
         }
     )
 }

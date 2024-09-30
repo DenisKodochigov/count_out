@@ -16,9 +16,8 @@ enum class ConnectState(val strId: Int) {
     NOT_CONNECTED(R.string.not_connected) ,
     CONNECTING(R.string.connecting),
     CONNECTED(R.string.connected) }
-enum class TimerState { COUNTING, STOPPED, END, }
-enum class StateScanner { RUNNING_ALL, END, }
-enum class StateService { DECLARED, CREATED, STARTED, PAUSED, STOPPED, GET_REMOTE_DEVICE, CONNECT_GAT, GET_DISCOVER_SERVICE, DISCONNECTED }
+enum class StateBleScanner { RUNNING, END, }
+enum class StateBleConnecting { NONE, GET_REMOTE_DEVICE, CONNECT_GAT}
 enum class RunningState { Started, Paused, Stopped }
 enum class BleTask{ NONE, CONNECT_DEVICE, NOTIFY_CHARACTERISTIC }
 enum class RoundType(val strId: Int, var amount: Int, var duration: Int){

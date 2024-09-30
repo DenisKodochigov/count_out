@@ -1,6 +1,6 @@
 package com.example.count_out.di
 
-import com.example.count_out.ui.screens.play_workout.PlayWorkoutScreenState
+import com.example.count_out.ui.screens.executor.ExecuteWorkoutScreenState
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -13,7 +13,7 @@ class ScreenStateModule {
 
     @Singleton
     @Provides
-    fun providePlayWorkoutScreenState(): PlayWorkoutScreenState {
-        return PlayWorkoutScreenState( )
+    fun provideExecuteWorkoutScreenState(): ExecuteWorkoutScreenState {
+        return ExecuteWorkoutScreenState( )
     }
 }

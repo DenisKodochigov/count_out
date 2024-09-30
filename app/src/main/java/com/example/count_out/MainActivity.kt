@@ -11,8 +11,7 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.core.app.ActivityCompat
 import com.example.count_out.permission.RequestPermissionsAll
-import com.example.count_out.service.sensors.SensorsApp
-import com.example.count_out.service.workout.ServiceManager
+import com.example.count_out.service_count_out.sensors.SensorsApp
 import com.example.count_out.ui.StartApp
 import com.example.count_out.ui.view_components.lg
 import dagger.hilt.android.AndroidEntryPoint
@@ -21,7 +20,6 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class MainActivity: ComponentActivity()
 {
-    @Inject lateinit var workOutManager: ServiceManager
     @Inject lateinit var sensorsManager: SensorsApp
     @Inject lateinit var bluetoothAdapter: BluetoothAdapter
 //    @Inject lateinit var bleManager: BleManager

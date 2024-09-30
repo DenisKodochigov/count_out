@@ -5,13 +5,9 @@ import android.bluetooth.BluetoothManager
 import android.content.Context
 import com.example.count_out.entity.MessageApp
 import com.example.count_out.permission.PermissionApp
-import com.example.count_out.service.ServiceUtils
-import com.example.count_out.service.bluetooth.BleBindO
-import com.example.count_out.service.bluetooth.BleConnecting
-import com.example.count_out.service.bluetooth.BleScanner
-import com.example.count_out.service.bluetooth.BleServiceO
-import com.example.count_out.service_app.BleBind
-import com.example.count_out.service_app.BleService
+import com.example.count_out.service_count_out.bluetooth.BleConnecting
+import com.example.count_out.service_count_out.bluetooth.BleScanner
+import com.example.count_out.service_count_out.bluetooth.Bluetooth
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -22,11 +18,6 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 class BluetoothModule {
-
-    @Singleton
-    @Provides
-    fun provideBleBindO(@ApplicationContext context: Context, serviceUtils: ServiceUtils) =
-        BleBindO(context, serviceUtils)
 
     @Singleton
     @Provides
@@ -58,14 +49,10 @@ class BluetoothModule {
 
     @Singleton
     @Provides
-    fun provideBleService() = BleServiceO()
-
-    @Singleton
-    @Provides
-    fun provideBleServ() = BleService()
-
-    @Singleton
-    @Provides
-    fun provideBleBind(@ApplicationContext context: Context, serviceUtils: ServiceUtils) =
-        BleBind(context, serviceUtils)
+    fun provideBluetooth(
+        bleScanner: BleScanner,
+        messengerA: MessageApp,
+        bleConnecting: BleConnecting,
+        bluetoothAdapter: BluetoothAdapter,
+    ): Bluetooth = Bluetooth(bleScanner, messengerA, bleConnecting, bluetoothAdapter)
 }
