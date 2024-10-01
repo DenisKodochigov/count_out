@@ -5,7 +5,7 @@ import android.speech.tts.TextToSpeech
 import android.speech.tts.UtteranceProgressListener
 import com.example.count_out.entity.MessageApp
 import com.example.count_out.entity.RunningState
-import com.example.count_out.entity.SendToUI
+import com.example.count_out.entity.DataForUI
 import com.example.count_out.entity.Speech
 import com.example.count_out.entity.MessageWorkOut
 import com.example.count_out.service_count_out.stopwatch.Watcher
@@ -57,16 +57,16 @@ class SpeechManager(val context: Context) {
                 tts = null }
         }
     }
-    suspend fun speech(sendToUI: SendToUI, speech: Speech): Long {
-        if (sendToUI.runningState.value != RunningState.Stopped){
+    suspend fun speech(dataForUI: DataForUI, speech: Speech): Long {
+        if (dataForUI.runningState.value != RunningState.Stopped){
             val speechText = speech.message + " " + speech.addMessage
             if ((speechText).length > 1) {
-                sendToUI.message.value = MessageWorkOut(message = speechText, tickTime = Watcher.getTickTime().value)
-                speakOutAdd(speechText, sendToUI.runningState)
-                while (tts?.isSpeaking == true || sendToUI.runningState.value == RunningState.Paused)
+                dataForUI.message.value = MessageWorkOut(message = speechText, tickTime = Watcher.getTickTime().value)
+                speakOutAdd(speechText, dataForUI.runningState)
+                while (tts?.isSpeaking == true || dataForUI.runningState.value == RunningState.Paused)
                     { delay(500L) }
                 if( speech.duration == 0L && speech.idSpeech > 0 && duration > 0 ){
-                    sendToUI.durationSpeech.value = speech.idSpeech to duration
+                    dataForUI.durationSpeech.value = speech.idSpeech to duration
                 }
             }
         }

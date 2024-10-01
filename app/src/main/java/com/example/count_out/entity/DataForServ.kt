@@ -4,7 +4,7 @@ import com.example.count_out.entity.bluetooth.BleConnection
 import com.example.count_out.ui.view_components.lg
 import kotlinx.coroutines.flow.MutableStateFlow
 
-data class SendToService(
+data class DataForServ(
     var training: MutableStateFlow<Training?> = MutableStateFlow(null),
     var runningState: MutableStateFlow<RunningState> = MutableStateFlow(RunningState.Stopped),
     var enableSpeechDescription: MutableStateFlow<Boolean> = MutableStateFlow(true),

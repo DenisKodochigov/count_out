@@ -6,21 +6,18 @@ import android.content.pm.ServiceInfo.FOREGROUND_SERVICE_TYPE_DATA_SYNC
 import android.os.Binder
 import android.os.Build
 import android.os.IBinder
+import com.example.count_out.entity.CommandService
 import com.example.count_out.entity.Const.NOTIFICATION_EXTRA
 import com.example.count_out.entity.Const.NOTIFICATION_ID
+import com.example.count_out.entity.DataForServ
+import com.example.count_out.entity.DataForUI
 import com.example.count_out.entity.MessageApp
 import com.example.count_out.entity.RunningState
-import com.example.count_out.entity.SendToService
-import com.example.count_out.entity.SendToUI
 import com.example.count_out.entity.Site
-import com.example.count_out.entity.StateBleScanner
 import com.example.count_out.helpers.NotificationHelper
 import com.example.count_out.service_count_out.bluetooth.Bluetooth
 import com.example.count_out.service_count_out.workout.Work
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -28,8 +25,8 @@ import javax.inject.Singleton
 @AndroidEntryPoint
 class CountOutService @Inject constructor(): Service() {
 
-    val sendToUI: SendToUI = SendToUI()
-    private var sendToService: SendToService? = null
+    val dataForUI: DataForUI = DataForUI()
+    private var dataForServ: DataForServ? = null
     private val site: Site? = null
     @Inject lateinit var notificationHelper: NotificationHelper
     @Inject lateinit var messageApp: MessageApp
@@ -40,17 +37,35 @@ class CountOutService @Inject constructor(): Service() {
     override fun onBind(p0: Intent?): IBinder = DistributionServiceBinder()
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         when (intent?.getStringExtra(NOTIFICATION_EXTRA)) {
-            RunningState.Started.name -> goonWork()
+            RunningState.Started.name -> startWork()
             RunningState.Paused.name -> pauseWork()
-            RunningState.Stopped.name -> stopWork()
+            RunningState.Stopped.name -> dataForUI.runningState.value = RunningState.Stopped
         }
         return super.onStartCommand(intent, flags, startId)
     }
 
-    fun startCountOutService(sendToServ: SendToService): SendToUI?{
-        sendToService = sendToServ
+    fun commandService(command: CommandService, dataServ: DataForServ){
+        when(command){
+            CommandService.START_SERVICE->{ startCountOutService(dataServ)}
+            CommandService.STOP_SERVICE->{ stopCountOutService() }
+            CommandService.START_WORK->{ startWork() }
+            CommandService.STOP_WORK->{ dataForUI.runningState.value = RunningState.Stopped }
+            CommandService.PAUSE_WORK->{ pauseWork() }
+            CommandService.CONNECT_DEVICE->{
+                dataForServ?.let { dataForSrv -> ble.connectDevice(dataForUI, dataForSrv) }
+            }
+            CommandService.DISCONNECT_DEVICE->{ ble.disconnectDevice() }
+            CommandService.START_SCANNING->{ ble.startScanning(dataForUI) }
+            CommandService.STOP_SCANNING->{ ble.stopScanning(dataForUI) }
+            CommandService.CLEAR_CACHE_BLE->{ ble.onClearCacheBLE() }
+            CommandService.START_LOCATION->{ site?.start() }
+            CommandService.STOP_LOCATION->{ site?.stop() }
+        }
+    }
+
+    private fun startCountOutService(sendToServ: DataForServ){
+        dataForServ = sendToServ
         startForegroundService()
-        return sendToUI
     }
     private fun startForegroundService() {
         if (!notificationHelper.channelExist()) notificationHelper.createChannel()
@@ -59,75 +74,28 @@ class CountOutService @Inject constructor(): Service() {
         }
         else startForeground(NOTIFICATION_ID, notificationHelper.build())
     }
-    fun stopCountOutService(){
-        sendToService = null
+    private fun stopCountOutService(){
+        dataForServ = null
         messageApp.messageApi("Stop Distribution Service")
         stopForeground(STOP_FOREGROUND_REMOVE)
         notificationHelper.cancel()
     }
-
-    fun startWork(){
-        if (sendToUI.runningState.value == RunningState.Stopped){
-            messageApp.messageApi("Start WorkOut")
-            sendToUI.runningState.value = RunningState.Started
-            sendToUI.nextSet.value = sendToService?.getSet(0)
-            work.start(sendToUI, sendToService){ stopWork() }
-        } //else if (it.runningState.value == RunningState.Paused) { continueWorkout() }
-    }
-    private fun stopWork(){
-        messageApp.messageApi("Stop WorkOut")
-        work.stop()
-        sendToUI.cancel()
-    }
-    fun stopWorkSignal() {
-        messageApp.messageApi("Command Stop WorkOut")
-        sendToUI.runningState.value = RunningState.Stopped
-    }
-    fun pauseWork(){
-        messageApp.messageApi("Command Pause WorkOut")
-        sendToUI.runningState.value = RunningState.Paused
-        notificationHelper.setContinueButton()
-    }
-    fun goonWork(){
-        if (sendToUI.runningState.value == RunningState.Paused){
-            sendToUI.runningState.value = RunningState.Started
+    fun getDataForUi() = dataForUI
+    private fun startWork(){
+        if (dataForUI.runningState.value == RunningState.Paused){
+            dataForUI.runningState.value = RunningState.Started
             notificationHelper.setPauseButton()
         }
+        if (dataForUI.runningState.value == RunningState.Stopped){
+            dataForUI.runningState.value = RunningState.Started
+            notificationHelper.setPauseButton()
+            dataForUI.nextSet.value = dataForServ?.getSet(0)
+            work.start(dataForUI, dataForServ){ dataForUI.cancel() }
+        } //else if (it.runningState.value == RunningState.Paused) { continueWorkout() }
     }
-
-    fun connectDevice(){
-        if (ble.state.stateBleScanner == StateBleScanner.RUNNING) ble.stopScannerBLEDevices(sendToUI)
-        sendToService?.let { it1 -> ble.connectDevice(sendToUI, it1) }
+    private fun pauseWork(){
+        dataForUI.runningState.value = RunningState.Paused
+        notificationHelper.setContinueButton()
     }
-    fun disconnectDevice() {
-        ble.disconnectDevice()
-    }
-    fun startScanningBle(){
-        CoroutineScope(Dispatchers.Default).launch {
-            ble.stopScannerBLEDevices(sendToUI)
-            ble.startScannerBLEDevices(sendToUI)
-        }
-    }
-    fun stopScanningBle() {
-        ble.stopScannerBLEDevices(sendToUI)
-    }
-
-    fun receiveDataBle(){}
-
-    fun onClearCacheBLE() { ble.onClearCacheBLE()}
-
-    fun startLocation(){site?.start()}
-
-    fun stopLocation(){site?.stop()}
-
-    fun receiveDataLocation(){}
-
-    fun sendDataUI(){}
-
-    fun sendDataBase(){}
-
-    fun getStateBle(){}
-
-    fun getStateLocation(){}
 
 }

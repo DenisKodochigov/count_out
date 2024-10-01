@@ -5,12 +5,12 @@ import androidx.lifecycle.viewModelScope
 import com.example.count_out.R
 import com.example.count_out.data.DataRepository
 import com.example.count_out.data.room.tables.SetDB
+import com.example.count_out.entity.CommandService
+import com.example.count_out.entity.DataForServ
+import com.example.count_out.entity.DataForUI
 import com.example.count_out.entity.MessageApp
 import com.example.count_out.entity.RunningState
-import com.example.count_out.entity.SendToService
-import com.example.count_out.entity.SendToUI
 import com.example.count_out.entity.TickTime
-import com.example.count_out.entity.Training
 import com.example.count_out.service_count_out.CountOutServiceBind
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -29,15 +29,18 @@ class ExecuteWorkViewModel @Inject constructor(
 ): ViewModel() {
     private val _executeWorkoutScreenState = MutableStateFlow(
         ExecuteWorkoutScreenState(
-            startWorkOutService = { startWork(it) },
-            stopWorkOutService = { stopWork() },
-            pauseWorkOutService = { pauseWork() },
+            startWorkOutService = {
+                dataForServ.training.value = it
+                commandService(CommandService.START_WORK) },
+            stopWorkOutService = { commandService(CommandService.STOP_WORK) },
+            pauseWorkOutService = { commandService(CommandService.PAUSE_WORK) },
             updateSet = { trainingId, setDB -> updateSet(trainingId, setDB) }
         ))
     val executeWorkoutScreenState: StateFlow<ExecuteWorkoutScreenState> =
         _executeWorkoutScreenState.asStateFlow()
 
-    private var sendToService = SendToService()
+    private var dataForServ = DataForServ()
+    private val isBindService: MutableStateFlow<Boolean> = MutableStateFlow(false)
 
     init {
         initServiceApp()
@@ -46,69 +49,36 @@ class ExecuteWorkViewModel @Inject constructor(
     private fun initServiceApp(){
         viewModelScope.launch(Dispatchers.IO) {
             kotlin.runCatching {
-                if ( !serviceBind.isBound.value ) {
-                    serviceBind.bindService()
-                    serviceBind.service.startCountOutService(sendToService)
-                } else null
+                if ( !serviceBind.isBound.value ) serviceBind.bindService()
+                dataForServ.enableSpeechDescription =
+                    MutableStateFlow(dataRepository.getSetting(R.string.speech_description).value == 1)
             }.fold(
-                onSuccess = { it?.let { senUI ->  receiveState(senUI)}},
+                onSuccess = { },
                 onFailure = { messageApp.errorApi("initServiceApp ${it.message ?: ""}") }
             )
         }
-    }
-
-    private fun startWork(training: Training){
-        if (sendToService.runningState.value == RunningState.Paused) goonWork()
-        else  startWorkOut(training)
-    }
-    private fun startWorkOut(training: Training) {
         viewModelScope.launch(Dispatchers.IO) {
-            kotlin.runCatching {
-                sendToService.training = MutableStateFlow(training)
-                sendToService.runningState = MutableStateFlow(RunningState.Started )
-                sendToService.enableSpeechDescription =
-                    MutableStateFlow(dataRepository.getSetting(R.string.speech_description).value == 1)
-                serviceBind.service.startWork()
-            }.fold(
-                onSuccess = {  },
-                onFailure = { messageApp.errorApi(it.message ?: "") }
-            )
+            serviceBind.isBound.collect { isBound->
+                if (isBound) {
+                    kotlin.runCatching {
+                        commandService( CommandService.START_SERVICE )
+                        serviceBind.service.getDataForUi()
+                    }.fold(
+                        onSuccess = { receiveState(it) },
+                        onFailure = { messageApp.errorApi("initServiceApp1 ${it.message ?: ""}") }
+                    )
+                }
+            }
         }
     }
-    private fun goonWork() {
+    private fun commandSrv(command: CommandService){
+        serviceBind.service.commandService( command, dataForServ)
+    }
+    private fun commandService(command: CommandService){
         viewModelScope.launch(Dispatchers.IO) {
-            kotlin.runCatching { serviceBind.service.goonWork() }.fold(
+            kotlin.runCatching { commandSrv( command) }.fold(
                 onSuccess = { },
-                onFailure = { messageApp.errorApi(it.message ?: "") }
-            )
-        }
-    }
-    private fun pauseWork(){
-        viewModelScope.launch(Dispatchers.IO) {
-            kotlin.runCatching { serviceBind.service.pauseWork() }.fold(
-                onSuccess = { _executeWorkoutScreenState.update { currentState ->
-                        currentState.copy( stateWorkOutService =
-                            serviceBind.service.sendToUI.runningState.value)
-                    }
-                },
-                onFailure = { messageApp.errorApi(it.message ?: "") }
-            )
-        }
-    }
-    private fun stopWork(){
-        viewModelScope.launch(Dispatchers.IO) {
-            kotlin.runCatching { serviceBind.service.stopWorkSignal() }.fold(
-                onSuccess = {
-                    _executeWorkoutScreenState.update { currentState ->
-                        currentState.copy(
-                            startTime = 0L,
-                            tickTime = TickTime(hour = "00", min = "00", sec = "00"),
-                            messageWorkout = emptyList(),
-//                            stateWorkOutService = service.sendToService(),
-                        )
-                    }
-                },
-                onFailure = { messageApp.errorApi(it.message ?: "") }
+                onFailure = { messageApp.errorApi("initServiceApp ${it.message ?: ""}") }
             )
         }
     }
@@ -118,7 +88,7 @@ class ExecuteWorkViewModel @Inject constructor(
             kotlin.runCatching { dataRepository.getTraining(id) }.fold(
                 onSuccess = {
                     _executeWorkoutScreenState.update { currentState -> currentState.copy( training = it ) }
-                    sendToService.training.value = it
+                    dataForServ.training.value = it
                 },
                 onFailure = { messageApp.errorApi(it.message ?: "") }
             )
@@ -131,7 +101,7 @@ class ExecuteWorkViewModel @Inject constructor(
                 onSuccess = {
                     _executeWorkoutScreenState.update { currentState ->
                         currentState.copy(training = it, playerSet = set) }
-                    sendToService.training.value = it
+                    dataForServ.training.value = it
                 },
                 onFailure = { messageApp.errorApi(it.message ?: "") }
             )
@@ -140,33 +110,41 @@ class ExecuteWorkViewModel @Inject constructor(
 
     private fun connectToStoredBleDev() {
         viewModelScope.launch(Dispatchers.IO) {
-            dataRepository.getBleDevStoreFlow().collect{
-                if (it.address.isNotEmpty()) {
-                    sendToService.addressForSearch = it.address
-                    serviceBind.service.connectDevice()
+            dataRepository.getBleDevStoreFlow().collect{ device->
+                if (device.address.isNotEmpty()) {
+                    dataForServ.addressForSearch = device.address
+                    commandSrv( CommandService.CONNECT_DEVICE)
                 }
             }
         }
     }
 
-    private fun receiveState(sendToUI: SendToUI){
+    private fun receiveState(dataForUI: DataForUI){
         viewModelScope.launch(Dispatchers.IO) {
-            sendToUI.runningState.collect{
-                sendToService.runningState.value = it
-                _executeWorkoutScreenState.update { currentState -> currentState.copy(stateWorkOutService = it) }
+            dataForUI.runningState.collect{
+                dataForServ.runningState.value = it
+                _executeWorkoutScreenState.update { currentState ->
+                    currentState.copy(stateWorkOutService = it) }
                 if (it == RunningState.Stopped) {
-                    sendToService = SendToService()
+                    dataForServ = DataForServ()
+                    _executeWorkoutScreenState.update { currentState ->
+                        currentState.copy(
+                            startTime = 0L,
+                            tickTime = TickTime(hour = "00", min = "00", sec = "00"),
+                            messageWorkout = emptyList(),
+                        )
+                    }
                     return@collect
                 }
             }
         }
         viewModelScope.launch(Dispatchers.IO) {
-            sendToUI.set.collect{ set->
+            dataForUI.set.collect{ set->
                 _executeWorkoutScreenState.update { currentState -> currentState.copy( playerSet = set )}
                 if (executeWorkoutScreenState.value.stateWorkOutService == RunningState.Stopped) return@collect}
         }
         viewModelScope.launch(Dispatchers.IO) {
-            sendToUI.nextSet.collect{ set->
+            dataForUI.nextSet.collect{ set->
                 _executeWorkoutScreenState.update { currentState ->
                     currentState.copy(
                         listActivity = if (set != null ) currentState.activityList(set.idSet)
@@ -174,17 +152,16 @@ class ExecuteWorkViewModel @Inject constructor(
                 if (executeWorkoutScreenState.value.stateWorkOutService == RunningState.Stopped) return@collect}
         }
         viewModelScope.launch(Dispatchers.IO) {
-            sendToUI.flowTick.collect { tick ->
-                _executeWorkoutScreenState.update { currentState ->
-                    currentState.copy( tickTime = tick )}
+            dataForUI.flowTick.collect { tick ->
+                _executeWorkoutScreenState.update { currentState -> currentState.copy( tickTime = tick )}
                 if (executeWorkoutScreenState.value.stateWorkOutService == RunningState.Stopped) return@collect}
         }
         viewModelScope.launch(Dispatchers.IO) {
-            sendToUI.durationSpeech.collect { duration ->
+            dataForUI.durationSpeech.collect { duration ->
                 dataRepository.updateDuration(duration)}
         }
         viewModelScope.launch(Dispatchers.IO) {
-            sendToUI.message.collect { message ->
+            dataForUI.message.collect { message ->
                 message?.let { mes->
                     _executeWorkoutScreenState.update { currentState ->
                         currentState.copy( messageWorkout = currentState.addMessage(mes) ) }
@@ -192,22 +169,22 @@ class ExecuteWorkViewModel @Inject constructor(
             }
         }
         viewModelScope.launch(Dispatchers.IO) {
-            sendToUI.lastConnectHearthRateDeviceF.collect { lastHR ->
-                if (sendToUI.runningState.value == RunningState.Stopped) return@collect
+            dataForUI.lastConnectHearthRateDeviceF.collect { lastHR ->
+                if (dataForUI.runningState.value == RunningState.Stopped) return@collect
                 _executeWorkoutScreenState.update { currentState ->
                     currentState.copy(lastConnectHearthRateDevice = lastHR) }
             }
         }
         viewModelScope.launch(Dispatchers.IO) {
-            sendToUI.connectingStateF.collect { state ->
-                if (sendToUI.runningState.value == RunningState.Stopped) return@collect
+            dataForUI.connectingStateF.collect { state ->
+                if (dataForUI.runningState.value == RunningState.Stopped) return@collect
                 _executeWorkoutScreenState.update { currentState ->
                     currentState.copy( connectingState = state,) }
             }
         }
         viewModelScope.launch(Dispatchers.IO) {
-            sendToUI.heartRateF.collect { hr ->
-                if (sendToUI.runningState.value == RunningState.Stopped) return@collect
+            dataForUI.heartRateF.collect { hr ->
+                if (dataForUI.runningState.value == RunningState.Stopped) return@collect
                 _executeWorkoutScreenState.update { currentState ->
                     currentState.copy(heartRate = hr) }
             }

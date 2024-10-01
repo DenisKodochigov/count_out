@@ -30,6 +30,20 @@ enum class ErrorBleService{
     NONE, GET_REMOTE_DEVICE, CONNECT_DEVICE, NOT_CONNECT_GATT, DISCOVER_SERVICE
 }
 
+enum class CommandService(var arg: String){
+    START_SERVICE(""),
+    STOP_SERVICE(""),
+    START_WORK(""),
+    STOP_WORK(""),
+    PAUSE_WORK(""),
+    CONNECT_DEVICE(""),
+    DISCONNECT_DEVICE(""),
+    START_SCANNING(""),
+    STOP_SCANNING(""),
+    CLEAR_CACHE_BLE(""),
+    START_LOCATION(""),
+    STOP_LOCATION(""),
+}
 /**This class describes the HCI error codes as defined in the Bluetooth Standard, Volume 1, Part F,
  * 1.3 HCI Error Code, pages 364-377.
  * See https://www.bluetooth.org/docman/handlers/downloaddoc.ashx?doc_id=478726,*/

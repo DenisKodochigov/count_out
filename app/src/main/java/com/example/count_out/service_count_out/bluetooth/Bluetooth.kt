@@ -3,11 +3,11 @@ package com.example.count_out.service_count_out.bluetooth
 import android.bluetooth.BluetoothAdapter
 import com.example.count_out.entity.BleTask
 import com.example.count_out.entity.ConnectState
+import com.example.count_out.entity.DataForServ
+import com.example.count_out.entity.DataForUI
 import com.example.count_out.entity.ErrorBleService
 import com.example.count_out.entity.MessageApp
 import com.example.count_out.entity.RunningState
-import com.example.count_out.entity.SendToService
-import com.example.count_out.entity.SendToUI
 import com.example.count_out.entity.StateBleConnecting
 import com.example.count_out.entity.StateBleScanner
 import com.example.count_out.entity.bluetooth.BleConnection
@@ -29,64 +29,63 @@ class Bluetooth @Inject constructor(
 
     val state = BleStates()
 
-    fun startScanning(){}
-
-    fun stopScanning(){}
-
     fun receiveHR(){}
 
-    fun startScannerBLEDevices(sendToUi: SendToUI){
+    fun startScanning(dataForUi: DataForUI){
+        stopScanning(dataForUi)
         if (state.stateBleScanner == StateBleScanner.END){
             state.stateBleScanner = StateBleScanner.RUNNING
-            bleScanner.startScannerBLEDevices(sendToUi, state)
+            bleScanner.startScannerBLEDevices(dataForUi, state)
             messageApp.messageApi("Start scanner.")
         }
     }
 
-    fun stopScannerBLEDevices(sendToUi: SendToUI){
+    fun stopScanning(dataForUi: DataForUI){
         if (state.stateBleScanner == StateBleScanner.RUNNING){
             state.stateBleScanner = StateBleScanner.END
-            bleScanner.stopScannerBLEDevices(sendToUi)
+            bleScanner.stopScannerBLEDevices(dataForUi)
             messageApp.messageApi("Stop scanner.")
         }
     }
 
-    fun connectDevice(sendToUi: SendToUI, sendToBle: SendToService){
-        sendToUi.connectingStateF.value = ConnectState.CONNECTING
+    fun connectDevice(dataForUI: DataForUI, dataForBle: DataForServ){
+        if (state.stateBleScanner == StateBleScanner.RUNNING) stopScanning(dataForUI)
+
+        dataForUI.connectingStateF.value = ConnectState.CONNECTING
         state.task = BleTask.CONNECT_DEVICE
-        getRemoteDevice(bluetoothAdapter, sendToBle, sendToUi, state)
-        sendHeartRate(bleConnecting.heartRate, sendToUi)
-        if ( sendToBle.currentConnection != null ) {
-            bleConnecting.connectDevice(state, sendToBle)
+        getRemoteDevice(bluetoothAdapter, dataForBle, dataForUI, state)
+        sendHeartRate(bleConnecting.heartRate, dataForUI)
+        if ( dataForBle.currentConnection != null ) {
+            bleConnecting.connectDevice(state, dataForBle)
         }
     }
 
-    private fun sendHeartRate(heartRate: MutableStateFlow<Int>, sendToUi: SendToUI){
+    private fun sendHeartRate(heartRate: MutableStateFlow<Int>, dataForUi: DataForUI){
         CoroutineScope(Dispatchers.Default).launch {
             heartRate.collect{ hr->
-                if(sendToUi.runningState.value == RunningState.Stopped) return@collect
-                sendToUi.heartRateF.value = hr
+                if(dataForUi.runningState.value == RunningState.Stopped) return@collect
+                dataForUi.heartRateF.value = hr
 //                sendToUi.update { send-> send.copy( heartRate = hr,) }
-                if ( hr > 0) sendToUi.connectingStateF.value = ConnectState.CONNECTED
+                if ( hr > 0) dataForUi.connectingStateF.value = ConnectState.CONNECTED
 //                if ( hr > 0) sendToUi.update { send-> send.copy( connectingState = ConnectState.CONNECTED) }
             }
         }
     }
     private fun getRemoteDevice(
         bluetoothAdapter: BluetoothAdapter,
-        sendToBle: SendToService,
-        sendToUi: SendToUI,
+        dataForBle: DataForServ,
+        dataForUi: DataForUI,
         bleStates: BleStates,
     ): Boolean {
         var result = false
         if (bleStates.stateBleScanner == StateBleScanner.END){
             bluetoothAdapter.let { adapter ->
                 try {
-                    adapter.getRemoteDevice(sendToBle.addressForSearch)?.let { dv ->
-                        sendToUi.lastConnectHearthRateDeviceF.value = BleDevice().fromBluetoothDevice(dv)
+                    adapter.getRemoteDevice(dataForBle.addressForSearch)?.let { dv ->
+                        dataForUi.lastConnectHearthRateDeviceF.value = BleDevice().fromBluetoothDevice(dv)
 //                        sendToUi.update { send->
 //                            send.copy(lastConnectHearthRateDevice = BleDevice().fromBluetoothDevice(dv)) }
-                        sendToBle.currentConnection = BleConnection(device = dv)
+                        dataForBle.currentConnection = BleConnection(device = dv)
                         result = true
                         bleStates.stateBleConnecting = StateBleConnecting.GET_REMOTE_DEVICE
                     }

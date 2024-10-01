@@ -14,7 +14,7 @@ import android.os.Build
 import com.example.count_out.entity.Const.UUIDBle
 import com.example.count_out.entity.ErrorBleService
 import com.example.count_out.entity.MessageApp
-import com.example.count_out.entity.SendToService
+import com.example.count_out.entity.DataForServ
 import com.example.count_out.entity.StateBleConnecting
 import com.example.count_out.entity.bluetooth.BleConnection
 import com.example.count_out.entity.bluetooth.BleStates
@@ -36,7 +36,7 @@ class BleConnecting @Inject constructor(
     private val UUID_HEART_RATE_MEASUREMENT = UUID.fromString(UUIDBle.HEART_RATE_MEASUREMENT)
     private val UUID_CLIENT_CHARACTERISTIC_CONFIG = UUID.fromString(UUIDBle.CLIENT_CHARACTERISTIC_CONFIG)
 
-    fun connectDevice(bleStates: BleStates, sendToBle: SendToService){
+    fun connectDevice(bleStates: BleStates, sendToBle: DataForServ){
         sendToBle.currentConnection?.let {
             connection = it
             connectingGatt( bleStates )

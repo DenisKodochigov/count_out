@@ -3,7 +3,7 @@ package com.example.count_out.entity
 import com.example.count_out.entity.bluetooth.DeviceUI
 import kotlinx.coroutines.flow.MutableStateFlow
 
-data class SendToUI (
+data class DataForUI (
     var flowTick: MutableStateFlow<TickTime> = MutableStateFlow(TickTime()),
     val message: MutableStateFlow<MessageWorkOut?> = MutableStateFlow(null),
     val set: MutableStateFlow<Set?> = MutableStateFlow(null),

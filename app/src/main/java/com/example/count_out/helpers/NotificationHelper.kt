@@ -64,14 +64,16 @@ class NotificationHelper @Inject constructor(private val context: Context)
     fun setContinueButton() {
         notificationBuilder.mActions.removeAt(0)
         notificationBuilder.mActions.add(
-            0, NotificationCompat.Action(0, "Continue", intentAction(RunningState.Started.name, START_REQUEST_CODE)))
+            0, NotificationCompat.Action(0, "Continue",
+                intentAction(RunningState.Started.name, START_REQUEST_CODE)))
         notificationManager.notify(NOTIFICATION_ID, notificationBuilder.build())
     }
     @SuppressLint("RestrictedApi")
     fun setPauseButton() {
         notificationBuilder.mActions.removeAt(0)
         notificationBuilder.mActions.add(0,
-            NotificationCompat.Action(0, "Pause", intentAction(RunningState.Paused.name, PAUSE_REQUEST_CODE)))
+            NotificationCompat.Action(0, "Pause",
+                intentAction(RunningState.Paused.name, PAUSE_REQUEST_CODE)))
         notificationManager.notify(NOTIFICATION_ID, notificationBuilder.build())
     }
 

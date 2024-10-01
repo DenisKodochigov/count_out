@@ -7,7 +7,7 @@ import android.bluetooth.le.ScanFilter
 import android.content.Context
 import android.os.ParcelUuid
 import com.example.count_out.entity.Const
-import com.example.count_out.entity.SendToUI
+import com.example.count_out.entity.DataForUI
 import com.example.count_out.entity.StateBleScanner
 import com.example.count_out.entity.bluetooth.BleStates
 import com.example.count_out.permission.PermissionApp
@@ -45,29 +45,29 @@ class BleScanner @Inject constructor(
     }
 
     @SuppressLint("MissingPermission")
-    fun startScannerBLEDevices(sendToUi: SendToUI, bleStates: BleStates) {
+    fun startScannerBLEDevices(dataForUi: DataForUI, bleStates: BleStates) {
         CoroutineScope(Dispatchers.Default).launch {
-            scanCallback = objectScanCallback(bleStates, sendToUi)
+            scanCallback = objectScanCallback(bleStates, dataForUi)
             permissionApp.checkBleScan{
                 bleScanner.startScan( scanFilters(), scanSettings(0L), scanCallback) }
-            sendToUi.scannedBleF.value = true
+            dataForUi.scannedBleF.value = true
             timer.start(
                 sec = timeScanning,
                 endCommand = {
                     bleStates.stateBleScanner = StateBleScanner.END
-                    stopScanner(sendToUi)
+                    stopScanner(dataForUi)
                 }
             )
         }
     }
-    fun stopScannerBLEDevices(sendToUi: SendToUI) {
+    fun stopScannerBLEDevices(dataForUi: DataForUI) {
         timer.cancel()
-        stopScanner(sendToUi)
+        stopScanner(dataForUi)
     }
     @SuppressLint("MissingPermission")
-    fun stopScanner(sendToUI: SendToUI){
+    fun stopScanner(dataForUI: DataForUI){
         lg("Stop scanner")
         permissionApp.checkBleScan{ bleScanner.stopScan(scanCallback)}
-        sendToUI.scannedBleF.value = false
+        dataForUI.scannedBleF.value = false
     }
 }
