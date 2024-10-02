@@ -76,7 +76,7 @@ class SettingViewModel @Inject constructor(
             }
         }
     }
-    private fun commandSrv(command: CommandService){
+    private suspend fun commandSrv(command: CommandService){
         serviceBind.service.commandService( command, dataForServ)
     }
     private fun commandService(command: CommandService){
@@ -122,35 +122,35 @@ class SettingViewModel @Inject constructor(
     }
     private fun receiveState(dataForUI: DataForUI) { //
         viewModelScope.launch(Dispatchers.IO) {
-            dataForUI.lastConnectHearthRateDeviceF.collect { lastHR ->
+            dataForUI.lastConnectHearthRateDevice.collect { lastHR ->
                 if (dataForUI.runningState.value == RunningState.Stopped) return@collect
                 _settingScreenState.update { currentState ->
                     currentState.copy(lastConnectHearthRateDevice = lastHR) }
             }
         }
         viewModelScope.launch(Dispatchers.IO) {
-            dataForUI.connectingStateF.collect { state ->
+            dataForUI.connectingState.collect { state ->
                 if (dataForUI.runningState.value == RunningState.Stopped) return@collect
                 _settingScreenState.update { currentState ->
                     currentState.copy( connectingState = state,) }
             }
         }
         viewModelScope.launch(Dispatchers.IO) {
-            dataForUI.heartRateF.collect { hr ->
+            dataForUI.heartRate.collect { hr ->
                 if (dataForUI.runningState.value == RunningState.Stopped) return@collect
                 _settingScreenState.update { currentState ->
                     currentState.copy(heartRate = hr) }
             }
         }
         viewModelScope.launch(Dispatchers.IO) {
-            dataForUI.scannedBleF.collect { scannedBle ->
+            dataForUI.scannedBle.collect { scannedBle ->
                 if (dataForUI.runningState.value == RunningState.Stopped) return@collect
                 _settingScreenState.update { currentState ->
                     currentState.copy(scannedBle = scannedBle) }
             }
         }
         viewModelScope.launch(Dispatchers.IO) {
-            dataForUI.foundDevicesF.collect { foundDevices ->
+            dataForUI.foundDevices.collect { foundDevices ->
                 if (dataForUI.runningState.value == RunningState.Stopped) return@collect
                 _settingScreenState.update { currentState ->
                     currentState.copy(devicesUI = foundDevices) }

@@ -50,7 +50,7 @@ class BleScanner @Inject constructor(
             scanCallback = objectScanCallback(bleStates, dataForUi)
             permissionApp.checkBleScan{
                 bleScanner.startScan( scanFilters(), scanSettings(0L), scanCallback) }
-            dataForUi.scannedBleF.value = true
+            dataForUi.scannedBle.value = true
             timer.start(
                 sec = timeScanning,
                 endCommand = {
@@ -68,6 +68,6 @@ class BleScanner @Inject constructor(
     fun stopScanner(dataForUI: DataForUI){
         lg("Stop scanner")
         permissionApp.checkBleScan{ bleScanner.stopScan(scanCallback)}
-        dataForUI.scannedBleF.value = false
+        dataForUI.scannedBle.value = false
     }
 }

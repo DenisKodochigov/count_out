@@ -34,7 +34,6 @@ fun BottomSheetAddActivity(uiState: SettingScreenState)
 @Composable
 fun BottomSheetAddActivityContent(uiState: SettingScreenState)
 {
-    lg("BottomSheetAddActivityContent")
     Column( horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier
             .fillMaxWidth()

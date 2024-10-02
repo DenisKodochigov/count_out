@@ -12,25 +12,21 @@ data class DataForUI (
     val runningState: MutableStateFlow<RunningState> = MutableStateFlow(RunningState.Stopped),
     var mark: MutableStateFlow<Mark> = MutableStateFlow(Mark()),
 
-    var heartRate: Int = 0,
-    var scannedBle: Boolean = false,
-    val connectingState: ConnectState = ConnectState.NOT_CONNECTED,
-    var foundDevices: List<DeviceUI> = emptyList(),
-    var lastConnectHearthRateDevice: DeviceUI? = null,
+    val heartRate: MutableStateFlow<Int> = MutableStateFlow(0),
+    var scannedBle: MutableStateFlow<Boolean> = MutableStateFlow(false),
+    val connectingState: MutableStateFlow<ConnectState> = MutableStateFlow(ConnectState.NOT_CONNECTED),
+    var foundDevices: MutableStateFlow<List<DeviceUI>> = MutableStateFlow(emptyList()),
+    var lastConnectHearthRateDevice: MutableStateFlow<DeviceUI?> = MutableStateFlow(null),
 
-    val heartRateF: MutableStateFlow<Int> = MutableStateFlow(0),
-    var scannedBleF: MutableStateFlow<Boolean> = MutableStateFlow(false),
-    val connectingStateF: MutableStateFlow<ConnectState> = MutableStateFlow(ConnectState.NOT_CONNECTED),
-    var foundDevicesF: MutableStateFlow<List<DeviceUI>> = MutableStateFlow(emptyList()),
-    var lastConnectHearthRateDeviceF: MutableStateFlow<DeviceUI?> = MutableStateFlow(null),
+    var cancelCoroutineWork: ()-> Unit = {}
 ){
 
-    fun cancel(){
+    fun empty(){
         flowTick.value = TickTime()
         set.value = null
         nextSet.value = null
         durationSpeech.value = Pair(0,0)
         runningState.value = RunningState.Stopped
-        heartRate = 0
+        heartRate.value = 0
     }
 }

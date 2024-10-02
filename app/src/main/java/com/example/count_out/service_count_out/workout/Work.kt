@@ -11,41 +11,36 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+import kotlin.coroutines.cancellation.CancellationException
 
 class Work @Inject constructor(val speechManager: SpeechManager, val executeWork: ExecuteWork){
 
-    fun start(dataForUI: DataForUI?, sendToWork: DataForServ?, stopWorkout: ()->Unit){
+    fun start( dataForUI: DataForUI, dataForWork: DataForServ?){
         speechManager.init {
-            getTick(dataForUI)
-            speaking(dataForUI, sendToWork,  stopWorkout)
+            getTick( dataForUI )
+            speaking( dataForUI, dataForWork )
         }
     }
     fun stop(){
         Watcher.stop()
         speechManager.stopTts()
+        throw CancellationException()
     }
-
-    private fun speaking(dataForUI: DataForUI?, sendToWork: DataForServ?, stopWorkout: ()->Unit) {
-        dataForUI?.let { toUI->
-            sendToWork?.let { toWork->
-                CoroutineScope(Dispatchers.Default).launch {
-                    toUI.mark.value = toWork.training.value?.let {
-                        toUI.mark.value.copy(idTraining = it.idTraining.toInt()) } ?:Mark()
-                    executeWork.executeWorkOut( toWork, toUI)
-                    stop()
-                    stopWorkout()
-                }
+    private fun speaking(dataForUI: DataForUI, dataForWork: DataForServ?) {
+        if (dataForWork != null ) {
+            CoroutineScope(Dispatchers.Default).launch {
+                dataForUI.mark.value = Mark(idTraining = dataForWork.training.value?.idTraining?.toInt() ?: 0)
+                dataForUI.cancelCoroutineWork = { stop() }
+                executeWork.executeWorkOut( dataForWork, dataForUI)
             }
         }
     }
-    private fun getTick(dataForUI: DataForUI?){
-        dataForUI?.let {
-            Watcher.start(it.runningState)
-            CoroutineScope(Dispatchers.Default).launch {
-                Watcher.getTickTime().collect{ tick ->
-                    if (dataForUI.runningState.value == RunningState.Stopped) return@collect
-                    it.flowTick.value = tick
-                }
+    private fun getTick( dataForUI: DataForUI ){
+        Watcher.start(dataForUI.runningState)
+        CoroutineScope(Dispatchers.Default).launch {
+            Watcher.getTickTime().collect{ tick ->
+                if (dataForUI.runningState.value == RunningState.Stopped) return@collect
+                dataForUI.flowTick.value = tick
             }
         }
     }

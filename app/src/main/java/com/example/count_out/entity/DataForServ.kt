@@ -14,11 +14,22 @@ data class DataForServ(
     var addressForSearch: String = "",
     var currentConnection: BleConnection? = null
 ) {
+    fun empty(){
+        training = MutableStateFlow(null)
+        runningState = MutableStateFlow(RunningState.Stopped)
+        enableSpeechDescription = MutableStateFlow(true)
+        indexRound = 0
+        indexExercise = 0
+        indexSet = 0
+        addressForSearch = ""
+        currentConnection = null
+    }
+
     fun getRound(): Round? {
         return try {
             training.value?.rounds?.get(indexRound)
         } catch (e: Exception) {
-            lg(" ERROR: $e")
+            lg(" ERROR getRound: $e")
             training.value?.let { trng ->
                 if (trng.rounds.count() - 1 < indexRound) indexRound = trng.rounds.count() - 1
             }
@@ -30,7 +41,7 @@ data class DataForServ(
         return try {
             getRound()?.exercise?.get(indexExercise)
         } catch (e: Exception) {
-            lg(" ERROR: $e")
+            lg(" ERROR getExercise: $e")
             training.value?.let { trng ->
                 if (trng.rounds.count() - 1 < indexRound) indexRound = trng.rounds.count() - 1
                 if (trng.rounds[indexRound].exercise.count() - 1 < indexExercise)
@@ -45,7 +56,7 @@ data class DataForServ(
         return try {
             getExercise()?.sets?.get(ind)
         } catch (e: Exception) {
-            lg(" ERROR: $e")
+            lg(" ERROR getSet: $e")
             training.value?.let { trng ->
                 if (trng.rounds.count() - 1 < indexRound) indexRound = trng.rounds.count() - 1
                 if (trng.rounds[indexRound].exercise.count() - 1 < indexExercise)
@@ -61,7 +72,7 @@ data class DataForServ(
         return try {
             indexSet == (getExercise()?.sets?.count() ?: 0) - 1
         } catch (e: Exception) {
-            lg(" ERROR: $e")
+            lg(" ERROR lastSet: $e")
             false
         }
     }
@@ -70,7 +81,7 @@ data class DataForServ(
         return try {
             getSet()?.intervalReps ?: 0.0
         } catch (e: Exception) {
-            lg(" ERROR: $e")
+            lg(" ERROR getSetIntervalReps: $e")
             0.0
         }
     }
@@ -79,7 +90,7 @@ data class DataForServ(
         return try {
             getRound()?.exercise?.count() ?: 0
         } catch (e: Exception) {
-            lg(" ERROR: $e")
+            lg(" ERROR getCurrentExercisesSize: $e")
             0
         }
     }
@@ -90,7 +101,7 @@ data class DataForServ(
                 getRound()?.exercise?.get(indexExercise + 1)
             else getRound()?.exercise?.get(getCurrentExercisesSize() - 1)
         } catch (e: Exception) {
-            lg(" ERROR: $e")
+            lg(" ERROR getNextExercise: $e")
             getRound()?.exercise?.get(getCurrentExercisesSize() - 1)
         }
     }

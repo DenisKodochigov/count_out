@@ -28,8 +28,8 @@ fun objectScanCallback(bleStates: BleStates, dataForUI: DataForUI): ScanCallback
     override fun onScanResult(callbackType: Int, result: ScanResult?) {
         super.onScanResult(callbackType, result)
         result?.device?.let { dev ->
-            if (dataForUI.foundDevicesF.value.find { it.address == dev.address } == null){
-                dataForUI.foundDevicesF.value = dataForUI.foundDevicesF.value.addApp(BleDevice().fromBluetoothDevice(dev))
+            if (dataForUI.foundDevices.value.find { it.address == dev.address } == null){
+                dataForUI.foundDevices.value = dataForUI.foundDevices.value.addApp(BleDevice().fromBluetoothDevice(dev))
             }
         }
     }
@@ -37,16 +37,16 @@ fun objectScanCallback(bleStates: BleStates, dataForUI: DataForUI): ScanCallback
         super.onBatchScanResults(results)
         if (!results.isNullOrEmpty()) {
             results.forEach{ result->
-                if (dataForUI.foundDevicesF.value.find { it.address == result.device.address } == null){
-                    dataForUI.foundDevicesF.value =
-                        dataForUI.foundDevicesF.value.addApp(BleDevice().fromBluetoothDevice(result.device))
+                if (dataForUI.foundDevices.value.find { it.address == result.device.address } == null){
+                    dataForUI.foundDevices.value =
+                        dataForUI.foundDevices.value.addApp(BleDevice().fromBluetoothDevice(result.device))
                 }
             }
         }
     }
     override fun onScanFailed(errorCode: Int) {
         lg("Error scan BLE device. $errorCode")
-        dataForUI.scannedBleF.value = false
+        dataForUI.scannedBle.value = false
         bleStates.stateBleScanner = StateBleScanner.END
     }
 }

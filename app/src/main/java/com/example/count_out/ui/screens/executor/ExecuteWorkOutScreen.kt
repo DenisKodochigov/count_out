@@ -65,7 +65,6 @@ fun ExecuteWorkoutScreen(trainingId: Long ){
 @Composable fun ExecuteWorkoutScreenLayout( uiState: ExecuteWorkoutScreenState){
     if(uiState.listActivity.isEmpty()) {
         uiState.listActivity = uiState.activityList() }
-
     Column(
         modifier = Modifier.fillMaxSize(),
         content = {
@@ -238,22 +237,22 @@ fun ExecuteWorkoutScreen(trainingId: Long ){
 ){
     Row( horizontalArrangement = Arrangement.Center, modifier = Modifier.fillMaxWidth()) {
         when (switchState){
-            RunningState.Started -> StartedService(onClickStop, onClickPause)
-            RunningState.Stopped -> StoppedService(onClickStart)
-            RunningState.Paused -> PauseService(onClickStart, onClickStop)
+            RunningState.Started -> ButtonStartedService(onClickStop, onClickPause)
+            RunningState.Stopped -> ButtonStoppedService(onClickStart)
+            RunningState.Paused -> ButtonPauseService(onClickStart, onClickStop)
         }
     }
     Spacer(modifier = Modifier.height(12.dp))
 }
-@Composable fun StartedService(onClickStop: () -> Unit, onClickPause: () -> Unit,){
+@Composable fun ButtonStartedService(onClickStop: () -> Unit, onClickPause: () -> Unit,){
     IconSingleLarge(Icons.Filled.Pause, onClickPause)
     Spacer(modifier = Modifier.width(12.dp))
     IconSingleLarge(Icons.Filled.Stop, onClickStop )
 }
-@Composable fun StoppedService(onClickStart: () -> Unit,){
+@Composable fun ButtonStoppedService(onClickStart: () -> Unit,){
     IconSingleLarge(Icons.Filled.PlayArrow, onClickStart )
 }
-@Composable fun PauseService(onClickStart: () -> Unit, onClickStop: () -> Unit){
+@Composable fun ButtonPauseService(onClickStart: () -> Unit, onClickStop: () -> Unit){
     IconSingleLarge(Icons.Filled.PlayArrow, onClickStart )
     Spacer(modifier = Modifier.width(12.dp))
     IconSingleLarge(Icons.Filled.Stop, onClickStop )

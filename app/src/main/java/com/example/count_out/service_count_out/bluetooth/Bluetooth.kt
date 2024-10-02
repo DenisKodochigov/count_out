@@ -51,7 +51,7 @@ class Bluetooth @Inject constructor(
     fun connectDevice(dataForUI: DataForUI, dataForBle: DataForServ){
         if (state.stateBleScanner == StateBleScanner.RUNNING) stopScanning(dataForUI)
 
-        dataForUI.connectingStateF.value = ConnectState.CONNECTING
+        dataForUI.connectingState.value = ConnectState.CONNECTING
         state.task = BleTask.CONNECT_DEVICE
         getRemoteDevice(bluetoothAdapter, dataForBle, dataForUI, state)
         sendHeartRate(bleConnecting.heartRate, dataForUI)
@@ -64,10 +64,8 @@ class Bluetooth @Inject constructor(
         CoroutineScope(Dispatchers.Default).launch {
             heartRate.collect{ hr->
                 if(dataForUi.runningState.value == RunningState.Stopped) return@collect
-                dataForUi.heartRateF.value = hr
-//                sendToUi.update { send-> send.copy( heartRate = hr,) }
-                if ( hr > 0) dataForUi.connectingStateF.value = ConnectState.CONNECTED
-//                if ( hr > 0) sendToUi.update { send-> send.copy( connectingState = ConnectState.CONNECTED) }
+                dataForUi.heartRate.value = hr
+                if ( hr > 0) dataForUi.connectingState.value = ConnectState.CONNECTED
             }
         }
     }
@@ -82,9 +80,7 @@ class Bluetooth @Inject constructor(
             bluetoothAdapter.let { adapter ->
                 try {
                     adapter.getRemoteDevice(dataForBle.addressForSearch)?.let { dv ->
-                        dataForUi.lastConnectHearthRateDeviceF.value = BleDevice().fromBluetoothDevice(dv)
-//                        sendToUi.update { send->
-//                            send.copy(lastConnectHearthRateDevice = BleDevice().fromBluetoothDevice(dv)) }
+                        dataForUi.lastConnectHearthRateDevice.value = BleDevice().fromBluetoothDevice(dv)
                         dataForBle.currentConnection = BleConnection(device = dv)
                         result = true
                         bleStates.stateBleConnecting = StateBleConnecting.GET_REMOTE_DEVICE

@@ -17,6 +17,7 @@ import com.example.count_out.entity.Site
 import com.example.count_out.helpers.NotificationHelper
 import com.example.count_out.service_count_out.bluetooth.Bluetooth
 import com.example.count_out.service_count_out.workout.Work
+import com.example.count_out.ui.view_components.lg
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -45,15 +46,15 @@ class CountOutService @Inject constructor(): Service() {
     }
 
     fun commandService(command: CommandService, dataServ: DataForServ){
+        lg("commandService")
         when(command){
             CommandService.START_SERVICE->{ startCountOutService(dataServ)}
             CommandService.STOP_SERVICE->{ stopCountOutService() }
             CommandService.START_WORK->{ startWork() }
-            CommandService.STOP_WORK->{ dataForUI.runningState.value = RunningState.Stopped }
+            CommandService.STOP_WORK->{ stopWork() }
             CommandService.PAUSE_WORK->{ pauseWork() }
             CommandService.CONNECT_DEVICE->{
-                dataForServ?.let { dataForSrv -> ble.connectDevice(dataForUI, dataForSrv) }
-            }
+                dataForServ?.let { dataForSrv -> ble.connectDevice( dataForUI, dataForSrv ) } }
             CommandService.DISCONNECT_DEVICE->{ ble.disconnectDevice() }
             CommandService.START_SCANNING->{ ble.startScanning(dataForUI) }
             CommandService.STOP_SCANNING->{ ble.stopScanning(dataForUI) }
@@ -63,8 +64,8 @@ class CountOutService @Inject constructor(): Service() {
         }
     }
 
-    private fun startCountOutService(sendToServ: DataForServ){
-        dataForServ = sendToServ
+    private fun startCountOutService(dataServ: DataForServ){
+        dataForServ = dataServ
         startForegroundService()
     }
     private fun startForegroundService() {
@@ -90,10 +91,17 @@ class CountOutService @Inject constructor(): Service() {
             dataForUI.runningState.value = RunningState.Started
             notificationHelper.setPauseButton()
             dataForUI.nextSet.value = dataForServ?.getSet(0)
-            work.start(dataForUI, dataForServ){ dataForUI.cancel() }
-        } //else if (it.runningState.value == RunningState.Paused) { continueWorkout() }
+            work.start(dataForUI, dataForServ)
+        }
+    }
+    private fun stopWork(){
+        lg("Stop Work")
+        dataForUI.runningState.value = RunningState.Stopped
+        dataForUI.empty()
+        dataForServ?.empty()
     }
     private fun pauseWork(){
+        lg("Pause Work")
         dataForUI.runningState.value = RunningState.Paused
         notificationHelper.setContinueButton()
     }

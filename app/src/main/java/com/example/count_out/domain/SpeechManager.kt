@@ -3,14 +3,13 @@ package com.example.count_out.domain
 import android.content.Context
 import android.speech.tts.TextToSpeech
 import android.speech.tts.UtteranceProgressListener
-import com.example.count_out.entity.MessageApp
-import com.example.count_out.entity.RunningState
 import com.example.count_out.entity.DataForUI
-import com.example.count_out.entity.Speech
+import com.example.count_out.entity.MessageApp
 import com.example.count_out.entity.MessageWorkOut
+import com.example.count_out.entity.RunningState
+import com.example.count_out.entity.Speech
 import com.example.count_out.service_count_out.stopwatch.Watcher
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.MutableStateFlow
 import java.util.Locale
 import javax.inject.Singleton
 
@@ -58,31 +57,28 @@ class SpeechManager(val context: Context) {
         }
     }
     suspend fun speech(dataForUI: DataForUI, speech: Speech): Long {
-        if (dataForUI.runningState.value != RunningState.Stopped){
-            val speechText = speech.message + " " + speech.addMessage
-            if ((speechText).length > 1) {
-                dataForUI.message.value = MessageWorkOut(message = speechText, tickTime = Watcher.getTickTime().value)
-                speakOutAdd(speechText, dataForUI.runningState)
-                while (tts?.isSpeaking == true || dataForUI.runningState.value == RunningState.Paused)
-                    { delay(500L) }
-                if( speech.duration == 0L && speech.idSpeech > 0 && duration > 0 ){
-                    dataForUI.durationSpeech.value = speech.idSpeech to duration
-                }
+        if (dataForUI.runningState.value == RunningState.Stopped) dataForUI.cancelCoroutineWork()
+        val speechText = speech.message + " " + speech.addMessage
+        if ((speechText).length > 1) {
+            dataForUI.message.value = MessageWorkOut(message = speechText, tickTime = Watcher.getTickTime().value)
+            speakOutAdd(speechText, dataForUI)
+            while (tts?.isSpeaking == true || dataForUI.runningState.value == RunningState.Paused)
+                { delay(500L) }
+            if( speech.duration == 0L && speech.idSpeech > 0 && duration > 0 ){
+                dataForUI.durationSpeech.value = speech.idSpeech to duration
             }
         }
         return durationEnd
     }
-    private fun speakOutAdd(text: String, speakEnabled: MutableStateFlow<RunningState>){
+    private fun speakOutAdd(text: String, dataForUI: DataForUI){
 //        messengerA.messageApi("SpeechManager.speakOutAdd $text")
-        if (speakEnabled.value != RunningState.Stopped){
-            tts?.speak(text, TextToSpeech.QUEUE_ADD, null,"speakOut$idSpeech")
-        }
+        if (dataForUI.runningState.value == RunningState.Stopped) dataForUI.cancelCoroutineWork()
+        tts?.speak(text, TextToSpeech.QUEUE_ADD, null,"speakOut$idSpeech")
     }
-    fun speakOutFlush(text: String, speakEnabled: MutableStateFlow<RunningState>){
+    fun speakOutFlush(text: String, dataForUI: DataForUI){
 //        messengerA.messageApi("SpeechManager.speakOutFlush")
-        if (speakEnabled.value != RunningState.Stopped){
-            tts?.speak(text, TextToSpeech.QUEUE_FLUSH, null,"speakOut$idSpeech")
-        }
+        if (dataForUI.runningState.value == RunningState.Stopped) dataForUI.cancelCoroutineWork()
+        tts?.speak(text, TextToSpeech.QUEUE_FLUSH, null,"speakOut$idSpeech")
     }
     fun getSpeeching() = tts?.isSpeaking ?: false
     fun stopTts(){

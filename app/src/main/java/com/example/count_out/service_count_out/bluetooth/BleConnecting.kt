@@ -12,9 +12,9 @@ import android.bluetooth.BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE
 import android.content.Context
 import android.os.Build
 import com.example.count_out.entity.Const.UUIDBle
+import com.example.count_out.entity.DataForServ
 import com.example.count_out.entity.ErrorBleService
 import com.example.count_out.entity.MessageApp
-import com.example.count_out.entity.DataForServ
 import com.example.count_out.entity.StateBleConnecting
 import com.example.count_out.entity.bluetooth.BleConnection
 import com.example.count_out.entity.bluetooth.BleStates
@@ -24,7 +24,6 @@ import com.example.count_out.ui.view_components.lg
 import kotlinx.coroutines.flow.MutableStateFlow
 import java.util.UUID
 import javax.inject.Inject
-
 
 class BleConnecting @Inject constructor(
     val context: Context,
@@ -36,8 +35,8 @@ class BleConnecting @Inject constructor(
     private val UUID_HEART_RATE_MEASUREMENT = UUID.fromString(UUIDBle.HEART_RATE_MEASUREMENT)
     private val UUID_CLIENT_CHARACTERISTIC_CONFIG = UUID.fromString(UUIDBle.CLIENT_CHARACTERISTIC_CONFIG)
 
-    fun connectDevice(bleStates: BleStates, sendToBle: DataForServ){
-        sendToBle.currentConnection?.let {
+    fun connectDevice(bleStates: BleStates, dataForBle: DataForServ){
+        dataForBle.currentConnection?.let {
             connection = it
             connectingGatt( bleStates )
             if (bleStates.error == ErrorBleService.NOT_CONNECT_GATT)  connectingGatt( bleStates )
