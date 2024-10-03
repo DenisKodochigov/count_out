@@ -8,7 +8,7 @@ import com.example.count_out.entity.DataForServ
 import com.example.count_out.entity.DataForUI
 import com.example.count_out.entity.GoalSet
 import com.example.count_out.entity.RunningState
-import com.example.count_out.entity.Set
+import com.example.count_out.entity.workout.Set
 import com.example.count_out.service_count_out.stopwatch.delayMy
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers

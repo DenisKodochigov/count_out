@@ -13,12 +13,16 @@ import com.example.count_out.entity.DataForServ
 import com.example.count_out.entity.DataForUI
 import com.example.count_out.entity.MessageApp
 import com.example.count_out.entity.RunningState
-import com.example.count_out.entity.Site
+import com.example.count_out.entity.router.Router
 import com.example.count_out.helpers.NotificationHelper
 import com.example.count_out.service_count_out.bluetooth.Bluetooth
+import com.example.count_out.service_count_out.location.Site
 import com.example.count_out.service_count_out.workout.Work
 import com.example.count_out.ui.view_components.lg
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -28,7 +32,8 @@ class CountOutService @Inject constructor(): Service() {
 
     val dataForUI: DataForUI = DataForUI()
     private var dataForServ: DataForServ? = null
-    private val site: Site? = null
+    private val site = Site()
+    private var router: Router? = null ///!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     @Inject lateinit var notificationHelper: NotificationHelper
     @Inject lateinit var messageApp: MessageApp
     @Inject lateinit var ble: Bluetooth
@@ -59,14 +64,22 @@ class CountOutService @Inject constructor(): Service() {
             CommandService.START_SCANNING->{ ble.startScanning(dataForUI) }
             CommandService.STOP_SCANNING->{ ble.stopScanning(dataForUI) }
             CommandService.CLEAR_CACHE_BLE->{ ble.onClearCacheBLE() }
-            CommandService.START_LOCATION->{ site?.start() }
-            CommandService.STOP_LOCATION->{ site?.stop() }
+            CommandService.START_LOCATION->{ }
+            CommandService.STOP_LOCATION->{ }
         }
     }
 
     private fun startCountOutService(dataServ: DataForServ){
         dataForServ = dataServ
+        router = Router(dataServ)
+        site.start(router!!.dataForSite, router!!.dataFromSite)
         startForegroundService()
+        startSite()
+        CoroutineScope(Dispatchers.Default).launch {
+            router?.let { it.buffer.coordinate?.collect{ coord->
+                lg("Coordinate $coord")
+            } }
+        }
     }
     private fun startForegroundService() {
         if (!notificationHelper.channelExist()) notificationHelper.createChannel()
@@ -82,6 +95,9 @@ class CountOutService @Inject constructor(): Service() {
         notificationHelper.cancel()
     }
     fun getDataForUi() = dataForUI
+    private fun startSite(){
+        router?.let { it.dataForSite.state.value == RunningState.Started }
+    }
     private fun startWork(){
         if (dataForUI.runningState.value == RunningState.Paused){
             dataForUI.runningState.value = RunningState.Started

@@ -3,7 +3,7 @@ package com.example.count_out.ui.screens.trainings
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.mutableStateOf
-import com.example.count_out.entity.Training
+import com.example.count_out.entity.workout.Training
 import javax.inject.Singleton
 
 @Singleton

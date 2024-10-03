@@ -10,12 +10,12 @@ import com.example.count_out.data.room.tables.SpeechKitDB
 import com.example.count_out.data.room.tables.TrainingDB
 import com.example.count_out.entity.Activity
 import com.example.count_out.entity.Const.MODE_DATABASE
-import com.example.count_out.entity.Exercise
-import com.example.count_out.entity.Round
+import com.example.count_out.entity.workout.Exercise
+import com.example.count_out.entity.workout.Round
 import com.example.count_out.entity.RoundType
-import com.example.count_out.entity.Set
+import com.example.count_out.entity.workout.Set
 import com.example.count_out.entity.SpeechKit
-import com.example.count_out.entity.Training
+import com.example.count_out.entity.workout.Training
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -196,7 +196,7 @@ class DataSource @Inject constructor(private val dataDao: DataDao) {
     fun onDeleteActivity(activityId: Long) = dataDao.delActivity( activityId )
 
 //Sets
-    fun addUpdateSet(exerciseId:Long, set: Set): Exercise{
+    fun addUpdateSet(exerciseId:Long, set: Set): Exercise {
         if (set.idSet < 1) {
             (set as SetDB).speechId = newSpeechKit()
             dataDao.addSet(set) }
@@ -292,7 +292,7 @@ class DataSource @Inject constructor(private val dataDao: DataDao) {
         dataDao.updateRound( round )
         return dataDao.getExerciseRel(idNew).toExercise()
     }
-    private fun copySet(set: Set, exerciseId: Long): Set{
+    private fun copySet(set: Set, exerciseId: Long): Set {
         val idNew = dataDao.addSet(
             (set as SetDB).copy(
                 idSet = 0L,

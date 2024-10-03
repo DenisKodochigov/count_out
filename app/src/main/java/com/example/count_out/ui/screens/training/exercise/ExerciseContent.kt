@@ -19,7 +19,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.example.count_out.R
 import com.example.count_out.data.room.tables.SetDB
-import com.example.count_out.entity.Exercise
+import com.example.count_out.entity.workout.Exercise
 import com.example.count_out.entity.RoundType
 import com.example.count_out.ui.screens.training.TrainingScreenState
 import com.example.count_out.ui.screens.training.set.SetContent
