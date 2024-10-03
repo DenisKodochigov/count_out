@@ -10,7 +10,6 @@ import com.example.count_out.entity.GoalSet
 import com.example.count_out.entity.RunningState
 import com.example.count_out.entity.Set
 import com.example.count_out.service_count_out.stopwatch.delayMy
-import com.example.count_out.ui.view_components.lg
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -39,31 +38,31 @@ class ExecuteSet @Inject constructor(val speechManager:SpeechManager, val contex
     private suspend fun speakSetBody(dataForWork: DataForServ, dataForUI: DataForUI){
         dataForUI.mark.value = dataForUI.mark.value.copy(set = 1)
         when (dataForWork.getSet()?.goal){
-            GoalSet.COUNT -> playSetCOUNT(dataForWork, dataForUI)
-            GoalSet.DURATION -> playSetDURATION(dataForWork, dataForUI)
-            GoalSet.DISTANCE -> playSetDISTANCE(dataForWork, dataForUI)
-            GoalSet.COUNT_GROUP -> playSetCOUNTGROUP(dataForWork, dataForUI)
+            GoalSet.COUNT -> speakingSetCOUNT(dataForWork, dataForUI)
+            GoalSet.DURATION -> speakingSetDURATION(dataForWork, dataForUI)
+            GoalSet.DISTANCE -> speakingSetDISTANCE(dataForWork, dataForUI)
+            GoalSet.COUNT_GROUP -> speakingSetCOUNTGROUP(dataForWork, dataForUI)
             null -> {}
         }
         dataForUI.mark.value = dataForUI.mark.value.copy(set = 0)
     }
-    private suspend fun playSetDURATION(dataForWork: DataForServ, dataForUI: DataForUI){
+    private suspend fun speakingSetDURATION(dataForWork: DataForServ, dataForUI: DataForUI){
         dataForWork.getSet()?.let{
             speakInterval( duration = (it.duration * 60).toInt(), dataForUI = dataForUI) }
     }
-    private suspend fun playSetCOUNTGROUP(dataForWork: DataForServ, dataForUI: DataForUI){
+    private suspend fun speakingSetCOUNTGROUP(dataForWork: DataForServ, dataForUI: DataForUI){
         dataForWork.getSet()?.let {
             val listWordCount = it.groupCount.split(",")
             if ( listWordCount.isNotEmpty()){
                 for (count in 0..< it.reps){
-                    lg("Count group $count: ${listWordCount[count%listWordCount.size]}")
+//                    lg("Count group $count: ${listWordCount[count%listWordCount.size]}")
                     speechManager.speakOutFlush(text = listWordCount[count%listWordCount.size], dataForUI)
                     delayMy((dataForWork.getSetIntervalReps() * 1000).toLong(), dataForUI.runningState)
                 }
             }
         }
     }
-    private suspend fun playSetDISTANCE(dataForWork: DataForServ, dataForUI: DataForUI ){}
+    private suspend fun speakingSetDISTANCE(dataForWork: DataForServ, dataForUI: DataForUI ){}
     private suspend fun speakSetRest(dataForWork: DataForServ, dataForUI: DataForUI ){
         dataForWork.getSet()?.let {
             if (it.timeRest > 0){
@@ -78,7 +77,7 @@ class ExecuteSet @Inject constructor(val speechManager:SpeechManager, val contex
             }
         }
     }
-    private suspend fun playSetCOUNT(dataForWork: DataForServ, dataForUI: DataForUI ){
+    private suspend fun speakingSetCOUNT(dataForWork: DataForServ, dataForUI: DataForUI ){
         dataForWork.getSet()?.let {
             for (count in 1..it.reps){
                 speechManager.speakOutFlush(text = count.toString(), dataForUI)

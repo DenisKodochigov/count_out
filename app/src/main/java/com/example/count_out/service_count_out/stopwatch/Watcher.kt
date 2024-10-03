@@ -30,8 +30,13 @@ object Watcher {
     }
     fun start(state: MutableStateFlow<RunningState>){
         stateTimer = state
+        currentTickTime.value = TickTime(hour = "00", min = "00", sec = "00")
+        lg("Watch start ${currentTickTime.value}")
         engineWatcher()
     }
-    fun stop(){ currentTickTime.value = TickTime() }
+    fun stop(){
+        currentTickTime.value = TickTime(hour = "00", min = "00", sec = "00")
+        lg("Watch stop ${currentTickTime.value}")
+    }
     fun getTickTime(): MutableStateFlow<TickTime> = currentTickTime
 }

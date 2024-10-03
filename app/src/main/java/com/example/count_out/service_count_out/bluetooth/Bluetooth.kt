@@ -1,13 +1,13 @@
 package com.example.count_out.service_count_out.bluetooth
 
 import android.bluetooth.BluetoothAdapter
+import com.example.count_out.R
 import com.example.count_out.entity.BleTask
 import com.example.count_out.entity.ConnectState
 import com.example.count_out.entity.DataForServ
 import com.example.count_out.entity.DataForUI
 import com.example.count_out.entity.ErrorBleService
 import com.example.count_out.entity.MessageApp
-import com.example.count_out.entity.RunningState
 import com.example.count_out.entity.StateBleConnecting
 import com.example.count_out.entity.StateBleScanner
 import com.example.count_out.entity.bluetooth.BleConnection
@@ -22,21 +22,19 @@ import javax.inject.Singleton
 
 @Singleton
 class Bluetooth @Inject constructor(
-    val bleScanner: BleScanner,
+    private val bleScanner: BleScanner,
     val messageApp: MessageApp,
-    val bleConnecting: BleConnecting,
+    private val bleConnecting: BleConnecting,
     val bluetoothAdapter: BluetoothAdapter) {
 
     val state = BleStates()
 
-    fun receiveHR(){}
-
     fun startScanning(dataForUi: DataForUI){
         stopScanning(dataForUi)
         if (state.stateBleScanner == StateBleScanner.END){
+            messageApp.messageApi(R.string.start_scanner)
             state.stateBleScanner = StateBleScanner.RUNNING
             bleScanner.startScannerBLEDevices(dataForUi, state)
-            messageApp.messageApi("Start scanner.")
         }
     }
 
@@ -44,7 +42,7 @@ class Bluetooth @Inject constructor(
         if (state.stateBleScanner == StateBleScanner.RUNNING){
             state.stateBleScanner = StateBleScanner.END
             bleScanner.stopScannerBLEDevices(dataForUi)
-            messageApp.messageApi("Stop scanner.")
+            messageApp.messageApi(R.string.stop_scanner)
         }
     }
 
@@ -63,7 +61,6 @@ class Bluetooth @Inject constructor(
     private fun sendHeartRate(heartRate: MutableStateFlow<Int>, dataForUi: DataForUI){
         CoroutineScope(Dispatchers.Default).launch {
             heartRate.collect{ hr->
-                if(dataForUi.runningState.value == RunningState.Stopped) return@collect
                 dataForUi.heartRate.value = hr
                 if ( hr > 0) dataForUi.connectingState.value = ConnectState.CONNECTED
             }

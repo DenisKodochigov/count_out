@@ -53,7 +53,7 @@ class ExecuteWorkViewModel @Inject constructor(
                     MutableStateFlow(dataRepository.getSetting(R.string.speech_description).value == 1)
             }.fold(
                 onSuccess = { },
-                onFailure = { messageApp.errorApi("initServiceApp ${it.message ?: ""}") }
+                onFailure = { messageApp.errorApi(R.string.init_service, " ${it.message ?: ""}") }
             )
         }
         viewModelScope.launch(Dispatchers.IO) {
@@ -65,13 +65,13 @@ class ExecuteWorkViewModel @Inject constructor(
                         serviceBind.service.getDataForUi()
                     }.fold(
                         onSuccess = { receiveState( it ) },
-                        onFailure = { messageApp.errorApi("initServiceApp1 ${it.message ?: ""}") }
+                        onFailure = { messageApp.errorApi(R.string.start_service, " ${it.message ?: ""}") }
                     )
                 }
             }
         }
     }
-    private suspend fun commandSrv(command: CommandService){
+    private fun commandSrv(command: CommandService){
         serviceBind.service.commandService( command, dataForServ)
     }
     private fun commandService(command: CommandService){
@@ -140,12 +140,10 @@ class ExecuteWorkViewModel @Inject constructor(
         }
         viewModelScope.launch(Dispatchers.IO) {
             dataForUI.set.collect{ set->
-                if (dataForUI.runningState.value == RunningState.Stopped) return@collect
                 _executeWorkoutScreenState.update { currentState -> currentState.copy( playerSet = set )}}
         }
         viewModelScope.launch(Dispatchers.IO) {
             dataForUI.nextSet.collect{ set->
-                if (dataForUI.runningState.value == RunningState.Stopped) return@collect
                 _executeWorkoutScreenState.update { currentState ->
                     currentState.copy(
                         listActivity = if (set != null ) currentState.activityList(set.idSet)
@@ -153,36 +151,30 @@ class ExecuteWorkViewModel @Inject constructor(
         }
         viewModelScope.launch(Dispatchers.IO) {
             dataForUI.flowTick.collect { tick ->
-                if (dataForUI.runningState.value == RunningState.Stopped) return@collect
                 _executeWorkoutScreenState.update { currentState -> currentState.copy( tickTime = tick )}}
         }
         viewModelScope.launch(Dispatchers.IO) {
             dataForUI.durationSpeech.collect { duration ->
-                if (dataForUI.runningState.value == RunningState.Stopped) return@collect
                 dataRepository.updateDuration(duration)}
         }
         viewModelScope.launch(Dispatchers.IO) {
             dataForUI.message.collect { message ->
-                if (dataForUI.runningState.value == RunningState.Stopped) return@collect
                 message?.let { mes ->
                     _executeWorkoutScreenState.update { currentState ->
                         currentState.copy(messageWorkout = currentState.addMessage(mes)) } } }
         }
         viewModelScope.launch(Dispatchers.IO) {
             dataForUI.lastConnectHearthRateDevice.collect { lastHR ->
-                if (dataForUI.runningState.value == RunningState.Stopped) return@collect
                 _executeWorkoutScreenState.update { currentState ->
                     currentState.copy(lastConnectHearthRateDevice = lastHR) } }
         }
         viewModelScope.launch(Dispatchers.IO) {
             dataForUI.connectingState.collect { state ->
-                if (dataForUI.runningState.value == RunningState.Stopped) return@collect
                 _executeWorkoutScreenState.update { currentState ->
-                    currentState.copy( connectingState = state,) } }
+                    currentState.copy( connectingState = state) } }
         }
         viewModelScope.launch(Dispatchers.IO) {
             dataForUI.heartRate.collect { hr ->
-                if (dataForUI.runningState.value == RunningState.Stopped) return@collect
                 _executeWorkoutScreenState.update { currentState ->
                     currentState.copy(heartRate = hr) } }
         }

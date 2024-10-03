@@ -66,7 +66,7 @@ class BleScanner @Inject constructor(
     }
     @SuppressLint("MissingPermission")
     fun stopScanner(dataForUI: DataForUI){
-        lg("Stop scanner")
+        lg("BleScanner. Stop scanner")
         permissionApp.checkBleScan{ bleScanner.stopScan(scanCallback)}
         dataForUI.scannedBle.value = false
     }

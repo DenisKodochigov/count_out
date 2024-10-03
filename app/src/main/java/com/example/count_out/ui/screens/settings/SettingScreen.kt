@@ -83,8 +83,8 @@ import com.example.count_out.ui.view_components.TextApp
             .fillMaxSize(),
         content = {
             NameScreen(id = R.string.title_setting_screen)
-            ActivitySection(uiState = uiState,)
-            OtherSettings(uiState = uiState,)
+            ActivitySection(uiState = uiState)
+            OtherSettings(uiState = uiState)
         }
     )
 }
@@ -93,7 +93,7 @@ import com.example.count_out.ui.view_components.TextApp
     Card ( elevation = elevationTraining(), shape = MaterialTheme.shapes.extraSmall
     ){
         Box {
-            Column( modifier = Modifier.padding(start = 6.dp, top = 6.dp, bottom = 6.dp),)
+            Column( modifier = Modifier.padding(start = 6.dp, top = 6.dp, bottom = 6.dp))
             {
                 ActivitySectionTitle(uiState = uiState)
                 ActivitySectionBody(uiState = uiState)

@@ -57,7 +57,7 @@ class NotificationHelper @Inject constructor(private val context: Context)
 //        lg("updateNotification")
         notificationManager.notify(
             NOTIFICATION_ID, notificationBuilder.setContentText(
-                formatTime(hours = hours, min = minutes, sec = seconds,)).build()
+                formatTime(hours = hours, min = minutes, sec = seconds)).build()
         )
     }
     @SuppressLint("RestrictedApi")

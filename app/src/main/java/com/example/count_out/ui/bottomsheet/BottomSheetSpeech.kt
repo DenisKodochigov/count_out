@@ -38,7 +38,7 @@ import com.example.count_out.ui.view_components.TextFieldApp
 @Composable fun BottomSheetSpeech(itemSpeech: BottomSheetInterface)
 {
     val uiState by remember{ mutableStateOf( bottomSheetStateNew(itemSpeech)) }
-    val sheetState = rememberModalBottomSheetState( skipPartiallyExpanded = true, )
+    val sheetState = rememberModalBottomSheetState( skipPartiallyExpanded = true )
     ModalBottomSheetApp(
         onDismissRequest = {uiState.onDismissSpeech.invoke()},
         modifier = Modifier.padding(horizontal = Dimen.bsPaddingHor1),

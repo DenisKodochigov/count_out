@@ -38,7 +38,7 @@ fun Round(uiState: TrainingScreenState, roundType: MutableState<RoundType>){
     Card( elevation = elevationTraining(), shape = MaterialTheme.shapes.extraSmall
     ){
         Box{
-            Column( modifier = Modifier.padding(start = 6.dp, bottom=6.dp),)
+            Column( modifier = Modifier.padding(start = 6.dp, bottom=6.dp))
             {
                 Row1Round(uiState = uiState, roundType)
                 Row2Round(roundType)

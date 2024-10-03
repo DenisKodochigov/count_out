@@ -96,7 +96,6 @@ fun TrainingsLazyColumn(uiState: TrainingsScreenState,
     LazyList(uiState)
     Spacer(modifier = Modifier.height(8.dp))
 }
-@OptIn(ExperimentalFoundationApi::class)
 @Composable fun LazyList(uiState: TrainingsScreenState)
 {
 //    lg("LazyList")

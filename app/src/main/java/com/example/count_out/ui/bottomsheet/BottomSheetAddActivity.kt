@@ -15,7 +15,6 @@ import com.example.count_out.ui.theme.Dimen
 import com.example.count_out.ui.theme.shapes
 import com.example.count_out.ui.view_components.ButtonConfirm
 import com.example.count_out.ui.view_components.ModalBottomSheetApp
-import com.example.count_out.ui.view_components.lg
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

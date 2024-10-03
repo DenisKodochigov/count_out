@@ -1,6 +1,5 @@
 package com.example.count_out.ui.screens.executor
 
-import android.annotation.SuppressLint
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -51,14 +50,12 @@ import com.example.count_out.ui.view_components.lg
 import kotlinx.coroutines.launch
 import java.math.RoundingMode
 
-@SuppressLint("UnrememberedMutableState")
-@Composable
-fun ExecuteWorkoutScreen(trainingId: Long ){
+@Composable fun ExecuteWorkoutScreen(trainingId: Long ){
     val viewModel: ExecuteWorkViewModel = hiltViewModel()
     LaunchedEffect( key1 = true, block = { viewModel.getTraining(trainingId) })
     ExecuteWorkoutScreenCreateView( viewModel = viewModel)
 }
-@Composable fun ExecuteWorkoutScreenCreateView(viewModel: ExecuteWorkViewModel, ){
+@Composable fun ExecuteWorkoutScreenCreateView(viewModel: ExecuteWorkViewModel){
     val uiState by viewModel.executeWorkoutScreenState.collectAsState()
     ExecuteWorkoutScreenLayout(uiState = uiState)
 }
@@ -147,7 +144,6 @@ fun ExecuteWorkoutScreen(trainingId: Long ){
     TextApp(text = uiState.tickTime.sec, style = style)
 }
 @Composable fun HearthRate(uiState: ExecuteWorkoutScreenState) {
-
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
         TextApp(text = uiState.heartRate.toString(), style = typography.displayLarge)
         TextApp(text = stringResource(uiState.connectingState.strId), style = alumBodySmall)
@@ -230,11 +226,7 @@ fun ExecuteWorkoutScreen(trainingId: Long ){
 }
 
 @Composable fun ButtonsStartStopWorkOut(
-    onClickStart: () -> Unit,
-    onClickStop: () -> Unit,
-    onClickPause: () -> Unit,
-    switchState: RunningState,
-){
+    onClickStart:()->Unit, onClickStop:()->Unit, onClickPause:()->Unit, switchState: RunningState){
     Row( horizontalArrangement = Arrangement.Center, modifier = Modifier.fillMaxWidth()) {
         when (switchState){
             RunningState.Started -> ButtonStartedService(onClickStop, onClickPause)
@@ -244,12 +236,12 @@ fun ExecuteWorkoutScreen(trainingId: Long ){
     }
     Spacer(modifier = Modifier.height(12.dp))
 }
-@Composable fun ButtonStartedService(onClickStop: () -> Unit, onClickPause: () -> Unit,){
+@Composable fun ButtonStartedService(onClickStop: () -> Unit, onClickPause: () -> Unit){
     IconSingleLarge(Icons.Filled.Pause, onClickPause)
     Spacer(modifier = Modifier.width(12.dp))
     IconSingleLarge(Icons.Filled.Stop, onClickStop )
 }
-@Composable fun ButtonStoppedService(onClickStart: () -> Unit,){
+@Composable fun ButtonStoppedService(onClickStart: () -> Unit){
     IconSingleLarge(Icons.Filled.PlayArrow, onClickStart )
 }
 @Composable fun ButtonPauseService(onClickStart: () -> Unit, onClickStop: () -> Unit){
