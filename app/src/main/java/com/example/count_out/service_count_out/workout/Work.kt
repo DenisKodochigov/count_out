@@ -4,7 +4,6 @@ import com.example.count_out.domain.SpeechManager
 import com.example.count_out.entity.DataForServ
 import com.example.count_out.entity.DataForUI
 import com.example.count_out.entity.Mark
-import com.example.count_out.entity.RunningState
 import com.example.count_out.service_count_out.stopwatch.Watcher
 import com.example.count_out.service_count_out.workout.execute.ExecuteWork
 import kotlinx.coroutines.CoroutineScope
@@ -39,7 +38,7 @@ class Work @Inject constructor(val speechManager: SpeechManager, val executeWork
         Watcher.start(dataForUI.runningState)
         CoroutineScope(Dispatchers.Default).launch {
             Watcher.getTickTime().collect{ tick ->
-                if (dataForUI.runningState.value == RunningState.Stopped) return@collect
+//                if (dataForUI.runningState.value == RunningState.Stopped) return@collect
                 dataForUI.flowTick.value = tick
             }
         }

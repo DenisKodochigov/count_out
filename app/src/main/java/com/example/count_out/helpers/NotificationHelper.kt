@@ -54,7 +54,6 @@ class NotificationHelper @Inject constructor(private val context: Context)
     fun build() = notificationBuilder.build()
     fun cancel(){ notificationManager.cancel(NOTIFICATION_ID) }
     fun updateNotification(hours: String, minutes: String, seconds: String) {
-//        lg("updateNotification")
         notificationManager.notify(
             NOTIFICATION_ID, notificationBuilder.setContentText(
                 formatTime(hours = hours, min = minutes, sec = seconds)).build()
