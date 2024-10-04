@@ -30,6 +30,7 @@ suspend fun delayMy(delay: Long, pause: MutableStateFlow<RunningState>){
                     endTime.value += 100000000000L
                 }
             }
+            else-> {}
         }
         delay(1)
     }

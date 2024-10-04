@@ -47,26 +47,30 @@ class ExecuteWorkViewModel @Inject constructor(
     }
     private fun initServiceApp(){
         viewModelScope.launch(Dispatchers.IO) {
-            kotlin.runCatching {
-                if ( !serviceBind.isBound.value ) serviceBind.bindService()
-                dataForServ.enableSpeechDescription =
-                    MutableStateFlow(dataRepository.getSetting(R.string.speech_description).value == 1)
-            }.fold(
-                onSuccess = { },
-                onFailure = { messageApp.errorApi(R.string.init_service, " ${it.message ?: ""}") }
-            )
-        }
-        viewModelScope.launch(Dispatchers.IO) {
-            serviceBind.isBound.collect { isBound->
-                if (isBound) {
-                    kotlin.runCatching {
-                        commandService( CommandService.START_SERVICE )
-                        connectToStoredBleDev()
-                        serviceBind.service.getDataForUi()
-                    }.fold(
-                        onSuccess = { receiveState( it ) },
-                        onFailure = { messageApp.errorApi(R.string.start_service, " ${it.message ?: ""}") }
-                    )
+            serviceBind.stateService.collect { stateService ->
+                when (stateService){
+                    RunningState.Stopped -> {
+                        kotlin.runCatching { serviceBind.bindService() }.fold(
+                            onSuccess = {  },
+                            onFailure = { messageApp.errorApi(
+                                id = R.string.init_service, errorMessage = " ${it.message ?: ""}") })
+                    }
+                    RunningState.Binding -> {
+                        kotlin.runCatching { commandService( CommandService.START_SERVICE ) }.fold(
+                            onSuccess = {  },
+                            onFailure = { messageApp.errorApi(
+                                id = R.string.start_service, errorMessage = " ${it.message ?: ""}")})
+                    }
+                    RunningState.Started -> {
+                        kotlin.runCatching {
+                            connectToStoredBleDev()
+                            serviceBind.service.getDataForUi()
+                        }.fold(
+                            onSuccess = { receiveState( it ) },
+                            onFailure = { messageApp.errorApi(
+                                id = R.string.start_service, errorMessage = " ${it.message ?: ""}")})
+                    }
+                    RunningState.Paused -> {}
                 }
             }
         }
@@ -136,12 +140,10 @@ class ExecuteWorkViewModel @Inject constructor(
                     }
                     return@collect
                 }
-            }
-        }
+            } }
         viewModelScope.launch(Dispatchers.IO) {
             dataForUI.set.collect{ set->
-                _executeWorkoutScreenState.update { currentState -> currentState.copy( playerSet = set )}}
-        }
+                _executeWorkoutScreenState.update { currentState -> currentState.copy( playerSet = set )}} }
         viewModelScope.launch(Dispatchers.IO) {
             dataForUI.nextSet.collect{ set->
                 _executeWorkoutScreenState.update { currentState ->

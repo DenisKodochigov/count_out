@@ -8,6 +8,7 @@ import com.example.count_out.entity.MessageApp
 import com.example.count_out.entity.MessageWorkOut
 import com.example.count_out.entity.RunningState
 import com.example.count_out.entity.Speech
+import com.example.count_out.entity.router.DataFromWork
 import com.example.count_out.service_count_out.stopwatch.Watcher
 import kotlinx.coroutines.delay
 import java.util.Locale
@@ -56,6 +57,35 @@ class SpeechManager(val context: Context) {
                 tts = null }
         }
     }
+
+
+    suspend fun speech(dataFromWork: DataFromWork, speech: Speech): Long {
+        if (dataFromWork.runningState.value == RunningState.Stopped) dataFromWork.cancelCoroutineWork()
+        val speechText = speech.message + " " + speech.addMessage
+        if ((speechText).length > 1) {
+            dataFromWork.message.value = MessageWorkOut(message = speechText, tickTime = Watcher.getTickTime().value)
+            speakOutAdd(speechText, dataFromWork)
+            while (tts?.isSpeaking == true || dataFromWork.runningState.value == RunningState.Paused)
+            { delay(500L) }
+            if( speech.duration == 0L && speech.idSpeech > 0 && duration > 0 ){
+                dataFromWork.durationSpeech.value = speech.idSpeech to duration
+            }
+        }
+        return durationEnd
+    }
+    private fun speakOutAdd(text: String, dataFromWork: DataFromWork){
+//        messengerA.messageApi("SpeechManager.speakOutAdd $text")
+        if (dataFromWork.runningState.value == RunningState.Stopped) dataFromWork.cancelCoroutineWork()
+        tts?.speak(text, TextToSpeech.QUEUE_ADD, null,"speakOut$idSpeech")
+    }
+    fun speakOutFlush(text: String, dataFromWork: DataFromWork){
+//        messengerA.messageApi("SpeechManager.speakOutFlush")
+        if (dataFromWork.runningState.value == RunningState.Stopped) dataFromWork.cancelCoroutineWork()
+        tts?.speak(text, TextToSpeech.QUEUE_FLUSH, null,"speakOut$idSpeech")
+    }
+
+
+
     suspend fun speech(dataForUI: DataForUI, speech: Speech): Long {
         if (dataForUI.runningState.value == RunningState.Stopped) dataForUI.cancelCoroutineWork()
         val speechText = speech.message + " " + speech.addMessage

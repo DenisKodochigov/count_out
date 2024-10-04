@@ -2,14 +2,16 @@ package com.example.count_out.entity.router
 
 import com.example.count_out.entity.DataForServ
 import com.example.count_out.entity.DataForUI
+import com.example.count_out.entity.RunningState
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 
 class Router(private val dataForServ: DataForServ) {
 
-    val dataForUI = DataForUI()
-    val dataForBase = DataForBase()
+    val enableChange: MutableStateFlow<Boolean> = MutableStateFlow(true)
 
     val dataFromBle = DataFromBle()
     val dataFromSite = DataFromSite()
@@ -20,6 +22,8 @@ class Router(private val dataForServ: DataForServ) {
     val dataForSite: DataForSite by lazy { initDataForSite(dataForServ) }
 
     val buffer: Buffer by lazy { bufferInit(dataFromBle, dataFromWork, dataFromSite )}
+    val dataForUI: DataForUI by lazy { initDataForUI(buffer) }
+    val dataForBase = DataForBase()
 
     fun initRouter(){}
     fun startRouter(){}
@@ -56,42 +60,36 @@ class Router(private val dataForServ: DataForServ) {
             indexSet = dataForServ.indexSet,
             indexRound = dataForServ.indexRound,
             indexExercise = dataForServ.indexExercise,
-            runningState = dataFromWork.runningState,
             enableSpeechDescription = dataForServ.enableSpeechDescription
         )
     }
     private fun initDataForSite(dataForServ: DataForServ): DataForSite{
-        return DataForSite(site = "")
+        return DataForSite(site = "", state = MutableStateFlow(RunningState.Stopped))
     }
-    private fun receiveData(dataFromBle: DataFromBle, dataFromWork: DataFromWork, dataFromSite: DataFromSite){
+    private fun initDataForUI(buffer: Buffer): DataForUI{
+        return DataForUI(
+            set = buffer.set,
+            runningState = buffer.runningState,
+        )
+    }
+    fun sendDataToUi(){
         CoroutineScope(Dispatchers.Default).launch {
-            dataFromBle.scannedBle.collect{ buffer.scannedBle.value = it }}
-        CoroutineScope(Dispatchers.Default).launch {
-            dataFromBle.heartRate.collect{ buffer.heartRate.value = it }}
-        CoroutineScope(Dispatchers.Default).launch {
-            dataFromBle.connectingState.collect{ buffer.connectingState.value = it }}
-        CoroutineScope(Dispatchers.Default).launch {
-            dataFromBle.foundDevices.collect{ buffer.foundDevices.value = it }}
-        CoroutineScope(Dispatchers.Default).launch {
-            dataFromBle.lastConnectHearthRateDevice.collect{ buffer.lastConnectHearthRateDevice.value = it }}
-
-        CoroutineScope(Dispatchers.Default).launch {
-            dataFromWork.flowTick.collect{ buffer.flowTick.value = it }}
-        CoroutineScope(Dispatchers.Default).launch {
-            dataFromWork.message.collect{ buffer.message.value = it }}
-        CoroutineScope(Dispatchers.Default).launch {
-            dataFromWork.set.collect{ buffer.set.value = it }}
-        CoroutineScope(Dispatchers.Default).launch {
-            dataFromWork.nextSet.collect{ buffer.nextSet.value = it }}
-        CoroutineScope(Dispatchers.Default).launch {
-            dataFromWork.durationSpeech.collect{ buffer.durationSpeech.value = it }}
-        CoroutineScope(Dispatchers.Default).launch {
-            dataFromWork.runningState.collect{ buffer.runningState.value = it }}
-        CoroutineScope(Dispatchers.Default).launch {
-            dataFromWork.mark.collect{ buffer.mark.value = it }}
-
-        CoroutineScope(Dispatchers.Default).launch {
-            dataFromSite.coordinate?.collect{ buffer.coordinate?.value = it }
+            while (true){
+                dataForUI.set(buffer)
+//                if (enableChange.value){ dataForUI.set(buffer) }
+                delay(1000L)
+            }
         }
     }
+
+//    fun <T>collect(varCollect: MutableStateFlow<T>, enableChange: MutableStateFlow<Boolean>): MutableStateFlow<T>{
+//        val any: MutableStateFlow<T>? = null
+//        CoroutineScope(Dispatchers.Default).launch {
+//            varCollect.collect{ vr->
+//                var storeCollect = vr
+//                if (enableChange.value) any?.value = storeCollect
+//            }
+//        }
+//        return any ?: T()
+//    }
 }

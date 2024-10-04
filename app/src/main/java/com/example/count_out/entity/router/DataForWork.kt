@@ -1,6 +1,5 @@
 package com.example.count_out.entity.router
 
-import com.example.count_out.entity.RunningState
 import com.example.count_out.entity.workout.Exercise
 import com.example.count_out.entity.workout.Round
 import com.example.count_out.entity.workout.Set
@@ -10,13 +9,20 @@ import kotlinx.coroutines.flow.MutableStateFlow
 
 data class DataForWork (
     var training: MutableStateFlow<Training?> = MutableStateFlow(null),
-    var runningState: MutableStateFlow<RunningState> = MutableStateFlow(RunningState.Stopped),
     var enableSpeechDescription: MutableStateFlow<Boolean> = MutableStateFlow(true),
     var indexRound: Int = 0,
     var indexExercise: Int = 0,
     var indexSet: Int = 0,
     var cancelCoroutineWork: ()-> Unit = {},
 ){
+    fun empty(){
+        training = MutableStateFlow(null)
+        enableSpeechDescription = MutableStateFlow(true)
+        indexRound = 0
+        indexExercise = 0
+        indexSet = 0
+    }
+
     fun getRound(): Round? {
         return try {
             training.value?.rounds?.get(indexRound)

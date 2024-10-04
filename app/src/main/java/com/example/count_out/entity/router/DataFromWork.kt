@@ -15,4 +15,5 @@ data class DataFromWork (
     val durationSpeech: MutableStateFlow<Pair<Long, Long>> = MutableStateFlow(Pair(0,0)),
     val runningState: MutableStateFlow<RunningState> = MutableStateFlow(RunningState.Stopped),
     var mark: MutableStateFlow<Mark> = MutableStateFlow(Mark()),
+    var cancelCoroutineWork: ()-> Unit = {}
 )

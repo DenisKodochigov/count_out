@@ -232,6 +232,7 @@ import java.math.RoundingMode
             RunningState.Started -> ButtonStartedService(onClickStop, onClickPause)
             RunningState.Stopped -> ButtonStoppedService(onClickStart)
             RunningState.Paused -> ButtonPauseService(onClickStart, onClickStop)
+            else->{}
         }
     }
     Spacer(modifier = Modifier.height(12.dp))

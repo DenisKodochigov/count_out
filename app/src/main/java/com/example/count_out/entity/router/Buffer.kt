@@ -25,5 +25,5 @@ data class Buffer (
     val runningState: MutableStateFlow<RunningState> = MutableStateFlow(RunningState.Stopped),
     val mark: MutableStateFlow<Mark> = MutableStateFlow(Mark()),
 
-    val coordinate: MutableStateFlow<Coordinate>? = null,
+    val coordinate: MutableStateFlow<Coordinate?> = MutableStateFlow( null),
 )

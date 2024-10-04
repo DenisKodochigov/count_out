@@ -2,6 +2,7 @@ package com.example.count_out.ui.screens.settings
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.count_out.R
 import com.example.count_out.data.DataRepository
 import com.example.count_out.data.room.tables.SettingDB
 import com.example.count_out.entity.Activity
@@ -9,6 +10,7 @@ import com.example.count_out.entity.CommandService
 import com.example.count_out.entity.DataForServ
 import com.example.count_out.entity.DataForUI
 import com.example.count_out.entity.MessageApp
+import com.example.count_out.entity.RunningState
 import com.example.count_out.entity.bluetooth.BleDevSerializable
 import com.example.count_out.service_count_out.CountOutServiceBind
 import com.example.count_out.ui.view_components.lg
@@ -55,25 +57,54 @@ class SettingViewModel @Inject constructor(
     }
     private fun initServiceApp(){
         viewModelScope.launch(Dispatchers.IO) {
-            kotlin.runCatching { if ( !serviceBind.isBound.value ) serviceBind.bindService() }.fold(
-                onSuccess = { },
-                onFailure = { messageApp.errorApi("initServiceApp ${it.message ?: ""}") }
-            )
-        }
-        viewModelScope.launch(Dispatchers.IO) {
-            serviceBind.isBound.collect { isBound->
-                if (isBound) {
-                    kotlin.runCatching {
-                        commandService( CommandService.START_SERVICE )
-                        connectToStoredBleDev()
-                        serviceBind.service.getDataForUi()
-                    }.fold(
-                        onSuccess = { receiveState(it) },
-                        onFailure = { messageApp.errorApi("startService ${it.message ?: ""}") }
-                    )
+            serviceBind.stateService.collect { stateService ->
+                when (stateService){
+                    RunningState.Stopped -> {
+                        kotlin.runCatching { serviceBind.bindService() }.fold(
+                            onSuccess = {  },
+                            onFailure = { messageApp.errorApi(
+                                id = R.string.init_service, errorMessage = " ${it.message ?: ""}") })
+                    }
+                    RunningState.Binding -> {
+                        kotlin.runCatching { commandService( CommandService.START_SERVICE ) }.fold(
+                            onSuccess = {  },
+                            onFailure = { messageApp.errorApi(
+                                id = R.string.start_service, errorMessage = " ${it.message ?: ""}")})
+                    }
+                    RunningState.Started -> {
+                        kotlin.runCatching {
+                            lg("service starting")
+                            connectToStoredBleDev()
+                            serviceBind.service.getDataForUi()
+                        }.fold(
+                            onSuccess = { receiveState( it ) },
+                            onFailure = { messageApp.errorApi(
+                                id = R.string.start_service, errorMessage = " ${it.message ?: ""}")})
+                    }
+                    RunningState.Paused -> {}
                 }
             }
         }
+//        viewModelScope.launch(Dispatchers.IO) {
+//            kotlin.runCatching { if ( !serviceBind.isBound.value ) serviceBind.bindService() }.fold(
+//                onSuccess = { },
+//                onFailure = { messageApp.errorApi("initServiceApp ${it.message ?: ""}") }
+//            )
+//        }
+//        viewModelScope.launch(Dispatchers.IO) {
+//            serviceBind.isBound.collect { isBound->
+//                if (isBound) {
+//                    kotlin.runCatching {
+//                        commandService( CommandService.START_SERVICE )
+//                        connectToStoredBleDev()
+//                        serviceBind.service.getDataForUi()
+//                    }.fold(
+//                        onSuccess = { receiveState(it) },
+//                        onFailure = { messageApp.errorApi("startService ${it.message ?: ""}") }
+//                    )
+//                }
+//            }
+//        }
     }
     private fun commandSrv(command: CommandService){
         serviceBind.service.commandService( command, dataForServ)

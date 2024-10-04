@@ -14,10 +14,11 @@ class Site {
     fun start(dataForSite: DataForSite, dataFromSite: DataFromSite){
         CoroutineScope(Dispatchers.Default).launch {
             var count = 0L
-            while (dataForSite.state.value == RunningState.Started){
-                dataFromSite.coordinate?.value = CoordinateDB(0.0,0.0,count)
+            while (true){
+                dataFromSite.coordinate.value = CoordinateDB(0.0,0.0,count)
+//                lg("dataForSite $dataForSite; dataFromSite:$dataFromSite")
                 count++
-                delay(100L)
+                delay(1000L)
             }
         }
     }

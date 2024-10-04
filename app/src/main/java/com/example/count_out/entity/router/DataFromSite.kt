@@ -4,5 +4,5 @@ import com.example.count_out.entity.Coordinate
 import kotlinx.coroutines.flow.MutableStateFlow
 
 data class DataFromSite (
-    val coordinate: MutableStateFlow<Coordinate>? = null,
+    val coordinate: MutableStateFlow<Coordinate?> = MutableStateFlow( null),
 )
