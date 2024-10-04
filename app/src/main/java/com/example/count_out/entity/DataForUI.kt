@@ -1,6 +1,7 @@
 package com.example.count_out.entity
 
 import com.example.count_out.entity.bluetooth.DeviceUI
+import com.example.count_out.entity.workout.Set
 import kotlinx.coroutines.flow.MutableStateFlow
 
 data class DataForUI (

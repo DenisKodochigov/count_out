@@ -10,12 +10,12 @@ import com.example.count_out.data.room.tables.SettingDB
 import com.example.count_out.data.room.tables.SpeechKitDB
 import com.example.count_out.data.room.tables.TrainingDB
 import com.example.count_out.entity.Activity
-import com.example.count_out.entity.Exercise
+import com.example.count_out.entity.workout.Exercise
 import com.example.count_out.entity.Plugins
-import com.example.count_out.entity.Round
-import com.example.count_out.entity.Set
+import com.example.count_out.entity.workout.Round
+import com.example.count_out.entity.workout.Set
 import com.example.count_out.entity.SpeechKit
-import com.example.count_out.entity.Training
+import com.example.count_out.entity.workout.Training
 import com.example.count_out.entity.bluetooth.BleDevSerializable
 import com.example.count_out.ui.view_components.lg
 import javax.inject.Inject
@@ -86,7 +86,7 @@ class DataRepository  @Inject constructor(private val dataSource: DataSource,
         if ( exerciseId > 0) dataSource.deleteExercise( exerciseId )
         return getTraining(trainingId)
     }
-    fun changeSequenceExercise(trainingId: Long, roundId: Long, from: Int, to: Int): Training{
+    fun changeSequenceExercise(trainingId: Long, roundId: Long, from: Int, to: Int): Training {
         if ( roundId > 0) dataSource.changeSequenceExercise( roundId, from, to)
         return getTraining(trainingId)
     }

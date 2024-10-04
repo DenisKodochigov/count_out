@@ -5,9 +5,9 @@ import com.example.count_out.data.room.tables.SetDB
 import com.example.count_out.entity.ConnectState
 import com.example.count_out.entity.ListActivityForExecute
 import com.example.count_out.entity.RunningState
-import com.example.count_out.entity.Set
+import com.example.count_out.entity.workout.Set
 import com.example.count_out.entity.TickTime
-import com.example.count_out.entity.Training
+import com.example.count_out.entity.workout.Training
 import com.example.count_out.entity.bluetooth.DeviceUI
 import com.example.count_out.entity.MessageWorkOut
 import javax.inject.Singleton

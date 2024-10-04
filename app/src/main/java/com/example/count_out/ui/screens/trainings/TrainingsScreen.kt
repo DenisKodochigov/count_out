@@ -2,7 +2,6 @@ package com.example.count_out.ui.screens.trainings
 
 import android.annotation.SuppressLint
 import androidx.compose.animation.animateContentSize
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -34,7 +33,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.count_out.R
-import com.example.count_out.entity.Training
+import com.example.count_out.entity.workout.Training
 import com.example.count_out.navigation.ScreenDestination
 import com.example.count_out.ui.theme.Dimen
 import com.example.count_out.ui.theme.Dimen.sizeIconLarge

@@ -4,8 +4,8 @@ import androidx.room.Entity
 import androidx.room.Ignore
 import androidx.room.PrimaryKey
 import com.example.count_out.entity.Rainfall
-import com.example.count_out.entity.Training
-import com.example.count_out.entity.Workout
+import com.example.count_out.entity.workout.Training
+import com.example.count_out.entity.workout.Workout
 @Entity(tableName = "tb_workout")
 data class WorkoutDB(
     @PrimaryKey(autoGenerate = true) override var idWorkout: Long = 0L,

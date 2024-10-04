@@ -11,8 +11,8 @@ import com.example.count_out.data.room.tables.SpeechKitDB
 import com.example.count_out.data.room.tables.TrainingDB
 import com.example.count_out.domain.toNumeric
 import com.example.count_out.entity.Activity
-import com.example.count_out.entity.Exercise
-import com.example.count_out.entity.Set
+import com.example.count_out.entity.workout.Exercise
+import com.example.count_out.entity.workout.Set
 import com.example.count_out.entity.SpeechKit
 
 data class SpeechKitRel(
@@ -41,7 +41,7 @@ data class SetRel(
     @Embedded val setDB: SetDB,
     @Relation(parentColumn = "speechId", entityColumn = "idSpeechKit", entity = SpeechKitDB::class) val speechKit: SpeechKitRel?
 ){
-    fun toSet(): Set{
+    fun toSet(): Set {
         return SetDB(
             idSet = setDB.idSet,
             name = setDB.name,
@@ -67,7 +67,7 @@ data class ExerciseRel(
     @Relation(parentColumn = "idExercise", entityColumn = "exerciseId", entity = SetDB::class) val sets: List<SetRel>?,
     @Relation(parentColumn = "speechId", entityColumn = "idSpeechKit", entity = SpeechKitDB::class) val speechKit: SpeechKitRel?
 ){
-    fun toExercise(): Exercise{
+    fun toExercise(): Exercise {
         return ExerciseDB(
             idExercise = exerciseDB.idExercise,
             roundId = exerciseDB.roundId,

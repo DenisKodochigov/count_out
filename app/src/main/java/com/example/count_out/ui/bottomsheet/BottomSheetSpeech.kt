@@ -20,10 +20,10 @@ import com.example.count_out.R
 import com.example.count_out.data.room.tables.SpeechDB
 import com.example.count_out.data.room.tables.SpeechKitDB
 import com.example.count_out.entity.BottomSheetInterface
-import com.example.count_out.entity.Exercise
-import com.example.count_out.entity.Round
-import com.example.count_out.entity.Set
-import com.example.count_out.entity.Training
+import com.example.count_out.entity.workout.Exercise
+import com.example.count_out.entity.workout.Round
+import com.example.count_out.entity.workout.Set
+import com.example.count_out.entity.workout.Training
 import com.example.count_out.entity.TypeKeyboard
 import com.example.count_out.ui.theme.Dimen
 import com.example.count_out.ui.theme.interLight14Start
@@ -50,10 +50,10 @@ import com.example.count_out.ui.view_components.TextFieldApp
 
 fun bottomSheetStateNew(itemSpeech: BottomSheetInterface): BottomSheetState{
     val speech = when (itemSpeech.item) {
-        is Training-> (itemSpeech.item as Training).speech
-        is Exercise-> (itemSpeech.item as Exercise).speech
-        is Round-> (itemSpeech.item as Round).speech
-        is Set-> (itemSpeech.item as Set).speech
+        is Training -> (itemSpeech.item as Training).speech
+        is Exercise -> (itemSpeech.item as Exercise).speech
+        is Round -> (itemSpeech.item as Round).speech
+        is Set -> (itemSpeech.item as Set).speech
         else -> SpeechKitDB()
     }
     return BottomSheetState(

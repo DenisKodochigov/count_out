@@ -10,6 +10,7 @@ import com.example.count_out.data.room.tables.SettingDB
 import com.example.count_out.data.room.tables.SpeechDB
 import com.example.count_out.data.room.tables.SpeechKitDB
 import com.example.count_out.data.room.tables.TrainingDB
+import com.example.count_out.entity.workout.Training
 
 object Plugins
 {
@@ -36,7 +37,7 @@ object Plugins
     }
 
 
-    fun item (id: Long): Training{
+    fun item (id: Long): Training {
         return listTr.find { it.idTraining == id } ?: TrainingDB() as Training
     }
 }

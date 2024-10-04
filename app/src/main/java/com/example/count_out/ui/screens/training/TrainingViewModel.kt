@@ -7,9 +7,9 @@ import com.example.count_out.data.DataRepository
 import com.example.count_out.data.room.tables.SetDB
 import com.example.count_out.data.room.tables.TrainingDB
 import com.example.count_out.entity.MessageApp
-import com.example.count_out.entity.Set
+import com.example.count_out.entity.workout.Set
 import com.example.count_out.entity.SpeechKit
-import com.example.count_out.entity.Training
+import com.example.count_out.entity.workout.Training
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow

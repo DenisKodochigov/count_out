@@ -8,10 +8,10 @@ import com.example.count_out.data.room.tables.SetDB
 import com.example.count_out.data.room.tables.TrainingDB
 import com.example.count_out.entity.Activity
 import com.example.count_out.entity.BottomSheetInterface
-import com.example.count_out.entity.Exercise
-import com.example.count_out.entity.Set
+import com.example.count_out.entity.workout.Exercise
+import com.example.count_out.entity.workout.Set
 import com.example.count_out.entity.SpeechKit
-import com.example.count_out.entity.Training
+import com.example.count_out.entity.workout.Training
 
 data class TrainingScreenState(
     val training: Training = TrainingDB(),
@@ -33,7 +33,7 @@ data class TrainingScreenState(
     @Stable var set: Set = SetDB(),
     val activities: List<Activity> = emptyList(),
 
-    @Stable var changeNameTraining: (Training, String) -> Unit = {_,_ ->},
+    @Stable var changeNameTraining: (Training, String) -> Unit = { _, _ ->},
     @Stable var onDeleteTraining: (Long) -> Unit = {},
     @Stable var onAddExercise: (Long, SetDB) -> Unit = {_,_ ->},
     @Stable var onCopyExercise: (Long, Long) -> Unit = {_,_ ->},
