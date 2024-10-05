@@ -11,7 +11,6 @@ import kotlinx.coroutines.launch
 
 class Router(private val dataForServ: DataForServ) {
 
-    val enableChange: MutableStateFlow<Boolean> = MutableStateFlow(true)
 
     val dataFromBle = DataFromBle()
     val dataFromSite = DataFromSite()
@@ -21,7 +20,7 @@ class Router(private val dataForServ: DataForServ) {
     val dataForWork: DataForWork by lazy {initDataForWork(dataForServ)}
     val dataForSite: DataForSite by lazy { initDataForSite(dataForServ) }
 
-    val buffer: Buffer by lazy { bufferInit(dataFromBle, dataFromWork, dataFromSite )}
+    private val buffer: Buffer by lazy { bufferInit(dataFromBle, dataFromWork, dataFromSite )}
     val dataForUI: DataForUI by lazy { initDataForUI(buffer) }
     val dataForBase = DataForBase()
 
@@ -37,8 +36,7 @@ class Router(private val dataForServ: DataForServ) {
             connectingState = dataFromBle.connectingState,
             lastConnectHearthRateDevice = dataFromBle.lastConnectHearthRateDevice,
 
-            set = dataFromWork.set,
-            mark = dataFromWork.mark,
+            speakingSet = dataFromWork.speakingSet,
             nextSet = dataFromWork.nextSet,
             message = dataFromWork.message,
             flowTick = dataFromWork.flowTick,
@@ -68,7 +66,7 @@ class Router(private val dataForServ: DataForServ) {
     }
     private fun initDataForUI(buffer: Buffer): DataForUI{
         return DataForUI(
-            set = buffer.set,
+            speakingSet = buffer.speakingSet,
             runningState = buffer.runningState,
         )
     }
@@ -76,20 +74,20 @@ class Router(private val dataForServ: DataForServ) {
         CoroutineScope(Dispatchers.Default).launch {
             while (true){
                 dataForUI.set(buffer)
-//                if (enableChange.value){ dataForUI.set(buffer) }
                 delay(1000L)
             }
         }
     }
 
-//    fun <T>collect(varCollect: MutableStateFlow<T>, enableChange: MutableStateFlow<Boolean>): MutableStateFlow<T>{
-//        val any: MutableStateFlow<T>? = null
-//        CoroutineScope(Dispatchers.Default).launch {
-//            varCollect.collect{ vr->
-//                var storeCollect = vr
-//                if (enableChange.value) any?.value = storeCollect
-//            }
-//        }
-//        return any ?: T()
-//    }
+    fun empty (){
+        dataForUI.empty()
+        dataForWork.empty()
+        dataFromWork.empty()
+        dataFromBle.empty()
+    }
+    fun emptyWork (){
+        dataForUI.empty()
+        dataForWork.empty()
+        dataFromWork.empty()
+    }
 }

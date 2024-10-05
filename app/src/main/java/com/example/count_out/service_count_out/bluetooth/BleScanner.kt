@@ -7,9 +7,9 @@ import android.bluetooth.le.ScanFilter
 import android.content.Context
 import android.os.ParcelUuid
 import com.example.count_out.entity.Const
-import com.example.count_out.entity.DataForUI
 import com.example.count_out.entity.StateBleScanner
 import com.example.count_out.entity.bluetooth.BleStates
+import com.example.count_out.entity.router.DataFromBle
 import com.example.count_out.permission.PermissionApp
 import com.example.count_out.service_count_out.stopwatch.TimerMy
 import com.example.count_out.ui.view_components.lg
@@ -45,29 +45,29 @@ class BleScanner @Inject constructor(
     }
 
     @SuppressLint("MissingPermission")
-    fun startScannerBLEDevices(dataForUi: DataForUI, bleStates: BleStates) {
+    fun startScannerBLEDevices(dataFromBle: DataFromBle, bleStates: BleStates) {
         CoroutineScope(Dispatchers.Default).launch {
-            scanCallback = objectScanCallback(bleStates, dataForUi)
+            scanCallback = objectScanCallback(bleStates, dataFromBle)
             permissionApp.checkBleScan{
                 bleScanner.startScan( scanFilters(), scanSettings(0L), scanCallback) }
-            dataForUi.scannedBle.value = true
+            dataFromBle.scannedBle.value = true
             timer.start(
                 sec = timeScanning,
                 endCommand = {
                     bleStates.stateBleScanner = StateBleScanner.END
-                    stopScanner(dataForUi)
+                    stopScanner(dataFromBle)
                 }
             )
         }
     }
-    fun stopScannerBLEDevices(dataForUi: DataForUI) {
+    fun stopScannerBLEDevices(dataFromBle: DataFromBle) {
         timer.cancel()
-        stopScanner(dataForUi)
+        stopScanner(dataFromBle)
     }
     @SuppressLint("MissingPermission")
-    fun stopScanner(dataForUI: DataForUI){
+    fun stopScanner(dataFromBle: DataFromBle){
         lg("BleScanner. Stop scanner")
         permissionApp.checkBleScan{ bleScanner.stopScan(scanCallback)}
-        dataForUI.scannedBle.value = false
+        dataFromBle.scannedBle.value = false
     }
 }

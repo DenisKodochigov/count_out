@@ -115,6 +115,8 @@
     <string name="gatt_connect_error">Error connecting GATT</string>
     <string name="start_service">Start foreground service</string>
     <string name="init_service">Initialization foreground service</string>
+    <string name="stop_distribution_service">Stop Distribution Service</string>
+    <string name="speech_manager_error">SpeechManager</string>
 
     <plurals name="set_1">
         <item quantity="zero">%1$d = zero</item>

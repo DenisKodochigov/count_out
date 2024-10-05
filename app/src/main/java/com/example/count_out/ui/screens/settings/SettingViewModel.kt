@@ -142,22 +142,17 @@ class SettingViewModel @Inject constructor(
 
     private fun connectToStoredBleDev() {
         viewModelScope.launch(Dispatchers.IO) {
-            dataRepository.getBleDevStoreFlow().collect{
-                if (it.address.isNotEmpty()) {
-                    dataForServ.addressForSearch = it.address
+            dataRepository.getBleDevStoreFlow().collect{ device->
+                if (device.address.isNotEmpty()) {
+                    _settingScreenState.update { state ->
+                        state.copy(lastConnectHearthRateDevice = device) }
+                    dataForServ.addressForSearch = device.address
                     commandService(CommandService.CONNECT_DEVICE)
                 }
             }
         }
     }
     private fun receiveState(dataForUI: DataForUI) { //
-        viewModelScope.launch(Dispatchers.IO) {
-            dataForUI.lastConnectHearthRateDevice.collect { lastHR ->
-//                if (dataForUI.runningState.value == RunningState.Stopped) return@collect
-                _settingScreenState.update { currentState ->
-                    currentState.copy(lastConnectHearthRateDevice = lastHR) }
-            }
-        }
         viewModelScope.launch(Dispatchers.IO) {
             dataForUI.connectingState.collect { state ->
 //                if (dataForUI.runningState.value == RunningState.Stopped) return@collect

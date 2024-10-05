@@ -4,8 +4,6 @@ import android.bluetooth.BluetoothAdapter
 import com.example.count_out.R
 import com.example.count_out.entity.BleTask
 import com.example.count_out.entity.ConnectState
-import com.example.count_out.entity.DataForServ
-import com.example.count_out.entity.DataForUI
 import com.example.count_out.entity.ErrorBleService
 import com.example.count_out.entity.MessageApp
 import com.example.count_out.entity.StateBleConnecting
@@ -13,6 +11,8 @@ import com.example.count_out.entity.StateBleScanner
 import com.example.count_out.entity.bluetooth.BleConnection
 import com.example.count_out.entity.bluetooth.BleDevice
 import com.example.count_out.entity.bluetooth.BleStates
+import com.example.count_out.entity.router.DataForBle
+import com.example.count_out.entity.router.DataFromBle
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -29,47 +29,47 @@ class Bluetooth @Inject constructor(
 
     val state = BleStates()
 
-    fun startScanning(dataForUi: DataForUI){
-        stopScanning(dataForUi)
+    fun startScanning(dataFromBle: DataFromBle){
+        stopScanning(dataFromBle)
         if (state.stateBleScanner == StateBleScanner.END){
             messageApp.messageApi(R.string.start_scanner)
             state.stateBleScanner = StateBleScanner.RUNNING
-            bleScanner.startScannerBLEDevices(dataForUi, state)
+            bleScanner.startScannerBLEDevices(dataFromBle, state)
         }
     }
 
-    fun stopScanning(dataForUi: DataForUI){
+    fun stopScanning(dataFromBle: DataFromBle){
         if (state.stateBleScanner == StateBleScanner.RUNNING){
             state.stateBleScanner = StateBleScanner.END
-            bleScanner.stopScannerBLEDevices(dataForUi)
+            bleScanner.stopScannerBLEDevices(dataFromBle)
             messageApp.messageApi(R.string.stop_scanner)
         }
     }
 
-    fun connectDevice(dataForUI: DataForUI, dataForBle: DataForServ){
-        if (state.stateBleScanner == StateBleScanner.RUNNING) stopScanning(dataForUI)
+    fun connectDevice(dataFromBle: DataFromBle, dataForBle: DataForBle){
+        if (state.stateBleScanner == StateBleScanner.RUNNING) stopScanning(dataFromBle)
 
-        dataForUI.connectingState.value = ConnectState.CONNECTING
+        dataFromBle.connectingState.value = ConnectState.CONNECTING
         state.task = BleTask.CONNECT_DEVICE
-        getRemoteDevice(bluetoothAdapter, dataForBle, dataForUI, state)
-        sendHeartRate(bleConnecting.heartRate, dataForUI)
+        getRemoteDevice(bluetoothAdapter, dataForBle, dataFromBle, state)
+        sendHeartRate(bleConnecting.heartRate, dataFromBle)
         if ( dataForBle.currentConnection != null ) {
             bleConnecting.connectDevice(state, dataForBle)
         }
     }
 
-    private fun sendHeartRate(heartRate: MutableStateFlow<Int>, dataForUi: DataForUI){
+    private fun sendHeartRate(heartRate: MutableStateFlow<Int>, dataFromBle: DataFromBle){
         CoroutineScope(Dispatchers.Default).launch {
             heartRate.collect{ hr->
-                dataForUi.heartRate.value = hr
-                if ( hr > 0) dataForUi.connectingState.value = ConnectState.CONNECTED
+                dataFromBle.heartRate.value = hr
+                if ( hr > 0) dataFromBle.connectingState.value = ConnectState.CONNECTED
             }
         }
     }
     private fun getRemoteDevice(
         bluetoothAdapter: BluetoothAdapter,
-        dataForBle: DataForServ,
-        dataForUi: DataForUI,
+        dataForBle: DataForBle,
+        dataForUi: DataFromBle,
         bleStates: BleStates,
     ): Boolean {
         var result = false

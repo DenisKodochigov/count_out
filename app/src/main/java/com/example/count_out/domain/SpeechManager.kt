@@ -3,7 +3,7 @@ package com.example.count_out.domain
 import android.content.Context
 import android.speech.tts.TextToSpeech
 import android.speech.tts.UtteranceProgressListener
-import com.example.count_out.entity.DataForUI
+import com.example.count_out.R
 import com.example.count_out.entity.MessageApp
 import com.example.count_out.entity.MessageWorkOut
 import com.example.count_out.entity.RunningState
@@ -47,7 +47,7 @@ class SpeechManager(val context: Context) {
                             }
                             @Deprecated("Deprecated in Java", ReplaceWith("Log.i(\"TextToSpeech\", \"On Error\")", "android.util.Log"))
                             override fun onError(utteranceId: String) {
-                                messengerA.errorApi("SpeechManager.On Error $utteranceId")}
+                                messengerA.errorApi( R.string.speech_manager_error, " $utteranceId")}
                         }
                     )
                     callBack()
@@ -58,9 +58,8 @@ class SpeechManager(val context: Context) {
         }
     }
 
-
     suspend fun speech(dataFromWork: DataFromWork, speech: Speech): Long {
-        if (dataFromWork.runningState.value == RunningState.Stopped) dataFromWork.cancelCoroutineWork()
+        dataFromWork.equalsStop()
         val speechText = speech.message + " " + speech.addMessage
         if ((speechText).length > 1) {
             dataFromWork.message.value = MessageWorkOut(message = speechText, tickTime = Watcher.getTickTime().value)
@@ -75,41 +74,15 @@ class SpeechManager(val context: Context) {
     }
     private fun speakOutAdd(text: String, dataFromWork: DataFromWork){
 //        messengerA.messageApi("SpeechManager.speakOutAdd $text")
-        if (dataFromWork.runningState.value == RunningState.Stopped) dataFromWork.cancelCoroutineWork()
+        dataFromWork.equalsStop()
         tts?.speak(text, TextToSpeech.QUEUE_ADD, null,"speakOut$idSpeech")
     }
     fun speakOutFlush(text: String, dataFromWork: DataFromWork){
 //        messengerA.messageApi("SpeechManager.speakOutFlush")
-        if (dataFromWork.runningState.value == RunningState.Stopped) dataFromWork.cancelCoroutineWork()
-        tts?.speak(text, TextToSpeech.QUEUE_FLUSH, null,"speakOut$idSpeech")
+        dataFromWork.equalsStop()
+        if (tts?.isSpeaking == false) tts?.speak(text, TextToSpeech.QUEUE_FLUSH, null,"speakOut$idSpeech")
     }
 
-
-
-    suspend fun speech(dataForUI: DataForUI, speech: Speech): Long {
-        if (dataForUI.runningState.value == RunningState.Stopped) dataForUI.cancelCoroutineWork()
-        val speechText = speech.message + " " + speech.addMessage
-        if ((speechText).length > 1) {
-            dataForUI.message.value = MessageWorkOut(message = speechText, tickTime = Watcher.getTickTime().value)
-            speakOutAdd(speechText, dataForUI)
-            while (tts?.isSpeaking == true || dataForUI.runningState.value == RunningState.Paused)
-                { delay(500L) }
-            if( speech.duration == 0L && speech.idSpeech > 0 && duration > 0 ){
-                dataForUI.durationSpeech.value = speech.idSpeech to duration
-            }
-        }
-        return durationEnd
-    }
-    private fun speakOutAdd(text: String, dataForUI: DataForUI){
-//        messengerA.messageApi("SpeechManager.speakOutAdd $text")
-        if (dataForUI.runningState.value == RunningState.Stopped) dataForUI.cancelCoroutineWork()
-        tts?.speak(text, TextToSpeech.QUEUE_ADD, null,"speakOut$idSpeech")
-    }
-    fun speakOutFlush(text: String, dataForUI: DataForUI){
-//        messengerA.messageApi("SpeechManager.speakOutFlush")
-        if (dataForUI.runningState.value == RunningState.Stopped) dataForUI.cancelCoroutineWork()
-        tts?.speak(text, TextToSpeech.QUEUE_FLUSH, null,"speakOut$idSpeech")
-    }
     fun getSpeeching() = tts?.isSpeaking ?: false
     fun stopTts(){
         tts?.let {

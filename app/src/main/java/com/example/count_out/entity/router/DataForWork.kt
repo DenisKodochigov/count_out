@@ -16,8 +16,8 @@ data class DataForWork (
     var cancelCoroutineWork: ()-> Unit = {},
 ){
     fun empty(){
-        training = MutableStateFlow(null)
-        enableSpeechDescription = MutableStateFlow(true)
+//        training = MutableStateFlow(null)
+//        enableSpeechDescription = MutableStateFlow(true)
         indexRound = 0
         indexExercise = 0
         indexSet = 0

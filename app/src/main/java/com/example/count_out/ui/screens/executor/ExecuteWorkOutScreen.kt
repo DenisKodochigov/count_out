@@ -190,19 +190,18 @@ import java.math.RoundingMode
 }
 
 @Composable fun ButtonFasterSlower(uiState: ExecuteWorkoutScreenState){
-
     var downInterval = {}
     var upInterval = {}
     uiState.training?.let { training ->
-        uiState.playerSet?.let { set ->
+        uiState.speakingSet?.let { set ->
             downInterval = { uiState.updateSet(
                 training.idTraining, (set as SetDB).copy(intervalReps = set.intervalReps.Minus())) }
             upInterval = { uiState.updateSet(
                 training.idTraining, (set as SetDB).copy(intervalReps = set.intervalReps.Plus())) }
         }
     }
-    val enabledButton = uiState.playerSet != null &&
-            ( uiState.playerSet.goal == GoalSet.COUNT || uiState.playerSet.goal == GoalSet.COUNT_GROUP)
+    val enabledButton = uiState.speakingSet != null &&
+            ( uiState.speakingSet.goal == GoalSet.COUNT || uiState.speakingSet.goal == GoalSet.COUNT_GROUP)
     Row(verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Center,
         modifier = Modifier
@@ -214,7 +213,7 @@ import java.math.RoundingMode
             onClick = { upInterval() })
         Spacer(modifier = Modifier.weight(1f))
         if (enabledButton){
-            uiState.playerSet?.intervalReps?.toBigDecimal()?.setScale(1, RoundingMode.UP)?.let {
+            uiState.speakingSet?.intervalReps?.toBigDecimal()?.setScale(1, RoundingMode.UP)?.let {
                 TextApp(text = it.toString(), style = typography.titleLarge)}
         }
         Spacer(modifier = Modifier.weight(1f))

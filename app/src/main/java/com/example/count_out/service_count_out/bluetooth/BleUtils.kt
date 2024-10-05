@@ -5,10 +5,10 @@ import android.bluetooth.BluetoothGattCharacteristic
 import android.bluetooth.le.ScanCallback
 import android.bluetooth.le.ScanResult
 import android.bluetooth.le.ScanSettings
-import com.example.count_out.entity.DataForUI
 import com.example.count_out.entity.StateBleScanner
 import com.example.count_out.entity.bluetooth.BleDevice
 import com.example.count_out.entity.bluetooth.BleStates
+import com.example.count_out.entity.router.DataFromBle
 import com.example.count_out.ui.view_components.lg
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
@@ -24,12 +24,12 @@ fun scanSettings(reportDelay: Long): ScanSettings {
         .build()
 }
 
-fun objectScanCallback(bleStates: BleStates, dataForUI: DataForUI): ScanCallback = object: ScanCallback() {
+fun objectScanCallback(bleStates: BleStates, dataFromBle: DataFromBle): ScanCallback = object: ScanCallback() {
     override fun onScanResult(callbackType: Int, result: ScanResult?) {
         super.onScanResult(callbackType, result)
         result?.device?.let { dev ->
-            if (dataForUI.foundDevices.value.find { it.address == dev.address } == null){
-                dataForUI.foundDevices.value = dataForUI.foundDevices.value.addApp(BleDevice().fromBluetoothDevice(dev))
+            if (dataFromBle.foundDevices.value.find { it.address == dev.address } == null){
+            dataFromBle.foundDevices.value = dataFromBle.foundDevices.value.addApp(BleDevice().fromBluetoothDevice(dev))
             }
         }
     }
@@ -37,16 +37,16 @@ fun objectScanCallback(bleStates: BleStates, dataForUI: DataForUI): ScanCallback
         super.onBatchScanResults(results)
         if (!results.isNullOrEmpty()) {
             results.forEach{ result->
-                if (dataForUI.foundDevices.value.find { it.address == result.device.address } == null){
-                    dataForUI.foundDevices.value =
-                        dataForUI.foundDevices.value.addApp(BleDevice().fromBluetoothDevice(result.device))
+                if (dataFromBle.foundDevices.value.find { it.address == result.device.address } == null){
+                dataFromBle.foundDevices.value =
+                dataFromBle.foundDevices.value.addApp(BleDevice().fromBluetoothDevice(result.device))
                 }
             }
         }
     }
     override fun onScanFailed(errorCode: Int) {
         lg("Error scan BLE device. $errorCode")
-        dataForUI.scannedBle.value = false
+        dataFromBle.scannedBle.value = false
         bleStates.stateBleScanner = StateBleScanner.END
     }
 }

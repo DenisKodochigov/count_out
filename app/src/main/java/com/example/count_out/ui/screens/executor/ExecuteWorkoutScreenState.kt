@@ -4,19 +4,19 @@ import androidx.compose.runtime.Stable
 import com.example.count_out.data.room.tables.SetDB
 import com.example.count_out.entity.ConnectState
 import com.example.count_out.entity.ListActivityForExecute
-import com.example.count_out.entity.RunningState
-import com.example.count_out.entity.workout.Set
-import com.example.count_out.entity.TickTime
-import com.example.count_out.entity.workout.Training
-import com.example.count_out.entity.bluetooth.DeviceUI
 import com.example.count_out.entity.MessageWorkOut
+import com.example.count_out.entity.RunningState
+import com.example.count_out.entity.TickTime
+import com.example.count_out.entity.bluetooth.DeviceUI
+import com.example.count_out.entity.workout.Set
+import com.example.count_out.entity.workout.Training
 import javax.inject.Singleton
 
 @Singleton
 data class ExecuteWorkoutScreenState(
     val training: Training? = null,
     val messageWorkout: List<MessageWorkOut> = emptyList(),
-    val playerSet: Set? = null,
+    val speakingSet: Set? = null,
     val nextSet: Set? = null,
     var listActivity: List< ListActivityForExecute> = emptyList(),
     val lastConnectHearthRateDevice: DeviceUI? = null,

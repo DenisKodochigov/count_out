@@ -13,13 +13,13 @@ import android.content.Context
 import android.os.Build
 import com.example.count_out.R
 import com.example.count_out.entity.Const.UUIDBle
-import com.example.count_out.entity.DataForServ
 import com.example.count_out.entity.ErrorBleService
 import com.example.count_out.entity.MessageApp
 import com.example.count_out.entity.StateBleConnecting
 import com.example.count_out.entity.bluetooth.BleConnection
 import com.example.count_out.entity.bluetooth.BleStates
 import com.example.count_out.entity.hciStatusFromValue
+import com.example.count_out.entity.router.DataForBle
 import com.example.count_out.permission.PermissionApp
 import com.example.count_out.ui.view_components.lg
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -36,7 +36,7 @@ class BleConnecting @Inject constructor(
     private val uuidHeartRateMeasurement = UUID.fromString(UUIDBle.HEART_RATE_MEASUREMENT)
     private val uuidClientCharacteristicConfig = UUID.fromString(UUIDBle.CLIENT_CHARACTERISTIC_CONFIG)
 
-    fun connectDevice(bleStates: BleStates, dataForBle: DataForServ){
+    fun connectDevice(bleStates: BleStates, dataForBle: DataForBle){
         dataForBle.currentConnection?.let {
             connection = it
             connectingGatt( bleStates )
