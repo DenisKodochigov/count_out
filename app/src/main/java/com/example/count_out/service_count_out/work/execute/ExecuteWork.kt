@@ -10,13 +10,15 @@ class ExecuteWork @Inject constructor(
     val speechManager:SpeechManager, private val executeRound: ExecuteRound) {
     suspend fun executeWorkOut(dataForWork: DataForWork, dataFromWork: DataFromWork){
         dataFromWork.equalsStop()
-        dataForWork.training.value?.speech?.beforeStart?.addMessage = ". " + dataForWork.training.value?.name
-        dataForWork.training.value?.speech?.beforeStart?.let { speechManager.speech(dataFromWork, it) }
-        dataForWork.training.value?.speech?.afterStart?.let { speechManager.speech(dataFromWork, it) }
-        dataForWork.training.value?.rounds?.forEachIndexed { index, _->
-            executeRound.executeRound( dataForWork.apply { indexRound = index }, dataFromWork) }
-        dataForWork.training.value?.speech?.beforeEnd?.let { speechManager.speech(dataFromWork, it)}
-        dataForWork.training.value?.speech?.afterEnd?.let { speechManager.speech(dataFromWork, it) }
-        dataFromWork.runningState.value = RunningState.Stopped
+        dataForWork.training.value?.let { training->
+            training.speech.beforeStart.addMessage = training.name
+            speechManager.speech(dataFromWork, training.speech.beforeStart)
+            speechManager.speech(dataFromWork, training.speech.afterStart)
+            training.rounds.forEachIndexed { index, _->
+                executeRound.executeRound( dataForWork.apply { indexRound = index }, dataFromWork) }
+            speechManager.speech(dataFromWork, training.speech.beforeEnd)
+            speechManager.speech(dataFromWork, training.speech.afterEnd)
+            dataFromWork.runningState.value = RunningState.Stopped
+        }
     }
 }

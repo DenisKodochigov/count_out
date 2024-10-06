@@ -93,7 +93,6 @@ data class ExecuteWorkoutScreenState(
                 }
             }
         }
-        
         return resultList
     }
 }

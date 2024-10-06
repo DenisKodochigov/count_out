@@ -105,7 +105,7 @@ private fun createSetting( db: AppDatabase){
 }
 private fun createTrainingPlansTesting( db: AppDatabase) {
 
-    val rest = 7
+    val rest = 10
     val reps = 3
     val idTraining = db.dataDao().addTraining(TrainingDB(name = "Тестовая", idTraining = 1,
         speechId = addSpeechKit(db, bs = "Начало тренировки", ast = "", be = "", ae = "Тренировка окончена",)))

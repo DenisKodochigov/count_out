@@ -60,8 +60,9 @@ import java.math.RoundingMode
     ExecuteWorkoutScreenLayout(uiState = uiState)
 }
 @Composable fun ExecuteWorkoutScreenLayout( uiState: ExecuteWorkoutScreenState){
-    if(uiState.listActivity.isEmpty()) {
-        uiState.listActivity = uiState.activityList() }
+//    lg("ExecuteWorkoutScreenLayout")
+    if(uiState.listActivity.isEmpty()) { uiState.listActivity = uiState.activityList()
+     lg("uiState.listActivity ${uiState.listActivity}")}
     Column(
         modifier = Modifier.fillMaxSize(),
         content = {
@@ -96,7 +97,7 @@ import java.math.RoundingMode
     LaunchedEffect(lazyState.canScrollForward){
         if (lazyState.canScrollForward) {
             coroutineScope.launch {
-                lazyState.animateScrollToItem(index =
+                lazyState.animateScrollToItem( index =
                 if (uiState.messageWorkout.isEmpty()) 0 else uiState.messageWorkout.size - 1)
             }
         }

@@ -18,22 +18,39 @@ import javax.inject.Singleton
 class ExecuteModule {
     @Singleton
     @Provides
-    fun provideExecuteWorkOut(speechManager: SpeechManager, executeRound: ExecuteRound): ExecuteWork {
+    fun provideExecuteWorkOut(
+        speechManager: SpeechManager,
+        executeRound: ExecuteRound,
+    ): ExecuteWork {
         return ExecuteWork(speechManager, executeRound)
     }
+
     @Singleton
     @Provides
-    fun provideExecuteRound(speechManager: SpeechManager, executeExercise: ExecuteExercise): ExecuteRound {
-        return ExecuteRound(speechManager, executeExercise)
+    fun provideExecuteRound(
+        speechManager: SpeechManager,
+        executeExercise: ExecuteExercise,
+        @ApplicationContext appContext: Context,
+    ): ExecuteRound {
+        return ExecuteRound(speechManager, executeExercise, appContext)
     }
+
     @Singleton
     @Provides
-    fun provideExecuteExercise(speechManager: SpeechManager, executeSet: ExecuteSet): ExecuteExercise {
-        return ExecuteExercise(speechManager, executeSet)
+    fun provideExecuteExercise(
+        speechManager: SpeechManager,
+        executeSet: ExecuteSet,
+        @ApplicationContext appContext: Context,
+    ): ExecuteExercise {
+        return ExecuteExercise(speechManager, executeSet, appContext)
     }
+
     @Singleton
     @Provides
-    fun provideExecuteSet(speechManager: SpeechManager, @ApplicationContext appContext: Context): ExecuteSet {
+    fun provideExecuteSet(
+        speechManager: SpeechManager,
+        @ApplicationContext appContext: Context,
+    ): ExecuteSet {
         return ExecuteSet(speechManager, appContext)
     }
 }

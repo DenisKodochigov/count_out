@@ -74,7 +74,7 @@
     <string name="create_ring">Create ring</string>
     <string name="add_ring">Add ring</string>
     <string name="count">count</string>
-    <string name="next_exercise">Prepare for the next exercise</string>
+    <string name="next_exercise">Prepare for the exercise</string>
     <string name="rest_time">seconds of rest.</string>
     <string name="section_heart_rate">Section select device heart rate</string>
     <string name="heart_rate_device">Heart rate monitor</string>

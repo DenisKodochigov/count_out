@@ -128,7 +128,6 @@ class ExecuteWorkViewModel @Inject constructor(
     private fun receiveState(dataForUI: DataForUI){
         viewModelScope.launch(Dispatchers.IO) {
             dataForUI.runningState.collect{
-                dataForServ.runningState.value = it
                 _executeWorkoutScreenState.update { state -> state.copy(stateWorkOutService = it) }
                 if (it == RunningState.Stopped) {
                     _executeWorkoutScreenState.update { state ->
@@ -142,28 +141,30 @@ class ExecuteWorkViewModel @Inject constructor(
                     }
                     return@collect
                 }
-            } }
+            } } //stateWorkOutService
         viewModelScope.launch(Dispatchers.IO) {
             dataForUI.speakingSet.collect{ set->
-                _executeWorkoutScreenState.update { state -> state.copy( speakingSet = set )}} }
-         viewModelScope.launch(Dispatchers.IO) {
-            dataForUI.nextSet.collect{ set-> _executeWorkoutScreenState.update { state ->
-                    state.copy(listActivity = if (set != null ) state.activityList(set.idSet)
-                                                else state.listActivity)}} }
+                _executeWorkoutScreenState.update { state -> state.copy( speakingSet = set )}} } //speakingSet
+        viewModelScope.launch(Dispatchers.IO) {
+            dataForUI.nextSet.collect{ nextSet->
+                lg("ExecuteWorkViewModel nextSet=${nextSet?.idSet ?: -1}")
+                _executeWorkoutScreenState.update { state ->
+                    state.copy(listActivity = if (nextSet != null ) state.activityList(nextSet.idSet)
+                                                else state.listActivity)}} } //listActivity
         viewModelScope.launch(Dispatchers.IO) {
             dataForUI.flowTick.collect { tick ->
-                _executeWorkoutScreenState.update { state -> state.copy( tickTime = tick )}} }
+                _executeWorkoutScreenState.update { state -> state.copy( tickTime = tick )}} } //tickTime
         viewModelScope.launch(Dispatchers.IO) {
-            dataForUI.durationSpeech.collect { duration -> dataRepository.updateDuration(duration)} }
+            dataForUI.durationSpeech.collect { duration ->dataRepository.updateDuration(duration)} } //save duration set time
         viewModelScope.launch(Dispatchers.IO) {
             dataForUI.message.collect { message ->
                 message?.let { mes -> _executeWorkoutScreenState.update { state ->
-                        state.copy(messageWorkout = state.addMessage(mes)) } } } }
+                        state.copy(messageWorkout = state.addMessage(mes)) } } } } //messageWorkout
         viewModelScope.launch(Dispatchers.IO) {
             dataForUI.connectingState.collect { stateC ->
-                _executeWorkoutScreenState.update { state -> state.copy( connectingState = stateC) } } }
+                _executeWorkoutScreenState.update { state -> state.copy( connectingState = stateC) } } } //connectingState
         viewModelScope.launch(Dispatchers.IO) {
             dataForUI.heartRate.collect { hr ->
-                _executeWorkoutScreenState.update { state -> state.copy(heartRate = hr) } } }
+                _executeWorkoutScreenState.update { state -> state.copy(heartRate = hr) } } } //heartRate
     }
 }

@@ -107,6 +107,8 @@ data class DataForWork (
     fun getNextSet(): Set? {
         var findingSet = false
         val currentIdSet = getSet()?.idSet
+
+        lg("getNextSet currentIdSet:$currentIdSet ")
         training.value?.let { trainingIt ->
             trainingIt.rounds.forEachIndexed { _, round ->
                 round.exercise.forEachIndexed { _, exercise ->
