@@ -1,27 +1,51 @@
 package com.example.count_out.service_count_out.location
 
+import android.annotation.SuppressLint
+import android.content.Context
+import android.os.Looper
 import com.example.count_out.data.room.tables.CoordinateDB
-import com.example.count_out.entity.RunningState
 import com.example.count_out.entity.router.DataForSite
 import com.example.count_out.entity.router.DataFromSite
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
+import com.example.count_out.permission.PermissionApp
+import com.example.count_out.ui.view_components.lg
+import com.google.android.gms.location.Granularity
+import com.google.android.gms.location.LocationListener
+import com.google.android.gms.location.LocationRequest
+import com.google.android.gms.location.LocationServices
+import javax.inject.Inject
 
-class Site {
+class Site @Inject constructor(val context: Context, val permission: PermissionApp) {
 
+    private lateinit var locationListener: LocationListener
+    private lateinit var locationRequest: LocationRequest
+    private val fusedClient = LocationServices.getFusedLocationProviderClient(context)
+
+    @SuppressLint("MissingPermission")
     fun start(dataForSite: DataForSite, dataFromSite: DataFromSite){
-        CoroutineScope(Dispatchers.Default).launch {
-            var count = 0L
-            while (true){
-                dataFromSite.coordinate.value = CoordinateDB(0.0,0.0,count)
-//                lg("dataForSite $dataForSite; dataFromSite:$dataFromSite")
-                count++
-                delay(1000L)
-            }
+        locationRequest = LocationRequest.Builder(1000L).apply {
+            this.setGranularity(Granularity.GRANULARITY_FINE)
+//            this.setMinUpdateDistanceMeters(1F)
+//            this.setMaxUpdateDelayMillis(your_choice)
+            this.setWaitForAccurateLocation(false)
+            this.setMinUpdateIntervalMillis(500)
+            this.setMaxUpdateDelayMillis(1000)
+        }.build()
+        locationListener = LocationListener { location ->
+            dataFromSite.coordinate.value = CoordinateDB(
+                latitude = location.latitude,
+                longitude = location.longitude,
+                altitude = location.altitude,
+                time = location.time,
+                accuracy = location.accuracy,
+                speed = location.speed
+            )
         }
+        if (!permission.checkLocation()) return
+        fusedClient.requestLocationUpdates(locationRequest, locationListener, Looper.getMainLooper())
     }
-    fun stop(dataForSite: DataForSite){dataForSite.state.value = RunningState.Stopped}
-    fun pause(dataForSite: DataForSite){dataForSite.state.value = RunningState.Paused}
+
+    @SuppressLint("MissingPermission")
+    fun stop(){
+        if(permission.checkLocation()) fusedClient.removeLocationUpdates(locationListener)
+    }
 }

@@ -46,7 +46,6 @@ import com.example.count_out.ui.view_components.ButtonApp
 import com.example.count_out.ui.view_components.IconSingleLarge
 import com.example.count_out.ui.view_components.NameScreen
 import com.example.count_out.ui.view_components.TextApp
-import com.example.count_out.ui.view_components.lg
 import kotlinx.coroutines.launch
 import java.math.RoundingMode
 
@@ -134,11 +133,17 @@ import java.math.RoundingMode
 }
 @Composable fun CountTime(uiState: ExecuteWorkoutScreenState){
     val style = typography.displayLarge
-    TextApp(text = uiState.tickTime.hour, style = style)
-    TextApp(text = ":", style = style)
-    TextApp(text = uiState.tickTime.min, style = style)
-    TextApp(text = ":", style = style)
-    TextApp(text = uiState.tickTime.sec, style = style)
+    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+        Row {
+            TextApp(text = uiState.tickTime.hour, style = style)
+            TextApp(text = ":", style = style)
+            TextApp(text = uiState.tickTime.min, style = style)
+            TextApp(text = ":", style = style)
+            TextApp(text = uiState.tickTime.sec, style = style)
+        }
+        TextApp(text = "longitude: ${(uiState.coordinate?.longitude ?: "00")}" +
+                "   latitude: ${uiState.coordinate?.latitude ?: "00"}", style = alumBodySmall)
+    }
 }
 @Composable fun HearthRate(uiState: ExecuteWorkoutScreenState) {
     Column(horizontalAlignment = Alignment.CenterHorizontally) {

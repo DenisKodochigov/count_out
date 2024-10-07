@@ -3,6 +3,7 @@ package com.example.count_out.ui.screens.executor
 import androidx.compose.runtime.Stable
 import com.example.count_out.data.room.tables.SetDB
 import com.example.count_out.entity.ConnectState
+import com.example.count_out.entity.Coordinate
 import com.example.count_out.entity.ListActivityForExecute
 import com.example.count_out.entity.MessageWorkOut
 import com.example.count_out.entity.RunningState
@@ -22,6 +23,7 @@ data class ExecuteWorkoutScreenState(
     val lastConnectHearthRateDevice: DeviceUI? = null,
     val connectingState: ConnectState = ConnectState.NOT_CONNECTED,
     val heartRate: Int = 0,
+    val coordinate: Coordinate? = null,
 
     val tickTime: TickTime = TickTime(hour = "00", min="00", sec= "00"),
     val updateSet: (Long, SetDB)->Unit = { _, _->},

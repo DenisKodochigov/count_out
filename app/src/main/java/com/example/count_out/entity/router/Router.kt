@@ -11,7 +11,6 @@ import kotlinx.coroutines.launch
 
 class Router(private val dataForServ: DataForServ) {
 
-
     val dataFromBle = DataFromBle()
     val dataFromSite = DataFromSite()
     val dataFromWork = DataFromWork()
@@ -22,11 +21,8 @@ class Router(private val dataForServ: DataForServ) {
 
     private val buffer: Buffer by lazy { bufferInit(dataFromBle, dataFromWork, dataFromSite )}
     val dataForUI: DataForUI by lazy { initDataForUI(buffer) }
+    val dataForNotification: MutableStateFlow<DataForNotification?> = MutableStateFlow(null)
     val dataForBase = DataForBase()
-
-    fun initRouter(){}
-    fun startRouter(){}
-    fun stopRouter(){}
 
     private fun bufferInit(dataFromBle: DataFromBle, dataFromWork: DataFromWork, dataFromSite: DataFromSite): Buffer{
         return Buffer(
@@ -75,6 +71,22 @@ class Router(private val dataForServ: DataForServ) {
             while (true){
                 if (buffer.runningState.value == RunningState.Started) { dataForUI.setWork(buffer) }
                 dataForUI.setBle(buffer)
+                delay(1000L)
+            }
+        }
+    }
+    fun sendDataToNotification(){
+        CoroutineScope(Dispatchers.Default).launch {
+            while (true){
+                if (buffer.runningState.value == RunningState.Started) {
+                    dataForNotification.value = DataForNotification(
+                        hours = buffer.message.value?.tickTime?.hour ?: "00",
+                        minutes = buffer.message.value?.tickTime?.min ?: "00",
+                        seconds = buffer.message.value?.tickTime?.sec ?: "00",
+                        heartRate = buffer.heartRate.value,
+                        enableLocation = (buffer.coordinate.value?.longitude ?: 0.0) > 0.0
+                    )
+                }
                 delay(1000L)
             }
         }

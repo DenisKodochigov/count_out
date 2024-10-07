@@ -5,6 +5,7 @@ import androidx.room.Ignore
 import androidx.room.PrimaryKey
 import com.example.count_out.entity.Coordinate
 import com.example.count_out.entity.Count
+
 @Entity(tableName = "tb_counts")
 data class CountDB(
     @PrimaryKey(autoGenerate = true) override var idCount: Long = 0L,

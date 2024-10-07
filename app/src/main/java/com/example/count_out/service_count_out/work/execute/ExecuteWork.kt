@@ -4,6 +4,7 @@ import com.example.count_out.domain.SpeechManager
 import com.example.count_out.entity.RunningState
 import com.example.count_out.entity.router.DataForWork
 import com.example.count_out.entity.router.DataFromWork
+import com.example.count_out.ui.view_components.lg
 import javax.inject.Inject
 
 class ExecuteWork @Inject constructor(

@@ -12,7 +12,6 @@ import com.example.count_out.entity.MessageApp
 import com.example.count_out.entity.RunningState
 import com.example.count_out.entity.TickTime
 import com.example.count_out.service_count_out.CountOutServiceBind
-import com.example.count_out.ui.view_components.lg
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -141,6 +140,9 @@ class ExecuteWorkViewModel @Inject constructor(
                     return@collect
                 }
             } } //stateWorkOutService
+        viewModelScope.launch(Dispatchers.IO) {
+            dataForUI.coordinate.collect{ loc->
+                _executeWorkoutScreenState.update { state -> state.copy( coordinate = loc )}} } //coordinate
         viewModelScope.launch(Dispatchers.IO) {
             dataForUI.speakingSet.collect{ set->
                 _executeWorkoutScreenState.update { state -> state.copy( speakingSet = set )}} } //speakingSet

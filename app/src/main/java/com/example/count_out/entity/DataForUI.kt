@@ -18,7 +18,7 @@ data class DataForUI (
     val scannedBle: MutableStateFlow<Boolean> = MutableStateFlow(false),
     val connectingState: MutableStateFlow<ConnectState> = MutableStateFlow(ConnectState.NOT_CONNECTED),
     val foundDevices: MutableStateFlow<List<DeviceUI>> = MutableStateFlow(emptyList()),
-
+    val coordinate: MutableStateFlow<Coordinate?> = MutableStateFlow( null),
     var cancelCoroutineWork: ()-> Unit = {}
 ){
     fun empty(){
@@ -40,6 +40,6 @@ data class DataForUI (
         this.scannedBle.value = buffer.scannedBle.value
         this.connectingState.value = buffer.connectingState.value
         this.foundDevices.value = buffer.foundDevices.value
-
+        this.coordinate.value = buffer.coordinate.value
     }
 }

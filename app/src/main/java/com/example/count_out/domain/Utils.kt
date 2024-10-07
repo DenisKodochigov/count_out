@@ -7,18 +7,11 @@ import android.os.Build
 import android.os.VibrationEffect
 import android.os.Vibrator
 import android.os.VibratorManager
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 import java.util.TimeZone
-import kotlin.math.pow
-import kotlin.math.roundToInt
 
-fun formatTime( sec: String, min: String, hours: String): String = "$hours:$min:$sec"
 fun Int.pad(): String = this.toString().padStart(2, '0')
 fun String.toDoubleMy(): Double = if (this.isNotEmpty()) this.toDouble() else 0.0
 fun String.toIntMy(): Int = if (this.isNotEmpty()) this.toInt() else 0
@@ -28,15 +21,9 @@ fun Double.Plus(): Double = ((this * 10).toInt() + 1).toDouble()/10
 fun String.toNumeric(): Double{
     var result = ""
     return if (this.isNotEmpty()){
-        this.forEach { char->
-            if (char in '0'..'9' || char == '.') result += char
-        }
+        this.forEach { char-> if (char in '0'..'9' || char == '.') result += char }
         if (result.isNotEmpty()) result.toDouble() else 0.0
     } else 0.0
-}
-fun Double.rnd(count: Int): Double {
-    val dec = 10.0.pow(count+1)
-    return (this * dec).roundToInt() / dec
 }
 fun Long.getTime(): String {
     val date = Date(this)
@@ -54,8 +41,6 @@ fun vibrate(context: Context){
     }
     vibrateApp.vibrate(VibrationEffect.createOneShot(50, 10) )
 }
-@Composable
-fun <T>rememberMutableState(value: T): MutableState<T> = remember {mutableStateOf(value)}
 
 //class TestTTSFile @Inject constructor(val context: Context, val speechManager: SpeechManager) {
 //    fun writeToFile(text: String, nameFile: String){

@@ -21,7 +21,10 @@ import com.example.count_out.service_count_out.location.Site
 import com.example.count_out.service_count_out.work.Work
 import com.example.count_out.ui.view_components.lg
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -30,12 +33,12 @@ import javax.inject.Singleton
 class CountOutService @Inject constructor(): Service() {
 
     val stateService:MutableStateFlow<RunningState> = MutableStateFlow( RunningState.Stopped)
-    private val site = Site()
     private lateinit var router: Router
     @Inject lateinit var notificationHelper: NotificationHelper
     @Inject lateinit var messageApp: MessageApp
     @Inject lateinit var ble: Bluetooth
     @Inject lateinit var work: Work
+    @Inject lateinit var site: Site
 
     inner class DistributionServiceBinder: Binder() { fun getService(): CountOutService = this@CountOutService }
     override fun onBind(p0: Intent?): IBinder = DistributionServiceBinder()
@@ -68,7 +71,11 @@ class CountOutService @Inject constructor(): Service() {
     private fun startCountOutService(dataServ: DataForServ){
         router = Router(dataServ)
         startForegroundService()
+        notificationUpdate()
         stateService.value = RunningState.Started
+        startSite()
+        router.sendDataToUi()
+        router.sendDataToNotification()
     }
     private fun startForegroundService() {
         if (!notificationHelper.channelExist()) notificationHelper.createChannel()
@@ -78,37 +85,46 @@ class CountOutService @Inject constructor(): Service() {
         else startForeground(NOTIFICATION_ID, notificationHelper.build())
     }
     private fun stopCountOutService(){
-//        dataForServ = null
         messageApp.messageApi(R.string.stop_distribution_service)
         stopForeground(STOP_FOREGROUND_REMOVE)
         notificationHelper.cancel()
+        stopSite()
     }
-    fun getDataForUi(): DataForUI  {
-        return router.dataForUI }
+    fun getDataForUi(): DataForUI  { return router.dataForUI }
     private fun startSite(){
+        site.start(router.dataForSite, router.dataFromSite)
         router.dataForSite.state.value = RunningState.Started }
     private fun stopSite(){
+        site.stop()
         router.dataForSite.state.value = RunningState.Stopped }
     private fun startWork(){
         if (router.dataForUI.runningState.value == RunningState.Paused){
             router.dataFromWork.runningState.value = RunningState.Started
-            notificationHelper.setPauseButton()
+            notificationHelper.updateNotification(router.dataForNotification.value, router.dataFromWork.runningState.value)
         }
         if (router.dataForUI.runningState.value == RunningState.Stopped){
             router.dataFromWork.runningState.value = RunningState.Started
-            notificationHelper.setPauseButton()
-            router.sendDataToUi()
+            notificationHelper.updateNotification(router.dataForNotification.value, router.dataFromWork.runningState.value)
             router.dataFromWork.nextSet.value = router.dataForWork.getSet(0)
             lg("#################### Start Service Work ##########################")
             work.start( router.dataForWork, router.dataFromWork )
         }
     }
     private fun stopWork(){
+        lg("#################### Stop Service Work ##########################")
         router.dataFromWork.runningState.value = RunningState.Stopped
+    }
+    private fun notificationUpdate(){
+        CoroutineScope(Dispatchers.Default).launch {
+            router.dataForNotification.collect{
+                notificationHelper.updateNotification( it, router.dataFromWork.runningState.value )
+            }
+        }
     }
     private fun pauseWork(){
         lg("Pause Work")
-        router.dataForUI.runningState.value = RunningState.Paused
-        notificationHelper.setContinueButton()
+        router.dataFromWork.runningState.value = RunningState.Paused
+        notificationHelper.updateNotification(router.dataForNotification.value, router.dataFromWork.runningState.value)
+//        notificationHelper.setContinueButton()
     }
 }

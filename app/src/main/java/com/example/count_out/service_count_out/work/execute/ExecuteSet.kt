@@ -30,8 +30,7 @@ class ExecuteSet @Inject constructor(val speechManager:SpeechManager, val contex
             speakSetBegin(set = setCurrent, dataFromWork = dataFromWork)
             speakSetBody(set = setCurrent, dataForWork = dataForWork, dataFromWork = dataFromWork)
             dataFromWork.speakingSet.value = null
-            val eee = dataForWork.getNextSet()
-            dataFromWork.nextSet.value = eee
+            dataFromWork.nextSet.value = dataForWork.getNextSet()
             speakSetEnd(setCurrent, dataFromWork)
         }
     }
