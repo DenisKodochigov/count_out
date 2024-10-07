@@ -73,16 +73,17 @@ class SpeechManager(val context: Context) {
         return durationEnd
     }
     private fun speakOutAdd(text: String, dataFromWork: DataFromWork){
-//        messengerA.messageApi("SpeechManager.speakOutAdd $text")
         dataFromWork.equalsStop()
         tts?.speak(text, TextToSpeech.QUEUE_ADD, null,"speakOut$idSpeech")
     }
     fun speakOutFlush(text: String, dataFromWork: DataFromWork){
-//        messengerA.messageApi("SpeechManager.speakOutFlush")
+        dataFromWork.equalsStop()
+        tts?.speak(text, TextToSpeech.QUEUE_FLUSH, null,"speakOut$idSpeech")
+    }
+    fun speakOutFlushBusy(text: String, dataFromWork: DataFromWork){
         dataFromWork.equalsStop()
         if (tts?.isSpeaking == false) tts?.speak(text, TextToSpeech.QUEUE_FLUSH, null,"speakOut$idSpeech")
     }
-
     fun getSpeeching() = tts?.isSpeaking ?: false
     fun stopTts(){
         tts?.let {
