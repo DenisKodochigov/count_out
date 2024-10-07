@@ -51,7 +51,6 @@ import com.example.count_out.ui.view_components.TextApp
     screen: ScreenDestination,
 ){
     val viewModel: TrainingsViewModel = hiltViewModel()
-//    lg("TrainingsScreen")
     TrainingsScreenCreateView(
         onClickTraining = onClickTraining,
         onStartWorkout = onStartWorkout,
@@ -95,9 +94,7 @@ fun TrainingsLazyColumn(uiState: TrainingsScreenState,
     LazyList(uiState)
     Spacer(modifier = Modifier.height(8.dp))
 }
-@Composable fun LazyList(uiState: TrainingsScreenState)
-{
-//    lg("LazyList")
+@Composable fun LazyList(uiState: TrainingsScreenState) {
     LazyColumn(
         state = rememberLazyListState(),
         modifier = Modifier
@@ -117,9 +114,7 @@ fun TrainingsLazyColumn(uiState: TrainingsScreenState,
         }
     }
 }
-@Composable fun RowLazy(item: Training, uiState: TrainingsScreenState, modifier: Modifier)
-{
-//    lg("RowLazy")
+@Composable fun RowLazy(item: Training, uiState: TrainingsScreenState, modifier: Modifier) {
     Card(elevation = elevationTraining(), shape = MaterialTheme.shapes.extraSmall
     ){
         Row(
@@ -152,7 +147,6 @@ fun TrainingsLazyColumn(uiState: TrainingsScreenState,
     uiState: TrainingsScreenState,
     modifier: Modifier = Modifier)
 {
-//    lg("TrainingInformation")
     Column (modifier = modifier.clickable { uiState.onSelectItem(item.idTraining) }){
         TextApp( text = item.name, style = typography.titleLarge)
         Spacer(modifier = Modifier.height(Dimen.height4))

@@ -46,7 +46,7 @@ fun ListExercises(
         modifier = modifier,
         showList = showExercises,
         viewItem = { item -> ElementColum( item, uiState = uiState) },
-        onMoveItem = { from, to-> lg("from: $from; to: $to")
+        onMoveItem = { from, to->
             uiState.changeSequenceExercise( uiState.training.idTraining, roundId, from, to )},
     )
 }

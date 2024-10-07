@@ -10,19 +10,17 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.core.app.ActivityCompat
+import com.example.count_out.entity.MessageApp
 import com.example.count_out.permission.RequestPermissionsAll
-import com.example.count_out.service_count_out.sensors.SensorsApp
 import com.example.count_out.ui.StartApp
-import com.example.count_out.ui.view_components.lg
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity: ComponentActivity()
 {
-    @Inject lateinit var sensorsManager: SensorsApp
     @Inject lateinit var bluetoothAdapter: BluetoothAdapter
-//    @Inject lateinit var bleManager: BleManager
+    @Inject lateinit var messageApp: MessageApp
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,22 +33,7 @@ class MainActivity: ComponentActivity()
     override fun onStart() {
         super.onStart()
         ignoreBatteryOptimisation()
-//        serviceApp.bindService( DistributionService::class.java)
-        if ( !checkBluetoothEnable()) lg(" Bluetooth not enable")
-//        workOutManager.bindService( WorkoutService::class.java)
-//        sensorsManager.onCreate()
-//        if (checkBluetoothEnable()) bleManager.bindBleService(BleService::class.java)
-//        else lg(" Bluetooth not enable")
-    }
-
-    override fun onStop() {
-        super.onStop()
-//######
-//        serviceApp.unbindService()
-//######
-
-//        workOutManager.unbindService()
-//        bleManager.unbindService()
+        if ( !checkBluetoothEnable()) messageApp.errorApi(R.string.bluetootj_not_available)
     }
 
     private fun checkBluetoothEnable(): Boolean {

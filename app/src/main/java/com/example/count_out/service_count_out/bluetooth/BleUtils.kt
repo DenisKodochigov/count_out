@@ -83,7 +83,7 @@ fun BluetoothGatt.printCharacteristicsTable() {
             it.uuid.toString() + " Readable: " + it.isReadable() + " Writable: " + it.isWritable() +
                     " Notify: " + it.isNotify() + " Indicate: " + it.isIndicatable()
         }
-        lg("Service ${service.uuid}\nCharacteristics:\n$characteristicsTable")
+//        lg("Service ${service.uuid}\nCharacteristics:\n$characteristicsTable")
     }
 //    Service 00001800-0000-1000-8000-00805f9b34fb
 //    Characteristics:

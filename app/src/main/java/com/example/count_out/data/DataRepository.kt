@@ -35,7 +35,6 @@ class DataRepository  @Inject constructor(private val dataSource: DataSource,
         Plugins.listTr.remove(Plugins.listTr.find { it.idTraining == id })
     }
     suspend fun storeSelectBleDev(bleDevSerializable: BleDevSerializable) {
-        lg("storeSelectBleDev ${bleDevSerializable.address}, ${bleDevSerializable.name}")
         if (bleDevSerializable.name.isNotEmpty()){
             dataStoreBle.updateData {
                 it.copy( address = bleDevSerializable.address, name = bleDevSerializable.name) }

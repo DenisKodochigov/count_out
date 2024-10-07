@@ -32,7 +32,6 @@ class ExecuteWorkViewModel @Inject constructor(
         ExecuteWorkoutScreenState(
             startWorkOutService = {
                 dataForServ.training.value = it
-                lg("ExecuteWorkoutScreenState ${dataForServ.training.value?.idTraining} ")
                 commandService(CommandService.START_WORK) },
             stopWorkOutService = { commandService(CommandService.STOP_WORK) },
             pauseWorkOutService = { commandService(CommandService.PAUSE_WORK) },
@@ -117,7 +116,6 @@ class ExecuteWorkViewModel @Inject constructor(
             dataRepository.getBleDevStoreFlow().collect{ device->
                 if (device.address.isNotEmpty()) { _executeWorkoutScreenState.update { state ->
                         state.copy(lastConnectHearthRateDevice = device) } 
-                    lg("connectToStoredBleDev ${device.address}")
                     dataForServ.addressForSearch = device.address
                     commandSrv( CommandService.CONNECT_DEVICE)
                 }
@@ -130,6 +128,7 @@ class ExecuteWorkViewModel @Inject constructor(
             dataForUI.runningState.collect{
                 _executeWorkoutScreenState.update { state -> state.copy(stateWorkOutService = it) }
                 if (it == RunningState.Stopped) {
+                    dataForServ.empty()
                     _executeWorkoutScreenState.update { state ->
                         state.copy(
                             startTime = 0L,
@@ -147,7 +146,6 @@ class ExecuteWorkViewModel @Inject constructor(
                 _executeWorkoutScreenState.update { state -> state.copy( speakingSet = set )}} } //speakingSet
         viewModelScope.launch(Dispatchers.IO) {
             dataForUI.nextSet.collect{ nextSet->
-                lg("ExecuteWorkViewModel nextSet=${nextSet?.idSet ?: -1}")
                 _executeWorkoutScreenState.update { state ->
                     state.copy(listActivity = if (nextSet != null ) state.activityList(nextSet.idSet)
                                                 else state.listActivity)}} } //listActivity

@@ -65,16 +65,6 @@ data class DataForWork (
             training.value?.rounds?.get(indexRound)?.exercise?.get(indexExercise)?.sets?.get(indSet)
         }
     }
-
-    fun lastSet(): Boolean {
-        return try {
-            indexSet == (getExercise()?.sets?.count() ?: 0) - 1
-        } catch (e: Exception) {
-            lg(" ERROR lastSet: $e")
-            false
-        }
-    }
-
     fun getSetIntervalReps(): Double {
         return try {
             getSet()?.intervalReps ?: 0.0
@@ -83,32 +73,10 @@ data class DataForWork (
             0.0
         }
     }
-
-    private fun getCurrentExercisesSize(): Int {
-        return try {
-            getRound()?.exercise?.count() ?: 0
-        } catch (e: Exception) {
-            lg(" ERROR getCurrentExercisesSize: $e")
-            0
-        }
-    }
-
-    fun getNextExercise(): Exercise? {
-        return try {
-            if (indexExercise < getCurrentExercisesSize() - 1)
-                getRound()?.exercise?.get(indexExercise + 1)
-            else getRound()?.exercise?.get(getCurrentExercisesSize() - 1)
-        } catch (e: Exception) {
-            lg(" ERROR getNextExercise: $e")
-            getRound()?.exercise?.get(getCurrentExercisesSize() - 1)
-        }
-    }
-
     fun getNextSet(): Set? {
         var findingSet = false
         val currentIdSet = getSet()?.idSet
 
-        lg("getNextSet currentIdSet:$currentIdSet ")
         training.value?.let { trainingIt ->
             trainingIt.rounds.forEachIndexed { _, round ->
                 round.exercise.forEachIndexed { _, exercise ->

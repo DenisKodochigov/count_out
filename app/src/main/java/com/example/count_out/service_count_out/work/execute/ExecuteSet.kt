@@ -10,7 +10,6 @@ import com.example.count_out.entity.router.DataForWork
 import com.example.count_out.entity.router.DataFromWork
 import com.example.count_out.entity.workout.Set
 import com.example.count_out.service_count_out.stopwatch.delayMy
-import com.example.count_out.ui.view_components.lg
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -32,7 +31,6 @@ class ExecuteSet @Inject constructor(val speechManager:SpeechManager, val contex
             speakSetBody(set = setCurrent, dataForWork = dataForWork, dataFromWork = dataFromWork)
             dataFromWork.speakingSet.value = null
             val eee = dataForWork.getNextSet()
-            lg(" dataForWork.getNextSet() = $eee")
             dataFromWork.nextSet.value = eee
             speakSetEnd(setCurrent, dataFromWork)
         }

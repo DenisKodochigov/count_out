@@ -60,9 +60,7 @@ import java.math.RoundingMode
     ExecuteWorkoutScreenLayout(uiState = uiState)
 }
 @Composable fun ExecuteWorkoutScreenLayout( uiState: ExecuteWorkoutScreenState){
-//    lg("ExecuteWorkoutScreenLayout")
-    if(uiState.listActivity.isEmpty()) { uiState.listActivity = uiState.activityList()
-     lg("uiState.listActivity ${uiState.listActivity}")}
+    if(uiState.listActivity.isEmpty()) { uiState.listActivity = uiState.activityList()}
     Column(
         modifier = Modifier.fillMaxSize(),
         content = {
@@ -115,10 +113,8 @@ import java.math.RoundingMode
         ButtonsStartStopWorkOut(
             switchState= uiState.stateWorkOutService,
             onClickStart = { uiState.training?.let {
-                lg("#################### ExecuteWorkoutScreen Start Service ##########################")
                 uiState.startWorkOutService(it) } },
             onClickStop = {
-                lg("#################### ExecuteWorkoutScreen StoppedService ##########################")
                 uiState.stopWorkOutService() },
             onClickPause = { uiState.pauseWorkOutService() },
         )

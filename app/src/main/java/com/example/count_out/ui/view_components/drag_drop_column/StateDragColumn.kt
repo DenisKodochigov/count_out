@@ -21,7 +21,6 @@ data class StateDragColumn(
             heightItem = round((heightList.value / sizeList).toDouble()).toInt()
             offsetBegin = (indexItem * heightItem).toFloat()
             offsetZ.value = 1.0f
-//            lg("onStartDrag heightList=${heightList.value}; sizeList: $sizeList")
         }
     }
     fun onStopDrag( indexItem: Int, onMoveItem: (Int, Int) -> Unit){
@@ -29,7 +28,6 @@ data class StateDragColumn(
         if (indexTo != indexItem) onMoveItem( indexItem, indexTo )
         offsetY.value =0f
         offsetZ.value = 0.0f
-//        lg("onStopDrag offsetZ=${offsetY.value}")
     }
     private fun roundMy( value: Float): Int{
         return if (value > 0) {
@@ -43,7 +41,6 @@ data class StateDragColumn(
     fun shiftItem(delta: Float){
         if ((offsetBegin + offsetY.value + delta) in 0f..(heightList.value - heightItem/2).toFloat()) {
             offsetY.value += delta
-//            lg("shiftItem offsetZ=${offsetY.value}")
         }
     }
     fun itemOffset() = offsetY.value.toInt()

@@ -90,7 +90,6 @@ class CountOutService @Inject constructor(): Service() {
     private fun stopSite(){
         router.dataForSite.state.value = RunningState.Stopped }
     private fun startWork(){
-        lg(" CountOutService ${router.dataForWork.training.value?.idTraining}")
         if (router.dataForUI.runningState.value == RunningState.Paused){
             router.dataFromWork.runningState.value = RunningState.Started
             notificationHelper.setPauseButton()
@@ -100,6 +99,7 @@ class CountOutService @Inject constructor(): Service() {
             notificationHelper.setPauseButton()
             router.sendDataToUi()
             router.dataFromWork.nextSet.value = router.dataForWork.getSet(0)
+            lg("#################### Start Service Work ##########################")
             work.start( router.dataForWork, router.dataFromWork )
         }
     }

@@ -73,21 +73,10 @@ class Router(private val dataForServ: DataForServ) {
     fun sendDataToUi(){
         CoroutineScope(Dispatchers.Default).launch {
             while (true){
-                dataForUI.set(buffer)
+                if (buffer.runningState.value == RunningState.Started) { dataForUI.setWork(buffer) }
+                dataForUI.setBle(buffer)
                 delay(1000L)
             }
         }
-    }
-
-    fun empty (){
-        dataForUI.empty()
-        dataForWork.empty()
-        dataFromWork.empty()
-        dataFromBle.empty()
-    }
-    fun emptyWork (){
-        dataForUI.empty()
-        dataForWork.empty()
-        dataFromWork.empty()
     }
 }

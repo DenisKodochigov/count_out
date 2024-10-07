@@ -73,7 +73,6 @@ class SettingViewModel @Inject constructor(
                     }
                     RunningState.Started -> {
                         kotlin.runCatching {
-                            lg("service starting")
                             connectToStoredBleDev()
                             serviceBind.service.getDataForUi()
                         }.fold(
@@ -85,26 +84,6 @@ class SettingViewModel @Inject constructor(
                 }
             }
         }
-//        viewModelScope.launch(Dispatchers.IO) {
-//            kotlin.runCatching { if ( !serviceBind.isBound.value ) serviceBind.bindService() }.fold(
-//                onSuccess = { },
-//                onFailure = { messageApp.errorApi("initServiceApp ${it.message ?: ""}") }
-//            )
-//        }
-//        viewModelScope.launch(Dispatchers.IO) {
-//            serviceBind.isBound.collect { isBound->
-//                if (isBound) {
-//                    kotlin.runCatching {
-//                        commandService( CommandService.START_SERVICE )
-//                        connectToStoredBleDev()
-//                        serviceBind.service.getDataForUi()
-//                    }.fold(
-//                        onSuccess = { receiveState(it) },
-//                        onFailure = { messageApp.errorApi("startService ${it.message ?: ""}") }
-//                    )
-//                }
-//            }
-//        }
     }
     private fun commandSrv(command: CommandService){
         serviceBind.service.commandService( command, dataForServ)
@@ -202,8 +181,7 @@ class SettingViewModel @Inject constructor(
     }
 
     override fun onCleared(){
-        lg("SettingViewModel cleared")
-        lg("##########################################################################")
+        lg("#################################### SettingViewModel cleared ######################################")
         commandService(CommandService.STOP_SCANNING)
     }
 }

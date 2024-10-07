@@ -3,7 +3,6 @@ package com.example.count_out.service_count_out.stopwatch
 import com.example.count_out.domain.pad
 import com.example.count_out.entity.RunningState
 import com.example.count_out.entity.TickTime
-import com.example.count_out.ui.view_components.lg
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -31,12 +30,10 @@ object Watcher {
     fun start(state: MutableStateFlow<RunningState>){
         stateTimer = state
         currentTickTime.value = TickTime(hour = "00", min = "00", sec = "00")
-        lg("Watch start ${currentTickTime.value}")
         engineWatcher()
     }
     fun stop(){
         currentTickTime.value = TickTime(hour = "00", min = "00", sec = "00")
-        lg("Watch stop ${currentTickTime.value}")
     }
     fun getTickTime(): MutableStateFlow<TickTime> = currentTickTime
 }

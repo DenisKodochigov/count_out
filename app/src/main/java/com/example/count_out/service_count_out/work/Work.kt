@@ -6,6 +6,7 @@ import com.example.count_out.entity.router.DataForWork
 import com.example.count_out.entity.router.DataFromWork
 import com.example.count_out.service_count_out.stopwatch.Watcher
 import com.example.count_out.service_count_out.work.execute.ExecuteWork
+import com.example.count_out.ui.view_components.lg
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -27,7 +28,12 @@ class Work @Inject constructor(val speechManager: SpeechManager, val executeWork
     }
     private fun speaking(dataForWork: DataForWork, dataFromWork: DataFromWork) {
         CoroutineScope(Dispatchers.Default).launch {
-            dataFromWork.equalsStop = { if (dataFromWork.runningState.value == RunningState.Stopped) stop() }
+            dataFromWork.equalsStop = {
+                if (dataFromWork.runningState.value == RunningState.Stopped) {
+                    dataFromWork.empty()
+                    dataForWork.empty()
+                    stop()
+                } }
             executeWork.executeWorkOut( dataForWork, dataFromWork)
         }
     }

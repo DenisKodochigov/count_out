@@ -29,12 +29,13 @@ data class DataForUI (
         runningState.value = RunningState.Stopped
         heartRate.value = 0
     }
-    fun set(buffer: Buffer){
+    fun setWork(buffer: Buffer){
         this.flowTick.value = buffer.flowTick.value
         this.message.value = buffer.message.value
         this.nextSet.value = buffer.nextSet.value
         this.durationSpeech.value = buffer.durationSpeech.value
-
+    }
+    fun setBle(buffer: Buffer){
         this.heartRate.value = buffer.heartRate.value
         this.scannedBle.value = buffer.scannedBle.value
         this.connectingState.value = buffer.connectingState.value

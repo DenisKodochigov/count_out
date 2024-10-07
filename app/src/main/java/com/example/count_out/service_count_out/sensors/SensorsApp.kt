@@ -5,7 +5,6 @@ import android.hardware.Sensor
 import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
 import android.hardware.SensorManager
-import com.example.count_out.ui.view_components.lg
 import javax.inject.Inject
 
 class SensorsApp @Inject constructor( val context: Context): SensorEventListener {
@@ -28,7 +27,6 @@ class SensorsApp @Inject constructor( val context: Context): SensorEventListener
     override fun onSensorChanged(event: SensorEvent?) {
         if (event?.sensor?.type == Sensor.TYPE_STEP_DETECTOR) {
             stepCount++
-            lg("Steps taken: $stepCount")
         }
     }
     override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {    }
