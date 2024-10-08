@@ -10,6 +10,7 @@ class CountOutApp: Application() {
         super.onCreate()
     //        FirebaseCrashlytics.getInstance().setCrashlyticsCollectionEnabled(!BuildConfig.DEBUG)
     }
+
     companion object App{
         var scale: Int = 1
     }

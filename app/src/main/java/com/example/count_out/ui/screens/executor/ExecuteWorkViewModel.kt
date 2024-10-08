@@ -42,36 +42,19 @@ class ExecuteWorkViewModel @Inject constructor(
     private val dataForServ = DataForServ()
 
     init {
-        initServiceApp()
+        startServiceApp()
     }
-    private fun initServiceApp(){
+    private fun startServiceApp(){
         viewModelScope.launch(Dispatchers.IO) {
-            serviceBind.stateService.collect { stateService ->
-                when (stateService){
-                    RunningState.Stopped -> {
-                        kotlin.runCatching { serviceBind.bindService() }.fold(
-                            onSuccess = {  },
-                            onFailure = { messageApp.errorApi(
-                                id = R.string.init_service, errorMessage = " ${it.message ?: ""}") })
-                    }
-                    RunningState.Binding -> {
-                        kotlin.runCatching { commandService( CommandService.START_SERVICE ) }.fold(
-                            onSuccess = {  },
-                            onFailure = { messageApp.errorApi(
-                                id = R.string.start_service, errorMessage = " ${it.message ?: ""}")})
-                    }
-                    RunningState.Started -> {
-                        kotlin.runCatching {
-                            connectToStoredBleDev()
-                            serviceBind.service.getDataForUi()
-                        }.fold(
-                            onSuccess = { receiveState( it ) },
-                            onFailure = { messageApp.errorApi(
-                                id = R.string.start_service, errorMessage = " ${it.message ?: ""}")})
-                    }
-                    RunningState.Paused -> {}
-                }
-            }
+            kotlin.runCatching {
+                serviceBind.service.startCountOutService(
+                    dataForServ = dataForServ,
+                    callBack = { connectToStoredBleDev() })
+            }.fold(
+                onSuccess = { receiveState( it ) },
+                onFailure = { messageApp.errorApi(
+                    id = R.string.start_service, errorMessage = " ${it.message ?: ""}") }
+            )
         }
     }
     private fun commandSrv(command: CommandService){

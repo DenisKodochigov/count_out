@@ -32,7 +32,6 @@ import javax.inject.Singleton
 @AndroidEntryPoint
 class CountOutService @Inject constructor(): Service() {
 
-    val stateService:MutableStateFlow<RunningState> = MutableStateFlow( RunningState.Stopped)
     private lateinit var router: Router
     @Inject lateinit var notificationHelper: NotificationHelper
     @Inject lateinit var messageApp: MessageApp
@@ -53,7 +52,7 @@ class CountOutService @Inject constructor(): Service() {
 
     fun commandService(command: CommandService, dataServ: DataForServ){
         when(command){
-            CommandService.START_SERVICE->{ startCountOutService(dataServ)}
+            CommandService.START_SERVICE->{ startCountOutService(dataServ, {})}
             CommandService.STOP_SERVICE->{ stopCountOutService() }
             CommandService.START_WORK->{ startWork() }
             CommandService.STOP_WORK->{ stopWork() }
@@ -68,14 +67,15 @@ class CountOutService @Inject constructor(): Service() {
         }
     }
 
-    private fun startCountOutService(dataServ: DataForServ){
-        router = Router(dataServ)
+    fun startCountOutService(dataForServ: DataForServ, callBack: ()->Unit): DataForUI{
+        router = Router(dataForServ)
         startForegroundService()
         notificationUpdate()
-        stateService.value = RunningState.Started
+        callBack()
         startSite()
         router.sendDataToUi()
         router.sendDataToNotification()
+        return router.dataForUI
     }
     private fun startForegroundService() {
         if (!notificationHelper.channelExist()) notificationHelper.createChannel()
@@ -90,7 +90,6 @@ class CountOutService @Inject constructor(): Service() {
         notificationHelper.cancel()
         stopSite()
     }
-    fun getDataForUi(): DataForUI  { return router.dataForUI }
     private fun startSite(){
         site.start(router.dataForSite, router.dataFromSite)
         router.dataForSite.state.value = RunningState.Started }

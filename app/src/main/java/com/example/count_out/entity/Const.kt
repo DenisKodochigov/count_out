@@ -26,11 +26,10 @@ import android.Manifest.permission.VIBRATE
 import com.example.count_out.navigation.TrainingsDestination
 import java.util.UUID
 
-
 object Const {
     const val DATA_STORE_FILE_NAME = "ble_device.json"
     val DEFAULT_SCREEN = TrainingsDestination
-    const val MODE_DATABASE = 2
+    const val MODE_DATABASE = 1
 
     const val DURATION_SCREEN = 800
     const val DELAY_SCREEN = 200

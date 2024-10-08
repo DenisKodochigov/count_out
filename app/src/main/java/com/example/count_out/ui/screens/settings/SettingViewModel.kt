@@ -10,7 +10,6 @@ import com.example.count_out.entity.CommandService
 import com.example.count_out.entity.DataForServ
 import com.example.count_out.entity.DataForUI
 import com.example.count_out.entity.MessageApp
-import com.example.count_out.entity.RunningState
 import com.example.count_out.entity.bluetooth.BleDevSerializable
 import com.example.count_out.service_count_out.CountOutServiceBind
 import com.example.count_out.ui.view_components.lg
@@ -57,32 +56,15 @@ class SettingViewModel @Inject constructor(
     }
     private fun initServiceApp(){
         viewModelScope.launch(Dispatchers.IO) {
-            serviceBind.stateService.collect { stateService ->
-                when (stateService){
-                    RunningState.Stopped -> {
-                        kotlin.runCatching { serviceBind.bindService() }.fold(
-                            onSuccess = {  },
-                            onFailure = { messageApp.errorApi(
-                                id = R.string.init_service, errorMessage = " ${it.message ?: ""}") })
-                    }
-                    RunningState.Binding -> {
-                        kotlin.runCatching { commandService( CommandService.START_SERVICE ) }.fold(
-                            onSuccess = {  },
-                            onFailure = { messageApp.errorApi(
-                                id = R.string.start_service, errorMessage = " ${it.message ?: ""}")})
-                    }
-                    RunningState.Started -> {
-                        kotlin.runCatching {
-                            connectToStoredBleDev()
-                            serviceBind.service.getDataForUi()
-                        }.fold(
-                            onSuccess = { receiveState( it ) },
-                            onFailure = { messageApp.errorApi(
-                                id = R.string.start_service, errorMessage = " ${it.message ?: ""}")})
-                    }
-                    RunningState.Paused -> {}
-                }
-            }
+            kotlin.runCatching {
+                serviceBind.service.startCountOutService(
+                    dataForServ = dataForServ,
+                    callBack = { connectToStoredBleDev() })
+            }.fold(
+                onSuccess = { receiveState( it ) },
+                onFailure = { messageApp.errorApi(
+                    id = R.string.start_service, errorMessage = " ${it.message ?: ""}") }
+            )
         }
     }
     private fun commandSrv(command: CommandService){
