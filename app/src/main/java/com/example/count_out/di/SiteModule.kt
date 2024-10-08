@@ -2,6 +2,7 @@ package com.example.count_out.di
 
 import android.content.Context
 import com.example.count_out.permission.PermissionApp
+import com.example.count_out.service_count_out.location.LocationWithOutGoogle
 import com.example.count_out.service_count_out.location.Site
 import dagger.Module
 import dagger.Provides
@@ -18,5 +19,13 @@ class SiteModule {
     @Provides
     fun provideSite(@ApplicationContext appContext: Context, permissionApp: PermissionApp,): Site {
         return Site(appContext, permissionApp)
+    }
+
+    @Singleton
+    @Provides
+    fun provideLocationWithOutGoogle(
+        @ApplicationContext appContext: Context, permissionApp: PermissionApp,
+        ): LocationWithOutGoogle {
+        return LocationWithOutGoogle(appContext, permissionApp)
     }
 }

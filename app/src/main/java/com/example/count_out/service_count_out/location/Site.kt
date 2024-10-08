@@ -7,7 +7,6 @@ import com.example.count_out.data.room.tables.CoordinateDB
 import com.example.count_out.entity.router.DataForSite
 import com.example.count_out.entity.router.DataFromSite
 import com.example.count_out.permission.PermissionApp
-import com.example.count_out.ui.view_components.lg
 import com.google.android.gms.location.Granularity
 import com.google.android.gms.location.LocationListener
 import com.google.android.gms.location.LocationRequest

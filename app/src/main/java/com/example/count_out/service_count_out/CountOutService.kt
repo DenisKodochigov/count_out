@@ -23,7 +23,6 @@ import com.example.count_out.ui.view_components.lg
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -52,8 +51,6 @@ class CountOutService @Inject constructor(): Service() {
 
     fun commandService(command: CommandService, dataServ: DataForServ){
         when(command){
-            CommandService.START_SERVICE->{ startCountOutService(dataServ, {})}
-            CommandService.STOP_SERVICE->{ stopCountOutService() }
             CommandService.START_WORK->{ startWork() }
             CommandService.STOP_WORK->{ stopWork() }
             CommandService.PAUSE_WORK->{ pauseWork() }
@@ -84,11 +81,11 @@ class CountOutService @Inject constructor(): Service() {
         }
         else startForeground(NOTIFICATION_ID, notificationHelper.build())
     }
-    private fun stopCountOutService(){
+    fun stopCountOutService(){
         messageApp.messageApi(R.string.stop_distribution_service)
-        stopForeground(STOP_FOREGROUND_REMOVE)
-        notificationHelper.cancel()
         stopSite()
+        notificationHelper.cancel()
+        stopForeground(STOP_FOREGROUND_REMOVE)
     }
     private fun startSite(){
         site.start(router.dataForSite, router.dataFromSite)

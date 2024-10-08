@@ -118,6 +118,7 @@
     <string name="stop_distribution_service">Stop Distribution Service</string>
     <string name="speech_manager_error">SpeechManager</string>
     <string name="bluetootj_not_available">Bluetooth not available.</string>
+    <string name="heart_rate">Heart rate:</string>
 
     <plurals name="set_1">
         <item quantity="zero">%1$d = zero</item>

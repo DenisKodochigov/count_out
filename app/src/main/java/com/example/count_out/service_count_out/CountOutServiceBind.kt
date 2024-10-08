@@ -8,8 +8,7 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class CountOutServiceBind @Inject constructor(
-    val context: Context, private val serviceUtils: ServiceUtils
+class CountOutServiceBind @Inject constructor(val context: Context, private val serviceUtils: ServiceUtils
 ) {
     lateinit var service: CountOutService
 
@@ -18,6 +17,7 @@ class CountOutServiceBind @Inject constructor(
             service = (binder as CountOutService.DistributionServiceBinder).getService()
         }
         override fun onServiceDisconnected(arg0: ComponentName) {
+            service.stopCountOutService()
             service.stopSelf()
         }
     }
