@@ -10,14 +10,14 @@ import com.example.count_out.data.room.tables.SettingDB
 import com.example.count_out.data.room.tables.SpeechKitDB
 import com.example.count_out.data.room.tables.TrainingDB
 import com.example.count_out.entity.Activity
-import com.example.count_out.entity.workout.Exercise
 import com.example.count_out.entity.Plugins
+import com.example.count_out.entity.SpeechKit
+import com.example.count_out.entity.TemporaryBase
+import com.example.count_out.entity.bluetooth.BleDevSerializable
+import com.example.count_out.entity.workout.Exercise
 import com.example.count_out.entity.workout.Round
 import com.example.count_out.entity.workout.Set
-import com.example.count_out.entity.SpeechKit
 import com.example.count_out.entity.workout.Training
-import com.example.count_out.entity.bluetooth.BleDevSerializable
-import com.example.count_out.ui.view_components.lg
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -150,4 +150,8 @@ class DataRepository  @Inject constructor(private val dataSource: DataSource,
         return dataSource.getSettings()
     }
     fun updateDuration(duration: Pair<Long, Long>){ dataSource.updateDuration(duration) }
+
+    fun writeTemporaryData(dataForBase: TemporaryBase) {
+        dataSource.writeTemporaryData(dataForBase)
+    }
 }

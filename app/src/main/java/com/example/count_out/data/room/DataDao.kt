@@ -18,6 +18,7 @@ import com.example.count_out.data.room.tables.SetDB
 import com.example.count_out.data.room.tables.SettingDB
 import com.example.count_out.data.room.tables.SpeechDB
 import com.example.count_out.data.room.tables.SpeechKitDB
+import com.example.count_out.data.room.tables.TemporaryDB
 import com.example.count_out.data.room.tables.TrainingDB
 
 @Dao
@@ -142,4 +143,8 @@ interface DataDao {
     fun getSetting(parameter: Int): SettingDB
     @Query("SELECT * FROM tb_settings WHERE idSetting = :id")
     fun getSettingId(id: Long): SettingDB
+
+    //Temporary record training
+    @Insert
+    fun addRecordMetric(item: TemporaryDB): Long
 }

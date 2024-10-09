@@ -3,7 +3,7 @@ package com.example.count_out.service_count_out.location
 import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Looper
-import com.example.count_out.data.room.tables.CoordinateDB
+import com.example.count_out.data.room.tables.TemporaryDB
 import com.example.count_out.entity.router.DataForSite
 import com.example.count_out.entity.router.DataFromSite
 import com.example.count_out.permission.PermissionApp
@@ -30,7 +30,7 @@ class Site @Inject constructor(val context: Context, val permission: PermissionA
             this.setMaxUpdateDelayMillis(1000)
         }.build()
         locationListener = LocationListener { location ->
-            dataFromSite.coordinate.value = CoordinateDB(
+            dataFromSite.coordinate.value = TemporaryDB(
                 latitude = location.latitude,
                 longitude = location.longitude,
                 altitude = location.altitude,

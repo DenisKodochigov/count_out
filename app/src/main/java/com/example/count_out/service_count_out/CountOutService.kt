@@ -18,6 +18,7 @@ import com.example.count_out.entity.router.Router
 import com.example.count_out.helpers.NotificationHelper
 import com.example.count_out.service_count_out.bluetooth.Bluetooth
 import com.example.count_out.service_count_out.location.Site
+import com.example.count_out.service_count_out.logging.Logging
 import com.example.count_out.service_count_out.work.Work
 import com.example.count_out.ui.view_components.lg
 import dagger.hilt.android.AndroidEntryPoint
@@ -37,6 +38,7 @@ class CountOutService @Inject constructor(): Service() {
     @Inject lateinit var ble: Bluetooth
     @Inject lateinit var work: Work
     @Inject lateinit var site: Site
+    @Inject lateinit var logging: Logging
 
     inner class DistributionServiceBinder: Binder() { fun getService(): CountOutService = this@CountOutService }
     override fun onBind(p0: Intent?): IBinder = DistributionServiceBinder()
@@ -49,7 +51,7 @@ class CountOutService @Inject constructor(): Service() {
         return super.onStartCommand(intent, flags, startId)
     }
 
-    fun commandService(command: CommandService, dataServ: DataForServ){
+    fun commandService(command: CommandService){
         when(command){
             CommandService.START_WORK->{ startWork() }
             CommandService.STOP_WORK->{ stopWork() }
@@ -70,8 +72,7 @@ class CountOutService @Inject constructor(): Service() {
         notificationUpdate()
         callBack()
         startSite()
-        router.sendDataToUi()
-        router.sendDataToNotification()
+        router.sendData()
         return router.dataForUI
     }
     private fun startForegroundService() {
@@ -92,7 +93,12 @@ class CountOutService @Inject constructor(): Service() {
         router.dataForSite.state.value = RunningState.Started }
     private fun stopSite(){
         site.stop()
-        router.dataForSite.state.value = RunningState.Stopped }
+        router.dataForSite.state.value = RunningState.Stopped
+    }
+    private fun startWriteBase(){
+        logging.runLogging(router.dataForBase, router.dataFromWork.runningState)
+    }
+    private fun stopWriteBase(){ logging.stop()}
     private fun startWork(){
         if (router.dataForUI.runningState.value == RunningState.Paused){
             router.dataFromWork.runningState.value = RunningState.Started
@@ -102,13 +108,15 @@ class CountOutService @Inject constructor(): Service() {
             router.dataFromWork.runningState.value = RunningState.Started
             notificationHelper.updateNotification(router.dataForNotification.value, router.dataFromWork.runningState.value)
             router.dataFromWork.nextSet.value = router.dataForWork.getSet(0)
-            lg("#################### Start Service Work ##########################")
+            lg("#################### Start Service Work #################### ")
+            startWriteBase()
             work.start( router.dataForWork, router.dataFromWork )
         }
     }
     private fun stopWork(){
-        lg("#################### Stop Service Work ##########################")
+        lg("#################### Stop Service Work #################### ")
         router.dataFromWork.runningState.value = RunningState.Stopped
+        stopWriteBase()
     }
     private fun notificationUpdate(){
         CoroutineScope(Dispatchers.Default).launch {
@@ -118,7 +126,7 @@ class CountOutService @Inject constructor(): Service() {
         }
     }
     private fun pauseWork(){
-        lg("Pause Work")
+        lg("#################### Pause Work ####################")
         router.dataFromWork.runningState.value = RunningState.Paused
         notificationHelper.updateNotification(router.dataForNotification.value, router.dataFromWork.runningState.value)
 //        notificationHelper.setContinueButton()

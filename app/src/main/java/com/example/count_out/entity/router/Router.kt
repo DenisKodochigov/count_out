@@ -1,8 +1,10 @@
 package com.example.count_out.entity.router
 
+import com.example.count_out.data.room.tables.TemporaryDB
 import com.example.count_out.entity.DataForServ
 import com.example.count_out.entity.DataForUI
 import com.example.count_out.entity.RunningState
+import com.example.count_out.entity.TemporaryBase
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -22,7 +24,7 @@ class Router(private val dataForServ: DataForServ) {
     private val buffer: Buffer by lazy { bufferInit(dataFromBle, dataFromWork, dataFromSite )}
     val dataForUI: DataForUI by lazy { initDataForUI(buffer) }
     val dataForNotification: MutableStateFlow<DataForNotification?> = MutableStateFlow(null)
-    val dataForBase = DataForBase()
+    val dataForBase: MutableStateFlow<TemporaryBase?> = MutableStateFlow(null)
 
     private fun bufferInit(dataFromBle: DataFromBle, dataFromWork: DataFromWork, dataFromSite: DataFromSite): Buffer{
         return Buffer(
@@ -65,6 +67,33 @@ class Router(private val dataForServ: DataForServ) {
             speakingSet = buffer.speakingSet,
             runningState = buffer.runningState,
         )
+    }
+    fun sendData(){
+        sendDataToBase()
+        sendDataToUi()
+        sendDataToNotification()
+    }
+
+    fun sendDataToBase(){
+        CoroutineScope(Dispatchers.Default).launch {
+            while (true){
+                if (buffer.runningState.value == RunningState.Started) {
+                    dataForBase.value = TemporaryDB(
+                        latitude = buffer.coordinate.value?.latitude ?: 0.0,
+                        longitude = buffer.coordinate.value?.longitude ?: 0.0,
+                        altitude = buffer.coordinate.value?.altitude ?: 0.0,
+                        time = buffer.coordinate.value?.time ?: 0,
+                        accuracy = buffer.coordinate.value?.accuracy ?: 0f,
+                        speed = buffer.coordinate.value?.speed ?: 0f,
+                        heartRate = buffer.heartRate.value,
+                        idTraining = dataForWork.training.value?.idTraining ?: 0,
+                        idSet = dataForWork.indexSet.toLong(),
+                        runningSet = if (buffer.speakingSet.value != null) 1 else 0,
+                    )
+                }
+                delay(500L)
+            }
+        }
     }
     fun sendDataToUi(){
         CoroutineScope(Dispatchers.Default).launch {

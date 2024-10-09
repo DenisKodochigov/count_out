@@ -13,6 +13,7 @@ import com.example.count_out.data.room.tables.SetDB
 import com.example.count_out.data.room.tables.SettingDB
 import com.example.count_out.data.room.tables.SpeechDB
 import com.example.count_out.data.room.tables.SpeechKitDB
+import com.example.count_out.data.room.tables.TemporaryDB
 import com.example.count_out.data.room.tables.TrainingDB
 
 @Database(entities = [
@@ -25,6 +26,7 @@ import com.example.count_out.data.room.tables.TrainingDB
     SpeechKitDB::class,
     CountDB::class,
     SettingDB::class,
+    TemporaryDB::class,
     ], version = 1, exportSchema = false)
 @TypeConverters(ConverterZone::class, ConverterGoalSet::class)
 abstract class AppDatabase : RoomDatabase() {

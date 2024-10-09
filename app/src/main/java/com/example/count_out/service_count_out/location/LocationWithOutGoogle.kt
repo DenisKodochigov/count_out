@@ -5,7 +5,7 @@ import android.content.Context.LOCATION_SERVICE
 import android.location.Location
 import android.location.LocationListener
 import android.location.LocationManager
-import com.example.count_out.data.room.tables.CoordinateDB
+import com.example.count_out.data.room.tables.TemporaryDB
 import com.example.count_out.entity.router.DataFromSite
 import com.example.count_out.permission.PermissionApp
 import com.example.count_out.ui.view_components.lg
@@ -20,14 +20,15 @@ class LocationWithOutGoogle @Inject constructor(val context: Context, val permis
         locationManager = context.getSystemService(LOCATION_SERVICE) as LocationManager
         locationListener = object : LocationListener {
             override fun onLocationChanged(location: Location) {
-                dataFromSite.coordinate.value = CoordinateDB(
+                dataFromSite.coordinate.value = TemporaryDB(
                     latitude = location.latitude,
                     longitude = location.longitude,
                     altitude = location.altitude,
                     time = location.time,
                     accuracy = location.accuracy,
                     speed = location.speed
-                ) }
+                )
+            }
             override fun onProviderEnabled(provider: String) {}
             override fun onProviderDisabled(provider: String) {}
         }

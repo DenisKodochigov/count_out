@@ -17,5 +17,5 @@ data class CountDB(
     override var sensor1: Double = 0.0,
     override var sensor2: Double = 0.0,
     override var sensor3: Double = 0.0,
-    @Ignore override var coordinate: Coordinate = CoordinateDB(),
+    @Ignore override var coordinate: Coordinate? = null,
 ): Count

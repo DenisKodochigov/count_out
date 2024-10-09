@@ -58,7 +58,7 @@ class ExecuteWorkViewModel @Inject constructor(
         }
     }
     private fun commandSrv(command: CommandService){
-        serviceBind.service.commandService( command, dataForServ)
+        serviceBind.service.commandService( command)
     }
     private fun commandService(command: CommandService){
         viewModelScope.launch(Dispatchers.IO) {
