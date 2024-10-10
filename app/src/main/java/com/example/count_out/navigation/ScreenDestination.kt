@@ -3,6 +3,7 @@ package com.example.count_out.navigation
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccessAlarms
 import androidx.compose.material.icons.filled.Brightness5
+import androidx.compose.material.icons.filled.CalendarMonth
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.navigation.NavType
@@ -33,6 +34,18 @@ object TrainingsDestination : ScreenDestination {
     override val pictureNight = 0
     override val showFab: Boolean = true
     override var textFABId = R.string.training
+    override var onClickFAB: () -> Unit = {}
+}
+object HistoryDestination : ScreenDestination {
+    override val route = "history"
+    override val routeWithArgs = route
+    override val nameScreen = R.string.history
+    override val icon = Icons.Filled.CalendarMonth
+    override val iconText = R.string.history_
+    override val pictureDay = 0
+    override val pictureNight = 0
+    override val showFab: Boolean = false
+    override var textFABId = R.string.history_
     override var onClickFAB: () -> Unit = {}
 }
 object TrainingDestination : ScreenDestination {
@@ -77,8 +90,13 @@ object SettingDestination : ScreenDestination {
     override var textFABId = 0
     override var onClickFAB: () -> Unit = {}
 }
-val navBottomScreens = listOf(TrainingsDestination, SettingDestination)
-val listScreens = listOf(TrainingsDestination, TrainingDestination, ExecuteWorkDestination, SettingDestination)
+val navBottomScreens = listOf(TrainingsDestination, HistoryDestination, SettingDestination)
+val listScreens = listOf(
+    TrainingsDestination,
+    TrainingDestination,
+    ExecuteWorkDestination,
+    HistoryDestination,
+    SettingDestination)
 
 
 

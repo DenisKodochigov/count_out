@@ -41,7 +41,7 @@ import com.example.count_out.ui.bottomsheet.BottomSheetBle
 import com.example.count_out.ui.bottomsheet.CardActivity
 import com.example.count_out.ui.theme.alumBodySmall
 import com.example.count_out.ui.theme.elevationTraining
-import com.example.count_out.ui.theme.typography
+import com.example.count_out.ui.theme.mTypography
 import com.example.count_out.ui.view_components.AnimateIcon
 import com.example.count_out.ui.view_components.IconSingle
 import com.example.count_out.ui.view_components.IconsCollapsing
@@ -109,7 +109,7 @@ import com.example.count_out.ui.view_components.TextApp
         IconsCollapsing(
             onClick = { uiState.collapsingActivity.value = !uiState.collapsingActivity.value },
             wrap = uiState.collapsingActivity.value )
-        TextApp(text = stringResource(id = R.string.list_activity), style = typography.titleMedium)
+        TextApp(text = stringResource(id = R.string.list_activity), style = mTypography.titleMedium)
         Spacer(modifier = Modifier.weight(1f))
         IconSingle(
             image = Icons.Default.Add,
@@ -171,7 +171,7 @@ import com.example.count_out.ui.view_components.TextApp
     ) {
         TextApp(
             text = stringResource(id = R.string.heart_rate_device),
-            style = typography.titleMedium,
+            style = mTypography.titleMedium,
             modifier = Modifier.padding(horizontal = 4.dp)
         )
         Spacer(modifier = Modifier.weight(1f))
@@ -197,11 +197,11 @@ import com.example.count_out.ui.view_components.TextApp
         if (uiState.connectingState == ConnectState.CONNECTED) {
             RowBleDeviceItem(modifier = Modifier.weight(1f),
                 uiState = uiState,
-                style = typography.bodyMedium.copy(fontWeight = FontWeight.Bold))
+                style = mTypography.bodyMedium.copy(fontWeight = FontWeight.Bold))
         } else {
             RowBleDeviceItem(modifier = Modifier.weight(1f),
                 uiState = uiState,
-                style = typography.titleMedium)
+                style = mTypography.titleMedium)
         }
     }
 }
@@ -213,7 +213,7 @@ import com.example.count_out.ui.view_components.TextApp
         TextApp(text = nameDevice, textAlign = TextAlign.Start, style = style)
         TextApp(text = stringResource(id = uiState.connectingState.strId), style = alumBodySmall)
     }
-    TextApp(text = heartRate, style = typography.displayMedium, modifier = Modifier.padding(start = 12.dp, end = 12.dp))
+    TextApp(text = heartRate, style = mTypography.displayMedium, modifier = Modifier.padding(start = 12.dp, end = 12.dp))
 }
 
 

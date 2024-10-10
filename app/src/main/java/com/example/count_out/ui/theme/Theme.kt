@@ -47,7 +47,7 @@ lateinit var colors3: ColorScheme
         }
 
     }
-    MaterialTheme(colorScheme = colors3, content = content, shapes = shapes, typography = typography)
+    MaterialTheme(colorScheme = colors3, content = content, shapes = shapes, typography = mTypography)
 }
 
 @Composable

@@ -15,8 +15,8 @@ import com.example.count_out.data.room.tables.WorkoutDB
 import com.example.count_out.entity.TagsTesting.DIALOG_EDIT_BASKET_INPUT_NAME
 import com.example.count_out.entity.TypeKeyboard
 import com.example.count_out.entity.workout.Workout
+import com.example.count_out.ui.theme.mTypography
 import com.example.count_out.ui.theme.shapes
-import com.example.count_out.ui.theme.typography
 import com.example.count_out.ui.view_components.MyOutlinedTextFieldWithoutIcon
 import com.example.count_out.ui.view_components.TextApp
 import com.example.count_out.ui.view_components.TextButtonOK
@@ -33,7 +33,7 @@ fun EditWorkoutName(
         onDismissRequest = onDismiss ,
         modifier = Modifier.testTag("1"),
         shape = shapes.small,
-        title = { TextApp( text = stringResource(R.string.change_name_workout), style = typography.titleMedium) },
+        title = { TextApp( text = stringResource(R.string.change_name_workout), style = mTypography.titleMedium) },
         text = { EditBasketNameDialogLayout(nameBasket) },
         confirmButton = {
             TextButtonOK( onConfirm = {
@@ -46,7 +46,7 @@ fun EditWorkoutName(
 @Composable
 fun EditBasketNameDialogLayout( enterValue: MutableState<String>){
     Column {
-        TextApp(text = "", style = typography.titleMedium)
+        TextApp(text = "", style = mTypography.titleMedium)
         MyOutlinedTextFieldWithoutIcon( enterValue = enterValue, typeKeyboard =  TypeKeyboard.TEXT,
             modifier = Modifier
                 .fillMaxWidth()

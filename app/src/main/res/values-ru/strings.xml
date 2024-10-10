@@ -10,8 +10,8 @@
     <string name="change_name_workout">Редактирование тренировки</string>
     <string name="History">History</string>
     <string name="Workout">Workout</string>
-    <string name="plans_workout">Plans workout</string>
-    <string name="plan_workout">plan workout</string>
+    <string name="plans_workout">>Список тренировок</string>
+    <string name="plan_workout">План тренировки</string>
     <string name="training">План тренировки</string>
     <string name="trainings">тренировки</string>
     <string name="exercise">Упражнения</string>
@@ -92,7 +92,6 @@
     <string name="quit">Quit</string>
     <string name="disconnected">Disconnected</string>
     <string name="disconnected_or_unable_to_connect_to_device">Disconnected or unable to connect to %1$s.</string>
-    <string name="list_trainings">Список тренировок</string>
     <string name="show_Action">Показать действия</string>
     <string name="title_setting_screen">Настройки приложения</string>
     <string name="not_connected">не подключен</string>
@@ -121,6 +120,7 @@
     <string name="speech_manager_error">SpeechManager</string>
     <string name="bluetootj_not_available">Bluetooth not available.</string>
     <string name="heart_rate">Heart rate:</string>
+    <string name="history">History</string>
     <plurals name="set_1">
         <item quantity="one">%1$d = подход</item>
         <item quantity="few">%1$d = подхода</item>

@@ -40,8 +40,8 @@ import com.example.count_out.entity.ListActivityForExecute
 import com.example.count_out.entity.RunningState
 import com.example.count_out.ui.theme.alumBodySmall
 import com.example.count_out.ui.theme.colors3
+import com.example.count_out.ui.theme.mTypography
 import com.example.count_out.ui.theme.shapes
-import com.example.count_out.ui.theme.typography
 import com.example.count_out.ui.view_components.ButtonApp
 import com.example.count_out.ui.view_components.IconSingleLarge
 import com.example.count_out.ui.view_components.NameScreen
@@ -84,10 +84,10 @@ import java.math.RoundingMode
                 TextApp(
                     text = "${item.tickTime.hour}:${item.tickTime.min}:${item.tickTime.sec}",
                     modifier = Modifier.width(70.dp),
-                    style = typography.bodySmall
+                    style = mTypography.bodySmall
                 )
                 Spacer(modifier = Modifier.width(12.dp))
-                TextApp(text = item.message, style = typography.bodySmall)
+                TextApp(text = item.message, style = mTypography.bodySmall)
             }
         }
     }
@@ -132,7 +132,7 @@ import java.math.RoundingMode
     }
 }
 @Composable fun CountTime(uiState: ExecuteWorkoutScreenState){
-    val style = typography.displayLarge
+    val style = mTypography.displayLarge
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
         Row {
             TextApp(text = uiState.tickTime.hour, style = style)
@@ -147,7 +147,7 @@ import java.math.RoundingMode
 }
 @Composable fun HearthRate(uiState: ExecuteWorkoutScreenState) {
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
-        TextApp(text = uiState.heartRate.toString(), style = typography.displayLarge)
+        TextApp(text = uiState.heartRate.toString(), style = mTypography.displayLarge)
         TextApp(text = stringResource(uiState.connectingState.strId), style = alumBodySmall)
     }
 }
@@ -175,17 +175,17 @@ import java.math.RoundingMode
         if (item.roundNameId != 0 && setDescription == ""){
             Spacer(modifier = Modifier.height(12.dp))
             TextApp(text = stringResource(id = item.roundNameId),
-                style = typography.bodyLarge, fontWeight = FontWeight.Bold)
+                style = mTypography.bodyLarge, fontWeight = FontWeight.Bold)
         } else {
             Row {
                 TextApp(
                     text = item.activityName + " ",
-                    style = typography.bodyLarge,
+                    style = mTypography.bodyLarge,
                     textAlign = TextAlign.Start,
                     modifier = Modifier
                         .padding(start = 12.dp)
                         .weight(1f))
-                TextApp(text = setDescription, style = typography.bodyLarge)
+                TextApp(text = setDescription, style = mTypography.bodyLarge)
             }
         }
     }
@@ -216,7 +216,7 @@ import java.math.RoundingMode
         Spacer(modifier = Modifier.weight(1f))
         if (enabledButton){
             uiState.speakingSet?.intervalReps?.toBigDecimal()?.setScale(1, RoundingMode.UP)?.let {
-                TextApp(text = it.toString(), style = typography.titleLarge)}
+                TextApp(text = it.toString(), style = mTypography.titleLarge)}
         }
         Spacer(modifier = Modifier.weight(1f))
         ButtonApp( modifier = Modifier.width(150.dp),

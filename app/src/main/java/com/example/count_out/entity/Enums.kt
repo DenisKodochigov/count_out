@@ -27,7 +27,7 @@ enum class RoundType(val strId: Int, var amount: Int, var duration: Int){
 }
 enum class GoalSet(val id: Int){ DISTANCE(1), DURATION(2), COUNT(3), COUNT_GROUP(4), }
 enum class ErrorBleService{ NONE, GET_REMOTE_DEVICE, CONNECT_DEVICE, NOT_CONNECT_GATT, DISCOVER_SERVICE }
-
+enum class UnitTime(val arg: Int) {Year(1), Month(2), Week(3), Day(4)}
 enum class CommandService{
     START_WORK,
     STOP_WORK,

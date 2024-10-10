@@ -13,7 +13,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import com.example.count_out.data.room.tables.SettingDB
-import com.example.count_out.ui.theme.typography
+import com.example.count_out.ui.theme.mTypography
 
 @Composable
 fun SwitchApp(setting: SettingDB, modifier: Modifier = Modifier, change:(Boolean)->Unit) {
@@ -24,7 +24,7 @@ fun SwitchApp(setting: SettingDB, modifier: Modifier = Modifier, change:(Boolean
             textAlign = TextAlign.Start,
             maxLines = 2,
             modifier = Modifier.weight(1f),
-            style = typography.titleMedium,
+            style = mTypography.titleMedium,
             fontWeight = FontWeight.Normal)
         Switch(
             checked = checked,

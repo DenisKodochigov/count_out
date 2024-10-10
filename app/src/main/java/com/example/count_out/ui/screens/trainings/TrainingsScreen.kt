@@ -39,7 +39,7 @@ import com.example.count_out.ui.theme.Dimen
 import com.example.count_out.ui.theme.Dimen.sizeIconLarge
 import com.example.count_out.ui.theme.elevationTraining
 import com.example.count_out.ui.theme.getIdImage
-import com.example.count_out.ui.theme.typography
+import com.example.count_out.ui.theme.mTypography
 import com.example.count_out.ui.view_components.IconSingleLarge
 import com.example.count_out.ui.view_components.ItemSwipe
 import com.example.count_out.ui.view_components.NameScreen
@@ -148,11 +148,11 @@ fun TrainingsLazyColumn(uiState: TrainingsScreenState,
     modifier: Modifier = Modifier)
 {
     Column (modifier = modifier.clickable { uiState.onSelectItem(item.idTraining) }){
-        TextApp( text = item.name, style = typography.titleLarge)
+        TextApp( text = item.name, style = mTypography.titleLarge)
         Spacer(modifier = Modifier.height(Dimen.height4))
         TextApp(
             text = stringResource(id = R.string.exercise)+ ": " + item.amountActivity,
-            style = typography.bodyLarge )
+            style = mTypography.bodyLarge )
     }
 }
 

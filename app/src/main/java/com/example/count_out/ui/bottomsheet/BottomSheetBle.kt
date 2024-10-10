@@ -28,8 +28,8 @@ import com.example.count_out.ui.screens.settings.SettingScreenState
 import com.example.count_out.ui.theme.Dimen
 import com.example.count_out.ui.theme.Dimen.bsHeightWindowsListBle
 import com.example.count_out.ui.theme.Dimen.bsSpacerBottomHeight
+import com.example.count_out.ui.theme.mTypography
 import com.example.count_out.ui.theme.shapes
-import com.example.count_out.ui.theme.typography
 import com.example.count_out.ui.view_components.AnimateIcon
 import com.example.count_out.ui.view_components.ModalBottomSheetApp
 import com.example.count_out.ui.view_components.TextApp
@@ -67,7 +67,7 @@ fun BottomSheetBleContent(uiState: SettingScreenState)
             .fillMaxWidth()
             .padding(horizontal = 12.dp)
             .height(30.dp)) {
-        TextApp(text = stringResource(id = R.string.section_heart_rate), style = typography.bodyLarge)
+        TextApp(text = stringResource(id = R.string.section_heart_rate), style = mTypography.bodyLarge)
         Spacer(modifier = Modifier.weight(1f))
         AnimateIcon(animate = uiState.scannedBle)
     }
@@ -87,9 +87,9 @@ fun BottomSheetBleContent(uiState: SettingScreenState)
                     uiState.showBottomSheetBLE.value = false
                     uiState.onSelectDevice(item.address)
                 }) {
-                TextApp(text = item.address, style = typography.bodyMedium)
+                TextApp(text = item.address, style = mTypography.bodyMedium)
                 Spacer(modifier = Modifier.width(12.dp))
-                TextApp(text = item.name.ifEmpty { stringResource(id = R.string.no_name)}, style = typography.bodyMedium)
+                TextApp(text = item.name.ifEmpty { stringResource(id = R.string.no_name)}, style = mTypography.bodyMedium)
             }
         }
     }

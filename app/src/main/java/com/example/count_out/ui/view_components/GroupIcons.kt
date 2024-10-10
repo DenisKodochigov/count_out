@@ -46,8 +46,8 @@ import com.example.count_out.ui.theme.Dimen
 import com.example.count_out.ui.theme.Dimen.sizeBetweenIcon
 import com.example.count_out.ui.theme.Dimen.sizeIcon
 import com.example.count_out.ui.theme.colors3
+import com.example.count_out.ui.theme.mTypography
 import com.example.count_out.ui.theme.shapes
-import com.example.count_out.ui.theme.typography
 
 @Composable fun IconsGroup(
     onClickEdit: (() -> Unit)? = null,
@@ -236,7 +236,7 @@ fun IconsCollapsing(onClick: ()->Unit, wrap: Boolean)
                 shape = CircleShape
             )
         )
-        TextApp(text = text, style = typography.titleMedium, modifier = Modifier.align(alignment = Alignment.Center))
+        TextApp(text = text, style = mTypography.titleMedium, modifier = Modifier.align(alignment = Alignment.Center))
     }
 
 }

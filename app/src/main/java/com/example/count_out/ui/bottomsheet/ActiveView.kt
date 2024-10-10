@@ -38,8 +38,7 @@ import com.example.count_out.ui.dialog.ChangeColorSectionDialog
 import com.example.count_out.ui.screens.settings.SettingScreenState
 import com.example.count_out.ui.theme.colors3
 import com.example.count_out.ui.theme.elevationTraining
-import com.example.count_out.ui.theme.interLight12
-import com.example.count_out.ui.theme.typography
+import com.example.count_out.ui.theme.mTypography
 import com.example.count_out.ui.view_components.TextApp
 import com.example.count_out.ui.view_components.TextFieldApp
 
@@ -90,7 +89,7 @@ fun ActivityValueSelect(
         Spacer(modifier = Modifier.padding(end= 12.dp))
         TextApp(
             text = activity.value.name,
-            style = typography.bodyMedium,
+            style = mTypography.bodyMedium,
             modifier = Modifier.weight(1f), textAlign = TextAlign.Start)
         Spacer(modifier = Modifier
             .size(size = 32.dp)
@@ -127,31 +126,31 @@ fun ActivityValueFull(
             onChangeColor = onChangeColor
         )
         Row(verticalAlignment = Alignment.CenterVertically, modifier = modifier){
-            TextApp(text = stringResource(id = R.string.audio_track), style = interLight12)
+            TextApp(text = stringResource(id = R.string.audio_track), style = mTypography.bodySmall)
             TextFieldApp(
                 modifier = Modifier.fillMaxWidth(),
                 placeholder = activity.value.audioTrack,
                 contentAlignment = Alignment.BottomStart,
                 typeKeyboard = TypeKeyboard.TEXT,
                 onLossFocus = false,
-                textStyle = interLight12,
+                textStyle = mTypography.bodySmall,
                 onChangeValue = { onChange( (activity.value as ActivityDB).copy(audioTrack = it)) }
             )
         }
         Row(verticalAlignment = Alignment.CenterVertically, modifier = modifier ){
-            TextApp(text = stringResource(id = R.string.video_clip), style = interLight12)
+            TextApp(text = stringResource(id = R.string.video_clip), style = mTypography.bodySmall)
             TextFieldApp(
                 modifier = Modifier.fillMaxWidth(),
                 placeholder = activity.value.videoClip,
                 contentAlignment = Alignment.BottomStart,
                 typeKeyboard = TypeKeyboard.TEXT,
                 onLossFocus = false,
-                textStyle = interLight12,
+                textStyle = mTypography.bodySmall,
                 onChangeValue = { onChange( (activity.value as ActivityDB).copy(videoClip = it)) }
             )
         }
         Column( modifier = modifier ){
-            TextApp(text = stringResource(id = R.string.description), style = interLight12)
+            TextApp(text = stringResource(id = R.string.description), style = mTypography.bodySmall)
             TextFieldApp(
                 modifier = Modifier.fillMaxWidth(),
                 placeholder = activity.value.description,
@@ -160,7 +159,7 @@ fun ActivityValueFull(
                 onLossFocus = false,
                 maxLines = 3,
                 edit = true,
-                textStyle = interLight12,
+                textStyle = mTypography.bodySmall,
                 onChangeValue = { onChange( (activity.value as ActivityDB).copy(description = it)) }
             )
         }
@@ -203,7 +202,7 @@ fun ActivityValueEdit(
             placeholder = "${activity.value.idActivity}:${activity.value.name}",
             contentAlignment = Alignment.BottomStart,
             typeKeyboard = typeKeyboard,
-            textStyle = interLight12,
+            textStyle = mTypography.bodySmall,
             onLossFocus = false,
             onChangeValue = {
                 activity.value = (activity.value as ActivityDB).copy(name = it)

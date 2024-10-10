@@ -20,6 +20,7 @@ import com.example.count_out.entity.Const.DEFAULT_SCREEN
 import com.example.count_out.entity.Const.DELAY_SCREEN
 import com.example.count_out.entity.Const.DURATION_SCREEN
 import com.example.count_out.ui.screens.executor.ExecuteWorkoutScreen
+import com.example.count_out.ui.screens.history.HistoryScreen
 import com.example.count_out.ui.screens.settings.SettingScreen
 import com.example.count_out.ui.screens.training.TrainingScreen
 import com.example.count_out.ui.screens.trainings.TrainingsScreen
@@ -58,6 +59,12 @@ fun NavGraphBuilder.playWorkout() {
         content = { navBackStackEntry ->
             ExecuteWorkoutScreen(trainingId = navBackStackEntry.arguments?.getLong(TrainingDestination.ARG) ?: 0)
         }
+    )
+}
+fun NavGraphBuilder.history() {
+    template(
+        routeTo = HistoryDestination.route,
+        content = { HistoryScreen() }
     )
 }
 fun NavGraphBuilder.settings() {

@@ -30,8 +30,8 @@ val alumniReg12 = alumnisans.copy(fontSize = 12.sp)
 val alumniReg14 = alumnisans.copy(fontSize = 14.sp)
 
 
-val typography = Typography()
-val alumBodySmall = typography.bodySmall.copy(fontFamily = FontFamily(Font(R.font.alumnisans_regular)))
+val mTypography = Typography()
+val alumBodySmall = mTypography.bodySmall.copy(fontFamily = FontFamily(Font(R.font.alumnisans_regular)))
 
 //    headlineLarge = TextStyle(
 //        fontWeight = FontWeight.SemiBold,

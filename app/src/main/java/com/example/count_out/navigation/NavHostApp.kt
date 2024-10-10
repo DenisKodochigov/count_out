@@ -19,6 +19,7 @@ fun NavHostApp(
         trainings( goToScreenTraining = { navController.navigateToTraining(it) },
             goToScreenPlayWorkOut = { navController.navigateToPlayWorkout(it) } )
         training ( onBaskScreen = { navController.popBackStack() })
+        history()
         playWorkout ()
         settings()
     }

@@ -32,7 +32,7 @@ import com.example.count_out.ui.bottomsheet.BottomSheetSelectActivity
 import com.example.count_out.ui.bottomsheet.BottomSheetSpeech
 import com.example.count_out.ui.screens.training.round.Round
 import com.example.count_out.ui.theme.Dimen
-import com.example.count_out.ui.theme.typography
+import com.example.count_out.ui.theme.mTypography
 import com.example.count_out.ui.view_components.IconsGroup
 import com.example.count_out.ui.view_components.TextFieldApp
 
@@ -138,7 +138,7 @@ fun NameTraining( uiState: TrainingScreenState ) {
             placeholder = uiState.enteredName.value,
             typeKeyboard = TypeKeyboard.TEXT,
             contentAlignment = Alignment.BottomStart,
-            textStyle = typography.headlineMedium,
+            textStyle = mTypography.headlineMedium,
             onChangeValue = {
                 uiState.enteredName.value = it
                 uiState.changeNameTraining(uiState.training, uiState.enteredName.value)}

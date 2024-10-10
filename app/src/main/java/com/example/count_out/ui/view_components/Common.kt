@@ -3,7 +3,6 @@ package com.example.count_out.ui.view_components
 import androidx.compose.foundation.background
 import androidx.compose.foundation.focusable
 import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -58,7 +57,7 @@ import com.example.count_out.ui.theme.Dimen
 import com.example.count_out.ui.theme.colors3
 import com.example.count_out.ui.theme.interLight12
 import com.example.count_out.ui.theme.interReg12
-import com.example.count_out.ui.theme.typography
+import com.example.count_out.ui.theme.mTypography
 
 @Composable fun MyOutlinedTextFieldWithoutIcon(
     modifier: Modifier,
@@ -75,7 +74,7 @@ import com.example.count_out.ui.theme.typography
         modifier = modifier.background(color = colors3.surface),
         value = enterText,
         singleLine = true,
-        textStyle = typography.titleMedium,
+        textStyle = mTypography.titleMedium,
         label = label,
         onValueChange = {
             enterText = it
@@ -96,10 +95,10 @@ import com.example.count_out.ui.theme.typography
 }
 
 @Composable fun NameScreen(id: Int){
-    Row(horizontalArrangement = Arrangement.Center,
-        modifier = Modifier.padding(top=24.dp, bottom =12.dp).fillMaxWidth()){
-        TextApp(text = stringResource(id = id), style = typography.headlineMedium)
-    }
+//    Row(horizontalArrangement = Arrangement.Center,
+//        modifier = Modifier.padding(top=24.dp, bottom =12.dp).fillMaxWidth()){
+//        TextApp(text = stringResource(id = id), style = mTypography.headlineMedium)
+//    }
 }
 @Composable fun ButtonApp(
     text: String,
@@ -139,7 +138,7 @@ import com.example.count_out.ui.theme.typography
             TextApp(
                 text = stringResource(R.string.ok),
                 modifier = Modifier.testTag(BUTTON_OK),
-                style = typography.titleMedium
+                style = mTypography.titleMedium
             )
         }
     }
