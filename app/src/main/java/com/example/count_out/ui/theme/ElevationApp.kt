@@ -18,6 +18,26 @@ class ElevationApp {
         disabledElevation= 6.dp,
     )
 }
+@Composable fun elevationCalendar(): CardElevation {
+    return CardDefaults.cardElevation(
+        defaultElevation = 4.dp,
+        pressedElevation= 2.dp,
+        focusedElevation= 5.dp,
+        hoveredElevation= 6.dp,
+        draggedElevation= 4.dp,
+        disabledElevation= 0.dp,
+    )
+}
+@Composable fun elevationNull(): CardElevation {
+    return CardDefaults.cardElevation(
+        defaultElevation = 1.dp,
+        pressedElevation= 1.dp,
+        focusedElevation= 1.dp,
+        hoveredElevation= 1.dp,
+        draggedElevation= 1.dp,
+        disabledElevation= 1.dp,
+    )
+}
 @Composable fun elevation(): CardElevation {
     return CardDefaults.cardElevation(
         defaultElevation = 6.dp,

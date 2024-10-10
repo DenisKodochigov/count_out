@@ -12,4 +12,5 @@ data class HistoryScreenState (
 
     @Stable val getTraining: (String) ->Unit = {},
     @Stable val getTrainings: (String) ->Unit = {},
+    @Stable val onClickDay: (String) ->Unit = {},
 )
