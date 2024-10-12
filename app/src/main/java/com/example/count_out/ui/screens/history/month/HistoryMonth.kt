@@ -7,7 +7,7 @@ import androidx.compose.material3.Card
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.example.count_out.ui.screens.history.HistoryScreenState
-import com.example.count_out.ui.screens.history.day.CardDay
+import com.example.count_out.ui.screens.history.day.CalendarDay
 import com.example.count_out.ui.theme.elevationCalendar
 import com.example.count_out.ui.theme.shapes
 import java.time.LocalDate
@@ -30,18 +30,18 @@ fun CardMonth(uiState: HistoryScreenState, month: Int) {
         Row(horizontalArrangement = Arrangement.Center, modifier = Modifier.fillMaxWidth()){
             for (d in 1..7){
                 if (dayWeek.value == d || day > 1 ) {
-                    CardDay(uiState, day.toString())
+                    CalendarDay(uiState, day.toString())
                     day++
-                } else CardDay(uiState,"")
+                } else CalendarDay(uiState,"")
             }
         }
         for (i in 1..4){
             Row(horizontalArrangement = Arrangement.Center, modifier = Modifier.fillMaxWidth()){
                 for (d in 1..7){
                     if (day <= countDay) {
-                        CardDay(uiState, day.toString())
+                        CalendarDay(uiState, day.toString())
                         day++
-                    } else { CardDay(uiState, "")}
+                    } else { CalendarDay(uiState, "")}
                 }
             }
         }
