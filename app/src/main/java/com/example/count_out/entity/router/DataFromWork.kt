@@ -14,7 +14,7 @@ data class DataFromWork (
     val activityId: MutableStateFlow<Long?> = MutableStateFlow(null),
     val nextSet: MutableStateFlow<Set?> = MutableStateFlow(null),
     val durationSpeech: MutableStateFlow<Pair<Long, Long>> = MutableStateFlow(Pair(0,0)),
-    val runningState: MutableStateFlow<RunningState> = MutableStateFlow(RunningState.Stopped),
+    val runningState: MutableStateFlow<RunningState?> = MutableStateFlow(null),
     var equalsStop: ()-> Unit = {}
 ){
     fun empty(){

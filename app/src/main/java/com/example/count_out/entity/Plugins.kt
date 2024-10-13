@@ -3,6 +3,7 @@ package com.example.count_out.entity
 import com.example.count_out.R
 import com.example.count_out.data.room.AppDatabase
 import com.example.count_out.data.room.tables.ActivityDB
+import com.example.count_out.data.room.tables.CountDB
 import com.example.count_out.data.room.tables.ExerciseDB
 import com.example.count_out.data.room.tables.RoundDB
 import com.example.count_out.data.room.tables.SetDB
@@ -10,6 +11,7 @@ import com.example.count_out.data.room.tables.SettingDB
 import com.example.count_out.data.room.tables.SpeechDB
 import com.example.count_out.data.room.tables.SpeechKitDB
 import com.example.count_out.data.room.tables.TrainingDB
+import com.example.count_out.data.room.tables.WorkoutDB
 import com.example.count_out.entity.workout.Training
 
 object Plugins
@@ -143,25 +145,24 @@ private fun createTrainingPlansTesting( db: AppDatabase) {
     db.dataDao().addSet(
         SetDB(exerciseId = idExercise, name = "Set 4", reps = reps, intervalReps = 1.0, timeRest = rest, goal = GoalSet.COUNT,
             speechId = addSpeechKit(db, bs = "Старт", ast = "", be = "", ae = "Конец",)))
+    addRecordWorkout(db)
+    addRecordCount(db)
 }
-private fun createTrainingPlansReal( db: AppDatabase
-) {
+private fun createTrainingPlansReal( db: AppDatabase) {
     val idTraining = db.dataDao().addTraining(TrainingDB(name = "Зарядка", idTraining = 1,
         speechId = addSpeechKit(db, bs = "Начинаем", ast = "", be = "", ae = "Тренировка закончена.",)))
     workUp( db, idTraining)
     workOut( db, idTraining)
     workDown( db, idTraining)
 }
-private fun createTrainingPlansArm( db: AppDatabase
-) {
+private fun createTrainingPlansArm( db: AppDatabase) {
     val idTraining = db.dataDao().addTraining(TrainingDB(name = "Зарядка. Руки", idTraining = 2,
         speechId = addSpeechKit(db, bs = "Начинаем", ast = "", be = "", ae = "Тренировка закончена.",)))
     workUp( db, idTraining)
     workOutArm( db, idTraining)
     workDown( db, idTraining)
 }
-private fun createTrainingPlansLeg( db: AppDatabase
-){
+private fun createTrainingPlansLeg( db: AppDatabase){
     val idTraining = db.dataDao().addTraining(TrainingDB(name = "Зарядка. Ноги", idTraining = 3,
         speechId = addSpeechKit(db, bs = "Начинаем ", ast = "", be = "", ae = "Тренировка закончена.",)))
     workUp( db, idTraining)
@@ -543,6 +544,44 @@ private fun addSpeechKit(db: AppDatabase, bs: String, ast: String, be: String, a
             idAfterStart = db.dataDao().addSpeech( SpeechDB( message = ast)),
             idBeforeEnd = db.dataDao().addSpeech( SpeechDB( message = be)),
             idAfterEnd = db.dataDao().addSpeech( SpeechDB( message = ae))
+        )
+    )
+}
+
+private fun addRecordWorkout(db: AppDatabase){
+    db.dataDao().addWorkout(
+        WorkoutDB(
+            idWorkout = 1, trainingId = 1, isSelected = true,
+            name = "", address = "Мурино, Россия",
+            latitude = 60.0564957, longitude = 30.4331601, timeZone = "Europe/Moscow", timeStart = 1042440587, timeEnd = 1042453270,
+            averagePace = 0.0, maxPace = 0.0, minPace = 0.0,
+            averageSpeed = 0.0,
+            maxSpeed = 0.0,
+            minSpeed = 0.0,
+            averageHeartRate = 0.0, maxHeartRate = 0.0, minHeartRate = 0.0,
+            resultSpeed = 0.0, resultTime = 0.0, resultWeight = 0.0, resultAmount = 0.0, resultRange = 0.0,
+            temperature = 6.6, relativeHumidity2m = 99, apparentTemperature = 4.3, precipitation = 0.0,
+            rain = 0.0, showers = 0.0, snowfall = 0.0, weatherCode = 3, cloudCover = 100,
+            pressureMsl = 1011.4, surfacePressure = 1008.7, windSpeed10m = 2.6, windDirection10m = 115,
+            windGusts10m = 4.4,
+        )
+    )
+}
+private fun addRecordCount(db: AppDatabase){
+    val count = CountDB(
+        workoutId = 1, heartRate = 0, latitude = 60.0564957, longitude = 30.4331601,
+        altitude = 41.39999771118160, timeLocation = 1728844945990, accuracy = 100.0f,
+        speed = 0.0f, distance = 0.0f, idTraining = 1,
+        sensor1 = 0.0, sensor2 = 0.0, sensor3 = 0.0,
+        idSet = 0, rest = 0, activityId = 0, runningSet = 0,
+    )
+
+    db.dataDao().addCounts(
+        listOf( count, count, count, count,count, count, count, count, count,
+            count.copy(idSet = 1, rest = 0, activityId = 4, runningSet = 1),
+            count.copy(idSet = 1, rest = 0, activityId = 4, runningSet = 1),
+            count.copy(idSet = 1, rest = 0, activityId = 4, runningSet = 1),
+            count.copy(idSet = 1, rest = 0, activityId = 4, runningSet = 1),
         )
     )
 }

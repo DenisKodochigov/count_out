@@ -8,8 +8,8 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 
 
-suspend fun delayMy(delay: Long, pause: MutableStateFlow<RunningState>){
-    val state: MutableStateFlow <RunningState> = pause
+suspend fun delayMy(delay: Long, pause: MutableStateFlow<RunningState?>){
+    val state: MutableStateFlow <RunningState?> = pause
     val startTime: Long = SystemClock.elapsedRealtime()
     var pauseTime: Long = 0
     val endTime: MutableStateFlow<Long> = MutableStateFlow(startTime + delay)

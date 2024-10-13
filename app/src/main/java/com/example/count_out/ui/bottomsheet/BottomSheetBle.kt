@@ -41,7 +41,7 @@ fun BottomSheetBle(uiState: SettingScreenState) {
     val sheetState = rememberModalBottomSheetState(
         skipPartiallyExpanded = true, confirmValueChange = { true },)
     ModalBottomSheetApp(
-        onDismissRequest = { uiState.onDismissBLEScan.invoke() },
+        onDismissRequest = { uiState.onDismissBLEScan(uiState) },
         modifier = Modifier.padding(horizontal = Dimen.bsPaddingHor1),
         shape = shapes.small,
         sheetState = sheetState,

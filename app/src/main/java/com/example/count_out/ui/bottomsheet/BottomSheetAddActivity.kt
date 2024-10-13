@@ -23,7 +23,7 @@ fun BottomSheetAddActivity(uiState: SettingScreenState)
     val sheetState = rememberModalBottomSheetState(
         skipPartiallyExpanded = true, confirmValueChange = { true },)
     ModalBottomSheetApp(
-        onDismissRequest = { uiState.onDismissAddActivity.invoke() },
+        onDismissRequest = { uiState.onDismissAddActivity(uiState) },
         modifier = Modifier.padding(horizontal = Dimen.bsPaddingHor1),
         shape = shapes.small,
         sheetState = sheetState,
@@ -46,7 +46,7 @@ fun BottomSheetAddActivityContent(uiState: SettingScreenState)
         )
         Spacer(Modifier.height(Dimen.bsSpacerHeight))
         ButtonConfirm( onConfirm = {
-            uiState.onConfirmAddActivity(uiState.activity.value)
+            uiState.onConfirmAddActivity(uiState)
         } )
         Spacer(Modifier.height(Dimen.bsSpacerBottomHeight))
     }

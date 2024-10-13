@@ -19,7 +19,7 @@ class Router(private val dataForServ: DataForServ) {
 
     val dataForBle: DataForBle by lazy { initDataForBle(dataForServ) }
     val dataForWork: DataForWork by lazy {initDataForWork(dataForServ)}
-    val dataForSite: DataForSite by lazy { initDataForSite(dataForServ) }
+    val dataForSite: DataForSite by lazy { initDataForSite() }
 
     private val buffer: Buffer by lazy { bufferInit(dataFromBle, dataFromWork, dataFromSite )}
     val dataForUI: DataForUI by lazy { initDataForUI(buffer) }
@@ -61,7 +61,7 @@ class Router(private val dataForServ: DataForServ) {
             enableSpeechDescription = dataForServ.enableSpeechDescription
         )
     }
-    private fun initDataForSite(dataForServ: DataForServ): DataForSite{
+    private fun initDataForSite(): DataForSite{
         return DataForSite(site = "", state = MutableStateFlow(RunningState.Stopped))
     }
     private fun initDataForUI(buffer: Buffer): DataForUI {

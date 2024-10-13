@@ -11,7 +11,7 @@ import kotlinx.coroutines.launch
 
 object Watcher {
     private val currentTickTime: MutableStateFlow<TickTime> =  MutableStateFlow(TickTime())
-    private var stateTimer: MutableStateFlow<RunningState> =  MutableStateFlow(RunningState.Stopped)
+    private var stateTimer: MutableStateFlow<RunningState?> =  MutableStateFlow(RunningState.Binding)
     private fun engineWatcher(){
         CoroutineScope(Dispatchers.Default).launch {
             var currentTime = 0L
@@ -27,7 +27,7 @@ object Watcher {
             }
         }
     }
-    fun start(state: MutableStateFlow<RunningState>){
+    fun start(state: MutableStateFlow<RunningState?>){
         stateTimer = state
         currentTickTime.value = TickTime(hour = "00", min = "00", sec = "00")
         engineWatcher()

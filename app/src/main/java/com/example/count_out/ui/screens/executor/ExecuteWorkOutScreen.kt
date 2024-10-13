@@ -47,6 +47,7 @@ import com.example.count_out.ui.view_components.ButtonApp
 import com.example.count_out.ui.view_components.IconSingleLarge
 import com.example.count_out.ui.view_components.NameScreen
 import com.example.count_out.ui.view_components.TextApp
+import com.example.count_out.ui.view_components.lg
 import kotlinx.coroutines.launch
 import java.math.RoundingMode
 

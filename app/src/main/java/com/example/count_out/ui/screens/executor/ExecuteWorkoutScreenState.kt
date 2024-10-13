@@ -5,12 +5,12 @@ import androidx.compose.runtime.Stable
 import androidx.compose.runtime.mutableStateOf
 import com.example.count_out.data.room.tables.SetDB
 import com.example.count_out.entity.ConnectState
-import com.example.count_out.entity.workout.Coordinate
-import com.example.count_out.entity.ui.ListActivityForExecute
-import com.example.count_out.entity.workout.MessageWorkOut
 import com.example.count_out.entity.RunningState
 import com.example.count_out.entity.TickTime
 import com.example.count_out.entity.bluetooth.DeviceUI
+import com.example.count_out.entity.ui.ListActivityForExecute
+import com.example.count_out.entity.workout.Coordinate
+import com.example.count_out.entity.workout.MessageWorkOut
 import com.example.count_out.entity.workout.Set
 import com.example.count_out.entity.workout.Training
 import javax.inject.Singleton
@@ -37,11 +37,11 @@ data class ExecuteWorkoutScreenState(
     val notSaveTraining: ()->Unit = { },
     @Stable var startTime: Long = 0L,
 
-    @Stable var onDismissSaveTraining: () -> Unit = {
-        showBottomSheetSaveTraining.value = false
+    @Stable var onDismissSaveTraining: (ExecuteWorkoutScreenState) -> Unit = { uiState ->
+        uiState.showBottomSheetSaveTraining.value = false
         notSaveTraining() },
-    @Stable var onConfirmASaveTraining: () -> Unit = {
-        showBottomSheetSaveTraining.value = false
+    @Stable var onConfirmASaveTraining: (ExecuteWorkoutScreenState) -> Unit = { uiState ->
+        uiState.showBottomSheetSaveTraining.value = false
         saveTraining()
     },
 ){

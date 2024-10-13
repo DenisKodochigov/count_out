@@ -27,7 +27,7 @@ fun BottomSheetSaveTraining(uiState: ExecuteWorkoutScreenState)
     val sheetState = rememberModalBottomSheetState(
         skipPartiallyExpanded = true, confirmValueChange = { true },)
     ModalBottomSheetApp(
-        onDismissRequest = { uiState.onDismissSaveTraining.invoke() },
+        onDismissRequest = { uiState.onDismissSaveTraining.invoke(uiState) },
         modifier = Modifier.padding(horizontal = Dimen.bsPaddingHor1),
         shape = shapes.small,
         sheetState = sheetState,
@@ -45,8 +45,8 @@ fun BottomSheetSaveTrainingContent(uiState: ExecuteWorkoutScreenState)
         Spacer(Modifier.height(Dimen.bsSpacerHeight))
         TextApp(text = stringResource(R.string.save_traning), style = mTypography.headlineSmall)
         Spacer(Modifier.height(Dimen.bsSpacerHeight))
-        ButtonsOkCancel( onConfirm = { uiState.onConfirmASaveTraining() },
-            onDismiss = { uiState.onDismissSaveTraining()})
+        ButtonsOkCancel( onConfirm = { uiState.onConfirmASaveTraining(uiState) },
+            onDismiss = { uiState.onDismissSaveTraining(uiState)})
         Spacer(Modifier.height(Dimen.bsSpacerBottomHeight))
     }
 }

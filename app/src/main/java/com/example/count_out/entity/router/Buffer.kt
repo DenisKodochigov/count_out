@@ -23,7 +23,7 @@ data class Buffer (
     val activityId: MutableStateFlow<Long?> = MutableStateFlow(null),
     val rest: MutableStateFlow<Int?> = MutableStateFlow(null),
     val durationSpeech:MutableStateFlow<Pair<Long, Long>> = MutableStateFlow(Pair(0,0)),
-    val runningState: MutableStateFlow<RunningState> = MutableStateFlow(RunningState.Stopped),
+    val runningState: MutableStateFlow<RunningState?> = MutableStateFlow(null),
 
     val coordinate: MutableStateFlow<Coordinate?> = MutableStateFlow( null),
 )

@@ -12,7 +12,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 
 data class DataForUI (
     val speakingSet: MutableStateFlow<Set?> = MutableStateFlow(null),
-    val runningState: MutableStateFlow<RunningState> = MutableStateFlow(RunningState.Stopped),
+    val runningState: MutableStateFlow<RunningState?> = MutableStateFlow(null),
 
     val flowTick: MutableStateFlow<TickTime> = MutableStateFlow(TickTime()),
     val message: MutableStateFlow<MessageWorkOut?> = MutableStateFlow(null),

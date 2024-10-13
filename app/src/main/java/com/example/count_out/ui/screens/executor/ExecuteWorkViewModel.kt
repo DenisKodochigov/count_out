@@ -1,17 +1,18 @@
 package com.example.count_out.ui.screens.executor
 
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.count_out.R
 import com.example.count_out.data.DataRepository
 import com.example.count_out.data.room.tables.SetDB
 import com.example.count_out.entity.CommandService
-import com.example.count_out.entity.ui.DataForServ
-import com.example.count_out.entity.ui.DataForUI
 import com.example.count_out.entity.Internet
 import com.example.count_out.entity.MessageApp
 import com.example.count_out.entity.RunningState
 import com.example.count_out.entity.TickTime
+import com.example.count_out.entity.ui.DataForServ
+import com.example.count_out.entity.ui.DataForUI
 import com.example.count_out.service_count_out.CountOutServiceBind
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -121,7 +122,8 @@ class ExecuteWorkViewModel @Inject constructor(
                             tickTime = TickTime(hour = "00", min = "00", sec = "00"),
                             speakingSet = null,
                             messageWorkout = emptyList(),
-                            listActivity = emptyList()
+                            listActivity = emptyList(),
+                            showBottomSheetSaveTraining = mutableStateOf(true)
                         )
                     }
                     return@collect
