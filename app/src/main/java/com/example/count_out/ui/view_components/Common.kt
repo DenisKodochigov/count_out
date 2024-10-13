@@ -3,6 +3,7 @@ package com.example.count_out.ui.view_components
 import androidx.compose.foundation.background
 import androidx.compose.foundation.focusable
 import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -286,4 +287,15 @@ fun ButtonConfirm(onConfirm: ()->Unit)
 {
     Spacer(modifier = Modifier.height(Dimen.bsItemPaddingVer))
     ButtonApp(text = stringResource(id = R.string.ok), onClick = onConfirm )
+}
+@Composable
+fun ButtonsOkCancel(onConfirm: ()->Unit, onDismiss: ()->Unit)
+{
+    Spacer(modifier = Modifier.height(Dimen.bsItemPaddingVer))
+    Row(horizontalArrangement = Arrangement.Center,
+        modifier = Modifier.padding(horizontal = 24.dp)){
+        ButtonApp(text = stringResource(id = R.string.yes), onClick = onConfirm )
+        Spacer(Modifier.weight(1f))
+        ButtonApp(text = stringResource(id = R.string.no), onClick = onDismiss)
+    }
 }

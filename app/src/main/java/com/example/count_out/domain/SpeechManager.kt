@@ -5,9 +5,9 @@ import android.speech.tts.TextToSpeech
 import android.speech.tts.UtteranceProgressListener
 import com.example.count_out.R
 import com.example.count_out.entity.MessageApp
-import com.example.count_out.entity.MessageWorkOut
+import com.example.count_out.entity.workout.MessageWorkOut
 import com.example.count_out.entity.RunningState
-import com.example.count_out.entity.Speech
+import com.example.count_out.entity.speech.Speech
 import com.example.count_out.entity.router.DataFromWork
 import com.example.count_out.service_count_out.stopwatch.Watcher
 import kotlinx.coroutines.delay

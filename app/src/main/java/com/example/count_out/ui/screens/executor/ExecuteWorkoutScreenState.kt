@@ -1,11 +1,13 @@
 package com.example.count_out.ui.screens.executor
 
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.Stable
+import androidx.compose.runtime.mutableStateOf
 import com.example.count_out.data.room.tables.SetDB
 import com.example.count_out.entity.ConnectState
-import com.example.count_out.entity.Coordinate
-import com.example.count_out.entity.ListActivityForExecute
-import com.example.count_out.entity.MessageWorkOut
+import com.example.count_out.entity.workout.Coordinate
+import com.example.count_out.entity.ui.ListActivityForExecute
+import com.example.count_out.entity.workout.MessageWorkOut
 import com.example.count_out.entity.RunningState
 import com.example.count_out.entity.TickTime
 import com.example.count_out.entity.bluetooth.DeviceUI
@@ -19,20 +21,31 @@ data class ExecuteWorkoutScreenState(
     val messageWorkout: List<MessageWorkOut> = emptyList(),
     val speakingSet: Set? = null,
     val nextSet: Set? = null,
-    var listActivity: List< ListActivityForExecute> = emptyList(),
+    var listActivity: List<ListActivityForExecute> = emptyList(),
     val lastConnectHearthRateDevice: DeviceUI? = null,
     val connectingState: ConnectState = ConnectState.NOT_CONNECTED,
     val heartRate: Int = 0,
     val coordinate: Coordinate? = null,
-
+    val showBottomSheetSaveTraining: MutableState<Boolean> = mutableStateOf(false),
     val tickTime: TickTime = TickTime(hour = "00", min="00", sec= "00"),
     val updateSet: (Long, SetDB)->Unit = { _, _->},
-    val stateWorkOutService: RunningState = RunningState.Stopped,
+    val stateWorkOutService: RunningState? = null,
     val startWorkOutService: (Training)->Unit = {},
     val stopWorkOutService: ()->Unit = {},
-    val pauseWorkOutService: ()->Unit = {},
+    val pauseWorkOutService: ()->Unit = { },
+    val saveTraining: ()->Unit = { },
+    val notSaveTraining: ()->Unit = { },
     @Stable var startTime: Long = 0L,
+
+    @Stable var onDismissSaveTraining: () -> Unit = {
+        showBottomSheetSaveTraining.value = false
+        notSaveTraining() },
+    @Stable var onConfirmASaveTraining: () -> Unit = {
+        showBottomSheetSaveTraining.value = false
+        saveTraining()
+    },
 ){
+
     fun addMessage(messageWorkOut: MessageWorkOut):List<MessageWorkOut>{
         return messageWorkout.toMutableList().apply { this.add(messageWorkOut) }
     }
@@ -48,7 +61,8 @@ data class ExecuteWorkoutScreenState(
                     round.exercise.forEachIndexed{ _, exercise ->
                         exercise.sets.forEachIndexed{ indexSet, set ->
                             if (findingSet){
-                                resultList.add(ListActivityForExecute(
+                                resultList.add(
+                                    ListActivityForExecute(
                                     roundNameId = round.roundType.strId,
                                     activityName = exercise.activity.name,
                                     typeDescription = true,
@@ -56,14 +70,16 @@ data class ExecuteWorkoutScreenState(
                                     currentIndSet = currentSet,
                                     countRing = 0,
                                     currentRing = 0,
-                                ))
+                                )
+                                )
                                 currentSet = 0
                             }
                             if (set.idSet == setId) {
                                 findingSet = true
                                 currentSet = indexSet
                                 resultList.add(ListActivityForExecute(roundNameId = round.roundType.strId))
-                                resultList.add(ListActivityForExecute(
+                                resultList.add(
+                                    ListActivityForExecute(
                                     roundNameId =round.roundType.strId,
                                     activityName = exercise.activity.name,
                                     typeDescription = false,
@@ -71,7 +87,8 @@ data class ExecuteWorkoutScreenState(
                                     currentIndSet = currentSet,
                                     countRing = 0,
                                     currentRing = 0,
-                                ))
+                                )
+                                )
                             }
                         }
                     }
@@ -82,7 +99,8 @@ data class ExecuteWorkoutScreenState(
                 trainingIt.rounds.forEachIndexed { _, round ->
                     resultList.add(ListActivityForExecute(roundNameId = round.roundType.strId))
                     round.exercise.forEachIndexed{ _, exercise ->
-                        resultList.add(ListActivityForExecute(
+                        resultList.add(
+                            ListActivityForExecute(
                             roundNameId =round.roundType.strId,
                             activityName = exercise.activity.name,
                             typeDescription = true,
@@ -90,7 +108,8 @@ data class ExecuteWorkoutScreenState(
                             currentIndSet = 0,
                             countRing = 0,
                             currentRing = 0,
-                        ))
+                        )
+                        )
                     }
                 }
             }

@@ -55,17 +55,6 @@ import com.example.count_out.ui.view_components.TextApp
 }
 @Composable fun SettingScreenCreateView( viewModel: SettingViewModel){
     val uiState by viewModel.settingScreenState.collectAsStateWithLifecycle()
-    uiState.onConfirmAddActivity = { activity->
-        uiState.onAddActivity(activity)
-        uiState.showBottomSheetAddActivity.value = false }
-    uiState.onDismissAddActivity = { uiState.showBottomSheetAddActivity.value = false }
-
-    uiState.onConfirmBLEScan = { address->
-        uiState.onSelectDevice(address)
-        uiState.showBottomSheetBLE.value = false }
-    uiState.onDismissBLEScan = {
-        uiState.onStopScanBLE()
-        uiState.showBottomSheetBLE.value = false }
 
     if (uiState.showBottomSheetAddActivity.value) BottomSheetAddActivity(uiState)
     if (uiState.showBottomSheetBLE.value) {

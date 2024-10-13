@@ -39,6 +39,8 @@ enum class CommandService{
     CLEAR_CACHE_BLE,
     START_LOCATION,
     STOP_LOCATION,
+    SAVE_TRAINING,
+    NOT_SAVE_TRAINING,
 }
 /**This class describes the HCI error codes as defined in the Bluetooth Standard, Volume 1, Part F,
  * 1.3 HCI Error Code, pages 364-377.

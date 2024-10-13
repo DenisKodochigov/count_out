@@ -6,8 +6,9 @@ import com.example.count_out.R
 import com.example.count_out.data.DataRepository
 import com.example.count_out.data.room.tables.SetDB
 import com.example.count_out.entity.CommandService
-import com.example.count_out.entity.DataForServ
-import com.example.count_out.entity.DataForUI
+import com.example.count_out.entity.ui.DataForServ
+import com.example.count_out.entity.ui.DataForUI
+import com.example.count_out.entity.Internet
 import com.example.count_out.entity.MessageApp
 import com.example.count_out.entity.RunningState
 import com.example.count_out.entity.TickTime
@@ -24,6 +25,7 @@ import javax.inject.Inject
 @HiltViewModel
 class ExecuteWorkViewModel @Inject constructor(
     private val messageApp: MessageApp,
+    private val internet: Internet,
     private val dataRepository: DataRepository,
     private val serviceBind: CountOutServiceBind
 ): ViewModel() {
@@ -34,6 +36,8 @@ class ExecuteWorkViewModel @Inject constructor(
                 commandService(CommandService.START_WORK) },
             stopWorkOutService = { commandService(CommandService.STOP_WORK) },
             pauseWorkOutService = { commandService(CommandService.PAUSE_WORK) },
+            saveTraining = { commandService( CommandService.SAVE_TRAINING)},
+            notSaveTraining = { commandService( CommandService.NOT_SAVE_TRAINING)},
             updateSet = { trainingId, setDB -> updateSet(trainingId, setDB) }
         ))
     val executeWorkoutScreenState: StateFlow<ExecuteWorkoutScreenState> =
@@ -150,4 +154,5 @@ class ExecuteWorkViewModel @Inject constructor(
             dataForUI.heartRate.collect { hr ->
                 _executeWorkoutScreenState.update { state -> state.copy(heartRate = hr) } } } //heartRate
     }
+    fun availableInternet() = internet.isOnline()
 }

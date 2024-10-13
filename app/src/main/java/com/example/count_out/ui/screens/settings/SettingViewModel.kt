@@ -5,10 +5,10 @@ import androidx.lifecycle.viewModelScope
 import com.example.count_out.R
 import com.example.count_out.data.DataRepository
 import com.example.count_out.data.room.tables.SettingDB
-import com.example.count_out.entity.Activity
+import com.example.count_out.entity.workout.Activity
 import com.example.count_out.entity.CommandService
-import com.example.count_out.entity.DataForServ
-import com.example.count_out.entity.DataForUI
+import com.example.count_out.entity.ui.DataForServ
+import com.example.count_out.entity.ui.DataForUI
 import com.example.count_out.entity.MessageApp
 import com.example.count_out.entity.bluetooth.BleDevSerializable
 import com.example.count_out.service_count_out.CountOutServiceBind

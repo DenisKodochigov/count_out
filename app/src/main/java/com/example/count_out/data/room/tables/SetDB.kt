@@ -5,7 +5,7 @@ import androidx.room.Ignore
 import androidx.room.PrimaryKey
 import com.example.count_out.entity.GoalSet
 import com.example.count_out.entity.workout.Set
-import com.example.count_out.entity.SpeechKit
+import com.example.count_out.entity.speech.SpeechKit
 import com.example.count_out.entity.Zone
 
 @Entity(tableName = "tb_set")

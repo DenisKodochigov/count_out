@@ -24,7 +24,7 @@ class LocationWithOutGoogle @Inject constructor(val context: Context, val permis
                     latitude = location.latitude,
                     longitude = location.longitude,
                     altitude = location.altitude,
-                    time = location.time,
+                    timeLocation = location.time,
                     accuracy = location.accuracy,
                     speed = location.speed
                 )

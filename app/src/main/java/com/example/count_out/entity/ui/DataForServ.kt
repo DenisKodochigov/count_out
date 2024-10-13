@@ -1,5 +1,6 @@
-package com.example.count_out.entity
+package com.example.count_out.entity.ui
 
+import com.example.count_out.entity.RunningState
 import com.example.count_out.entity.bluetooth.BleConnection
 import com.example.count_out.entity.workout.Training
 import kotlinx.coroutines.flow.MutableStateFlow

@@ -10,7 +10,7 @@
     <string name="change_name_workout">Редактирование тренировки</string>
     <string name="History">History</string>
     <string name="Workout">Workout</string>
-    <string name="plans_workout">>Список тренировок</string>
+    <string name="plans_workout">Список тренировок</string>
     <string name="plan_workout">План тренировки</string>
     <string name="training">План тренировки</string>
     <string name="trainings">тренировки</string>
@@ -79,7 +79,7 @@
     <string name="heart_rate_device">Датчик пульса.</string>
     <string name="not_select_device">Нет выбранных устройств.</string>
 
-
+    <string name="list_trainings">Список тренировок</string>
     <string name="ble_playground">BLE Playground</string>
     <string name="location_permission_required">Location Permission Required</string>
     <string name="location_permission_rationale">Starting from Android 6, the system requires apps to be granted location access in order to scan for BLE devices.\n\nYour location is never used aside from enabling the app to perform BLE scans.</string>
@@ -121,6 +121,8 @@
     <string name="bluetootj_not_available">Bluetooth not available.</string>
     <string name="heart_rate">Heart rate:</string>
     <string name="history">History</string>
+    <string name="history_">History</string>
+
     <plurals name="set_1">
         <item quantity="one">%1$d = подход</item>
         <item quantity="few">%1$d = подхода</item>
@@ -163,4 +165,75 @@
         <item quantity="many">%d метров</item>
         <item quantity="other">метр</item>
     </plurals>
+
+
+
+
+    <string name="select_position">Выбор местоположения.</string>
+    <string name="not_text" />
+    <string name="weather3">Погода</string>
+    <string name="clear_sky">Чистое небо</string>
+    <string name="mainly_clear">Преимущественно ясно</string>
+    <string name="partly_cloudy">Переменная облачность</string>
+    <string name="overcast">Пасмурно</string>
+    <string name="fog">Туман</string>
+    <string name="depositing_rime_fog">Налипание изморози</string>
+    <string name="drizzle_light">Слабый моросящий дождь</string>
+    <string name="drizzle_moderate">Умеренный моросящий дождь</string>
+    <string name="drizzle_dense">Густой моросящий дождь</string>
+    <string name="freezing_drizzle_light">Небольшой ледяной дождь</string>
+    <string name="freezing_drizzle_dense">Сильный ледяной дождь</string>
+    <string name="rain_slight">Дождь слабый</string>
+    <string name="rain_moderate">Дождь умеренный</string>
+    <string name="rain_heavy">Дождь сильный</string>
+    <string name="freezing_rain_light">Замерзающий дождь слабый</string>
+    <string name="freezing_rain_heavy">Замерзающий дождь сильный</string>
+    <string name="snow_fall_slight">Снегопад слабый</string>
+    <string name="snow_fall_moderate">Снегопад умеренный</string>
+    <string name="snow_fall_heavy">Снегопад сильный</string>
+    <string name="snow_grains">Снежные зерна</string>
+    <string name="rain_showers_slight">Ливневые дожди слабые</string>
+    <string name="rain_showers_moderate">Ливневые дожди умеренные</string>
+    <string name="rain_showers_violent">Ливневые дожди сильные</string>
+    <string name="snow_showers_slight">Снежные ливни слабые</string>
+    <string name="snow_showers_heavy">Снежные ливни сильные</string>
+    <string name="thunderstorm">Гроза</string>
+    <string name="thunderstorm_with_slight_hail">Гроза с небольшим градом</string>
+    <string name="thunderstorm_with_heavy_hail">Гроза с сильным градом</string>
+    <string name="feels_like">Ощущается как</string>
+    <string name="button_today">Сегодня</string>
+    <string name="button_tomorrow">Завтра</string>
+    <string name="button_tenday">10 дней</string>
+    <string name="now">Сейчас</string>
+    <string name="monday">Понедельник</string>
+    <string name="tuesday">Вторник</string>
+    <string name="wednesday">Среда</string>
+    <string name="thursday">Четверг</string>
+    <string name="friday">Пятница</string>
+    <string name="saturday">Суббота</string>
+    <string name="sunday">Воскресенье</string>
+    <string name="precipitation">Вероятность осадков</string>
+
+    <string name="january">Январь</string>
+    <string name="february">Февраль</string>
+    <string name="march">Март</string>
+    <string name="april">Апрель</string>
+    <string name="may">Май</string>
+    <string name="june">Июнь</string>
+    <string name="july">Июль</string>
+    <string name="august">Август</string>
+    <string name="september">Сентябрь</string>
+    <string name="october">Октябрь</string>
+    <string name="november">Ноябрь</string>
+    <string name="december">Декабрь</string>
+    <string name="title_request_permission">Необходимо разрешение</string>
+    <string name="text_request_permission">Для работы приложения, необходимо разрешение использовать местоположение. Пожалуйста установить его в ручную или введите название населенного пункта.</string>
+    <string name="title_request_internet">Необходим интернет.</string>
+    <string name="text_request_internet">Для работы приложения, необходим интернет. Пожалуйста выполните подключение.</string>
+    <string name="today">Сегодня</string>
+    <string name="title_precipitation">Вероятность осадков.</string>
+    <string name="title_temp">Температура.</string>
+    <string name="save_traning">Save training?</string>
+    <string name="no">NO</string>
+    <string name="yes">YES</string>
 </resources>

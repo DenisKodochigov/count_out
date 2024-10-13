@@ -1,7 +1,6 @@
 package com.example.count_out.entity.workout
 
-import com.example.count_out.entity.Activity
-import com.example.count_out.entity.SpeechKit
+import com.example.count_out.entity.speech.SpeechKit
 
 interface Exercise {
     val idExercise: Long

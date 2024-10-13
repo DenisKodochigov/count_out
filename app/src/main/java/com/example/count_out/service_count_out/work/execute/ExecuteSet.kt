@@ -24,12 +24,14 @@ class ExecuteSet @Inject constructor(val speechManager:SpeechManager, val contex
 
     suspend fun executeSet(dataForWork: DataForWork, dataFromWork: DataFromWork){
         dataFromWork.equalsStop()
-        while (!countRest.value) {delay(100L)}
+        while (!countRest.value) { delay(100L) }
         dataForWork.getSet()?.let { setCurrent->
             dataFromWork.speakingSet.value = setCurrent
+            dataFromWork.activityId.value = dataForWork.getExercise()?.activity?.idActivity
             speakSetBegin(set = setCurrent, dataFromWork = dataFromWork)
             speakSetBody(set = setCurrent, dataForWork = dataForWork, dataFromWork = dataFromWork)
             dataFromWork.speakingSet.value = null
+            dataFromWork.activityId.value = null
             dataFromWork.nextSet.value = dataForWork.getNextSet()
             speakSetEnd(setCurrent, dataFromWork)
         }
@@ -75,7 +77,10 @@ class ExecuteSet @Inject constructor(val speechManager:SpeechManager, val contex
     }
     private suspend fun speakingSetRest(set: Set, dataFromWork: DataFromWork ){
         countRest.value = false
+        dataFromWork.rest.value = 1
         speakInterval( duration = set.timeRest, dataFromWork = dataFromWork)
+
+        dataFromWork.rest.value = 0
         countRest.value = true
     }
     private suspend fun speakInterval(duration: Int, dataFromWork: DataFromWork) {

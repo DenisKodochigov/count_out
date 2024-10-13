@@ -1,6 +1,7 @@
 package com.example.count_out.data
 
 import androidx.datastore.core.DataStore
+import com.example.count_out.data.openmeteo_api.DataSourceAPI
 import com.example.count_out.data.room.DataSource
 import com.example.count_out.data.room.tables.ActivityDB
 import com.example.count_out.data.room.tables.ExerciseDB
@@ -9,20 +10,22 @@ import com.example.count_out.data.room.tables.SetDB
 import com.example.count_out.data.room.tables.SettingDB
 import com.example.count_out.data.room.tables.SpeechKitDB
 import com.example.count_out.data.room.tables.TrainingDB
-import com.example.count_out.entity.Activity
+import com.example.count_out.data.room.tables.WorkoutDB
 import com.example.count_out.entity.Plugins
-import com.example.count_out.entity.SpeechKit
-import com.example.count_out.entity.TemporaryBase
 import com.example.count_out.entity.bluetooth.BleDevSerializable
+import com.example.count_out.entity.speech.SpeechKit
+import com.example.count_out.entity.workout.Activity
 import com.example.count_out.entity.workout.Exercise
 import com.example.count_out.entity.workout.Round
 import com.example.count_out.entity.workout.Set
+import com.example.count_out.entity.workout.TemporaryBase
 import com.example.count_out.entity.workout.Training
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
 class DataRepository  @Inject constructor(private val dataSource: DataSource,
+                                          private val dataOpenMeteo: DataSourceAPI,
                                           private val dataStoreBle: DataStore<BleDevSerializable>
 ){
     fun getTrainings(): List<Training> = dataSource.getTrainings()
@@ -153,5 +156,19 @@ class DataRepository  @Inject constructor(private val dataSource: DataSource,
 
     fun writeTemporaryData(dataForBase: TemporaryBase) {
         dataSource.writeTemporaryData(dataForBase)
+    }
+
+    fun clearTemporaryData() {
+        dataSource.clearTemporaryData()
+    }
+
+//    suspend fun getWeathers(latitude: Double, longitude: Double): Weathers {
+//        return dataOpenMeteo.getWeather(latitude, longitude).toWeathers()
+//    }
+
+    suspend fun saveTraining(workout: WorkoutDB) {
+        val weather = dataOpenMeteo.getWeather(workout).current
+        weather?.let { workout.formWeather(it) }
+        dataSource.saveTraining(workout)
     }
 }

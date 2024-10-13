@@ -76,6 +76,7 @@ dependencies {
     implementation (libs.androidx.hilt.navigation.compose)
     implementation(libs.play.services.location)
     implementation(libs.androidx.lifecycle.runtime.compose.android)
+    implementation(libs.play.services.contextmanager)
     ksp (libs.dagger.compiler)
     ksp (libs.hilt.compiler)
     testImplementation (libs.hilt.android.testing)
@@ -109,6 +110,10 @@ dependencies {
     implementation (libs.androidx.room.runtime)
     implementation (libs.androidx.room.ktx)
     ksp (libs.androidx.room.compiler)
+    // Retrofit
+    implementation (libs.retrofit)
+    implementation (libs.retrofit.moshi)
+    implementation (libs.okhttp3)
     //Moshi
     implementation (libs.moshi)
     implementation (libs.moshi.kotlin)

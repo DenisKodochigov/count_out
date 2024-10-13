@@ -36,8 +36,9 @@ import com.example.count_out.data.room.tables.SetDB
 import com.example.count_out.domain.Minus
 import com.example.count_out.domain.Plus
 import com.example.count_out.entity.GoalSet
-import com.example.count_out.entity.ListActivityForExecute
 import com.example.count_out.entity.RunningState
+import com.example.count_out.entity.ui.ListActivityForExecute
+import com.example.count_out.ui.bottomsheet.BottomSheetSaveTraining
 import com.example.count_out.ui.theme.alumBodySmall
 import com.example.count_out.ui.theme.colors3
 import com.example.count_out.ui.theme.mTypography
@@ -60,6 +61,7 @@ import java.math.RoundingMode
 }
 @Composable fun ExecuteWorkoutScreenLayout( uiState: ExecuteWorkoutScreenState){
     if(uiState.listActivity.isEmpty()) { uiState.listActivity = uiState.activityList()}
+    if (uiState.showBottomSheetSaveTraining.value) BottomSheetSaveTraining(uiState)
     Column(
         modifier = Modifier.fillMaxSize(),
         content = {
@@ -110,15 +112,17 @@ import java.math.RoundingMode
         Spacer(modifier = Modifier.height(24.dp))
         ButtonFasterSlower(uiState)
         ButtonsStartStopWorkOut(
-            switchState= uiState.stateWorkOutService,
-            onClickStart = { uiState.training?.let {
-                uiState.startWorkOutService(it) } },
+            switchState= uiState.stateWorkOutService ?: RunningState.Stopped,
+            onClickStart = { uiState.training?.let { uiState.startWorkOutService(it) } },
             onClickStop = {
-                uiState.stopWorkOutService() },
+                uiState.stopWorkOutService()
+                uiState.showBottomSheetSaveTraining.value = true
+            },
             onClickPause = { uiState.pauseWorkOutService() },
         )
     }
 }
+
 @Composable fun CurrentTimePulse(uiState: ExecuteWorkoutScreenState) {
     Row( modifier = Modifier
         .fillMaxWidth()
@@ -227,7 +231,7 @@ import java.math.RoundingMode
 }
 
 @Composable fun ButtonsStartStopWorkOut(
-    onClickStart:()->Unit, onClickStop:()->Unit, onClickPause:()->Unit, switchState: RunningState){
+    onClickStart:()->Unit, onClickStop: ()->Unit, onClickPause:()->Unit, switchState: RunningState){
     Row( horizontalArrangement = Arrangement.Center, modifier = Modifier.fillMaxWidth()) {
         when (switchState){
             RunningState.Started -> ButtonStartedService(onClickStop, onClickPause)
@@ -241,7 +245,7 @@ import java.math.RoundingMode
 @Composable fun ButtonStartedService(onClickStop: () -> Unit, onClickPause: () -> Unit){
     IconSingleLarge(Icons.Filled.Pause, onClickPause)
     Spacer(modifier = Modifier.width(12.dp))
-    IconSingleLarge(Icons.Filled.Stop, onClickStop )
+    IconSingleLarge(Icons.Filled.Stop,  onClickStop )
 }
 @Composable fun ButtonStoppedService(onClickStart: () -> Unit){
     IconSingleLarge(Icons.Filled.PlayArrow, onClickStart )

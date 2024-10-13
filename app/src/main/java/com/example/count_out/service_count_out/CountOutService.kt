@@ -6,15 +6,17 @@ import android.content.pm.ServiceInfo.FOREGROUND_SERVICE_TYPE_DATA_SYNC
 import android.os.Binder
 import android.os.Build
 import android.os.IBinder
+import android.os.SystemClock
 import com.example.count_out.R
+import com.example.count_out.data.room.tables.WorkoutDB
 import com.example.count_out.entity.CommandService
 import com.example.count_out.entity.Const.NOTIFICATION_EXTRA
 import com.example.count_out.entity.Const.NOTIFICATION_ID
-import com.example.count_out.entity.DataForServ
-import com.example.count_out.entity.DataForUI
 import com.example.count_out.entity.MessageApp
 import com.example.count_out.entity.RunningState
 import com.example.count_out.entity.router.Router
+import com.example.count_out.entity.ui.DataForServ
+import com.example.count_out.entity.ui.DataForUI
 import com.example.count_out.helpers.NotificationHelper
 import com.example.count_out.service_count_out.bluetooth.Bluetooth
 import com.example.count_out.service_count_out.location.Site
@@ -33,6 +35,7 @@ import javax.inject.Singleton
 class CountOutService @Inject constructor(): Service() {
 
     private lateinit var router: Router
+    private lateinit var workout: WorkoutDB
     @Inject lateinit var notificationHelper: NotificationHelper
     @Inject lateinit var messageApp: MessageApp
     @Inject lateinit var ble: Bluetooth
@@ -63,10 +66,12 @@ class CountOutService @Inject constructor(): Service() {
             CommandService.CLEAR_CACHE_BLE->{ ble.onClearCacheBLE() }
             CommandService.START_LOCATION->{ }
             CommandService.STOP_LOCATION->{ }
+            CommandService.SAVE_TRAINING -> { saveTraining()}
+            CommandService.NOT_SAVE_TRAINING -> { notSaveTraining()}
         }
     }
 
-    fun startCountOutService(dataForServ: DataForServ, callBack: ()->Unit): DataForUI{
+    fun startCountOutService(dataForServ: DataForServ, callBack: ()->Unit): DataForUI {
         router = Router(dataForServ)
         startForegroundService()
         notificationUpdate()
@@ -105,16 +110,24 @@ class CountOutService @Inject constructor(): Service() {
             notificationHelper.updateNotification(router.dataForNotification.value, router.dataFromWork.runningState.value)
         }
         if (router.dataForUI.runningState.value == RunningState.Stopped){
-            router.dataFromWork.runningState.value = RunningState.Started
-            notificationHelper.updateNotification(router.dataForNotification.value, router.dataFromWork.runningState.value)
-            router.dataFromWork.nextSet.value = router.dataForWork.getSet(0)
-            lg("#################### Start Service Work #################### ")
-            startWriteBase()
-            work.start( router.dataForWork, router.dataFromWork )
+            router.dataForWork.training.value?.let { training->
+                workout = WorkoutDB(timeStart = SystemClock.elapsedRealtime(), trainingId = training.idTraining)
+                router.dataFromWork.runningState.value = RunningState.Started
+                notificationHelper.updateNotification(router.dataForNotification.value, router.dataFromWork.runningState.value)
+                router.dataFromWork.nextSet.value = router.dataForWork.getSet(0)
+                router.dataForWork.training.value?.let { workout.formTraining(it) }
+                lg("#################### Start Service Work #################### ")
+                startWriteBase()
+                work.start( router.dataForWork, router.dataFromWork )
+            }
         }
     }
     private fun stopWork(){
         lg("#################### Stop Service Work #################### ")
+        workout.latitude = router.dataFromSite.coordinate.value?.latitude ?: 0.0
+        workout.longitude = router.dataFromSite.coordinate.value?.longitude ?: 0.0
+        workout.address = site.getAddressFromLocation(workout.latitude,workout.longitude)
+        workout.timeEnd = SystemClock.elapsedRealtime()
         router.dataFromWork.runningState.value = RunningState.Stopped
         stopWriteBase()
     }
@@ -130,5 +143,12 @@ class CountOutService @Inject constructor(): Service() {
         router.dataFromWork.runningState.value = RunningState.Paused
         notificationHelper.updateNotification(router.dataForNotification.value, router.dataFromWork.runningState.value)
 //        notificationHelper.setContinueButton()
+    }
+
+    private fun saveTraining(){
+        logging.saveTraining( workout )
+    }
+    private fun notSaveTraining(){
+        logging.notSaveTraining()
     }
 }

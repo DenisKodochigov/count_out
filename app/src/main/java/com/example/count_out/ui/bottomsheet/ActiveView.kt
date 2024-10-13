@@ -32,7 +32,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.example.count_out.R
 import com.example.count_out.data.room.tables.ActivityDB
-import com.example.count_out.entity.Activity
+import com.example.count_out.entity.workout.Activity
 import com.example.count_out.entity.TypeKeyboard
 import com.example.count_out.ui.dialog.ChangeColorSectionDialog
 import com.example.count_out.ui.screens.settings.SettingScreenState

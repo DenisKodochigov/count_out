@@ -1,20 +1,36 @@
 package com.example.count_out.entity.workout
 
-import com.example.count_out.entity.Rainfall
+import com.example.count_out.entity.weather.Weather
 
 interface Workout {
     val idWorkout: Long
-    val name: String
     val trainingId: Long
     val training: Training?
     val isSelected: Boolean
+    val name: String
+    val address: String
+
+    val latitude: Double
+    val longitude: Double
 
     val temperature:Double
-    val rainfallId: Int
-    val rainfall: Rainfall
+    val relativeHumidity2m: Int
+    val apparentTemperature: Double
+    val precipitation: Double
+    val rain: Double
+    val showers: Double
+    val snowfall: Double
+    val weatherCode: Int
+    val cloudCover: Int
+    val pressureMsl: Double
+    val surfacePressure: Double
+    val windSpeed10m: Double
+    val windDirection10m: Int
+    val windGusts10m: Double
 
-    val timeStart: Int
-    val timeEnd: Int
+    val timeZone: String
+    val timeStart: Long
+    val timeEnd: Long
 
     val averagePace: Double
     val maxPace: Double
@@ -33,4 +49,7 @@ interface Workout {
     val resultWeight :Double
     val resultAmount :Double
     val resultRange  :Double
+
+    fun formTraining(training: Training)
+    fun formWeather(weather: Weather)
 }

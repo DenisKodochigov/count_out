@@ -7,7 +7,10 @@ import android.os.Build
 import android.os.VibrationEffect
 import android.os.Vibrator
 import android.os.VibratorManager
+import com.example.count_out.R
 import java.text.SimpleDateFormat
+import java.time.DayOfWeek
+import java.time.Month
 import java.util.Date
 import java.util.Locale
 import java.util.TimeZone
@@ -40,6 +43,38 @@ fun vibrate(context: Context){
         context.getSystemService(VIBRATOR_SERVICE) as Vibrator
     }
     vibrateApp.vibrate(VibrationEffect.createOneShot(50, 10) )
+}
+val DayOfWeek.rus: Int get() = rusDayOfWeek(this.value)
+val Month.rus: Int get() = rusMonth(this.value)
+
+fun rusDayOfWeek(dayOfWeek: Int): Int {
+    return when(dayOfWeek){
+        1 -> R.string.monday
+        2 -> R.string.tuesday
+        3 -> R.string.wednesday
+        4 -> R.string.thursday
+        5 -> R.string.friday
+        6 -> R.string.saturday
+        7 -> R.string.sunday
+        else -> R.string.sunday
+    }
+}
+fun rusMonth(dayOfWeek: Int): Int {
+    return when(dayOfWeek){
+        1 -> R.string.january
+        2 -> R.string.february
+        3 -> R.string.march
+        4 -> R.string.april
+        5 -> R.string.may
+        6 -> R.string.june
+        7 -> R.string.july
+        8 -> R.string.august
+        9 -> R.string.september
+        10 -> R.string.october
+        11 -> R.string.november
+        12 -> R.string.december
+        else -> R.string.december
+    }
 }
 
 //class TestTTSFile @Inject constructor(val context: Context, val speechManager: SpeechManager) {

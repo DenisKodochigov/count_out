@@ -1,7 +1,12 @@
-package com.example.count_out.entity
+package com.example.count_out.entity.ui
 
+import com.example.count_out.entity.ConnectState
+import com.example.count_out.entity.RunningState
+import com.example.count_out.entity.TickTime
 import com.example.count_out.entity.bluetooth.DeviceUI
 import com.example.count_out.entity.router.Buffer
+import com.example.count_out.entity.workout.Coordinate
+import com.example.count_out.entity.workout.MessageWorkOut
 import com.example.count_out.entity.workout.Set
 import kotlinx.coroutines.flow.MutableStateFlow
 

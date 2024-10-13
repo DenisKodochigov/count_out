@@ -19,7 +19,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.example.count_out.R
 import com.example.count_out.data.room.tables.SpeechDB
 import com.example.count_out.data.room.tables.SpeechKitDB
-import com.example.count_out.entity.BottomSheetInterface
+import com.example.count_out.entity.ui.BottomSheetInterface
 import com.example.count_out.entity.workout.Exercise
 import com.example.count_out.entity.workout.Round
 import com.example.count_out.entity.workout.Set

@@ -1,4 +1,4 @@
-package com.example.count_out.entity
+package com.example.count_out.entity.ui
 
 data class ListActivityForExecute(
     val roundNameId: Int = 0,

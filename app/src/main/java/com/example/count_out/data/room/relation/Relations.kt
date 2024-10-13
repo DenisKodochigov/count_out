@@ -10,10 +10,10 @@ import com.example.count_out.data.room.tables.SpeechDB
 import com.example.count_out.data.room.tables.SpeechKitDB
 import com.example.count_out.data.room.tables.TrainingDB
 import com.example.count_out.domain.toNumeric
-import com.example.count_out.entity.Activity
+import com.example.count_out.entity.workout.Activity
 import com.example.count_out.entity.workout.Exercise
 import com.example.count_out.entity.workout.Set
-import com.example.count_out.entity.SpeechKit
+import com.example.count_out.entity.speech.SpeechKit
 
 data class SpeechKitRel(
     @Embedded val speechKitDB: SpeechKitDB,
@@ -22,7 +22,7 @@ data class SpeechKitRel(
     @Relation (parentColumn = "idBeforeEnd", entityColumn = "idSpeech", entity = SpeechDB::class) val beforeEnd: SpeechDB?,
     @Relation (parentColumn = "idAfterEnd", entityColumn = "idSpeech", entity = SpeechDB::class) val afterEnd: SpeechDB?,
 ){
-    fun toSpeechKit(): SpeechKit{
+    fun toSpeechKit(): SpeechKit {
         return SpeechKitDB(
             idSpeechKit = speechKitDB.idSpeechKit,
             idBeforeStart = speechKitDB.idBeforeStart,

@@ -1,7 +1,7 @@
 package com.example.count_out.entity.workout
 
 import com.example.count_out.entity.RoundType
-import com.example.count_out.entity.SpeechKit
+import com.example.count_out.entity.speech.SpeechKit
 
 interface Round {
     val idRound: Long

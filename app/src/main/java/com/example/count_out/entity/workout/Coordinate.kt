@@ -1,4 +1,4 @@
-package com.example.count_out.entity
+package com.example.count_out.entity.workout
 
 interface Coordinate {
     val latitude: Double
@@ -6,5 +6,6 @@ interface Coordinate {
     val altitude: Double
     val accuracy: Float
     val speed: Float
-    val time: Long
+    val distance: Float
+    val timeLocation: Long
 }

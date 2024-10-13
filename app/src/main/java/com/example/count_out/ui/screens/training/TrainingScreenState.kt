@@ -6,11 +6,11 @@ import androidx.compose.runtime.mutableStateOf
 import com.example.count_out.data.room.tables.ExerciseDB
 import com.example.count_out.data.room.tables.SetDB
 import com.example.count_out.data.room.tables.TrainingDB
-import com.example.count_out.entity.Activity
-import com.example.count_out.entity.BottomSheetInterface
+import com.example.count_out.entity.workout.Activity
+import com.example.count_out.entity.ui.BottomSheetInterface
 import com.example.count_out.entity.workout.Exercise
 import com.example.count_out.entity.workout.Set
-import com.example.count_out.entity.SpeechKit
+import com.example.count_out.entity.speech.SpeechKit
 import com.example.count_out.entity.workout.Training
 
 data class TrainingScreenState(
@@ -57,7 +57,7 @@ data class TrainingScreenState(
     @Stable var screenTextHeader: String = "",
     @Stable override var listSpeech: List<SpeechKit> = emptyList(),
     @Stable override var nameSection: String = "",
-    @Stable override var onConfirmationSpeech: (SpeechKit, Any?) -> Unit = {_,_ ->},
+    @Stable override var onConfirmationSpeech: (SpeechKit, Any?) -> Unit = { _, _ ->},
     @Stable override var item: Any? = null,
     @Stable override var onDismissSpeech: () -> Unit = {},
 ): BottomSheetInterface

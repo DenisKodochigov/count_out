@@ -5,7 +5,7 @@ import androidx.compose.runtime.Stable
 import androidx.compose.runtime.mutableStateOf
 import com.example.count_out.data.room.tables.ActivityDB
 import com.example.count_out.data.room.tables.SettingDB
-import com.example.count_out.entity.Activity
+import com.example.count_out.entity.workout.Activity
 import com.example.count_out.entity.ConnectState
 import com.example.count_out.entity.bluetooth.DeviceUI
 
@@ -36,8 +36,16 @@ data class SettingScreenState(
     @Stable val onStartScanBLE: () ->Unit = {},
     @Stable val onStopScanBLE: () ->Unit = {},
 
-    @Stable var onDismissAddActivity: () -> Unit = {},
-    @Stable var onConfirmAddActivity: (Activity) -> Unit = {},
-    @Stable var onDismissBLEScan: () -> Unit = {},
-    @Stable var onConfirmBLEScan: (String) -> Unit = {},
+    @Stable var onDismissAddActivity: () -> Unit = { showBottomSheetAddActivity.value = false },
+    @Stable var onConfirmAddActivity: (Activity) -> Unit = { activ ->
+        onAddActivity(activ)
+        showBottomSheetAddActivity.value = false
+    },
+    @Stable var onDismissBLEScan: () -> Unit = {
+        onStopScanBLE()
+        showBottomSheetBLE.value = false },
+    @Stable var onConfirmBLEScan: (String) -> Unit = { addr->
+        onSelectDevice(addr)
+        showBottomSheetBLE.value = false
+    },
 )

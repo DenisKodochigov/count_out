@@ -203,7 +203,6 @@ import com.example.count_out.ui.theme.shapes
             .size(Dimen.sizeIconLarge)
             .clickable { onClick() })
 }
-
 @Composable fun IconSingleLarge(image: ImageVector){
     Icon(imageVector = image, contentDescription = "", modifier = Modifier.size(Dimen.sizeIconLarge))
 }

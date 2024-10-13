@@ -1,10 +1,10 @@
 package com.example.count_out.entity.router
 
 import com.example.count_out.data.room.tables.TemporaryDB
-import com.example.count_out.entity.DataForServ
-import com.example.count_out.entity.DataForUI
 import com.example.count_out.entity.RunningState
-import com.example.count_out.entity.TemporaryBase
+import com.example.count_out.entity.ui.DataForServ
+import com.example.count_out.entity.ui.DataForUI
+import com.example.count_out.entity.workout.TemporaryBase
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -36,6 +36,8 @@ class Router(private val dataForServ: DataForServ) {
 
             speakingSet = dataFromWork.speakingSet,
             nextSet = dataFromWork.nextSet,
+            rest = dataFromWork.rest,
+            activityId = dataFromWork.activityId,
             message = dataFromWork.message,
             flowTick = dataFromWork.flowTick,
             runningState = dataFromWork.runningState,
@@ -62,7 +64,7 @@ class Router(private val dataForServ: DataForServ) {
     private fun initDataForSite(dataForServ: DataForServ): DataForSite{
         return DataForSite(site = "", state = MutableStateFlow(RunningState.Stopped))
     }
-    private fun initDataForUI(buffer: Buffer): DataForUI{
+    private fun initDataForUI(buffer: Buffer): DataForUI {
         return DataForUI(
             speakingSet = buffer.speakingSet,
             runningState = buffer.runningState,
@@ -74,7 +76,7 @@ class Router(private val dataForServ: DataForServ) {
         sendDataToNotification()
     }
 
-    fun sendDataToBase(){
+    private fun sendDataToBase(){
         CoroutineScope(Dispatchers.Default).launch {
             while (true){
                 if (buffer.runningState.value == RunningState.Started) {
@@ -82,12 +84,14 @@ class Router(private val dataForServ: DataForServ) {
                         latitude = buffer.coordinate.value?.latitude ?: 0.0,
                         longitude = buffer.coordinate.value?.longitude ?: 0.0,
                         altitude = buffer.coordinate.value?.altitude ?: 0.0,
-                        time = buffer.coordinate.value?.time ?: 0,
+                        timeLocation = buffer.coordinate.value?.timeLocation ?: 0,
                         accuracy = buffer.coordinate.value?.accuracy ?: 0f,
                         speed = buffer.coordinate.value?.speed ?: 0f,
                         heartRate = buffer.heartRate.value,
                         idTraining = dataForWork.training.value?.idTraining ?: 0,
-                        idSet = dataForWork.indexSet.toLong(),
+                        idSet = buffer.speakingSet.value?.idSet ?: 0,
+                        rest = buffer.rest.value ?: 0,
+                        activityId = buffer.activityId.value ?: 0,
                         runningSet = if (buffer.speakingSet.value != null) 1 else 0,
                     )
                 }
@@ -95,7 +99,7 @@ class Router(private val dataForServ: DataForServ) {
             }
         }
     }
-    fun sendDataToUi(){
+    private fun sendDataToUi(){
         CoroutineScope(Dispatchers.Default).launch {
             while (true){
                 if (buffer.runningState.value == RunningState.Started) { dataForUI.setWork(buffer) }
@@ -104,7 +108,7 @@ class Router(private val dataForServ: DataForServ) {
             }
         }
     }
-    fun sendDataToNotification(){
+    private fun sendDataToNotification(){
         CoroutineScope(Dispatchers.Default).launch {
             while (true){
                 if (buffer.runningState.value == RunningState.Started) {

@@ -6,7 +6,7 @@ import androidx.room.PrimaryKey
 import com.example.count_out.entity.workout.Exercise
 import com.example.count_out.entity.workout.Round
 import com.example.count_out.entity.RoundType
-import com.example.count_out.entity.SpeechKit
+import com.example.count_out.entity.speech.SpeechKit
 
 @Entity(tableName = "tb_round")
 data class RoundDB(

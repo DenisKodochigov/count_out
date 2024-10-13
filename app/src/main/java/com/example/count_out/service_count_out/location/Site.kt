@@ -2,6 +2,9 @@ package com.example.count_out.service_count_out.location
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.location.Address
+import android.location.Geocoder
+import android.os.Build
 import android.os.Looper
 import com.example.count_out.data.room.tables.TemporaryDB
 import com.example.count_out.entity.router.DataForSite
@@ -34,7 +37,7 @@ class Site @Inject constructor(val context: Context, val permission: PermissionA
                 latitude = location.latitude,
                 longitude = location.longitude,
                 altitude = location.altitude,
-                time = location.time,
+                timeLocation = location.time,
                 accuracy = location.accuracy,
                 speed = location.speed
             )
@@ -46,5 +49,19 @@ class Site @Inject constructor(val context: Context, val permission: PermissionA
     @SuppressLint("MissingPermission")
     fun stop(){
         if(permission.checkLocation()) fusedClient.removeLocationUpdates(locationListener)
+    }
+    fun getAddressFromLocation(latitude: Double, longitude: Double): String{
+        val geocoder = Geocoder(context)
+        var list: MutableList<Address>? = mutableListOf()
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            geocoder.getFromLocation(latitude, longitude, 1
+            ) { addresses -> list = addresses }
+        } else {
+            list = geocoder.getFromLocation(latitude, longitude, 1)
+        }
+        val address = if (list.isNullOrEmpty()) "" else {
+            list!![0].locality + ", " + list!![0].countryName
+        }
+        return address
     }
 }

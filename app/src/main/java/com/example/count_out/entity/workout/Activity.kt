@@ -1,4 +1,4 @@
-package com.example.count_out.entity
+package com.example.count_out.entity.workout
 
 interface Activity {
     val idActivity: Long

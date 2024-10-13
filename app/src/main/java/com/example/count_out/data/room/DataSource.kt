@@ -1,6 +1,7 @@
 package com.example.count_out.data.room
 
 import com.example.count_out.data.room.tables.ActivityDB
+import com.example.count_out.data.room.tables.CountDB
 import com.example.count_out.data.room.tables.ExerciseDB
 import com.example.count_out.data.room.tables.RoundDB
 import com.example.count_out.data.room.tables.SetDB
@@ -9,14 +10,15 @@ import com.example.count_out.data.room.tables.SpeechDB
 import com.example.count_out.data.room.tables.SpeechKitDB
 import com.example.count_out.data.room.tables.TemporaryDB
 import com.example.count_out.data.room.tables.TrainingDB
-import com.example.count_out.entity.Activity
+import com.example.count_out.data.room.tables.WorkoutDB
 import com.example.count_out.entity.Const.MODE_DATABASE
 import com.example.count_out.entity.RoundType
-import com.example.count_out.entity.SpeechKit
-import com.example.count_out.entity.TemporaryBase
+import com.example.count_out.entity.speech.SpeechKit
+import com.example.count_out.entity.workout.Activity
 import com.example.count_out.entity.workout.Exercise
 import com.example.count_out.entity.workout.Round
 import com.example.count_out.entity.workout.Set
+import com.example.count_out.entity.workout.TemporaryBase
 import com.example.count_out.entity.workout.Training
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -152,7 +154,7 @@ class DataSource @Inject constructor(private val dataDao: DataDao) {
         dataDao.delSpeech(speechKit.idAfterEnd)
         dataDao.delSpeechKit(speechKit.idSpeechKit)
     }
-    fun updateSpeechKit(speechKit: SpeechKitDB): SpeechKit{
+    fun updateSpeechKit(speechKit: SpeechKitDB): SpeechKit {
         speechKit.idBeforeStart = dataDao.updateSpeech(speechKit.beforeStart as SpeechDB).toLong()
         speechKit.idAfterStart = dataDao.updateSpeech(speechKit.afterStart as SpeechDB).toLong()
         speechKit.idBeforeEnd = dataDao.updateSpeech(speechKit.beforeEnd as SpeechDB).toLong()
@@ -315,5 +317,25 @@ class DataSource @Inject constructor(private val dataDao: DataDao) {
 
     fun writeTemporaryData(dataForBase: TemporaryBase) {
         dataDao.addRecordMetric(dataForBase as TemporaryDB)
+    }
+
+    fun clearTemporaryData() {
+        dataDao.clearTemporaryData()
+    }
+
+    fun saveTraining(workout: WorkoutDB) {
+        val step = 50
+        val workoutId = dataDao.addWorkout(workout)
+        val countRecord = dataDao.countTemporary()
+        val listCount: MutableList<CountDB> = mutableListOf()
+
+        for ( offset in 0..countRecord step step){
+            dataDao.selectNRecord( step, offset).forEach { temporary->
+                listCount.add(CountDB().add(workoutId,temporary))
+            }
+            dataDao.addCounts(listCount)
+            listCount.clear()
+        }
+        clearTemporaryData()
     }
 }

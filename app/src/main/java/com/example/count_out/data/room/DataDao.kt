@@ -2,6 +2,7 @@ package com.example.count_out.data.room
 
 import androidx.room.Dao
 import androidx.room.Insert
+import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Transaction
 import androidx.room.Update
@@ -12,6 +13,7 @@ import com.example.count_out.data.room.relation.SetRel
 import com.example.count_out.data.room.relation.SpeechKitRel
 import com.example.count_out.data.room.relation.TrainingRel
 import com.example.count_out.data.room.tables.ActivityDB
+import com.example.count_out.data.room.tables.CountDB
 import com.example.count_out.data.room.tables.ExerciseDB
 import com.example.count_out.data.room.tables.RoundDB
 import com.example.count_out.data.room.tables.SetDB
@@ -20,6 +22,7 @@ import com.example.count_out.data.room.tables.SpeechDB
 import com.example.count_out.data.room.tables.SpeechKitDB
 import com.example.count_out.data.room.tables.TemporaryDB
 import com.example.count_out.data.room.tables.TrainingDB
+import com.example.count_out.data.room.tables.WorkoutDB
 
 @Dao
 interface DataDao {
@@ -147,4 +150,19 @@ interface DataDao {
     //Temporary record training
     @Insert
     fun addRecordMetric(item: TemporaryDB): Long
+
+    @Query("DELETE FROM tb_temporary")
+    fun clearTemporaryData()
+
+    @Query("SELECT COUNT(id) FROM tb_temporary")
+    fun countTemporary(): Int
+
+    @Query("SELECT * FROM tb_temporary LIMIT :limit OFFSET :offset")
+    fun selectNRecord(limit: Int, offset: Int): List<TemporaryDB>
+
+    @Insert
+    fun addWorkout(workout: WorkoutDB): Long
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun addCounts(objects: List<CountDB>)
 }
