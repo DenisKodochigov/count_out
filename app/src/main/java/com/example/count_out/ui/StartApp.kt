@@ -44,10 +44,10 @@ fun StartApp() {
                     onTabSelection = { newScreen -> navController.navigateToScreen(newScreen.route) }
                 )
             },
-            floatingActionButton = {
-                if (currentScreen.showFab) {
-                    ExtendedFAB(textId =  currentScreen.textFABId, onClick = currentScreen.onClickFAB) }
-            },
+//            floatingActionButton = {
+//                if (currentScreen.showFab) {
+//                    ExtendedFAB(textId =  currentScreen.textFABId, onClick = currentScreen.onClickFAB) }
+//            },
             floatingActionButtonPosition = FabPosition.End,
             content = { innerPadding ->
                 NavHostApp(navController = navController, modifier = Modifier.padding(innerPadding))

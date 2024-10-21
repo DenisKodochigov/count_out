@@ -32,7 +32,7 @@ object TrainingsDestination : ScreenDestination {
     override val iconText = R.string.trainings_
     override val pictureDay = 0
     override val pictureNight = 0
-    override val showFab: Boolean = true
+    override val showFab: Boolean = false
     override var textFABId = R.string.training
     override var onClickFAB: () -> Unit = {}
 }
