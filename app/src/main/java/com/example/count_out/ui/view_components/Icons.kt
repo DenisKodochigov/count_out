@@ -1,5 +1,8 @@
 package com.example.count_out.ui.view_components
 
+import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.animateContentSize
+import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.RepeatMode
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.repeatable
@@ -10,6 +13,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -25,6 +29,7 @@ import androidx.compose.material.icons.filled.GraphicEq
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -36,15 +41,23 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.clearAndSetSemantics
+import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import com.example.count_out.R
+import com.example.count_out.entity.Const.TAB_FADE_IN_ANIMATION_DELAY
+import com.example.count_out.entity.Const.TAB_FADE_IN_ANIMATION_DURATION
+import com.example.count_out.entity.Const.TAB_FADE_OUT_ANIMATION_DURATION
 import com.example.count_out.ui.theme.Dimen
 import com.example.count_out.ui.theme.Dimen.sizeBetweenIcon
 import com.example.count_out.ui.theme.Dimen.sizeIcon
+import com.example.count_out.ui.theme.alumniReg12
 import com.example.count_out.ui.theme.colors3
 import com.example.count_out.ui.theme.mTypography
 import com.example.count_out.ui.theme.shapes
@@ -188,28 +201,27 @@ import com.example.count_out.ui.theme.shapes
         }
     }
 }
-@Composable fun IconSingle(image: ImageVector, onClick:()->Unit, idDescription: Int = 0){
+@Composable fun IconSingle(image: ImageVector, onClick:()->Unit = {}, idDescription: Int = 0){
     Icon(imageVector = image,
+        tint = colors3.onTertiaryContainer,
         contentDescription = if ( idDescription == 0) "" else stringResource(id = idDescription),
-        modifier = Modifier
-            .size(sizeIcon)
-            .clickable { onClick() })
+        modifier = Modifier.size(sizeIcon).clickable { onClick() })
 }
 
 @Composable fun IconSingleLarge(image: ImageVector, onClick:()->Unit){
     Icon(imageVector = image,
         contentDescription = "",
-        modifier = Modifier
-            .size(Dimen.sizeIconLarge)
-            .clickable { onClick() })
+        tint = colors3.onTertiaryContainer,
+        modifier = Modifier.size(Dimen.sizeIconLarge).clickable { onClick() })
 }
 @Composable fun IconSingleLarge(image: ImageVector){
-    Icon(imageVector = image, contentDescription = "", modifier = Modifier.size(Dimen.sizeIconLarge))
+    Icon(imageVector = image, contentDescription = "",
+        tint = colors3.onTertiaryContainer,
+        modifier = Modifier.size(Dimen.sizeIconLarge))
 }
 
 @Composable
-fun IconsCollapsing(onClick: ()->Unit, wrap: Boolean)
-{
+fun IconsCollapsing(onClick: ()->Unit, wrap: Boolean) {
     Icon(imageVector = if (wrap) Icons.Filled.ArrowDropUp else Icons.Filled.ArrowDropDown,
         contentDescription = "",
         modifier = Modifier
@@ -229,14 +241,48 @@ fun IconsCollapsing(onClick: ()->Unit, wrap: Boolean)
             .size(size = sizeIcon)
             .clickable { onClick() }
             .clip(shape = CircleShape)
-            .border(
-                width = 1.dp,
-                color = colors3.outline,
-                shape = CircleShape
-            )
+            .border(width = 1.dp, color = colors3.outline, shape = CircleShape)
         )
         TextApp(text = text, style = mTypography.titleMedium, modifier = Modifier.align(alignment = Alignment.Center))
     }
-
+}
+@Composable fun IconSubscribe(
+    text: String,
+    icon: ImageVector,
+    onSelected: () -> Unit = {},
+    selected: Boolean = false,
+){
+    val animationSpec = remember {
+        tween<Color>(
+            easing = LinearEasing,
+            delayMillis = TAB_FADE_IN_ANIMATION_DELAY,
+            durationMillis = if (selected) TAB_FADE_IN_ANIMATION_DURATION
+            else TAB_FADE_OUT_ANIMATION_DURATION
+        )
+    }
+    val colorIcon = MaterialTheme.colorScheme.onTertiaryContainer
+    val colorUnselected = Color(colorIcon.red, colorIcon.green, colorIcon.blue, colorIcon.alpha * 0.6f)
+    val iconColor by animateColorAsState(
+        label = "",
+        animationSpec = animationSpec,
+        targetValue = if (selected) colorIcon else colorUnselected,
+    )
+    Column(
+        verticalArrangement = Arrangement.Center,
+        modifier = Modifier,
+        horizontalAlignment = Alignment.CenterHorizontally)
+    {
+        IconButton( onClick = onSelected, modifier = Modifier.testTag(text)
+        ){
+            Icon(
+                imageVector = icon,
+                contentDescription = text,
+                tint = iconColor,
+                modifier = Modifier.fillMaxSize().animateContentSize()
+                    .clearAndSetSemantics { contentDescription = text }
+            )
+        }
+        TextApp(text = text, style = alumniReg12)
+    }
 }
 

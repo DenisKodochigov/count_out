@@ -74,7 +74,7 @@ class CountOutService @Inject constructor(): Service() {
     fun startCountOutService(dataForServ: DataForServ, callBack: ()->Unit): DataForUI {
         router = Router(dataForServ)
         startForegroundService()
-        notificationUpdate()
+        sendDataToNotification()
         callBack()
         startSite()
         router.sendData()
@@ -101,22 +101,17 @@ class CountOutService @Inject constructor(): Service() {
         router.dataForSite.state.value = RunningState.Stopped
     }
     private fun startWriteBase(){
-        logging.runLogging(router.dataForBase, router.dataFromWork.runningState)
-    }
+        logging.runLogging(router.dataForBase, router.dataFromWork.runningState) }
     private fun stopWriteBase(){ logging.stop()}
     private fun startWork(){
          if (router.dataForUI.runningState.value == RunningState.Paused){
             router.dataFromWork.runningState.value = RunningState.Started
-            notificationHelper.updateNotification( data = router.dataForNotification.value,
-                state = router.dataFromWork.runningState.value ?: RunningState.Binding )
         }
         if (router.dataForUI.runningState.value == RunningState.Stopped ||
             router.dataForUI.runningState.value == null){
             router.dataForWork.training.value?.let { training->
                 workout = WorkoutDB(timeStart = SystemClock.elapsedRealtime(), trainingId = training.idTraining)
                 router.dataFromWork.runningState.value = RunningState.Started
-                notificationHelper.updateNotification( data = router.dataForNotification.value,
-                    state = router.dataFromWork.runningState.value ?: RunningState.Binding )
                 router.dataFromWork.nextSet.value = router.dataForWork.getSet(0)
                 router.dataForWork.training.value?.let { workout.formTraining(it) }
                 lg("#################### Start Service Work #################### ")
@@ -134,12 +129,11 @@ class CountOutService @Inject constructor(): Service() {
         router.dataFromWork.runningState.value = RunningState.Stopped
         stopWriteBase()
     }
-    private fun notificationUpdate(){
+    private fun sendDataToNotification(){
         CoroutineScope(Dispatchers.Default).launch {
             router.dataForNotification.collect{
                 notificationHelper.updateNotification( data = it,
-                    state = router.dataFromWork.runningState.value ?: RunningState.Binding )
-            }
+                    state = router.dataFromWork.runningState.value ?: RunningState.Binding ) }
         }
     }
     private fun pauseWork(){

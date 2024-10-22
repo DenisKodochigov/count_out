@@ -11,7 +11,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -34,17 +33,14 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.count_out.R
-import com.example.count_out.data.room.tables.RoundDB
-import com.example.count_out.data.room.tables.TrainingDB
-import com.example.count_out.entity.RoundType
 import com.example.count_out.entity.workout.Training
 import com.example.count_out.navigation.ScreenDestination
 import com.example.count_out.ui.theme.Dimen
-import com.example.count_out.ui.theme.Dimen.sizeIconLarge
 import com.example.count_out.ui.theme.elevationTraining
 import com.example.count_out.ui.theme.getIdImage
 import com.example.count_out.ui.theme.mTypography
-import com.example.count_out.ui.view_components.IconSingleLarge
+import com.example.count_out.ui.view_components.IconSingle
+import com.example.count_out.ui.view_components.IconSubscribe
 import com.example.count_out.ui.view_components.ItemSwipe
 import com.example.count_out.ui.view_components.TextApp
 
@@ -79,19 +75,7 @@ import com.example.count_out.ui.view_components.TextApp
     Column(
         modifier = Modifier.fillMaxSize()) {
         TrainingList(uiState, modifier = Modifier.weight(1f))
-        ItemLast(
-            item = TrainingDB(
-                idTraining = -1,
-                name = stringResource(R.string.no_plan_training),
-                rounds = listOf(
-                    RoundDB(idRound = -1, trainingId = -1, roundType = RoundType.UP),
-                    RoundDB(idRound = -1, trainingId = -1, roundType = RoundType.OUT),
-                    RoundDB(idRound = -1, trainingId = -1, roundType = RoundType.DOWN)
-                )
-            ),
-            uiState = uiState,
-            modifier = Modifier
-        )
+        ItemLast( uiState = uiState )
     }
 }
 
@@ -122,7 +106,7 @@ import com.example.count_out.ui.view_components.TextApp
             modifier = modifier.fillMaxWidth().padding(vertical = 6.dp)
         ){
             Spacer(modifier = Modifier.width(12.dp))
-            IconRunTraining(item = item, uiState = uiState, modifier = Modifier.size(sizeIconLarge))
+            IconRunTraining(idTraining = item.idTraining, uiState = uiState)
             Spacer(modifier = Modifier.width(16.dp))
             TrainingInformation(item = item, uiState = uiState, modifier = Modifier.weight(1f))
             Spacer(modifier = Modifier.width(Dimen.width6))
@@ -131,30 +115,30 @@ import com.example.count_out.ui.view_components.TextApp
         }
     }
 }
-@Composable fun ItemLast(item: Training, uiState: TrainingsScreenState, modifier: Modifier) {
+@Composable fun ItemLast( uiState: TrainingsScreenState) {
     Row(
         horizontalArrangement = Arrangement.Center,
         verticalAlignment = Alignment.CenterVertically,
-        modifier = modifier.fillMaxWidth()
+        modifier = Modifier.fillMaxWidth()
     ){
         Spacer(modifier = Modifier.weight(1f))
-        IconRunTraining(item = item, uiState = uiState, modifier = Modifier.size(sizeIconLarge))
+        IconRunTraining(idTraining = 1, uiState = uiState)
         Spacer(modifier = Modifier.weight(1f))
-        IconAddTraining( uiState = uiState, modifier = Modifier.size(sizeIconLarge))
+        IconAddTraining( uiState = uiState)
         Spacer(modifier = Modifier.weight(1f))
     }
 }
-@Composable fun IconRunTraining(item: Training, uiState: TrainingsScreenState, modifier: Modifier = Modifier){
-    IconButton(onClick = { uiState.onStartWorkout(item.idTraining)}, modifier = modifier) {
-        IconSingleLarge(image = Icons.Default.PlayCircleOutline)}
+@Composable fun IconRunTraining(idTraining: Long, uiState: TrainingsScreenState){
+    IconSubscribe(text = "Write activity", icon = Icons.Default.PlayCircleOutline,
+        onSelected = { uiState.onStartWorkout(idTraining)})
 }
-@Composable fun IconAddTraining(uiState: TrainingsScreenState, modifier: Modifier = Modifier){
-    IconButton(onClick = {  uiState.onAddTraining()}, modifier = modifier) {
-        IconSingleLarge(image = Icons.Default.AddCircleOutline)}
+@Composable fun IconAddTraining(uiState: TrainingsScreenState){
+    IconSubscribe(text = "Add training", icon = Icons.Default.AddCircleOutline,
+        onSelected = { uiState.onAddTraining})
 }
 @Composable fun IconEnd(item: Training, uiState: TrainingsScreenState, modifier: Modifier = Modifier){
     IconButton(onClick = { uiState.onCopyTraining(item.idTraining)}, modifier = modifier) {
-        IconSingleLarge(image = Icons.Default.CopyAll) }
+        IconSingle(image = Icons.Default.CopyAll) }
 }
 @Composable fun TrainingInformation(item: Training, uiState: TrainingsScreenState, modifier: Modifier = Modifier) {
     Column (modifier = modifier.clickable { uiState.onSelectItem(item.idTraining) }){

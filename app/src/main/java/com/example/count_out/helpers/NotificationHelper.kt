@@ -70,7 +70,7 @@ class NotificationHelper @Inject constructor(private val context: Context)
         ).apply { description = NOTIFICATION_CHANNEL_DESCRIPTION }
         manager.createNotificationChannel(channel)
     }
-    fun build() = builderPause.build()
+    fun build() = builderStart.build()
     fun cancel(){ manager.cancel(NOTIFICATION_ID) }
     fun updateNotification(data: DataForNotification?, state: RunningState) {
         data?.let {
@@ -81,7 +81,7 @@ class NotificationHelper @Inject constructor(private val context: Context)
                     .notify(NOTIFICATION_ID, builderContinue.setContentText(contextText(it)).build())
                 RunningState.Stopped->manager
                     .notify(NOTIFICATION_ID, builderStart.setContentText(contextText(it)).build())
-                RunningState.Binding -> { }
+                RunningState.Binding -> {}
             }
         }
     }

@@ -36,16 +36,19 @@ data class DataForWork (
     }
 
     fun getExercise(): Exercise? {
-        return try {
-            getRound()?.exercise?.get(indexExercise)
-        } catch (e: Exception) {
-            lg(" ERROR getExercise: $e")
-            training.value?.let { trng ->
-                if (trng.rounds.count() - 1 < indexRound) indexRound = trng.rounds.count() - 1
-                if (trng.rounds[indexRound].exercise.count() - 1 < indexExercise)
-                    indexExercise = trng.rounds[indexRound].exercise.count() - 1
-            }
-            training.value?.rounds?.get(indexRound)?.exercise?.get(indexExercise)
+        return getRound()?.exercise?.let {
+            if (it.isNotEmpty()) {
+                try { getRound()?.exercise?.get(indexExercise) }
+                catch (e: Exception) {
+                    lg(" ERROR getExercise: $e")
+                    training.value?.let { trng ->
+                        if (trng.rounds.count() - 1 < indexRound) indexRound = trng.rounds.count() - 1
+                        if (trng.rounds[indexRound].exercise.count() - 1 < indexExercise)
+                            indexExercise = trng.rounds[indexRound].exercise.count() - 1
+                    }
+                    training.value?.rounds?.get(indexRound)?.exercise?.get(indexExercise)
+                }
+            } else null
         }
     }
 

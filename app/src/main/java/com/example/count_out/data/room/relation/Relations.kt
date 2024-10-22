@@ -10,10 +10,10 @@ import com.example.count_out.data.room.tables.SpeechDB
 import com.example.count_out.data.room.tables.SpeechKitDB
 import com.example.count_out.data.room.tables.TrainingDB
 import com.example.count_out.domain.toNumeric
+import com.example.count_out.entity.speech.SpeechKit
 import com.example.count_out.entity.workout.Activity
 import com.example.count_out.entity.workout.Exercise
 import com.example.count_out.entity.workout.Set
-import com.example.count_out.entity.speech.SpeechKit
 
 data class SpeechKitRel(
     @Embedded val speechKitDB: SpeechKitDB,
@@ -123,7 +123,7 @@ data class TrainingRel(
 ){
     fun toTraining(): TrainingDB{
         var amountActivity = 0
-        this.rounds?.forEach { round-> amountActivity += (round.exercise?.size ?: -1) + 1 }
+        this.rounds?.forEach { round-> amountActivity += round.exercise?.count() ?:0 }
         return TrainingDB(
             idTraining = training.idTraining,
             isSelected = training.isSelected,

@@ -105,11 +105,32 @@ private fun createActivity( db: AppDatabase){
 private fun createSetting( db: AppDatabase){
     db.dataDao().addSetting(SettingDB(parameter = R.string.speech_description, value = 1))
 }
-private fun createTrainingPlansTesting( db: AppDatabase) {
 
+private fun createTrainingId0( db: AppDatabase) {
+    val idTraining = db.dataDao().addTraining(TrainingDB(name = "", idTraining = 0,
+        speechId = addSpeechKit(db, bs = "Начало тренировки", ast = "", be = "", ae = "Тренировка окончена",)))
+//Разминка
+    db.dataDao().addRound(RoundDB(trainingId = idTraining, roundType = RoundType.UP,
+        countRing = 1, speechId = addSpeechKit(db, bs = "", ast = "", be = "", ae = "",)))
+//Основная
+    val idRound = db.dataDao().addRound(RoundDB(trainingId = idTraining, roundType = RoundType.OUT, countRing = 1,
+        speechId = addSpeechKit(db, bs = "", ast = "", be = "", ae = "",)))
+    val idExercise = db.dataDao().addExercise(ExerciseDB(roundId = idRound, activityId = 1,
+        speechId = addSpeechKit(db, bs = "", ast = "", be = "", ae = "",)))
+    db.dataDao().addSet(
+        SetDB(exerciseId = idExercise, name = "", goal = GoalSet.DURATION, duration = 1440.0,
+            speechId = addSpeechKit(db, bs = "", ast = "", be = "", ae = "",)))
+//Заминка
+    db.dataDao().addRound(RoundDB(trainingId = idTraining, roundType = RoundType.DOWN, countRing = 1,
+        speechId = addSpeechKit(db, bs = "", ast = "", be = "", ae = "",)))
+    addRecordWorkout(db)
+    addRecordCount(db)
+}
+private fun createTrainingPlansTesting( db: AppDatabase) {
+    createTrainingId0( db )
     val rest = 10
     val reps = 3
-    val idTraining = db.dataDao().addTraining(TrainingDB(name = "Тестовая", idTraining = 1,
+    val idTraining = db.dataDao().addTraining(TrainingDB(name = "Тестовая",
         speechId = addSpeechKit(db, bs = "Начало тренировки", ast = "", be = "", ae = "Тренировка окончена",)))
 //Разминка
     var idRound = db.dataDao().addRound(RoundDB(trainingId = idTraining, roundType = RoundType.UP, countRing = 1,
@@ -148,22 +169,24 @@ private fun createTrainingPlansTesting( db: AppDatabase) {
     addRecordWorkout(db)
     addRecordCount(db)
 }
+
 private fun createTrainingPlansReal( db: AppDatabase) {
-    val idTraining = db.dataDao().addTraining(TrainingDB(name = "Зарядка", idTraining = 1,
+    createTrainingId0( db )
+    val idTraining = db.dataDao().addTraining(TrainingDB(name = "Зарядка",
         speechId = addSpeechKit(db, bs = "Начинаем", ast = "", be = "", ae = "Тренировка закончена.",)))
     workUp( db, idTraining)
     workOut( db, idTraining)
     workDown( db, idTraining)
 }
 private fun createTrainingPlansArm( db: AppDatabase) {
-    val idTraining = db.dataDao().addTraining(TrainingDB(name = "Зарядка. Руки", idTraining = 2,
+    val idTraining = db.dataDao().addTraining(TrainingDB(name = "Зарядка. Руки",
         speechId = addSpeechKit(db, bs = "Начинаем", ast = "", be = "", ae = "Тренировка закончена.",)))
     workUp( db, idTraining)
     workOutArm( db, idTraining)
     workDown( db, idTraining)
 }
 private fun createTrainingPlansLeg( db: AppDatabase){
-    val idTraining = db.dataDao().addTraining(TrainingDB(name = "Зарядка. Ноги", idTraining = 3,
+    val idTraining = db.dataDao().addTraining(TrainingDB(name = "Зарядка. Ноги",
         speechId = addSpeechKit(db, bs = "Начинаем ", ast = "", be = "", ae = "Тренировка закончена.",)))
     workUp( db, idTraining)
     workOutLeg( db, idTraining)
@@ -551,9 +574,10 @@ private fun addSpeechKit(db: AppDatabase, bs: String, ast: String, be: String, a
 private fun addRecordWorkout(db: AppDatabase){
     db.dataDao().addWorkout(
         WorkoutDB(
-            idWorkout = 1, trainingId = 1, isSelected = true,
+            trainingId = 1, isSelected = true,
             name = "", address = "Мурино, Россия",
-            latitude = 60.0564957, longitude = 30.4331601, timeZone = "Europe/Moscow", timeStart = 1042440587, timeEnd = 1042453270,
+            latitude = 60.0564957, longitude = 30.4331601,
+            timeZone = "Europe/Moscow", timeStart = 1042440587, timeEnd = 1042453270,
             averagePace = 0.0, maxPace = 0.0, minPace = 0.0,
             averageSpeed = 0.0,
             maxSpeed = 0.0,

@@ -33,7 +33,7 @@ interface DataDao {
     fun updateTraining(item: TrainingDB): Int
     @Transaction @Query("SELECT * FROM tb_trainings WHERE idTraining = :id")
     fun getTrainingRel(id: Long): TrainingRel
-    @Transaction @Query("SELECT * FROM tb_trainings")
+    @Transaction @Query("SELECT * FROM tb_trainings WHERE idTraining != 1")
     fun getTrainingsRel(): List<TrainingRel>
     @Query("DELETE FROM tb_trainings WHERE idTraining = :id")
     fun delTraining(id: Long)
