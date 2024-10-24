@@ -2,6 +2,8 @@ package com.example.count_out.data.datastore
 
 import androidx.datastore.core.Serializer
 import com.example.count_out.entity.bluetooth.BleDevSerializable
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import kotlinx.serialization.SerializationException
 import kotlinx.serialization.json.Json
 import java.io.InputStream
@@ -24,11 +26,13 @@ object BleDevSerializer : Serializer<BleDevSerializable>{
     }
 
     override suspend fun writeTo(t: BleDevSerializable, output: OutputStream) {
-        output.write(
-            Json.encodeToString(
-                serializer = BleDevSerializable.serializer(),
-                value = t
-            ).encodeToByteArray()
-        )
+        withContext(Dispatchers.IO) {
+            output.write(
+                Json.encodeToString(
+                    serializer = BleDevSerializable.serializer(),
+                    value = t
+                ).encodeToByteArray()
+            )
+        }
     }
 }

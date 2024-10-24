@@ -39,13 +39,13 @@ data class ExecuteWorkoutScreenState(
 
     @Stable var onDismissSaveTraining: (ExecuteWorkoutScreenState) -> Unit = { uiState ->
         uiState.showBottomSheetSaveTraining.value = false
-        notSaveTraining() },
+        notSaveTraining()
+    },
     @Stable var onConfirmASaveTraining: (ExecuteWorkoutScreenState) -> Unit = { uiState ->
         uiState.showBottomSheetSaveTraining.value = false
         saveTraining()
     },
 ){
-
     fun addMessage(messageWorkOut: MessageWorkOut):List<MessageWorkOut>{
         return messageWorkout.toMutableList().apply { this.add(messageWorkOut) }
     }
@@ -117,3 +117,5 @@ data class ExecuteWorkoutScreenState(
         return resultList
     }
 }
+
+

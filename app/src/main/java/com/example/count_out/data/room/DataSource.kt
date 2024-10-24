@@ -48,7 +48,7 @@ class DataSource @Inject constructor(private val dataDao: DataDao) {
         }
         return dataDao.getTrainingsRel().map { it.toTraining() }
     }
-    fun updateTraining(trainingDB: TrainingDB): Int = dataDao.updateTraining(trainingDB)
+//    fun updateTraining(trainingDB: TrainingDB): Int = dataDao.updateTraining(trainingDB)
     fun addTraining(): List<Training> {
         createTraining()
         return dataDao.getTrainingsRel().map { it.toTraining() }
@@ -78,7 +78,7 @@ class DataSource @Inject constructor(private val dataDao: DataDao) {
         return trainingId
     }
 //Round
-    fun updateRound(round: RoundDB): Int = dataDao.updateRound(round)
+//    fun updateRound(round: RoundDB): Int = dataDao.updateRound(round)
     fun getNameRound(roundId: Long): String = dataDao.getNameRound(roundId)
     fun getRound(roundId: Long): RoundDB = dataDao.getRoundRel(roundId).toRound()
     fun changeSequenceExercise( roundId: Long, from: Int, to: Int){
@@ -144,8 +144,8 @@ class DataSource @Inject constructor(private val dataDao: DataDao) {
         }
     }
 //Speech
-    fun addSpeech(speech: SpeechDB): Long = dataDao.addSpeech(speech)
-    fun updateSpeech(speech: SpeechDB): Int = dataDao.updateSpeech(speech)
+//    fun addSpeech(speech: SpeechDB): Long = dataDao.addSpeech(speech)
+//    fun updateSpeech(speech: SpeechDB): Int = dataDao.updateSpeech(speech)
 //SpeechKit
     private fun deleteSpeechKit(speechKit: SpeechKit){
         dataDao.delSpeech(speechKit.idBeforeStart)
@@ -228,9 +228,9 @@ class DataSource @Inject constructor(private val dataDao: DataDao) {
     fun getSettings(): List<SettingDB> = dataDao.getSettings()
     fun getSetting(parameter: Int) = dataDao.getSetting(parameter)
     fun updateSetting(item: SettingDB) = dataDao.getSettingId(dataDao.updateSetting(item).toLong())
-    fun addSetting(item: SettingDB): SettingDB{
-        return dataDao.getSettingId(dataDao.addSetting(item))
-    }
+//    fun addSetting(item: SettingDB): SettingDB{
+//        return dataDao.getSettingId(dataDao.addSetting(item))
+//    }
     fun updateDuration(duration: Pair<Long, Long>){
         dataDao.updateDuration(id = duration.first, duration = duration.second)
     }

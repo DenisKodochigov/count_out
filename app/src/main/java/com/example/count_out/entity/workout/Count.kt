@@ -1,7 +1,5 @@
 package com.example.count_out.entity.workout
 
-import com.example.count_out.data.room.tables.TemporaryDB
-
 interface Count: TemporaryBase {
     val idCount: Long
     val workoutId: Long
@@ -22,5 +20,5 @@ interface Count: TemporaryBase {
     val sensor2: Double
     val sensor3: Double
 
-    fun add(workoutId: Long, temporary: TemporaryDB): Count
+//    fun add(workoutId: Long, temporary: TemporaryDB): Count
 }

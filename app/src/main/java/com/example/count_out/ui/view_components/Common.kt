@@ -1,6 +1,5 @@
 package com.example.count_out.ui.view_components
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.focusable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
@@ -21,7 +20,6 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.RadioButtonDefaults
 import androidx.compose.material3.Text
@@ -29,7 +27,6 @@ import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.TextFieldDefaults.indicatorLine
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -60,47 +57,47 @@ import com.example.count_out.ui.theme.interLight12
 import com.example.count_out.ui.theme.interReg12
 import com.example.count_out.ui.theme.mTypography
 
-@Composable fun MyOutlinedTextFieldWithoutIcon(
-    modifier: Modifier,
-    enterValue: MutableState<String>,
-    typeKeyboard: TypeKeyboard,
-    label:  @Composable (() -> Unit)? = null,
-    keyboardActionsOnDone: (() -> Unit)? = null
-) {
-    val keyboardController = LocalSoftwareKeyboardController.current
-    val localFocusManager = LocalFocusManager.current
-    var enterText by remember { mutableStateOf(enterValue.value) }
+//@Composable fun MyOutlinedTextFieldWithoutIcon(
+//    modifier: Modifier,
+//    enterValue: MutableState<String>,
+//    typeKeyboard: TypeKeyboard,
+//    label:  @Composable (() -> Unit)? = null,
+//    keyboardActionsOnDone: (() -> Unit)? = null
+//) {
+//    val keyboardController = LocalSoftwareKeyboardController.current
+//    val localFocusManager = LocalFocusManager.current
+//    var enterText by remember { mutableStateOf(enterValue.value) }
+//
+//    OutlinedTextField(
+//        modifier = modifier.background(color = colors3.surface),
+//        value = enterText,
+//        singleLine = true,
+//        textStyle = mTypography.titleMedium,
+//        label = label,
+//        onValueChange = {
+//            enterText = it
+//            enterValue.value = it
+//        },
+//        keyboardOptions = keyBoardOpt(typeKeyboard),
+//        keyboardActions = KeyboardActions(
+//            onDone =
+//            {
+//                localFocusManager.clearFocus()
+//                enterValue.value = enterText
+//                enterText = ""
+//                keyboardActionsOnDone?.invoke()
+//                keyboardController?.hide()
+//            }
+//        ),
+//    )
+//}
 
-    OutlinedTextField(
-        modifier = modifier.background(color = colors3.surface),
-        value = enterText,
-        singleLine = true,
-        textStyle = mTypography.titleMedium,
-        label = label,
-        onValueChange = {
-            enterText = it
-            enterValue.value = it
-        },
-        keyboardOptions = keyBoardOpt(typeKeyboard),
-        keyboardActions = KeyboardActions(
-            onDone =
-            {
-                localFocusManager.clearFocus()
-                enterValue.value = enterText
-                enterText = ""
-                keyboardActionsOnDone?.invoke()
-                keyboardController?.hide()
-            }
-        ),
-    )
-}
-
-@Composable fun NameScreen(id: Int){
+//@Composable fun NameScreen(id: Int){
 //    Row(horizontalArrangement = Arrangement.Center,
 //        modifier = Modifier.padding(top=24.dp, bottom =12.dp).fillMaxWidth()){
 //        TextApp(text = stringResource(id = id), style = mTypography.headlineMedium)
 //    }
-}
+//}
 @Composable fun ButtonApp(
     text: String,
     onClick: () -> Unit,

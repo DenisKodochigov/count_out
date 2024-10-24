@@ -34,7 +34,6 @@ object Const {
 
     const val DURATION_SCREEN = 800
     const val DELAY_SCREEN = 200
-    const val INTERVAL_DELAY: Long = 100L
 
     const val TAB_FADE_IN_ANIMATION_DURATION = 150
     const val TAB_FADE_IN_ANIMATION_DELAY = 100
@@ -116,10 +115,6 @@ object Const {
             attributes[MANUFACTURE_NAME] = "Manufacture name"
             attributes[HEART_RATE_MEASUREMENT] = "Heart Rate Measurement"
             attributes[IO_TANK] = "ioTank"
-        }
-        fun lookup(uuid: String, defaultName: String): String {
-            val name = attributes.get(uuid)
-            return name ?: defaultName
         }
     }
 }

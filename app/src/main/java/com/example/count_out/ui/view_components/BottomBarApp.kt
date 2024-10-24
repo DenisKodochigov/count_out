@@ -2,10 +2,12 @@ package com.example.count_out.ui.view_components
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.runtime.Composable
@@ -28,14 +30,19 @@ fun BottomBarApp(
     onTabSelection: (ScreenDestination) -> Unit,
     modifier: Modifier = Modifier
 ){
-    BottomAppBar(
-        contentPadding = PaddingValues(0.dp),
-        tonalElevation = 6.dp,
-        modifier = modifier
-            .testTag(BOTTOM_APP_BAR)
-            .clip(shape = bottomBarShape),
-        content = { BottomBarContent( currentScreen = currentScreen, onTabSelection = onTabSelection )}
-    )
+    Box( modifier = Modifier.fillMaxWidth()){
+        BottomAppBar(
+            contentPadding = PaddingValues(0.dp),
+            tonalElevation = 6.dp,
+            modifier = modifier.padding(top = 16.dp)
+                .testTag(BOTTOM_APP_BAR)
+                .clip(shape = bottomBarShape),
+            content = { BottomBarContent( currentScreen = currentScreen, onTabSelection = onTabSelection )}
+        )
+//        Row(modifier = Modifier.align(alignment = Alignment.TopCenter)) {
+//            IconSingleLarge(image = Icons.Default.PlayCircleOutline, onClick = {  },)
+//        }
+    }
 }
 
 @Composable fun BottomBarContent(

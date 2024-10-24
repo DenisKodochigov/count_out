@@ -28,19 +28,16 @@ import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.MultiplePermissionsState
 import com.google.accompanist.permissions.PermissionState
 import com.google.accompanist.permissions.rememberMultiplePermissionsState
-
-class CodeLabLocationPermission {
-}
-
-@OptIn(ExperimentalPermissionsApi::class)
-@Composable
-fun LocationPermissions(text: String, rationale: String, locationState: PermissionState) {
-    LocationPermissions(
-        text = text,
-        rationale = rationale,
-        locationState = rememberMultiplePermissionsState(permissions = listOf(locationState.permission))
-    )
-}
+//
+//@OptIn(ExperimentalPermissionsApi::class)
+//@Composable
+//fun LocationPermissions(text: String, rationale: String, locationState: PermissionState) {
+//    LocationPermissions(
+//        text = text,
+//        rationale = rationale,
+//        locationState = rememberMultiplePermissionsState(permissions = listOf(locationState.permission))
+//    )
+//}
 
 /**
  * Simple screen that manages the location permission state

@@ -19,7 +19,6 @@ enum class ConnectState(val strId: Int) {
 enum class StateBleScanner { RUNNING, END, }
 enum class StateBleConnecting { NONE, GET_REMOTE_DEVICE, CONNECT_GAT}
 enum class RunningState { Binding, Started, Paused, Stopped }
-enum class BleTask{ NONE, CONNECT_DEVICE, NOTIFY_CHARACTERISTIC }
 enum class RoundType(val strId: Int, var amount: Int, var duration: Int){
     UP (R.string.work_up,0,0),
     OUT (R.string.work_out,0,0),
@@ -27,7 +26,7 @@ enum class RoundType(val strId: Int, var amount: Int, var duration: Int){
 }
 enum class GoalSet(val id: Int){ DISTANCE(1), DURATION(2), COUNT(3), COUNT_GROUP(4), }
 enum class ErrorBleService{ NONE, GET_REMOTE_DEVICE, CONNECT_DEVICE, NOT_CONNECT_GATT, DISCOVER_SERVICE }
-enum class UnitTime(val arg: Int) { Day(1), Week(2), Month(3), Year(4)}
+enum class UnitTime(val arg: Int) { Days(1), Week(2), Month(3), Year(4)}
 enum class CommandService{
     START_WORK,
     STOP_WORK,

@@ -26,14 +26,14 @@ data class DataForUI (
     val coordinate: MutableStateFlow<Coordinate?> = MutableStateFlow( null),
     var cancelCoroutineWork: ()-> Unit = {}
 ){
-    fun empty(){
-        flowTick.value = TickTime()
-        speakingSet.value = null
-        nextSet.value = null
-        durationSpeech.value = Pair(0,0)
-        runningState.value = RunningState.Stopped
-        heartRate.value = 0
-    }
+//    fun empty(){
+//        flowTick.value = TickTime()
+//        speakingSet.value = null
+//        nextSet.value = null
+//        durationSpeech.value = Pair(0,0)
+//        runningState.value = RunningState.Stopped
+//        heartRate.value = 0
+//    }
     fun setWork(buffer: Buffer){
         this.flowTick.value = buffer.flowTick.value
         this.message.value = buffer.message.value

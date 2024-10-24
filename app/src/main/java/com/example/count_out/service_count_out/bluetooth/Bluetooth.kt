@@ -2,7 +2,6 @@ package com.example.count_out.service_count_out.bluetooth
 
 import android.bluetooth.BluetoothAdapter
 import com.example.count_out.R
-import com.example.count_out.entity.BleTask
 import com.example.count_out.entity.ConnectState
 import com.example.count_out.entity.ErrorBleService
 import com.example.count_out.entity.MessageApp
@@ -50,7 +49,6 @@ class Bluetooth @Inject constructor(
         if (state.stateBleScanner == StateBleScanner.RUNNING) stopScanning(dataFromBle)
 
         dataFromBle.connectingState.value = ConnectState.CONNECTING
-        state.task = BleTask.CONNECT_DEVICE
         getRemoteDevice(bluetoothAdapter, dataForBle, dataFromBle, state)
         sendHeartRate(bleConnecting.heartRate, dataFromBle)
         if ( dataForBle.currentConnection != null ) {

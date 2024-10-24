@@ -7,7 +7,6 @@ import android.location.Geocoder
 import android.os.Build
 import android.os.Looper
 import com.example.count_out.data.room.tables.TemporaryDB
-import com.example.count_out.entity.router.DataForSite
 import com.example.count_out.entity.router.DataFromSite
 import com.example.count_out.permission.PermissionApp
 import com.google.android.gms.location.Granularity
@@ -23,7 +22,7 @@ class Site @Inject constructor(val context: Context, val permission: PermissionA
     private val fusedClient = LocationServices.getFusedLocationProviderClient(context)
 
     @SuppressLint("MissingPermission")
-    fun start(dataForSite: DataForSite, dataFromSite: DataFromSite){
+    fun start( dataFromSite: DataFromSite){
         locationRequest = LocationRequest.Builder(1000L).apply {
             this.setGranularity(Granularity.GRANULARITY_FINE)
 //            this.setMinUpdateDistanceMeters(1F)

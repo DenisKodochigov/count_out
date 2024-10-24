@@ -45,7 +45,6 @@ import com.example.count_out.ui.theme.mTypography
 import com.example.count_out.ui.view_components.AnimateIcon
 import com.example.count_out.ui.view_components.IconSingle
 import com.example.count_out.ui.view_components.IconsCollapsing
-import com.example.count_out.ui.view_components.NameScreen
 import com.example.count_out.ui.view_components.SwitchApp
 import com.example.count_out.ui.view_components.TextApp
 
@@ -71,7 +70,7 @@ import com.example.count_out.ui.view_components.TextApp
             .padding(8.dp)
             .fillMaxSize(),
         content = {
-            NameScreen(id = R.string.title_setting_screen)
+//            NameScreen(id = R.string.title_setting_screen)
             ActivitySection(uiState = uiState)
             OtherSettings(uiState = uiState)
         }

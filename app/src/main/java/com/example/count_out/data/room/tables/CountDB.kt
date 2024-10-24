@@ -25,7 +25,7 @@ data class CountDB(
     override var sensor2: Double = 0.0,
     override var sensor3: Double = 0.0,
 ): Count {
-    override fun add(workoutId: Long, temporary: TemporaryDB): CountDB{
+    fun add(workoutId: Long, temporary: TemporaryDB): CountDB{
         return  CountDB(
             workoutId = workoutId,
             latitude = temporary.latitude,

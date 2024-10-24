@@ -55,7 +55,7 @@ import com.example.count_out.ui.view_components.TextApp
             UnitTime.Year -> HistoryYear(uiState)
             UnitTime.Month -> HistoryMonth(uiState, 1)
             UnitTime.Week -> HistoryWeek(uiState)
-            UnitTime.Day -> HistoryDay(uiState)
+            UnitTime.Days -> HistoryDay(uiState)
         }
     }
 }

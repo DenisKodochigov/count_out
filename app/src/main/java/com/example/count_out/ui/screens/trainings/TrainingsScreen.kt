@@ -75,7 +75,6 @@ import com.example.count_out.ui.view_components.TextApp
     Column(
         modifier = Modifier.fillMaxSize()) {
         TrainingList(uiState, modifier = Modifier.weight(1f))
-        ItemLast( uiState = uiState )
     }
 }
 
@@ -95,6 +94,7 @@ import com.example.count_out.ui.view_components.TextApp
             )
             Spacer(modifier = Modifier.height(Dimen.width4))
         }
+        item { ItemLast( uiState = uiState ) }
     }
 }
 @Composable fun TrainingCard(item: Training, uiState: TrainingsScreenState, modifier: Modifier) {
@@ -121,11 +121,11 @@ import com.example.count_out.ui.view_components.TextApp
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier.fillMaxWidth()
     ){
-        Spacer(modifier = Modifier.weight(1f))
-        IconRunTraining(idTraining = 1, uiState = uiState)
-        Spacer(modifier = Modifier.weight(1f))
+//        Spacer(modifier = Modifier.weight(1f))
+//        IconRunTraining(idTraining = 1, uiState = uiState)
+//        Spacer(modifier = Modifier.weight(1f))
         IconAddTraining( uiState = uiState)
-        Spacer(modifier = Modifier.weight(1f))
+//        Spacer(modifier = Modifier.weight(1f))
     }
 }
 @Composable fun IconRunTraining(idTraining: Long, uiState: TrainingsScreenState){
@@ -133,11 +133,14 @@ import com.example.count_out.ui.view_components.TextApp
         onSelected = { uiState.onStartWorkout(idTraining)})
 }
 @Composable fun IconAddTraining(uiState: TrainingsScreenState){
-    IconSubscribe(text = "Add training", icon = Icons.Default.AddCircleOutline,
+    IconSubscribe(text = "Add plan", icon = Icons.Default.AddCircleOutline,
         onSelected = { uiState.onAddTraining})
 }
 @Composable fun IconEnd(item: Training, uiState: TrainingsScreenState, modifier: Modifier = Modifier){
-    IconButton(onClick = { uiState.onCopyTraining(item.idTraining)}, modifier = modifier) {
+    IconButton(
+        onClick = {
+            uiState.onCopyTraining(item.idTraining)
+                  }, modifier = modifier) {
         IconSingle(image = Icons.Default.CopyAll) }
 }
 @Composable fun TrainingInformation(item: Training, uiState: TrainingsScreenState, modifier: Modifier = Modifier) {

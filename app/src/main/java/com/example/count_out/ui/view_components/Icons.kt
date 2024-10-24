@@ -122,49 +122,6 @@ import com.example.count_out.ui.theme.shapes
     }
 }
 
-//@Composable fun HorIcons(
-//    onClickEdit: (() -> Unit)? = null,
-//    onClickCopy: (() -> Unit)? = null,
-//    onClickSpeech: (() -> Unit)? = null,
-//    onClickDelete: (() -> Unit)? = null,
-//    onClickAddSet: (() -> Unit)? = null,
-//    onClickAddRing: (() -> Unit)? = null,
-//    onClickAddExercise: (() -> Unit)? = null,
-//    expanded: ()->Unit
-//){
-//    Row(horizontalArrangement = Arrangement.Center, verticalAlignment = Alignment.CenterVertically){
-//        Spacer(modifier = Modifier.width(sizeBetweenIcon))
-//        onClickEdit?.let {  IconSingle(
-//            image = Icons.Default.Edit,
-//            onClick = { it(); expanded()} )
-//            Spacer(modifier = Modifier.width(sizeBetweenIcon)) }
-//        onClickCopy?.let {  IconSingle(
-//            image = Icons.Default.CopyAll,
-//            onClick = { it(); expanded()} )
-//            Spacer(modifier = Modifier.width(sizeBetweenIcon)) }
-//        onClickSpeech?.let {  IconSingle(
-//            image = Icons.Default.GraphicEq,
-//            onClick = { it(); expanded()} )
-//            Spacer(modifier = Modifier.width(sizeBetweenIcon)) }
-//        onClickDelete?.let {  IconSingle(
-//            image = Icons.Default.DeleteOutline,
-//            onClick = { it(); expanded()} )
-//            Spacer(modifier = Modifier.width(sizeBetweenIcon)) }
-//        onClickAddSet?.let {  IconSingle(
-//            image = Icons.Default.AddRoad,
-//            onClick = { it(); expanded()} )
-//            Spacer(modifier = Modifier.width(sizeBetweenIcon))}
-//        onClickAddRing?.let {  IconSingle(
-//            image = Icons.Default.AddCircleOutline,
-//            onClick = { it();expanded()} )
-//            Spacer(modifier = Modifier.width(sizeBetweenIcon))}
-//        onClickAddExercise?.let {  IconSingle(
-//            image = Icons.Default.LibraryAdd,
-//            onClick = { it(); expanded()} )
-//            Spacer(modifier = Modifier.width(sizeBetweenIcon)) }
-//    }
-//}
-
 @Composable fun VerIcons(
     onClickEdit: (() -> Unit)? = null,
     onClickCopy: (() -> Unit)? = null,
@@ -203,7 +160,7 @@ import com.example.count_out.ui.theme.shapes
 }
 @Composable fun IconSingle(image: ImageVector, onClick:()->Unit = {}, idDescription: Int = 0){
     Icon(imageVector = image,
-        tint = colors3.onTertiaryContainer,
+//        tint = colors3.onTertiaryContainer,
         contentDescription = if ( idDescription == 0) "" else stringResource(id = idDescription),
         modifier = Modifier.size(sizeIcon).clickable { onClick() })
 }
@@ -211,7 +168,7 @@ import com.example.count_out.ui.theme.shapes
 @Composable fun IconSingleLarge(image: ImageVector, onClick:()->Unit){
     Icon(imageVector = image,
         contentDescription = "",
-        tint = colors3.onTertiaryContainer,
+//        tint = colors3.onTertiaryContainer,
         modifier = Modifier.size(Dimen.sizeIconLarge).clickable { onClick() })
 }
 @Composable fun IconSingleLarge(image: ImageVector){
@@ -260,7 +217,7 @@ fun IconsCollapsing(onClick: ()->Unit, wrap: Boolean) {
             else TAB_FADE_OUT_ANIMATION_DURATION
         )
     }
-    val colorIcon = MaterialTheme.colorScheme.onTertiaryContainer
+    val colorIcon = colors3.onTertiaryContainer
     val colorUnselected = Color(colorIcon.red, colorIcon.green, colorIcon.blue, colorIcon.alpha * 0.6f)
     val iconColor by animateColorAsState(
         label = "",
@@ -286,3 +243,46 @@ fun IconsCollapsing(onClick: ()->Unit, wrap: Boolean) {
     }
 }
 
+
+//@Composable fun HorIcons(
+//    onClickEdit: (() -> Unit)? = null,
+//    onClickCopy: (() -> Unit)? = null,
+//    onClickSpeech: (() -> Unit)? = null,
+//    onClickDelete: (() -> Unit)? = null,
+//    onClickAddSet: (() -> Unit)? = null,
+//    onClickAddRing: (() -> Unit)? = null,
+//    onClickAddExercise: (() -> Unit)? = null,
+//    expanded: ()->Unit
+//){
+//    Row(horizontalArrangement = Arrangement.Center, verticalAlignment = Alignment.CenterVertically){
+//        Spacer(modifier = Modifier.width(sizeBetweenIcon))
+//        onClickEdit?.let {  IconSingle(
+//            image = Icons.Default.Edit,
+//            onClick = { it(); expanded()} )
+//            Spacer(modifier = Modifier.width(sizeBetweenIcon)) }
+//        onClickCopy?.let {  IconSingle(
+//            image = Icons.Default.CopyAll,
+//            onClick = { it(); expanded()} )
+//            Spacer(modifier = Modifier.width(sizeBetweenIcon)) }
+//        onClickSpeech?.let {  IconSingle(
+//            image = Icons.Default.GraphicEq,
+//            onClick = { it(); expanded()} )
+//            Spacer(modifier = Modifier.width(sizeBetweenIcon)) }
+//        onClickDelete?.let {  IconSingle(
+//            image = Icons.Default.DeleteOutline,
+//            onClick = { it(); expanded()} )
+//            Spacer(modifier = Modifier.width(sizeBetweenIcon)) }
+//        onClickAddSet?.let {  IconSingle(
+//            image = Icons.Default.AddRoad,
+//            onClick = { it(); expanded()} )
+//            Spacer(modifier = Modifier.width(sizeBetweenIcon))}
+//        onClickAddRing?.let {  IconSingle(
+//            image = Icons.Default.AddCircleOutline,
+//            onClick = { it();expanded()} )
+//            Spacer(modifier = Modifier.width(sizeBetweenIcon))}
+//        onClickAddExercise?.let {  IconSingle(
+//            image = Icons.Default.LibraryAdd,
+//            onClick = { it(); expanded()} )
+//            Spacer(modifier = Modifier.width(sizeBetweenIcon)) }
+//    }
+//}

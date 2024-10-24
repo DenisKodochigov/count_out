@@ -10,8 +10,6 @@ import com.example.count_out.entity.bluetooth.BleDevice
 import com.example.count_out.entity.bluetooth.BleStates
 import com.example.count_out.entity.router.DataFromBle
 import com.example.count_out.ui.view_components.lg
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.update
 import java.util.UUID
 
 fun scanSettings(reportDelay: Long): ScanSettings {
@@ -68,23 +66,20 @@ fun BluetoothGattCharacteristic.isNotify(): Boolean =
     containsProperty(BluetoothGattCharacteristic.PROPERTY_NOTIFY)
 fun BluetoothGattCharacteristic.isIndicatable(): Boolean =
     containsProperty(BluetoothGattCharacteristic.PROPERTY_INDICATE)
-fun BluetoothGattCharacteristic.isWritableWithoutResponse(): Boolean =
-    containsProperty(BluetoothGattCharacteristic.PROPERTY_WRITE_NO_RESPONSE)
-
-fun <T>MutableStateFlow<List<T>>.addApp(device: T) =
-    update { this.value.toMutableList().apply { this.add(device) } }
+//fun BluetoothGattCharacteristic.isWritableWithoutResponse(): Boolean =
+//    containsProperty(BluetoothGattCharacteristic.PROPERTY_WRITE_NO_RESPONSE)
 
 fun <T>List<T>.addApp(device: T): List<T> = this.toMutableList().apply { this.add(device) }
 
-fun BluetoothGatt.printCharacteristicsTable() {
-    if (services.isEmpty()) { return }
-    services.forEach { service ->
-        val characteristicsTable = service.characteristics.joinToString(separator = "\n|--", prefix = "|--") {
-            it.uuid.toString() + " Readable: " + it.isReadable() + " Writable: " + it.isWritable() +
-                    " Notify: " + it.isNotify() + " Indicate: " + it.isIndicatable()
-        }
+//fun BluetoothGatt.printCharacteristicsTable() {
+//    if (services.isEmpty()) { return }
+//    services.forEach { service ->
+//        val characteristicsTable = service.characteristics.joinToString(separator = "\n|--", prefix = "|--") {
+//            it.uuid.toString() + " Readable: " + it.isReadable() + " Writable: " + it.isWritable() +
+//                    " Notify: " + it.isNotify() + " Indicate: " + it.isIndicatable()
+//        }
 //        lg("Service ${service.uuid}\nCharacteristics:\n$characteristicsTable")
-    }
+//    }
 //    Service 00001800-0000-1000-8000-00805f9b34fb
 //    Characteristics:
 //    |--00002a00-0000-1000-8000-00805f9b34fb Readable: true Writable: true
@@ -118,7 +113,7 @@ fun BluetoothGatt.printCharacteristicsTable() {
 //    |--00002a27-0000-1000-8000-00805f9b34fb Readable: true Writable: false
 //    |--00002a26-0000-1000-8000-00805f9b34fb Readable: true Writable: false
 //    |--00002a28-0000-1000-8000-00805f9b34fb Readable: true Writable: false
-}
+//}
 //fun <T>printHR(text: String, hr: MutableStateFlow<T>){
 //    CoroutineScope(Dispatchers.Default).launch {
 //        hr.collect{ hr->

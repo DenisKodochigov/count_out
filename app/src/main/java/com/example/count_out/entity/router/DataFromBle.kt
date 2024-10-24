@@ -11,11 +11,11 @@ data class DataFromBle (
     var foundDevices: MutableStateFlow<List<DeviceUI>> = MutableStateFlow(emptyList()),
     var lastConnectHearthRateDevice: MutableStateFlow<DeviceUI?> = MutableStateFlow(null),
 ){
-    fun empty(){
-        this.heartRate.value = 0
-        this.scannedBle.value = false
-        this.connectingState.value = ConnectState.NOT_CONNECTED
-        this.foundDevices.value = emptyList()
-        this.lastConnectHearthRateDevice.value = null
-    }
+//    fun empty(){
+//        this.heartRate.value = 0
+//        this.scannedBle.value = false
+//        this.connectingState.value = ConnectState.NOT_CONNECTED
+//        this.foundDevices.value = emptyList()
+//        this.lastConnectHearthRateDevice.value = null
+//    }
 }

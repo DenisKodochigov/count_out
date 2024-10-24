@@ -94,7 +94,7 @@ class CountOutService @Inject constructor(): Service() {
         stopForeground(STOP_FOREGROUND_REMOVE)
     }
     private fun startSite(){
-        site.start(router.dataForSite, router.dataFromSite)
+        site.start(router.dataFromSite)
         router.dataForSite.state.value = RunningState.Started }
     private fun stopSite(){
         site.stop()
