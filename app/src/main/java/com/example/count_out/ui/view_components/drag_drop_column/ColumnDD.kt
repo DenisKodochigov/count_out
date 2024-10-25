@@ -38,11 +38,10 @@ fun <T>ColumnDD(
     AnimatedVisibility(
         visible = showList,
         content = {
-            Column(modifier = modifier.onGloballyPositioned { heightList.value = it.size.height }
-            ) {
+            Column(modifier = modifier.onGloballyPositioned { heightList.value = it.size.height }){
                 items.forEachIndexed { index, item ->
                     ItemDD(
-                        frontFon = { viewItem(item) },
+                        frontFon = { viewItem (item) },
                         indexItem = index,
                         heightList = heightList,
                         size = items.size,
@@ -67,25 +66,34 @@ fun ItemDD(
 ){
     val stateDrag = remember { StateDragColumn(heightList = heightList, sizeList = size) }
     val context = LocalContext.current
-    val verticalTranslation by animateIntAsState(
-        targetValue = stateDrag.itemOffset(),
-        label = "",
-    )
+    val verticalTranslation by animateIntAsState(targetValue = stateDrag.itemOffset(), label = "")
+
     Box(modifier = Modifier.fillMaxWidth().padding(top = 6.dp)
         .offset { IntOffset(0, verticalTranslation) }
 //        .graphicsLayer { translationY = stateDrag.itemOffset().toFloat() }
         .zIndex(stateDrag.itemZ())
         .clickable { onClickItem(indexItem) }
         .pointerInput(Unit) {
+//            detectDragGesturesAfterLongPress(
+//                onDrag = { change, offset ->
+//                    change.consume()
+//                    stateDrag.shiftItem(offset.y)
+//                },
+//                onDragStart = {
+//                    vibrate(context)
+//                    stateDrag.onStartDrag(indexItem) },
+//                onDragEnd = { stateDrag.onStopDrag(indexItem, onMoveItem) },
+//                onDragCancel = {}
+//            )
             detectDragGesturesAfterLongPress(
-                onDrag = { change, offset ->
-                    change.consume()
-                    stateDrag.shiftItem(offset.y)
-                },
                 onDragStart = {
                     vibrate(context)
                     stateDrag.onStartDrag(indexItem) },
-                onDragEnd = { stateDrag.onStopDrag(indexItem, onMoveItem) },
+                onDrag = { change, offset ->
+                    change.consume()  //?
+                    stateDrag.shiftItem(offset.y,onMoveItem)
+                },
+                onDragEnd = { stateDrag.onStopDrag() },
                 onDragCancel = {}
             )
         },

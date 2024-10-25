@@ -57,47 +57,7 @@ import com.example.count_out.ui.theme.interLight12
 import com.example.count_out.ui.theme.interReg12
 import com.example.count_out.ui.theme.mTypography
 
-//@Composable fun MyOutlinedTextFieldWithoutIcon(
-//    modifier: Modifier,
-//    enterValue: MutableState<String>,
-//    typeKeyboard: TypeKeyboard,
-//    label:  @Composable (() -> Unit)? = null,
-//    keyboardActionsOnDone: (() -> Unit)? = null
-//) {
-//    val keyboardController = LocalSoftwareKeyboardController.current
-//    val localFocusManager = LocalFocusManager.current
-//    var enterText by remember { mutableStateOf(enterValue.value) }
-//
-//    OutlinedTextField(
-//        modifier = modifier.background(color = colors3.surface),
-//        value = enterText,
-//        singleLine = true,
-//        textStyle = mTypography.titleMedium,
-//        label = label,
-//        onValueChange = {
-//            enterText = it
-//            enterValue.value = it
-//        },
-//        keyboardOptions = keyBoardOpt(typeKeyboard),
-//        keyboardActions = KeyboardActions(
-//            onDone =
-//            {
-//                localFocusManager.clearFocus()
-//                enterValue.value = enterText
-//                enterText = ""
-//                keyboardActionsOnDone?.invoke()
-//                keyboardController?.hide()
-//            }
-//        ),
-//    )
-//}
 
-//@Composable fun NameScreen(id: Int){
-//    Row(horizontalArrangement = Arrangement.Center,
-//        modifier = Modifier.padding(top=24.dp, bottom =12.dp).fillMaxWidth()){
-//        TextApp(text = stringResource(id = id), style = mTypography.headlineMedium)
-//    }
-//}
 @Composable fun ButtonApp(
     text: String,
     onClick: () -> Unit,
@@ -296,3 +256,38 @@ fun ButtonsOkCancel(onConfirm: ()->Unit, onDismiss: ()->Unit)
         ButtonApp(text = stringResource(id = R.string.no), onClick = onDismiss)
     }
 }
+
+//@Composable fun MyOutlinedTextFieldWithoutIcon(
+//    modifier: Modifier,
+//    enterValue: MutableState<String>,
+//    typeKeyboard: TypeKeyboard,
+//    label:  @Composable (() -> Unit)? = null,
+//    keyboardActionsOnDone: (() -> Unit)? = null
+//) {
+//    val keyboardController = LocalSoftwareKeyboardController.current
+//    val localFocusManager = LocalFocusManager.current
+//    var enterText by remember { mutableStateOf(enterValue.value) }
+//
+//    OutlinedTextField(
+//        modifier = modifier.background(color = colors3.surface),
+//        value = enterText,
+//        singleLine = true,
+//        textStyle = mTypography.titleMedium,
+//        label = label,
+//        onValueChange = {
+//            enterText = it
+//            enterValue.value = it
+//        },
+//        keyboardOptions = keyBoardOpt(typeKeyboard),
+//        keyboardActions = KeyboardActions(
+//            onDone =
+//            {
+//                localFocusManager.clearFocus()
+//                enterValue.value = enterText
+//                enterText = ""
+//                keyboardActionsOnDone?.invoke()
+//                keyboardController?.hide()
+//            }
+//        ),
+//    )
+//}

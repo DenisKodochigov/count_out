@@ -41,12 +41,12 @@ import com.example.count_out.ui.theme.colors3
 import com.example.count_out.ui.theme.interBold16
 import com.example.count_out.ui.theme.massColor
 import com.example.count_out.ui.theme.shapes
-import com.example.count_out.ui.view_components.ArrowDown
-import com.example.count_out.ui.view_components.ArrowLeft
-import com.example.count_out.ui.view_components.ArrowNoneHor
-import com.example.count_out.ui.view_components.ArrowNoneVer
-import com.example.count_out.ui.view_components.ArrowRight
-import com.example.count_out.ui.view_components.ArrowUp
+import com.example.count_out.ui.view_components.icons.ArrowDown
+import com.example.count_out.ui.view_components.icons.ArrowLeft
+import com.example.count_out.ui.view_components.icons.ArrowNoneHor
+import com.example.count_out.ui.view_components.icons.ArrowNoneVer
+import com.example.count_out.ui.view_components.icons.ArrowRight
+import com.example.count_out.ui.view_components.icons.ArrowUp
 import com.example.count_out.ui.view_components.TextApp
 import com.example.count_out.ui.view_components.TextButtonOK
 
@@ -189,7 +189,8 @@ fun ChangeColorSectionLayout(color: MutableState<Int>)
             )
         }
 
-        if( enable ) { if (direction == UPDOWN.START) ArrowLeft() else ArrowRight()}
+        if( enable ) { if (direction == UPDOWN.START) ArrowLeft() else ArrowRight()
+        }
         else ArrowNoneHor()
         if (direction == UPDOWN.END && drawLine){
             HorizontalDivider(modifier =

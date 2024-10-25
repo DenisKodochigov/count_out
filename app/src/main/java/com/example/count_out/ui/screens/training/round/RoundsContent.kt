@@ -26,8 +26,8 @@ import com.example.count_out.ui.screens.training.exercise.ListExercises
 import com.example.count_out.ui.theme.elevationTraining
 import com.example.count_out.ui.theme.interBold14
 import com.example.count_out.ui.theme.interLight12
-import com.example.count_out.ui.view_components.IconsCollapsing
-import com.example.count_out.ui.view_components.IconsGroup
+import com.example.count_out.ui.view_components.icons.IconsCollapsing
+import com.example.count_out.ui.view_components.icons.IconsGroup
 import com.example.count_out.ui.view_components.TextApp
 import kotlin.math.roundToInt
 

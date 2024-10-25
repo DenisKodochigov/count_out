@@ -76,12 +76,13 @@ class ExecuteSet @Inject constructor(val speechManager:SpeechManager, val contex
             "${setCurrent.timeRest} ${getStr(R.string.rest_time)}"))
     }
     private suspend fun speakingSetRest(set: Set, dataFromWork: DataFromWork ){
-        countRest.value = false
-        dataFromWork.rest.value = 1
-        speakInterval( duration = set.timeRest, dataFromWork = dataFromWork)
-
-        dataFromWork.rest.value = 0
-        countRest.value = true
+        if (set.timeRest > 0) {
+            countRest.value = false
+            dataFromWork.rest.value = 1
+            speakInterval(duration = set.timeRest, dataFromWork = dataFromWork)
+            dataFromWork.rest.value = 0
+            countRest.value = true
+        }
     }
     private suspend fun speakInterval(duration: Int, dataFromWork: DataFromWork) {
         when (duration) {

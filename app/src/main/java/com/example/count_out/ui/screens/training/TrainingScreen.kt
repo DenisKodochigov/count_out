@@ -33,7 +33,7 @@ import com.example.count_out.ui.bottomsheet.BottomSheetSpeech
 import com.example.count_out.ui.screens.training.round.Round
 import com.example.count_out.ui.theme.Dimen
 import com.example.count_out.ui.theme.mTypography
-import com.example.count_out.ui.view_components.IconsGroup
+import com.example.count_out.ui.view_components.icons.IconsGroup
 import com.example.count_out.ui.view_components.TextFieldApp
 
 @SuppressLint("UnrememberedMutableState")

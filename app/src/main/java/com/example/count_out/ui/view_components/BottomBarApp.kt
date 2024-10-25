@@ -23,6 +23,7 @@ import com.example.count_out.navigation.ScreenDestination
 import com.example.count_out.navigation.TrainingsDestination
 import com.example.count_out.navigation.navBottomScreens
 import com.example.count_out.ui.theme.bottomBarShape
+import com.example.count_out.ui.view_components.icons.IconSubscribe
 
 @Composable
 fun BottomBarApp(
@@ -39,9 +40,6 @@ fun BottomBarApp(
                 .clip(shape = bottomBarShape),
             content = { BottomBarContent( currentScreen = currentScreen, onTabSelection = onTabSelection )}
         )
-//        Row(modifier = Modifier.align(alignment = Alignment.TopCenter)) {
-//            IconSingleLarge(image = Icons.Default.PlayCircleOutline, onClick = {  },)
-//        }
     }
 }
 

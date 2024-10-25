@@ -19,16 +19,16 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.example.count_out.R
 import com.example.count_out.data.room.tables.SetDB
-import com.example.count_out.entity.workout.Exercise
 import com.example.count_out.entity.RoundType
+import com.example.count_out.entity.workout.Exercise
 import com.example.count_out.ui.screens.training.TrainingScreenState
 import com.example.count_out.ui.screens.training.set.SetContent
 import com.example.count_out.ui.theme.elevationTraining
 import com.example.count_out.ui.theme.interReg14
-import com.example.count_out.ui.view_components.IconsCollapsing
-import com.example.count_out.ui.view_components.IconsGroup
 import com.example.count_out.ui.view_components.TextApp
 import com.example.count_out.ui.view_components.drag_drop_column.ColumnDD
+import com.example.count_out.ui.view_components.icons.IconsCollapsing
+import com.example.count_out.ui.view_components.icons.IconsGroup
 import com.example.count_out.ui.view_components.lg
 
 @Composable
@@ -41,6 +41,7 @@ fun ListExercises(
     val listExercise = uiState.training.rounds.find { it.roundType == roundType }?.exercise ?: emptyList()
     val roundId = if (listExercise.isNotEmpty()) listExercise[0].roundId else 0
 
+    printM(listExercise)
     ColumnDD(
         items = listExercise,
         modifier = modifier,
@@ -50,6 +51,11 @@ fun ListExercises(
             uiState.changeSequenceExercise( uiState.training.idTraining, roundId, from, to )},
     )
 }
+
+fun printM(list: List<Exercise>) {
+    list.forEach { lg("${it.idExercise}-${it.activity.name}") }
+}
+
 @Composable
 fun <T>ElementColum (item:T, uiState: TrainingScreenState){
     Card(

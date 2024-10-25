@@ -72,7 +72,6 @@ data class ExerciseRel(
             idExercise = exerciseDB.idExercise,
             roundId = exerciseDB.roundId,
             activityId = exerciseDB.activityId,
-            sequenceNumber = exerciseDB.sequenceNumber,
             activity = activity as Activity,
             speech = speechKit?.toSpeechKit() ?: SpeechKitDB(),
             speechId = exerciseDB.speechId,

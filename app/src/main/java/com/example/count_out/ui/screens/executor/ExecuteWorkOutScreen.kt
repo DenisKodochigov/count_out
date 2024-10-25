@@ -33,8 +33,8 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.count_out.R
 import com.example.count_out.data.room.tables.SetDB
-import com.example.count_out.domain.Minus
-import com.example.count_out.domain.Plus
+import com.example.count_out.domain.minus
+import com.example.count_out.domain.plus
 import com.example.count_out.entity.GoalSet
 import com.example.count_out.entity.RunningState
 import com.example.count_out.entity.ui.ListActivityForExecute
@@ -44,7 +44,7 @@ import com.example.count_out.ui.theme.colors3
 import com.example.count_out.ui.theme.mTypography
 import com.example.count_out.ui.theme.shapes
 import com.example.count_out.ui.view_components.ButtonApp
-import com.example.count_out.ui.view_components.IconSingleLarge
+import com.example.count_out.ui.view_components.icons.IconSingleLarge
 import com.example.count_out.ui.view_components.TextApp
 import kotlinx.coroutines.launch
 import java.math.RoundingMode
@@ -200,9 +200,9 @@ import java.math.RoundingMode
     uiState.training?.let { training ->
         uiState.speakingSet?.let { set ->
             downInterval = { uiState.updateSet(
-                training.idTraining, (set as SetDB).copy(intervalReps = set.intervalReps.Minus())) }
+                training.idTraining, (set as SetDB).copy(intervalReps = set.intervalReps.minus())) }
             upInterval = { uiState.updateSet(
-                training.idTraining, (set as SetDB).copy(intervalReps = set.intervalReps.Plus())) }
+                training.idTraining, (set as SetDB).copy(intervalReps = set.intervalReps.plus())) }
         }
     }
     val enabledButton = uiState.speakingSet != null &&

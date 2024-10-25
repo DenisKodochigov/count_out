@@ -1,4 +1,4 @@
-package com.example.count_out.ui.view_components
+package com.example.count_out.ui.view_components.icons
 
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.animateContentSize
@@ -61,6 +61,7 @@ import com.example.count_out.ui.theme.alumniReg12
 import com.example.count_out.ui.theme.colors3
 import com.example.count_out.ui.theme.mTypography
 import com.example.count_out.ui.theme.shapes
+import com.example.count_out.ui.view_components.TextApp
 
 @Composable fun IconsGroup(
     onClickEdit: (() -> Unit)? = null,
@@ -121,7 +122,6 @@ import com.example.count_out.ui.theme.shapes
             modifier = Modifier.align(Alignment.Center).size(size).clickable { onClick() })
     }
 }
-
 @Composable fun VerIcons(
     onClickEdit: (() -> Unit)? = null,
     onClickCopy: (() -> Unit)? = null,
@@ -160,7 +160,7 @@ import com.example.count_out.ui.theme.shapes
 }
 @Composable fun IconSingle(image: ImageVector, onClick:()->Unit = {}, idDescription: Int = 0){
     Icon(imageVector = image,
-//        tint = colors3.onTertiaryContainer,
+        tint = colors3.tertiary,
         contentDescription = if ( idDescription == 0) "" else stringResource(id = idDescription),
         modifier = Modifier.size(sizeIcon).clickable { onClick() })
 }
@@ -168,12 +168,12 @@ import com.example.count_out.ui.theme.shapes
 @Composable fun IconSingleLarge(image: ImageVector, onClick:()->Unit){
     Icon(imageVector = image,
         contentDescription = "",
-//        tint = colors3.onTertiaryContainer,
+        tint = colors3.tertiary,
         modifier = Modifier.size(Dimen.sizeIconLarge).clickable { onClick() })
 }
 @Composable fun IconSingleLarge(image: ImageVector){
     Icon(imageVector = image, contentDescription = "",
-        tint = colors3.onTertiaryContainer,
+        tint = colors3.tertiary,
         modifier = Modifier.size(Dimen.sizeIconLarge))
 }
 
@@ -217,7 +217,7 @@ fun IconsCollapsing(onClick: ()->Unit, wrap: Boolean) {
             else TAB_FADE_OUT_ANIMATION_DURATION
         )
     }
-    val colorIcon = colors3.onTertiaryContainer
+    val colorIcon = colors3.tertiary
     val colorUnselected = Color(colorIcon.red, colorIcon.green, colorIcon.blue, colorIcon.alpha * 0.6f)
     val iconColor by animateColorAsState(
         label = "",

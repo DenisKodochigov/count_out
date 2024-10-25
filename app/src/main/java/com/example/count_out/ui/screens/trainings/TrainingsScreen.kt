@@ -39,8 +39,8 @@ import com.example.count_out.ui.theme.Dimen
 import com.example.count_out.ui.theme.elevationTraining
 import com.example.count_out.ui.theme.getIdImage
 import com.example.count_out.ui.theme.mTypography
-import com.example.count_out.ui.view_components.IconSingle
-import com.example.count_out.ui.view_components.IconSubscribe
+import com.example.count_out.ui.view_components.icons.IconSingle
+import com.example.count_out.ui.view_components.icons.IconSubscribe
 import com.example.count_out.ui.view_components.ItemSwipe
 import com.example.count_out.ui.view_components.TextApp
 
@@ -75,6 +75,13 @@ import com.example.count_out.ui.view_components.TextApp
     Column(
         modifier = Modifier.fillMaxSize()) {
         TrainingList(uiState, modifier = Modifier.weight(1f))
+//        Row {
+//            PlayI(color = colors3.primary)
+//            PauseI(color = colors3.primary)
+//            StopI(color = colors3.primary)
+//            MinI(color = colors3.primary)
+//            MaxI(color = colors3.primary)
+//        }
     }
 }
 
@@ -121,11 +128,7 @@ import com.example.count_out.ui.view_components.TextApp
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier.fillMaxWidth()
     ){
-//        Spacer(modifier = Modifier.weight(1f))
-//        IconRunTraining(idTraining = 1, uiState = uiState)
-//        Spacer(modifier = Modifier.weight(1f))
         IconAddTraining( uiState = uiState)
-//        Spacer(modifier = Modifier.weight(1f))
     }
 }
 @Composable fun IconRunTraining(idTraining: Long, uiState: TrainingsScreenState){
@@ -134,7 +137,7 @@ import com.example.count_out.ui.view_components.TextApp
 }
 @Composable fun IconAddTraining(uiState: TrainingsScreenState){
     IconSubscribe(text = "Add plan", icon = Icons.Default.AddCircleOutline,
-        onSelected = { uiState.onAddTraining})
+        onSelected = { uiState.onAddTraining() })
 }
 @Composable fun IconEnd(item: Training, uiState: TrainingsScreenState, modifier: Modifier = Modifier){
     IconButton(

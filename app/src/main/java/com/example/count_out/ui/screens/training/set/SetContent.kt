@@ -36,8 +36,8 @@ import com.example.count_out.ui.theme.elevationTraining
 import com.example.count_out.ui.theme.interLight12
 import com.example.count_out.ui.theme.interReg12
 import com.example.count_out.ui.theme.interReg14
-import com.example.count_out.ui.view_components.IconsCollapsing
-import com.example.count_out.ui.view_components.IconsGroup
+import com.example.count_out.ui.view_components.icons.IconsCollapsing
+import com.example.count_out.ui.view_components.icons.IconsGroup
 import com.example.count_out.ui.view_components.RadioButtonApp
 import com.example.count_out.ui.view_components.TextApp
 import com.example.count_out.ui.view_components.TextAppLines

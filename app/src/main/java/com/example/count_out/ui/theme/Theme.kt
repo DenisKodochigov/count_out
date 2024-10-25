@@ -63,10 +63,8 @@ fun selectSchemeForContrast(isDark: Boolean): ColorScheme {
 
             in 0.34f..0.66f -> if (isDark)
                 mediumContrastDarkColorScheme else mediumContrastLightColorScheme
-
             in 0.67f..1.0f -> if (isDark)
                 highContrastDarkColorScheme else highContrastLightColorScheme
-
             else -> if (isDark) darkScheme else lightScheme
         }
         return colorScheme
@@ -78,7 +76,7 @@ fun selectSchemeForContrast(isDark: Boolean): ColorScheme {
     return if (dayNight) screen.pictureDay else screen.pictureNight
 }
 
-private val lightScheme = lightColorScheme(
+val lightScheme = lightColorScheme(
     primary = primaryLight,
     onPrimary = onPrimaryLight,
     primaryContainer = primaryContainerLight,
@@ -116,7 +114,7 @@ private val lightScheme = lightColorScheme(
     surfaceContainerHighest = surfaceContainerHighestLight,
 )
 
-private val darkScheme = darkColorScheme(
+val darkScheme = darkColorScheme(
     primary = primaryDark,
     onPrimary = onPrimaryDark,
     primaryContainer = primaryContainerDark,

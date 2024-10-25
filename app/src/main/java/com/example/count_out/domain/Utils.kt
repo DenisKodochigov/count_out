@@ -16,11 +16,21 @@ import java.util.Locale
 import java.util.TimeZone
 
 fun Int.pad(): String = this.toString().padStart(2, '0')
+
+
 fun String.toDoubleMy(): Double = if (this.isNotEmpty()) this.toDouble() else 0.0
 fun String.toIntMy(): Int = if (this.isNotEmpty()) this.toInt() else 0
 fun Boolean.to01(): Int = if (this) 1 else 0
-fun Double.Minus(): Double = if (this - 0.1 < 0) 0.0 else ((this * 10).toInt() - 1).toDouble()/10
-fun Double.Plus(): Double = ((this * 10).toInt() + 1).toDouble()/10
+fun Double.minus(): Double = if (this - 0.1 < 0) 0.0 else ((this * 10).toInt() - 1).toDouble()/10
+fun Double.plus(): Double = ((this * 10).toInt() + 1).toDouble()/10
+fun Float.mRound(): Int =
+    if (this > 0) {
+        if (this - this.toInt() >= 0.5 ) { this.toInt() + 1 }
+        else { this.toInt() }
+    } else {
+        if (this - this.toInt() >= -0.5 ) { this.toInt() }
+        else { this.toInt() - 1 }
+    }
 fun String.toNumeric(): Double{
     var result = ""
     return if (this.isNotEmpty()){
@@ -74,6 +84,15 @@ fun rusMonth(dayOfWeek: Int): Int {
         11 -> R.string.november
         12 -> R.string.december
         else -> R.string.december
+    }
+}
+fun roundMy( value: Float): Int{
+    return if (value > 0) {
+        if (value - value.toInt() >= 0.5 ) { value.toInt() + 1 }
+        else { value.toInt() }
+    } else {
+        if (value - value.toInt() >= -0.5 ) { value.toInt() }
+        else { value.toInt() - 1 }
     }
 }
 

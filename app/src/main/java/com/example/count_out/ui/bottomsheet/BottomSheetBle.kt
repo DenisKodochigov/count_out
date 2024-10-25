@@ -30,7 +30,7 @@ import com.example.count_out.ui.theme.Dimen.bsHeightWindowsListBle
 import com.example.count_out.ui.theme.Dimen.bsSpacerBottomHeight
 import com.example.count_out.ui.theme.mTypography
 import com.example.count_out.ui.theme.shapes
-import com.example.count_out.ui.view_components.AnimateIcon
+import com.example.count_out.ui.view_components.icons.AnimateIcon
 import com.example.count_out.ui.view_components.ModalBottomSheetApp
 import com.example.count_out.ui.view_components.TextApp
 
