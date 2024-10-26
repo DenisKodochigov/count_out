@@ -77,6 +77,7 @@ dependencies {
     implementation(libs.play.services.location)
     implementation(libs.androidx.lifecycle.runtime.compose.android)
     implementation(libs.play.services.contextmanager)
+    implementation(libs.androidx.storage)
     ksp (libs.dagger.compiler)
     ksp (libs.hilt.compiler)
     testImplementation (libs.hilt.android.testing)

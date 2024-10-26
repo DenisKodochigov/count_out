@@ -49,15 +49,15 @@ data class StateDragColumn(
         if ((offsetBegin + offsetY.value + delta) in 0f..(heightList.value - heightItem/2).toFloat()) {
             offsetY.value += delta
             if (offsetY.value > heightItem) {
-//                onMoveItem(indexItemL, indexItemL + 1 )
+                onMoveItem(indexItemL, indexItemL + 1 )
                 indexItemL ++
-                offsetY.value = 0f
+//                offsetY.value = 0f
                 offsetBegin = (indexItemL * heightItem).toFloat()
                 lg(" move ${indexItemL-1} to $indexItemL  offsetBegin:$offsetBegin")
             } else if (offsetY.value < (-1) * heightItem){
-//                onMoveItem(indexItemL, indexItemL - 1 )
+                onMoveItem(indexItemL, indexItemL - 1 )
                 indexItemL --
-                offsetY.value = 0f
+//                offsetY.value = 0f
                 offsetBegin = (indexItemL * heightItem).toFloat()
                 lg(" move ${indexItemL + 1} to $indexItemL  offsetBegin:$offsetBegin")
             }

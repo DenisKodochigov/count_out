@@ -14,6 +14,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.pointer.pointerInput
@@ -34,33 +35,40 @@ fun <T>ColumnDD(
     onClickItem: (Int) -> Unit = {},
 ){
     val heightList: MutableState<Int> = remember { mutableIntStateOf(0) }
-
+    val itemList: MutableState<List<T>> = remember { mutableStateOf(emptyList()) }
+    itemList.value = items
     AnimatedVisibility(
         visible = showList,
         content = {
             Column(modifier = modifier.onGloballyPositioned { heightList.value = it.size.height }){
-                items.forEachIndexed { index, item ->
+                itemList.value.forEachIndexed { index, item ->
                     ItemDD(
-                        frontFon = { viewItem (item) },
+                        viewItem = { viewItem (item) },
                         indexItem = index,
                         heightList = heightList,
                         size = items.size,
                         onClickItem = onClickItem,
-                        onMoveItem = onMoveItem
+                        onMoveItem = { ind1, ind2 ->moveItem(itemList, ind1, ind2) }
                     )
                 }
             }
         }
     )
 }
-
+fun <T>moveItem(listMut: MutableState<List<T>>, indexFrom: Int, indexTo: Int){
+    val list = listMut.value.toMutableList()
+    val item = list[indexFrom]
+    list.removeAt(indexFrom)
+    list.add(indexTo, item)
+    listMut.value = list
+}
 @SuppressLint("UnrememberedMutableState", "UnnecessaryComposedModifier")
 @Composable
 fun ItemDD(
     indexItem: Int,
     heightList: MutableState<Int>,
     size: Int = 0,
-    frontFon:@Composable () -> Unit,
+    viewItem :@Composable () -> Unit,
     onMoveItem: (Int, Int) -> Unit = {_,_->},
     onClickItem: (Int) -> Unit,
 ){
@@ -68,7 +76,9 @@ fun ItemDD(
     val context = LocalContext.current
     val verticalTranslation by animateIntAsState(targetValue = stateDrag.itemOffset(), label = "")
 
-    Box(modifier = Modifier.fillMaxWidth().padding(top = 6.dp)
+    Box(modifier = Modifier
+        .fillMaxWidth()
+        .padding(top = 6.dp)
         .offset { IntOffset(0, verticalTranslation) }
 //        .graphicsLayer { translationY = stateDrag.itemOffset().toFloat() }
         .zIndex(stateDrag.itemZ())
@@ -88,16 +98,17 @@ fun ItemDD(
             detectDragGesturesAfterLongPress(
                 onDragStart = {
                     vibrate(context)
-                    stateDrag.onStartDrag(indexItem) },
+                    stateDrag.onStartDrag(indexItem)
+                },
                 onDrag = { change, offset ->
                     change.consume()  //?
-                    stateDrag.shiftItem(offset.y,onMoveItem)
+                    stateDrag.shiftItem(offset.y, onMoveItem)
                 },
                 onDragEnd = { stateDrag.onStopDrag() },
                 onDragCancel = {}
             )
         },
     ){
-        frontFon()
+        viewItem()
     }
 }

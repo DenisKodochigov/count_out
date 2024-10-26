@@ -42,11 +42,12 @@ import com.example.count_out.ui.bottomsheet.CardActivity
 import com.example.count_out.ui.theme.alumBodySmall
 import com.example.count_out.ui.theme.elevationTraining
 import com.example.count_out.ui.theme.mTypography
+import com.example.count_out.ui.view_components.SwitchApp
+import com.example.count_out.ui.view_components.TextApp
+import com.example.count_out.ui.view_components.drag_drop_column.test1.ListColumnDragDopItem
 import com.example.count_out.ui.view_components.icons.AnimateIcon
 import com.example.count_out.ui.view_components.icons.IconSingle
 import com.example.count_out.ui.view_components.icons.IconsCollapsing
-import com.example.count_out.ui.view_components.SwitchApp
-import com.example.count_out.ui.view_components.TextApp
 
 @Composable fun SettingScreen(){
     val viewModel: SettingViewModel = hiltViewModel()

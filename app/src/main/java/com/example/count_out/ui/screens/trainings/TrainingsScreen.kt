@@ -39,10 +39,11 @@ import com.example.count_out.ui.theme.Dimen
 import com.example.count_out.ui.theme.elevationTraining
 import com.example.count_out.ui.theme.getIdImage
 import com.example.count_out.ui.theme.mTypography
-import com.example.count_out.ui.view_components.icons.IconSingle
-import com.example.count_out.ui.view_components.icons.IconSubscribe
 import com.example.count_out.ui.view_components.ItemSwipe
 import com.example.count_out.ui.view_components.TextApp
+import com.example.count_out.ui.view_components.drag_drop_column.test1.ListColumnDragDopItem
+import com.example.count_out.ui.view_components.icons.IconSingle
+import com.example.count_out.ui.view_components.icons.IconSubscribe
 
 @Composable fun TrainingsScreen(
     onClickTraining: (Long) -> Unit,
@@ -82,6 +83,8 @@ import com.example.count_out.ui.view_components.TextApp
 //            MinI(color = colors3.primary)
 //            MaxI(color = colors3.primary)
 //        }
+
+        ListColumnDragDopItem()
     }
 }
 
