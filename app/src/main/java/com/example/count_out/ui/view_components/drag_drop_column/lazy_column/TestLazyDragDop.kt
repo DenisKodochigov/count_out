@@ -1,4 +1,4 @@
-package com.example.count_out.ui.view_components.drag_drop_column.test1
+package com.example.count_out.ui.view_components.drag_drop_column.lazy_column
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
@@ -17,7 +17,7 @@ import com.example.count_out.ui.view_components.drag_drop_column.ColumnDD
 
 @Composable
 fun ListColumnDragDopItem() {
-    ColumnDD1(
+    ColumnDD(
         items = ReorderItem,
         onMoveItem = { fromIndex, toIndex -> ReorderItem.move(fromIndex, toIndex)},
         viewItem = { item -> Element(item) }
@@ -28,10 +28,9 @@ fun ListColumnDragDopItem() {
     Column( modifier = Modifier
         .background(color = colors3.secondaryContainer, shape = RoundedCornerShape(8.dp))
         .fillMaxWidth()
-        .padding(12.dp),)
-    {
-        Text(text = item.toString(), fontSize = 16.sp)
-    }
+        .padding(12.dp),
+        content = {Text(text = item, fontSize = 16.sp)}
+    )
     Spacer(modifier = Modifier.height(12.dp))
 }
 

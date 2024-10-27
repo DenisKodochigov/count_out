@@ -1,4 +1,4 @@
-package com.example.count_out.ui.view_components.drag_drop_column.test1
+package com.example.count_out.ui.view_components.drag_drop_column.lazy_column
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.detectDragGesturesAfterLongPress
@@ -18,7 +18,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 
 @Composable
-fun <T>ColumnDD1(
+fun <T>LazyColumnDD(
     items: List<T>,
     modifier: Modifier = Modifier,
     showList: Boolean = true,
@@ -37,10 +37,10 @@ fun <T>ColumnDD1(
             .padding(top = 10.dp, start = 10.dp, end = 10.dp)
             .pointerInput(Unit) {
                 detectDragGesturesAfterLongPress(
+                    onDragStart = { offset -> stateDD.onDragStart(offset) },
                     onDrag = { change, offset ->
                         change.consume()
                         stateDD.onDrag(offset = offset) },
-                    onDragStart = { offset -> stateDD.onDragStart(offset) },
                     onDragEnd = { stateDD.onDragInterrupted() },
                     onDragCancel = { stateDD.onDragInterrupted() }
                 )

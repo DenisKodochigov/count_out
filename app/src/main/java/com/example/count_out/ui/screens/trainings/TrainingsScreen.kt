@@ -41,7 +41,7 @@ import com.example.count_out.ui.theme.getIdImage
 import com.example.count_out.ui.theme.mTypography
 import com.example.count_out.ui.view_components.ItemSwipe
 import com.example.count_out.ui.view_components.TextApp
-import com.example.count_out.ui.view_components.drag_drop_column.test1.ListColumnDragDopItem
+import com.example.count_out.ui.view_components.drag_drop_column.lazy_column.ListColumnDragDopItem
 import com.example.count_out.ui.view_components.icons.IconSingle
 import com.example.count_out.ui.view_components.icons.IconSubscribe
 

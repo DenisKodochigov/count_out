@@ -1,4 +1,4 @@
-package com.example.count_out.ui.view_components.drag_drop_column.test1
+package com.example.count_out.ui.view_components.drag_drop_column.lazy_column
 
 import androidx.compose.foundation.lazy.LazyListItemInfo
 import androidx.compose.foundation.lazy.LazyListState
@@ -13,7 +13,7 @@ class StateDD(val lazyListState: LazyListState, private val onMove: (Int, Int) -
     private var draggedDistance by mutableFloatStateOf(0f)
     private var draggedItem by mutableStateOf<LazyListItemInfo?>(null)
     private var indexItemUnder by mutableStateOf<Int?>(null)
-    private val ItemUnder: LazyListItemInfo?
+    private val itemUnder: LazyListItemInfo?
         get() = indexItemUnder?.let { lazyListState.getVisibleItemInfoFor(absolute = it) }
 
     fun onDragStart(offset: Offset) {
@@ -36,7 +36,7 @@ class StateDD(val lazyListState: LazyListState, private val onMove: (Int, Int) -
             val startOffset = element.offset + draggedDistance
             val endOffset = element.offsetEnd + draggedDistance
 
-            ItemUnder?.let { itemUnder ->
+            itemUnder?.let { itemUnder ->
                 lazyListState.layoutInfo.visibleItemsInfo
                     .filterNot { item ->
                         item.offsetEnd < startOffset || item.offset > endOffset || itemUnder.index == item.index }
@@ -51,7 +51,7 @@ class StateDD(val lazyListState: LazyListState, private val onMove: (Int, Int) -
             }
         }
     }
-    fun offsetIt(index: Int): Float? = ItemUnder?.let { item ->
+    fun offsetIt(index: Int): Float? = itemUnder?.let { item ->
         (draggedItem?.offset ?: 0f).toFloat() + draggedDistance - item.offset }
         .takeIf { index == indexItemUnder }
     fun zIndex(index: Int) = if (index == indexItemUnder ) 1f else 0f

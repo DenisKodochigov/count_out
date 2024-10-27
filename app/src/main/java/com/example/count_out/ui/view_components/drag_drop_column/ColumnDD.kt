@@ -19,6 +19,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.layout.onPlaced
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
@@ -30,11 +31,12 @@ fun <T>ColumnDD(
     items: List<T>,
     modifier: Modifier = Modifier,
     viewItem:@Composable (T) -> Unit,
-    showList: Boolean,
+    showList: Boolean = true,
     onMoveItem: (Int, Int) -> Unit = {_,_->},
     onClickItem: (Int) -> Unit = {},
 ){
     val heightList: MutableState<Int> = remember { mutableIntStateOf(0) }
+
     val itemList: MutableState<List<T>> = remember { mutableStateOf(emptyList()) }
     itemList.value = items
     AnimatedVisibility(
@@ -76,13 +78,19 @@ fun ItemDD(
     val context = LocalContext.current
     val verticalTranslation by animateIntAsState(targetValue = stateDrag.itemOffset(), label = "")
 
-    Box(modifier = Modifier
+    val per1: MutableState<Any?> = remember { mutableStateOf(null) }
+    val per2: MutableState<Any?> = remember { mutableStateOf(null) }
+    val per3: MutableState<Any?> = remember { mutableStateOf(null) }
+
+    Box(
+        modifier = Modifier
         .fillMaxWidth()
         .padding(top = 6.dp)
         .offset { IntOffset(0, verticalTranslation) }
 //        .graphicsLayer { translationY = stateDrag.itemOffset().toFloat() }
         .zIndex(stateDrag.itemZ())
         .clickable { onClickItem(indexItem) }
+        .onPlaced {  }
         .pointerInput(Unit) {
 //            detectDragGesturesAfterLongPress(
 //                onDrag = { change, offset ->
@@ -98,17 +106,13 @@ fun ItemDD(
             detectDragGesturesAfterLongPress(
                 onDragStart = {
                     vibrate(context)
-                    stateDrag.onStartDrag(indexItem)
-                },
+                    stateDrag.onStartDrag(indexItem) },
                 onDrag = { change, offset ->
-                    change.consume()  //?
-                    stateDrag.shiftItem(offset.y, onMoveItem)
-                },
+                    change.consume()
+                    stateDrag.onDrag(offset.y, onMoveItem) },
                 onDragEnd = { stateDrag.onStopDrag() },
                 onDragCancel = {}
             )
         },
-    ){
-        viewItem()
-    }
+    ){ viewItem() }
 }

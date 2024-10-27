@@ -34,7 +34,7 @@ data class StateDragColumn(
         offsetZ.value = 0.0f
     }
 
-    fun shiftItem(delta: Float){
+    fun onDrag(delta: Float){
         if ((offsetBegin + offsetY.value + delta) in 0f..(heightList.value - heightItem/2).toFloat()) {
             offsetY.value += delta
         }
@@ -45,21 +45,23 @@ data class StateDragColumn(
 
     //#################################################################
 
-    fun shiftItem(delta: Float, onMoveItem: (Int, Int) -> Unit){
-        if ((offsetBegin + offsetY.value + delta) in 0f..(heightList.value - heightItem/2).toFloat()) {
+    fun onDrag(delta: Float, onMoveItem: (Int, Int) -> Unit){
+        if ((offsetBegin + offsetY.value + delta) in 0f..(heightList.value - heightItem).toFloat()) {
+//            lg("offsetBegin + offsetY.value + delta = ${offsetBegin + offsetY.value + delta}, heightList=${heightList.value}, heightItem=$heightItem")
+            lg("offsetY.value + delta = ${offsetY.value + delta}, heightItem=$heightItem")
             offsetY.value += delta
             if (offsetY.value > heightItem) {
-                onMoveItem(indexItemL, indexItemL + 1 )
-                indexItemL ++
+//                onMoveItem(indexItemL, indexItemL + 1 )
+//                indexItemL ++
 //                offsetY.value = 0f
-                offsetBegin = (indexItemL * heightItem).toFloat()
-                lg(" move ${indexItemL-1} to $indexItemL  offsetBegin:$offsetBegin")
+//                offsetBegin = (indexItemL * heightItem).toFloat()
+//                lg(" move ${indexItemL-1} to $indexItemL  offsetBegin:$offsetBegin")
             } else if (offsetY.value < (-1) * heightItem){
-                onMoveItem(indexItemL, indexItemL - 1 )
+//                onMoveItem(indexItemL, indexItemL - 1 )
                 indexItemL --
-//                offsetY.value = 0f
+                offsetY.value = 0f
                 offsetBegin = (indexItemL * heightItem).toFloat()
-                lg(" move ${indexItemL + 1} to $indexItemL  offsetBegin:$offsetBegin")
+//                lg(" move ${indexItemL + 1} to $indexItemL  offsetBegin:$offsetBegin")
             }
         }
     }
