@@ -36,7 +36,6 @@ fun <T>ColumnDD(
     onClickItem: (Int) -> Unit = {},
 ){
     val heightList: MutableState<Int> = remember { mutableIntStateOf(0) }
-
     val itemList: MutableState<List<T>> = remember { mutableStateOf(emptyList()) }
     itemList.value = items
     AnimatedVisibility(

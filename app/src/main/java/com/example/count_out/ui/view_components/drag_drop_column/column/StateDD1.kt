@@ -64,7 +64,7 @@ class StateDragColumn(
     fun onStopDrag( onMoveItem: (Int, Int) -> Unit){
         offsetY.value =0f
         offsetZ.value = 0.0f
-        mapOffset.value[indexItem] = droppedOffsetFinal
+        for ( i in 0..< sizeList) mapOffset.value[i] = 0
         onMoveItem(indexItem,indexTo)
         lg(" indexItem $indexItem  indexTo $indexTo")
     }

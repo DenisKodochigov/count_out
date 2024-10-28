@@ -15,14 +15,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.count_out.ui.view_components.lg
 
 @Composable
 fun ListColumnDragDopItem() {
     val items = remember { mutableStateOf(ReorderItem) }
     ColumnDD(
         items = items,
-        onMoveItem = { fromIndex, toIndex -> ReorderItem.toMutableList().move(fromIndex, toIndex) },
+        onMoveItem = { from, to -> items.value = move (from, to, items.value)},
         viewItem = { item -> Element(item) }
     )
 }
@@ -33,20 +32,17 @@ fun Element(item:String){
         .background(color = Color.Gray, shape = RoundedCornerShape(8.dp))
         .fillMaxWidth()
         .padding(12.dp),
-        content = { Text(text = item, fontSize = 16.sp) }
+        content = { Text(text = item, fontSize = 20.sp) }
     )
     Spacer(modifier = Modifier.height(12.dp))
 }
 
-val ReorderItem = listOf("Item 0", "Item 1", "Item 2", "Item 3", )
-//val ReorderItem = mutableListOf(
-//    "Item 1", "Item 2", "Item 3", "Item 4", "Item 5", "Item 6", "Item 7", "Item 8", "Item 9",
-//    "Item 10", "Item 11", "Item 12", "Item 13", "Item 14", "Item 15", "Item 16", "Item 17",
-//    "Item 18", "Item 19", "Item 20"
-//)
-fun <T> MutableList<T>.move(from: Int, to: Int) {
-    lg(" move $from $to")
-    if (from == to) return
-    val element = this.removeAt(from) ?: return
-    this.add(to, element)
+var ReorderItem = listOf("Item 0", "Item 1", "Item 2", "Item 3", "Item 4", "Item 5", "Item 6" )
+
+fun <T>move(from: Int, to: Int, list: List<T>): List<T> {
+    if (from == to) return list
+    val list_ = list.toMutableList()
+    val element = list_.removeAt(from) ?: return list
+    list_.add(to, element)
+    return list_
 }

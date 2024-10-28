@@ -29,8 +29,6 @@ fun <T>ColumnDD(
 ){
     val heightList: MutableState<Int> = remember { mutableIntStateOf(0) }
     val stateDrag = remember { StateDragColumn(heightList = heightList, sizeList = items.value.count()) }
-    val list = items.value
-    lg(" ColumnDD $list")
     AnimatedVisibility(
         visible = showList,
         content = {
@@ -46,8 +44,8 @@ fun <T>ColumnDD(
                         onDragCancel = {}
                     )
                 }){
-                list.forEachIndexed { index, item ->
-//                    lg(" Column $index")
+                lg(" ColumnDD ${items.value}")
+                items.value.forEachIndexed { index, item ->
                     val offset = stateDrag.itemOffset(index)
                     Column(
                         modifier = Modifier

@@ -16,7 +16,7 @@ import com.example.count_out.ui.theme.colors3
 import com.example.count_out.ui.view_components.drag_drop_column.ColumnDD
 
 @Composable
-fun ListColumnDragDopItem() {
+fun LazyColumnDragDopItem() {
     ColumnDD(
         items = ReorderItem,
         onMoveItem = { fromIndex, toIndex -> ReorderItem.move(fromIndex, toIndex)},
