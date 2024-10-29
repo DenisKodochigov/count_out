@@ -13,11 +13,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.count_out.ui.theme.colors3
-import com.example.count_out.ui.view_components.drag_drop_column.ColumnDD
 
 @Composable
 fun LazyColumnDragDopItem() {
-    ColumnDD(
+    LazyColumnDD(
         items = ReorderItem,
         onMoveItem = { fromIndex, toIndex -> ReorderItem.move(fromIndex, toIndex)},
         viewItem = { item -> Element(item) }

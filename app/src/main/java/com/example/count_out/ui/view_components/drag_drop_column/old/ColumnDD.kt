@@ -1,4 +1,4 @@
-package com.example.count_out.ui.view_components.drag_drop_column
+package com.example.count_out.ui.view_components.drag_drop_column.old
 
 import android.annotation.SuppressLint
 import androidx.compose.animation.AnimatedVisibility
@@ -27,7 +27,7 @@ import androidx.compose.ui.zIndex
 import com.example.count_out.domain.vibrate
 
 @Composable
-fun <T>ColumnDD(
+fun <T>ColumnDD1(
     items: List<T>,
     modifier: Modifier = Modifier,
     viewItem:@Composable (T) -> Unit,
@@ -49,20 +49,14 @@ fun <T>ColumnDD(
                         heightList = heightList,
                         size = items.size,
                         onClickItem = onClickItem,
-                        onMoveItem = { ind1, ind2 ->moveItem(itemList, ind1, ind2) }
+                        onMoveItem = { ind1, ind2 ->onMoveItem(ind1, ind2) }
                     )
                 }
             }
         }
     )
 }
-fun <T>moveItem(listMut: MutableState<List<T>>, indexFrom: Int, indexTo: Int){
-    val list = listMut.value.toMutableList()
-    val item = list[indexFrom]
-    list.removeAt(indexFrom)
-    list.add(indexTo, item)
-    listMut.value = list
-}
+
 @SuppressLint("UnrememberedMutableState", "UnnecessaryComposedModifier")
 @Composable
 fun ItemDD(
@@ -77,39 +71,24 @@ fun ItemDD(
     val context = LocalContext.current
     val verticalTranslation by animateIntAsState(targetValue = stateDrag.itemOffset(), label = "")
 
-    val per1: MutableState<Any?> = remember { mutableStateOf(null) }
-    val per2: MutableState<Any?> = remember { mutableStateOf(null) }
-    val per3: MutableState<Any?> = remember { mutableStateOf(null) }
-
     Box(
         modifier = Modifier
         .fillMaxWidth()
         .padding(top = 6.dp)
         .offset { IntOffset(0, verticalTranslation) }
-//        .graphicsLayer { translationY = stateDrag.itemOffset().toFloat() }
         .zIndex(stateDrag.itemZ())
         .clickable { onClickItem(indexItem) }
         .onPlaced {  }
         .pointerInput(Unit) {
-//            detectDragGesturesAfterLongPress(
-//                onDrag = { change, offset ->
-//                    change.consume()
-//                    stateDrag.shiftItem(offset.y)
-//                },
-//                onDragStart = {
-//                    vibrate(context)
-//                    stateDrag.onStartDrag(indexItem) },
-//                onDragEnd = { stateDrag.onStopDrag(indexItem, onMoveItem) },
-//                onDragCancel = {}
-//            )
             detectDragGesturesAfterLongPress(
+                onDrag = { change, offset ->
+                    change.consume()
+                    stateDrag.onDrag(offset.y)
+                },
                 onDragStart = {
                     vibrate(context)
                     stateDrag.onStartDrag(indexItem) },
-                onDrag = { change, offset ->
-                    change.consume()
-                    stateDrag.onDrag(offset.y, onMoveItem) },
-                onDragEnd = { stateDrag.onStopDrag() },
+                onDragEnd = { stateDrag.onStopDrag(indexItem, onMoveItem) },
                 onDragCancel = {}
             )
         },

@@ -26,7 +26,7 @@ import com.example.count_out.ui.screens.training.set.SetContent
 import com.example.count_out.ui.theme.elevationTraining
 import com.example.count_out.ui.theme.interReg14
 import com.example.count_out.ui.view_components.TextApp
-import com.example.count_out.ui.view_components.drag_drop_column.ColumnDD
+import com.example.count_out.ui.view_components.drag_drop_column.column.ColumnDD
 import com.example.count_out.ui.view_components.icons.IconsCollapsing
 import com.example.count_out.ui.view_components.icons.IconsGroup
 import com.example.count_out.ui.view_components.lg
@@ -43,7 +43,7 @@ fun ListExercises(
 
     printM(listExercise)
     ColumnDD(
-        items = listExercise,
+        itemsvalue = listExercise,
         modifier = modifier,
         showList = showExercises,
         viewItem = { item -> ElementColum( item, uiState = uiState) },

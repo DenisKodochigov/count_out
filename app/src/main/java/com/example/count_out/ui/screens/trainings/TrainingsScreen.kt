@@ -75,7 +75,7 @@ import com.example.count_out.ui.view_components.icons.IconSubscribe
 ){
     Column(
         modifier = Modifier.fillMaxSize()) {
-//        TrainingList(uiState, modifier = Modifier.weight(1f))
+        TrainingList(uiState, modifier = Modifier.weight(1f))
 //        Row {
 //            PlayI(color = colors3.primary)
 //            PauseI(color = colors3.primary)

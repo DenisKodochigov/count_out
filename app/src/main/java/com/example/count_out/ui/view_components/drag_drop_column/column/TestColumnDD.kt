@@ -9,8 +9,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
@@ -18,10 +16,11 @@ import androidx.compose.ui.unit.sp
 
 @Composable
 fun ListColumnDragDopItem() {
-    val items = remember { mutableStateOf(ReorderItem) }
-    ColumnDD1(
-        items = items,
-        onMoveItem = { from, to -> items.value = move (from, to, items.value)},
+//    val items = remember { mutableStateOf(ReorderItem) }
+    var itemsvalue =  ReorderItem
+    ColumnDD(
+        itemsvalue = itemsvalue,
+        onMoveItem = { from, to -> itemsvalue = move (from, to, itemsvalue)},
         viewItem = { item -> Element(item) }
     )
 }
@@ -32,17 +31,15 @@ fun Element(item:String){
         .background(color = Color.Gray, shape = RoundedCornerShape(8.dp))
         .fillMaxWidth()
         .padding(12.dp),
-        content = {
-            Text(text = item, fontSize = 20.sp)
-            Spacer(modifier = Modifier.height(12.dp))
-        }
+        content = { Text(text = item, fontSize = 20.sp) }
     )
+    Spacer(modifier = Modifier.height(12.dp))
 }
 
 var ReorderItem = listOf("Item 0", "Item 1", "Item 2", "Item 3", "Item 4", "Item 5", "Item 6" )
 
 fun <T>move(from: Int, to: Int, list: List<T>): List<T> {
-    if (from == to) return list
+    if (from == to || from > list.count() -1  || to > list.count() - 1) return list
     val lst = list.toMutableList()
     val element = lst.removeAt(from) ?: return list
     lst.add(to, element)
