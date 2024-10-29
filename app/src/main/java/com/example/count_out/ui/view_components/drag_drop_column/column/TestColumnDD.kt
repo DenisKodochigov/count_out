@@ -19,7 +19,7 @@ import androidx.compose.ui.unit.sp
 @Composable
 fun ListColumnDragDopItem() {
     val items = remember { mutableStateOf(ReorderItem) }
-    ColumnDD(
+    ColumnDD1(
         items = items,
         onMoveItem = { from, to -> items.value = move (from, to, items.value)},
         viewItem = { item -> Element(item) }
@@ -32,17 +32,19 @@ fun Element(item:String){
         .background(color = Color.Gray, shape = RoundedCornerShape(8.dp))
         .fillMaxWidth()
         .padding(12.dp),
-        content = { Text(text = item, fontSize = 20.sp) }
+        content = {
+            Text(text = item, fontSize = 20.sp)
+            Spacer(modifier = Modifier.height(12.dp))
+        }
     )
-    Spacer(modifier = Modifier.height(12.dp))
 }
 
 var ReorderItem = listOf("Item 0", "Item 1", "Item 2", "Item 3", "Item 4", "Item 5", "Item 6" )
 
 fun <T>move(from: Int, to: Int, list: List<T>): List<T> {
     if (from == to) return list
-    val list_ = list.toMutableList()
-    val element = list_.removeAt(from) ?: return list
-    list_.add(to, element)
-    return list_
+    val lst = list.toMutableList()
+    val element = lst.removeAt(from) ?: return list
+    lst.add(to, element)
+    return lst
 }

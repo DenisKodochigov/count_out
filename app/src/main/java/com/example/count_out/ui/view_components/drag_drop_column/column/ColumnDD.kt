@@ -8,18 +8,16 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.offset
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.zIndex
-import com.example.count_out.ui.view_components.lg
 
 @SuppressLint("UnnecessaryComposedModifier")
 @Composable
-fun <T>ColumnDD(
+fun <T>ColumnDD1(
     items: MutableState<List<T>>,
     modifier: Modifier = Modifier,
     viewItem:@Composable (T) -> Unit,
@@ -27,13 +25,12 @@ fun <T>ColumnDD(
     onMoveItem: (Int, Int) -> Unit = {_,_->},
     onClickItem: (Int) -> Unit = {},
 ){
-    val heightList: MutableState<Int> = remember { mutableIntStateOf(0) }
-    val stateDrag = remember { StateDragColumn(heightList = heightList, sizeList = items.value.count()) }
+    val stateDrag = remember { StateDDColumn(sizeList = items.value.count()) }
     AnimatedVisibility(
         visible = showList,
         content = {
             Column(modifier = modifier
-                .onGloballyPositioned { heightList.value = it.size.height }
+                .onGloballyPositioned { stateDrag.heightList.value = it.size.height}
                 .pointerInput(Unit) {
                     detectDragGesturesAfterLongPress(
                         onDragStart = { offset -> stateDrag.onStartDrag(offset.y) },
@@ -44,11 +41,11 @@ fun <T>ColumnDD(
                         onDragCancel = {}
                     )
                 }){
-                lg(" ColumnDD ${items.value}")
                 items.value.forEachIndexed { index, item ->
                     val offset = stateDrag.itemOffset(index)
                     Column(
                         modifier = Modifier
+                            .onGloballyPositioned { stateDrag.heightItem.value = it.size.height}
                             .clickable { onClickItem(index) }
                             .zIndex(stateDrag.itemZ(index))
                             .offset { IntOffset(0, offset ) },

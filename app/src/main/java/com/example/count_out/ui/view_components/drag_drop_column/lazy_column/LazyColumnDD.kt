@@ -27,7 +27,7 @@ fun <T>LazyColumnDD(
     viewItem: @Composable (T)->Unit,
 ) {
     val lazyListState: LazyListState = rememberLazyListState()
-    val stateDD = remember { StateDD(lazyListState = lazyListState, onMove = onMoveItem) }
+    val stateDD = remember { StateDDLazy(lazyListState = lazyListState, onMove = onMoveItem) }
 
     if (!showList) return
     LazyColumn(

@@ -8,7 +8,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.geometry.Offset
 
-class StateDD(val lazyListState: LazyListState, private val onMove: (Int, Int) -> Unit
+class StateDDLazy(val lazyListState: LazyListState, private val onMove: (Int, Int) -> Unit
 ) {
     private var draggedDistance by mutableFloatStateOf(0f)
     private var draggedItem by mutableStateOf<LazyListItemInfo?>(null)
