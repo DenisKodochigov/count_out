@@ -9,6 +9,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
@@ -16,12 +19,11 @@ import androidx.compose.ui.unit.sp
 
 @Composable
 fun ListColumnDragDopItem() {
-//    val items = remember { mutableStateOf(ReorderItem) }
-    var itemsvalue =  ReorderItem
+    val items: MutableState<List<String>> = remember {  mutableStateOf(ReorderItem) }
     ColumnDD(
-        itemsvalue = itemsvalue,
-        onMoveItem = { from, to -> itemsvalue = move (from, to, itemsvalue)},
-        viewItem = { item -> Element(item) }
+        items = items.value,
+        onMoveItem = { from, to -> items.value = move (from, to, items.value)},
+        content = { item -> Element(item) }
     )
 }
 

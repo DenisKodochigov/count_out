@@ -41,13 +41,13 @@ fun ListExercises(
     val listExercise = uiState.training.rounds.find { it.roundType == roundType }?.exercise ?: emptyList()
     val roundId = if (listExercise.isNotEmpty()) listExercise[0].roundId else 0
 
-    printM(listExercise)
     ColumnDD(
-        itemsvalue = listExercise,
+        items = listExercise,
         modifier = modifier,
         showList = showExercises,
-        viewItem = { item -> ElementColum( item, uiState = uiState) },
+        content = { item -> ElementColum( item, uiState = uiState) },
         onMoveItem = { from, to->
+            lg("ListExercises from $from to $to")
             uiState.changeSequenceExercise( uiState.training.idTraining, roundId, from, to )},
     )
 }

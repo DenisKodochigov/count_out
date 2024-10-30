@@ -13,47 +13,49 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.zIndex
-import com.example.count_out.ui.view_components.lg
 
 @SuppressLint("UnnecessaryComposedModifier")
 @Composable
 fun <T>ColumnDD(
-    itemsvalue: List<T>,
+    items: List<T>,
     modifier: Modifier = Modifier,
-    viewItem:@Composable (T) -> Unit,
+    content:@Composable (T) -> Unit,
     showList: Boolean = true,
     onMoveItem: (Int, Int) -> Unit = {_,_->},
     onClickItem: (Int) -> Unit = {},
 ){
-    val stateDrag = remember { StateDDColumn(sizeList = itemsvalue.count()) }
-    lg("itemsvalue $itemsvalue")
+    val stateDrag = remember { StateDDColumn(sizeList = items.count()) }
+
     AnimatedVisibility(
         visible = showList,
         content = {
             Column(modifier = modifier
-                .onGloballyPositioned { stateDrag.heightList.value = it.size.height}
+                .onGloballyPositioned { stateDrag.heightList.value = it.size.height }
                 .pointerInput(Unit) {
                     detectDragGesturesAfterLongPress(
                         onDragStart = { offset -> stateDrag.onStartDrag(offset.y) },
                         onDrag = { change, offset ->
                             change.consume()
-                            stateDrag.onDrag(offset.y) },
+                            stateDrag.onDrag(offset.y)
+                        },
                         onDragEnd = { stateDrag.onStopDrag(onMoveItem) },
                         onDragCancel = {}
                     )
                 }){
-                itemsvalue.forEachIndexed { index, item ->
-                    val offset = stateDrag.itemOffset(index)
+                items.forEachIndexed { index, item ->
+                    val offsetIt = stateDrag.offsetIt(index) ///Не переносить в modifier.
+                    val itemZ = stateDrag.itemZ(index)
                     Column(
                         modifier = Modifier
-                            .onGloballyPositioned { stateDrag.heightItem.value = it.size.height}
+                            .onGloballyPositioned { stateDrag.heightItem.value = it.size.height }
                             .clickable { onClickItem(index) }
-                            .zIndex(stateDrag.itemZ(index))
-                            .offset { IntOffset(0, offset ) },
-                        content = { viewItem(item) }
+                            .zIndex( itemZ )
+                            .offset { IntOffset(0, offsetIt ) },
+                        content = { content(item) }
                     )
                 }
             }
         }
     )
 }
+
