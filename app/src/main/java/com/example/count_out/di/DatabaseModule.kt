@@ -42,8 +42,16 @@ class DatabaseModule {
                         override fun onCreate(db: SupportSQLiteDatabase) {
                             super.onCreate(db)
                             Thread { prepopulateRealDb(database) }.start()
-//                            Executors.newSingleThreadExecutor().execute {
-//                                database.dataDao().newBasket(BasketEntity(nameBasket = "Test")) }
+                        }
+                    })
+                    .build()
+            }
+            3 -> {
+                database = Room.inMemoryDatabaseBuilder(appContext, AppDatabase::class.java)
+                    .addCallback(object : RoomDatabase.Callback() {
+                        override fun onCreate(db: SupportSQLiteDatabase) {
+                            super.onCreate(db)
+                            Thread { prepopulateRealDb(database) }.start()
                         }
                     })
                     .build()

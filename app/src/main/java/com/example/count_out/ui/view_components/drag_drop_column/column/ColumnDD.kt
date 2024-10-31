@@ -38,19 +38,17 @@ fun <T>ColumnDD(
                             change.consume()
                             stateDrag.onDrag(offset.y)
                         },
-                        onDragEnd = { stateDrag.onStopDrag(onMoveItem) },
-                        onDragCancel = {}
+                        onDragEnd = { stateDrag.onDragEnd(onMoveItem) },
+                        onDragCancel = {stateDrag.onDragCancel()}
                     )
                 }){
                 items.forEachIndexed { index, item ->
-                    val offsetIt = stateDrag.offsetIt(index) ///Не переносить в modifier.
-                    val itemZ = stateDrag.itemZ(index)
                     Column(
                         modifier = Modifier
                             .onGloballyPositioned { stateDrag.heightItem.value = it.size.height }
                             .clickable { onClickItem(index) }
-                            .zIndex( itemZ )
-                            .offset { IntOffset(0, offsetIt ) },
+                            .zIndex( stateDrag.itemZ(index) )
+                            .offset { IntOffset(0,  stateDrag.offsetIt(index) ) },
                         content = { content(item) }
                     )
                 }

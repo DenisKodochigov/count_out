@@ -20,6 +20,7 @@ import com.example.count_out.entity.workout.Round
 import com.example.count_out.entity.workout.Set
 import com.example.count_out.entity.workout.TemporaryBase
 import com.example.count_out.entity.workout.Training
+import com.example.count_out.ui.view_components.lg
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -89,7 +90,8 @@ class DataRepository  @Inject constructor(private val dataSource: DataSource,
         return getTraining(trainingId)
     }
     fun changeSequenceExercise(trainingId: Long, roundId: Long, from: Int, to: Int): Training {
-        if ( roundId > 0) dataSource.changeSequenceExercise( roundId, from, to)
+        lg("changeSequenceExercise  from $from   to $to")
+        if ( roundId > 0 && from != to) dataSource.changeSequenceExercise( roundId, from, to)
         return getTraining(trainingId)
     }
     fun getNameTrainingFromRound(roundId: Long): String {
