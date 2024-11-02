@@ -11,5 +11,4 @@ interface Round {
     val speech: SpeechKit
     val roundType: RoundType
     val exercise: List<Exercise>
-    val sequenceExercise: String
 }

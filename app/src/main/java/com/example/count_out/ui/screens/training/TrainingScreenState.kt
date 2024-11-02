@@ -6,11 +6,11 @@ import androidx.compose.runtime.mutableStateOf
 import com.example.count_out.data.room.tables.ExerciseDB
 import com.example.count_out.data.room.tables.SetDB
 import com.example.count_out.data.room.tables.TrainingDB
-import com.example.count_out.entity.workout.Activity
+import com.example.count_out.entity.speech.SpeechKit
 import com.example.count_out.entity.ui.BottomSheetInterface
+import com.example.count_out.entity.workout.Activity
 import com.example.count_out.entity.workout.Exercise
 import com.example.count_out.entity.workout.Set
-import com.example.count_out.entity.speech.SpeechKit
 import com.example.count_out.entity.workout.Training
 
 data class TrainingScreenState(
@@ -38,7 +38,8 @@ data class TrainingScreenState(
     @Stable var onAddExercise: (Long, SetDB) -> Unit = {_,_ ->},
     @Stable var onCopyExercise: (Long, Long) -> Unit = {_,_ ->},
     @Stable var onDeleteExercise: (Long, Long) -> Unit = {_,_ ->},
-    @Stable var changeSequenceExercise: (Long, Long, Int, Int) -> Unit = {_,_,_,_ ->},
+    @Stable var changeSequenceExercise: (Long, Long, Pair<Long,Int>, Pair<Long, Int>) -> Unit = {_,_,_,_ ->},
+//    @Stable var changeSequenceExercise: (Long, Long, Int, Int) -> Unit = {_,_,_,_ ->},
     @Stable var onSelectActivity: (Long, Long) -> Unit = {_,_ ->},
     @Stable var onSetColorActivity: (Long, Int) -> Unit = {_,_ ->},
     @Stable var doChangeActivity: (Activity) -> Unit = {},

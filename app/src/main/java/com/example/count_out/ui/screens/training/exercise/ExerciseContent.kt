@@ -40,20 +40,17 @@ fun ListExercises(
 {
     val listExercise = uiState.training.rounds.find { it.roundType == roundType }?.exercise ?: emptyList()
     val roundId = if (listExercise.isNotEmpty()) listExercise[0].roundId else 0
-
     ColumnDD(
         items = listExercise,
         modifier = modifier,
         showList = showExercises,
         content = { item -> ElementColum( item, uiState = uiState) },
         onMoveItem = { from, to->
-            lg("ListExercises from $from to $to")
-            uiState.changeSequenceExercise( uiState.training.idTraining, roundId, from, to )},
+            lg(" ListExercises roundId $roundId  ${listExercise[from].idExercise to to} ${listExercise[to].idExercise to from} ")
+            uiState.changeSequenceExercise( uiState.training.idTraining, roundId,
+                listExercise[from].idExercise to to, listExercise[to].idExercise to from)
+        },
     )
-}
-
-fun printM(list: List<Exercise>) {
-    list.forEach { lg("${it.idExercise}-${it.activity.name}") }
 }
 
 @Composable

@@ -14,6 +14,7 @@ data class ExerciseDB(
     override var roundId: Long = 0,
     override var speechId: Long = 0,
     override var activityId: Long = 0,
+    override var idView: Int = 0,
     @Ignore override var speech: SpeechKit = SpeechKitDB(),
     @Ignore override var activity: Activity = ActivityDB(),
     @Ignore override var sets: List<Set> = emptyList(),

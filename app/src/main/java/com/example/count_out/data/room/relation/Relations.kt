@@ -9,7 +9,6 @@ import com.example.count_out.data.room.tables.SetDB
 import com.example.count_out.data.room.tables.SpeechDB
 import com.example.count_out.data.room.tables.SpeechKitDB
 import com.example.count_out.data.room.tables.TrainingDB
-import com.example.count_out.domain.toNumeric
 import com.example.count_out.entity.speech.SpeechKit
 import com.example.count_out.entity.workout.Activity
 import com.example.count_out.entity.workout.Exercise
@@ -72,6 +71,7 @@ data class ExerciseRel(
             idExercise = exerciseDB.idExercise,
             roundId = exerciseDB.roundId,
             activityId = exerciseDB.activityId,
+            idView = exerciseDB. idView,
             activity = activity as Activity,
             speech = speechKit?.toSpeechKit() ?: SpeechKitDB(),
             speechId = exerciseDB.speechId,
@@ -91,28 +91,14 @@ data class RoundRel(
 ){
     fun toRound(): RoundDB{
         return RoundDB(
-            exercise = sortExercise(round.sequenceExercise, exercise),
+            exercise = exercise?.map{ it.toExercise()}?.sortedBy{ it.idView } ?: emptyList(),
             countRing = 1,
             idRound = round.idRound,
             roundType = round.roundType,
             speechId = round.speechId,
             speech = speechKit?.toSpeechKit() ?: SpeechKitDB(),
             trainingId = round.trainingId,
-            sequenceExercise = round.sequenceExercise
         )
-    }
-    private fun sortExercise(sequenceExercise: String, exercise: List<ExerciseRel>? ):List<Exercise>{
-        val sortingList = sequenceExercise.split(",")
-        val listExercise: MutableList<Exercise> = mutableListOf()
-        if (sortingList.size > 1) {
-            sortingList.forEach { id->
-                exercise?.find { it.exerciseDB.idExercise == id.toNumeric().toLong() }?.also { exercise ->
-                    listExercise.add(exercise.toExercise()) } ?: mutableListOf<Exercise>()
-            }
-        } else {
-            exercise?.forEach { listExercise.add( it.toExercise() ) } ?: mutableListOf<Exercise>()
-        }
-        return listExercise.toList()
     }
 }
 data class TrainingRel(

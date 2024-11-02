@@ -14,7 +14,7 @@ import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.zIndex
 
-@SuppressLint("UnnecessaryComposedModifier")
+@SuppressLint("UnnecessaryComposedModifier", "RememberReturnType")
 @Composable
 fun <T>ColumnDD(
     items: List<T>,
@@ -24,7 +24,9 @@ fun <T>ColumnDD(
     onMoveItem: (Int, Int) -> Unit = {_,_->},
     onClickItem: (Int) -> Unit = {},
 ){
-    val stateDrag = remember { StateDDColumn(sizeList = items.count()) }
+    if (items.isEmpty()) return
+
+    val stateDrag =  remember { StateDDColumn(sizeList = items.count()) }
 
     AnimatedVisibility(
         visible = showList,

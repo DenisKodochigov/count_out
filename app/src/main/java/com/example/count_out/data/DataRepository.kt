@@ -73,12 +73,9 @@ class DataRepository  @Inject constructor(private val dataSource: DataSource,
                else if (idParent != idChild) { idChild }
                 else { idParent }
     }
-    fun getExercise( roundId: Long, exerciseId:Long): Training {
-        if ( exerciseId > 0) dataSource.getExercise( exerciseId )
-        return dataSource.getTraining( dataSource.getRound(roundId = roundId).trainingId )
-    }
-    fun addExercise(trainingId: Long, roundId: Long, set: SetDB): Training {
-        if ( roundId > 0) dataSource.addExercise( roundId, set )
+
+    fun addExercise(trainingId: Long, roundId: Long ): Training {
+        if ( roundId > 0) dataSource.addExercise( roundId )
         return dataSource.getTraining( trainingId )
     }
     fun copyExercise (trainingId: Long, exerciseId: Long): Training {
@@ -89,16 +86,14 @@ class DataRepository  @Inject constructor(private val dataSource: DataSource,
         if ( exerciseId > 0) dataSource.deleteExercise( exerciseId )
         return getTraining(trainingId)
     }
-    fun changeSequenceExercise(trainingId: Long, roundId: Long, from: Int, to: Int): Training {
-        lg("changeSequenceExercise  from $from   to $to")
-        if ( roundId > 0 && from != to) dataSource.changeSequenceExercise( roundId, from, to)
-        return getTraining(trainingId)
-    }
-    fun getNameTrainingFromRound(roundId: Long): String {
-        return if (roundId > 0) dataSource.getNameTrainingFromRound(roundId) else ""
-    }
-    fun getNameRound(roundId: Long): String {
-        return if (roundId > 0) dataSource.getNameRound(roundId) else ""
+    fun changeSequenceExercise(
+        trainingId: Long, roundId: Long, from: Pair<Long, Int>, to: Pair<Long, Int>): Training {
+
+        lg("changeSequenceExercise roundId $roundId  from $from  to $to")
+        if ( roundId > 0 && from.second != to.second)
+            dataSource.changeSequenceExercise( roundId, from, to)
+        val training = getTraining(trainingId)
+        return training
     }
 
 //###### ACTIVITY ##################
@@ -128,7 +123,7 @@ class DataRepository  @Inject constructor(private val dataSource: DataSource,
         dataSource.onDeleteActivity(activityId)
         return getActivities()
     }
-    //###### SET ##################
+//###### SET ##################
     fun addUpdateSet(trainingId: Long, exerciseId:Long, set: Set): Training {
         if (exerciseId > 0 && set != SetDB()) dataSource.addUpdateSet(exerciseId, set).roundId
         return dataSource.getTraining(trainingId)
@@ -149,28 +144,41 @@ class DataRepository  @Inject constructor(private val dataSource: DataSource,
     fun getSettings(): List<SettingDB>{
         return dataSource.getSettings()
     }
-    fun getSetting(parameter: Int) = dataSource.getSetting(parameter)
     fun updateSetting(item: SettingDB): List<SettingDB>{
         dataSource.updateSetting(item)
         return dataSource.getSettings()
     }
     fun updateDuration(duration: Pair<Long, Long>){ dataSource.updateDuration(duration) }
-
     fun writeTemporaryData(dataForBase: TemporaryBase) {
         dataSource.writeTemporaryData(dataForBase)
     }
-
     fun clearTemporaryData() {
         dataSource.clearTemporaryData()
     }
-
-//    suspend fun getWeathers(latitude: Double, longitude: Double): Weathers {
-//        return dataOpenMeteo.getWeather(latitude, longitude).toWeathers()
-//    }
-
     suspend fun saveTraining(workout: WorkoutDB) {
         val weather = dataOpenMeteo.getWeather(workout).current
         weather?.let { workout.formWeather(it) }
         dataSource.saveTraining(workout)
     }
 }
+
+
+//    fun getNameTrainingFromRound(roundId: Long): String {
+//        return if (roundId > 0) dataSource.getNameTrainingFromRound(roundId) else "" }
+//    fun getNameRound(roundId: Long): String {
+//        return if (roundId > 0) dataSource.getNameRound(roundId) else "" }
+//    fun getSetting(parameter: Int) = dataSource.getSetting(parameter)
+//    suspend fun getWeathers(latitude: Double, longitude: Double): Weathers {
+//        return dataOpenMeteo.getWeather(latitude, longitude).toWeathers()
+//    }
+//    fun getExercise( roundId: Long, exerciseId:Long): Training {
+//        if ( exerciseId > 0) dataSource.getExercise( exerciseId )
+//        return dataSource.getTraining( dataSource.getRound(roundId = roundId).trainingId )
+//    }
+
+//    fun changeSequenceExercise(trainingId: Long, roundId: Long, from: Int, to: Int): Training {
+//        lg("changeSequenceExercise roundId $roundId  from $from  to $to")
+//        if ( roundId > 0 && from != to) dataSource.changeSequenceExercise( roundId, from, to)
+//        val training = getTraining(trainingId)
+//        return training
+//    }

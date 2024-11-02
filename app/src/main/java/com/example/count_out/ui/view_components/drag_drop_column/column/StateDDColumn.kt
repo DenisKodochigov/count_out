@@ -4,11 +4,7 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
-import com.example.count_out.ui.view_components.lg
-import javax.inject.Singleton
 
-
-@Singleton
 data class StateDDColumn( var sizeList: Int = 0, ) {
 
     private val offsetItems: MutableState<Map<Int, Int>> = mutableStateOf(emptyMap())
@@ -26,10 +22,11 @@ data class StateDDColumn( var sizeList: Int = 0, ) {
         offsetY.value = offset
         indexDD.value = (offset / heightItem.value).toInt()
         indexMoved.value = indexDD.value
-        lg("onStartDrag  indexDD ${indexDD.value} offsetStart=$offsetStart  heightItem=${heightItem.value}  heightList=${heightList.value}")
+//        lg("onStartDrag  indexDD ${indexDD.value} offsetStart=$offsetStart  heightItem=${heightItem.value}  heightList=${heightList.value}")
     }
     fun onDrag(delta: Float){
         offsetY.value += delta
+//        lg("onStartDrag  offsetY ${offsetY.value} down=${heightItem.value * (indexMoved.value + 1.5)}  up=${ heightItem.value * (indexMoved.value - 0.5)} ")
         if (offsetY.value in 0f..(heightList.value + heightItem.value/2f)) {
             val koef = if (offsetY.value > heightItem.value * (indexMoved.value + 1.5)) { 1 }
                         else if (offsetY.value < heightItem.value * (indexMoved.value - 0.5) ) { -1 }
@@ -56,7 +53,7 @@ data class StateDDColumn( var sizeList: Int = 0, ) {
 
     private fun addOffset( koef: Int ): Map<Int, Int>{
         if ((indexMoved.value + koef) in 0..< sizeList) indexMoved.value += koef
-        lg("")
+//        lg("indexMoved ${indexMoved.value}  indexDD ${indexDD.value}  koef $koef   size $sizeList")
         val map = offsetItems.value.toMutableMap()
         map[indexMoved.value] = (map[indexMoved.value] ?: 0) + (-1 * koef) * heightItem.value
         return map

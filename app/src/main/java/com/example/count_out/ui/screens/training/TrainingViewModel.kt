@@ -7,8 +7,8 @@ import com.example.count_out.data.DataRepository
 import com.example.count_out.data.room.tables.SetDB
 import com.example.count_out.data.room.tables.TrainingDB
 import com.example.count_out.entity.MessageApp
-import com.example.count_out.entity.workout.Set
 import com.example.count_out.entity.speech.SpeechKit
+import com.example.count_out.entity.workout.Set
 import com.example.count_out.entity.workout.Training
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -75,10 +75,10 @@ class TrainingViewModel @Inject constructor(
     private fun copyExercise(trainingId: Long, exerciseId: Long){
         templateMy { dataRepository.copyExercise(trainingId, exerciseId) } }
     private fun addExercise(roundId: Long, set: SetDB){
-        templateMy { dataRepository.addExercise(trainingScreenState.value.training.idTraining, roundId, set ) } }
+        templateMy { dataRepository.addExercise(trainingScreenState.value.training.idTraining, roundId ) } }
     private fun deleteExercise(trainingId: Long, exerciseId: Long){
         templateMy { dataRepository.deleteExercise(trainingId, exerciseId) } }
-    private fun changeSequenceExercise(trainingId: Long, roundId: Long, from: Int, to: Int){
+    private fun changeSequenceExercise(trainingId: Long, roundId: Long, from: Pair<Long, Int> , to: Pair<Long, Int>){
         templateMy { dataRepository.changeSequenceExercise(trainingId, roundId, from, to) } }
     private fun setActivityToExercise(exerciseId: Long, activityId: Long) {
         templateMy{dataRepository.setActivityToExercise(

@@ -41,7 +41,6 @@ import com.example.count_out.ui.theme.getIdImage
 import com.example.count_out.ui.theme.mTypography
 import com.example.count_out.ui.view_components.ItemSwipe
 import com.example.count_out.ui.view_components.TextApp
-import com.example.count_out.ui.view_components.drag_drop_column.column.ListColumnDragDopItem
 import com.example.count_out.ui.view_components.icons.IconSingle
 import com.example.count_out.ui.view_components.icons.IconSubscribe
 
@@ -76,9 +75,16 @@ import com.example.count_out.ui.view_components.icons.IconSubscribe
     Column(
         modifier = Modifier.fillMaxSize()) {
         TrainingList(uiState, modifier = Modifier.weight(1f))
-        ListColumnDragDopItem()
+//        ListColumnDragDopItem()
+//        TestDB(uiState)
     }
 }
+
+//@Composable
+//fun TestDB(uiState: TrainingsScreenState) {
+//    if ( uiState.trainings.isNotEmpty())
+//        uiState.trainings.get(0).rounds.forEach{ rnd-> lg("     ${rnd.exercise.map { ex-> ex.sequential}  }")}
+//}
 
 @Composable fun TrainingList(uiState: TrainingsScreenState, modifier: Modifier = Modifier) {
     LazyColumn(

@@ -33,8 +33,8 @@ import com.example.count_out.ui.bottomsheet.BottomSheetSpeech
 import com.example.count_out.ui.screens.training.round.Round
 import com.example.count_out.ui.theme.Dimen
 import com.example.count_out.ui.theme.mTypography
-import com.example.count_out.ui.view_components.icons.IconsGroup
 import com.example.count_out.ui.view_components.TextFieldApp
+import com.example.count_out.ui.view_components.icons.IconsGroup
 
 @SuppressLint("UnrememberedMutableState")
 @Composable
@@ -109,12 +109,10 @@ fun TrainingScreenLayout( uiState: TrainingScreenState
             .fillMaxHeight()
             .verticalScroll(rememberScrollState())
             .padding(horizontal = Dimen.paddingAppHor)
-            .clickable(
-                interactionSource = interactionSource, indication = null
+            .clickable(interactionSource = interactionSource, indication = null
             ) {
                 if (uiState.training.name != uiState.enteredName.value) {
-                    uiState.changeNameTraining(uiState.training, uiState.enteredName.value)
-                }
+                    uiState.changeNameTraining(uiState.training, uiState.enteredName.value) }
                 focusManager.clearFocus(true)
             },
     ){
