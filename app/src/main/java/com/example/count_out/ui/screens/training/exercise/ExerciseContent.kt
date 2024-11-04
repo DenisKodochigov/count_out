@@ -32,6 +32,7 @@ import com.example.count_out.ui.view_components.TextApp
 import com.example.count_out.ui.view_components.drag_drop_column.column.ColumnDD
 import com.example.count_out.ui.view_components.icons.IconsCollapsing
 import com.example.count_out.ui.view_components.icons.IconsGroup
+import com.example.count_out.ui.view_components.lg
 
 @Composable
 fun ListExercises(
@@ -42,15 +43,19 @@ fun ListExercises(
 {
     val listExercise: MutableState<List<Exercise>> = remember { mutableStateOf(emptyList()) }
     listExercise.value = uiState.training.rounds.find { it.roundType == roundType }?.exercise ?: emptyList()
-    val roundId = if (listExercise.value.isNotEmpty()) listExercise.value[0].roundId else 0
+    lg(" listExercise ${listExercise.value.map { it.idExercise.toString() + "/" + it.idView }}")
     ColumnDD(
         items = listExercise.value,
         modifier = modifier,
         showList = showExercises,
         content = { item -> ElementColum( item, uiState = uiState) },
         onMoveItem = { from, to->
-            uiState.changeSequenceExercise( uiState.training.idTraining, roundId,
-                listExercise.value[from].idExercise to to, listExercise.value[to].idExercise to from)
+            lg(" listExercise ${listExercise.value.map { it.idExercise.toString() + "/" + it.idView }}  ${ from to to}")
+            uiState.changeSequenceExercise(
+                uiState.training.idTraining,
+                if (listExercise.value.isNotEmpty()) listExercise.value[0].roundId else 0,
+                listExercise.value[from].idExercise to from,
+                listExercise.value[to].idExercise to to)
         },
     )
 }

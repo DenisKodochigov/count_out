@@ -80,8 +80,11 @@ interface DataDao {
     @Query("SELECT * FROM tb_exercise WHERE idExercise = :id ORDER BY  idView ASC")
     fun getExerciseRel(id: Long): ExerciseRel
 
-    @Transaction @Query("SELECT * FROM tb_exercise WHERE roundId = :id ORDER BY  idView ASC")
+    @Transaction @Query("SELECT * FROM tb_exercise WHERE roundId = :id ORDER BY idView ASC")
     fun getExercisesForRoundRel(id: Long): List<ExerciseRel>
+
+    @Transaction @Query("SELECT * FROM tb_exercise WHERE roundId = :id ORDER BY idView ASC")
+    fun getExercisesForRound(id: Long): List<ExerciseDB>
 
     @Query("SELECT * FROM tb_exercise ")
     fun getExercises(): List<ExerciseDB>
@@ -100,6 +103,8 @@ interface DataDao {
 
     @Query("UPDATE tb_exercise SET idView = :idView WHERE idExercise =:id AND roundId =:roundId")
     fun updateIdView( roundId: Long, id: Long, idView: Int)
+    @Query("UPDATE tb_exercise SET idView = :idView WHERE idView =:idViewOld AND roundId =:roundId")
+    fun updateIdView1( roundId: Long, idViewOld: Int, idView: Int)
 //Activity
     @Insert
     fun addActivity(item: ActivityDB): Long

@@ -29,13 +29,12 @@ class DataSource @Inject constructor(private val dataDao: DataDao) {
 //Training
     fun getTraining(id: Long): TrainingDB {
         val training = dataDao.getTrainingRel(id).toTraining()
-//        checkSequenceExercise(training)
         return training
     }
     fun getTrainings(): List<Training> {
         if (MODE_DATABASE == 1 || MODE_DATABASE == 3) {
             dataDao.getTrainingsRel()
-            Thread.sleep(1800)
+            Thread.sleep(1000)
         }
         return dataDao.getTrainingsRel().map { it.toTraining() }
     }
@@ -103,8 +102,35 @@ class DataSource @Inject constructor(private val dataDao: DataDao) {
         }
     }
     fun changeSequenceExercise( roundId: Long, from: Pair<Long, Int> , to: Pair<Long, Int>){
-        dataDao.updateIdView(roundId, from.first, from.second)
-        dataDao.updateIdView(roundId, to.first, to.second)
+        lg("0 from=${from}  to=${to}")
+        lg("1 ${dataDao.getExercisesForRound(roundId).map { it.idExercise.toString() + "/" + it.idView }}")
+
+        val listExercise = dataDao.getExercisesForRound(roundId)
+        for ( id in from.first..to.first ){
+            if (listExercise[id.toInt()].idView == 1){
+
+            }
+        }
+
+
+
+        if (from.second > to.second){
+            val id = from.second - 1
+            dataDao.updateIdView1(roundId, from.second, to.second)
+            while ( id > to.second && id > 0){
+
+            }
+
+            for (id in from.second..< to.second step -1){ dataDao.updateIdView1(roundId, id, (id + 1))
+                lg("2-$id ${dataDao.getExercisesForRound(roundId).map { it.idExercise.toString() + "/" + it.idView }}") }
+            dataDao.updateIdView1(roundId, from.second, to.second)
+        } else {
+            for (id in to.second..< from.second step -1){
+                dataDao.updateIdView1(roundId, id, (id + 1))
+                lg("2-$id ${dataDao.getExercisesForRound(roundId).map { it.idExercise.toString() + "/" + it.idView }}") }
+            lg("3 ${dataDao.getExercisesForRound(roundId).map { it.idExercise.toString() + "/" + it.idView }}")
+            dataDao.updateIdView1(roundId, from.second, to.second)
+        }
     }
 //Exercise
     fun getExercise( exerciseId:Long): Exercise {

@@ -25,9 +25,8 @@ fun <T>ColumnDD(
     onClickItem: (Int) -> Unit = {},
 ){
     if (items.isEmpty()) return
-
     val stateDrag =  remember { StateDDColumn(sizeList = items.count()) }
-
+    stateDrag.init()
     AnimatedVisibility(
         visible = showList,
         content = {

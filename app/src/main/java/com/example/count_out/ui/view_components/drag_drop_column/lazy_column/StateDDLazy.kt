@@ -55,4 +55,9 @@ class StateDDLazy(val lazyListState: LazyListState, private val onMove: (Int, In
         (draggedItem?.offset ?: 0f).toFloat() + draggedDistance - item.offset }
         .takeIf { index == indexItemUnder }
     fun zIndex(index: Int) = if (index == indexItemUnder ) 1f else 0f
+    private fun LazyListState.getVisibleItemInfoFor(absolute: Int): LazyListItemInfo? {
+        return this.layoutInfo.visibleItemsInfo.getOrNull(absolute - this.layoutInfo.visibleItemsInfo.first().index)
+    }
 }
+val LazyListItemInfo.offsetEnd: Int
+    get() = this.offset + this.size

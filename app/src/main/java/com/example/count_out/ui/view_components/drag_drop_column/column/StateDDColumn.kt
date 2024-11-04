@@ -15,18 +15,20 @@ data class StateDDColumn( var sizeList: Int = 0, ) {
     val heightList: MutableState<Int> = mutableIntStateOf(0)
 
     private var offsetStart: Int = 0
+    fun init(){
+        offsetY.value =0f
+        offsetStart = 0
+        initMap()
+    }
 
     fun onStartDrag(offset: Float) {
-        initMap()
         offsetStart = offset.toInt()
         offsetY.value = offset
         indexDD.value = (offset / heightItem.value).toInt()
         indexMoved.value = indexDD.value
-//        lg("onStartDrag  indexDD ${indexDD.value} offsetStart=$offsetStart  heightItem=${heightItem.value}  heightList=${heightList.value}")
     }
     fun onDrag(delta: Float){
         offsetY.value += delta
-//        lg("onStartDrag  offsetY ${offsetY.value} down=${heightItem.value * (indexMoved.value + 1.5)}  up=${ heightItem.value * (indexMoved.value - 0.5)} ")
         if (offsetY.value in 0f..(heightList.value + heightItem.value/2f)) {
             val koef = if (offsetY.value > heightItem.value * (indexMoved.value + 1.5)) { 1 }
                         else if (offsetY.value < heightItem.value * (indexMoved.value - 0.5) ) { -1 }
@@ -35,15 +37,11 @@ data class StateDDColumn( var sizeList: Int = 0, ) {
         }
     }
     fun onDragEnd( onMoveItem: (Int, Int) -> Unit){
-        offsetY.value =0f
-        offsetStart = 0
-        initMap()
-        onMoveItem(indexDD.value,indexMoved.value)
-    }
+        onMoveItem(indexDD.value, indexMoved.value) }
     fun onDragCancel(){ indexDD.value = -1 }
     fun itemZ(index: Int) = if (index == indexDD.value) 1f else 0f
     fun offsetIt(index: Int) = (offsetItems.value[index] ?: 0) +
-            if (index == indexDD.value) { offsetY.value.toInt() - offsetStart } else 0
+        if (index == indexDD.value) { offsetY.value.toInt() - offsetStart } else 0
 
     private fun initMap() {
         val mapOffset: MutableMap<Int, Int> = mutableMapOf()
