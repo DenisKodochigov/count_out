@@ -20,7 +20,6 @@ import com.example.count_out.entity.workout.Round
 import com.example.count_out.entity.workout.Set
 import com.example.count_out.entity.workout.TemporaryBase
 import com.example.count_out.entity.workout.Training
-import com.example.count_out.ui.view_components.lg
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -30,6 +29,7 @@ class DataRepository  @Inject constructor(private val dataSource: DataSource,
                                           private val dataStoreBle: DataStore<BleDevSerializable>
 ){
     fun getTrainings(): List<Training> = dataSource.getTrainings()
+
     fun getTraining(id: Long): Training = dataSource.getTraining(id)
     fun addTraining(): List<Training> = dataSource.addTraining()
     fun deleteTraining(id: Long): List<Training> = dataSource.deleteTraining(id)
@@ -89,7 +89,7 @@ class DataRepository  @Inject constructor(private val dataSource: DataSource,
     fun changeSequenceExercise(
         trainingId: Long, roundId: Long, from: Pair<Long, Int>, to: Pair<Long, Int>): Training {
 
-        lg("changeSequenceExercise roundId $roundId  from $from  to $to")
+//        lg("changeSequenceExercise roundId $roundId  from $from  to $to")
         if ( roundId > 0 && from.second != to.second)
             dataSource.changeSequenceExercise( roundId, from, to)
         val training = getTraining(trainingId)

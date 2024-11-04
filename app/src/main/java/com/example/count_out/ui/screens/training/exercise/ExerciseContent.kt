@@ -12,6 +12,9 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Card
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -29,7 +32,6 @@ import com.example.count_out.ui.view_components.TextApp
 import com.example.count_out.ui.view_components.drag_drop_column.column.ColumnDD
 import com.example.count_out.ui.view_components.icons.IconsCollapsing
 import com.example.count_out.ui.view_components.icons.IconsGroup
-import com.example.count_out.ui.view_components.lg
 
 @Composable
 fun ListExercises(
@@ -38,17 +40,17 @@ fun ListExercises(
     modifier: Modifier = Modifier,
     showExercises: Boolean)
 {
-    val listExercise = uiState.training.rounds.find { it.roundType == roundType }?.exercise ?: emptyList()
-    val roundId = if (listExercise.isNotEmpty()) listExercise[0].roundId else 0
+    val listExercise: MutableState<List<Exercise>> = remember { mutableStateOf(emptyList()) }
+    listExercise.value = uiState.training.rounds.find { it.roundType == roundType }?.exercise ?: emptyList()
+    val roundId = if (listExercise.value.isNotEmpty()) listExercise.value[0].roundId else 0
     ColumnDD(
-        items = listExercise,
+        items = listExercise.value,
         modifier = modifier,
         showList = showExercises,
         content = { item -> ElementColum( item, uiState = uiState) },
         onMoveItem = { from, to->
-            lg(" ListExercises roundId $roundId  ${listExercise[from].idExercise to to} ${listExercise[to].idExercise to from} ")
             uiState.changeSequenceExercise( uiState.training.idTraining, roundId,
-                listExercise[from].idExercise to to, listExercise[to].idExercise to from)
+                listExercise.value[from].idExercise to to, listExercise.value[to].idExercise to from)
         },
     )
 }

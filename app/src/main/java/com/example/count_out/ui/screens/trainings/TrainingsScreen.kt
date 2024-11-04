@@ -23,8 +23,10 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -43,6 +45,7 @@ import com.example.count_out.ui.view_components.ItemSwipe
 import com.example.count_out.ui.view_components.TextApp
 import com.example.count_out.ui.view_components.icons.IconSingle
 import com.example.count_out.ui.view_components.icons.IconSubscribe
+import com.example.count_out.ui.view_components.lg
 
 @Composable fun TrainingsScreen(
     onClickTraining: (Long) -> Unit,
@@ -75,24 +78,18 @@ import com.example.count_out.ui.view_components.icons.IconSubscribe
     Column(
         modifier = Modifier.fillMaxSize()) {
         TrainingList(uiState, modifier = Modifier.weight(1f))
-//        ListColumnDragDopItem()
-//        TestDB(uiState)
     }
 }
 
-//@Composable
-//fun TestDB(uiState: TrainingsScreenState) {
-//    if ( uiState.trainings.isNotEmpty())
-//        uiState.trainings.get(0).rounds.forEach{ rnd-> lg("     ${rnd.exercise.map { ex-> ex.sequential}  }")}
-//}
-
 @Composable fun TrainingList(uiState: TrainingsScreenState, modifier: Modifier = Modifier) {
+    val trainings: MutableState<List<Training>> = remember { mutableStateOf( emptyList()) }
+    trainings.value =  uiState.trainings
     LazyColumn(
         state = rememberLazyListState(),
         contentPadding = PaddingValues(horizontal = Dimen.paddingAppHor, vertical = 4.dp),
         modifier = modifier.testTag("1").animateContentSize()
     ){
-        items( items = uiState.trainings, key = { it.idTraining })
+        items( items = trainings.value, key = { it.idTraining })
         { item ->
             Spacer(modifier = Modifier.height(Dimen.width4))
             ItemSwipe(

@@ -35,7 +35,7 @@ class DataSource @Inject constructor(private val dataDao: DataDao) {
     fun getTrainings(): List<Training> {
         if (MODE_DATABASE == 1 || MODE_DATABASE == 3) {
             dataDao.getTrainingsRel()
-            Thread.sleep(800)
+            Thread.sleep(1800)
         }
         return dataDao.getTrainingsRel().map { it.toTraining() }
     }
