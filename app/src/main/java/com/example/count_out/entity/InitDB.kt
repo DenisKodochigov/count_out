@@ -147,6 +147,18 @@ private fun createTrainingPlansTesting( db: AppDatabase) {
     db.dataDao().addSet(
         SetDB(exerciseId = idExercise, name = "Set 2", reps = reps, intervalReps = 1.0, timeRest = rest, goal = GoalSet.COUNT,
         speechId = addSpeechKit(db, bs = "Старт", ast = "", be = "", ae = "Конец",)))
+    //Упражнение 3
+    idExercise = db.dataDao().addExercise(ExerciseDB(roundId = idRound, activityId = 6, idView = 2,  //"Растереть макушку"
+        speechId = addSpeechKit(db, bs = "", ast = "", be = "", ae = "",)))
+    db.dataDao().addSet(
+        SetDB(exerciseId = idExercise, name = "Set 3", reps = reps, intervalReps = 1.0, timeRest = rest, goal = GoalSet.COUNT,
+            speechId = addSpeechKit(db, bs = "Старт", ast = "", be = "", ae = "Конец",)))
+    //Упражнение 4
+    idExercise = db.dataDao().addExercise(ExerciseDB(roundId = idRound, activityId = 7, idView = 3,  //"Растереть макушку"
+        speechId = addSpeechKit(db, bs = "", ast = "", be = "", ae = "",)))
+    db.dataDao().addSet(
+        SetDB(exerciseId = idExercise, name = "Set 4", reps = reps, intervalReps = 1.0, timeRest = rest, goal = GoalSet.COUNT,
+            speechId = addSpeechKit(db, bs = "Старт", ast = "", be = "", ae = "Конец",)))
 
 //Основная
     idRound = db.dataDao().addRound(RoundDB(trainingId = idTraining, roundType = RoundType.OUT, countRing = 1,

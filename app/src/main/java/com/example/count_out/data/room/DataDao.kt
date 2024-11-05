@@ -101,10 +101,8 @@ interface DataDao {
     @Query("SELECT max( idView) FROM tb_exercise WHERE roundId = :roundId")
     fun getExerciseMaxSequential(roundId: Long): Int
 
-    @Query("UPDATE tb_exercise SET idView = :idView WHERE idExercise =:id AND roundId =:roundId")
-    fun updateIdView( roundId: Long, id: Long, idView: Int)
-    @Query("UPDATE tb_exercise SET idView = :idView WHERE idView =:idViewOld AND roundId =:roundId")
-    fun updateIdView1( roundId: Long, idViewOld: Int, idView: Int)
+    @Query("UPDATE tb_exercise SET idView = :idView WHERE idExercise =:exerciseId")
+    fun updateIdView( exerciseId: Long, idView: Int)
 //Activity
     @Insert
     fun addActivity(item: ActivityDB): Long

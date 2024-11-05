@@ -54,8 +54,7 @@ fun ListExercises(
             uiState.changeSequenceExercise(
                 uiState.training.idTraining,
                 if (listExercise.value.isNotEmpty()) listExercise.value[0].roundId else 0,
-                listExercise.value[from].idExercise to from,
-                listExercise.value[to].idExercise to to)
+                from, to )
         },
     )
 }

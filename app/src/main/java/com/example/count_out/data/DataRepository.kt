@@ -87,11 +87,10 @@ class DataRepository  @Inject constructor(private val dataSource: DataSource,
         return getTraining(trainingId)
     }
     fun changeSequenceExercise(
-        trainingId: Long, roundId: Long, from: Pair<Long, Int>, to: Pair<Long, Int>): Training {
+        trainingId: Long, roundId: Long, idViewForm:Int, idViewTo: Int): Training {
 
-//        lg("changeSequenceExercise roundId $roundId  from $from  to $to")
-        if ( roundId > 0 && from.second != to.second)
-            dataSource.changeSequenceExercise( roundId, from, to)
+        if ( roundId > 0 && idViewForm != idViewTo)
+            dataSource.changeSequenceExercise( roundId, idViewForm, idViewTo)
         val training = getTraining(trainingId)
         return training
     }

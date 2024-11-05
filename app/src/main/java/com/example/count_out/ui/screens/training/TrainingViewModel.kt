@@ -34,7 +34,7 @@ class TrainingViewModel @Inject constructor(
             onAddExercise = { roundId, set -> addExercise( roundId, set )},
             onCopyExercise = { trainingId, exerciseId -> copyExercise(trainingId, exerciseId)},
             onDeleteExercise = { trainingId, exerciseId -> deleteExercise(trainingId, exerciseId)},
-            changeSequenceExercise = {trainingId, roundId, from, to ->
+            changeSequenceExercise = { trainingId, roundId, from, to ->
                     changeSequenceExercise(trainingId,roundId, from, to)},
             onSelectActivity = {
                     exerciseId, activityId -> setActivityToExercise(exerciseId, activityId) },
@@ -78,8 +78,8 @@ class TrainingViewModel @Inject constructor(
         templateMy { dataRepository.addExercise(trainingScreenState.value.training.idTraining, roundId ) } }
     private fun deleteExercise(trainingId: Long, exerciseId: Long){
         templateMy { dataRepository.deleteExercise(trainingId, exerciseId) } }
-    private fun changeSequenceExercise(trainingId: Long, roundId: Long, from: Pair<Long, Int> , to: Pair<Long, Int>){
-        templateMy { dataRepository.changeSequenceExercise(trainingId, roundId, from, to) } }
+    private fun changeSequenceExercise(trainingId: Long, roundId: Long, idViewForm:Int, idViewTo: Int){
+        templateMy { dataRepository.changeSequenceExercise(trainingId, roundId, idViewForm, idViewTo) } }
     private fun setActivityToExercise(exerciseId: Long, activityId: Long) {
         templateMy{dataRepository.setActivityToExercise(
             trainingScreenState.value.training.idTraining, exerciseId, activityId)}

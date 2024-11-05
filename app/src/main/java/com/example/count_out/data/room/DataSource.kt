@@ -74,7 +74,7 @@ class DataSource @Inject constructor(private val dataDao: DataDao) {
         return trainingId
     }
 //Round
-    fun getRound(roundId: Long): RoundDB = dataDao.getRoundRel(roundId).toRound()
+//    fun getRound(roundId: Long): RoundDB = dataDao.getRoundRel(roundId).toRound()
     private fun createRound( trainingId: Long, typeRound: RoundType){
         dataDao.addRound(
             RoundDB(
@@ -87,7 +87,6 @@ class DataSource @Inject constructor(private val dataDao: DataDao) {
     private fun copyRound(round: Round, trainingId: Long = 0): Round {
         val idNew = dataDao.addRound((round as RoundDB).copy(
             idRound = 0,
-//            sequenceExercise = "",
             speechId = copySpeechKit(round.speech as SpeechKitDB),
             trainingId = if (trainingId == 0L) round.trainingId else trainingId ))
         round.exercise.forEach { exercise-> copyExercise(exercise, idNew) }
@@ -101,42 +100,24 @@ class DataSource @Inject constructor(private val dataDao: DataDao) {
             dataDao.delRound(it.idRound)
         }
     }
-    fun changeSequenceExercise( roundId: Long, from: Pair<Long, Int> , to: Pair<Long, Int>){
-        lg("0 from=${from}  to=${to}")
-        lg("1 ${dataDao.getExercisesForRound(roundId).map { it.idExercise.toString() + "/" + it.idView }}")
+    fun changeSequenceExercise( roundId: Long, idViewForm:Int, idViewTo: Int){
 
         val listExercise = dataDao.getExercisesForRound(roundId)
-        for ( id in from.first..to.first ){
-            if (listExercise[id.toInt()].idView == 1){
 
-            }
-        }
-
-
-
-        if (from.second > to.second){
-            val id = from.second - 1
-            dataDao.updateIdView1(roundId, from.second, to.second)
-            while ( id > to.second && id > 0){
-
-            }
-
-            for (id in from.second..< to.second step -1){ dataDao.updateIdView1(roundId, id, (id + 1))
-                lg("2-$id ${dataDao.getExercisesForRound(roundId).map { it.idExercise.toString() + "/" + it.idView }}") }
-            dataDao.updateIdView1(roundId, from.second, to.second)
+        if (idViewForm > idViewTo){
+            for ( id in idViewTo..<idViewForm){
+                dataDao.updateIdView(exerciseId = listExercise[id].idExercise, idView = id + 1) }
         } else {
-            for (id in to.second..< from.second step -1){
-                dataDao.updateIdView1(roundId, id, (id + 1))
-                lg("2-$id ${dataDao.getExercisesForRound(roundId).map { it.idExercise.toString() + "/" + it.idView }}") }
-            lg("3 ${dataDao.getExercisesForRound(roundId).map { it.idExercise.toString() + "/" + it.idView }}")
-            dataDao.updateIdView1(roundId, from.second, to.second)
+            for ( id in (idViewForm + 1)..idViewTo){
+                dataDao.updateIdView(exerciseId = listExercise[id].idExercise, idView = id - 1) }
         }
+        dataDao.updateIdView(exerciseId = listExercise[idViewForm].idExercise, idView = idViewTo)
     }
 //Exercise
-    fun getExercise( exerciseId:Long): Exercise {
-        return if (exerciseId > 1) { dataDao.getExerciseRel(exerciseId).toExercise() }
-                else { ExerciseDB() }
-    }
+//    fun getExercise( exerciseId:Long): Exercise {
+//        return if (exerciseId > 1) { dataDao.getExerciseRel(exerciseId).toExercise() }
+//                else { ExerciseDB() }
+//    }
     fun addExercise( roundId:Long): Exercise {
         return createExercise( roundId )
     }
@@ -154,9 +135,6 @@ class DataSource @Inject constructor(private val dataDao: DataDao) {
     }
     fun deleteExercise ( exerciseId: Long) {
         val exercise = dataDao.getExerciseRel(exerciseId).toExercise()
-//        val round = getRound(exercise.roundId)
-//        round.sequenceExercise = deleteIdFromSequence( round.sequenceExercise, exerciseId )
-//        dataDao.updateRound(round)
         deleteSets( exerciseId )
         deleteSpeechKit(exercise.speech)
         dataDao.deleteExercise(exerciseId)
@@ -173,23 +151,13 @@ class DataSource @Inject constructor(private val dataDao: DataDao) {
         return dataDao.getExercise(exerciseId)
     }
     private fun copyExercise(exercise: Exercise, roundId: Long): Exercise {
-        lg(" copyExercise idView=${dataDao.getExerciseMaxSequential(roundId) + 1}")
         val idNew = dataDao.addExercise((exercise as ExerciseDB).copy(
             idExercise = 0L,
             idView = dataDao.getExerciseMaxSequential(roundId) + 1,
             speechId = copySpeechKit(exercise.speech as SpeechKitDB),
-            roundId = if (roundId == 0L) exercise.roundId else roundId ))
+            roundId = if (roundId == 0L) exercise.roundId else roundId )
+        )
         exercise.sets.forEach { copySet( it, idNew) }
-        val round  = dataDao.getRound(roundId)
-//        if (round.sequenceExercise.contains(exercise.idExercise.toString())){
-//            round.sequenceExercise = round.sequenceExercise.substringBefore("${exercise.idExercise}") +
-//                    "${exercise.idExercise},$idNew" +
-//                    round.sequenceExercise.substringAfter("${exercise.idExercise}")
-//        } else {
-//            if (round.sequenceExercise.isEmpty()) round.sequenceExercise += "$idNew"
-//            else round.sequenceExercise += ",$idNew"
-//        }
-        dataDao.updateRound( round )
         return dataDao.getExerciseRel(idNew).toExercise()
     }
 //Activity
