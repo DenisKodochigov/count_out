@@ -55,9 +55,6 @@ android {
     kotlinOptions {
         jvmTarget = "17"
     }
-    composeCompiler {
-        includeSourceInformation = true
-    }
     buildFeatures {
         compose = true
         buildConfig = true

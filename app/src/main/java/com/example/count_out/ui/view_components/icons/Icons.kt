@@ -241,11 +241,11 @@ import com.example.count_out.ui.view_components.TextApp
 }
 @Composable fun IconRun(onClick: () -> Unit){
     Box(modifier = Modifier.clickable { onClick() }){
-        PlayI(colors3.secondary) }
+        PlayIcon(colors3.secondary) }
 }
 @Composable fun IconAdd(onClick: () -> Unit){
     Box(modifier = Modifier.clickable { onClick() }){
-        PlayI(colors3.secondary) }
+        PlayIcon(colors3.secondary) }
 }
 
 //@Composable fun HorIcons(
