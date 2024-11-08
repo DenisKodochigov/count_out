@@ -1,4 +1,4 @@
-package com.example.count_out.service_count_out.location
+package com.example.count_out.service_count_out.locationM
 
 import android.content.Context
 import android.content.Context.LOCATION_SERVICE

@@ -7,8 +7,8 @@ import com.example.count_out.permission.PermissionApp
 import com.example.count_out.service_count_out.CountOutService
 import com.example.count_out.service_count_out.CountOutServiceBind
 import com.example.count_out.service_count_out.ServiceUtils
-import com.example.count_out.service_count_out.location.LocationWithOutGoogle
-import com.example.count_out.service_count_out.location.Site
+import com.example.count_out.service_count_out.locationM.LocationWithOutGoogle
+import com.example.count_out.service_count_out.locationM.Site
 import com.example.count_out.service_count_out.logging.Logging
 import com.example.count_out.service_count_out.work.Work
 import com.example.count_out.service_count_out.work.execute.ExecuteWork

@@ -19,4 +19,9 @@ data class TrainingsScreenState(
     @Stable var onClickTraining: (Long) ->Unit = {},
     @Stable var idImage: Int = 0,
     @Stable var screenTextHeader: String = "",
-)
+){
+    fun selectedItem(): Long{
+        val id = trainings.find { it.isSelected }?.idTraining ?: 0L
+        return id
+    }
+}

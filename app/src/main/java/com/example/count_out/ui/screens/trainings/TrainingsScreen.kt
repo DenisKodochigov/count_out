@@ -41,6 +41,7 @@ import com.example.count_out.ui.theme.getIdImage
 import com.example.count_out.ui.theme.mTypography
 import com.example.count_out.ui.view_components.ItemSwipe
 import com.example.count_out.ui.view_components.TextApp
+import com.example.count_out.ui.view_components.icons.IconRun
 import com.example.count_out.ui.view_components.icons.IconSingle
 import com.example.count_out.ui.view_components.icons.IconSubscribe
 
@@ -75,8 +76,11 @@ import com.example.count_out.ui.view_components.icons.IconSubscribe
     Column(
         modifier = Modifier.fillMaxSize()) {
         TrainingList(uiState, modifier = Modifier.weight(1f))
+        DownPlace(uiState)
     }
 }
+
+
 
 @Composable fun TrainingList(uiState: TrainingsScreenState, modifier: Modifier = Modifier) {
 
@@ -148,4 +152,11 @@ import com.example.count_out.ui.view_components.icons.IconSubscribe
             style = mTypography.bodyLarge )
     }
 }
-
+//##################################################################################################
+@Composable fun DownPlace(uiState: TrainingsScreenState) {
+    Row(modifier = Modifier.fillMaxWidth(),) {
+        IconRun(onClick = {})
+        Spacer(modifier = Modifier.width(16.dp))
+        IconAddTraining( uiState = uiState )
+    }
+}

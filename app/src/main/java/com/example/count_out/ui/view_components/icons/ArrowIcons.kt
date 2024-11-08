@@ -21,8 +21,7 @@ const val  widthHor = 10f
 const val  heightVer = 10f
 const val  widthVer = 40f
 
-@Composable fun ArrowLeft()
-{
+@Composable fun ArrowLeft() {
     val colorLine = colors3.primary
     Canvas(modifier = Modifier.height(Dp(heightHor)).width(Dp(widthHor))) {
         drawLine(
@@ -37,8 +36,7 @@ const val  widthVer = 40f
             end = Offset(x = size.width - deltaLeftRightX, y = size.height - deltaLeftRightY),)
     }
 }
-@Composable fun ArrowRight()
-{
+@Composable fun ArrowRight() {
     val colorLine = colors3.primary
     Canvas(modifier = Modifier.height(Dp(heightHor)).width(Dp(widthHor))) {
         drawLine(
@@ -53,8 +51,7 @@ const val  widthVer = 40f
             end = Offset(x = deltaLeftRightX, y = size.height - deltaLeftRightY),)
     }
 }
-@Composable fun ArrowUp()
-{
+@Composable fun ArrowUp() {
     val colorLine = colors3.primary
     Canvas(modifier = Modifier.height(Dp(heightVer)).width(Dp(widthVer))) {
 
@@ -71,8 +68,7 @@ const val  widthVer = 40f
             end = Offset(x = size.width - deltaUpDownX, y = size.height - deltaUpDownY),)
     }
 }
-@Composable fun ArrowDown()
-{
+@Composable fun ArrowDown() {
     val colorLine = colors3.primary
     Canvas(modifier = Modifier.height(Dp(heightVer)).width(Dp(widthVer))) {
         drawLine(

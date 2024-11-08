@@ -164,7 +164,6 @@ import com.example.count_out.ui.view_components.TextApp
         contentDescription = if ( idDescription == 0) "" else stringResource(id = idDescription),
         modifier = Modifier.size(sizeIcon).clickable { onClick() })
 }
-
 @Composable fun IconSingleLarge(image: ImageVector, onClick:()->Unit){
     Icon(imageVector = image,
         contentDescription = "",
@@ -176,9 +175,7 @@ import com.example.count_out.ui.view_components.TextApp
         tint = colors3.tertiary,
         modifier = Modifier.size(Dimen.sizeIconLarge))
 }
-
-@Composable
-fun IconsCollapsing(onClick: ()->Unit, wrap: Boolean) {
+@Composable fun IconsCollapsing(onClick: ()->Unit, wrap: Boolean) {
     Icon(imageVector = if (wrap) Icons.Filled.ArrowDropUp else Icons.Filled.ArrowDropDown,
         contentDescription = "",
         modifier = Modifier
@@ -242,7 +239,14 @@ fun IconsCollapsing(onClick: ()->Unit, wrap: Boolean) {
         TextApp(text = text, style = alumniReg12)
     }
 }
-
+@Composable fun IconRun(onClick: () -> Unit){
+    Box(modifier = Modifier.clickable { onClick() }){
+        PlayI(colors3.secondary) }
+}
+@Composable fun IconAdd(onClick: () -> Unit){
+    Box(modifier = Modifier.clickable { onClick() }){
+        PlayI(colors3.secondary) }
+}
 
 //@Composable fun HorIcons(
 //    onClickEdit: (() -> Unit)? = null,

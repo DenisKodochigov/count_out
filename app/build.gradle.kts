@@ -3,6 +3,7 @@ plugins {
 //    id ("kotlin-parcelize")
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.jetbrainsKotlinAndroid)
+    alias(libs.plugins.compose.compiler)
     alias(libs.plugins.serialization)
     alias(libs.plugins.hilt)
     alias(libs.plugins.ksp)
@@ -12,6 +13,7 @@ plugins {
 android {
     namespace = "com.example.count_out"
     compileSdk = 35
+    buildToolsVersion = "35"
 
     defaultConfig {
         applicationId = "com.example.count_out"
@@ -53,12 +55,12 @@ android {
     kotlinOptions {
         jvmTarget = "17"
     }
+    composeCompiler {
+        includeSourceInformation = true
+    }
     buildFeatures {
         compose = true
         buildConfig = true
-    }
-    composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.12"
     }
     packaging {
         resources {
@@ -68,67 +70,42 @@ android {
 }
 
 dependencies {
-    implementation(libs.androidx.core.ktx)
-    implementation(libs.androidx.activity.compose)
-    implementation(platform(libs.androidx.compose.bom))
+    implementation(libs.bundles.core)
+//    implementation(libs.bundles.graphics)
+//    implementation (libs.fragment.ktx)
     //Hilt
-    implementation (libs.hilt.android)
-    implementation (libs.androidx.hilt.navigation.compose)
-    implementation(libs.play.services.location)
-    implementation(libs.androidx.lifecycle.runtime.compose.android)
-    implementation(libs.play.services.contextmanager)
-    implementation(libs.androidx.storage)
-    ksp (libs.dagger.compiler)
-    ksp (libs.hilt.compiler)
-    testImplementation (libs.hilt.android.testing)
-    //Jetpack  Compose
-    implementation (libs.androidx.ui)
+    implementation (libs.bundles.hilt)
+    ksp (libs.bundles.hiltksp)
+    //Location
+    implementation(libs.bundles.gms)
+//    implementation(libs.storage)
+    //Permission
     implementation(libs.accompanist.permissions)
-    //Foundation (Border, Background, Box, Image, Scroll, shapes, animations, etc.)
-    implementation (libs.androidx.foundation)
-    implementation (libs.androidx.foundation.layout)
+    //Jetpack  Compose
+    implementation (libs.bundles.compose)
+    implementation (platform(libs.compose.bom))
+    debugImplementation (libs.compose.ui.tooling)
     //Navigation
-    implementation (libs.androidx.navigation.compose)
-    //Tooling support (Previews, etc.)
-    implementation (libs.androidx.ui.graphics)
-    implementation (libs.androidx.ui.tooling.preview)
-    debugImplementation (libs.androidx.ui.tooling)
-    //Integration with observables
-    implementation (libs.androidx.runtime)
+    implementation (libs.navigation.compose)
     // Material Design
-    implementation (libs.androidx.material3)
-    implementation (libs.androidx.ui.text.google.fonts)
-    implementation (libs.androidx.material.icons.core)
-    implementation (libs.androidx.material.icons.extended)
-    //Color Palette
-    implementation (libs.androidx.palette.ktx)
+    implementation (libs.bundles.material3)
     //LifeCycle
-    implementation (libs.androidx.lifecycle.runtime.ktx)
-    implementation (libs.androidx.lifecycle.viewmodel.ktx)
-    implementation (libs.androidx.lifecycle.viewmodel.compose)
-    implementation (libs.androidx.fragment.ktx)
+    implementation (libs.bundles.lifecycle)
     // Room
-    implementation (libs.androidx.room.runtime)
-    implementation (libs.androidx.room.ktx)
-    ksp (libs.androidx.room.compiler)
+    implementation (libs.bundles.room)
+    ksp (libs.room.compiler)
     // Retrofit
-    implementation (libs.retrofit)
-    implementation (libs.retrofit.moshi)
-    implementation (libs.okhttp3)
+    implementation (libs.bundles.retrofit)
     //Moshi
-    implementation (libs.moshi)
-    implementation (libs.moshi.kotlin)
+    implementation (libs.bundles.moshi)
     ksp (libs.moshi.kotlin.codegen)
     //DataStore
-    implementation(libs.androidx.datastore)
-//    implementation(libs.androidx.datastore.core)
-    implementation(libs.serialization.json)
-    implementation(libs.immutable)
-    debugImplementation(libs.androidx.ui.test.manifest)
+    implementation(libs.datastore)
+//    implementation(libs.datastore.core)
+//    implementation(libs.immutable)
+    debugImplementation(libs.ui.test.manifest)
 //Testing
-    testImplementation (libs.junit)
-    androidTestImplementation (libs.androidx.junit)
-    androidTestImplementation (libs.androidx.espresso.core)
-    androidTestImplementation (platform(libs.androidx.compose.bom))
-    androidTestImplementation (libs.androidx.ui.test.junit4)
+    testImplementation (libs.bundles.testing)
+    androidTestImplementation (platform(libs.compose.bom))
+    androidTestImplementation (libs.bundles.testingAndroid)
 }
