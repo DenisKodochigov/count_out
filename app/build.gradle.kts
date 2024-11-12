@@ -1,19 +1,18 @@
-
 plugins {
-//    id ("kotlin-parcelize")
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.jetbrainsKotlinAndroid)
     alias(libs.plugins.compose.compiler)
     alias(libs.plugins.serialization)
     alias(libs.plugins.hilt)
     alias(libs.plugins.ksp)
+//    id ("kotlin-parcelize")
 //    alias(libs.plugins.firebase)
     }
 
 android {
     namespace = "com.example.count_out"
     compileSdk = 35
-    buildToolsVersion = "35"
+    buildToolsVersion = "35.0.0"
 
     defaultConfig {
         applicationId = "com.example.count_out"
@@ -26,7 +25,11 @@ android {
             useSupportLibrary = true
         }
     }
-
+    repositories {
+        google()
+        mavenLocal()
+        mavenCentral()
+    }
     buildTypes {
         release {
             // Enables code shrinking, obfuscation, and optimization for only
@@ -68,14 +71,11 @@ android {
 
 dependencies {
     implementation(libs.bundles.core)
-//    implementation(libs.bundles.graphics)
-//    implementation (libs.fragment.ktx)
     //Hilt
     implementation (libs.bundles.hilt)
     ksp (libs.bundles.hiltksp)
     //Location
     implementation(libs.bundles.gms)
-//    implementation(libs.storage)
     //Permission
     implementation(libs.accompanist.permissions)
     //Jetpack  Compose
@@ -98,8 +98,6 @@ dependencies {
     ksp (libs.moshi.kotlin.codegen)
     //DataStore
     implementation(libs.datastore)
-//    implementation(libs.datastore.core)
-//    implementation(libs.immutable)
     debugImplementation(libs.ui.test.manifest)
 //Testing
     testImplementation (libs.bundles.testing)

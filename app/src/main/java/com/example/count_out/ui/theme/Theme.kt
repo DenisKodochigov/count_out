@@ -4,6 +4,7 @@ import android.app.Activity
 import android.app.UiModeManager
 import android.content.Context
 import android.os.Build
+import android.view.WindowManager
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.ColorScheme
 import androidx.compose.material3.MaterialTheme
@@ -28,26 +29,25 @@ lateinit var colors3: ColorScheme
     content: @Composable () -> Unit,
 ){
     val dynamicColorVersion = dynamicColor && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S
-    colors3 = when {
+    val colorScheme = when {
         dynamicColorVersion && darkTheme -> dynamicDarkColorScheme(LocalContext.current)
         dynamicColorVersion && !darkTheme -> dynamicLightColorScheme(LocalContext.current)
         else -> selectSchemeForContrast(darkTheme)
     }
-
+    WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS
     val view = LocalView.current
     if (!view.isInEditMode) {
-        if (Build.VERSION.SDK_INT >= 35){
-
-        } else {
+        if (Build.VERSION.SDK_INT < 35){
             SideEffect {
                 val window = (view.context as Activity).window
-                window.statusBarColor = colors3.primary.toArgb()
+                window.statusBarColor = colorScheme.primary.toArgb()
                 WindowCompat.getInsetsController(window, view).isAppearanceLightStatusBars = darkTheme
             }
         }
-
     }
-    MaterialTheme(colorScheme = colors3, content = content, shapes = shapes, typography = mTypography)
+
+    MaterialTheme(colorScheme = colorScheme, content = content, shapes = shapes, typography = mTypography)
+    colors3 = MaterialTheme.colorScheme
 }
 
 @Composable

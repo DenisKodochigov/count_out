@@ -1,4 +1,4 @@
-package com.example.count_out.service_count_out.locationM
+package com.example.count_out.service_count_out.location
 
 import android.annotation.SuppressLint
 import android.content.Context
@@ -59,7 +59,7 @@ class Site @Inject constructor(val context: Context, val permission: PermissionA
             list = geocoder.getFromLocation(latitude, longitude, 1)
         }
         val address = if (list.isNullOrEmpty()) "" else {
-            list!![0].locality + ", " + list!![0].countryName
+            list[0].locality + ", " + list[0].countryName
         }
         return address
     }

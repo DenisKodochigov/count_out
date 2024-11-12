@@ -1,42 +1,43 @@
 [versions]
-permissions = "0.34.0"
+
+kotlin = "2.0.21"
+kspVersion = "2.0.21-1.0.25"
+serialization_plugin = "2.0.21"
 agp = "8.7.2"
-#androidMapsUtils = "2.3.0"
 composeV = "1.7.5"
 composeBom = "2024.10.01"
 composeActivity = "1.9.3"
-graphics = "1.0.2"
-graphics1 = "1.0.1"
-#firebaseBom = "33.4.0"
-fragmentKtx = "1.8.5"
-hiltAndroid = "2.50"
+#graphics = "1.0.2"
+#graphics1 = "1.0.1"
+#fragmentKtx = "1.8.5"
+hiltAndroid = "2.52"
 hiltNavigationCompose = "1.2.0"
 
-kotlin = "2.0.20"
-kspVersion = "2.0.20-1.0.25"
-serialization_plugin = "2.0.20"
-
 coreKtx = "1.15.0"
-junit = "4.13.2"
-espressoCore = "3.6.1"
 lifecycleRuntimeKtx = "2.8.7"
-#mapsUtilsKtx = "3.4.0"
 material3 = "1.3.1"
 
+permissions = "0.36.0"
 moshi = "1.15.1"
 
 navigationCompose = "2.8.3"
-paletteKtx = "1.0.0"
 roomV = "2.6.1"
-#firebase_crashlytics = "3.0.2"
 datastore = "1.1.1"
-serialization = "1.6.3"
-immutable = "0.3.7"
+serialization = "1.7.3"
 gmsV = "21.3.0"
-gmsContextManagerV = "9.4.0"
 retrofit = "2.11.0"
 okhttp3 = "4.12.0"
-storage = "1.5.0"
+paletteKtx = "1.0.0"
+
+junit = "4.13.2"
+espressoCore = "3.6.1"
+
+#storage = "1.5.0"
+#androidMapsUtils = "2.3.0"
+#firebase_crashlytics = "3.0.2"
+#immutable = "0.3.7"
+#mapsUtilsKtx = "3.4.0"
+#firebaseBom = "33.4.0"
 
 [libraries]
 core-ktx = { module = "androidx.core:core-ktx", version.ref = "coreKtx" }
@@ -44,7 +45,7 @@ kotlin-serialization-plugin = { module = "org.jetbrains.kotlin:kotlin-serializat
 kotlin-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "serialization"}
 kotlin-stdlib = { module = "org.jetbrains.kotlin:kotlin-stdlib", version.ref = "kotlin" }
 kotlin-stdlib-common = { module = "org.jetbrains.kotlin:kotlin-stdlib-common", version.ref = "kotlin" }
-fragment-ktx = { module = "androidx.fragment:fragment-ktx", version.ref = "fragmentKtx" }
+#fragment-ktx = { module = "androidx.fragment:fragment-ktx", version.ref = "fragmentKtx" }
 #Navigation
 navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "navigationCompose" }
 
@@ -99,9 +100,8 @@ moshi-kotlin-codegen = { module = "com.squareup.moshi:moshi-kotlin-codegen", ver
 
 #GPS and MAP
 gms = { module = "com.google.android.gms:play-services-location", version.ref = "gmsV" }
-gms-contextmanager = { module = "com.google.android.gms:play-services-contextmanager", version.ref = "gmsContextManagerV" }
-#maps-utils-ktx = { module = "com.google.maps.android:maps-utils-ktx", version.ref = "mapsUtilsKtx" }
-#maps-utils = { module = "com.google.maps.android:android-maps-utils", version.ref = "androidMapsUtils" }
+#google-maps-utils-ktx = { module = "com.google.maps.android:maps-utils-ktx", version.ref = "mapsUtilsKtx" }
+#google-maps-utils = { module = "com.google.maps.android:android-maps-utils", version.ref = "androidMapsUtils" }
 
 #FireBase
 #firebase-crashlytics = { group = "com.google.firebase", name = "firebase-crashlytics"}
@@ -114,15 +114,15 @@ datastore = { module = "androidx.datastore:datastore", version.ref = "datastore"
 #immutable = { module = "org.jetbrains.kotlinx:kotlinx-collections-immutable", version.ref = "immutable"}
 
 #Graphics
-graphics-core = { module = "androidx.graphics:graphics-core", version.ref = "graphics"}
-graphics-path = { module = "androidx.graphics:graphics-path", version.ref = "graphics1"}
-graphics-shapes = { module = "androidx.graphics:graphics-shapes", version.ref = "graphics1"}
+#graphics-core = { module = "androidx.graphics:graphics-core", version.ref = "graphics"}
+#graphics-path = { module = "androidx.graphics:graphics-path", version.ref = "graphics1"}
+#graphics-shapes = { module = "androidx.graphics:graphics-shapes", version.ref = "graphics1"}
 
 
 #TEST
 junit = { module = "junit:junit", version.ref = "junit" }
-kotlin-test-common = { module = "org.jetbrains.kotlin:kotlin-test-common", version.ref = "kotlin" }
-kotlin-test-annotations-common = { module = "org.jetbrains.kotlin:kotlin-test-annotations-common", version.ref = "kotlin" }
+#kotlin-test-common = { module = "org.jetbrains.kotlin:kotlin-test-common", version.ref = "kotlin" }
+#kotlin-test-annotations-common = { module = "org.jetbrains.kotlin:kotlin-test-annotations-common", version.ref = "kotlin" }
 hilt-testing = { module = "com.google.dagger:hilt-android-testing", version.ref = "hiltAndroid" }
 espresso-core = { module = "androidx.test.espresso:espresso-core", version.ref = "espressoCore" }
 ui-test-junit4 = { module = "androidx.compose.ui:ui-test-junit4" }
@@ -159,7 +159,7 @@ serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref 
         "compose-ui-graphics",
         "compose-ui-tooling",
         "compose-ui-tooling-preview", ]
-    graphics = ["graphics-core", "graphics-path", "graphics-shapes"]
+#    graphics = ["graphics-core", "graphics-path", "graphics-shapes"]
     moshi =["moshi", "moshi-kotlin", ]
     retrofit = ["retrofit", "retrofit-moshi", "okhttp3"]
     room = ["room-runtime", "room-ktx"]
@@ -167,7 +167,7 @@ serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref 
     material3 = ["material3", "material-icons-core", "material-icons-extended", "compose-ui-text-google-fonts", "palette-ktx"]
     hilt = ["hilt-android", "hilt-navigation-compose"]
     hiltksp = ["hilt-compiler", "dagger-compiler"]
-    gms = [ "gms", "gms-contextmanager"]
+    gms = [ "gms"]
 
     testing = ["junit", "hilt-testing"]
     testingAndroid = ["espresso-core", "ui-test-junit4"]

@@ -157,8 +157,7 @@ class BleConnecting @Inject constructor(
                 val refreshMethod = gattL.javaClass.getMethod("refresh")
                 result = refreshMethod.invoke(gattL) as Boolean
             } catch (e: Exception) {
-                messengerA.errorApi(R.string.error_refresh,": $e")
-            }
+                messengerA.errorApi(R.string.error_refresh,": $e") }
         }
         return result
     }
