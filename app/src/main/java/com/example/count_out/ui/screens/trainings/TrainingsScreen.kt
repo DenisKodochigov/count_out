@@ -19,7 +19,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AddCircleOutline
 import androidx.compose.material.icons.filled.CopyAll
 import androidx.compose.material.icons.filled.PlayCircleOutline
-import androidx.compose.material3.Card
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
@@ -36,12 +35,14 @@ import com.example.count_out.R
 import com.example.count_out.entity.workout.Training
 import com.example.count_out.navigation.ScreenDestination
 import com.example.count_out.ui.theme.Dimen
-import com.example.count_out.ui.theme.elevationTraining
+import com.example.count_out.ui.theme.dividerBottomShape
+import com.example.count_out.ui.theme.dividerTopShape
 import com.example.count_out.ui.theme.getIdImage
 import com.example.count_out.ui.theme.mTypography
 import com.example.count_out.ui.view_components.ItemSwipe
 import com.example.count_out.ui.view_components.TextApp
-import com.example.count_out.ui.view_components.custom_view.FrameHorVer
+import com.example.count_out.ui.view_components.custom_view.Frame
+import com.example.count_out.ui.view_components.custom_view.LineHorApp
 import com.example.count_out.ui.view_components.icons.IconSingle
 import com.example.count_out.ui.view_components.icons.IconSubscribe
 
@@ -74,15 +75,10 @@ import com.example.count_out.ui.view_components.icons.IconSubscribe
 @Composable fun TrainingsScreenLayout( uiState: TrainingsScreenState
 ){
     Column( modifier = Modifier.fillMaxSize()) {
-        FrameHorVer(
-            fill = true,
-            widthBorder = 3.dp,
-            colorBorder = MaterialTheme.colorScheme.surfaceContainerHigh,
-            content = {
-                TrainingList(uiState, modifier = Modifier)
-                Spacer(modifier = Modifier.weight(1f))
-            }
-        )
+        LineHorApp(shape = dividerTopShape,color = MaterialTheme.colorScheme.surfaceContainerHigh)
+        TrainingList(uiState, modifier = Modifier)
+        Spacer(modifier = Modifier.weight(1f))
+        LineHorApp(shape = dividerBottomShape,color = MaterialTheme.colorScheme.surfaceContainerHigh)
         DownPlace(uiState)
     }
 }
@@ -104,12 +100,26 @@ import com.example.count_out.ui.view_components.icons.IconSubscribe
             )
             Spacer(modifier = Modifier.height(Dimen.width4))
         }
-//        Spacer(modifier= Modifier.w)
-//        item { ItemLast( uiState = uiState ) }
     }
 }
 @Composable fun TrainingCard(item: Training, uiState: TrainingsScreenState, modifier: Modifier) {
-    Card(elevation = elevationTraining(), shape = MaterialTheme.shapes.extraSmall
+//    Card(elevation = elevationTraining(), shape = MaterialTheme.shapes.extraSmall
+//    ){
+//        Row(
+//            horizontalArrangement = Arrangement.Start,
+//            verticalAlignment = Alignment.CenterVertically,
+//            modifier = modifier.fillMaxWidth().padding(vertical = 6.dp)
+//        ){
+//            Spacer(modifier = Modifier.width(12.dp))
+//            IconRunTraining(idTraining = item.idTraining, uiState = uiState)
+//            Spacer(modifier = Modifier.width(16.dp))
+//            TrainingInformation(item = item, uiState = uiState, modifier = Modifier.weight(1f))
+//            Spacer(modifier = Modifier.width(Dimen.width6))
+//            IconEnd(item = item, uiState = uiState)
+//            Spacer(modifier = Modifier.width(12.dp))
+//        }
+//    }
+    Frame( colorBorder = MaterialTheme.colorScheme.surfaceContainerLow
     ){
         Row(
             horizontalArrangement = Arrangement.Start,
