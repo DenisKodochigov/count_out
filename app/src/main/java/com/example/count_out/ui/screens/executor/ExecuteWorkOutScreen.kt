@@ -18,6 +18,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Pause
 import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material.icons.filled.Stop
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -40,7 +41,6 @@ import com.example.count_out.entity.RunningState
 import com.example.count_out.entity.ui.ListActivityForExecute
 import com.example.count_out.ui.bottomsheet.BottomSheetSaveTraining
 import com.example.count_out.ui.theme.alumBodySmall
-import com.example.count_out.ui.theme.colors3
 import com.example.count_out.ui.theme.mTypography
 import com.example.count_out.ui.theme.shapes
 import com.example.count_out.ui.view_components.ButtonApp
@@ -105,7 +105,7 @@ import java.math.RoundingMode
 @Composable fun Indication(uiState: ExecuteWorkoutScreenState){
     Column( modifier = Modifier
         .fillMaxWidth()
-        .background(color = colors3.surfaceContainer, shape = shapes.extraSmall),) {
+        .background(color = MaterialTheme.colorScheme.surfaceContainer, shape = shapes.extraSmall),) {
         CurrentTimePulse(uiState)
         ListExercise(uiState)
         Spacer(modifier = Modifier.height(24.dp))

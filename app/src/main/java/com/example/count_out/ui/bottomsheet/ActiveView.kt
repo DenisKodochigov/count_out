@@ -36,7 +36,6 @@ import com.example.count_out.entity.workout.Activity
 import com.example.count_out.entity.TypeKeyboard
 import com.example.count_out.ui.dialog.ChangeColorSectionDialog
 import com.example.count_out.ui.screens.settings.SettingScreenState
-import com.example.count_out.ui.theme.colors3
 import com.example.count_out.ui.theme.elevationTraining
 import com.example.count_out.ui.theme.mTypography
 import com.example.count_out.ui.view_components.TextApp
@@ -96,7 +95,7 @@ fun ActivityValueSelect(
             .clip(shape = CircleShape)
             .border(
                 width = 1.dp,
-                color = colors3.outline,
+                color = MaterialTheme.colorScheme.outline,
                 shape = CircleShape
             )
             .clickable { activityChangeColor.value = activity.value }
@@ -213,7 +212,7 @@ fun ActivityValueEdit(
             .clip(shape = CircleShape)
             .border(
                 width = 1.dp,
-                color = colors3.outline,
+                color = MaterialTheme.colorScheme.outline,
                 shape = CircleShape
             )
             .clickable { activityChangeColor.value = activity.value }

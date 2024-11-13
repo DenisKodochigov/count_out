@@ -52,7 +52,6 @@ import com.example.count_out.R
 import com.example.count_out.entity.TagsTesting.BUTTON_OK
 import com.example.count_out.entity.TypeKeyboard
 import com.example.count_out.ui.theme.Dimen
-import com.example.count_out.ui.theme.colors3
 import com.example.count_out.ui.theme.interLight12
 import com.example.count_out.ui.theme.interReg12
 import com.example.count_out.ui.theme.mTypography
@@ -68,10 +67,10 @@ import com.example.count_out.ui.theme.mTypography
         onClick = onClick,
         enabled = enabled,
         colors = ButtonDefaults.buttonColors (
-            containerColor= colors3.tertiaryContainer,
-            contentColor = colors3.onTertiaryContainer ,
-            disabledContainerColor = colors3.surface,
-            disabledContentColor = colors3.onSurface
+            containerColor= MaterialTheme.colorScheme.tertiaryContainer,
+            contentColor = MaterialTheme.colorScheme.onTertiaryContainer ,
+            disabledContainerColor = MaterialTheme.colorScheme.surface,
+            disabledContentColor = MaterialTheme.colorScheme.onSurface
         ),
         elevation = ButtonDefaults.buttonElevation(
             defaultElevation = 6.dp,
@@ -269,7 +268,7 @@ fun ButtonsOkCancel(onConfirm: ()->Unit, onDismiss: ()->Unit)
 //    var enterText by remember { mutableStateOf(enterValue.value) }
 //
 //    OutlinedTextField(
-//        modifier = modifier.background(color = colors3.surface),
+//        modifier = modifier.background(color = MaterialTheme.colorScheme.surface),
 //        value = enterText,
 //        singleLine = true,
 //        textStyle = mTypography.titleMedium,

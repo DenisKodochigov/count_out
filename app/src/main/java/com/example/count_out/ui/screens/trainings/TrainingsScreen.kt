@@ -41,7 +41,7 @@ import com.example.count_out.ui.theme.getIdImage
 import com.example.count_out.ui.theme.mTypography
 import com.example.count_out.ui.view_components.ItemSwipe
 import com.example.count_out.ui.view_components.TextApp
-import com.example.count_out.ui.view_components.icons.IconRun
+import com.example.count_out.ui.view_components.custom_view.FrameHorVer
 import com.example.count_out.ui.view_components.icons.IconSingle
 import com.example.count_out.ui.view_components.icons.IconSubscribe
 
@@ -73,14 +73,19 @@ import com.example.count_out.ui.view_components.icons.IconSubscribe
 }
 @Composable fun TrainingsScreenLayout( uiState: TrainingsScreenState
 ){
-    Column(
-        modifier = Modifier.fillMaxSize()) {
-        TrainingList(uiState, modifier = Modifier.weight(1f))
+    Column( modifier = Modifier.fillMaxSize()) {
+        FrameHorVer(
+            fill = true,
+            widthBorder = 3.dp,
+            colorBorder = MaterialTheme.colorScheme.surfaceContainerHigh,
+            content = {
+                TrainingList(uiState, modifier = Modifier)
+                Spacer(modifier = Modifier.weight(1f))
+            }
+        )
         DownPlace(uiState)
     }
 }
-
-
 
 @Composable fun TrainingList(uiState: TrainingsScreenState, modifier: Modifier = Modifier) {
 
@@ -99,7 +104,8 @@ import com.example.count_out.ui.view_components.icons.IconSubscribe
             )
             Spacer(modifier = Modifier.height(Dimen.width4))
         }
-        item { ItemLast( uiState = uiState ) }
+//        Spacer(modifier= Modifier.w)
+//        item { ItemLast( uiState = uiState ) }
     }
 }
 @Composable fun TrainingCard(item: Training, uiState: TrainingsScreenState, modifier: Modifier) {
@@ -154,9 +160,8 @@ import com.example.count_out.ui.view_components.icons.IconSubscribe
 }
 //##################################################################################################
 @Composable fun DownPlace(uiState: TrainingsScreenState) {
-    Row(modifier = Modifier.fillMaxWidth(),) {
-        IconRun(onClick = {})
-        Spacer(modifier = Modifier.width(16.dp))
+    Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
+        Spacer(modifier = Modifier.width(32.dp))
         IconAddTraining( uiState = uiState )
     }
 }

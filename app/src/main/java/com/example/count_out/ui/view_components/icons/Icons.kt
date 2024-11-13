@@ -58,10 +58,10 @@ import com.example.count_out.ui.theme.Dimen
 import com.example.count_out.ui.theme.Dimen.sizeBetweenIcon
 import com.example.count_out.ui.theme.Dimen.sizeIcon
 import com.example.count_out.ui.theme.alumniReg12
-import com.example.count_out.ui.theme.colors3
 import com.example.count_out.ui.theme.mTypography
 import com.example.count_out.ui.theme.shapes
 import com.example.count_out.ui.view_components.TextApp
+import com.example.count_out.ui.view_components.custom_view.PlayIcon
 
 @Composable fun IconsGroup(
     onClickEdit: (() -> Unit)? = null,
@@ -160,19 +160,19 @@ import com.example.count_out.ui.view_components.TextApp
 }
 @Composable fun IconSingle(image: ImageVector, onClick:()->Unit = {}, idDescription: Int = 0){
     Icon(imageVector = image,
-        tint = colors3.tertiary,
+        tint = MaterialTheme.colorScheme.tertiary,
         contentDescription = if ( idDescription == 0) "" else stringResource(id = idDescription),
         modifier = Modifier.size(sizeIcon).clickable { onClick() })
 }
 @Composable fun IconSingleLarge(image: ImageVector, onClick:()->Unit){
     Icon(imageVector = image,
         contentDescription = "",
-        tint = colors3.tertiary,
+        tint = MaterialTheme.colorScheme.tertiary,
         modifier = Modifier.size(Dimen.sizeIconLarge).clickable { onClick() })
 }
 @Composable fun IconSingleLarge(image: ImageVector){
     Icon(imageVector = image, contentDescription = "",
-        tint = colors3.tertiary,
+        tint = MaterialTheme.colorScheme.tertiary,
         modifier = Modifier.size(Dimen.sizeIconLarge))
 }
 @Composable fun IconsCollapsing(onClick: ()->Unit, wrap: Boolean) {
@@ -195,7 +195,7 @@ import com.example.count_out.ui.view_components.TextApp
             .size(size = sizeIcon)
             .clickable { onClick() }
             .clip(shape = CircleShape)
-            .border(width = 1.dp, color = colors3.outline, shape = CircleShape)
+            .border(width = 1.dp, color = MaterialTheme.colorScheme.outline, shape = CircleShape)
         )
         TextApp(text = text, style = mTypography.titleMedium, modifier = Modifier.align(alignment = Alignment.Center))
     }
@@ -214,8 +214,8 @@ import com.example.count_out.ui.view_components.TextApp
             else TAB_FADE_OUT_ANIMATION_DURATION
         )
     }
-    val colorIcon = colors3.tertiary
-    val colorUnselected = Color(colorIcon.red, colorIcon.green, colorIcon.blue, colorIcon.alpha * 0.6f)
+    val colorIcon = MaterialTheme.colorScheme.outline
+    val colorUnselected = Color(colorIcon.red, colorIcon.green, colorIcon.blue, colorIcon.alpha * 0.4f)
     val iconColor by animateColorAsState(
         label = "",
         animationSpec = animationSpec,
@@ -241,11 +241,11 @@ import com.example.count_out.ui.view_components.TextApp
 }
 @Composable fun IconRun(onClick: () -> Unit){
     Box(modifier = Modifier.clickable { onClick() }){
-        PlayIcon(colors3.secondary) }
+        PlayIcon(MaterialTheme.colorScheme.secondary) }
 }
 @Composable fun IconAdd(onClick: () -> Unit){
     Box(modifier = Modifier.clickable { onClick() }){
-        PlayIcon(colors3.secondary) }
+        PlayIcon(MaterialTheme.colorScheme.secondary) }
 }
 
 //@Composable fun HorIcons(

@@ -21,8 +21,6 @@ import androidx.compose.ui.platform.LocalView
 import androidx.core.view.WindowCompat
 import com.example.count_out.navigation.ScreenDestination
 
-lateinit var colors3: ColorScheme
-
 @Composable fun AppTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
     dynamicColor: Boolean = false,
@@ -45,9 +43,7 @@ lateinit var colors3: ColorScheme
             }
         }
     }
-
     MaterialTheme(colorScheme = colorScheme, content = content, shapes = shapes, typography = mTypography)
-    colors3 = MaterialTheme.colorScheme
 }
 
 @Composable

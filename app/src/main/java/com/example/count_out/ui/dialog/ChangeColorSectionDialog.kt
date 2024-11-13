@@ -21,6 +21,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.derivedStateOf
@@ -37,18 +38,17 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.example.count_out.R
 import com.example.count_out.entity.UPDOWN
-import com.example.count_out.ui.theme.colors3
 import com.example.count_out.ui.theme.interBold16
 import com.example.count_out.ui.theme.massColor
 import com.example.count_out.ui.theme.shapes
+import com.example.count_out.ui.view_components.TextApp
+import com.example.count_out.ui.view_components.TextButtonOK
 import com.example.count_out.ui.view_components.icons.ArrowDown
 import com.example.count_out.ui.view_components.icons.ArrowLeft
 import com.example.count_out.ui.view_components.icons.ArrowNoneHor
 import com.example.count_out.ui.view_components.icons.ArrowNoneVer
 import com.example.count_out.ui.view_components.icons.ArrowRight
 import com.example.count_out.ui.view_components.icons.ArrowUp
-import com.example.count_out.ui.view_components.TextApp
-import com.example.count_out.ui.view_components.TextButtonOK
 
 @Composable
 fun ChangeColorSectionDialog(
@@ -58,7 +58,7 @@ fun ChangeColorSectionDialog(
 ){
     val color = remember { mutableIntStateOf(colorItem) }
     AlertDialog(
-        modifier = Modifier.border(width = 1.dp, shape = shapes.small, color = colors3.primary),
+        modifier = Modifier.border(width = 1.dp, shape = shapes.small, color = MaterialTheme.colorScheme.primary),
         onDismissRequest = onDismiss,
         shape = shapes.small,
         confirmButton = { TextButtonOK( onConfirm = { onConfirm( color.intValue) } ) },
@@ -90,7 +90,7 @@ fun ChangeColorSectionLayout(color: MutableState<Int>)
                 .background(color = selectColor.value, shape = CircleShape)
                 .border(
                     width = 1.dp,
-                    color = colors3.outline,
+                    color = MaterialTheme.colorScheme.outline,
                     shape = CircleShape
                 )
             )
@@ -139,7 +139,7 @@ fun ChangeColorSectionLayout(color: MutableState<Int>)
                             .clickable { doSelectedColor(item.toArgb()) }
                             .border(
                                 width = 1.dp,
-                                color = colors3.outline,
+                                color = MaterialTheme.colorScheme.outline,
                                 shape = CircleShape
                             )
                         )
@@ -161,7 +161,7 @@ fun ChangeColorSectionLayout(color: MutableState<Int>)
     Column(modifier = Modifier.fillMaxWidth()){
         if (direction == UPDOWN.UP && drawLine) HorizontalDivider(
             thickness = 1.dp,
-            color = colors3.primary
+            color = MaterialTheme.colorScheme.primary
         )
 
         Row(modifier = Modifier.fillMaxWidth(),  horizontalArrangement = Arrangement.Center) {
@@ -172,7 +172,7 @@ fun ChangeColorSectionLayout(color: MutableState<Int>)
         }
         if (direction == UPDOWN.DOWN && drawLine) HorizontalDivider(
             thickness = 1.dp,
-            color = colors3.primary
+            color = MaterialTheme.colorScheme.primary
         )
     }
 }
@@ -185,7 +185,7 @@ fun ChangeColorSectionLayout(color: MutableState<Int>)
             HorizontalDivider(
                 modifier = Modifier
                     .fillMaxHeight()
-                    .width(1.dp), color = colors3.primary
+                    .width(1.dp), color = MaterialTheme.colorScheme.primary
             )
         }
 
@@ -194,7 +194,7 @@ fun ChangeColorSectionLayout(color: MutableState<Int>)
         else ArrowNoneHor()
         if (direction == UPDOWN.END && drawLine){
             HorizontalDivider(modifier =
-                Modifier.fillMaxHeight().width(1.dp), color = colors3.primary)
+                Modifier.fillMaxHeight().width(1.dp), color = MaterialTheme.colorScheme.primary)
         }
     }
 }

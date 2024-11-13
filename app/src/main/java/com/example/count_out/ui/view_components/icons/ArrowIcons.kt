@@ -4,13 +4,13 @@ import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.width
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawWithCache
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
-import com.example.count_out.ui.theme.colors3
 
 const val strokeWidth = 3f
 const val arrowWidthHor = 2f
@@ -24,7 +24,7 @@ const val  heightVer = 10f
 const val  widthVer = 40f
 
 @Composable fun ArrowLeft() {
-    val colorLine = colors3.primary
+    val colorLine = MaterialTheme.colorScheme.primary
     Spacer(modifier = Modifier.height(Dp(heightHor)).width(Dp(widthHor))
         .drawWithCache {
             onDrawWithContent {
@@ -43,7 +43,7 @@ const val  widthVer = 40f
     )
 }
 @Composable fun ArrowRight() {
-    val colorLine = colors3.primary
+    val colorLine = MaterialTheme.colorScheme.primary
     Spacer(modifier = Modifier.height(Dp(heightHor)).width(Dp(widthHor))
         .drawWithCache {
             onDrawWithContent {
@@ -62,7 +62,7 @@ const val  widthVer = 40f
     )
 }
 @Composable fun ArrowUp() {
-    val colorLine = colors3.primary
+    val colorLine = MaterialTheme.colorScheme.primary
 
     Spacer(modifier = Modifier.height(Dp(heightHor)).width(Dp(widthVer))
         .drawWithCache {
@@ -83,7 +83,7 @@ const val  widthVer = 40f
     )
 }
 @Composable fun ArrowDown() {
-    val colorLine = colors3.primary
+    val colorLine = MaterialTheme.colorScheme.primary
 
     Spacer(modifier = Modifier.height(Dp(heightHor)).width(Dp(widthVer))
         .drawWithCache {

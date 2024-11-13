@@ -5,12 +5,12 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Card
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.example.count_out.ui.screens.history.HistoryScreenState
-import com.example.count_out.ui.theme.colors3
 import com.example.count_out.ui.theme.elevationNull
 import com.example.count_out.ui.theme.mTypography
 import com.example.count_out.ui.theme.shapes
@@ -22,7 +22,7 @@ fun CalendarDay(uiState: HistoryScreenState, day: String = "1") {
     Card(
         elevation = elevationNull(),
         shape = shapes.extraSmall,
-        border =  BorderStroke(1.dp, colors3.primary),
+        border =  BorderStroke(1.dp, MaterialTheme.colorScheme.primary),
         modifier = Modifier.padding(4.dp).clickable { uiState.onClickDay(uiState.currentDay.toString()) }
     ){
         TextApp(text = uiState.currentDay.toString(), style = mTypography.bodySmall,

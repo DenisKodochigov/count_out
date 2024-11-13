@@ -1,8 +1,10 @@
 package com.example.count_out
 
+import android.Manifest.permission.BLUETOOTH
 import android.annotation.SuppressLint
 import android.bluetooth.BluetoothAdapter
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
 import android.provider.Settings
@@ -46,9 +48,11 @@ class MainActivity: ComponentActivity()
         lg(" Activity destroy")
     }
     private fun checkBluetoothEnable(): Boolean {
-        if ( !bluetoothAdapter.isEnabled) {
-            val enableBtIntent = Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE)
-            ActivityCompat.startActivityForResult(this, enableBtIntent, 1, null)
+        if (ActivityCompat.checkSelfPermission(this,BLUETOOTH) == PackageManager.PERMISSION_GRANTED){
+            if ( !bluetoothAdapter.isEnabled) {
+                val enableBtIntent = Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE)
+                ActivityCompat.startActivityForResult(this, enableBtIntent, 1, null)
+            }
         }
         return bluetoothAdapter.isEnabled
     }

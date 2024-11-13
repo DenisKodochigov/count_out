@@ -1,5 +1,6 @@
 package com.example.count_out.ui.view_components
 
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -9,7 +10,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextOverflow
-import com.example.count_out.ui.theme.colors3
 
 @Composable fun TextApp(
     text: String,
@@ -19,7 +19,7 @@ import com.example.count_out.ui.theme.colors3
     style: TextStyle,
     maxLines:Int = 1,
     fontWeight: FontWeight = FontWeight.Normal,
-    color: Color = colors3.onSurface
+    color: Color = MaterialTheme.colorScheme.onSurface
 ) {
     Text(
         text = text,

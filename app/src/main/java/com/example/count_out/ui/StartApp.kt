@@ -18,7 +18,6 @@ import com.example.count_out.navigation.navigateToScreen
 import com.example.count_out.ui.theme.AppTheme
 import com.example.count_out.ui.view_components.BottomBarApp
 import com.example.count_out.ui.view_components.CollapsingToolbar
-import com.example.count_out.ui.view_components.ExtendedFAB
 
 
 @OptIn(ExperimentalComposeUiApi::class)
@@ -41,8 +40,7 @@ fun StartApp() {
             bottomBar = {
                 BottomBarApp(
                     currentScreen = currentScreen,
-                    onTabSelection = { newScreen -> navController.navigateToScreen(newScreen.route) }
-                )
+                    onTabSelection = { newScreen -> navController.navigateToScreen(newScreen.route) })
             },
 //            floatingActionButton = {
 //                if (currentScreen.showFab) {

@@ -15,6 +15,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -24,7 +25,6 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
-import com.example.count_out.ui.theme.colors3
 import kotlinx.coroutines.launch
 import kotlin.math.roundToInt
 
@@ -42,16 +42,14 @@ fun ItemSwipe(
 
     Box(modifier = Modifier.fillMaxWidth()
     ){
-        BackFon(iconRight = iconRight,iconLeft = iconLeft,
-            modifier = Modifier.align(alignment = Alignment.Center))
+        BackFon(iconRight = iconRight,iconLeft = iconLeft, modifier = Modifier.align(alignment = Alignment.Center))
         Row(
             modifier = Modifier
                 .fillMaxWidth()
                 .offset { IntOffset(offsetX.value.roundToInt(), 0) }
                 .draggable(
                     state = rememberDraggableState { delta ->
-                        coroutineScope.launch { offsetX.snapTo(offsetX.value + delta) }
-                    },
+                        coroutineScope.launch { offsetX.snapTo(offsetX.value + delta) } },
                     orientation = Orientation.Horizontal,
                     onDragStopped = {
                         coroutineScope.launch {
@@ -76,12 +74,12 @@ fun ItemSwipe(
     Row(modifier = modifier.fillMaxWidth(). padding(horizontal = 12.dp)) {
         Icon(imageVector = iconLeft,
             contentDescription = "",
-            tint = colors3.primary,
+            tint = MaterialTheme.colorScheme.primary,
             modifier = Modifier.padding(start = 8.dp))
         Spacer(modifier = Modifier.weight(1f))
         Icon(imageVector = iconRight,
             contentDescription = "",
-            tint = colors3.primary,
+            tint = MaterialTheme.colorScheme.primary,
             modifier = Modifier.padding(end = 8.dp))
     }
 }
