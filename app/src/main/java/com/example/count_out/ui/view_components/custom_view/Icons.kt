@@ -1,5 +1,6 @@
 package com.example.count_out.ui.view_components.custom_view
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.MaterialTheme
@@ -24,11 +25,12 @@ import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
-@Composable fun AddIcon(color: Color){
+@Composable fun AddIcon(color: Color = MaterialTheme.colorScheme.outline, onClick: ()->Unit = {}){
     val size = 39.dp
     val width = 1.dp
 
     Spacer(modifier = Modifier.size(size)
+        .clickable { onClick() }
         .drawWithCache {
             onDrawWithContent {
                 val sizePx = size .toPx()
@@ -55,59 +57,13 @@ import androidx.compose.ui.unit.sp
     )
 }
 
-@Composable fun SelectIcon(color: Color){
-    val size = 39.dp
-    val width = 1.dp
-
-    Spacer(modifier = Modifier.size(size)
-        .drawWithCache {
-            onDrawWithContent {
-                val sizePx = size .toPx()
-                val widthPx = width.toPx()
-                onDrawWithContent {
-                    drawLine(
-                        color = color,
-                        strokeWidth = widthPx*2,
-                        start = Offset(sizePx /4, sizePx/3),
-                        end = Offset(sizePx /2, sizePx * 3/4))
-                    drawLine(
-                        color = color,
-                        strokeWidth = widthPx*2,
-                        start = Offset(sizePx/2 - widthPx + 1,sizePx * 3/4),
-                        end = Offset(sizePx * 3/4, sizePx/5))
-                }
-            }
-        }
-    )
-}
-
-@Composable fun MinusIcon(color: Color){
-    val size = 39.dp
-    val width = 1.dp
-
-    Spacer(modifier = Modifier.size(size)
-        .drawWithCache {
-            onDrawWithContent {
-                val sizePx = size .toPx()
-                val widthPx = width.toPx()
-                onDrawWithContent {
-                    drawLine(
-                        color = color,
-                        strokeWidth = widthPx*2,
-                        start = Offset(sizePx /4,sizePx/2),
-                        end = Offset(sizePx * 3/4, sizePx /2))
-                }
-            }
-        }
-    )
-}
-
-@Composable fun MaxIcon(color: Color){
+@Composable fun MaxIcon(color: Color = MaterialTheme.colorScheme.outline, onClick: ()->Unit = {}){
     val size = 39.dp
     val width = 1.dp
     val textMeasurer = rememberTextMeasurer()
 
     Spacer(modifier = Modifier.size(size)
+        .clickable { onClick() }
         .drawWithCache {
             onDrawWithContent {
                 val sizePx = size .toPx()
@@ -155,12 +111,13 @@ import androidx.compose.ui.unit.sp
     )
 }
 
-@Composable fun MinIcon(color: Color){
+@Composable fun MinIcon(color: Color = MaterialTheme.colorScheme.outline, onClick: ()->Unit = {}){
     val size = 39.dp
     val width = 1.dp
     val textMeasurer = rememberTextMeasurer()
 
     Spacer(modifier = Modifier.size(size)
+        .clickable { onClick() }
         .drawWithCache {
             onDrawWithContent {
                 val sizePx = size .toPx()
@@ -203,10 +160,11 @@ import androidx.compose.ui.unit.sp
     )
 }
 
-@Composable fun PauseIcon(color: Color){
+@Composable fun PauseIcon(color: Color = MaterialTheme.colorScheme.outline, onClick: ()->Unit = {}){
     val size = 39.dp
     val width = 1.dp
     Spacer(modifier = Modifier.size(size)
+        .clickable { onClick() }
         .drawWithCache {
             val sizePx = size .toPx()
             val widthPx = width.toPx()
@@ -232,11 +190,12 @@ import androidx.compose.ui.unit.sp
     )
 }
 
-@Composable fun PlayIcon(color: Color){
+@Composable fun PlayIcon(color: Color = MaterialTheme.colorScheme.outline, onClick: ()->Unit = {}){
     val size = 39.dp
     val width = 1.dp
 
     Spacer(modifier = Modifier.size(size)
+        .clickable { onClick() }
         .drawWithCache {
             val sizePx = size .toPx()
             val widthPx = width.toPx()
@@ -261,10 +220,11 @@ import androidx.compose.ui.unit.sp
     )
 }
 
-@Composable fun StopIcon( color: Color){
+@Composable fun StopIcon( color: Color = MaterialTheme.colorScheme.outline, onClick: ()->Unit = {}){
     val size = 39.dp
     val width = 1.dp
     Spacer(modifier = Modifier.size(size)
+        .clickable { onClick() }
         .drawWithCache {
             val sizePx = size .toPx()
             val widthPx = width.toPx()
@@ -287,10 +247,11 @@ import androidx.compose.ui.unit.sp
     )
 }
 
-@Composable fun MultiIcon( color: Color){
+@Composable fun MultiIcon( color: Color = MaterialTheme.colorScheme.outline, onClick: ()->Unit = {}){
     val size = 39.dp
     val width = 1.dp
     Spacer(modifier = Modifier.size(size)
+        .clickable { onClick() }
         .drawWithCache {
             val sizePx = size .toPx()
             val widthPx = width.toPx()
@@ -322,70 +283,57 @@ import androidx.compose.ui.unit.sp
     )
 }
 
-@Composable fun CollapsingIcon( color: Color){
+@Composable fun CollapsingIcon( color: Color = MaterialTheme.colorScheme.outline, onClick: ()->Unit = {}){
     val size = 39.dp
     val width = 1.dp
     Spacer(modifier = Modifier.size(size)
+        .clickable { onClick() }
         .drawWithCache {
             val sizePx = size .toPx()
             val widthPx = width.toPx()
             onDrawWithContent {
-                drawOval(
-                    color = color,
-                    style = Stroke(width = widthPx),
-                    topLeft = Offset(x = widthPx/2, y = widthPx/2),
-                    size = Size(sizePx - widthPx, sizePx - widthPx)
-                )
-                val path = Path().apply {
-                    moveTo( sizePx / 2f, sizePx / 3f)
-                    lineTo( widthPx * 3, sizePx * 2 / 3f)
-                    lineTo( sizePx - widthPx * 3, sizePx * 2 / 3f)
+                drawPath(color = color, path = Path().apply {
+                    moveTo( sizePx/2, sizePx * 0.4f)
+                    lineTo( widthPx * 6, sizePx * 0.6f)
+                    lineTo( sizePx - widthPx * 6, sizePx * 0.6f)
                     close()
-                }
-                drawPath(path, color)
+                })
             }
         }
     )
 }
 
-@Composable fun UnCollapsingIcon( color: Color){
+@Composable fun UnCollapsingIcon( color: Color = MaterialTheme.colorScheme.outline, onClick: ()->Unit = {}){
     val size = 39.dp
     val width = 1.dp
     Spacer(modifier = Modifier.size(size)
+        .clickable { onClick() }
         .drawWithCache {
             val sizePx = size .toPx()
             val widthPx = width.toPx()
             onDrawWithContent {
-                drawOval(
-                    color = color,
-                    style = Stroke(width = widthPx),
-                    topLeft = Offset(x = widthPx/2, y = widthPx/2),
-                    size = Size(sizePx - widthPx, sizePx - widthPx)
-                )
-                val path = Path().apply {
-                    moveTo( sizePx/2, sizePx * 2/3)
-                    lineTo( widthPx * 3, sizePx/3)
-                    lineTo( sizePx - widthPx * 3, sizePx/3f)
+                drawPath(color = color, path = Path().apply {
+                    moveTo( sizePx/2, sizePx * 0.6f)
+                    lineTo( widthPx * 6, sizePx * 0.4f)
+                    lineTo( sizePx - widthPx * 6, sizePx * 0.4f)
                     close()
-                }
-                drawPath(path, color)
+                })
             }
         }
     )
 }
 
-@Composable fun CopyIcon( color: Color){
+@Composable fun CopyIcon( color: Color = MaterialTheme.colorScheme.outline, onClick: ()->Unit = {}){
     val size = 39.dp
     val width = 1.dp
     Spacer(modifier = Modifier.size(size)
+        .clickable { onClick() }
         .drawWithCache {
             val sizePx = size .toPx()
             val widthPx = width.toPx()
             onDrawWithContent {
                 val pathEffect = PathEffect.dashPathEffect(
-                    intervals = floatArrayOf(3.dp.toPx(), 1.dp.toPx()),
-                    phase = 0f
-                )
+                    intervals = floatArrayOf(3.dp.toPx(), 1.dp.toPx()), phase = 0f )
                 val offset = 2.dp.toPx()
                 drawRoundRect(
                     color = color,
@@ -405,6 +353,48 @@ import androidx.compose.ui.unit.sp
         }
     )
 }
-
+@Composable fun HorLineIcon( color: Color = MaterialTheme.colorScheme.outline, onClick: ()->Unit = {}){
+    val size = 39.dp
+    val width = 1.dp
+    Spacer(modifier = Modifier.size(size)
+        .clickable { onClick() }
+        .drawWithCache {
+            val sizePx = size .toPx()
+            val widthPx = width.toPx()
+            onDrawWithContent {
+                drawLine(
+                    color = color,
+                    strokeWidth = widthPx*2,
+                    start = Offset(sizePx /4,sizePx/2),
+                    end = Offset(sizePx * 3/4, sizePx /2))
+            }
+        }
+    )
+}
+@Composable fun MarkIcon( color: Color = MaterialTheme.colorScheme.outline, onClick: ()->Unit = {}){
+    val size = 39.dp
+    val width = 1.dp
+    Spacer(modifier = Modifier.size(size)
+        .clickable { onClick() }
+        .drawWithCache {
+            val sizePx = size .toPx()
+            val widthPx = width.toPx()
+            onDrawWithContent {
+                drawLine(
+                    color = color,
+                    strokeWidth = widthPx*2,
+                    start = Offset(sizePx /4, sizePx/3),
+                    end = Offset(sizePx /2, sizePx * 3/4))
+                drawLine(
+                    color = color,
+                    strokeWidth = widthPx*2,
+                    start = Offset(sizePx/2 - widthPx + 1,sizePx * 3/4),
+                    end = Offset(sizePx * 3/4, sizePx/5))
+            }
+        }
+    )
+}
 @Preview
-@Composable fun Preview() { SelectIcon(MaterialTheme.colorScheme.primary)}
+@Composable fun Preview() { AddIcon(MaterialTheme.colorScheme.outline)}
+@Preview
+@Composable fun Preview1() { HorLineIcon(color = MaterialTheme.colorScheme.outline)}

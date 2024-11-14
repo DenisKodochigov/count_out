@@ -73,7 +73,7 @@ import com.example.count_out.ui.view_components.custom_view.PlayIcon
     onClickAddExercise: (() -> Unit)? = null,
 ){
     var expanded by remember { mutableStateOf(false) }
-    Box() {
+    Box {
         IconSingle(image = Icons.Default.MoreVert, onClick = { expanded = true }, idDescription = R.string.show_Action)
         MaterialTheme( shapes = shapes.copy(extraSmall = shapes.large)) {
             DropdownMenu(

@@ -15,11 +15,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.AddCircleOutline
-import androidx.compose.material.icons.filled.CopyAll
-import androidx.compose.material.icons.filled.PlayCircleOutline
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -41,10 +36,13 @@ import com.example.count_out.ui.theme.getIdImage
 import com.example.count_out.ui.theme.mTypography
 import com.example.count_out.ui.view_components.ItemSwipe
 import com.example.count_out.ui.view_components.TextApp
+import com.example.count_out.ui.view_components.custom_view.AddIcon
+import com.example.count_out.ui.view_components.custom_view.CopyIcon
 import com.example.count_out.ui.view_components.custom_view.Frame
+import com.example.count_out.ui.view_components.custom_view.HorLineIcon
 import com.example.count_out.ui.view_components.custom_view.LineHorApp
-import com.example.count_out.ui.view_components.icons.IconSingle
-import com.example.count_out.ui.view_components.icons.IconSubscribe
+import com.example.count_out.ui.view_components.custom_view.MarkIcon
+import com.example.count_out.ui.view_components.custom_view.PlayIcon
 
 @Composable fun TrainingsScreen(
     onClickTraining: (Long) -> Unit,
@@ -79,6 +77,7 @@ import com.example.count_out.ui.view_components.icons.IconSubscribe
         TrainingList(uiState, modifier = Modifier)
         Spacer(modifier = Modifier.weight(1f))
         LineHorApp(shape = dividerBottomShape,color = MaterialTheme.colorScheme.surfaceContainerHigh)
+        Spacer(modifier = Modifier.height(18.dp))
         DownPlace(uiState)
     }
 }
@@ -98,27 +97,10 @@ import com.example.count_out.ui.view_components.icons.IconSubscribe
                 actionDragLeft = { uiState.onDeleteTraining( item.idTraining )},
                 actionDragRight = { uiState.editTraining(item) },
             )
-            Spacer(modifier = Modifier.height(Dimen.width4))
         }
     }
 }
 @Composable fun TrainingCard(item: Training, uiState: TrainingsScreenState, modifier: Modifier) {
-//    Card(elevation = elevationTraining(), shape = MaterialTheme.shapes.extraSmall
-//    ){
-//        Row(
-//            horizontalArrangement = Arrangement.Start,
-//            verticalAlignment = Alignment.CenterVertically,
-//            modifier = modifier.fillMaxWidth().padding(vertical = 6.dp)
-//        ){
-//            Spacer(modifier = Modifier.width(12.dp))
-//            IconRunTraining(idTraining = item.idTraining, uiState = uiState)
-//            Spacer(modifier = Modifier.width(16.dp))
-//            TrainingInformation(item = item, uiState = uiState, modifier = Modifier.weight(1f))
-//            Spacer(modifier = Modifier.width(Dimen.width6))
-//            IconEnd(item = item, uiState = uiState)
-//            Spacer(modifier = Modifier.width(12.dp))
-//        }
-//    }
     Frame( colorBorder = MaterialTheme.colorScheme.surfaceContainerLow
     ){
         Row(
@@ -127,38 +109,22 @@ import com.example.count_out.ui.view_components.icons.IconSubscribe
             modifier = modifier.fillMaxWidth().padding(vertical = 6.dp)
         ){
             Spacer(modifier = Modifier.width(12.dp))
-            IconRunTraining(idTraining = item.idTraining, uiState = uiState)
+            IconSelected(training = item, uiState = uiState)
             Spacer(modifier = Modifier.width(16.dp))
             TrainingInformation(item = item, uiState = uiState, modifier = Modifier.weight(1f))
             Spacer(modifier = Modifier.width(Dimen.width6))
-            IconEnd(item = item, uiState = uiState)
-            Spacer(modifier = Modifier.width(12.dp))
+            IconCopy(item = item, uiState = uiState)
+            Spacer(modifier = Modifier.width(Dimen.width6))
         }
     }
 }
-@Composable fun ItemLast( uiState: TrainingsScreenState) {
-    Row(
-        horizontalArrangement = Arrangement.Center,
-        verticalAlignment = Alignment.CenterVertically,
-        modifier = Modifier.fillMaxWidth()
-    ){
-        IconAddTraining( uiState = uiState)
-    }
+
+@Composable fun IconSelected(training: Training, uiState: TrainingsScreenState){
+    if (training.isSelected) MarkIcon(onClick = { uiState.onSelectItem(training.idTraining)})
+    else HorLineIcon(onClick = { uiState.onSelectItem(training.idTraining) })
 }
-@Composable fun IconRunTraining(idTraining: Long, uiState: TrainingsScreenState){
-    IconSubscribe(text = "Write activity", icon = Icons.Default.PlayCircleOutline,
-        onSelected = { uiState.onStartWorkout(idTraining)})
-}
-@Composable fun IconAddTraining(uiState: TrainingsScreenState){
-    IconSubscribe(text = "Add plan", icon = Icons.Default.AddCircleOutline,
-        onSelected = { uiState.onAddTraining() })
-}
-@Composable fun IconEnd(item: Training, uiState: TrainingsScreenState, modifier: Modifier = Modifier){
-    IconButton(
-        onClick = {
-            uiState.onCopyTraining(item.idTraining)
-                  }, modifier = modifier) {
-        IconSingle(image = Icons.Default.CopyAll) }
+@Composable fun IconCopy(item: Training, uiState: TrainingsScreenState){
+    CopyIcon(onClick = { uiState.onCopyTraining(item.idTraining) })
 }
 @Composable fun TrainingInformation(item: Training, uiState: TrainingsScreenState, modifier: Modifier = Modifier) {
     Column (modifier = modifier.clickable { uiState.onSelectItem(item.idTraining) }){
@@ -171,7 +137,8 @@ import com.example.count_out.ui.view_components.icons.IconSubscribe
 //##################################################################################################
 @Composable fun DownPlace(uiState: TrainingsScreenState) {
     Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
+        PlayIcon(onClick = {uiState.onStartWorkout(0)})
         Spacer(modifier = Modifier.width(32.dp))
-        IconAddTraining( uiState = uiState )
+        AddIcon(onClick = { uiState.onAddTraining() })
     }
 }
