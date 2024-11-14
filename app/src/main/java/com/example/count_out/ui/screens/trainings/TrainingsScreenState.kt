@@ -1,6 +1,8 @@
 package com.example.count_out.ui.screens.trainings
 
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.Stable
+import androidx.compose.runtime.mutableStateOf
 import com.example.count_out.entity.workout.Training
 import javax.inject.Singleton
 
@@ -18,6 +20,8 @@ data class TrainingsScreenState(
     @Stable var onSelect: (Training) -> Unit = {},
     @Stable var onClickTraining: (Long) ->Unit = {},
     @Stable var idImage: Int = 0,
+
+    val selectedId: MutableState<Long?> = mutableStateOf(null),
     @Stable var screenTextHeader: String = "",
 ){
     fun selectedItem(): Long{

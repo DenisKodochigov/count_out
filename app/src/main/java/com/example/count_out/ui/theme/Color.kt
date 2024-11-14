@@ -3,7 +3,7 @@ package com.example.count_out.ui.theme
 import androidx.compose.ui.graphics.Color
 
 val primaryLight = Color(0xFF004D78)
-val onPrimaryLight = Color(0xFFFFFFFF)
+val onPrimaryLight = Color(0xFF626262) // Text default color (TextApp)
 val primaryContainerLight = Color(0xFF2373A9)
 val onPrimaryContainerLight = Color(0xFFFFFFFF)
 val secondaryLight = Color(0xFF026398)
@@ -21,7 +21,7 @@ val onErrorContainerLight = Color(0xFFFFFFFF)
 val backgroundLight = Color(0xFFF8F9FE)  //Common background application
 val onBackgroundLight = Color(0xFF5F5F5F) //Common text
 val surfaceLight = Color(0xFFF8F9FE)
-val onSurfaceLight = Color(0xFF191C1F)
+val onSurfaceLight = Color(0xFF8D67FF)
 val surfaceVariantLight = Color(0xFFDCE3ED)
 val onSurfaceVariantLight = Color(0xFF40474F)  //Lower-emphasis color for text and icons against any surface color
 val outlineLight = Color(0xFF8D67FF)           // Selected element
@@ -35,7 +35,7 @@ val surfaceBrightLight = Color(0xFFF8F9FE)
 val surfaceContainerLowestLight = Color(0xFFE1E1E1) //1 level Frame 0xFF797979
 val surfaceContainerLowLight = Color(0xFFDCDCDC)    //2 level frame 0xFF9F9F9F
 val surfaceContainerLight = Color(0xFFE8E8E8)       //BottomBar background
-val surfaceContainerHighLight = Color(0xFFCECECE)   //3 level Frame 0xFFE1E1E1
+val surfaceContainerHighLight = Color(0xFFBDBDBD)   //3 level Frame 0xFFE1E1E1
 val surfaceContainerHighestLight = Color(0xFFE0E0E0) // Card background
 
 val primaryDark = Color(0xFF94CCFF)

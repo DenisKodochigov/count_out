@@ -43,12 +43,12 @@ import androidx.compose.ui.unit.sp
                         size = Size(sizePx - widthPx, sizePx - widthPx))
                     drawLine(
                         color = color,
-                        strokeWidth = widthPx*2,
+                        strokeWidth = widthPx,
                         start = Offset(sizePx /2, sizePx/4),
                         end = Offset(sizePx /2, sizePx * 3/4))
                     drawLine(
                         color = color,
-                        strokeWidth = widthPx*2,
+                        strokeWidth = widthPx,
                         start = Offset(sizePx /4,sizePx/2),
                         end = Offset(sizePx * 3/4, sizePx /2))
                 }
@@ -201,10 +201,10 @@ import androidx.compose.ui.unit.sp
             val widthPx = width.toPx()
             val offsetX = 2.dp.toPx()
             val triangle = Path().apply {
-                moveTo(sizePx/3 + offsetX, sizePx/3)
-                lineTo(sizePx * 2/3 + offsetX,sizePx / 2)
-                lineTo(sizePx /3 + offsetX,sizePx * 2 / 3)
-                lineTo(sizePx/3 + offsetX, sizePx/3)
+                moveTo(sizePx * 0.3f + offsetX, sizePx/4)
+                lineTo(sizePx * 0.7f + offsetX,sizePx / 2)
+                lineTo(sizePx * 0.3f + offsetX,sizePx * 3/4)
+                lineTo(sizePx * 0.3f + offsetX, sizePx/3)
                 close()
             }
             onDrawWithContent {
@@ -364,7 +364,7 @@ import androidx.compose.ui.unit.sp
             onDrawWithContent {
                 drawLine(
                     color = color,
-                    strokeWidth = widthPx*2,
+                    strokeWidth = widthPx,
                     start = Offset(sizePx /4,sizePx/2),
                     end = Offset(sizePx * 3/4, sizePx /2))
             }
@@ -395,6 +395,6 @@ import androidx.compose.ui.unit.sp
     )
 }
 @Preview
-@Composable fun Preview() { AddIcon(MaterialTheme.colorScheme.outline)}
-@Preview
-@Composable fun Preview1() { HorLineIcon(color = MaterialTheme.colorScheme.outline)}
+@Composable fun Preview() { PlayIcon(MaterialTheme.colorScheme.outline)}
+//@Preview
+//@Composable fun Preview1() { HorLineIcon(color = MaterialTheme.colorScheme.outline)}

@@ -19,7 +19,7 @@ import androidx.compose.ui.text.style.TextOverflow
     style: TextStyle,
     maxLines:Int = 1,
     fontWeight: FontWeight = FontWeight.Normal,
-    color: Color = MaterialTheme.colorScheme.onSurface
+    color: Color = MaterialTheme.colorScheme.onPrimary
 ) {
     Text(
         text = text,

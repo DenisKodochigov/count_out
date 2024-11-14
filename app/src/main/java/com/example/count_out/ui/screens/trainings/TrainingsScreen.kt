@@ -70,20 +70,16 @@ import com.example.count_out.ui.view_components.custom_view.PlayIcon
     uiState.idImage = getIdImage(screen)
     TrainingsScreenLayout(uiState = uiState)
 }
-@Composable fun TrainingsScreenLayout( uiState: TrainingsScreenState
-){
+@Composable fun TrainingsScreenLayout( uiState: TrainingsScreenState){
     Column( modifier = Modifier.fillMaxSize()) {
         LineHorApp(shape = dividerTopShape,color = MaterialTheme.colorScheme.surfaceContainerHigh)
-        TrainingList(uiState, modifier = Modifier)
-        Spacer(modifier = Modifier.weight(1f))
+        TrainingList(uiState, modifier = Modifier.weight(1f))
         LineHorApp(shape = dividerBottomShape,color = MaterialTheme.colorScheme.surfaceContainerHigh)
         Spacer(modifier = Modifier.height(18.dp))
         DownPlace(uiState)
     }
 }
-
 @Composable fun TrainingList(uiState: TrainingsScreenState, modifier: Modifier = Modifier) {
-
     LazyColumn(
         state = rememberLazyListState(),
         contentPadding = PaddingValues(horizontal = Dimen.paddingAppHor, vertical = 4.dp),
@@ -118,10 +114,11 @@ import com.example.count_out.ui.view_components.custom_view.PlayIcon
         }
     }
 }
-
 @Composable fun IconSelected(training: Training, uiState: TrainingsScreenState){
-    if (training.isSelected) MarkIcon(onClick = { uiState.onSelectItem(training.idTraining)})
-    else HorLineIcon(onClick = { uiState.onSelectItem(training.idTraining) })
+    uiState.selectedId.value?.let { selectedId->
+        if (training.idTraining == selectedId) MarkIcon(onClick = { uiState.selectedId.value = null})
+        else HorLineIcon(onClick = { uiState.selectedId.value = training.idTraining })
+    } ?: HorLineIcon(onClick = { uiState.selectedId.value = training.idTraining })
 }
 @Composable fun IconCopy(item: Training, uiState: TrainingsScreenState){
     CopyIcon(onClick = { uiState.onCopyTraining(item.idTraining) })
