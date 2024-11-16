@@ -16,6 +16,7 @@ val topBarShape = RoundedCornerShape(topEnd = 0.dp, topStart = 0.dp, bottomEnd =
 val bottomBarShape = RoundedCornerShape(topEnd = 6.dp, topStart = 6.dp, bottomEnd = 0.dp, bottomStart = 0.dp)
 val shapeAddExercise = RoundedCornerShape(topEnd = 0.dp, topStart = 6.dp, bottomEnd = 6.dp, bottomStart = 0.dp)
 val per = 24.dp
+val dividerShape = RoundedCornerShape(topStart = per, topEnd = per, bottomStart = per, bottomEnd = per )
 val dividerTopShape = RoundedCornerShape(topStart = per, topEnd = per, bottomStart = 0.dp, bottomEnd = 0.dp )
 val dividerStartShape = RoundedCornerShape(topStart = per, topEnd = 0.dp, bottomStart = per, bottomEnd = 0.dp )
 val dividerBottomShape = RoundedCornerShape(topStart = 0.dp, topEnd = 0.dp, bottomStart = per, bottomEnd = per )
