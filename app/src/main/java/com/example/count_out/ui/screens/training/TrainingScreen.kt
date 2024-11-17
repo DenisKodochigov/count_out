@@ -100,8 +100,7 @@ fun TrainingScreenCreateView(
 }
 @SuppressLint("UnrememberedMutableState")
 @Composable
-fun TrainingScreenLayout( uiState: TrainingScreenState
-){
+fun TrainingScreenLayout( uiState: TrainingScreenState){
     val focusManager = LocalFocusManager.current
     val interactionSource = remember { MutableInteractionSource() }
     Column(

@@ -24,6 +24,7 @@ enum class RoundType(val strId: Int, var amount: Int, var duration: Int){
     OUT (R.string.work_out,0,0),
     DOWN (R.string.work_down,0,0);
 }
+
 enum class GoalSet(val id: Int){ DISTANCE(1), DURATION(2), COUNT(3), COUNT_GROUP(4), }
 enum class ErrorBleService{ NONE, GET_REMOTE_DEVICE, CONNECT_DEVICE, NOT_CONNECT_GATT, DISCOVER_SERVICE }
 enum class UnitTime(val arg: Int) { Days(1), Week(2), Month(3), Year(4)}

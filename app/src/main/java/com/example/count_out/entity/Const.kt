@@ -23,6 +23,7 @@ import android.Manifest.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS
 import android.Manifest.permission.TRANSMIT_IR
 import android.Manifest.permission.UWB_RANGING
 import android.Manifest.permission.VIBRATE
+import androidx.compose.ui.unit.dp
 import com.example.count_out.R
 import com.example.count_out.navigation.TrainingsDestination
 import java.util.UUID
@@ -77,6 +78,14 @@ object Const {
     val permissions2 = listOf(
         ACCESS_BACKGROUND_LOCATION,//with 29
     )
+    private var widthContour = 2.dp
+    private val widthHideContour = 0.dp
+    val contourAll = Direction(top = widthContour, bottom = widthContour, start = widthContour, end = widthContour)
+    val contourHor = Direction(top = widthContour, bottom = widthContour, start = widthHideContour, end = widthHideContour)
+    val contourVer = Direction(top = widthHideContour, bottom = widthHideContour, start = widthContour, end = widthContour)
+    private val widthContour1 = 1.dp
+    val contourAll1 = Direction(top = widthContour1, bottom = widthContour1, start = widthContour1, end = widthContour1)
+
     val serviceUUIDs = listOf(
 //        UUID.fromString("00001809-0000-0000-0000-000000000000"),
 //        UUID.fromString("00001810-0000-1000-8000-000000000000"),

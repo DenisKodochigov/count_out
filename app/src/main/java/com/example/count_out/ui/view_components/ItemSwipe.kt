@@ -74,12 +74,12 @@ fun ItemSwipe(
     Row(modifier = modifier.fillMaxWidth(). padding(horizontal = 12.dp)) {
         Icon(imageVector = iconLeft,
             contentDescription = "",
-            tint = MaterialTheme.colorScheme.primary,
+            tint = MaterialTheme.colorScheme.outline,
             modifier = Modifier.padding(start = 8.dp))
         Spacer(modifier = Modifier.weight(1f))
         Icon(imageVector = iconRight,
             contentDescription = "",
-            tint = MaterialTheme.colorScheme.primary,
+            tint = MaterialTheme.colorScheme.outline,
             modifier = Modifier.padding(end = 8.dp))
     }
 }

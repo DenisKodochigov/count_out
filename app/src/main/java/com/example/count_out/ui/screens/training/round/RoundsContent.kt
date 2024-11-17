@@ -1,6 +1,5 @@
 package com.example.count_out.ui.screens.training.round
 
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -8,8 +7,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.material3.Card
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
@@ -19,72 +16,54 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.example.count_out.R
 import com.example.count_out.data.room.tables.SetDB
+import com.example.count_out.entity.Const.contourHor
 import com.example.count_out.entity.GoalSet
 import com.example.count_out.entity.RoundType
 import com.example.count_out.ui.screens.training.TrainingScreenState
 import com.example.count_out.ui.screens.training.exercise.ListExercises
-import com.example.count_out.ui.theme.elevationTraining
-import com.example.count_out.ui.theme.interBold14
-import com.example.count_out.ui.theme.interLight12
+import com.example.count_out.ui.view_components.TextApp
+import com.example.count_out.ui.view_components.custom_view.Frame
 import com.example.count_out.ui.view_components.icons.IconsCollapsing
 import com.example.count_out.ui.view_components.icons.IconsGroup
-import com.example.count_out.ui.view_components.TextApp
 import kotlin.math.roundToInt
 
 @Composable
 fun Round(uiState: TrainingScreenState, roundType: MutableState<RoundType>){
     roundType.value.amount = amountExercise(uiState, roundType)
     roundType.value.duration = durationRound(uiState, roundType)
-    Card( elevation = elevationTraining(), shape = MaterialTheme.shapes.extraSmall
-    ){
-        Box{
-            Column( modifier = Modifier.padding(start = 6.dp, bottom=6.dp))
-            {
-                Row1Round(uiState = uiState, roundType)
-                Row2Round(roundType)
-                Row3Round(uiState = uiState, roundType)
-//                Row4Round(uiState = uiState, roundType)
-            }
+    Frame(color = MaterialTheme.colorScheme.surfaceContainerHigh, contour = contourHor){
+        Column( modifier = Modifier.padding(start = 6.dp, bottom = 4.dp, top = 4.dp)){
+            Row1Round(uiState = uiState, roundType)
+            Row2Round(uiState = uiState, roundType)
         }
     }
 }
-@Composable
-fun Row1Round(uiState: TrainingScreenState, roundType: MutableState<RoundType>){
+@Composable fun Row1Round(uiState: TrainingScreenState, roundType: MutableState<RoundType>){
     val nameNewSet = stringResource(id = R.string.set)
     Row(
         verticalAlignment = Alignment.CenterVertically,
-        modifier = Modifier.fillMaxWidth().padding(bottom = 6.dp, end = 2.dp)
+        modifier = Modifier.fillMaxWidth().padding(end = 2.dp)
     ){
         IconsCollapsing(
             onClick = { setCollapsing(uiState, roundType) },
             wrap = getCollapsing(uiState, roundType) )
-        TextApp(text = stringResource(id = roundType.value.strId), style = interBold14)
+        TextApp(text = stringResource(id = roundType.value.strId), style = MaterialTheme.typography.headlineSmall)
         Spacer(modifier = Modifier.weight(1f))
+        Column {
+            TextApp( text = stringResource(id = R.string.exercises) + ": " + roundType.value.amount,
+                style = MaterialTheme.typography.bodySmall)
+            Spacer(modifier = Modifier.height(2.dp))
+            TextApp( text = stringResource(id = R.string.duration) + ": " + roundType.value.duration + " " +
+                    stringResource(id = R.string.min), style = MaterialTheme.typography.bodySmall) }
+        Spacer(modifier = Modifier.width(12.dp))
         IconsGroup(
             onClickSpeech = {showSpeechRound(uiState, roundType)},
             onClickAddExercise = {
-                uiState.onAddExercise(getIdRound(uiState, roundType), SetDB(name = nameNewSet))}
-        )
+                uiState.onAddExercise(getIdRound(uiState, roundType), SetDB(name = nameNewSet))})
         Spacer(modifier = Modifier.width(6.dp))
     }
 }
-@Composable
-fun Row2Round( roundType: MutableState<RoundType>){
-    HorizontalDivider()
-    Spacer(modifier = Modifier.height(4.dp))
-    Row(modifier = Modifier.padding(end = 8.dp)) {
-        TextApp(
-            text = stringResource(id = R.string.exercises) + ": " + roundType.value.amount,
-            style = interLight12)
-        Spacer(modifier = Modifier.weight(1f))
-        TextApp(
-            text = stringResource(id = R.string.duration) + ": " + roundType.value.duration + " " +
-                    stringResource(id = R.string.min),
-            style = interLight12)
-    }
-}
-@Composable
-fun Row3Round(uiState: TrainingScreenState, roundType: MutableState<RoundType>){
+@Composable fun Row2Round(uiState: TrainingScreenState, roundType: MutableState<RoundType>){
     ListExercises(
         uiState = uiState,
         roundType = roundType.value,

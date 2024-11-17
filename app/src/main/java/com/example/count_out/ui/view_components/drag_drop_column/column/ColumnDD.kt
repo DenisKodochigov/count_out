@@ -37,11 +37,9 @@ fun <T>ColumnDD(
                         onDragStart = { offset -> stateDrag.onStartDrag(offset.y) },
                         onDrag = { change, offset ->
                             change.consume()
-                            stateDrag.onDrag(offset.y)
-                        },
+                            stateDrag.onDrag(offset.y) },
                         onDragEnd = { stateDrag.onDragEnd(onMoveItem) },
-                        onDragCancel = {stateDrag.onDragCancel()}
-                    )
+                        onDragCancel = {stateDrag.onDragCancel()} )
                 }){
                 items.forEachIndexed { index, item ->
                     Column(

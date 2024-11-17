@@ -32,10 +32,10 @@ val inverseOnSurfaceLight = Color(0xFFEFF1F6)
 val inversePrimaryLight = Color(0xFF94CCFF)
 val surfaceDimLight = Color(0xFFD8DADF)
 val surfaceBrightLight = Color(0xFFF8F9FE)
-val surfaceContainerLowestLight = Color(0xFFE1E1E1) //1 level Frame 0xFF797979
+val surfaceContainerLowestLight = Color(0xFFE1E1E1) //3 level Frame 0xFF797979
 val surfaceContainerLowLight = Color(0xFFDCDCDC)    //2 level frame 0xFF9F9F9F
 val surfaceContainerLight = Color(0xFFE8E8E8)       //BottomBar background
-val surfaceContainerHighLight = Color(0xFFBDBDBD)   //3 level Frame 0xFFE1E1E1
+val surfaceContainerHighLight = Color(0xFFBDBDBD)   //1 level Frame 0xFFE1E1E1
 val surfaceContainerHighestLight = Color(0xFFE0E0E0) // Card background
 
 val primaryDark = Color(0xFF94CCFF)

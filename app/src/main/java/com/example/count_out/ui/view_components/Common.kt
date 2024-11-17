@@ -149,7 +149,7 @@ import com.example.count_out.ui.theme.mTypography
     val enabled = typeKeyboard != TypeKeyboard.NONE
     val paddingHor = if (textStyle.fontSize > 14.sp) 8.dp else 4.dp
     val paddingVer = if (textStyle.fontSize > 14.sp) 6.dp else 2.dp
-    val colorLine = if (visible) MaterialTheme.colorScheme.onBackground else Color.Transparent
+    val colorLine = if (visible) MaterialTheme.colorScheme.outline else Color.Transparent
     val mergedStyle = LocalTextStyle.current.merge(textStyle.copy(color = LocalContentColor.current))
     val colors = TextFieldDefaults.colors(
         unfocusedIndicatorColor = Color.Transparent,

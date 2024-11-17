@@ -19,8 +19,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowDropDown
-import androidx.compose.material.icons.filled.ArrowDropUp
 import androidx.compose.material.icons.filled.Bluetooth
 import androidx.compose.material.icons.filled.CopyAll
 import androidx.compose.material.icons.filled.DeleteOutline
@@ -61,7 +59,8 @@ import com.example.count_out.ui.theme.alumniReg12
 import com.example.count_out.ui.theme.mTypography
 import com.example.count_out.ui.theme.shapes
 import com.example.count_out.ui.view_components.TextApp
-import com.example.count_out.ui.view_components.custom_view.PlayIcon
+import com.example.count_out.ui.view_components.custom_view.CollapsingIcon
+import com.example.count_out.ui.view_components.custom_view.UnCollapsingIcon
 
 @Composable fun IconsGroup(
     onClickEdit: (() -> Unit)? = null,
@@ -160,7 +159,7 @@ import com.example.count_out.ui.view_components.custom_view.PlayIcon
 }
 @Composable fun IconSingle(image: ImageVector, onClick:()->Unit = {}, idDescription: Int = 0){
     Icon(imageVector = image,
-        tint = MaterialTheme.colorScheme.tertiary,
+        tint = MaterialTheme.colorScheme.outline,
         contentDescription = if ( idDescription == 0) "" else stringResource(id = idDescription),
         modifier = Modifier.size(sizeIcon).clickable { onClick() })
 }
@@ -176,13 +175,7 @@ import com.example.count_out.ui.view_components.custom_view.PlayIcon
         modifier = Modifier.size(Dimen.sizeIconLarge))
 }
 @Composable fun IconsCollapsing(onClick: ()->Unit, wrap: Boolean) {
-    Icon(imageVector = if (wrap) Icons.Filled.ArrowDropUp else Icons.Filled.ArrowDropDown,
-        contentDescription = "",
-        modifier = Modifier
-            .padding(4.dp)
-            .size(sizeIcon)
-            .clickable { onClick() }
-    )
+    if (wrap) CollapsingIcon( onClick = onClick) else UnCollapsingIcon( onClick = onClick)
 }
 @Composable fun IconAddSet(onClick:()->Unit) = IconAdd(onClick = onClick, text = "S+" )
 @Composable fun IconAddRing(onClick:()->Unit) = IconAdd(onClick = onClick, text = "R+" )
@@ -224,30 +217,27 @@ import com.example.count_out.ui.view_components.custom_view.PlayIcon
     Column(
         verticalArrangement = Arrangement.Center,
         modifier = Modifier,
-        horizontalAlignment = Alignment.CenterHorizontally)
+        horizontalAlignment = Alignment.CenterHorizontally )
     {
-        IconButton( onClick = onSelected, modifier = Modifier.testTag(text)
-        ){
+        IconButton( onClick = onSelected, modifier = Modifier.testTag(text)){
             Icon(
                 imageVector = icon,
                 contentDescription = text,
                 tint = iconColor,
                 modifier = Modifier.fillMaxSize().animateContentSize()
-                    .clearAndSetSemantics { contentDescription = text }
-            )
+                    .clearAndSetSemantics { contentDescription = text })
         }
         TextApp(text = text, style = alumniReg12)
     }
 }
-@Composable fun IconRun(onClick: () -> Unit){
-    Box(modifier = Modifier.clickable { onClick() }){
-        PlayIcon(MaterialTheme.colorScheme.secondary) }
-}
-@Composable fun IconAdd(onClick: () -> Unit){
-    Box(modifier = Modifier.clickable { onClick() }){
-        PlayIcon(MaterialTheme.colorScheme.secondary) }
-}
-
+//@Composable fun IconRun(onClick: () -> Unit){
+//    Box(modifier = Modifier.clickable { onClick() }){
+//        PlayIcon(MaterialTheme.colorScheme.secondary) }
+//}
+//@Composable fun IconAdd(onClick: () -> Unit){
+//    Box(modifier = Modifier.clickable { onClick() }){
+//        PlayIcon(MaterialTheme.colorScheme.secondary) }
+//}
 //@Composable fun HorIcons(
 //    onClickEdit: (() -> Unit)? = null,
 //    onClickCopy: (() -> Unit)? = null,
