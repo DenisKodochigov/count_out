@@ -22,6 +22,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalDensity
@@ -38,7 +39,7 @@ import com.example.count_out.ui.theme.dividerTopShape
 
 @Composable fun Layout(){
     AppTheme {
-        Column( modifier = Modifier.padding(1.dp).width(150.dp).height(150.dp)){
+        Column( modifier = Modifier.padding(1.dp).width(200.dp).height(150.dp)){
 //            Divider(Direction.Top)
 //            Divider(Direction.Start)
 //            Test()
@@ -48,7 +49,7 @@ import com.example.count_out.ui.theme.dividerTopShape
 //            FrameHorVer(content = {Test()}, type = true)
 //            Spacer(modifier = Modifier.height(4.dp))
 //            FrameHorVer(content = {Test()}, type = false)
-            Frame1 { Test() }
+            Frame2 (mode = 3, content =  {Test()} )
         }
     }
 }
@@ -65,23 +66,71 @@ enum class Direction{ Top, Start, Bottom, End }
 
 @Composable fun Frame1(content:@Composable ()->Unit){
     Column {
-        LineHorApp( dividerTopShape )
+        LineTop( dividerTopShape )
         Spacer(modifier = Modifier.weight(1f))
-        Row(modifier = Modifier.background(Color.Green)) {
-            LineVerApp( dividerStartShape)
+        Row(modifier = Modifier) {
+//            LineVerApp( dividerStartShape)
             Spacer(modifier = Modifier.weight(1f))
             content()
             Spacer(modifier = Modifier.weight(1f))
 //            LineVerApp( dividerEndShape )
         }
         Spacer(modifier = Modifier.weight(1f))
-        LineHorApp( dividerBottomShape )
+        LineBottom( dividerBottomShape )
     }
 }
+@Composable fun Frame2(color:Color = Color.Gray, mode: Int = 2, content:@Composable ()->Unit){
+    val per = 12.dp
+    val width = 2.dp
+    val width1 = 0.dp
+    val dividerShape = RoundedCornerShape(topStart = per, topEnd = per, bottomStart = per, bottomEnd = per )
+    val padding: List<Dp> = when(mode){
+//         {listOf<Dp>("top", "start", "end", "bottom")}
+        1-> listOf<Dp>(width, width, width, width)   //All
+        2-> listOf<Dp>(width, width1, width1, width) //Hor
+        3-> listOf<Dp>(width1, width, width, width1) //Ver
+        else -> listOf<Dp>(0.dp, 0.dp,0.dp, 0.dp)
+    }
 
+    Box(modifier = Modifier
+        .background(color, shape = dividerShape)
+        .padding(top = padding[0], start = padding[1], end = padding[2], bottom =  padding[3])    // отступ от границ фрагмента
+        .background(Color.White)
+        .padding(horizontal = 0.dp)     // отступ между границей во фрагменте и текстом
+    ){content()}
+
+}
 @Composable fun LineHorApp(shape: Shape, color:Color = Color.Gray){
-    Box(modifier = Modifier.padding(horizontal = 4.dp)){
+    Box(modifier = Modifier.padding(horizontal = 4.dp).clip(RoundedCornerShape(24.dp))){
         Box(modifier = Modifier.fillMaxWidth().height(2.dp).background(color = color, shape = shape)) }
+}
+@Composable fun LineTop(shape: Shape, color:Color = Color.Gray){
+    Box(modifier = Modifier
+        .fillMaxWidth()
+        .padding(2.dp)     // отступ от границ контейнера
+//        .clip(shape= RoundedCornerShape(12.dp))
+//        .border(width = 2.dp, color = Color.White)
+        .background(color, shape = MaterialTheme.shapes.large)
+        .padding(top = 5.dp)    // отступ от границ фрагмента
+        .clip(shape= RectangleShape)
+        .border(width = 2.dp, color = Color.White)
+        .background(Color.White)
+        .padding(4.dp)     // отступ между границей во фрагменте и текстом
+    ){}
+}
+@Composable fun LineBottom(shape: Shape, color:Color = Color.Gray){
+    Box(modifier = Modifier
+        .fillMaxWidth()
+        .padding(2.dp)     // отступ от границ контейнера
+//        .clip(shape= RoundedCornerShape(12.dp))
+//        .border(width = 2.dp, color = Color.White)
+        .background(color, shape = MaterialTheme.shapes.large)
+        .padding(bottom = 5.dp)    // отступ от границ фрагмента
+        .clip(shape= RectangleShape)
+        .border(width = 2.dp, color = Color.White)
+        .background(Color.White)
+        .padding(4.dp)     // отступ между границей во фрагменте и текстом
+    ){}
 }
 @Composable fun LineVerApp(shape: Shape, color:Color = Color.Gray){
     Box(modifier = Modifier.padding(vertical = 4.dp)){
@@ -132,7 +181,19 @@ fun FrameHorVer(
 
 
 @Composable fun Test(){
-    Column(modifier = Modifier.padding(vertical = 2.dp, horizontal = 12.dp)){
+//    Text("Hello METANIT.COM!",
+//        fontSize = 10.sp,
+//        modifier = Modifier
+//            .padding(2.dp)     // отступ от границ контейнера
+//            .background(Color.DarkGray, shape = MaterialTheme.shapes.large)
+//            .padding(top = 5.dp)    // отступ от границ фрагмента
+//            .clip(shape= RectangleShape)
+//            .border(width = 2.dp, color = Color.White)
+//            .background(Color.LightGray)
+//            .padding(6.dp)     // отступ между границей во фрагменте и текстом
+//    )
+
+    Column(modifier = Modifier.padding(vertical = 2.dp, horizontal = 2.dp)){
         Text( text = "test", style = MaterialTheme.typography.displayLarge,)
     }
 }
