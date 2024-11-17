@@ -30,17 +30,14 @@ import com.example.count_out.R
 import com.example.count_out.entity.workout.Training
 import com.example.count_out.navigation.ScreenDestination
 import com.example.count_out.ui.theme.Dimen
-import com.example.count_out.ui.theme.dividerBottomShape
-import com.example.count_out.ui.theme.dividerTopShape
 import com.example.count_out.ui.theme.getIdImage
 import com.example.count_out.ui.theme.mTypography
 import com.example.count_out.ui.view_components.ItemSwipe
 import com.example.count_out.ui.view_components.TextApp
 import com.example.count_out.ui.view_components.custom_view.AddIcon
 import com.example.count_out.ui.view_components.custom_view.CopyIcon
-import com.example.count_out.ui.view_components.custom_view.Frame
+import com.example.count_out.ui.view_components.custom_view.Frame2
 import com.example.count_out.ui.view_components.custom_view.HorLineIcon
-import com.example.count_out.ui.view_components.custom_view.LineHorApp
 import com.example.count_out.ui.view_components.custom_view.MarkIcon
 import com.example.count_out.ui.view_components.custom_view.PlayIcon
 
@@ -73,10 +70,15 @@ import com.example.count_out.ui.view_components.custom_view.PlayIcon
 @Composable fun TrainingsScreenLayout( uiState: TrainingsScreenState
 ){
     Column( modifier = Modifier.fillMaxSize()) {
-        LineHorApp(shape = dividerTopShape,color = MaterialTheme.colorScheme.surfaceContainerHigh)
-        TrainingList(uiState, modifier = Modifier)
-        Spacer(modifier = Modifier.weight(1f))
-        LineHorApp(shape = dividerBottomShape,color = MaterialTheme.colorScheme.surfaceContainerHigh)
+//        LineHorApp(shape = dividerTopShape,color = MaterialTheme.colorScheme.surfaceContainerHigh)
+//        TrainingList(uiState, modifier = Modifier)
+//        Spacer(modifier = Modifier.weight(1f))
+//        LineHorApp(shape = dividerBottomShape,color = MaterialTheme.colorScheme.surfaceContainerHigh)
+
+        Frame2( color = MaterialTheme.colorScheme.surfaceContainerLow, mode= 2){
+            TrainingList(uiState, modifier = Modifier.weight(1f))
+            Spacer(modifier = Modifier.weight(1f))
+        }
         Spacer(modifier = Modifier.height(18.dp))
         DownPlace(uiState)
     }
@@ -101,8 +103,7 @@ import com.example.count_out.ui.view_components.custom_view.PlayIcon
     }
 }
 @Composable fun TrainingCard(item: Training, uiState: TrainingsScreenState, modifier: Modifier) {
-    Frame( colorBorder = MaterialTheme.colorScheme.surfaceContainerLow
-    ){
+    Frame2( color = MaterialTheme.colorScheme.surfaceContainerLow, mode = 1){
         Row(
             horizontalArrangement = Arrangement.Start,
             verticalAlignment = Alignment.CenterVertically,

@@ -79,15 +79,16 @@ enum class Direction{ Top, Start, Bottom, End }
         LineBottom( dividerBottomShape )
     }
 }
-@Composable fun Frame2(content:@Composable ()->Unit, color:Color = Color.Gray, mode: Int = 1){
+@Composable fun Frame2(color:Color = Color.Gray, mode: Int = 2, content:@Composable ()->Unit){
     val per = 12.dp
     val width = 2.dp
+    val width1 = 0.dp
     val dividerShape = RoundedCornerShape(topStart = per, topEnd = per, bottomStart = per, bottomEnd = per )
     val padding: List<Dp> = when(mode){
 //         {listOf<Dp>("top", "start", "end", "bottom")}
-        1-> listOf<Dp>(width, width, width, width)
-        2-> listOf<Dp>(width, 0.dp, 0.dp, width)
-        3-> listOf<Dp>(0.dp, width, width, 0.dp)
+        1-> listOf<Dp>(width, width, width, width)   //All
+        2-> listOf<Dp>(width, width1, width1, width) //Hor
+        3-> listOf<Dp>(width1, width, width, width1) //Ver
         else -> listOf<Dp>(0.dp, 0.dp,0.dp, 0.dp)
     }
 
@@ -95,7 +96,7 @@ enum class Direction{ Top, Start, Bottom, End }
         .background(color, shape = dividerShape)
         .padding(top = padding[0], start = padding[1], end = padding[2], bottom =  padding[3])    // отступ от границ фрагмента
         .background(Color.White)
-        .padding(horizontal = per)     // отступ между границей во фрагменте и текстом
+        .padding(horizontal = 0.dp)     // отступ между границей во фрагменте и текстом
     ){content()}
 
 }
