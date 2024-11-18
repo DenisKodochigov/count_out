@@ -43,12 +43,12 @@ import com.example.count_out.ui.theme.massColor
 import com.example.count_out.ui.theme.shapes
 import com.example.count_out.ui.view_components.TextApp
 import com.example.count_out.ui.view_components.TextButtonOK
-import com.example.count_out.ui.view_components.icons.ArrowDown
-import com.example.count_out.ui.view_components.icons.ArrowLeft
-import com.example.count_out.ui.view_components.icons.ArrowNoneHor
-import com.example.count_out.ui.view_components.icons.ArrowNoneVer
-import com.example.count_out.ui.view_components.icons.ArrowRight
-import com.example.count_out.ui.view_components.icons.ArrowUp
+import com.example.count_out.ui.view_components.custom_view.ArrowDown
+import com.example.count_out.ui.view_components.custom_view.ArrowLeft
+import com.example.count_out.ui.view_components.custom_view.ArrowNoneHor
+import com.example.count_out.ui.view_components.custom_view.ArrowNoneVer
+import com.example.count_out.ui.view_components.custom_view.ArrowRight
+import com.example.count_out.ui.view_components.custom_view.ArrowUp
 
 @Composable
 fun ChangeColorSectionDialog(

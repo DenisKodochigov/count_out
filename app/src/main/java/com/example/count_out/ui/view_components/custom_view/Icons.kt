@@ -294,8 +294,8 @@ import androidx.compose.ui.unit.sp
             onDrawWithContent {
                 drawPath(color = color, path = Path().apply {
                     moveTo( sizePx/2, sizePx * 0.4f)
-                    lineTo( widthPx * 6, sizePx * 0.6f)
-                    lineTo( sizePx - widthPx * 6, sizePx * 0.6f)
+                    lineTo( widthPx * 9, sizePx * 0.6f)
+                    lineTo( sizePx - widthPx * 9, sizePx * 0.6f)
                     close()
                 })
             }
@@ -314,8 +314,8 @@ import androidx.compose.ui.unit.sp
             onDrawWithContent {
                 drawPath(color = color, path = Path().apply {
                     moveTo( sizePx/2, sizePx * 0.6f)
-                    lineTo( widthPx * 6, sizePx * 0.4f)
-                    lineTo( sizePx - widthPx * 6, sizePx * 0.4f)
+                    lineTo( widthPx * 9, sizePx * 0.4f)
+                    lineTo( sizePx - widthPx * 9, sizePx * 0.4f)
                     close()
                 })
             }
@@ -395,6 +395,6 @@ import androidx.compose.ui.unit.sp
     )
 }
 @Preview
-@Composable fun Preview() { PlayIcon(MaterialTheme.colorScheme.outline)}
+@Composable fun Preview() { CollapsingIcon(MaterialTheme.colorScheme.outline)}
 //@Preview
 //@Composable fun Preview1() { HorLineIcon(color = MaterialTheme.colorScheme.outline)}

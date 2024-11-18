@@ -241,6 +241,11 @@
     <string name="no">NO</string>
     <string name="yes">YES</string>
     <string name="no_plan_training">Run work ot without plan.</string>
+    <string name="zone1">ZONE I</string>
+    <string name="zone2">ZONE II</string>
+    <string name="zone3">ZONE III</string>
+    <string name="zone4">ZONE IV</string>
+    <string name="zone5">ZONE V</string>
 
 
 </resources>

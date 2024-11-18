@@ -1,4 +1,4 @@
-package com.example.count_out.ui.view_components.icons
+package com.example.count_out.ui.view_components.custom_view
 
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.Spacer

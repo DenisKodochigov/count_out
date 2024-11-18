@@ -82,7 +82,7 @@ object Const {
     private val widthHideContour = 0.dp
     val contourAll = Direction(top = widthContour, bottom = widthContour, start = widthContour, end = widthContour)
     val contourHor = Direction(top = widthContour, bottom = widthContour, start = widthHideContour, end = widthHideContour)
-    val contourVer = Direction(top = widthHideContour, bottom = widthHideContour, start = widthContour, end = widthContour)
+    val contourBot = Direction(top = widthHideContour, bottom = widthContour, start = widthHideContour, end = widthHideContour)
     private val widthContour1 = 1.dp
     val contourAll1 = Direction(top = widthContour1, bottom = widthContour1, start = widthContour1, end = widthContour1)
 

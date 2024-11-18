@@ -24,6 +24,7 @@ import androidx.compose.ui.unit.dp
 import com.example.count_out.R
 import com.example.count_out.data.room.tables.SetDB
 import com.example.count_out.entity.Const.contourAll1
+import com.example.count_out.entity.GoalSet
 import com.example.count_out.entity.RoundType
 import com.example.count_out.entity.workout.Exercise
 import com.example.count_out.ui.screens.training.TrainingScreenState
@@ -33,6 +34,7 @@ import com.example.count_out.ui.view_components.custom_view.Frame
 import com.example.count_out.ui.view_components.drag_drop_column.column.ColumnDD
 import com.example.count_out.ui.view_components.icons.IconsCollapsing
 import com.example.count_out.ui.view_components.icons.IconsGroup
+import kotlin.math.roundToInt
 
 @Composable
 fun ListExercises(
@@ -58,14 +60,15 @@ fun ListExercises(
     Spacer(modifier = Modifier.padding(top = 1.dp))
     uiState.exercise = item as Exercise
     Frame(color = MaterialTheme.colorScheme.surfaceContainerLow, contour = contourAll1) {
-        Column (modifier = Modifier.fillMaxWidth(),) {
+        Column (modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp),) {
             SelectActivity(uiState, item as Exercise)
             BodyExercise(uiState, item as Exercise)
         }
     }
 }
 @Composable fun SelectActivity(uiState: TrainingScreenState, exercise: Exercise) {
-//    val amountSets = amountSets(uiState, )
+    val amountSets = amountSets(exercise)
+    val countTime = durationExercise( exercise)
     Row( verticalAlignment = Alignment.CenterVertically){
         val nameNewSet = stringResource(id = R.string.set) + " ${exercise.sets.size + 1}"
         IconsCollapsing(
@@ -78,12 +81,9 @@ fun ListExercises(
             style = MaterialTheme.typography.titleMedium,
             modifier = Modifier.weight(1f))
         Column {
-            TextApp( text = stringResource(id = R.string.sets) + ": " ,
-                style = MaterialTheme.typography.bodySmall, fontWeight = FontWeight.Light)
-            Spacer(modifier = Modifier.height(2.dp))
-            TextApp( text = stringResource(id = R.string.duration) + ": "  + stringResource(id = R.string.min),
-                style = MaterialTheme.typography.bodySmall, fontWeight = FontWeight.Light
-            ) }
+            TextApp( style = MaterialTheme.typography.bodySmall, fontWeight = FontWeight.Light,
+                text = "${ stringResource(id = R.string.sets) }: $amountSets /" +
+                        " $countTime ${ stringResource(id = R.string.min)}",) }
         IconsGroup(
             onClickCopy = { uiState.onCopyExercise(uiState.training.idTraining, exercise.idExercise)},
             onClickDelete = { uiState.onDeleteExercise(uiState.training.idTraining, exercise.idExercise) },
@@ -105,15 +105,13 @@ fun ListExercises(
 }
 @Composable fun ListSets(uiState: TrainingScreenState) {
     Column {
-        uiState.exercise.sets.forEach { set ->
-            Box (
-                modifier = Modifier
-                    .border(
+        uiState.exercise.sets.forEachIndexed { ind, set ->
+            Box (modifier = Modifier.border(
                         width = 1.dp,
                         color = MaterialTheme.colorScheme.surface,
                         shape = MaterialTheme.shapes.extraSmall)
                     .fillMaxWidth(),
-                content = { SetContent(uiState,set, uiState.exercise.sets.size) }
+                content = { SetContent(uiState,set, uiState.exercise.sets.count(), ind) }
             )
             Spacer(modifier = Modifier.height(1.dp))
         }
@@ -133,9 +131,21 @@ fun exerciseCollapsing(uiState: TrainingScreenState,  exercise: Exercise): Boole
         true
     }
 }
-fun amountSets(uiState: TrainingScreenState, roundType: MutableState<RoundType>, exercise: Exercise) =
-    uiState.training.rounds.find{ it.roundType == roundType.value }?.exercise?.find {
-        it.idExercise == exercise.idExercise }?.sets?.size ?: 0
+fun amountSets( exercise: Exercise) = exercise.sets.count()
+fun durationExercise( exercise: Exercise): Int{
+    var durationExercise = 0.0
+    durationExercise = (exercise.speech.afterStart.duration + exercise.speech.afterEnd.duration +
+            exercise.speech.beforeStart.duration + exercise.speech.beforeEnd.duration).toDouble()
+    exercise.sets.forEach { set->
+        durationExercise += when (set.goal){
+            GoalSet.DURATION-> set.duration * 60
+            GoalSet.COUNT-> set.reps * set.intervalReps
+            GoalSet.COUNT_GROUP -> set.reps * set.intervalReps
+            GoalSet.DISTANCE -> set.distance * 600
+        } + set.timeRest
+    }
+    return ( durationExercise/60).toDouble().roundToInt()
+}
 //@Composable
 //fun RowAddSet(uiState: TrainingScreenState, exercise: Exercise)
 //{
