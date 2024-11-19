@@ -33,7 +33,8 @@ import com.example.count_out.ui.theme.AppTheme
                       contour: Direction = contourHor,
                       content:@Composable ()->Unit){
     val per = 12.dp
-    Box(modifier = modifier
+    Box(
+        modifier = modifier
         .background(color, shape = RoundedCornerShape(topStart = per, topEnd = per, bottomStart = per, bottomEnd = per ))
         .padding(top = contour.top, start = contour.start, end = contour.end, bottom =  contour.bottom)    // отступ от границ фрагмента
         .background( MaterialTheme.colorScheme.background )
