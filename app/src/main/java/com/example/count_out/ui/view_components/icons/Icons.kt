@@ -55,7 +55,7 @@ import com.example.count_out.entity.Const.TAB_FADE_OUT_ANIMATION_DURATION
 import com.example.count_out.ui.theme.Dimen
 import com.example.count_out.ui.theme.Dimen.sizeBetweenIcon
 import com.example.count_out.ui.theme.Dimen.sizeIcon
-import com.example.count_out.ui.theme.alumniReg12
+import com.example.count_out.ui.theme.alumBodySmall
 import com.example.count_out.ui.theme.mTypography
 import com.example.count_out.ui.theme.shapes
 import com.example.count_out.ui.view_components.TextApp
@@ -227,7 +227,7 @@ import com.example.count_out.ui.view_components.custom_view.UnCollapsingIcon
                 modifier = Modifier.fillMaxSize().animateContentSize()
                     .clearAndSetSemantics { contentDescription = text })
         }
-        TextApp(text = text, style = alumniReg12)
+        TextApp(text = text, style = alumBodySmall)
     }
 }
 //@Composable fun IconRun(onClick: () -> Unit){

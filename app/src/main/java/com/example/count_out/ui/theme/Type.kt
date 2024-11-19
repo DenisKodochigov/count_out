@@ -10,7 +10,6 @@ import androidx.compose.ui.unit.sp
 import com.example.count_out.R
 
 val interBold = TextStyle(fontFamily = FontFamily(Font(R.font.inter_bold)))
-val interBold14 = interBold.copy(fontSize = 14.sp)
 val interBold16 = interBold.copy(fontSize = 16.sp)
 
 val interLight = TextStyle(fontFamily = FontFamily(Font(R.font.inter_light)))
@@ -23,15 +22,10 @@ val interThin12Start = interThin.copy(fontSize = 12.sp, textAlign = TextAlign.St
 val interReg = TextStyle(fontFamily = FontFamily(Font(R.font.inter_regular)))
 val interReg12 = interReg.copy(fontSize = 12.sp)
 val interReg14 = interReg.copy(fontSize = 14.sp)
-val interReg16 = interReg.copy(fontSize = 16.sp)
-
-val alumnisans = TextStyle(fontFamily = FontFamily(Font(R.font.alumnisans_regular)))
-val alumniReg12 = alumnisans.copy(fontSize = 12.sp)
-val alumniReg14 = alumnisans.copy(fontSize = 14.sp)
-
 
 val mTypography = Typography()
 val alumBodySmall = mTypography.bodySmall.copy(fontFamily = FontFamily(Font(R.font.alumnisans_regular)))
+val alumBodyMedium = mTypography.bodyMedium.copy(fontFamily = FontFamily(Font(R.font.alumnisans_regular)))
 
 //    headlineLarge = TextStyle(
 //        fontWeight = FontWeight.SemiBold,

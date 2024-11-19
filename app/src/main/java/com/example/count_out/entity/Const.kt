@@ -78,13 +78,14 @@ object Const {
     val permissions2 = listOf(
         ACCESS_BACKGROUND_LOCATION,//with 29
     )
-    private var widthContour = 2.dp
+    private var widthContour2 = 2.dp
     private val widthHideContour = 0.dp
-    val contourAll = Direction(top = widthContour, bottom = widthContour, start = widthContour, end = widthContour)
-    val contourHor = Direction(top = widthContour, bottom = widthContour, start = widthHideContour, end = widthHideContour)
-    val contourBot = Direction(top = widthHideContour, bottom = widthContour, start = widthHideContour, end = widthHideContour)
+    val contourAll = Direction(top = widthContour2, bottom = widthContour2, start = widthContour2, end = widthContour2)
+    val contourHor = Direction(top = widthContour2, bottom = widthContour2, start = widthHideContour, end = widthHideContour)
+    val contourBot = Direction(top = widthHideContour, bottom = widthContour2, start = widthHideContour, end = widthHideContour)
     private val widthContour1 = 1.dp
     val contourAll1 = Direction(top = widthContour1, bottom = widthContour1, start = widthContour1, end = widthContour1)
+    val contourBot1 = Direction(top = widthHideContour, bottom = widthContour1, start = widthHideContour, end = widthHideContour)
 
     val serviceUUIDs = listOf(
 //        UUID.fromString("00001809-0000-0000-0000-000000000000"),

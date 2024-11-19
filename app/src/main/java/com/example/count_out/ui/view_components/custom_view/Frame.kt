@@ -32,7 +32,7 @@ import com.example.count_out.ui.theme.AppTheme
                       modifier: Modifier = Modifier,
                       contour: Direction = contourHor,
                       content:@Composable ()->Unit){
-    val per = 12.dp
+    val per = 8.dp
     Box(
         modifier = modifier
         .background(color, shape = RoundedCornerShape(topStart = per, topEnd = per, bottomStart = per, bottomEnd = per ))
