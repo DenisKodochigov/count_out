@@ -1,9 +1,11 @@
 package com.example.count_out.ui.view_components
 
 import androidx.compose.foundation.focusable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -26,6 +28,7 @@ import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -43,6 +46,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.example.count_out.R
 import com.example.count_out.entity.TagsTesting.BUTTON_OK
 import com.example.count_out.entity.TypeKeyboard
@@ -138,25 +142,28 @@ import com.example.count_out.ui.theme.mTypography
 
     val keyboardController = LocalSoftwareKeyboardController.current
     val focusManager = LocalFocusManager.current
-//    val interactionSource = remember { MutableInteractionSource() }
-    var text by if (edit) rememberSaveable { mutableStateOf(placeholder) }
-                    else rememberSaveable { mutableStateOf("") }
+    val interactionSource = remember { MutableInteractionSource() }
+    var text by rememberSaveable { mutableStateOf(if (edit) placeholder else "") }
     val enabled = typeKeyboard != TypeKeyboard.NONE
-//    val paddingHor = if (textStyle.fontSize > 14.sp) 8.dp else 4.dp
-//    val paddingVer = if (textStyle.fontSize > 14.sp) 6.dp else 2.dp
+    val paddingHor = if (textStyle.fontSize > 14.sp) 4.dp else 2.dp
+    val paddingVer = if (textStyle.fontSize > 14.sp) 6.dp else 4.dp
     val colorLine = if (visible) MaterialTheme.colorScheme.outline else Color.Transparent
     val mergedStyle = LocalTextStyle.current.merge(textStyle.copy(color = LocalContentColor.current))
-//    val colors = TextFieldDefaults.colors(
-//        unfocusedIndicatorColor = Color.Transparent,
-//        focusedIndicatorColor = Color.Transparent)
-    lg("text $text")
     BasicTextField(
         value = text,
         enabled = enabled,
         singleLine = maxLines == 1,
         maxLines = maxLines,
-        modifier = modifier.focusable().onFocusChanged {
-                if ((!it.isFocused || !onLossFocus) && text.isNotEmpty()) onChangeValue(text) },
+        textStyle = mergedStyle,
+        interactionSource = interactionSource,
+        visualTransformation = VisualTransformation.None,
+        modifier = modifier
+            .width(IntrinsicSize.Min)
+            .focusable()
+            .onFocusChanged {
+                lg("!it.isFocused =${!it.isFocused} !onLossFocus=${!onLossFocus} text=$text")
+                if ((!it.isFocused || !onLossFocus) && text.isNotEmpty()) { onChangeValue(text) }
+            },
         keyboardOptions = keyBoardOpt(typeKeyboard),
         keyboardActions = KeyboardActions(onDone = {
             focusManager.clearFocus()
@@ -165,14 +172,10 @@ import com.example.count_out.ui.theme.mTypography
         onValueChange = {
             text = it
             if (!onLossFocus) onChangeValue(text)},
-        visualTransformation = VisualTransformation.None,
-        textStyle = mergedStyle,
         decorationBox = {
-            Row( verticalAlignment = Alignment.CenterVertically,
-//                modifier = modifier.padding(horizontal = paddingHor, vertical = paddingVer)
-            ){
+            Row( verticalAlignment = Alignment.CenterVertically){
                 Box(contentAlignment = contentAlignment,
-                    modifier = modifier
+                    modifier = Modifier
                         .drawBehind {
                             val strokeWidth = 1.dp.toPx()
                             val y = size.height - strokeWidth / 2
@@ -183,7 +186,10 @@ import com.example.count_out.ui.theme.mTypography
                                     end = Offset(size.width, y),
                                     strokeWidth = strokeWidth) } }
                 ){
-                    if (text.isEmpty()) Text( text = if (edit || !visible) "" else placeholder, style = textStyle)
+                    if (text.isEmpty()) {
+                        Text(text = if (edit || !visible) "" else placeholder, style = textStyle,
+                            modifier = Modifier.padding(horizontal = paddingHor, vertical = paddingVer))
+                    }
                     it()
                 }
             }
@@ -205,7 +211,9 @@ import com.example.count_out.ui.theme.mTypography
                 selected = radioButtonId == state,
                 enabled = true,
                 onClick = onClick,
-                modifier = Modifier.size(sizeRadioButton).scale(0.8f),
+                modifier = Modifier
+                    .size(sizeRadioButton)
+                    .scale(0.8f),
                 colors = RadioButtonDefaults.colors(
                     selectedColor = MaterialTheme.colorScheme.onPrimary,
                     unselectedColor = MaterialTheme.colorScheme.onPrimary

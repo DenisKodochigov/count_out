@@ -14,7 +14,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -37,29 +36,20 @@ import com.example.count_out.ui.view_components.TextFieldApp
 import com.example.count_out.ui.view_components.icons.IconsGroup
 
 @SuppressLint("UnrememberedMutableState")
-@Composable
-fun TrainingScreen(
-    trainingId: Long,
-    onBaskScreen:() -> Unit
-){
+@Composable fun TrainingScreen(trainingId: Long, onBaskScreen:() -> Unit){
     val viewModel: TrainingViewModel = hiltViewModel()
-    LaunchedEffect(true){ viewModel.getTraining(trainingId) }
+    viewModel.getTraining(trainingId)
     TrainingScreenCreateView( viewModel = viewModel, onBaskScreen = onBaskScreen )
 }
 @SuppressLint("StateFlowValueCalledInComposition")
-@Composable
-fun TrainingScreenCreateView(
-    onBaskScreen:() -> Unit,
-    viewModel: TrainingViewModel
-){
+@Composable fun TrainingScreenCreateView(onBaskScreen:() -> Unit, viewModel: TrainingViewModel){
     val uiState = viewModel.trainingScreenState.collectAsState()
     uiState.value.onBaskScreen = onBaskScreen
     uiState.value.onDismissSelectActivity = { uiState.value.showBottomSheetSelectActivity.value = false }
     EditSpeech(uiState.value)
     TrainingScreenLayout(uiState = uiState.value)
 }
-@Composable fun EditSpeech(uiState: TrainingScreenState)
-{
+@Composable fun EditSpeech(uiState: TrainingScreenState) {
     if (uiState.showSpeechTraining.value) {
         uiState.nameSection = stringResource(id = R.string.training)
         uiState.item = uiState.training
@@ -108,12 +98,8 @@ fun TrainingScreenLayout( uiState: TrainingScreenState){
             .fillMaxHeight()
             .verticalScroll(rememberScrollState())
             .padding(horizontal = Dimen.paddingAppHor)
-            .clickable(interactionSource = interactionSource, indication = null
-            ) {
-                if (uiState.training.name != uiState.enteredName.value) {
-                    uiState.changeNameTraining(uiState.training, uiState.enteredName.value) }
-                focusManager.clearFocus(true)
-            },
+            .clickable(interactionSource = interactionSource, indication = null){
+                focusManager.clearFocus(true)},
     ){
         Spacer(modifier = Modifier.height(Dimen.width8))
         NameTraining(uiState = uiState)
@@ -127,8 +113,8 @@ fun TrainingScreenLayout( uiState: TrainingScreenState){
 }
 @Composable
 fun NameTraining( uiState: TrainingScreenState ) {
-    Row(
-        verticalAlignment = Alignment.CenterVertically,
+    if (uiState.training.idTraining == 0L) return
+    Row( verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier.fillMaxWidth().padding(bottom = 6.dp))
     {
         TextFieldApp(
@@ -136,6 +122,7 @@ fun NameTraining( uiState: TrainingScreenState ) {
             typeKeyboard = TypeKeyboard.TEXT,
             contentAlignment = Alignment.BottomStart,
             textStyle = mTypography.headlineMedium,
+            edit = true,
             onChangeValue = {
                 uiState.enteredName.value = it
                 uiState.changeNameTraining(uiState.training, uiState.enteredName.value)}

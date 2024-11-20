@@ -3,10 +3,13 @@ package com.example.count_out.data.room.tables
 import androidx.room.Entity
 import androidx.room.Ignore
 import androidx.room.PrimaryKey
+import com.example.count_out.entity.DistanceE
 import com.example.count_out.entity.GoalSet
-import com.example.count_out.entity.workout.Set
-import com.example.count_out.entity.speech.SpeechKit
+import com.example.count_out.entity.TimeE
+import com.example.count_out.entity.WeightE
 import com.example.count_out.entity.Zone
+import com.example.count_out.entity.speech.SpeechKit
+import com.example.count_out.entity.workout.Set
 
 @Entity(tableName = "tb_set")
 data class SetDB(
@@ -21,8 +24,12 @@ data class SetDB(
     override var intervalReps: Double = 0.0,
     override var intensity: Zone = Zone.EXTRA_SLOW,
     override var distance: Double = 0.0,
+    override val weightE: WeightE = WeightE.KG,
+    override val distanceE: DistanceE = DistanceE.KM,
+    override val durationE: TimeE = TimeE.SEC,
     override var intervalDown: Int = 0,
     override var groupCount: String = "",
     override var timeRest: Int = 0,
+    override val timeRestE: TimeE = TimeE.SEC,
     @Ignore override var speech: SpeechKit = SpeechKitDB(),
 ): Set

@@ -242,4 +242,5 @@
     <string name="zone3">ZONE III</string>
     <string name="zone4">ZONE IV</string>
     <string name="zone5">ZONE V</string>
+    <string name="gr">gram</string>
 </resources>

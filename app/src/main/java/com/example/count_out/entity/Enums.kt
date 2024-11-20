@@ -26,6 +26,9 @@ enum class RoundType(val strId: Int, var amount: Int, var duration: Int){
 }
 
 enum class GoalSet(val id: Int){ DISTANCE(1), DURATION(2), COUNT(3), COUNT_GROUP(4), }
+enum class DistanceE(val id: Int) { KM(R.string.km), M(R.string.m)}
+enum class TimeE(val id: Int) { SEC( R.string.sec), MIN( R.string.min), HOUR(R.string.hour)}
+enum class WeightE(val id: Int) { GR(R.string.gr), KG(R.string.kg)}
 enum class ErrorBleService{ NONE, GET_REMOTE_DEVICE, CONNECT_DEVICE, NOT_CONNECT_GATT, DISCOVER_SERVICE }
 enum class UnitTime(val arg: Int) { Days(1), Week(2), Month(3), Year(4)}
 enum class CommandService{
