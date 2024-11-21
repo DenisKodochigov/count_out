@@ -81,8 +81,7 @@ class TrainingViewModel @Inject constructor(
         templateMy { dataRepository.changeSequenceExercise(trainingId, roundId, idViewForm, idViewTo) } }
     private fun setActivityToExercise(exerciseId: Long, activityId: Long) {
         templateMy{dataRepository.setActivityToExercise(
-            trainingScreenState.value.training.idTraining, exerciseId, activityId)}
-    }
+            trainingScreenState.value.training.idTraining, exerciseId, activityId)} }
     private fun onSetColorActivity(activityId: Long, color: Int) {
         viewModelScope.launch(Dispatchers.IO) {
             kotlin.runCatching { dataRepository.onSetColorActivity( activityId, color) }

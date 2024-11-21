@@ -20,6 +20,7 @@ import com.example.count_out.entity.workout.Round
 import com.example.count_out.entity.workout.Set
 import com.example.count_out.entity.workout.TemporaryBase
 import com.example.count_out.entity.workout.Training
+import com.example.count_out.ui.view_components.lg
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -125,7 +126,8 @@ class DataRepository  @Inject constructor(private val dataSource: DataSource,
 //###### SET ##################
     fun addUpdateSet(trainingId: Long, exerciseId:Long, set: Set): Training {
         if (exerciseId > 0 && set != SetDB()) dataSource.addUpdateSet(exerciseId, set).roundId
-        return dataSource.getTraining(trainingId)
+        val training =  dataSource.getTraining(trainingId)
+        return training
     }
     fun updateSet(trainingId: Long, set: SetDB): Training {
         dataSource.updateSet(set)

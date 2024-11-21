@@ -31,6 +31,7 @@ import com.example.count_out.domain.toDoubleMy
 import com.example.count_out.domain.toIntMy
 import com.example.count_out.entity.Const.contourAll1
 import com.example.count_out.entity.Const.contourBot1
+import com.example.count_out.entity.DistanceE
 import com.example.count_out.entity.GoalSet
 import com.example.count_out.entity.TypeKeyboard
 import com.example.count_out.entity.Zone
@@ -49,6 +50,7 @@ import com.example.count_out.ui.view_components.TextStringAndField
 import com.example.count_out.ui.view_components.custom_view.Frame
 import com.example.count_out.ui.view_components.icons.IconsCollapsing
 import com.example.count_out.ui.view_components.icons.IconsGroup
+import com.example.count_out.ui.view_components.lg
 
 @Composable fun SetContent(uiState: TrainingScreenState, set: Set, amountSet: Int, index: Int){
     Column{
@@ -78,8 +80,8 @@ import com.example.count_out.ui.view_components.icons.IconsGroup
             textAlign = TextAlign.Start,)
         Spacer(modifier = Modifier.weight(1f))
         IconsGroup(
-            onClickCopy = { uiState.onCopySet(uiState.training?.idTraining ?: 0, set.idSet) },
-            onClickDelete = { uiState.onDeleteSet(uiState.training?.idTraining ?: 0, set.idSet) },
+            onClickCopy = { uiState.onCopySet(uiState.training.idTraining, set.idSet) },
+            onClickDelete = { uiState.onDeleteSet(uiState.training.idTraining, set.idSet) },
             onClickSpeech = {
                 uiState.set = set
                 uiState.showSpeechSet.value = true},
@@ -179,27 +181,7 @@ import com.example.count_out.ui.view_components.icons.IconsGroup
         }
     }
 }
-@Composable fun MenuDistance( uiState: TrainingScreenState, set: Set){
-    val modifier = Modifier.padding(vertical = 2.dp, horizontal = 2.dp).width(60.dp)
-    Row(verticalAlignment = Alignment.CenterVertically){
-        Frame (color = MaterialTheme.colorScheme.outline,
-            contour = if (set.distance < 1000) contourAll1 else contourBot1) {
-            TextApp( modifier = modifier.clickable {
-                uiState.onChangeSet ((set as SetDB).copy(intensity = Zone.EXTRA_SLOW)) },
-                style = MaterialTheme.typography.bodySmall,
-                fontWeight =  if (set.distance < 1000) FontWeight.Bold else FontWeight.Normal,
-                text = stringResource(R.string.m))
-        }
-        Frame (color = MaterialTheme.colorScheme.outline,
-            contour = if (set.distance >= 1000) contourAll1 else contourBot1) {
-            TextApp( modifier = modifier.clickable {
-                uiState.onChangeSet ((set as SetDB).copy(intensity = Zone.SLOW))},
-                fontWeight =  if (set.distance >= 1000) FontWeight.Bold else FontWeight.Normal,
-                style = MaterialTheme.typography.bodySmall,
-                text = stringResource(R.string.km))
-        }
-    }
-}
+
 @Composable fun MenuTime( uiState: TrainingScreenState, set: Set){
     val modifier = Modifier
         .padding(vertical = 2.dp, horizontal = 2.dp)
@@ -285,7 +267,27 @@ import com.example.count_out.ui.view_components.icons.IconsGroup
         TextApp(text = stringResource(R.string.distance), textAlign = TextAlign.Center, style = alumBodySmall)
     }
 }
-
+@Composable fun MenuDistance( uiState: TrainingScreenState, set: Set){
+    val modifier = Modifier.padding(vertical = 2.dp, horizontal = 2.dp).width(30.dp)
+    Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.padding(start = 12.dp)){
+        Frame (color = MaterialTheme.colorScheme.outline,
+            contour = if (set.distanceE == DistanceE.M) contourAll1 else contourBot1) {
+            TextApp( modifier = modifier.clickable {
+                uiState.onChangeSet ((set as SetDB).copy(distanceE = DistanceE.M)) },
+                style = MaterialTheme.typography.bodySmall,
+                fontWeight =  if (set.distanceE == DistanceE.M) FontWeight.Bold else FontWeight.Normal,
+                text = stringResource(R.string.m))
+        }
+        Frame (color = MaterialTheme.colorScheme.outline,
+            contour = if (set.distanceE == DistanceE.KM) contourAll1 else contourBot1) {
+            TextApp( modifier = modifier.clickable {
+                uiState.onChangeSet ((set as SetDB).copy(distanceE = DistanceE.KM))},
+                fontWeight =  if (set.distanceE == DistanceE.KM) FontWeight.Bold else FontWeight.Normal,
+                style = MaterialTheme.typography.bodySmall,
+                text = stringResource(R.string.km))
+        }
+    }
+}
 //#####################################Old#########################################################
 @Composable fun AdditionalInformation1(uiState: TrainingScreenState, set: Set, amountSet: Int){
     val visibleLazy = (uiState.listCollapsingSet.value.find { it == set.idSet } != null) || (amountSet == 1)

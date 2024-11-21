@@ -93,6 +93,7 @@ import com.example.count_out.ui.view_components.icons.IconsGroup
 fun TrainingScreenLayout( uiState: TrainingScreenState){
     val focusManager = LocalFocusManager.current
     val interactionSource = remember { MutableInteractionSource() }
+//    lg(" training=${uiState.training} ")
     Column(
         modifier = Modifier
             .fillMaxHeight()

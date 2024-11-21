@@ -179,6 +179,7 @@ class DataSource @Inject constructor(private val dataDao: DataDao) {
             (set as SetDB).speechId = newSpeechKit()
             dataDao.addSet(set) }
         else { dataDao.updateSet( set as SetDB) }
+        lg("DataSource.addUpdateSet")
         return dataDao.getExerciseRel(exerciseId).toExercise()
     }
     private fun createSet(exerciseId: Long): Long{

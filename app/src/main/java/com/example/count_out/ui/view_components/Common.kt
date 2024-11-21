@@ -161,9 +161,7 @@ import com.example.count_out.ui.theme.mTypography
             .width(IntrinsicSize.Min)
             .focusable()
             .onFocusChanged {
-                lg("!it.isFocused =${!it.isFocused} !onLossFocus=${!onLossFocus} text=$text")
-                if ((!it.isFocused || !onLossFocus) && text.isNotEmpty()) { onChangeValue(text) }
-            },
+                if ((!it.isFocused || !onLossFocus) && text.isNotEmpty()) { onChangeValue(text) } },
         keyboardOptions = keyBoardOpt(typeKeyboard),
         keyboardActions = KeyboardActions(onDone = {
             focusManager.clearFocus()
