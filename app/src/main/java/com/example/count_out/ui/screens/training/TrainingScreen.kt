@@ -21,6 +21,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -121,8 +122,7 @@ fun NameTraining( uiState: TrainingScreenState ) {
         TextFieldApp(
             placeholder = uiState.enteredName.value,
             typeKeyboard = TypeKeyboard.TEXT,
-            contentAlignment = Alignment.BottomStart,
-            textStyle = mTypography.headlineMedium,
+            textStyle = mTypography.headlineMedium.copy(textAlign = TextAlign.Start),
             edit = true,
             onChangeValue = {
                 uiState.enteredName.value = it

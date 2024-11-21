@@ -19,7 +19,7 @@ data class SetDB(
     override var goal: GoalSet = GoalSet.DISTANCE,
     override var exerciseId: Long = 0,
     override var reps: Int = 0,
-    override var duration: Double = 0.0,
+    override var duration: Int = 0,
     override var durationE: TimeE = TimeE.SEC,
     override var distance: Double = 0.0,
     override var distanceE: DistanceE = DistanceE.KM,

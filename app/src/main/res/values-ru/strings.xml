@@ -72,7 +72,7 @@
     <string name="speech_description">Проговаривать описание упражнения</string>
     <string name="create_ring">Создать круг</string>
     <string name="add_ring">Добавить круг</string>
-    <string name="count">отсчеты</string>
+    <string name="count">Отсчеты</string>
     <string name="next_exercise">Подготовьтесь к упражнению  </string>
     <string name="rest_time">секунд отдыха.</string>
     <string name="section_heart_rate">Доступные устройства.</string>
@@ -242,5 +242,6 @@
     <string name="zone3">ZONE III</string>
     <string name="zone4">ZONE IV</string>
     <string name="zone5">ZONE V</string>
-    <string name="gr">gram</string>
+    <string name="gr">гр</string>
+    <string name="interval">Interval</string>
 </resources>

@@ -57,6 +57,10 @@ data class SetRel(
             groupCount = setDB.groupCount, // Группы отстчетов
             timeRest = setDB.timeRest,
             goal = setDB.goal,
+            timeRestE = setDB.timeRestE,
+            distanceE = setDB.distanceE,
+            durationE = setDB.durationE,
+            weightE = setDB.weightE
         )
     }
 }

@@ -19,12 +19,12 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.example.count_out.R
 import com.example.count_out.data.room.tables.SpeechDB
 import com.example.count_out.data.room.tables.SpeechKitDB
+import com.example.count_out.entity.TypeKeyboard
 import com.example.count_out.entity.ui.BottomSheetInterface
 import com.example.count_out.entity.workout.Exercise
 import com.example.count_out.entity.workout.Round
 import com.example.count_out.entity.workout.Set
 import com.example.count_out.entity.workout.Training
-import com.example.count_out.entity.TypeKeyboard
 import com.example.count_out.ui.theme.Dimen
 import com.example.count_out.ui.theme.interLight14Start
 import com.example.count_out.ui.theme.interThin12Start
@@ -104,7 +104,6 @@ fun BottomSheetSpeechContent(uiState: BottomSheetState)
             onLossFocus = false,
             maxLines = 3,
             edit = true,
-            contentAlignment = Alignment.BottomStart,
             modifier = Modifier.fillMaxWidth(),
             placeholder = enterValue.value,
             onChangeValue = { enterValue.value = it },

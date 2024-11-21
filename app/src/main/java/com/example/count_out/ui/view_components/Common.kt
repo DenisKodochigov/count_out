@@ -13,11 +13,11 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
@@ -45,6 +45,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.count_out.R
@@ -125,7 +126,6 @@ import com.example.count_out.ui.theme.mTypography
         )
     }
 }
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable fun TextFieldApp(
     modifier: Modifier = Modifier,
     typeKeyboard: TypeKeyboard,
@@ -137,7 +137,8 @@ import com.example.count_out.ui.theme.mTypography
     maxLines: Int = 1,
     onChangeValue:(String)->Unit = {},
     edit: Boolean = false,
-    visible: Boolean = true
+    visible: Boolean = true,
+    width: Dp = 40.dp
 ){
 
     val keyboardController = LocalSoftwareKeyboardController.current
@@ -148,7 +149,7 @@ import com.example.count_out.ui.theme.mTypography
     val paddingHor = if (textStyle.fontSize > 14.sp) 4.dp else 2.dp
     val paddingVer = if (textStyle.fontSize > 14.sp) 6.dp else 4.dp
     val colorLine = if (visible) MaterialTheme.colorScheme.outline else Color.Transparent
-    val mergedStyle = LocalTextStyle.current.merge(textStyle.copy(color = LocalContentColor.current))
+    val mergedStyle = LocalTextStyle.current.merge(textStyle.copy(color = LocalContentColor.current,))
     BasicTextField(
         value = text,
         enabled = enabled,
@@ -172,8 +173,9 @@ import com.example.count_out.ui.theme.mTypography
             if (!onLossFocus) onChangeValue(text)},
         decorationBox = {
             Row( verticalAlignment = Alignment.CenterVertically){
-                Box(contentAlignment = contentAlignment,
+                Box( contentAlignment = contentAlignment,
                     modifier = Modifier
+                        .widthIn(min = width)
                         .drawBehind {
                             val strokeWidth = 1.dp.toPx()
                             val y = size.height - strokeWidth / 2

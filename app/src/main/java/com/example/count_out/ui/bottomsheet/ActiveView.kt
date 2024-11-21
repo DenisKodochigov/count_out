@@ -32,8 +32,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.example.count_out.R
 import com.example.count_out.data.room.tables.ActivityDB
-import com.example.count_out.entity.workout.Activity
 import com.example.count_out.entity.TypeKeyboard
+import com.example.count_out.entity.workout.Activity
 import com.example.count_out.ui.dialog.ChangeColorSectionDialog
 import com.example.count_out.ui.screens.settings.SettingScreenState
 import com.example.count_out.ui.theme.elevationTraining
@@ -129,7 +129,6 @@ fun ActivityValueFull(
             TextFieldApp(
                 modifier = Modifier.fillMaxWidth(),
                 placeholder = activity.value.audioTrack,
-                contentAlignment = Alignment.BottomStart,
                 typeKeyboard = TypeKeyboard.TEXT,
                 onLossFocus = false,
                 textStyle = mTypography.bodySmall,
@@ -141,7 +140,6 @@ fun ActivityValueFull(
             TextFieldApp(
                 modifier = Modifier.fillMaxWidth(),
                 placeholder = activity.value.videoClip,
-                contentAlignment = Alignment.BottomStart,
                 typeKeyboard = TypeKeyboard.TEXT,
                 onLossFocus = false,
                 textStyle = mTypography.bodySmall,
@@ -153,7 +151,6 @@ fun ActivityValueFull(
             TextFieldApp(
                 modifier = Modifier.fillMaxWidth(),
                 placeholder = activity.value.description,
-                contentAlignment = Alignment.BottomStart,
                 typeKeyboard = TypeKeyboard.TEXT,
                 onLossFocus = false,
                 maxLines = 3,
@@ -199,7 +196,6 @@ fun ActivityValueEdit(
         TextFieldApp(
             modifier = Modifier.weight(1f),
             placeholder = "${activity.value.idActivity}:${activity.value.name}",
-            contentAlignment = Alignment.BottomStart,
             typeKeyboard = typeKeyboard,
             textStyle = mTypography.bodySmall,
             onLossFocus = false,

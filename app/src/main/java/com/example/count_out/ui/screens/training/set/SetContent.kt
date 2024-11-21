@@ -15,15 +15,22 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.example.count_out.R
 import com.example.count_out.data.room.tables.SetDB
@@ -33,10 +40,13 @@ import com.example.count_out.entity.Const.contourAll1
 import com.example.count_out.entity.Const.contourBot1
 import com.example.count_out.entity.DistanceE
 import com.example.count_out.entity.GoalSet
+import com.example.count_out.entity.TimeE
 import com.example.count_out.entity.TypeKeyboard
+import com.example.count_out.entity.WeightE
 import com.example.count_out.entity.Zone
 import com.example.count_out.entity.workout.Set
 import com.example.count_out.ui.screens.training.TrainingScreenState
+import com.example.count_out.ui.theme.alumBodyMedium
 import com.example.count_out.ui.theme.alumBodySmall
 import com.example.count_out.ui.theme.elevationTraining
 import com.example.count_out.ui.theme.interLight12
@@ -50,7 +60,6 @@ import com.example.count_out.ui.view_components.TextStringAndField
 import com.example.count_out.ui.view_components.custom_view.Frame
 import com.example.count_out.ui.view_components.icons.IconsCollapsing
 import com.example.count_out.ui.view_components.icons.IconsGroup
-import com.example.count_out.ui.view_components.lg
 
 @Composable fun SetContent(uiState: TrainingScreenState, set: Set, amountSet: Int, index: Int){
     Column{
@@ -94,9 +103,7 @@ import com.example.count_out.ui.view_components.lg
     AnimatedVisibility(modifier = Modifier.padding(horizontal = 4.dp, vertical = 1.dp), visible = visibleLazy) {
         Frame(color = MaterialTheme.colorScheme.surfaceContainerLowest, contour = contourAll1) {
             Column (horizontalAlignment = Alignment.CenterHorizontally,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(vertical = 4.dp)) {
+                modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp)) {
                 MenuTask( uiState, set )
                 BodySet( uiState, set)
                 MenuZone( uiState, set )
@@ -105,130 +112,6 @@ import com.example.count_out.ui.view_components.lg
     }
 }
 
-@Composable fun MenuTask( uiState: TrainingScreenState, set: Set){
-    val modifier = Modifier.padding(vertical = 0.dp, horizontal = 16.dp)
-    Row(verticalAlignment = Alignment.CenterVertically){
-        Frame (color = MaterialTheme.colorScheme.outline,
-            contour = if (set.goal == GoalSet.DISTANCE) contourAll1 else contourBot1) {
-            TextApp( modifier = modifier.clickable {
-                    uiState.onChangeSet ((set as SetDB).copy(goal = GoalSet.DISTANCE)) },
-                style = MaterialTheme.typography.bodyLarge,
-                fontWeight =  if (set.goal == GoalSet.DISTANCE) FontWeight.Bold else FontWeight.Normal,
-                text = stringResource(R.string.distance))
-        }
-        Frame (color = MaterialTheme.colorScheme.outline,
-            contour = if (set.goal == GoalSet.DURATION) contourAll1 else contourBot1) {
-            TextApp( modifier = modifier.clickable {
-                    uiState.onChangeSet ((set as SetDB).copy(goal = GoalSet.DURATION)) },
-                fontWeight =  if (set.goal == GoalSet.DURATION) FontWeight.Bold else FontWeight.Normal,
-                style = MaterialTheme.typography.bodyLarge,
-                text = stringResource(R.string.duration))
-        }
-        Frame (color = MaterialTheme.colorScheme.outline,
-            contour = if (set.goal == GoalSet.COUNT) contourAll1 else contourBot1) {
-            TextApp( modifier = modifier.clickable {
-                    uiState.onChangeSet ((set as SetDB).copy(goal = GoalSet.COUNT)) },
-                fontWeight =  if (set.goal == GoalSet.COUNT) FontWeight.Bold else FontWeight.Normal,
-                style = MaterialTheme.typography.bodyLarge,
-                text = stringResource(R.string.count))
-        }
-    }
-}
-@Composable fun MenuZone( uiState: TrainingScreenState, set: Set){
-    val modifier = Modifier
-        .padding(vertical = 2.dp, horizontal = 2.dp)
-        .width(60.dp)
-    Row(verticalAlignment = Alignment.CenterVertically){
-        Frame (color = MaterialTheme.colorScheme.outline,
-            contour = if (set.intensity == Zone.EXTRA_SLOW) contourAll1 else contourBot1) {
-            TextApp( modifier = modifier.clickable {
-                    uiState.onChangeSet ((set as SetDB).copy(intensity = Zone.EXTRA_SLOW)) },
-                style = MaterialTheme.typography.bodySmall,
-                fontWeight =  if (set.intensity == Zone.EXTRA_SLOW) FontWeight.Bold else FontWeight.Normal,
-                text = stringResource(R.string.zone1))
-        }
-        Frame (color = MaterialTheme.colorScheme.outline,
-            contour = if (set.intensity == Zone.SLOW) contourAll1 else contourBot1) {
-            TextApp( modifier = modifier.clickable {
-                    uiState.onChangeSet ((set as SetDB).copy(intensity = Zone.SLOW))},
-                fontWeight =  if (set.intensity == Zone.SLOW) FontWeight.Bold else FontWeight.Normal,
-                style = MaterialTheme.typography.bodySmall,
-                text = stringResource(R.string.zone2))
-        }
-        Frame (color = MaterialTheme.colorScheme.outline,
-            contour = if (set.intensity == Zone.MEDIUM) contourAll1 else contourBot1) {
-            TextApp( modifier = modifier.clickable {
-                    uiState.onChangeSet ((set as SetDB).copy(intensity = Zone.MEDIUM)) },
-                fontWeight =  if (set.intensity == Zone.MEDIUM) FontWeight.Bold else FontWeight.Normal,
-                style = MaterialTheme.typography.bodySmall,
-                text = stringResource(R.string.zone3))
-        }
-        Frame (color = MaterialTheme.colorScheme.outline,
-            contour = if (set.intensity == Zone.HIGH) contourAll1 else contourBot1) {
-            TextApp( modifier = modifier.clickable {
-                    uiState.onChangeSet ((set as SetDB).copy(intensity = Zone.HIGH)) },
-                fontWeight =  if (set.intensity == Zone.HIGH) FontWeight.Bold else FontWeight.Normal,
-                style = MaterialTheme.typography.bodySmall,
-                text = stringResource(R.string.zone4))
-        }
-        Frame (color = MaterialTheme.colorScheme.outline,
-            contour = if (set.intensity == Zone.MAX) contourAll1 else contourBot1) {
-            TextApp( modifier = modifier.clickable {
-                    uiState.onChangeSet ((set as SetDB).copy(intensity = Zone.MAX)) },
-                fontWeight =  if (set.intensity == Zone.MAX) FontWeight.Bold else FontWeight.Normal,
-                style = MaterialTheme.typography.bodySmall,
-                text = stringResource(R.string.zone5))
-        }
-    }
-}
-
-@Composable fun MenuTime( uiState: TrainingScreenState, set: Set){
-    val modifier = Modifier
-        .padding(vertical = 2.dp, horizontal = 2.dp)
-        .width(60.dp)
-    Row(verticalAlignment = Alignment.CenterVertically){
-        Frame (color = MaterialTheme.colorScheme.outline,
-            contour = if (set.intensity == Zone.EXTRA_SLOW) contourAll1 else contourBot1) {
-            TextApp( modifier = modifier.clickable {
-                uiState.onChangeSet ((set as SetDB).copy(intensity = Zone.EXTRA_SLOW)) },
-                style = MaterialTheme.typography.bodySmall,
-                fontWeight =  if (set.intensity == Zone.EXTRA_SLOW) FontWeight.Bold else FontWeight.Normal,
-                text = stringResource(R.string.zone1))
-        }
-        Frame (color = MaterialTheme.colorScheme.outline,
-            contour = if (set.intensity == Zone.SLOW) contourAll1 else contourBot1) {
-            TextApp( modifier = modifier.clickable {
-                uiState.onChangeSet ((set as SetDB).copy(intensity = Zone.SLOW))},
-                fontWeight =  if (set.intensity == Zone.SLOW) FontWeight.Bold else FontWeight.Normal,
-                style = MaterialTheme.typography.bodySmall,
-                text = stringResource(R.string.zone2))
-        }
-        Frame (color = MaterialTheme.colorScheme.outline,
-            contour = if (set.intensity == Zone.MEDIUM) contourAll1 else contourBot1) {
-            TextApp( modifier = modifier.clickable {
-                uiState.onChangeSet ((set as SetDB).copy(intensity = Zone.MEDIUM)) },
-                fontWeight =  if (set.intensity == Zone.MEDIUM) FontWeight.Bold else FontWeight.Normal,
-                style = MaterialTheme.typography.bodySmall,
-                text = stringResource(R.string.zone3))
-        }
-        Frame (color = MaterialTheme.colorScheme.outline,
-            contour = if (set.intensity == Zone.HIGH) contourAll1 else contourBot1) {
-            TextApp( modifier = modifier.clickable {
-                uiState.onChangeSet ((set as SetDB).copy(intensity = Zone.HIGH)) },
-                fontWeight =  if (set.intensity == Zone.HIGH) FontWeight.Bold else FontWeight.Normal,
-                style = MaterialTheme.typography.bodySmall,
-                text = stringResource(R.string.zone4))
-        }
-        Frame (color = MaterialTheme.colorScheme.outline,
-            contour = if (set.intensity == Zone.MAX) contourAll1 else contourBot1) {
-            TextApp( modifier = modifier.clickable {
-                uiState.onChangeSet ((set as SetDB).copy(intensity = Zone.MAX)) },
-                fontWeight =  if (set.intensity == Zone.MAX) FontWeight.Bold else FontWeight.Normal,
-                style = MaterialTheme.typography.bodySmall,
-                text = stringResource(R.string.zone5))
-        }
-    }
-}
 @Composable fun BodySet( uiState: TrainingScreenState, set: Set){
     when (set.goal){
         GoalSet.DISTANCE -> BodySetDistance( uiState, set)
@@ -239,53 +122,165 @@ import com.example.count_out.ui.view_components.lg
 }
 
 @Composable fun BodySetCount(uiState: TrainingScreenState, set: Set) {
-
+    Row( horizontalArrangement = Arrangement.Center, verticalAlignment = Alignment.Top,
+        modifier = Modifier.fillMaxWidth().padding(vertical = 18.dp)){
+        BodySetIntervalFieldText(uiState, set)
+        MenuDuration(uiState, set)
+        BodySetWeightFieldText(uiState, set)
+        MenuWeight(uiState, set)
+    }
+    Row( horizontalArrangement = Arrangement.Center, verticalAlignment = Alignment.Top,
+        modifier = Modifier.fillMaxWidth().padding(bottom = 18.dp)){
+        BodySetCountFieldText(uiState, set)
+        BodySetCountGroupFieldText(uiState, set)
+    }
 }
-
 @Composable fun BodySetDuration(uiState: TrainingScreenState, set: Set) {
-
+    Row( horizontalArrangement = Arrangement.Center,
+        verticalAlignment = Alignment.Top,
+        modifier = Modifier.fillMaxWidth().padding(vertical = 18.dp)){
+        BodySetDurationFieldText(uiState, set)
+        MenuDuration(uiState, set)
+        BodySetWeightFieldText(uiState, set)
+        MenuWeight(uiState, set)
+    }
+}
+@Composable fun BodySetDurationFieldText(uiState: TrainingScreenState,set: Set){   //B7B7B7
+    BodySetFieldText( idText = R.string.duration, start = 0.dp,
+        placeholder = "${ if (set.durationE == TimeE.SEC) set.duration else set.duration * 60 }",
+        onChange = { uiState.onChangeSet ((set as SetDB).copy( duration =
+                                (if (set.durationE == TimeE.SEC) 1 else 60) * it.toIntMy())) },)
+}
+@Composable fun BodySetWeightFieldText(uiState: TrainingScreenState,set: Set){   //B7B7B7
+    BodySetFieldText( idText = R.string.weight, start = 36.dp,
+        placeholder = "${ if (set.weightE == WeightE.GR) set.weight else set.weight/1000 }",
+        onChange = { uiState.onChangeSet ((set as SetDB).copy( weight =
+                            (if (set.weightE == WeightE.GR) 1 else 1000) * it.toIntMy() )) },)
 }
 
 @Composable fun BodySetDistance(uiState: TrainingScreenState, set: Set) {
     Row( horizontalArrangement = Arrangement.Center,
-        verticalAlignment = Alignment.CenterVertically,
+        verticalAlignment = Alignment.Top,
         modifier = Modifier.fillMaxWidth().padding(vertical = 12.dp)){
-        FieldText(uiState, set)
+        BodySetDistanceFieldText(uiState, set)
         MenuDistance(uiState, set)
     }
 }
+@Composable fun BodySetDistanceFieldText(uiState: TrainingScreenState,set: Set){   //B7B7B7
+    BodySetFieldText( idText = R.string.distance, start = 0.dp,
+        placeholder = "${ if (set.distanceE == DistanceE.M) set.distance else set.distance/1000 }",
+        onChange = { uiState.onChangeSet ((set as SetDB).copy(distance =
+            if (set.distanceE == DistanceE.M) it.toDoubleMy() else it.toDoubleMy() * 1000)) },)
+}
 
-@Composable fun FieldText(uiState: TrainingScreenState,set: Set){   //B7B7B7
-    Column (horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier) {
+@Composable fun BodySetCountFieldText(uiState: TrainingScreenState,set: Set){   //B7B7B7
+    BodySetFieldText( idText = R.string.count, start = 0.dp,
+        placeholder = "${ set.reps }",
+        onChange = { uiState.onChangeSet ((set as SetDB).copy(reps = it.toIntMy()))  },)
+}
+@Composable fun BodySetCountGroupFieldText(uiState: TrainingScreenState,set: Set){   //B7B7B7
+    BodySetFieldText( idText = R.string.counts_by_group_add, start = 12.dp,
+        placeholder = set.groupCount,
+        onChange = { uiState.onChangeSet ((set as SetDB).copy(groupCount = it)) },)
+}
+@Composable fun BodySetIntervalFieldText(uiState: TrainingScreenState,set: Set){   //B7B7B7
+    BodySetFieldText( idText = R.string.interval, start = 0.dp,
+        placeholder = "${ if (set.durationE == TimeE.SEC) set.duration else set.duration*60 }",
+        onChange = { uiState.onChangeSet ((set as SetDB).copy(intervalReps = it.toDoubleMy() ))},)
+}
+
+@Composable fun MenuTask( uiState: TrainingScreenState, set: Set){
+    Row(verticalAlignment = Alignment.CenterVertically){
+        ButtonSwitchTask(selected = set.goal == GoalSet.DISTANCE, idString = R.string.distance,
+            onClick = {uiState.onChangeSet ((set as SetDB).copy(goal = GoalSet.DISTANCE))},)
+        ButtonSwitchTask(selected = set.goal == GoalSet.DURATION, idString = R.string.duration,
+            onClick = {uiState.onChangeSet ((set as SetDB).copy(goal = GoalSet.DURATION))})
+        ButtonSwitchTask(selected = set.goal == GoalSet.COUNT, idString = R.string.count,
+            onClick = {uiState.onChangeSet ((set as SetDB).copy(goal = GoalSet.COUNT))})
+    }
+}
+@Composable fun ButtonSwitchTask(selected: Boolean, onClick: () -> Unit, idString: Int,){
+    ButtonSwitch(selected = selected, idString = idString, onClick = onClick,
+        style = MaterialTheme.typography.bodyLarge, width = 90.dp)
+}
+@Composable fun MenuZone( uiState: TrainingScreenState, set: Set){
+    Row(verticalAlignment = Alignment.CenterVertically){
+        ButtonSwitchZone(selected = set.intensity == Zone.EXTRA_SLOW, idString = R.string.zone1,
+            onClick = {uiState.onChangeSet ((set as SetDB).copy(intensity = Zone.EXTRA_SLOW))})
+        ButtonSwitchZone(selected = set.intensity == Zone.SLOW, idString = R.string.zone2,
+            onClick = {uiState.onChangeSet ((set as SetDB).copy(intensity = Zone.SLOW))})
+        ButtonSwitchZone(selected = set.intensity == Zone.MEDIUM, idString = R.string.zone3,
+            onClick = {uiState.onChangeSet ((set as SetDB).copy(intensity = Zone.MEDIUM))})
+        ButtonSwitchZone(selected = set.intensity == Zone.HIGH, idString = R.string.zone4,
+            onClick = {uiState.onChangeSet ((set as SetDB).copy(intensity = Zone.HIGH))})
+        ButtonSwitchZone(selected = set.intensity == Zone.MAX, idString = R.string.zone5,
+            onClick = {uiState.onChangeSet ((set as SetDB).copy(intensity = Zone.MAX))})
+    }
+}
+@Composable fun ButtonSwitchZone(selected: Boolean, onClick: () -> Unit, idString: Int,){
+    ButtonSwitch(selected = selected, idString = idString, onClick = onClick,
+        style = alumBodyMedium, width = 55.dp)
+}
+@Composable fun MenuDistance( uiState: TrainingScreenState, set: Set){
+    Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.padding(start = 12.dp, top=6.dp)){
+        ButtonSwitchDistance(selected = set.distanceE == DistanceE.M, idString = R.string.m,
+            onClick = {uiState.onChangeSet ((set as SetDB).copy(distanceE = DistanceE.M))})
+        ButtonSwitchDistance(selected = set.distanceE == DistanceE.KM, idString = R.string.km,
+            onClick = {uiState.onChangeSet ((set as SetDB).copy(distanceE = DistanceE.KM))})
+    }
+}
+@Composable fun ButtonSwitchDistance(selected: Boolean, onClick: () -> Unit, idString: Int,){
+    ButtonSwitch(selected = selected, idString = idString, onClick = onClick,
+        style = MaterialTheme.typography.bodySmall, width = 20.dp)
+}
+@Composable fun MenuDuration( uiState: TrainingScreenState, set: Set){
+    Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.padding(start = 12.dp, top=6.dp)){
+        ButtonSwitchDuration(selected = set.durationE == TimeE.SEC, idString = R.string.sec,
+            onClick = {uiState.onChangeSet ((set as SetDB).copy(durationE = TimeE.SEC))})
+        ButtonSwitchDuration(selected = set.durationE == TimeE.MIN, idString = R.string.min,
+            onClick = {uiState.onChangeSet ((set as SetDB).copy(durationE = TimeE.MIN))})
+    }
+}
+@Composable fun MenuWeight( uiState: TrainingScreenState, set: Set){
+    Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.padding(start = 12.dp, top=6.dp)){
+        ButtonSwitchWeight(selected = set.weightE == WeightE.GR, idString = R.string.gr,
+            onClick = {uiState.onChangeSet ((set as SetDB).copy(weightE = WeightE.GR))})
+        ButtonSwitchWeight(selected = set.weightE == WeightE.KG, idString = R.string.kg,
+            onClick = {uiState.onChangeSet ((set as SetDB).copy(weightE = WeightE.KG))})
+    }
+}
+@Composable fun ButtonSwitchDuration(selected: Boolean, onClick: () -> Unit, idString: Int,){
+    ButtonSwitch(selected = selected, idString = idString, onClick = onClick,
+        style = MaterialTheme.typography.bodySmall, width = 30.dp)
+}
+@Composable fun ButtonSwitchWeight(selected: Boolean, onClick: () -> Unit, idString: Int,){
+    ButtonSwitch(selected = selected, idString = idString, onClick = onClick,
+        style = MaterialTheme.typography.bodySmall, width = 20.dp)
+}
+@Composable fun ButtonSwitch(selected: Boolean, onClick: () -> Unit, idString: Int, width: Dp, style: TextStyle){
+    val modifier = Modifier.padding(vertical = 2.dp, horizontal = 2.dp).width(width)
+    Frame (color = MaterialTheme.colorScheme.outline,
+        contour = if (selected) contourAll1 else contourBot1) {
+        TextApp( modifier = modifier.clickable { onClick() },
+            fontWeight =  if (selected) FontWeight.Bold else FontWeight.Normal,
+            style = style,
+            text = stringResource(idString))
+    }
+}
+@Composable fun BodySetFieldText(placeholder: String, idText: Int, start: Dp, onChange: (String)-> Unit){
+    val density = LocalDensity.current.density
+    var width by remember { mutableStateOf( 40.dp) }
+    Column (horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.padding(start = start)) {
         TextFieldApp(
             typeKeyboard = TypeKeyboard.TEXT,
             contentAlignment = Alignment.Center,
-            textStyle = MaterialTheme.typography.bodyMedium,
-            onChangeValue = { uiState.onChangeSet ((set as SetDB).copy(distance = it.toDoubleMy())) },
-            placeholder = "${ if (set.distance < 1000) set.distance else set.distance/1000 }",
+            textStyle = MaterialTheme.typography.bodyMedium.copy(textAlign = TextAlign.Center),
+            onChangeValue = {onChange(it)},
+            placeholder = placeholder,
+            width = width
         )
-        TextApp(text = stringResource(R.string.distance), textAlign = TextAlign.Center, style = alumBodySmall)
-    }
-}
-@Composable fun MenuDistance( uiState: TrainingScreenState, set: Set){
-    val modifier = Modifier.padding(vertical = 2.dp, horizontal = 2.dp).width(30.dp)
-    Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.padding(start = 12.dp)){
-        Frame (color = MaterialTheme.colorScheme.outline,
-            contour = if (set.distanceE == DistanceE.M) contourAll1 else contourBot1) {
-            TextApp( modifier = modifier.clickable {
-                uiState.onChangeSet ((set as SetDB).copy(distanceE = DistanceE.M)) },
-                style = MaterialTheme.typography.bodySmall,
-                fontWeight =  if (set.distanceE == DistanceE.M) FontWeight.Bold else FontWeight.Normal,
-                text = stringResource(R.string.m))
-        }
-        Frame (color = MaterialTheme.colorScheme.outline,
-            contour = if (set.distanceE == DistanceE.KM) contourAll1 else contourBot1) {
-            TextApp( modifier = modifier.clickable {
-                uiState.onChangeSet ((set as SetDB).copy(distanceE = DistanceE.KM))},
-                fontWeight =  if (set.distanceE == DistanceE.KM) FontWeight.Bold else FontWeight.Normal,
-                style = MaterialTheme.typography.bodySmall,
-                text = stringResource(R.string.km))
-        }
+        TextApp(text = stringResource(idText), textAlign = TextAlign.Center, style = alumBodySmall,
+            modifier = Modifier.onGloballyPositioned { width = (it.size.width / density).dp },)
     }
 }
 //#####################################Old#########################################################
@@ -351,7 +346,7 @@ import com.example.count_out.ui.view_components.lg
             contextRight = {
                 TextStringAndField(
                     placeholder = set.duration.toString(),
-                    onChangeValue = { uiState.onChangeSet ((set as SetDB).copy(duration = it.toDoubleMy())) },
+                    onChangeValue = { uiState.onChangeSet ((set as SetDB).copy(duration = it.toIntMy())) },
                     editing = true,
                     visibleField = state.intValue == 2,
                     text = "${stringResource(id = R.string.duration)} (${stringResource(id = R.string.min)})")
@@ -442,7 +437,6 @@ import com.example.count_out.ui.view_components.lg
             TextFieldApp(
                 modifier = Modifier.fillMaxWidth(),
                 placeholder = set.groupCount,
-                contentAlignment = Alignment.BottomStart,
                 typeKeyboard = TypeKeyboard.TEXT,
                 textStyle = interLight12,
                 onChangeValue = { uiState.onChangeSet ((set as SetDB).copy(groupCount = it)) })

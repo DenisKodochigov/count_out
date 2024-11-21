@@ -109,8 +109,8 @@ class ExecuteSet @Inject constructor(val speechManager:SpeechManager, val contex
             GoalSet.COUNT -> " " + getPlurals(set.reps, R.plurals.repeat)
             GoalSet.COUNT_GROUP -> " " + getPlurals(set.reps, R.plurals.repeat)
             GoalSet.DURATION ->
-                if (set.duration < 1) " " + getPlurals((set.duration * 60).roundToInt(), R.plurals.second)
-                else getPlurals(set.duration.roundToInt(), R.plurals.minutes)
+                if (set.duration < 1) " " + getPlurals((set.duration * 60), R.plurals.second)
+                else getPlurals(set.duration, R.plurals.minutes)
             GoalSet.DISTANCE ->
                 getPlurals(set.distance.toInt(), R.plurals.km) +
                 " " + getPlurals((set.distance - (set.distance *1000)).roundToInt(), R.plurals.km)

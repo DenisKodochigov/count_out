@@ -23,6 +23,7 @@ import android.Manifest.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS
 import android.Manifest.permission.TRANSMIT_IR
 import android.Manifest.permission.UWB_RANGING
 import android.Manifest.permission.VIBRATE
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.ui.unit.dp
 import com.example.count_out.R
 import com.example.count_out.navigation.TrainingsDestination
@@ -78,14 +79,14 @@ object Const {
     val permissions2 = listOf(
         ACCESS_BACKGROUND_LOCATION,//with 29
     )
-    private var widthContour2 = 2.dp
-    private val widthHideContour = 0.dp
-    val contourAll = Direction(top = widthContour2, bottom = widthContour2, start = widthContour2, end = widthContour2)
-    val contourHor = Direction(top = widthContour2, bottom = widthContour2, start = widthHideContour, end = widthHideContour)
-    val contourBot = Direction(top = widthHideContour, bottom = widthContour2, start = widthHideContour, end = widthHideContour)
-    private val widthContour1 = 1.dp
-    val contourAll1 = Direction(top = widthContour1, bottom = widthContour1, start = widthContour1, end = widthContour1)
-    val contourBot1 = Direction(top = widthHideContour, bottom = widthContour1, start = widthHideContour, end = widthHideContour)
+    private val dp2 = 2.dp
+    private val dp1 = 1.dp
+    private val dp0 = 0.dp
+    val contourAll = PaddingValues(top = dp2, bottom = dp2, start = dp2, end = dp2)
+    val contourHor = PaddingValues(top = dp2, bottom = dp2, start = dp0, end = dp0)
+    val contourBot = PaddingValues(top = dp0, bottom = dp2, start = dp0, end = dp0)
+    val contourAll1 = PaddingValues(top = dp1, bottom = dp1, start = dp1, end = dp1)
+    val contourBot1 = PaddingValues(top = dp0, bottom = dp1, start = dp0, end = dp0)
 
     val serviceUUIDs = listOf(
 //        UUID.fromString("00001809-0000-0000-0000-000000000000"),

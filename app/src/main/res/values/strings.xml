@@ -73,7 +73,7 @@
     <string name="speech_description">Speech description</string>
     <string name="create_ring">Create ring</string>
     <string name="add_ring">Add ring</string>
-    <string name="count">count</string>
+    <string name="count">Count</string>
     <string name="next_exercise">Prepare for the exercise</string>
     <string name="rest_time">seconds of rest.</string>
     <string name="section_heart_rate">Section select device heart rate</string>
@@ -246,7 +246,8 @@
     <string name="zone3">ZONE III</string>
     <string name="zone4">ZONE IV</string>
     <string name="zone5">ZONE V</string>
-    <string name="gr">gram</string>
+    <string name="gr">gr</string>
+    <string name="interval">Interval</string>
 
 
 </resources>

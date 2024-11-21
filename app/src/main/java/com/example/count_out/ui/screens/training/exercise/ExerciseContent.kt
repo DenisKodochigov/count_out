@@ -133,8 +133,7 @@ fun exerciseCollapsing(uiState: TrainingScreenState,  exercise: Exercise): Boole
 }
 fun amountSets( exercise: Exercise) = exercise.sets.count()
 fun durationExercise( exercise: Exercise): Int{
-    var durationExercise = 0.0
-    durationExercise = (exercise.speech.afterStart.duration + exercise.speech.afterEnd.duration +
+    var durationExercise = (exercise.speech.afterStart.duration + exercise.speech.afterEnd.duration +
             exercise.speech.beforeStart.duration + exercise.speech.beforeEnd.duration).toDouble()
     exercise.sets.forEach { set->
         durationExercise += when (set.goal){
@@ -142,9 +141,9 @@ fun durationExercise( exercise: Exercise): Int{
             GoalSet.COUNT-> set.reps * set.intervalReps
             GoalSet.COUNT_GROUP -> set.reps * set.intervalReps
             GoalSet.DISTANCE -> set.distance * 600
-        } + set.timeRest
+        }.toDouble() + set.timeRest
     }
-    return ( durationExercise/60).toDouble().roundToInt()
+    return ( durationExercise/60).roundToInt()
 }
 //@Composable
 //fun RowAddSet(uiState: TrainingScreenState, exercise: Exercise)

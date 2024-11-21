@@ -19,7 +19,7 @@ interface Set {
     val intensity: Zone
     val distance: Double
     val distanceE: DistanceE  // В каких единицах показывать
-    val duration: Double
+    val duration: Int
     val durationE: TimeE  // В каких единицах показывать
     val reps: Int // количество отстчетов
     val intervalReps: Double

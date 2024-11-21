@@ -85,15 +85,14 @@ fun durationRound(uiState: TrainingScreenState, roundType: MutableState<RoundTyp
         exercise.sets.forEach { set->
             durationRound += when (set.goal){
                 GoalSet.DURATION-> set.duration * 60
-                GoalSet.COUNT-> set.reps * set.intervalReps
-                GoalSet.COUNT_GROUP -> set.reps * set.intervalReps
-                GoalSet.DISTANCE -> set.distance * 600
+                GoalSet.COUNT-> (set.reps * set.intervalReps).roundToInt()
+                GoalSet.COUNT_GROUP -> (set.reps * set.intervalReps).roundToInt()
+                GoalSet.DISTANCE -> (set.distance * 6).roundToInt()
             } + set.timeRest
         }
     } ?: 0
     return ( durationRound / 60).roundToInt()
 }
-//    uiState.training.rounds.find{ it.roundType == roundType }?.exercise?.size ?: 0
 fun setCollapsing(uiState: TrainingScreenState, roundType: MutableState<RoundType>) {
     if (roundType.value.amount > 0) {
         when (roundType.value) {
