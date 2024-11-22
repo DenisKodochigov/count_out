@@ -34,6 +34,7 @@ import com.example.count_out.ui.view_components.custom_view.Frame
 import com.example.count_out.ui.view_components.drag_drop_column.column.ColumnDD
 import com.example.count_out.ui.view_components.icons.IconsCollapsing
 import com.example.count_out.ui.view_components.icons.IconsGroup
+import com.example.count_out.ui.view_components.lg
 import kotlin.math.roundToInt
 
 @Composable
@@ -105,6 +106,7 @@ fun ListExercises(
 }
 @Composable fun ListSets(uiState: TrainingScreenState) {
     Column {
+        lg("sets.count ${uiState.exercise.sets.count()}")
         uiState.exercise.sets.forEachIndexed { ind, set ->
             Box (modifier = Modifier.border(
                         width = 1.dp,
