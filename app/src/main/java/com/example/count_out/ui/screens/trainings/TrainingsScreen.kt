@@ -27,8 +27,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.count_out.R
-import com.example.count_out.entity.Const.contourAll
-import com.example.count_out.entity.Const.contourHor
+import com.example.count_out.entity.Const.contourAll2
+import com.example.count_out.entity.Const.contourHor2
 import com.example.count_out.entity.workout.Training
 import com.example.count_out.navigation.ScreenDestination
 import com.example.count_out.ui.theme.Dimen
@@ -72,7 +72,7 @@ import com.example.count_out.ui.view_components.custom_view.PlayIcon
 @Composable fun TrainingsScreenLayout( uiState: TrainingsScreenState){
     Column( modifier = Modifier.fillMaxSize()) {
         Frame( color = MaterialTheme.colorScheme.surfaceContainerLow,
-            contour= contourHor,
+            contour= contourHor2,
             modifier = Modifier.weight(1f)){
             TrainingList(uiState, modifier = Modifier.weight(1f))
         }
@@ -97,7 +97,7 @@ import com.example.count_out.ui.view_components.custom_view.PlayIcon
     }
 }
 @Composable fun TrainingCard(item: Training, uiState: TrainingsScreenState, modifier: Modifier) {
-    Frame( color = MaterialTheme.colorScheme.surfaceContainerLow, contour = contourAll){
+    Frame( color = MaterialTheme.colorScheme.surfaceContainerLow, contour = contourAll2){
         Row(
             horizontalArrangement = Arrangement.Start,
             verticalAlignment = Alignment.CenterVertically,

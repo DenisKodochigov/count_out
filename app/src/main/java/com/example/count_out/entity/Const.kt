@@ -79,14 +79,13 @@ object Const {
     val permissions2 = listOf(
         ACCESS_BACKGROUND_LOCATION,//with 29
     )
-    private val dp2 = 2.dp
-    private val dp1 = 1.dp
     private val dp0 = 0.dp
-    val contourAll = PaddingValues(top = dp2, bottom = dp2, start = dp2, end = dp2)
-    val contourHor = PaddingValues(top = dp2, bottom = dp2, start = dp0, end = dp0)
-    val contourBot = PaddingValues(top = dp0, bottom = dp2, start = dp0, end = dp0)
+    private val dp1 = 1.dp
+    private val dp2 = 2.dp
     val contourAll1 = PaddingValues(top = dp1, bottom = dp1, start = dp1, end = dp1)
     val contourBot1 = PaddingValues(top = dp0, bottom = dp1, start = dp0, end = dp0)
+    val contourAll2 = PaddingValues(top = dp2, bottom = dp2, start = dp2, end = dp2)
+    val contourHor2 = PaddingValues(top = dp2, bottom = dp2, start = dp0, end = dp0)
 
     val serviceUUIDs = listOf(
 //        UUID.fromString("00001809-0000-0000-0000-000000000000"),

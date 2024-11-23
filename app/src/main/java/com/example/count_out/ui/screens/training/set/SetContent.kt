@@ -43,30 +43,40 @@ import com.example.count_out.ui.theme.alumBodyMedium
 import com.example.count_out.ui.theme.alumBodySmall
 import com.example.count_out.ui.view_components.TextApp
 import com.example.count_out.ui.view_components.TextFieldApp
+import com.example.count_out.ui.view_components.custom_view.CountIcon
+import com.example.count_out.ui.view_components.custom_view.DistanceIcon
+import com.example.count_out.ui.view_components.custom_view.DurationIcon
 import com.example.count_out.ui.view_components.custom_view.Frame
 import com.example.count_out.ui.view_components.icons.IconsCollapsing
 import com.example.count_out.ui.view_components.icons.IconsGroup
+import com.example.count_out.ui.view_components.lg
 
 @Composable fun SetContent(uiState: TrainingScreenState, set: Set, amountSet: Int, index: Int){
     val visibleLazy = (uiState.listCollapsingSet.value.find { it == set.idSet } != null) || (amountSet == 1)
-    AnimatedVisibility(modifier = Modifier.padding(horizontal = 4.dp, vertical = 1.dp), visible = visibleLazy) {
+    lg("visibleLazy $visibleLazy   amountSet=$amountSet  listCollapsingSet=${uiState.listCollapsingSet.value}  idSet=${set.idSet}")
+    AnimatedVisibility(modifier = Modifier.padding(horizontal = 4.dp, vertical = 1.dp), visible = true) {
         Frame(color = MaterialTheme.colorScheme.surfaceContainerLowest, contour = contourAll1) {
             Column (horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp)) {
                 if (amountSet > 1 && uiState.listCollapsingSet.value.find { it == set.idSet } == null)
                     NameSet(uiState, set, index)
-                TaskSwitch( uiState, set, index )
-                BodySet( uiState, set)
-                ZoneSwitch( uiState, set )
+                else {
+                    TaskSwitch( uiState, set, index, amountSet )
+                    BodySet( uiState, set)
+                    ZoneSwitch( uiState, set )
+                }
             }
         }
     }
 }
-
 @Composable fun NameSet(uiState: TrainingScreenState, set: Set, index: Int) {
     val textSetName = when (set.goal) {
-        GoalSet.DISTANCE -> "${set.distance} ${stringResource(id = set.distanceE.id)}"
-        GoalSet.DURATION -> "${set.duration} ${stringResource(id = set.durationE.id)}"
-        GoalSet.COUNT -> "${set.reps} ${stringResource(id = R.string.count)}"
+        GoalSet.DISTANCE -> "${ 
+            if (set.distanceE == DistanceE.KM) set.distance/1000 
+            else set.distance } ${stringResource(id = set.distanceE.id)}"
+        GoalSet.DURATION -> "${ 
+            if (set.durationE == TimeE.MIN) set.duration/60 
+            else set.duration} ${stringResource(id = set.durationE.id)}"
+        GoalSet.COUNT -> "${stringResource(id = R.string.count)}: ${set.reps}"
         GoalSet.COUNT_GROUP -> "${set.reps} ${stringResource(id = R.string.count)}"
     }
     Row (verticalAlignment = Alignment.CenterVertically){
@@ -74,10 +84,10 @@ import com.example.count_out.ui.view_components.icons.IconsGroup
             onClick = { setCollapsing(uiState, set) },
             wrap = uiState.listCollapsingSet.value.find { it == set.idSet } != null )
         TextApp(
-            text = index.toString(),
+            text = (index + 1).toString(),
             style = MaterialTheme.typography.displaySmall,
             textAlign = TextAlign.Start,
-            modifier = Modifier.padding(start = 8.dp))
+            modifier = Modifier.padding(start = 4.dp, end =16.dp))
         TextApp(
             text = textSetName,
             style = MaterialTheme.typography.bodyLarge,
@@ -208,20 +218,34 @@ import com.example.count_out.ui.view_components.icons.IconsGroup
         style = MaterialTheme.typography.bodySmall, modifier = Modifier.width(30.dp))
 }
 
-@Composable fun TaskSwitch(uiState: TrainingScreenState, set: Set, index: Int){
+@Composable fun TaskSwitch(uiState: TrainingScreenState, set: Set, index: Int, amountSet: Int){
     Row(verticalAlignment = Alignment.CenterVertically){
+        if (amountSet > 1){
+            IconsCollapsing(
+                onClick = { setCollapsing(uiState, set) },
+                wrap = uiState.listCollapsingSet.value.find { it == set.idSet } != null )
+        }
         TextApp(
             text = (index + 1).toString(),
             style = MaterialTheme.typography.displaySmall,
             textAlign = TextAlign.Start,
-            modifier = Modifier.padding(horizontal = 8.dp))
+            modifier = Modifier.padding(start = 4.dp, end =16.dp))
         Spacer(modifier = Modifier.weight(1f))
-        TaskButtonSwitch(selected = set.goal == GoalSet.DISTANCE, idString = R.string.distance,
+        DurationIcon(selected = set.goal == GoalSet.DURATION,
+            onClick = {uiState.onChangeSet ((set as SetDB).copy(goal = GoalSet.DURATION))},)
+        Spacer(modifier = Modifier.width(24.dp))
+        DistanceIcon(selected = set.goal == GoalSet.DISTANCE,
             onClick = {uiState.onChangeSet ((set as SetDB).copy(goal = GoalSet.DISTANCE))},)
-        TaskButtonSwitch(selected = set.goal == GoalSet.DURATION, idString = R.string.duration,
-            onClick = {uiState.onChangeSet ((set as SetDB).copy(goal = GoalSet.DURATION))})
-        TaskButtonSwitch(selected = set.goal == GoalSet.COUNT, idString = R.string.count,
-            onClick = {uiState.onChangeSet ((set as SetDB).copy(goal = GoalSet.COUNT))})
+        Spacer(modifier = Modifier.width(24.dp))
+        CountIcon(selected = set.goal == GoalSet.COUNT,
+            onClick = {uiState.onChangeSet ((set as SetDB).copy(goal = GoalSet.COUNT))},)
+        Spacer(modifier = Modifier.width(24.dp))
+//        TaskButtonSwitch(selected = set.goal == GoalSet.DISTANCE, idString = R.string.distance,
+//            onClick = {uiState.onChangeSet ((set as SetDB).copy(goal = GoalSet.DISTANCE))},)
+//        TaskButtonSwitch(selected = set.goal == GoalSet.DURATION, idString = R.string.duration,
+//            onClick = {uiState.onChangeSet ((set as SetDB).copy(goal = GoalSet.DURATION))})
+//        TaskButtonSwitch(selected = set.goal == GoalSet.COUNT, idString = R.string.count,
+//            onClick = {uiState.onChangeSet ((set as SetDB).copy(goal = GoalSet.COUNT))})
         Spacer(modifier = Modifier.weight(1f))
         IconsGroup(
             onClickCopy = { uiState.onCopySet(uiState.training.idTraining, set.idSet) },
@@ -235,9 +259,9 @@ import com.example.count_out.ui.view_components.icons.IconsGroup
     ButtonSwitch(selected = selected, idString = idString, onClick = onClick,
         modifier = Modifier.width(90.dp), style = MaterialTheme.typography.bodyMedium )
 }
-
 @Composable fun ZoneSwitch(uiState: TrainingScreenState, set: Set){
     Row(verticalAlignment = Alignment.CenterVertically){
+        Spacer(modifier = Modifier.weight(1f))
         ZoneButtonSwitch(selected = set.intensity == Zone.EXTRA_SLOW, idString = R.string.zone1,
             onClick = {uiState.onChangeSet ((set as SetDB).copy(intensity = Zone.EXTRA_SLOW))})
         ZoneButtonSwitch(selected = set.intensity == Zone.SLOW, idString = R.string.zone2,
@@ -248,11 +272,12 @@ import com.example.count_out.ui.view_components.icons.IconsGroup
             onClick = {uiState.onChangeSet ((set as SetDB).copy(intensity = Zone.HIGH))})
         ZoneButtonSwitch(selected = set.intensity == Zone.MAX, idString = R.string.zone5,
             onClick = {uiState.onChangeSet ((set as SetDB).copy(intensity = Zone.MAX))})
+        Spacer(modifier = Modifier.weight(1f))
     }
 }
 @Composable fun ZoneButtonSwitch(selected: Boolean, onClick: () -> Unit, idString: Int,){
     ButtonSwitch(selected = selected, idString = idString, onClick = onClick,
-        style = alumBodyMedium, modifier = Modifier.width(60.dp))
+        style = alumBodyMedium, modifier = Modifier.width(50.dp))
 }
 
 @Composable fun ButtonSwitch(

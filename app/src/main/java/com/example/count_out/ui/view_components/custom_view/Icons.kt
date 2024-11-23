@@ -2,7 +2,9 @@ package com.example.count_out.ui.view_components.custom_view
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -19,6 +21,7 @@ import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.drawText
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.rememberTextMeasurer
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Constraints
@@ -394,7 +397,125 @@ import androidx.compose.ui.unit.sp
         }
     )
 }
+@Composable fun DistanceIcon(selected: Boolean = false, color: Color = MaterialTheme.colorScheme.outline, onClick: ()->Unit = {}){
+    val size = 40.dp
+    val colorL = if (selected) color else Color(color.red, color.green, color.blue, color.alpha * 0.5f)
+    val style = if (selected) TextStyle(fontSize = 18.sp, color = colorL, fontWeight = FontWeight.ExtraBold)
+                else TextStyle(fontSize = 18.sp, color = colorL)
+
+    val textMeasurer = rememberTextMeasurer()
+    Spacer(modifier = Modifier.width(size).height(size/2)
+        .clickable { onClick() }
+        .drawWithCache {
+            val xPx = size.toPx()
+            val yPx = (size/2).toPx()
+            val widthPx = 1.dp.toPx()
+            onDrawWithContent {
+                drawLine(
+                    color = colorL,
+                    strokeWidth = widthPx,
+                    start = Offset(0f,yPx),
+                    end = Offset(xPx, yPx))
+                drawLine(
+                    color = colorL,
+                    strokeWidth = widthPx*2,
+                    start = Offset(0f + widthPx,yPx - widthPx * 4),
+                    end = Offset(0f + widthPx, yPx))
+                drawLine(
+                    color = colorL,
+                    strokeWidth = widthPx,
+                    start = Offset(xPx /2,yPx - widthPx * 3),
+                    end = Offset(xPx /2, yPx))
+                drawLine(
+                    color = colorL,
+                    strokeWidth = widthPx*2,
+                    start = Offset(xPx - widthPx,yPx - widthPx * 4),
+                    end = Offset(xPx - widthPx, yPx))
+                drawText(textMeasurer, "KM", topLeft = Offset( 18f, -12f), style = style)
+            }
+        }
+    )
+}
+@Composable fun CountIcon(selected: Boolean = false, color: Color = MaterialTheme.colorScheme.outline, onClick: ()->Unit = {}){
+    val size = 40.dp
+    val heightText = 16.sp
+    val style = if (selected) TextStyle(fontSize = heightText, color = color, fontWeight = FontWeight.ExtraBold)
+                else TextStyle(fontSize = heightText, color = Color(color.red, color.green, color.blue, color.alpha * 0.5f))
+    val textMeasurer = rememberTextMeasurer()
+    Spacer(modifier = Modifier.width(size).height(size/2)
+        .clickable { onClick() }
+        .drawWithCache {
+            onDrawWithContent {
+                drawText(textMeasurer, "1.2.3", topLeft = Offset( 0f, 0f), style = style)
+            }
+        }
+    )
+}
+@Composable fun DurationIcon( selected: Boolean = false, onClick: ()->Unit = {},
+                              color: Color = MaterialTheme.colorScheme.outline,) {
+    val colorL = if (selected) color else Color(color.red, color.green, color.blue, color.alpha * 0.5f)
+    val size = 40.dp
+    Spacer(modifier = Modifier.width(size).height(size * 2/3).clickable { onClick() }
+        .drawWithCache {
+            val xPx = (size).toPx()
+            val yPx = xPx * 0.67f
+            val widthPx = 1.dp.toPx()
+            val widthPx2 = if (selected) 2.dp.toPx() else 1.dp.toPx()
+
+            val diameter = yPx * 0.7f
+            val diameter1 = diameter * 0.15f
+            val x0 = xPx/2 - diameter/2
+            val y0 = yPx - diameter - widthPx2
+            val metka = diameter /8
+            val arrow = diameter /4
+            val x1 = diameter /8
+            val y1 = diameter /5
+            val x2 = diameter /4
+            val y2 = diameter /3
+            val y21 = diameter /10
+
+                onDrawWithContent {
+                drawOval( color = colorL, style = Stroke( width = widthPx2 ),
+                    topLeft = Offset(x = x0, y = y0),
+                    size = Size(diameter, diameter))
+                drawLine( color = colorL, strokeWidth = widthPx,
+                    start = Offset(x0 + diameter/2,y0 + diameter - metka),
+                    end = Offset(x0 + diameter/2, y0 + diameter))
+                drawLine( color = colorL, strokeWidth = widthPx,
+                    start = Offset(x0 + diameter/2,y0),
+                    end = Offset(x0 + diameter/2, y0 + metka))
+                drawLine( color = colorL, strokeWidth = widthPx,
+                    start = Offset(x0,y0 + diameter/2),
+                    end = Offset(x0 + metka, y0 + diameter/2))
+                drawLine( color = colorL, strokeWidth = widthPx,
+                    start = Offset(x0 + diameter,y0 + diameter/2),
+                    end = Offset(x0 + diameter - metka, y0 + diameter/2))
+                drawLine(color = colorL, strokeWidth = widthPx,
+                    start = Offset(x0 + diameter/2,y0 + diameter/2),
+                    end = Offset(x0 + diameter/2 + arrow, y0 + diameter/2 - arrow))
+                drawOval( color = colorL,
+                    topLeft = Offset(x0 + (diameter - diameter1)/2, y0 + (diameter - diameter1)/2),
+                    size = Size(diameter1, diameter1))
+                drawLine(color = colorL, strokeWidth = widthPx,
+                    start = Offset(x0 + diameter/2 - x1, y0 ),
+                    end = Offset(x0 + diameter/2 - x1, y0 - y1))
+                drawLine(color = colorL, strokeWidth = widthPx,
+                    start = Offset(x0 + diameter/2 + x1,y0),
+                    end = Offset(x0 + diameter/2 + x1, y0 - y1))
+                drawLine(color = colorL, strokeWidth = widthPx2,
+                    start = Offset(x0 + diameter/2 - x2,y0 - y2),
+                    end = Offset(x0 + diameter/2 - x2, y0 - y21))
+                drawLine(color = colorL, strokeWidth = widthPx2,
+                    start = Offset(x0 + diameter/2 + x2,y0 - y2),
+                    end = Offset(x0 + diameter/2 + x2, y0 - y21))
+                drawLine(color = colorL, strokeWidth = widthPx2,
+                    start = Offset(x0 + diameter/2 - x2,y0 - y2),
+                    end = Offset(x0 + diameter/2 + x2, y0 - y2))
+            }
+        }
+    )
+}
 @Preview
-@Composable fun Preview() { CollapsingIcon(MaterialTheme.colorScheme.outline)}
+@Composable fun Preview() { DurationIcon(selected = false)}
 //@Preview
 //@Composable fun Preview1() { HorLineIcon(color = MaterialTheme.colorScheme.outline)}

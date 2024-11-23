@@ -16,12 +16,12 @@ interface Set {
     val goal: GoalSet
     val weight: Int
     val weightE: WeightE // В каких единицах показывать
-    val intensity: Zone
     val distance: Double
     val distanceE: DistanceE  // В каких единицах показывать
     val duration: Int
     val durationE: TimeE  // В каких единицах показывать
     val reps: Int // количество отстчетов
+    val intensity: Zone
     val intervalReps: Double
     val intervalDown: Int //замедление отчетов
     val groupCount: String // Группы отстчетов

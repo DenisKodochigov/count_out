@@ -102,25 +102,26 @@ fun ListExercises(
 }
 @Composable fun BodyExercise(uiState: TrainingScreenState, exercise: Exercise){
     val visibleLazy = uiState.listCollapsingExercise.value.find { it == exercise.idExercise } != null
-    AnimatedVisibility( visible = visibleLazy){ ListSets(uiState) }
+    AnimatedVisibility( visible = visibleLazy){ ListSets(uiState, exercise) }
 }
-@Composable fun ListSets(uiState: TrainingScreenState) {
+@Composable fun ListSets(uiState: TrainingScreenState, exercise: Exercise) {
     Column {
-        lg("sets.count ${uiState.exercise.sets.count()}")
-        uiState.exercise.sets.forEachIndexed { ind, set ->
+        exercise.sets.forEachIndexed { ind, set ->
             Box (modifier = Modifier.border(
                         width = 1.dp,
                         color = MaterialTheme.colorScheme.surface,
                         shape = MaterialTheme.shapes.extraSmall)
                     .fillMaxWidth(),
-                content = { SetContent(uiState,set, uiState.exercise.sets.count(), ind) }
+                content = {
+                    lg("exerciseId=${exercise.idExercise}  sets.count=${exercise.sets.count()}  setId=${set.idSet}  ind=$ind")
+                    SetContent(uiState, set, exercise.sets.count(), ind) }
             )
             Spacer(modifier = Modifier.height(1.dp))
         }
     }
 
 }
-fun exerciseCollapsing(uiState: TrainingScreenState,  exercise: Exercise): Boolean {
+fun exerciseCollapsing(uiState: TrainingScreenState, exercise: Exercise): Boolean {
     val listCollapsingExercise = uiState.listCollapsingExercise.value.toMutableList()
     val itemList = listCollapsingExercise.find { it == exercise.idExercise }
     return if ( itemList != null) {

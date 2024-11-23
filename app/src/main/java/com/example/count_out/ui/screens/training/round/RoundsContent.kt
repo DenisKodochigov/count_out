@@ -16,7 +16,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.example.count_out.R
 import com.example.count_out.data.room.tables.SetDB
-import com.example.count_out.entity.Const.contourHor
+import com.example.count_out.entity.Const.contourHor2
 import com.example.count_out.entity.GoalSet
 import com.example.count_out.entity.RoundType
 import com.example.count_out.ui.screens.training.TrainingScreenState
@@ -31,7 +31,7 @@ import kotlin.math.roundToInt
 fun Round(uiState: TrainingScreenState, roundType: MutableState<RoundType>){
     roundType.value.amount = amountExercise(uiState, roundType)
     roundType.value.duration = durationRound(uiState, roundType)
-    Frame(color = MaterialTheme.colorScheme.surfaceContainerHigh, contour = contourHor){
+    Frame(color = MaterialTheme.colorScheme.surfaceContainerHigh, contour = contourHor2){
         Column( modifier = Modifier.padding(start = 6.dp, bottom = 4.dp, top = 4.dp)){
             Row1Round(uiState = uiState, roundType)
             Row2Round(uiState = uiState, roundType)

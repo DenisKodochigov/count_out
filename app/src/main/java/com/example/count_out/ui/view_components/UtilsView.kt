@@ -9,7 +9,8 @@ fun log(showLog: Boolean, text: String){
     if (showLog) Log.d("KDS", text)
 }
 fun lg( text: String){
-    Log.d("KDS", text)
+    try{ Log.d("KDS", text) }
+    catch(_: Exception) {}
 }
 @Composable
 fun ToastApp (text: String){
