@@ -24,7 +24,6 @@ import androidx.compose.material.icons.filled.CopyAll
 import androidx.compose.material.icons.filled.DeleteOutline
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.GraphicEq
-import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -48,7 +47,6 @@ import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
-import com.example.count_out.R
 import com.example.count_out.entity.Const.TAB_FADE_IN_ANIMATION_DELAY
 import com.example.count_out.entity.Const.TAB_FADE_IN_ANIMATION_DURATION
 import com.example.count_out.entity.Const.TAB_FADE_OUT_ANIMATION_DURATION
@@ -59,8 +57,7 @@ import com.example.count_out.ui.theme.alumBodySmall
 import com.example.count_out.ui.theme.mTypography
 import com.example.count_out.ui.theme.shapes
 import com.example.count_out.ui.view_components.TextApp
-import com.example.count_out.ui.view_components.custom_view.CollapsingIcon
-import com.example.count_out.ui.view_components.custom_view.UnCollapsingIcon
+import com.example.count_out.ui.view_components.custom_view.IconQ
 
 @Composable fun IconsGroup(
     onClickEdit: (() -> Unit)? = null,
@@ -73,7 +70,7 @@ import com.example.count_out.ui.view_components.custom_view.UnCollapsingIcon
 ){
     var expanded by remember { mutableStateOf(false) }
     Box {
-        IconSingle(image = Icons.Default.MoreVert, onClick = { expanded = true }, idDescription = R.string.show_Action)
+        IconQ.Multi(onClick = { expanded = true })
         MaterialTheme( shapes = shapes.copy(extraSmall = shapes.large)) {
             DropdownMenu(
                 modifier = Modifier.padding(8.dp),
@@ -175,7 +172,7 @@ import com.example.count_out.ui.view_components.custom_view.UnCollapsingIcon
         modifier = Modifier.size(Dimen.sizeIconLarge))
 }
 @Composable fun IconsCollapsing(onClick: ()->Unit, wrap: Boolean) {
-    if (wrap) CollapsingIcon( onClick = onClick) else UnCollapsingIcon( onClick = onClick)
+    if (wrap) IconQ.Collapsing( onClick = onClick) else IconQ.UnCollapsing( onClick = onClick)
 }
 @Composable fun IconAddSet(onClick:()->Unit) = IconAdd(onClick = onClick, text = "S+" )
 @Composable fun IconAddRing(onClick:()->Unit) = IconAdd(onClick = onClick, text = "R+" )

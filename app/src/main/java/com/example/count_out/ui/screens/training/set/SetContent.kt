@@ -43,17 +43,13 @@ import com.example.count_out.ui.theme.alumBodyMedium
 import com.example.count_out.ui.theme.alumBodySmall
 import com.example.count_out.ui.view_components.TextApp
 import com.example.count_out.ui.view_components.TextFieldApp
-import com.example.count_out.ui.view_components.custom_view.CountIcon
-import com.example.count_out.ui.view_components.custom_view.DistanceIcon
-import com.example.count_out.ui.view_components.custom_view.DurationIcon
 import com.example.count_out.ui.view_components.custom_view.Frame
+import com.example.count_out.ui.view_components.custom_view.IconQ
 import com.example.count_out.ui.view_components.icons.IconsCollapsing
 import com.example.count_out.ui.view_components.icons.IconsGroup
 import com.example.count_out.ui.view_components.lg
 
 @Composable fun SetContent(uiState: TrainingScreenState, set: Set, amountSet: Int, index: Int){
-    val visibleLazy = (uiState.listCollapsingSet.value.find { it == set.idSet } != null) || (amountSet == 1)
-    lg("visibleLazy $visibleLazy   amountSet=$amountSet  listCollapsingSet=${uiState.listCollapsingSet.value}  idSet=${set.idSet}")
     AnimatedVisibility(modifier = Modifier.padding(horizontal = 4.dp, vertical = 1.dp), visible = true) {
         Frame(color = MaterialTheme.colorScheme.surfaceContainerLowest, contour = contourAll1) {
             Column (horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp)) {
@@ -161,7 +157,7 @@ import com.example.count_out.ui.view_components.lg
 }
 @Composable fun DistanceButtonSwitch(selected: Boolean, onClick: () -> Unit, idString: Int,){
     ButtonSwitch(selected = selected, idString = idString, onClick = onClick,
-        modifier = Modifier.width(30.dp), style = MaterialTheme.typography.bodySmall)
+        modifier = Modifier.width(35.dp), style = MaterialTheme.typography.bodySmall)
 }
 
 @Composable fun DurationFieldText(uiState: TrainingScreenState, set: Set){   //B7B7B7
@@ -180,7 +176,7 @@ import com.example.count_out.ui.view_components.lg
 }
 @Composable fun DurationButtonSwitch(selected: Boolean, onClick: () -> Unit, idString: Int,){
     ButtonSwitch(selected = selected, idString = idString, onClick = onClick,
-        modifier = Modifier.width(30.dp), style = MaterialTheme.typography.bodySmall)
+        modifier = Modifier.width(35.dp), style = MaterialTheme.typography.bodySmall)
 }
 
 @Composable fun CountFieldText(uiState: TrainingScreenState, set: Set){   //B7B7B7
@@ -215,7 +211,7 @@ import com.example.count_out.ui.view_components.lg
 }
 @Composable fun WeightButtonSwitch(selected: Boolean, onClick: () -> Unit, idString: Int,){
     ButtonSwitch(selected = selected, idString = idString, onClick = onClick,
-        style = MaterialTheme.typography.bodySmall, modifier = Modifier.width(30.dp))
+        style = MaterialTheme.typography.bodySmall, modifier = Modifier.width(35.dp))
 }
 
 @Composable fun TaskSwitch(uiState: TrainingScreenState, set: Set, index: Int, amountSet: Int){
@@ -231,13 +227,13 @@ import com.example.count_out.ui.view_components.lg
             textAlign = TextAlign.Start,
             modifier = Modifier.padding(start = 4.dp, end =16.dp))
         Spacer(modifier = Modifier.weight(1f))
-        DurationIcon(selected = set.goal == GoalSet.DURATION,
+        IconQ.Duration(selected = set.goal == GoalSet.DURATION,
             onClick = {uiState.onChangeSet ((set as SetDB).copy(goal = GoalSet.DURATION))},)
         Spacer(modifier = Modifier.width(24.dp))
-        DistanceIcon(selected = set.goal == GoalSet.DISTANCE,
+        IconQ.Distance(selected = set.goal == GoalSet.DISTANCE,
             onClick = {uiState.onChangeSet ((set as SetDB).copy(goal = GoalSet.DISTANCE))},)
         Spacer(modifier = Modifier.width(24.dp))
-        CountIcon(selected = set.goal == GoalSet.COUNT,
+        IconQ.Count(selected = set.goal == GoalSet.COUNT,
             onClick = {uiState.onChangeSet ((set as SetDB).copy(goal = GoalSet.COUNT))},)
         Spacer(modifier = Modifier.width(24.dp))
 //        TaskButtonSwitch(selected = set.goal == GoalSet.DISTANCE, idString = R.string.distance,
@@ -255,10 +251,7 @@ import com.example.count_out.ui.view_components.lg
                 uiState.showSpeechSet.value = true},)
     }
 }
-@Composable fun TaskButtonSwitch(selected: Boolean, onClick: () -> Unit, idString: Int,){
-    ButtonSwitch(selected = selected, idString = idString, onClick = onClick,
-        modifier = Modifier.width(90.dp), style = MaterialTheme.typography.bodyMedium )
-}
+
 @Composable fun ZoneSwitch(uiState: TrainingScreenState, set: Set){
     Row(verticalAlignment = Alignment.CenterVertically){
         Spacer(modifier = Modifier.weight(1f))
@@ -299,7 +292,7 @@ import com.example.count_out.ui.view_components.lg
         TextFieldApp(
             typeKeyboard = typeKey,
             contentAlignment = Alignment.Center,
-            textStyle = MaterialTheme.typography.bodyMedium.copy(textAlign = TextAlign.Center),
+            textStyle = MaterialTheme.typography.bodyLarge.copy(textAlign = TextAlign.Center),
             onChangeValue = {onChange(it)},
             placeholder = placeholder,
             width = width
@@ -320,6 +313,10 @@ fun setCollapsing(uiState: TrainingScreenState, set: Set) {
         uiState.listCollapsingSet.value = listCollapsingSet
     }
 }
+//@Composable fun TaskButtonSwitch(selected: Boolean, onClick: () -> Unit, idString: Int,){
+//    ButtonSwitch(selected = selected, idString = idString, onClick = onClick,
+//        modifier = Modifier.width(90.dp), style = MaterialTheme.typography.bodyMedium )
+//}
 //#####################################Old#########################################################
 //@Composable fun AdditionalInformation1(uiState: TrainingScreenState, set: Set, amountSet: Int){
 //    val visibleLazy = (uiState.listCollapsingSet.value.find { it == set.idSet } != null) || (amountSet == 1)

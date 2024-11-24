@@ -35,7 +35,6 @@ import com.example.count_out.ui.theme.Dimen
 import com.example.count_out.ui.theme.mTypography
 import com.example.count_out.ui.view_components.TextFieldApp
 import com.example.count_out.ui.view_components.icons.IconsGroup
-import com.example.count_out.ui.view_components.lg
 
 @SuppressLint("UnrememberedMutableState")
 @Composable fun TrainingScreen(trainingId: Long, onBaskScreen:() -> Unit){
@@ -95,8 +94,6 @@ import com.example.count_out.ui.view_components.lg
 fun TrainingScreenLayout( uiState: TrainingScreenState){
     val focusManager = LocalFocusManager.current
     val interactionSource = remember { MutableInteractionSource() }
-    try{ lg("TrainingScreenLayout sets.count=${uiState.training.rounds[0].exercise[0].sets.count()} ") }
-    catch(_: Exception) {}
     Column(
         modifier = Modifier
             .fillMaxHeight()

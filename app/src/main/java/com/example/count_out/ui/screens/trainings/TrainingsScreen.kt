@@ -36,12 +36,8 @@ import com.example.count_out.ui.theme.getIdImage
 import com.example.count_out.ui.theme.mTypography
 import com.example.count_out.ui.view_components.ItemSwipe
 import com.example.count_out.ui.view_components.TextApp
-import com.example.count_out.ui.view_components.custom_view.AddIcon
-import com.example.count_out.ui.view_components.custom_view.CopyIcon
 import com.example.count_out.ui.view_components.custom_view.Frame
-import com.example.count_out.ui.view_components.custom_view.HorLineIcon
-import com.example.count_out.ui.view_components.custom_view.MarkIcon
-import com.example.count_out.ui.view_components.custom_view.PlayIcon
+import com.example.count_out.ui.view_components.custom_view.IconQ
 
 @Composable fun TrainingsScreen(
     onClickTraining: (Long) -> Unit,
@@ -116,12 +112,12 @@ import com.example.count_out.ui.view_components.custom_view.PlayIcon
 
 @Composable fun IconSelected(training: Training, uiState: TrainingsScreenState){
     uiState.selectedId.value?.let { selectedId->
-        if (training.idTraining == selectedId) MarkIcon(onClick = { uiState.selectedId.value = null})
-        else HorLineIcon(onClick = { uiState.selectedId.value = training.idTraining })
-    } ?: HorLineIcon(onClick = { uiState.selectedId.value = training.idTraining })
+        if (training.idTraining == selectedId) IconQ.Mark(onClick = { uiState.selectedId.value = null})
+        else IconQ.HorLine(onClick = { uiState.selectedId.value = training.idTraining })
+    } ?: IconQ.HorLine(onClick = { uiState.selectedId.value = training.idTraining })
 }
 @Composable fun IconCopy(item: Training, uiState: TrainingsScreenState){
-    CopyIcon(onClick = { uiState.onCopyTraining(item.idTraining) })
+    IconQ.Copy(onClick = { uiState.onCopyTraining(item.idTraining) })
 }
 @Composable fun TrainingInformation(item: Training, uiState: TrainingsScreenState, modifier: Modifier = Modifier) {
     Column (modifier = modifier.clickable { uiState.onSelectItem(item.idTraining) }){
@@ -134,8 +130,8 @@ import com.example.count_out.ui.view_components.custom_view.PlayIcon
 //##################################################################################################
 @Composable fun DownPlace(uiState: TrainingsScreenState) {
     Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
-        PlayIcon(onClick = {uiState.onStartWorkout(0)})
+        IconQ.Play(onClick = {uiState.onStartWorkout(0)})
         Spacer(modifier = Modifier.width(32.dp))
-        AddIcon(onClick = { uiState.onAddTraining() })
+        IconQ.Add(onClick = { uiState.onAddTraining() })
     }
 }

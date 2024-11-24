@@ -83,8 +83,8 @@ fun ListExercises(
             modifier = Modifier.weight(1f))
         Column {
             TextApp( style = MaterialTheme.typography.bodySmall, fontWeight = FontWeight.Light,
-                text = "${ stringResource(id = R.string.sets) }: $amountSets /" +
-                        " $countTime ${ stringResource(id = R.string.min)}",) }
+                text = "${ stringResource(id = R.string.sets) }: $amountSets/" +
+                        "$countTime ${ stringResource(id = R.string.min)}",) }
         IconsGroup(
             onClickCopy = { uiState.onCopyExercise(uiState.training.idTraining, exercise.idExercise)},
             onClickDelete = { uiState.onDeleteExercise(uiState.training.idTraining, exercise.idExercise) },
@@ -119,7 +119,6 @@ fun ListExercises(
             Spacer(modifier = Modifier.height(1.dp))
         }
     }
-
 }
 fun exerciseCollapsing(uiState: TrainingScreenState, exercise: Exercise): Boolean {
     val listCollapsingExercise = uiState.listCollapsingExercise.value.toMutableList()
@@ -143,7 +142,7 @@ fun durationExercise( exercise: Exercise): Int{
             GoalSet.DURATION-> set.duration * 60
             GoalSet.COUNT-> set.reps * set.intervalReps
             GoalSet.COUNT_GROUP -> set.reps * set.intervalReps
-            GoalSet.DISTANCE -> set.distance * 600
+            GoalSet.DISTANCE -> set.distance * 100
         }.toDouble() + set.timeRest
     }
     return ( durationExercise/60).roundToInt()
