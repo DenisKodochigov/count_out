@@ -47,14 +47,13 @@ import com.example.count_out.ui.view_components.custom_view.Frame
 import com.example.count_out.ui.view_components.custom_view.IconQ
 import com.example.count_out.ui.view_components.icons.IconsCollapsing
 import com.example.count_out.ui.view_components.icons.IconsGroup
-import com.example.count_out.ui.view_components.lg
 
 @Composable fun SetContent(uiState: TrainingScreenState, set: Set, amountSet: Int, index: Int){
     AnimatedVisibility(modifier = Modifier.padding(horizontal = 4.dp, vertical = 1.dp), visible = true) {
         Frame(color = MaterialTheme.colorScheme.surfaceContainerLowest, contour = contourAll1) {
             Column (horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp)) {
                 if (amountSet > 1 && uiState.listCollapsingSet.value.find { it == set.idSet } == null)
-                    NameSet(uiState, set, index)
+                    FirstLine(uiState, set, index)
                 else {
                     TaskSwitch( uiState, set, index, amountSet )
                     BodySet( uiState, set)
@@ -64,14 +63,10 @@ import com.example.count_out.ui.view_components.lg
         }
     }
 }
-@Composable fun NameSet(uiState: TrainingScreenState, set: Set, index: Int) {
+@Composable fun FirstLine(uiState: TrainingScreenState, set: Set, index: Int) {
     val textSetName = when (set.goal) {
-        GoalSet.DISTANCE -> "${ 
-            if (set.distanceE == DistanceE.KM) set.distance/1000 
-            else set.distance } ${stringResource(id = set.distanceE.id)}"
-        GoalSet.DURATION -> "${ 
-            if (set.durationE == TimeE.MIN) set.duration/60 
-            else set.duration} ${stringResource(id = set.durationE.id)}"
+        GoalSet.DISTANCE -> viewDistance(set) + stringResource(id = set.distanceE.id)
+        GoalSet.DURATION -> "${set.duration/60} ${stringResource(id = R.string.min)}"
         GoalSet.COUNT -> "${stringResource(id = R.string.count)}: ${set.reps}"
         GoalSet.COUNT_GROUP -> "${set.reps} ${stringResource(id = R.string.count)}"
     }
@@ -80,10 +75,11 @@ import com.example.count_out.ui.view_components.lg
             onClick = { setCollapsing(uiState, set) },
             wrap = uiState.listCollapsingSet.value.find { it == set.idSet } != null )
         TextApp(
-            text = (index + 1).toString(),
+            text = "${(index + 1)}-${set.idSet}" ,
             style = MaterialTheme.typography.displaySmall,
             textAlign = TextAlign.Start,
             modifier = Modifier.padding(start = 4.dp, end =16.dp))
+        NumberSet(index, set)
         TextApp(
             text = textSetName,
             style = MaterialTheme.typography.bodyLarge,
@@ -97,6 +93,13 @@ import com.example.count_out.ui.view_components.lg
                 uiState.showSpeechSet.value = true},
         )
     }
+}
+@Composable fun NumberSet(index: Int, set: Set) {
+    TextApp(
+        text = "${(index + 1)}-${set.idSet}" ,
+        style = MaterialTheme.typography.displaySmall,
+        textAlign = TextAlign.Start,
+        modifier = Modifier.padding(start = 4.dp, end =16.dp))
 }
 @Composable fun BodySet( uiState: TrainingScreenState, set: Set){
     when (set.goal){
@@ -162,9 +165,8 @@ import com.example.count_out.ui.view_components.lg
 
 @Composable fun DurationFieldText(uiState: TrainingScreenState, set: Set){   //B7B7B7
     FieldText( idText = R.string.duration, start = 0.dp,typeKey = TypeKeyboard.DIGIT,
-        placeholder = "${ if (set.durationE == TimeE.SEC) set.duration else set.duration * 60 }",
-        onChange = { uiState.onChangeSet ((set as SetDB).copy( duration =
-        (if (set.durationE == TimeE.SEC) 1 else 60) * it.toIntMy())) },)
+        placeholder = setDurationToMin(set),
+        onChange = {uiState.onChangeSet ((set as SetDB).copy( duration = setDurationToSec(set) * it.toInt()))},)
 }
 @Composable fun DurationSwitch( uiState: TrainingScreenState, set: Set){
     Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.padding(start = 12.dp, top=6.dp)){
@@ -221,11 +223,7 @@ import com.example.count_out.ui.view_components.lg
                 onClick = { setCollapsing(uiState, set) },
                 wrap = uiState.listCollapsingSet.value.find { it == set.idSet } != null )
         }
-        TextApp(
-            text = (index + 1).toString(),
-            style = MaterialTheme.typography.displaySmall,
-            textAlign = TextAlign.Start,
-            modifier = Modifier.padding(start = 4.dp, end =16.dp))
+        NumberSet(index, set)
         Spacer(modifier = Modifier.weight(1f))
         IconQ.Duration(selected = set.goal == GoalSet.DURATION,
             onClick = {uiState.onChangeSet ((set as SetDB).copy(goal = GoalSet.DURATION))},)
@@ -236,12 +234,6 @@ import com.example.count_out.ui.view_components.lg
         IconQ.Count(selected = set.goal == GoalSet.COUNT,
             onClick = {uiState.onChangeSet ((set as SetDB).copy(goal = GoalSet.COUNT))},)
         Spacer(modifier = Modifier.width(24.dp))
-//        TaskButtonSwitch(selected = set.goal == GoalSet.DISTANCE, idString = R.string.distance,
-//            onClick = {uiState.onChangeSet ((set as SetDB).copy(goal = GoalSet.DISTANCE))},)
-//        TaskButtonSwitch(selected = set.goal == GoalSet.DURATION, idString = R.string.duration,
-//            onClick = {uiState.onChangeSet ((set as SetDB).copy(goal = GoalSet.DURATION))})
-//        TaskButtonSwitch(selected = set.goal == GoalSet.COUNT, idString = R.string.count,
-//            onClick = {uiState.onChangeSet ((set as SetDB).copy(goal = GoalSet.COUNT))})
         Spacer(modifier = Modifier.weight(1f))
         IconsGroup(
             onClickCopy = { uiState.onCopySet(uiState.training.idTraining, set.idSet) },
@@ -301,7 +293,12 @@ import com.example.count_out.ui.view_components.lg
             modifier = Modifier.onGloballyPositioned { width = (it.size.width / density).dp },)
     }
 }
-
+fun setDurationToMin(set: Set):String{
+    return "${ if (set.durationE == TimeE.MIN) set.duration/60 else set.duration}" }
+fun setDurationToSec(set: Set,) = if (set.durationE == TimeE.MIN) 60 else 1
+fun viewDistance(set:Set):String {
+    return "${ if (set.distanceE == DistanceE.KM) set.distance/1000 else set.distance }"
+}
 fun setCollapsing(uiState: TrainingScreenState, set: Set) {
     val listCollapsingSet = uiState.listCollapsingSet.value.toMutableList()
     val itemList = listCollapsingSet.find { it == set.idSet }
@@ -313,6 +310,12 @@ fun setCollapsing(uiState: TrainingScreenState, set: Set) {
         uiState.listCollapsingSet.value = listCollapsingSet
     }
 }
+//        TaskButtonSwitch(selected = set.goal == GoalSet.DISTANCE, idString = R.string.distance,
+//            onClick = {uiState.onChangeSet ((set as SetDB).copy(goal = GoalSet.DISTANCE))},)
+//        TaskButtonSwitch(selected = set.goal == GoalSet.DURATION, idString = R.string.duration,
+//            onClick = {uiState.onChangeSet ((set as SetDB).copy(goal = GoalSet.DURATION))})
+//        TaskButtonSwitch(selected = set.goal == GoalSet.COUNT, idString = R.string.count,
+//            onClick = {uiState.onChangeSet ((set as SetDB).copy(goal = GoalSet.COUNT))})
 //@Composable fun TaskButtonSwitch(selected: Boolean, onClick: () -> Unit, idString: Int,){
 //    ButtonSwitch(selected = selected, idString = idString, onClick = onClick,
 //        modifier = Modifier.width(90.dp), style = MaterialTheme.typography.bodyMedium )

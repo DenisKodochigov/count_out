@@ -84,7 +84,7 @@ fun durationRound(uiState: TrainingScreenState, roundType: MutableState<RoundTyp
     uiState.training.rounds.find{ it.roundType == roundType.value }?.exercise?.forEach { exercise ->
         exercise.sets.forEach { set->
             durationRound += when (set.goal){
-                GoalSet.DURATION-> set.duration * 60
+                GoalSet.DURATION-> set.duration
                 GoalSet.COUNT-> (set.reps * set.intervalReps).roundToInt()
                 GoalSet.COUNT_GROUP -> (set.reps * set.intervalReps).roundToInt()
                 GoalSet.DISTANCE -> (set.distance * 6).roundToInt()

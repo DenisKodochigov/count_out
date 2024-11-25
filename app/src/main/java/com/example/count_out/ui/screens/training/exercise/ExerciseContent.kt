@@ -139,7 +139,7 @@ fun durationExercise( exercise: Exercise): Int{
             exercise.speech.beforeStart.duration + exercise.speech.beforeEnd.duration).toDouble()
     exercise.sets.forEach { set->
         durationExercise += when (set.goal){
-            GoalSet.DURATION-> set.duration * 60
+            GoalSet.DURATION-> set.duration
             GoalSet.COUNT-> set.reps * set.intervalReps
             GoalSet.COUNT_GROUP -> set.reps * set.intervalReps
             GoalSet.DISTANCE -> set.distance * 100

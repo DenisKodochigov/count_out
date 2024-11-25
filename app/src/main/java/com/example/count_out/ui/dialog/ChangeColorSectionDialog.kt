@@ -43,12 +43,7 @@ import com.example.count_out.ui.theme.massColor
 import com.example.count_out.ui.theme.shapes
 import com.example.count_out.ui.view_components.TextApp
 import com.example.count_out.ui.view_components.TextButtonOK
-import com.example.count_out.ui.view_components.custom_view.ArrowDown
-import com.example.count_out.ui.view_components.custom_view.ArrowLeft
-import com.example.count_out.ui.view_components.custom_view.ArrowNoneHor
-import com.example.count_out.ui.view_components.custom_view.ArrowNoneVer
-import com.example.count_out.ui.view_components.custom_view.ArrowRight
-import com.example.count_out.ui.view_components.custom_view.ArrowUp
+import com.example.count_out.ui.view_components.custom_view.IconQ
 
 @Composable
 fun ChangeColorSectionDialog(
@@ -166,9 +161,9 @@ fun ChangeColorSectionLayout(color: MutableState<Int>)
 
         Row(modifier = Modifier.fillMaxWidth(),  horizontalArrangement = Arrangement.Center) {
             if( enable ) {
-                if (direction == UPDOWN.UP) ArrowUp() else ArrowDown()
+                if (direction == UPDOWN.UP) IconQ.ArrowUp() else IconQ.ArrowDown()
             }
-            else ArrowNoneVer()
+            else IconQ.ArrowNoneVer()
         }
         if (direction == UPDOWN.DOWN && drawLine) HorizontalDivider(
             thickness = 1.dp,
@@ -189,9 +184,8 @@ fun ChangeColorSectionLayout(color: MutableState<Int>)
             )
         }
 
-        if( enable ) { if (direction == UPDOWN.START) ArrowLeft() else ArrowRight()
-        }
-        else ArrowNoneHor()
+        if( enable ) { if (direction == UPDOWN.START) IconQ.ArrowLeft() else IconQ.ArrowRight() }
+        else IconQ.ArrowNoneHor()
         if (direction == UPDOWN.END && drawLine){
             HorizontalDivider(modifier =
                 Modifier.fillMaxHeight().width(1.dp), color = MaterialTheme.colorScheme.primary)
