@@ -47,7 +47,6 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.example.count_out.R
 import com.example.count_out.entity.TagsTesting.BUTTON_OK
 import com.example.count_out.entity.TypeKeyboard
@@ -146,8 +145,6 @@ import com.example.count_out.ui.theme.mTypography
     val interactionSource = remember { MutableInteractionSource() }
     var text by rememberSaveable { mutableStateOf(if (edit) placeholder else "") }
     val enabled = typeKeyboard != TypeKeyboard.NONE
-    val paddingHor = if (textStyle.fontSize > 14.sp) 4.dp else 2.dp
-    val paddingVer = if (textStyle.fontSize > 14.sp) 6.dp else 4.dp
     val colorLine = if (visible) MaterialTheme.colorScheme.outline else Color.Transparent
     val mergedStyle = LocalTextStyle.current.merge(textStyle.copy(color = LocalContentColor.current,))
     BasicTextField(
@@ -187,8 +184,7 @@ import com.example.count_out.ui.theme.mTypography
                                     strokeWidth = strokeWidth) } }
                 ){
                     if (text.isEmpty()) {
-                        Text(text = if (edit || !visible) "" else placeholder, style = textStyle,
-                            modifier = Modifier.padding(horizontal = paddingHor, vertical = paddingVer))
+                        Text(text = if (edit || !visible) "" else placeholder, style = textStyle)
                     }
                     it()
                 }

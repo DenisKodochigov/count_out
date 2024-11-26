@@ -26,6 +26,7 @@ val interReg14 = interReg.copy(fontSize = 14.sp)
 val mTypography = Typography()
 val alumBodySmall = mTypography.bodySmall.copy(fontFamily = FontFamily(Font(R.font.alumnisans_regular)))
 val alumBodyMedium = mTypography.bodyMedium.copy(fontFamily = FontFamily(Font(R.font.alumnisans_regular)))
+val alumBodyLarge = mTypography.bodyLarge.copy(fontFamily = FontFamily(Font(R.font.alumnisans_regular)))
 
 //    headlineLarge = TextStyle(
 //        fontWeight = FontWeight.SemiBold,

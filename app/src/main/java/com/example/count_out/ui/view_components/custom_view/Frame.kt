@@ -15,6 +15,7 @@ import androidx.compose.ui.unit.dp
 
 @Composable fun Frame(
     color:Color = Color.Gray,
+    background: Color = MaterialTheme.colorScheme.background,
     modifier: Modifier = Modifier,
     shape: Shape = RoundedCornerShape(topStart = 8.dp, topEnd = 8.dp, bottomStart = 8.dp, bottomEnd = 8.dp ),
     contour: PaddingValues = PaddingValues(top = 1.dp, start = 1.dp, end = 1.dp, bottom = 1.dp),
@@ -25,9 +26,13 @@ import androidx.compose.ui.unit.dp
         modifier = modifier
         .background(color, shape = shape)
         .padding(contour)// отступ от границ фрагмента
-        .background( MaterialTheme.colorScheme.background ))}
+        .background( color = background ))}
 }
 
+//@Preview
+//@Composable fun PreviewL(){
+//    UnitSwitch(term = false, unitId1 = R.string.sec, unitId2 = R.string.min){}
+//}
 //@Composable fun Divider(direction: Direction){
 //    when (direction){
 //        Direction.Top -> { LineHorApp( dividerTopShape )}

@@ -1,6 +1,7 @@
 package com.example.count_out.ui.screens.training.set
 
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -9,7 +10,10 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.MaterialTheme.colorScheme
+import androidx.compose.material3.MaterialTheme.shapes
+import androidx.compose.material3.MaterialTheme.typography
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -17,13 +21,16 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import com.example.count_out.R
 import com.example.count_out.data.room.tables.SetDB
@@ -39,6 +46,7 @@ import com.example.count_out.entity.WeightE
 import com.example.count_out.entity.Zone
 import com.example.count_out.entity.workout.Set
 import com.example.count_out.ui.screens.training.TrainingScreenState
+import com.example.count_out.ui.theme.alumBodyLarge
 import com.example.count_out.ui.theme.alumBodyMedium
 import com.example.count_out.ui.theme.alumBodySmall
 import com.example.count_out.ui.view_components.TextApp
@@ -48,9 +56,11 @@ import com.example.count_out.ui.view_components.custom_view.IconQ
 import com.example.count_out.ui.view_components.icons.IconsCollapsing
 import com.example.count_out.ui.view_components.icons.IconsGroup
 
+val interval_between_pole = 8.dp
+
 @Composable fun SetContent(uiState: TrainingScreenState, set: Set, amountSet: Int, index: Int){
     AnimatedVisibility(modifier = Modifier.padding(horizontal = 4.dp, vertical = 1.dp), visible = true) {
-        Frame(color = MaterialTheme.colorScheme.surfaceContainerLowest, contour = contourAll1) {
+        Frame(color = colorScheme.surfaceContainerLowest, contour = contourAll1) {
             Column (horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp)) {
                 if (amountSet > 1 && uiState.listCollapsingSet.value.find { it == set.idSet } == null)
                     FirstLine(uiState, set, index)
@@ -76,13 +86,13 @@ import com.example.count_out.ui.view_components.icons.IconsGroup
             wrap = uiState.listCollapsingSet.value.find { it == set.idSet } != null )
         TextApp(
             text = "${(index + 1)}-${set.idSet}" ,
-            style = MaterialTheme.typography.displaySmall,
+            style = typography.displaySmall,
             textAlign = TextAlign.Start,
             modifier = Modifier.padding(start = 4.dp, end =16.dp))
         NumberSet(index, set)
         TextApp(
             text = textSetName,
-            style = MaterialTheme.typography.bodyLarge,
+            style = typography.bodyLarge,
             textAlign = TextAlign.Start,)
         Spacer(modifier = Modifier.weight(1f))
         IconsGroup(
@@ -97,7 +107,7 @@ import com.example.count_out.ui.view_components.icons.IconsGroup
 @Composable fun NumberSet(index: Int, set: Set) {
     TextApp(
         text = "${(index + 1)}-${set.idSet}" ,
-        style = MaterialTheme.typography.displaySmall,
+        style = typography.displaySmall,
         textAlign = TextAlign.Start,
         modifier = Modifier.padding(start = 4.dp, end =16.dp))
 }
@@ -114,27 +124,25 @@ import com.example.count_out.ui.view_components.icons.IconsGroup
     Row( horizontalArrangement = Arrangement.Center,
         verticalAlignment = Alignment.Top,
         modifier = Modifier.fillMaxWidth().padding(vertical = 12.dp)){
-        DistanceFieldText(uiState, set)
-        DistanceSwitch(uiState, set)
+        DistancePole(uiState, set)
+        RestPole(uiState, set)
     }
 }
 @Composable fun Duration(uiState: TrainingScreenState, set: Set) {
     Row( horizontalArrangement = Arrangement.Center,
         verticalAlignment = Alignment.Top,
         modifier = Modifier.fillMaxWidth().padding(vertical = 18.dp)){
-        DurationFieldText(uiState, set)
-        DurationSwitch(uiState, set)
-        WeightFieldText(uiState, set)
-        WeightSwitch(uiState, set)
+        DurationPole(uiState, set)
+        WeightPole(uiState, set)
+        RestPole(uiState, set)
     }
 }
 @Composable fun Count(uiState: TrainingScreenState, set: Set) {
     Row( horizontalArrangement = Arrangement.Center, verticalAlignment = Alignment.Top,
-        modifier = Modifier.fillMaxWidth().padding(vertical = 18.dp)){
-        IntervalFieldText(uiState, set)
-        DurationSwitch(uiState, set)
-        WeightFieldText(uiState, set)
-        WeightSwitch(uiState, set)
+        modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp)){
+        IntervalPole(uiState, set)
+        WeightPole(uiState, set)
+        RestPole(uiState, set)
     }
     Row( horizontalArrangement = Arrangement.Center, verticalAlignment = Alignment.Top,
         modifier = Modifier.fillMaxWidth().padding(bottom = 18.dp)){
@@ -143,77 +151,104 @@ import com.example.count_out.ui.view_components.icons.IconsGroup
     }
 }
 
+@Composable fun DistancePole(uiState: TrainingScreenState, set: Set){   //B7B7B7
+    Row (verticalAlignment = Alignment.Top,
+        modifier = Modifier.background(color = Color.White, shape = shapes.small)
+            .padding(vertical = 8.dp, horizontal = 8.dp)) {
+        DistanceFieldText(uiState, set)
+        DistanceSwitch(uiState, set)
+    }
+}
 @Composable fun DistanceFieldText(uiState: TrainingScreenState, set: Set){   //B7B7B7
-    FieldText( idText = R.string.distance, start = 0.dp,typeKey = TypeKeyboard.DIGIT,
+    FieldText( idText = R.string.distance, typeKey = TypeKeyboard.DIGIT,
         placeholder = "${ if (set.distanceE == DistanceE.M) set.distance else set.distance/1000 }",
         onChange = { uiState.onChangeSet ((set as SetDB).copy(distance =
         if (set.distanceE == DistanceE.M) it.toDoubleMy() else it.toDoubleMy() * 1000)) },)
 }
 @Composable fun DistanceSwitch(uiState: TrainingScreenState, set: Set){
     Row(verticalAlignment = Alignment.CenterVertically,
-        modifier = Modifier.padding(start = 12.dp, top=6.dp, end= 6.dp)){
-        DistanceButtonSwitch(selected = set.distanceE == DistanceE.M, idString = R.string.m,
+        modifier = Modifier.padding(start = 12.dp, top=2.dp, end= 6.dp)){
+        ButtonSwitch(selected = set.distanceE == DistanceE.M, idString = R.string.m,
             onClick = {uiState.onChangeSet ((set as SetDB).copy(distanceE = DistanceE.M))})
-        DistanceButtonSwitch(selected = set.distanceE == DistanceE.KM, idString = R.string.km,
+        ButtonSwitch(selected = set.distanceE == DistanceE.KM, idString = R.string.km,
             onClick = {uiState.onChangeSet ((set as SetDB).copy(distanceE = DistanceE.KM))})
     }
 }
-@Composable fun DistanceButtonSwitch(selected: Boolean, onClick: () -> Unit, idString: Int,){
-    ButtonSwitch(selected = selected, idString = idString, onClick = onClick,
-        modifier = Modifier.width(35.dp), style = MaterialTheme.typography.bodySmall)
-}
 
+@Composable fun DurationPole(uiState: TrainingScreenState, set: Set){   //B7B7B7
+    Row (verticalAlignment = Alignment.Top,
+        modifier = Modifier.background(color = Color.White, shape = shapes.small)
+            .padding(vertical = 8.dp, horizontal = 8.dp)) {
+        DurationFieldText(uiState, set)
+        DurationSwitch(uiState, set)
+    }
+}
 @Composable fun DurationFieldText(uiState: TrainingScreenState, set: Set){   //B7B7B7
-    FieldText( idText = R.string.duration, start = 0.dp,typeKey = TypeKeyboard.DIGIT,
+    FieldText( idText = R.string.duration, typeKey = TypeKeyboard.DIGIT,
         placeholder = setDurationToMin(set),
         onChange = {uiState.onChangeSet ((set as SetDB).copy( duration = setDurationToSec(set) * it.toInt()))},)
 }
 @Composable fun DurationSwitch( uiState: TrainingScreenState, set: Set){
-    Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.padding(start = 12.dp, top=6.dp)){
-        DurationButtonSwitch(selected = set.durationE == TimeE.SEC, idString = R.string.sec,
+    Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.padding(start = 12.dp, top=2.dp)){
+        ButtonSwitch(selected = set.durationE == TimeE.SEC, idString = R.string.sec,
             onClick = {uiState.onChangeSet ((set as SetDB).copy(durationE = TimeE.SEC))})
-        DurationButtonSwitch(selected = set.durationE == TimeE.MIN, idString = R.string.min,
+        ButtonSwitch(selected = set.durationE == TimeE.MIN, idString = R.string.min,
             onClick = {uiState.onChangeSet ((set as SetDB).copy(durationE = TimeE.MIN))})
     }
 }
-@Composable fun DurationButtonSwitch(selected: Boolean, onClick: () -> Unit, idString: Int,){
-    ButtonSwitch(selected = selected, idString = idString, onClick = onClick,
-        modifier = Modifier.width(35.dp), style = MaterialTheme.typography.bodySmall)
+
+@Composable fun IntervalPole(uiState: TrainingScreenState, set: Set){   //B7B7B7
+    PoleInput(
+        unitId1 = R.string.sec,
+        headId = R.string.interval,
+        term = true,
+        placeholder = "${ set.intervalReps }",
+        modifier = Modifier,
+        typeKey = TypeKeyboard.DIGIT,
+        onChangeValue = { uiState.onChangeSet ((set as SetDB).copy(intervalReps = it.toDoubleMy() )) },
+        onChangeUnit = { }
+    )
+}
+@Composable fun WeightPole(uiState: TrainingScreenState, set: Set){   //B7B7B7
+    PoleInput(
+        unitId1 = R.string.gr,
+        unitId2 = R.string.kg,
+        headId = R.string.weight,
+        term = set.weightE == WeightE.GR,
+        placeholder = "${ if (set.weightE == WeightE.GR) set.weight else set.weight/1000 }",
+        modifier = Modifier,
+        typeKey = TypeKeyboard.DIGIT,
+        onChangeValue = { uiState.onChangeSet ((set as SetDB).copy(
+            weight = (if (set.weightE == WeightE.GR) 1 else 1000) * it.toIntMy() )) },
+        onChangeUnit = {uiState.onChangeSet ((set as SetDB).copy(
+            weightE = if (set.weightE == WeightE.GR) WeightE.KG else WeightE.GR)) }
+    )
 }
 
 @Composable fun CountFieldText(uiState: TrainingScreenState, set: Set){   //B7B7B7
-    FieldText( idText = R.string.count, start = 0.dp,typeKey = TypeKeyboard.DIGIT, placeholder = "${ set.reps }",
+    FieldText( idText = R.string.count, typeKey = TypeKeyboard.DIGIT, placeholder = "${ set.reps }",
         onChange = { uiState.onChangeSet ((set as SetDB).copy(reps = it.toIntMy()))  },)
 }
 @Composable fun CountGroupFieldText(uiState: TrainingScreenState, set: Set){   //B7B7B7
-    FieldText( idText = R.string.counts_by_group_add, start = 12.dp,
+    FieldText( idText = R.string.counts_by_group_add,
         placeholder = set.groupCount,
         onChange = { uiState.onChangeSet ((set as SetDB).copy(groupCount = it)) },)
 }
-@Composable fun IntervalFieldText(uiState: TrainingScreenState, set: Set){   //B7B7B7
-    FieldText( idText = R.string.interval, start = 0.dp, typeKey = TypeKeyboard.DIGIT,
-        placeholder = "${ if (set.durationE == TimeE.SEC) set.duration else set.duration*60 }",
-        onChange = { uiState.onChangeSet ((set as SetDB).copy(intervalReps = it.toDoubleMy() ))},)
-}
 
-@Composable fun WeightFieldText(uiState: TrainingScreenState, set: Set){   //B7B7B7
-    FieldText( idText = R.string.weight, start = 36.dp, typeKey = TypeKeyboard.DIGIT,
-        placeholder = "${ if (set.weightE == WeightE.GR) set.weight else set.weight/1000 }",
-        onChange = { uiState.onChangeSet ((set as SetDB).copy( weight =
-        (if (set.weightE == WeightE.GR) 1 else 1000) * it.toIntMy() )) },)
-}
-@Composable fun WeightSwitch(uiState: TrainingScreenState, set: Set){
-    Row(verticalAlignment = Alignment.CenterVertically,
-        modifier = Modifier.padding(start = 12.dp, top=6.dp, end = 6.dp)){
-        WeightButtonSwitch(selected = set.weightE == WeightE.GR, idString = R.string.gr,
-            onClick = {uiState.onChangeSet ((set as SetDB).copy(weightE = WeightE.GR))})
-        WeightButtonSwitch(selected = set.weightE == WeightE.KG, idString = R.string.kg,
-            onClick = {uiState.onChangeSet ((set as SetDB).copy(weightE = WeightE.KG))})
-    }
-}
-@Composable fun WeightButtonSwitch(selected: Boolean, onClick: () -> Unit, idString: Int,){
-    ButtonSwitch(selected = selected, idString = idString, onClick = onClick,
-        style = MaterialTheme.typography.bodySmall, modifier = Modifier.width(35.dp))
+@Composable fun RestPole(uiState: TrainingScreenState, set: Set){   //B7B7B7
+    PoleInput(
+        unitId1 = R.string.sec,
+        unitId2 = R.string.min,
+        headId = R.string.rest_time,
+        term = set.timeRestE == TimeE.SEC,
+        placeholder =  "${ if (set.timeRestE == TimeE.SEC) set.timeRest else set.timeRest/60 }",
+        modifier = Modifier,
+        typeKey = TypeKeyboard.DIGIT,
+        onChangeValue = { uiState.onChangeSet ((set as SetDB).copy(
+            timeRest = (if (set.timeRestE == TimeE.SEC) 1 else 1000) * it.toIntMy() )) },
+        onChangeUnit = {uiState.onChangeSet ((set as SetDB).copy(
+            timeRestE = if (set.timeRestE == TimeE.SEC) TimeE.MIN else TimeE.SEC)) }
+    )
 }
 
 @Composable fun TaskSwitch(uiState: TrainingScreenState, set: Set, index: Int, amountSet: Int){
@@ -243,7 +278,6 @@ import com.example.count_out.ui.view_components.icons.IconsGroup
                 uiState.showSpeechSet.value = true},)
     }
 }
-
 @Composable fun ZoneSwitch(uiState: TrainingScreenState, set: Set){
     Row(verticalAlignment = Alignment.CenterVertically){
         Spacer(modifier = Modifier.weight(1f))
@@ -266,25 +300,79 @@ import com.example.count_out.ui.view_components.icons.IconsGroup
 }
 
 @Composable fun ButtonSwitch(
-    selected: Boolean, onClick: () -> Unit, modifier: Modifier, idString: Int, style: TextStyle){
-    Frame (color = MaterialTheme.colorScheme.outline,
-        contour = if (selected) contourAll1 else contourBot1) {
-        TextApp( modifier = modifier.padding(vertical = 2.dp, horizontal = 2.dp).clickable { onClick() },
+    color: Color = colorScheme.outline,
+    background: Color = colorScheme.background,
+    selected: Boolean = false,
+    onClick: () -> Unit = {},
+    modifier: Modifier = Modifier.width(35.dp).padding(vertical = 2.dp, horizontal = 2.dp),
+    idString: Int,
+    style: TextStyle = typography.bodySmall)
+{
+    Frame (color = color, contour = if (selected) contourAll1 else contourBot1,
+            background = background,) {
+        TextApp( modifier = modifier.clickable { onClick() },
             fontWeight =  if (selected) FontWeight.Bold else FontWeight.Normal,
             style = style,
             text = stringResource(idString))
     }
 }
+
+@Composable fun PoleInput(
+    unitId1: Int,
+    unitId2: Int = R.string.no,
+    headId: Int,
+    term: Boolean,
+    placeholder: String,
+    modifier: Modifier = Modifier,
+    typeKey: TypeKeyboard = TypeKeyboard.TEXT,
+    onChangeValue: (String)-> Unit,
+    onChangeUnit: ()-> Unit,
+){
+    Column (horizontalAlignment = Alignment.CenterHorizontally,
+        modifier = Modifier
+            .padding(start = interval_between_pole)
+            .background(color = colorScheme.onSecondary, shape = shapes.small)
+            .padding(top = 2.dp, bottom = 6.dp, start = 4.dp, end = 4.dp)
+    ) {
+        TextApp(text = stringResource(headId), textAlign = TextAlign.Center, style = alumBodySmall)
+        Row (verticalAlignment = Alignment.Top,
+        ) {
+            TextFieldApp(
+                typeKeyboard = typeKey,
+                contentAlignment = Alignment.Center,
+                textStyle = typography.bodyLarge.copy(textAlign = TextAlign.Center),
+                onChangeValue = { onChangeValue(it) },
+                placeholder = placeholder,
+            )
+            Text(
+                buildAnnotatedString {
+                    append("(")
+                    withStyle(style = SpanStyle(fontWeight = if (term) FontWeight.Normal else FontWeight.ExtraBold))
+                    { append(stringResource(unitId1)) }
+                    if (unitId2 != R.string.no) {
+                        append("/")
+                        withStyle(style = SpanStyle(
+                            fontWeight = if (term) FontWeight.ExtraBold else FontWeight.Normal))
+                        { append(stringResource(unitId2)) }
+                    }
+                    append(")")},
+                modifier = Modifier.padding(start = 2.dp, top = 2.dp).clickable{ onChangeUnit() },
+                style = alumBodyLarge,
+                color = colorScheme.outline
+            )
+        }
+    }
+}
 @Composable fun FieldText (typeKey: TypeKeyboard = TypeKeyboard.TEXT,
-    placeholder: String, idText: Int, start: Dp, onChange: (String)-> Unit )
+    placeholder: String, idText: Int, onChange: (String)-> Unit,)
 {
     val density = LocalDensity.current.density
     var width by remember { mutableStateOf( 40.dp) }
-    Column (horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.padding(start = start)) {
+    Column (horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.padding(start = 12.dp)) {
         TextFieldApp(
             typeKeyboard = typeKey,
             contentAlignment = Alignment.Center,
-            textStyle = MaterialTheme.typography.bodyLarge.copy(textAlign = TextAlign.Center),
+            textStyle = typography.bodyLarge.copy(textAlign = TextAlign.Center),
             onChangeValue = {onChange(it)},
             placeholder = placeholder,
             width = width
@@ -318,7 +406,7 @@ fun setCollapsing(uiState: TrainingScreenState, set: Set) {
 //            onClick = {uiState.onChangeSet ((set as SetDB).copy(goal = GoalSet.COUNT))})
 //@Composable fun TaskButtonSwitch(selected: Boolean, onClick: () -> Unit, idString: Int,){
 //    ButtonSwitch(selected = selected, idString = idString, onClick = onClick,
-//        modifier = Modifier.width(90.dp), style = MaterialTheme.typography.bodyMedium )
+//        modifier = Modifier.width(90.dp), style = typography.bodyMedium )
 //}
 //#####################################Old#########################################################
 //@Composable fun AdditionalInformation1(uiState: TrainingScreenState, set: Set, amountSet: Int){
@@ -518,7 +606,7 @@ fun setCollapsing(uiState: TrainingScreenState, set: Set) {
 //        alpha = containerColor.alpha
 //    )
 //    Card(
-//        shape = MaterialTheme.shapes.extraSmall,
+//        shape = shapes.extraSmall,
 //        elevation = elevationTraining(),
 //        colors = CardDefaults.cardColors(
 //            containerColor = if (selected) containerColorSelected else containerColor),

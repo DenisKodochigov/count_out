@@ -40,6 +40,7 @@
     <string name="work_out">Основнная часть</string>
     <string name="work_down">Заминка</string>
     <string name="weight">Вес</string>
+    <string name="rest">Отдыха</string>
     <string name="intensity">Интенсивность</string>
     <string name="distance">Расстояние</string>
     <string name="duration_of_the_approach">Длительность подхода</string>
@@ -74,7 +75,7 @@
     <string name="add_ring">Добавить круг</string>
     <string name="count">Отсчеты</string>
     <string name="next_exercise">Подготовьтесь к упражнению  </string>
-    <string name="rest_time">секунд отдыха.</string>
+    <string name="rest_time">Время отдыха.</string>
     <string name="section_heart_rate">Доступные устройства.</string>
     <string name="heart_rate_device">Датчик пульса.</string>
     <string name="not_select_device">Нет выбранных устройств.</string>
