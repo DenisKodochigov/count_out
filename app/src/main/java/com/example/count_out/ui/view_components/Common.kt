@@ -11,7 +11,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.text.BasicTextField
@@ -21,8 +20,6 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.RadioButton
-import androidx.compose.material3.RadioButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -34,7 +31,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
-import androidx.compose.ui.draw.scale
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
@@ -44,15 +40,12 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.VisualTransformation
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.example.count_out.R
 import com.example.count_out.entity.TagsTesting.BUTTON_OK
 import com.example.count_out.entity.TypeKeyboard
 import com.example.count_out.ui.theme.Dimen
-import com.example.count_out.ui.theme.interLight12
-import com.example.count_out.ui.theme.interReg12
 import com.example.count_out.ui.theme.mTypography
 
 
@@ -99,32 +92,6 @@ import com.example.count_out.ui.theme.mTypography
         }
     }
 }
-@Composable fun TextStringAndField(
-    text:String,
-    fieldTextAlign: TextAlign = TextAlign.Center,
-    placeholder: String,
-    onChangeValue:(String)->Unit = {},
-    editing: Boolean,
-    visibleField: Boolean = true
-){
-    Row(verticalAlignment = Alignment.CenterVertically) {
-        TextApp(
-            text = text,
-            modifier = Modifier.weight(1f),
-            maxLines = 2,
-            style = interReg12,
-            textAlign = TextAlign.Start,
-        )
-        TextFieldApp(
-            placeholder = placeholder,
-            typeKeyboard = if (editing) TypeKeyboard.DIGIT else TypeKeyboard.NONE,
-            modifier = Modifier.width(50.dp),
-            textStyle = interLight12.copy(textAlign = fieldTextAlign),
-            onChangeValue = onChangeValue,
-            visible = visibleField
-        )
-    }
-}
 @Composable fun TextFieldApp(
     modifier: Modifier = Modifier,
     typeKeyboard: TypeKeyboard,
@@ -136,7 +103,7 @@ import com.example.count_out.ui.theme.mTypography
     maxLines: Int = 1,
     onChangeValue:(String)->Unit = {},
     edit: Boolean = false,
-    visible: Boolean = true,
+    colorLine: Color = MaterialTheme.colorScheme.surfaceContainerLowest,
     width: Dp = 40.dp
 ){
 
@@ -145,7 +112,6 @@ import com.example.count_out.ui.theme.mTypography
     val interactionSource = remember { MutableInteractionSource() }
     var text by rememberSaveable { mutableStateOf(if (edit) placeholder else "") }
     val enabled = typeKeyboard != TypeKeyboard.NONE
-    val colorLine = if (visible) MaterialTheme.colorScheme.outline else Color.Transparent
     val mergedStyle = LocalTextStyle.current.merge(textStyle.copy(color = LocalContentColor.current,))
     BasicTextField(
         value = text,
@@ -184,7 +150,7 @@ import com.example.count_out.ui.theme.mTypography
                                     strokeWidth = strokeWidth) } }
                 ){
                     if (text.isEmpty()) {
-                        Text(text = if (edit || !visible) "" else placeholder, style = textStyle)
+                        Text(text = if (edit) "" else placeholder, style = textStyle)
                     }
                     it()
                 }
@@ -192,43 +158,12 @@ import com.example.count_out.ui.theme.mTypography
         },
     )
 }
-@Composable fun RadioButtonApp(
-    radioButtonId: Int,
-    state: Int,
-    onClick:()->Unit,
-    contextRight: @Composable ()->Unit,
-    contextBottom: @Composable ()->Unit
-){
-    val sizeRadioButton = 12.dp
-    Column(){
-        Row(verticalAlignment = Alignment.CenterVertically)
-        {
-            RadioButton(
-                selected = radioButtonId == state,
-                enabled = true,
-                onClick = onClick,
-                modifier = Modifier
-                    .size(sizeRadioButton)
-                    .scale(0.8f),
-                colors = RadioButtonDefaults.colors(
-                    selectedColor = MaterialTheme.colorScheme.onPrimary,
-                    unselectedColor = MaterialTheme.colorScheme.onPrimary
-                )
-            )
-            Spacer(modifier = Modifier.width(6.dp))
-            contextRight()
-        }
-    }
-    contextBottom()
-}
-@Composable
-fun ButtonConfirm(onConfirm: ()->Unit)
+@Composable fun ButtonConfirm(onConfirm: ()->Unit)
 {
     Spacer(modifier = Modifier.height(Dimen.bsItemPaddingVer))
     ButtonApp(text = stringResource(id = R.string.ok), onClick = onConfirm )
 }
-@Composable
-fun ButtonsOkCancel(onConfirm: ()->Unit, onDismiss: ()->Unit)
+@Composable fun ButtonsOkCancel(onConfirm: ()->Unit, onDismiss: ()->Unit)
 {
     Spacer(modifier = Modifier.height(Dimen.bsItemPaddingVer))
     Row(horizontalArrangement = Arrangement.Center,
@@ -239,6 +174,59 @@ fun ButtonsOkCancel(onConfirm: ()->Unit, onDismiss: ()->Unit)
     }
 }
 
+//@Composable fun TextStringAndField(
+//    text:String,
+//    fieldTextAlign: TextAlign = TextAlign.Center,
+//    placeholder: String,
+//    onChangeValue:(String)->Unit = {},
+//    editing: Boolean,
+//){
+//    Row(verticalAlignment = Alignment.CenterVertically) {
+//        TextApp(
+//            text = text,
+//            modifier = Modifier.weight(1f),
+//            maxLines = 2,
+//            style = interReg12,
+//            textAlign = TextAlign.Start,
+//        )
+//        TextFieldApp(
+//            placeholder = placeholder,
+//            typeKeyboard = if (editing) TypeKeyboard.DIGIT else TypeKeyboard.NONE,
+//            modifier = Modifier.width(50.dp),
+//            textStyle = interLight12.copy(textAlign = fieldTextAlign),
+//            onChangeValue = onChangeValue,
+//        )
+//    }
+//}
+//@Composable fun RadioButtonApp(
+//    radioButtonId: Int,
+//    state: Int,
+//    onClick:()->Unit,
+//    contextRight: @Composable ()->Unit,
+//    contextBottom: @Composable ()->Unit
+//){
+//    val sizeRadioButton = 12.dp
+//    Column(){
+//        Row(verticalAlignment = Alignment.CenterVertically)
+//        {
+//            RadioButton(
+//                selected = radioButtonId == state,
+//                enabled = true,
+//                onClick = onClick,
+//                modifier = Modifier
+//                    .size(sizeRadioButton)
+//                    .scale(0.8f),
+//                colors = RadioButtonDefaults.colors(
+//                    selectedColor = MaterialTheme.colorScheme.onPrimary,
+//                    unselectedColor = MaterialTheme.colorScheme.onPrimary
+//                )
+//            )
+//            Spacer(modifier = Modifier.width(6.dp))
+//            contextRight()
+//        }
+//    }
+//    contextBottom()
+//}
 //@Composable fun MyOutlinedTextFieldWithoutIcon(
 //    modifier: Modifier,
 //    enterValue: MutableState<String>,

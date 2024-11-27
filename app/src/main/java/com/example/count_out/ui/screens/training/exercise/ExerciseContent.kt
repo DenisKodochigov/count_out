@@ -76,15 +76,16 @@ fun ListExercises(
             onClick = {exerciseCollapsing(uiState, exercise) },
             wrap = uiState.listCollapsingExercise.value.find { it == exercise.idExercise } != null )
         Spacer(modifier = Modifier.width(2.dp))
-        TextApp(
-            text = exercise.activity.name,
-            textAlign = TextAlign.Start,
-            style = MaterialTheme.typography.titleMedium,
-            modifier = Modifier.weight(1f))
         Column {
+            TextApp(
+                text = exercise.activity.name,
+                textAlign = TextAlign.Start,
+                style = MaterialTheme.typography.titleMedium,
+                modifier = Modifier)
             TextApp( style = MaterialTheme.typography.bodySmall, fontWeight = FontWeight.Light,
                 text = "${ stringResource(id = R.string.sets) }: $amountSets/" +
                         "$countTime ${ stringResource(id = R.string.min)}",) }
+        Spacer(modifier = Modifier.weight(1f))
         IconsGroup(
             onClickCopy = { uiState.onCopyExercise(uiState.training.idTraining, exercise.idExercise)},
             onClickDelete = { uiState.onDeleteExercise(uiState.training.idTraining, exercise.idExercise) },

@@ -73,8 +73,9 @@ val interval_between_pole = 8.dp
         }
     }
 }
+//${ if (set.distanceE == DistanceE.KM) set.distance/1000 else set.distance }
 @Composable fun FirstLine(uiState: TrainingScreenState, set: Set, index: Int) {
-    val textSetName = when (set.goal) {
+    val setInfo = when (set.goal) {
         GoalSet.DISTANCE -> viewDistance(set) + stringResource(id = set.distanceE.id)
         GoalSet.DURATION -> "${set.duration/60} ${stringResource(id = R.string.min)}"
         GoalSet.COUNT -> "${stringResource(id = R.string.count)}: ${set.reps}"
@@ -85,16 +86,16 @@ val interval_between_pole = 8.dp
             onClick = { setCollapsing(uiState, set) },
             wrap = uiState.listCollapsingSet.value.find { it == set.idSet } != null )
         TextApp(
-            text = "${(index + 1)}-${set.idSet}" ,
-            style = typography.displaySmall,
+            text = "${(index + 1)}" ,
+            style = typography.titleMedium,
             textAlign = TextAlign.Start,
             modifier = Modifier.padding(start = 4.dp, end =16.dp))
-        NumberSet(index, set)
-        TextApp(
-            text = textSetName,
-            style = typography.bodyLarge,
-            textAlign = TextAlign.Start,)
         Spacer(modifier = Modifier.weight(1f))
+        TextApp(
+            text = setInfo,
+            style = typography.bodySmall,
+            fontWeight = FontWeight.Light,
+            textAlign = TextAlign.Start,)
         IconsGroup(
             onClickCopy = { uiState.onCopySet(uiState.training.idTraining, set.idSet) },
             onClickDelete = { uiState.onDeleteSet(uiState.training.idTraining, set.idSet) },
@@ -103,13 +104,6 @@ val interval_between_pole = 8.dp
                 uiState.showSpeechSet.value = true},
         )
     }
-}
-@Composable fun NumberSet(index: Int, set: Set) {
-    TextApp(
-        text = "${(index + 1)}-${set.idSet}" ,
-        style = typography.displaySmall,
-        textAlign = TextAlign.Start,
-        modifier = Modifier.padding(start = 4.dp, end =16.dp))
 }
 @Composable fun BodySet( uiState: TrainingScreenState, set: Set){
     when (set.goal){
@@ -140,9 +134,9 @@ val interval_between_pole = 8.dp
 @Composable fun Count(uiState: TrainingScreenState, set: Set) {
     Row( horizontalArrangement = Arrangement.Center, verticalAlignment = Alignment.Top,
         modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp)){
-        IntervalPole(uiState, set)
-        WeightPole(uiState, set)
-        RestPole(uiState, set)
+        IntervalPole(uiState, set, Modifier.weight(1f))
+        WeightPole(uiState, set, Modifier.weight(1f))
+        RestPole(uiState, set, Modifier.weight(1f))
     }
     Row( horizontalArrangement = Arrangement.Center, verticalAlignment = Alignment.Top,
         modifier = Modifier.fillMaxWidth().padding(bottom = 18.dp)){
@@ -151,77 +145,77 @@ val interval_between_pole = 8.dp
     }
 }
 
-@Composable fun DistancePole(uiState: TrainingScreenState, set: Set){   //B7B7B7
-    Row (verticalAlignment = Alignment.Top,
-        modifier = Modifier.background(color = Color.White, shape = shapes.small)
-            .padding(vertical = 8.dp, horizontal = 8.dp)) {
-        DistanceFieldText(uiState, set)
-        DistanceSwitch(uiState, set)
-    }
+@Composable fun DistancePole(uiState: TrainingScreenState, set: Set, modifier: Modifier = Modifier,){   //B7B7B7
+    PoleInput(
+        unitId1 = R.string.m,
+        unitId2 = R.string.km,
+        headId = R.string.distance,
+        term = set.distanceE == DistanceE.M,
+        placeholder = "${if (set.distanceE == DistanceE.M) set.distance else set.distance/1000 }",
+        modifier = modifier,
+        typeKey = TypeKeyboard.DIGIT,
+        onChangeValue = { uiState.onChangeSet ((set as SetDB).copy(
+            distance = (if (set.distanceE == DistanceE.M) 1 else 1000 )* it.toDoubleMy())) },
+        onChangeUnit = {uiState.onChangeSet ((set as SetDB).copy(
+            distanceE = if (set.distanceE == DistanceE.M) DistanceE.KM else DistanceE.M)) }
+    )
 }
-@Composable fun DistanceFieldText(uiState: TrainingScreenState, set: Set){   //B7B7B7
-    FieldText( idText = R.string.distance, typeKey = TypeKeyboard.DIGIT,
-        placeholder = "${ if (set.distanceE == DistanceE.M) set.distance else set.distance/1000 }",
-        onChange = { uiState.onChangeSet ((set as SetDB).copy(distance =
-        if (set.distanceE == DistanceE.M) it.toDoubleMy() else it.toDoubleMy() * 1000)) },)
+@Composable fun DurationPole(uiState: TrainingScreenState, set: Set, modifier: Modifier = Modifier){   //B7B7B7
+    PoleInput(
+        unitId1 = R.string.sec,
+        unitId2 = R.string.min,
+        headId = R.string.duration,
+        term = set.durationE == TimeE.SEC,
+        placeholder = "${ if (set.durationE == TimeE.MIN) set.duration/60 else set.duration}",
+        modifier = modifier,
+        typeKey = TypeKeyboard.DIGIT,
+        onChangeValue = { uiState.onChangeSet ((set as SetDB).copy(
+            duration = (if (set.durationE == TimeE.MIN) 60 else 1) * it.toInt())) },
+        onChangeUnit = {uiState.onChangeSet ((set as SetDB).copy(
+            durationE = if (set.durationE == TimeE.SEC) TimeE.MIN else TimeE.SEC)) }
+    )
 }
-@Composable fun DistanceSwitch(uiState: TrainingScreenState, set: Set){
-    Row(verticalAlignment = Alignment.CenterVertically,
-        modifier = Modifier.padding(start = 12.dp, top=2.dp, end= 6.dp)){
-        ButtonSwitch(selected = set.distanceE == DistanceE.M, idString = R.string.m,
-            onClick = {uiState.onChangeSet ((set as SetDB).copy(distanceE = DistanceE.M))})
-        ButtonSwitch(selected = set.distanceE == DistanceE.KM, idString = R.string.km,
-            onClick = {uiState.onChangeSet ((set as SetDB).copy(distanceE = DistanceE.KM))})
-    }
-}
-
-@Composable fun DurationPole(uiState: TrainingScreenState, set: Set){   //B7B7B7
-    Row (verticalAlignment = Alignment.Top,
-        modifier = Modifier.background(color = Color.White, shape = shapes.small)
-            .padding(vertical = 8.dp, horizontal = 8.dp)) {
-        DurationFieldText(uiState, set)
-        DurationSwitch(uiState, set)
-    }
-}
-@Composable fun DurationFieldText(uiState: TrainingScreenState, set: Set){   //B7B7B7
-    FieldText( idText = R.string.duration, typeKey = TypeKeyboard.DIGIT,
-        placeholder = setDurationToMin(set),
-        onChange = {uiState.onChangeSet ((set as SetDB).copy( duration = setDurationToSec(set) * it.toInt()))},)
-}
-@Composable fun DurationSwitch( uiState: TrainingScreenState, set: Set){
-    Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.padding(start = 12.dp, top=2.dp)){
-        ButtonSwitch(selected = set.durationE == TimeE.SEC, idString = R.string.sec,
-            onClick = {uiState.onChangeSet ((set as SetDB).copy(durationE = TimeE.SEC))})
-        ButtonSwitch(selected = set.durationE == TimeE.MIN, idString = R.string.min,
-            onClick = {uiState.onChangeSet ((set as SetDB).copy(durationE = TimeE.MIN))})
-    }
-}
-
-@Composable fun IntervalPole(uiState: TrainingScreenState, set: Set){   //B7B7B7
+@Composable fun IntervalPole(uiState: TrainingScreenState, set: Set, modifier: Modifier = Modifier){   //B7B7B7
     PoleInput(
         unitId1 = R.string.sec,
         headId = R.string.interval,
         term = true,
         placeholder = "${ set.intervalReps }",
-        modifier = Modifier,
+        modifier = modifier,
         typeKey = TypeKeyboard.DIGIT,
         onChangeValue = { uiState.onChangeSet ((set as SetDB).copy(intervalReps = it.toDoubleMy() )) },
         onChangeUnit = { }
     )
 }
-@Composable fun WeightPole(uiState: TrainingScreenState, set: Set){   //B7B7B7
+@Composable fun WeightPole(uiState: TrainingScreenState, set: Set, modifier: Modifier = Modifier){   //B7B7B7
     PoleInput(
         unitId1 = R.string.gr,
         unitId2 = R.string.kg,
         headId = R.string.weight,
         term = set.weightE == WeightE.GR,
-        placeholder = "${ if (set.weightE == WeightE.GR) set.weight else set.weight/1000 }",
-        modifier = Modifier,
+        placeholder = "${ if (set.weightE == WeightE.GR) set.weight else set.weight/1000.0 }",
+        modifier = modifier,
         typeKey = TypeKeyboard.DIGIT,
         onChangeValue = { uiState.onChangeSet ((set as SetDB).copy(
-            weight = (if (set.weightE == WeightE.GR) 1 else 1000) * it.toIntMy() )) },
+            weight = ((if (set.weightE == WeightE.GR) 1 else 1000) * it.toDoubleMy()).toInt() ))},
         onChangeUnit = {uiState.onChangeSet ((set as SetDB).copy(
             weightE = if (set.weightE == WeightE.GR) WeightE.KG else WeightE.GR)) }
+    )
+
+}
+@Composable fun RestPole(uiState: TrainingScreenState, set: Set, modifier: Modifier = Modifier){
+    PoleInput(
+        unitId1 = R.string.sec,
+        unitId2 = R.string.min,
+        headId = R.string.rest_time,
+        term = set.timeRestE == TimeE.SEC,
+        placeholder =  "${ if (set.timeRestE == TimeE.SEC) set.timeRest else set.timeRest/60 }",
+        modifier = modifier,
+        typeKey = TypeKeyboard.DIGIT,
+        onChangeValue = { uiState.onChangeSet ((set as SetDB).copy(
+            timeRest = (if (set.timeRestE == TimeE.SEC) 1 else 60) * it.toIntMy() )) },
+        onChangeUnit = {uiState.onChangeSet ((set as SetDB).copy(
+            timeRestE = if (set.timeRestE == TimeE.SEC) TimeE.MIN else TimeE.SEC)) }
     )
 }
 
@@ -235,22 +229,6 @@ val interval_between_pole = 8.dp
         onChange = { uiState.onChangeSet ((set as SetDB).copy(groupCount = it)) },)
 }
 
-@Composable fun RestPole(uiState: TrainingScreenState, set: Set){   //B7B7B7
-    PoleInput(
-        unitId1 = R.string.sec,
-        unitId2 = R.string.min,
-        headId = R.string.rest_time,
-        term = set.timeRestE == TimeE.SEC,
-        placeholder =  "${ if (set.timeRestE == TimeE.SEC) set.timeRest else set.timeRest/60 }",
-        modifier = Modifier,
-        typeKey = TypeKeyboard.DIGIT,
-        onChangeValue = { uiState.onChangeSet ((set as SetDB).copy(
-            timeRest = (if (set.timeRestE == TimeE.SEC) 1 else 1000) * it.toIntMy() )) },
-        onChangeUnit = {uiState.onChangeSet ((set as SetDB).copy(
-            timeRestE = if (set.timeRestE == TimeE.SEC) TimeE.MIN else TimeE.SEC)) }
-    )
-}
-
 @Composable fun TaskSwitch(uiState: TrainingScreenState, set: Set, index: Int, amountSet: Int){
     Row(verticalAlignment = Alignment.CenterVertically){
         if (amountSet > 1){
@@ -258,7 +236,11 @@ val interval_between_pole = 8.dp
                 onClick = { setCollapsing(uiState, set) },
                 wrap = uiState.listCollapsingSet.value.find { it == set.idSet } != null )
         }
-        NumberSet(index, set)
+        TextApp(
+            text = "${(index + 1)}" ,
+            style = typography.displayMedium,
+            textAlign = TextAlign.Start,
+            modifier = Modifier.padding(start = 4.dp, end =16.dp))
         Spacer(modifier = Modifier.weight(1f))
         IconQ.Duration(selected = set.goal == GoalSet.DURATION,
             onClick = {uiState.onChangeSet ((set as SetDB).copy(goal = GoalSet.DURATION))},)
@@ -329,7 +311,7 @@ val interval_between_pole = 8.dp
     onChangeUnit: ()-> Unit,
 ){
     Column (horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = Modifier
+        modifier = modifier
             .padding(start = interval_between_pole)
             .background(color = colorScheme.onSecondary, shape = shapes.small)
             .padding(top = 2.dp, bottom = 6.dp, start = 4.dp, end = 4.dp)
@@ -347,12 +329,12 @@ val interval_between_pole = 8.dp
             Text(
                 buildAnnotatedString {
                     append("(")
-                    withStyle(style = SpanStyle(fontWeight = if (term) FontWeight.Normal else FontWeight.ExtraBold))
+                    withStyle(style = SpanStyle(fontWeight = if (term) FontWeight.ExtraBold else FontWeight.Normal))
                     { append(stringResource(unitId1)) }
                     if (unitId2 != R.string.no) {
                         append("/")
                         withStyle(style = SpanStyle(
-                            fontWeight = if (term) FontWeight.ExtraBold else FontWeight.Normal))
+                            fontWeight = if (term) FontWeight.Normal else FontWeight.ExtraBold))
                         { append(stringResource(unitId2)) }
                     }
                     append(")")},
@@ -381,9 +363,6 @@ val interval_between_pole = 8.dp
             modifier = Modifier.onGloballyPositioned { width = (it.size.width / density).dp },)
     }
 }
-fun setDurationToMin(set: Set):String{
-    return "${ if (set.durationE == TimeE.MIN) set.duration/60 else set.duration}" }
-fun setDurationToSec(set: Set,) = if (set.durationE == TimeE.MIN) 60 else 1
 fun viewDistance(set:Set):String {
     return "${ if (set.distanceE == DistanceE.KM) set.distance/1000 else set.distance }"
 }

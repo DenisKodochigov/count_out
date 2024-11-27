@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateOf
@@ -123,6 +124,7 @@ fun NameTraining( uiState: TrainingScreenState ) {
             typeKeyboard = TypeKeyboard.TEXT,
             textStyle = mTypography.headlineMedium.copy(textAlign = TextAlign.Start),
             edit = true,
+            colorLine = MaterialTheme.colorScheme.outline,
             onChangeValue = {
                 uiState.enteredName.value = it
                 uiState.changeNameTraining(uiState.training, uiState.enteredName.value)}
