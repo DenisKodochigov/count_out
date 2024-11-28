@@ -30,10 +30,9 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.count_out.ui.view_components.lg
 
 @Preview
-@Composable fun Preview() { IconQ.Distance()}
+@Composable fun Preview() { IconQ.Faster()}
 
 object IconQ{
     private val fontSize = 12.sp
@@ -207,11 +206,11 @@ object IconQ{
             }
         )
     }
-    @Composable fun Max(color: Color = color(), onClick: ()->Unit = {}){
+    @Composable fun Faster(color: Color = color(), onClick: ()->Unit = {}){
         val textMeasurer = rememberTextMeasurer()
         Spacer(modifier = Modifier
             .width(width)
-            .height(height)
+            .height(height/2 + thick *2)
             .clickable { onClick() }
             .drawWithCache {
                 onDrawWithContent {
@@ -272,11 +271,11 @@ object IconQ{
             }
         )
     }
-    @Composable fun Min(color: Color = color(), onClick: ()->Unit = {}){
+    @Composable fun Slower(color: Color = color(), onClick: ()->Unit = {}){
         val textMeasurer = rememberTextMeasurer()
         Spacer(modifier = Modifier
             .width(width)
-            .height(height)
+            .height(height/2 + thick *2)
             .clickable { onClick() }
             .drawWithCache {
                 onDrawWithContent {

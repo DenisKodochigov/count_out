@@ -73,7 +73,8 @@
     <string name="speech_description">Проговаривать описание упражнения</string>
     <string name="create_ring">Создать круг</string>
     <string name="add_ring">Добавить круг</string>
-    <string name="count">Отсчеты</string>
+    <string name="counts">Отсчеты</string>
+    <string name="count">Отсчет</string>
     <string name="next_exercise">Подготовьтесь к упражнению  </string>
     <string name="rest_time">Время отдыха.</string>
     <string name="section_heart_rate">Доступные устройства.</string>

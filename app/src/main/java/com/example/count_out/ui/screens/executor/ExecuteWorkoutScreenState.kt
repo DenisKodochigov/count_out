@@ -13,6 +13,7 @@ import com.example.count_out.entity.workout.Coordinate
 import com.example.count_out.entity.workout.MessageWorkOut
 import com.example.count_out.entity.workout.Set
 import com.example.count_out.entity.workout.Training
+import com.example.count_out.ui.view_components.lg
 import javax.inject.Singleton
 
 @Singleton
@@ -27,9 +28,9 @@ data class ExecuteWorkoutScreenState(
     val heartRate: Int = 0,
     val coordinate: Coordinate? = null,
     val showBottomSheetSaveTraining: MutableState<Boolean> = mutableStateOf(false),
+    val stateWorkOutService: RunningState? = null,
     val tickTime: TickTime = TickTime(hour = "00", min="00", sec= "00"),
     val updateSet: (Long, SetDB)->Unit = { _, _->},
-    val stateWorkOutService: RunningState? = null,
     val startWorkOutService: (Training)->Unit = {},
     val stopWorkOutService: ()->Unit = {},
     val pauseWorkOutService: ()->Unit = { },
@@ -115,6 +116,25 @@ data class ExecuteWorkoutScreenState(
             }
         }
         return resultList
+    }
+    fun getNameActivity(): String {
+        lg("getNameActivity ")
+        var nameActivity = ""
+        speakingSet?.let { currentSet->
+            lg("getNameActivity ${currentSet}")
+            training?.let { train->
+                train.rounds.forEach { round->
+                    round.exercise.forEach{ exercise->
+                        exercise.sets.find { it.idSet == currentSet.idSet }.apply{
+                            lg("getNameActivity ${exercise.activity.name}")
+                            nameActivity = exercise.activity.name
+                        }
+                    }
+                }
+            }
+        }
+
+        return nameActivity
     }
 }
 

@@ -74,6 +74,7 @@
     <string name="speech_description">Speech description</string>
     <string name="create_ring">Create ring</string>
     <string name="add_ring">Add ring</string>
+    <string name="counts">Counts</string>
     <string name="count">Count</string>
     <string name="next_exercise">Prepare for the exercise</string>
     <string name="rest_time">Rest time.</string>
@@ -248,7 +249,7 @@
     <string name="zone4">ZONE IV</string>
     <string name="zone5">ZONE V</string>
     <string name="gr">gr</string>
-    <string name="interval">Interval</string>
+    <string name="interval">Интервал</string>
 
 
 </resources>

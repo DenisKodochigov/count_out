@@ -77,8 +77,8 @@ val interval_between_pole = 4.dp
     val setInfo = when (set.goal) {
         GoalSet.DISTANCE -> viewDistance(set) + stringResource(id = set.distanceE.id)
         GoalSet.DURATION -> "${set.duration/60} ${stringResource(id = R.string.min)}"
-        GoalSet.COUNT -> "${stringResource(id = R.string.count)}: ${set.reps}"
-        GoalSet.COUNT_GROUP -> "${set.reps} ${stringResource(id = R.string.count)}"
+        GoalSet.COUNT -> "${stringResource(id = R.string.counts)}: ${set.reps}"
+        GoalSet.COUNT_GROUP -> "${set.reps} ${stringResource(id = R.string.counts)}"
     }
     Row (verticalAlignment = Alignment.CenterVertically){
         IconsCollapsing(
@@ -219,7 +219,7 @@ val interval_between_pole = 4.dp
 }
 
 @Composable fun CountFieldText(uiState: TrainingScreenState, set: Set){   //B7B7B7
-    FieldText( idText = R.string.count, typeKey = TypeKeyboard.DIGIT, placeholder = "${ set.reps }",
+    FieldText( idText = R.string.counts, typeKey = TypeKeyboard.DIGIT, placeholder = "${ set.reps }",
         onChange = { uiState.onChangeSet ((set as SetDB).copy(reps = it.toIntMy()))  },)
 }
 @Composable fun CountGroupFieldText(uiState: TrainingScreenState, set: Set){   //B7B7B7
