@@ -110,7 +110,7 @@ data class TrainingRel(
     @Relation(parentColumn = "idTraining", entityColumn = "trainingId", entity = RoundDB::class) val rounds: List<RoundRel>?,
     @Relation(parentColumn = "speechId", entityColumn = "idSpeechKit", entity = SpeechKitDB::class) val speechKit: SpeechKitRel?,
 ){
-    fun toTraining(): TrainingDB{
+    fun toTraining(): TrainingDB {
         var amountActivity = 0
         this.rounds?.forEach { round-> amountActivity += round.exercise?.count() ?:0 }
         return TrainingDB(

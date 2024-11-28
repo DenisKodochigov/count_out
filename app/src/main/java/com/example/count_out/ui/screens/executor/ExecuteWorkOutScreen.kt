@@ -44,8 +44,8 @@ import com.example.count_out.ui.theme.alumBodySmall
 import com.example.count_out.ui.theme.mTypography
 import com.example.count_out.ui.theme.shapes
 import com.example.count_out.ui.view_components.ButtonApp
-import com.example.count_out.ui.view_components.icons.IconSingleLarge
 import com.example.count_out.ui.view_components.TextApp
+import com.example.count_out.ui.view_components.icons.IconSingleLarge
 import kotlinx.coroutines.launch
 import java.math.RoundingMode
 
@@ -64,7 +64,7 @@ import java.math.RoundingMode
     Column(
         modifier = Modifier.fillMaxSize(),
         content = {
-//            NameScreen(id = R.string.runs_treining)
+
             ListState(uiState, Modifier.weight(1f))
             Indication(uiState = uiState)}
     )

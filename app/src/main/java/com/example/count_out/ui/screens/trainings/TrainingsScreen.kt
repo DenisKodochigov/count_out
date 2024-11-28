@@ -130,7 +130,10 @@ import com.example.count_out.ui.view_components.custom_view.IconQ
 //##################################################################################################
 @Composable fun DownPlace(uiState: TrainingsScreenState) {
     Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
-        IconQ.Play(onClick = {uiState.onStartWorkout(0)})
+        IconQ.Play(onClick = {
+            if (uiState.selectedId.value == null) uiState.onStartWorkout(1)
+            else uiState.selectedId.value?.let { id-> uiState.onStartWorkout(id)}
+        })
         Spacer(modifier = Modifier.width(32.dp))
         IconQ.Add(onClick = { uiState.onAddTraining() })
     }

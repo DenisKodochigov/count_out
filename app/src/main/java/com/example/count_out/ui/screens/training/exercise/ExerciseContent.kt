@@ -113,9 +113,7 @@ fun ListExercises(
                         color = MaterialTheme.colorScheme.surface,
                         shape = MaterialTheme.shapes.extraSmall)
                     .fillMaxWidth(),
-                content = {
-                    lg("exerciseId=${exercise.idExercise}  sets.count=${exercise.sets.count()}  setId=${set.idSet}  ind=$ind")
-                    SetContent(uiState, set, exercise.sets.count(), ind) }
+                content = { SetContent(uiState, set, exercise.sets.count(), ind) }
             )
             Spacer(modifier = Modifier.height(1.dp))
         }

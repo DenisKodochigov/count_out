@@ -620,7 +620,6 @@ object IconQ{
                     )
                     val textLayout: TextLayoutResult =
                         textMeasurer.measure(text = AnnotatedString("km"), style = style)
-                    lg("textLayout.size ${textLayout.size} xPx:$xPx")
                     drawText(
                         textLayout, topLeft = Offset(
                             (xPx - textLayout.size.width)/2,

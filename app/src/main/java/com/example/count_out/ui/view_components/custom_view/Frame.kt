@@ -1,6 +1,5 @@
 package com.example.count_out.ui.view_components.custom_view
 
-import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
@@ -21,12 +20,11 @@ import androidx.compose.ui.unit.dp
     contour: PaddingValues = PaddingValues(top = 1.dp, start = 1.dp, end = 1.dp, bottom = 1.dp),
     content:@Composable ()->Unit)
 {
-    AnimatedVisibility(modifier = Modifier, visible = true) {
     Box( content = { content() },
         modifier = modifier
         .background(color, shape = shape)
         .padding(contour)// отступ от границ фрагмента
-        .background( color = background ))}
+        .background( color = background ))
 }
 
 //@Preview
