@@ -104,7 +104,7 @@ import com.example.count_out.ui.theme.mTypography
     onChangeValue:(String)->Unit = {},
     edit: Boolean = false,
     colorLine: Color = MaterialTheme.colorScheme.surfaceContainerLowest,
-    width: Dp = 40.dp
+    width: Dp = 30.dp
 ){
 
     val keyboardController = LocalSoftwareKeyboardController.current

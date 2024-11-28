@@ -56,7 +56,7 @@ import com.example.count_out.ui.view_components.custom_view.IconQ
 import com.example.count_out.ui.view_components.icons.IconsCollapsing
 import com.example.count_out.ui.view_components.icons.IconsGroup
 
-val interval_between_pole = 8.dp
+val interval_between_pole = 4.dp
 
 @Composable fun SetContent(uiState: TrainingScreenState, set: Set, amountSet: Int, index: Int){
     AnimatedVisibility(modifier = Modifier.padding(horizontal = 4.dp, vertical = 1.dp), visible = true) {
@@ -73,7 +73,6 @@ val interval_between_pole = 8.dp
         }
     }
 }
-//${ if (set.distanceE == DistanceE.KM) set.distance/1000 else set.distance }
 @Composable fun FirstLine(uiState: TrainingScreenState, set: Set, index: Int) {
     val setInfo = when (set.goal) {
         GoalSet.DISTANCE -> viewDistance(set) + stringResource(id = set.distanceE.id)

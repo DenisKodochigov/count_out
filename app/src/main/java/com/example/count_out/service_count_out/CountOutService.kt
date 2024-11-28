@@ -36,6 +36,7 @@ class CountOutService @Inject constructor(): Service() {
 
     private lateinit var router: Router
     private lateinit var workout: WorkoutDB
+    private var running: Boolean = false
     @Inject lateinit var notificationHelper: NotificationHelper
     @Inject lateinit var messageApp: MessageApp
     @Inject lateinit var ble: Bluetooth
@@ -72,6 +73,7 @@ class CountOutService @Inject constructor(): Service() {
     }
 
     fun startCountOutService(dataForServ: DataForServ, callBack: ()->Unit): DataForUI {
+        running = true
         router = Router(dataForServ)
         startForegroundService()
         sendDataToNotification()
@@ -95,10 +97,14 @@ class CountOutService @Inject constructor(): Service() {
     }
     private fun startSite(){
         site.start(router.dataFromSite)
-        router.dataForSite.state.value = RunningState.Started }
+        router.dataForSite.state.value = RunningState.Started
+    }
     private fun stopSite(){
-        site.stop()
-        router.dataForSite.state.value = RunningState.Stopped
+        if (running) {
+            site.stop()
+            router.dataForSite.state.value = RunningState.Stopped
+            running = false
+        }
     }
     private fun startWriteBase(){
         logging.runLogging(router.dataForBase, router.dataFromWork.runningState) }

@@ -20,9 +20,11 @@ class Site @Inject constructor(val context: Context, val permission: PermissionA
     private lateinit var locationListener: LocationListener
     private lateinit var locationRequest: LocationRequest
     private val fusedClient = LocationServices.getFusedLocationProviderClient(context)
+    private var status: Boolean = false
 
     @SuppressLint("MissingPermission")
     fun start( dataFromSite: DataFromSite){
+        status = true
         locationRequest = LocationRequest.Builder(1000L).apply {
             this.setGranularity(Granularity.GRANULARITY_FINE)
 //            this.setMinUpdateDistanceMeters(1F)
@@ -47,7 +49,8 @@ class Site @Inject constructor(val context: Context, val permission: PermissionA
 
     @SuppressLint("MissingPermission")
     fun stop(){
-        if(permission.checkLocation()) fusedClient.removeLocationUpdates(locationListener)
+        if(permission.checkLocation() && status) fusedClient.removeLocationUpdates(locationListener)
+        status = false
     }
     fun getAddressFromLocation(latitude: Double, longitude: Double): String{
         val geocoder = Geocoder(context)
@@ -58,9 +61,9 @@ class Site @Inject constructor(val context: Context, val permission: PermissionA
         } else {
             list = geocoder.getFromLocation(latitude, longitude, 1)
         }
-        val address = if (list.isNullOrEmpty()) "" else {
-            list[0].locality + ", " + list[0].countryName
-        }
+        val address = list?.let { lst->
+            if (lst.isEmpty()) "" else { lst[0].locality + ", " + lst[0].countryName } } ?: ""
+
         return address
     }
 }
