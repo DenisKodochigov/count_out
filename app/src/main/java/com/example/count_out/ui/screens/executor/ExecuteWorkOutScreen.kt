@@ -35,7 +35,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
@@ -48,7 +47,7 @@ import com.example.count_out.domain.plus
 import com.example.count_out.entity.ConnectState
 import com.example.count_out.entity.GoalSet
 import com.example.count_out.entity.RunningState
-import com.example.count_out.entity.ui.ListActivityForExecute
+import com.example.count_out.entity.ui.ExecuteSetInfo
 import com.example.count_out.ui.bottomsheet.BottomSheetSaveTraining
 import com.example.count_out.ui.theme.alumBodySmall
 import com.example.count_out.ui.theme.mTypography
@@ -58,6 +57,7 @@ import com.example.count_out.ui.view_components.TextApp
 import com.example.count_out.ui.view_components.custom_view.Frame
 import com.example.count_out.ui.view_components.custom_view.IconQ
 import com.example.count_out.ui.view_components.icons.IconSingleLarge
+import com.example.count_out.ui.view_components.lg
 import kotlinx.coroutines.launch
 import java.math.RoundingMode
 
@@ -86,25 +86,67 @@ import java.math.RoundingMode
 
 @Composable
 fun ExerciseInfo(uiState: ExecuteWorkoutScreenState) {
-    val widthValue = 180.dp
-    if (uiState.listActivity.isEmpty()) return
+
+//    if (uiState.listActivity.isEmpty()) return
+    lg("ExerciseInfo ${uiState.executeSetInfo}")
     Frame(){
         Column{
-            TextApp(text = uiState.getNameActivity(), style = mTypography.headlineMedium)
-            RowInfoExercise(R.string.sets, "", widthValue)
-            RowInfoExercise(R.string.count, "", widthValue)
-            RowInfoExerciseInterval(uiState, R.string.interval, widthValue)
-            RowInfoExercise(R.string.time_to_rest, "", widthValue)
+            TextApp(text = uiState.executeSetInfo?.activityName ?: "", style = mTypography.titleLarge)
+            when(uiState.speakingSet?.goal ?: GoalSet.COUNT){
+                GoalSet.COUNT -> LayoutCount(uiState)
+                GoalSet.DISTANCE -> LayoutDistance(uiState)
+                GoalSet.DURATION -> LayoutDuration(uiState)
+                GoalSet.COUNT_GROUP -> {}
+            }
+
         }
     }
 }
-@Composable fun RowInfoExercise(idDescription: Int, value: String, widthValue: Dp){
-    Row {
-        TextApp(style = mTypography.bodyLarge, modifier = Modifier.weight(1f),
-            textAlign = TextAlign.End, text = stringResource(idDescription))
-        TextApp(style = mTypography.bodyLarge, modifier = Modifier.width(widthValue), text = value)
+
+@Composable
+fun LayoutCount(uiState: ExecuteWorkoutScreenState) {
+    val widthValue = 100.dp
+
+    RowSetsInterval(uiState, widthValue)
+//    RowInfoExercise(R.string.sets, "${uiState.executeSetInfo?.currentIndexSet ?: ""}/${uiState.executeSetInfo?.countSet ?: ""}", widthValue)
+//    RowInfoExercise(R.string.count, "", widthValue)
+//    RowInfoExerciseInterval(uiState, R.string.interval, widthValue)
+//    RowInfoExercise(R.string.time_to_rest, "", widthValue)
+}
+
+@Composable fun LayoutDistance(uiState: ExecuteWorkoutScreenState) {
+
+}
+@Composable fun LayoutDuration(uiState: ExecuteWorkoutScreenState) {
+
+}
+
+
+@Composable fun NextExercise(uiState: ExecuteWorkoutScreenState){
+    TextApp(style = mTypography.headlineMedium,
+        text = "${R.string.next_exercise}: ${uiState.executeSetInfo?.nextActivityName ?: ""}")
+    TextApp(style = mTypography.headlineMedium,
+        text = "${R.string.next_exercise}: ${uiState.executeSetInfo?.nextActivityName ?: ""}")
+}
+
+@Composable fun RowSetsInterval(uiState: ExecuteWorkoutScreenState, widthValue: Dp){
+    Row(verticalAlignment = Alignment.CenterVertically,
+        modifier = Modifier.fillMaxWidth().padding(horizontal = 12.dp))
+    {
+        Row(modifier = Modifier.weight(1f)){
+            TextApp(style = mTypography.bodyLarge, modifier = Modifier,
+                textAlign = TextAlign.End, text = stringResource(R.string.sets))
+            TextApp(style = mTypography.bodyLarge, modifier = Modifier.width(widthValue),
+                text = "${uiState.executeSetInfo?.currentIndexSet ?: ""}/${uiState.executeSetInfo?.countSet ?: ""}")
+        }
+        Row(modifier = Modifier.weight(1f)){
+            TextApp(style = mTypography.bodyLarge, modifier = Modifier,
+                textAlign = TextAlign.End, text = stringResource(R.string.interval))
+            ButtonFasterSlower1(uiState = uiState, widthValue)
+        }
     }
 }
+
 @Composable fun RowInfoExerciseInterval(uiState: ExecuteWorkoutScreenState,idDescription: Int, widthValue: Dp){
     Row (verticalAlignment = Alignment.Bottom) {
         TextApp(style = mTypography.bodyLarge, modifier = Modifier.weight(1f),
@@ -131,9 +173,8 @@ fun ExerciseInfo(uiState: ExecuteWorkoutScreenState) {
         IconQ.Slower( onClick = { if(enabledButton) upInterval()},
             color = if(!enabledButton) MaterialTheme.colorScheme.surfaceContainerLow
                     else MaterialTheme.colorScheme.outline)
-        if (enabledButton){
-            TextApp(style = mTypography.titleLarge, modifier = Modifier.padding(horizontal = 12.dp),
-                text = uiState.speakingSet.intervalReps.toBigDecimal().setScale(1, RoundingMode.UP).toString())}
+        TextApp(style = mTypography.titleLarge, modifier = Modifier.padding(horizontal = 12.dp),
+            text = (uiState.speakingSet?.intervalReps?.toBigDecimal()?.setScale(1, RoundingMode.UP) ?: "  ").toString())
         IconQ.Faster( onClick = { if(enabledButton) downInterval()},
             color = if(!enabledButton) MaterialTheme.colorScheme.surfaceContainerLow
                         else MaterialTheme.colorScheme.outline)
@@ -265,30 +306,30 @@ fun SensorInfo(uiState: ExecuteWorkoutScreenState) {
         verticalArrangement = Arrangement.Top
     ) { items(items = uiState.listActivity){ item -> ListExerciseContent(item = item) } }
 }
-@Composable fun ListExerciseContent(item: ListActivityForExecute) {
+@Composable fun ListExerciseContent(item: ExecuteSetInfo) {
     Column(modifier = Modifier.padding(horizontal = 12.dp)) {
         val setDescription = when(item.typeDescription){
             true -> "${stringResource(R.string.setFrom).lowercase()}: ${item.countSet}"
-            false -> "${stringResource(R.string.set).lowercase()} ${item.currentIndSet + 1} " +
+            false -> "${stringResource(R.string.set).lowercase()} ${item.currentIndexSet + 1} " +
                     "${stringResource(R.string.from)} ${item.countSet}"
             null -> ""
         }
-        if (item.roundNameId != 0 && setDescription == ""){
-            Spacer(modifier = Modifier.height(12.dp))
-            TextApp(text = stringResource(id = item.roundNameId),
-                style = mTypography.bodyLarge, fontWeight = FontWeight.Bold)
-        } else {
-            Row {
-                TextApp(
-                    text = item.activityName + " ",
-                    style = mTypography.bodyLarge,
-                    textAlign = TextAlign.Start,
-                    modifier = Modifier
-                        .padding(start = 12.dp)
-                        .weight(1f))
-                TextApp(text = setDescription, style = mTypography.bodyLarge)
-            }
-        }
+//        if (item.roundNameId != 0 && setDescription == ""){
+//            Spacer(modifier = Modifier.height(12.dp))
+//            TextApp(text = stringResource(id = item.roundNameId),
+//                style = mTypography.bodyLarge, fontWeight = FontWeight.Bold)
+//        } else {
+//            Row {
+//                TextApp(
+//                    text = item.activityName + " ",
+//                    style = mTypography.bodyLarge,
+//                    textAlign = TextAlign.Start,
+//                    modifier = Modifier
+//                        .padding(start = 12.dp)
+//                        .weight(1f))
+//                TextApp(text = setDescription, style = mTypography.bodyLarge)
+//            }
+//        }
     }
 }
 

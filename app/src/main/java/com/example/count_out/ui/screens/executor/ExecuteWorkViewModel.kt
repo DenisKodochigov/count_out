@@ -14,6 +14,7 @@ import com.example.count_out.entity.TickTime
 import com.example.count_out.entity.ui.DataForServ
 import com.example.count_out.entity.ui.DataForUI
 import com.example.count_out.service_count_out.CountOutServiceBind
+import com.example.count_out.ui.view_components.lg
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -78,7 +79,12 @@ class ExecuteWorkViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             kotlin.runCatching { dataRepository.getTraining(id) }.fold(
                 onSuccess = {
-                    _executeWorkoutScreenState.update { state -> state.copy( training = it ) }
+                    lg("getTraining")
+                    _executeWorkoutScreenState.update { state -> state.copy(
+                        training = it,
+                        speakingSet = state.getBeginningSet(it),
+                        executeSetInfo = state.getExecuteSetInfo(it, 0L)
+                    ) }
                 },
                 onFailure = { messageApp.errorApi(it.message ?: "") }
             )
@@ -113,6 +119,7 @@ class ExecuteWorkViewModel @Inject constructor(
     private fun receiveState(dataForUI: DataForUI){
         viewModelScope.launch(Dispatchers.IO) {
             dataForUI.runningState.collect{
+                lg("receiveState 1")
                 _executeWorkoutScreenState.update { state -> state.copy(stateWorkOutService = it) }
                 if (it == RunningState.Stopped) {
                     dataForServ.empty()
@@ -123,6 +130,7 @@ class ExecuteWorkViewModel @Inject constructor(
                             speakingSet = null,
                             messageWorkout = emptyList(),
                             listActivity = emptyList(),
+                            executeSetInfo = state.training?.let { state.getExecuteSetInfo(it, 0L) },
                             showBottomSheetSaveTraining = mutableStateOf(true)
                         )
                     }
@@ -133,13 +141,17 @@ class ExecuteWorkViewModel @Inject constructor(
             dataForUI.coordinate.collect{ loc->
                 _executeWorkoutScreenState.update { state -> state.copy( coordinate = loc )}} } //coordinate
         viewModelScope.launch(Dispatchers.IO) {
-            dataForUI.speakingSet.collect{ set->
-                _executeWorkoutScreenState.update { state -> state.copy( speakingSet = set )}} } //speakingSet
-        viewModelScope.launch(Dispatchers.IO) {
-            dataForUI.nextSet.collect{ nextSet->
-                _executeWorkoutScreenState.update { state ->
-                    state.copy(listActivity = if (nextSet != null ) state.activityList(nextSet.idSet)
-                                                else state.listActivity)}} } //listActivity
+            dataForUI.speakingSet.collect{ setCollect->
+                setCollect?.let { set->
+                    _executeWorkoutScreenState.update { state ->
+                        state.copy( speakingSet = set,
+                                    executeSetInfo = state.training?.let { train->
+                                        state.getExecuteSetInfo(train, set.idSet)} )}}}} //speakingSet
+//        viewModelScope.launch(Dispatchers.IO) {
+//            dataForUI.nextSet.collect{ nextSet->
+//                _executeWorkoutScreenState.update { state ->
+//                    state.copy(listActivity = if (nextSet != null ) state.activityList(nextSet.idSet)
+//                                                else state.listActivity)}} } //listActivity
         viewModelScope.launch(Dispatchers.IO) {
             dataForUI.flowTick.collect { tick ->
                 _executeWorkoutScreenState.update { state -> state.copy( tickTime = tick )}} } //tickTime
