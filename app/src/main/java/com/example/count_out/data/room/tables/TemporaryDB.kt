@@ -17,7 +17,6 @@ data class TemporaryDB(
     override val heartRate: Int = 0,
     override val idTraining: Long = 0,
     override val idSet: Long = 0,
-    override val rest: Int = 0,
+    override val phaseWorkout: Int = 0,  // 0 - rest, 1 - running
     override val activityId: Long = 0L,
-    override val runningSet: Int = 0,  // 0 - end, 1 - running
 ): TemporaryBase

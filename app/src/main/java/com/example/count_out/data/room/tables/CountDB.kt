@@ -18,9 +18,8 @@ data class CountDB(
     override val distance: Float = 0f,
     override val idTraining: Long = 0L,
     override val idSet: Long = 0L,
-    override val rest: Int = 0,
+    override val phaseWorkout: Int = 0,
     override val activityId: Long = 0L,
-    override val runningSet: Int = 0,
     override var sensor1: Double = 0.0,
     override var sensor2: Double = 0.0,
     override var sensor3: Double = 0.0,
@@ -38,9 +37,8 @@ data class CountDB(
             heartRate = temporary.heartRate,
             idTraining = temporary.idTraining,
             idSet = temporary.idSet,
-            rest = temporary.rest,
+            phaseWorkout = temporary.phaseWorkout,
             activityId = temporary.activityId,
-            runningSet = temporary.runningSet,
         )
     }
 }

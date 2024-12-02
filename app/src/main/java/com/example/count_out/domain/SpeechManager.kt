@@ -5,11 +5,9 @@ import android.speech.tts.TextToSpeech
 import android.speech.tts.UtteranceProgressListener
 import com.example.count_out.R
 import com.example.count_out.entity.MessageApp
-import com.example.count_out.entity.workout.MessageWorkOut
 import com.example.count_out.entity.RunningState
-import com.example.count_out.entity.speech.Speech
 import com.example.count_out.entity.router.DataFromWork
-import com.example.count_out.service_count_out.stopwatch.Watcher
+import com.example.count_out.entity.speech.Speech
 import kotlinx.coroutines.delay
 import java.util.Locale
 import javax.inject.Singleton
@@ -62,7 +60,6 @@ class SpeechManager(val context: Context) {
         dataFromWork.equalsStop()
         val speechText = speech.message + " " + speech.addMessage
         if ((speechText).length > 1) {
-            dataFromWork.message.value = MessageWorkOut(message = speechText, tickTime = Watcher.getTickTime().value)
             speakOutAdd(speechText, dataFromWork)
             while (tts?.isSpeaking == true || dataFromWork.runningState.value == RunningState.Paused)
             { delay(500L) }

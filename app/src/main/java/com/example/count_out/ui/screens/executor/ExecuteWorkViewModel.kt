@@ -13,8 +13,9 @@ import com.example.count_out.entity.RunningState
 import com.example.count_out.entity.TickTime
 import com.example.count_out.entity.ui.DataForServ
 import com.example.count_out.entity.ui.DataForUI
+import com.example.count_out.entity.ui.ExecuteSetInfo
+import com.example.count_out.entity.workout.Training
 import com.example.count_out.service_count_out.CountOutServiceBind
-import com.example.count_out.ui.view_components.lg
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -78,26 +79,17 @@ class ExecuteWorkViewModel @Inject constructor(
     fun getTraining(id: Long) {
         viewModelScope.launch(Dispatchers.IO) {
             kotlin.runCatching { dataRepository.getTraining(id) }.fold(
-                onSuccess = {
-                    lg("getTraining")
-                    _executeWorkoutScreenState.update { state -> state.copy(
-                        training = it,
-                        speakingSet = state.getBeginningSet(it),
-                        executeSetInfo = state.getExecuteSetInfo(it, 0L)
-                    ) }
-                },
+                onSuccess = { dataForServ.training.value = it
+                    _executeWorkoutScreenState.update { state -> state.copy(training = it) } },
                 onFailure = { messageApp.errorApi(it.message ?: "") }
             )
         }
     }
-
     private fun updateSet(trainingId: Long, set: SetDB) {
         viewModelScope.launch(Dispatchers.IO) {
             kotlin.runCatching { dataRepository.updateSet(trainingId, set) }.fold(
-                onSuccess = {
-                    _executeWorkoutScreenState.update { state ->
-                        state.copy(training = it, speakingSet = set) }
-                    dataForServ.training.value = it
+                onSuccess = { dataForServ.training.value = it
+                    _executeWorkoutScreenState.update { state -> state.copy(training = it, currentSet = set )} //executeSetInfo = state.getExecuteSetInfo(it, set.idSet)) }
                 },
                 onFailure = { messageApp.errorApi(it.message ?: "") }
             )
@@ -118,19 +110,19 @@ class ExecuteWorkViewModel @Inject constructor(
 
     private fun receiveState(dataForUI: DataForUI){
         viewModelScope.launch(Dispatchers.IO) {
+            dataForUI.durationSpeech.collect { duration ->dataRepository.updateDuration(duration)} } //save duration set time
+        viewModelScope.launch(Dispatchers.IO) {
+            dataForUI.coordinate.collect{ loc->
+                _executeWorkoutScreenState.update { state -> state.copy( coordinate = loc )}} } //coordinate
+        viewModelScope.launch(Dispatchers.IO) {
             dataForUI.runningState.collect{
-                lg("receiveState 1")
                 _executeWorkoutScreenState.update { state -> state.copy(stateWorkOutService = it) }
                 if (it == RunningState.Stopped) {
                     dataForServ.empty()
                     _executeWorkoutScreenState.update { state ->
                         state.copy(
                             startTime = 0L,
-                            tickTime = TickTime(hour = "00", min = "00", sec = "00"),
-                            speakingSet = null,
-                            messageWorkout = emptyList(),
-                            listActivity = emptyList(),
-                            executeSetInfo = state.training?.let { state.getExecuteSetInfo(it, 0L) },
+                            flowTime = TickTime(hour = "00", min = "00", sec = "00"),
                             showBottomSheetSaveTraining = mutableStateOf(true)
                         )
                     }
@@ -138,35 +130,53 @@ class ExecuteWorkViewModel @Inject constructor(
                 }
             } } //stateWorkOutService
         viewModelScope.launch(Dispatchers.IO) {
-            dataForUI.coordinate.collect{ loc->
-                _executeWorkoutScreenState.update { state -> state.copy( coordinate = loc )}} } //coordinate
+            dataForUI.flowTime.collect { tick ->
+                _executeWorkoutScreenState.update { state ->
+                    state.copy(
+                    flowTime = tick,
+                    currentSet = dataForUI.exerciseInfo.value?.currentSet,
+                    countRest = dataForUI.countRest.value,
+                    countReps = dataForUI.currentCount.value,
+                    currentDuration = dataForUI.currentDuration.value,
+                    currentDistance = dataForUI.currentDistance.value,
+                    enableChangeInterval = dataForUI.enableChangeInterval.value,
+                    executeInfo = dataForUI.exerciseInfo.value,
+                )}} } //tickTime
         viewModelScope.launch(Dispatchers.IO) {
-            dataForUI.speakingSet.collect{ setCollect->
-                setCollect?.let { set->
-                    _executeWorkoutScreenState.update { state ->
-                        state.copy( speakingSet = set,
-                                    executeSetInfo = state.training?.let { train->
-                                        state.getExecuteSetInfo(train, set.idSet)} )}}}} //speakingSet
+            dataForUI.bleConnectState.collect { stateC ->
+                _executeWorkoutScreenState.update { state -> state.copy( bleConnectState = stateC) } } } //connectingState
+        viewModelScope.launch(Dispatchers.IO) {
+            dataForUI.heartRate.collect { hr ->
+                _executeWorkoutScreenState.update { state -> state.copy(heartRate = hr) } } } //heartRate
+
+//        viewModelScope.launch(Dispatchers.IO) {
+//            dataForUI.speakingSet.collect{ setCollect->
+//                setCollect?.let { set->
+//                    _executeWorkoutScreenState.update { state ->
+//                        state.copy( speakingSet = set,
+//                                    executeSetInfo = state.training?.let { train->
+//                                        state.getExecuteSetInfo(train, set.idSet)} )}}}} //speakingSet
 //        viewModelScope.launch(Dispatchers.IO) {
 //            dataForUI.nextSet.collect{ nextSet->
 //                _executeWorkoutScreenState.update { state ->
 //                    state.copy(listActivity = if (nextSet != null ) state.activityList(nextSet.idSet)
 //                                                else state.listActivity)}} } //listActivity
-        viewModelScope.launch(Dispatchers.IO) {
-            dataForUI.flowTick.collect { tick ->
-                _executeWorkoutScreenState.update { state -> state.copy( tickTime = tick )}} } //tickTime
-        viewModelScope.launch(Dispatchers.IO) {
-            dataForUI.durationSpeech.collect { duration ->dataRepository.updateDuration(duration)} } //save duration set time
-        viewModelScope.launch(Dispatchers.IO) {
-            dataForUI.message.collect { message ->
-                message?.let { mes -> _executeWorkoutScreenState.update { state ->
-                        state.copy(messageWorkout = state.addMessage(mes)) } } } } //messageWorkout
-        viewModelScope.launch(Dispatchers.IO) {
-            dataForUI.connectingState.collect { stateC ->
-                _executeWorkoutScreenState.update { state -> state.copy( connectingState = stateC) } } } //connectingState
-        viewModelScope.launch(Dispatchers.IO) {
-            dataForUI.heartRate.collect { hr ->
-                _executeWorkoutScreenState.update { state -> state.copy(heartRate = hr) } } } //heartRate
+        //        viewModelScope.launch(Dispatchers.IO) {
+//            dataForUI.message.collect { message ->
+//                message?.let { mes -> _executeWorkoutScreenState.update { state ->
+//                        state.copy(messageWorkout = state.addMessage(mes)) } } } } //messageWorkout
     }
     fun availableInternet() = internet.isOnline()
+    private fun initExerciseInfo(training: Training): ExecuteSetInfo {
+        return ExecuteSetInfo(
+//            activityName = dataForWork.getExercise()?.activity?.name ?: "",
+//            activityId = dataForWork.getExercise()?.activity?.idActivity ?: 0,
+//            countSet = dataForWork.getExercise()?.sets?.count() ?: 0,
+//            currentSet = dataForWork.getSet(),
+//            currentIndexSet = dataForWork.indexSet,
+//            nextExercise = dataForWork.getNextExercise()?.idExercise ?: 0,
+//            nextActivityName = dataForWork.getNextExercise()?.activity?.name ?: "",
+//            nextExerciseSummarizeSet = dataForWork.getSummarizeSet()
+        )
+    }
 }

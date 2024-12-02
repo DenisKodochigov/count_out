@@ -118,7 +118,6 @@ class CountOutService @Inject constructor(): Service() {
             router.dataForWork.training.value?.let { training->
                 workout = WorkoutDB(timeStart = SystemClock.elapsedRealtime(), trainingId = training.idTraining)
                 router.dataFromWork.runningState.value = RunningState.Started
-                router.dataFromWork.nextSet.value = router.dataForWork.getSet(0)
                 router.dataForWork.training.value?.let { workout.formTraining(it) }
                 lg("#################### Start Service Work #################### ")
                 startWriteBase()

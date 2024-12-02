@@ -76,7 +76,7 @@
     <string name="add_ring">Add ring</string>
     <string name="counts">Counts</string>
     <string name="count">Count</string>
-    <string name="next_exercise">Prepare for the exercise</string>
+    <string name="next_exercise">Next the exercise</string>
     <string name="rest_time">Rest time.</string>
     <string name="section_heart_rate">Section select device heart rate</string>
     <string name="heart_rate_device">Heart rate monitor</string>
@@ -141,6 +141,12 @@
     <plurals name="repeat">
         <item quantity="one">%d repeat</item>
         <item quantity="two">%d repetitions</item>
+        <item quantity="few">%d repetitions</item>
+        <item quantity="many">%d repetitions</item>
+        <item quantity="other">repetitions</item>
+    </plurals>
+    <plurals name="repeat1">
+        <item quantity="one">%d repeat</item>
         <item quantity="few">%d repetitions</item>
         <item quantity="many">%d repetitions</item>
         <item quantity="other">repetitions</item>
@@ -250,6 +256,9 @@
     <string name="zone5">ZONE V</string>
     <string name="gr">gr</string>
     <string name="interval">Интервал</string>
+    <string name="reps">Reps</string>
+    <string name="rep">r.</string>
+    <string name="repeat_time">repeat</string>
 
 
 </resources>

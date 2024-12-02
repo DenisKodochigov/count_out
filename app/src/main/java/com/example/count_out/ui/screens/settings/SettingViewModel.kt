@@ -115,7 +115,7 @@ class SettingViewModel @Inject constructor(
     }
     private fun receiveState(dataForUI: DataForUI) { //
         viewModelScope.launch(Dispatchers.IO) {
-            dataForUI.connectingState.collect { state ->
+            dataForUI.bleConnectState.collect { state ->
 //                if (dataForUI.runningState.value == RunningState.Stopped) return@collect
                 _settingScreenState.update { currentState ->
                     currentState.copy( connectingState = state) }

@@ -4,6 +4,7 @@ import com.example.count_out.data.room.tables.TemporaryDB
 import com.example.count_out.entity.RunningState
 import com.example.count_out.entity.ui.DataForServ
 import com.example.count_out.entity.ui.DataForUI
+import com.example.count_out.entity.ui.ExecuteSetInfo
 import com.example.count_out.entity.workout.TemporaryBase
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -27,20 +28,32 @@ class Router(private val dataForServ: DataForServ) {
     val dataForBase: MutableStateFlow<TemporaryBase?> = MutableStateFlow(null)
 
     private fun bufferInit(dataFromBle: DataFromBle, dataFromWork: DataFromWork, dataFromSite: DataFromSite): Buffer{
+
+        dataFromWork.exerciseInfo.value = ExecuteSetInfo(
+            activityName = dataForWork.getExercise()?.activity?.name ?: "",
+            activityId = dataForWork.getExercise()?.activity?.idActivity ?: 0,
+            countSet = dataForWork.getExercise()?.sets?.count() ?: 0,
+            currentSet = dataForWork.getSet(),
+            currentIndexSet = dataForWork.indexSet,
+            nextExercise = dataForWork.getNextExercise()?.idExercise ?: 0,
+            nextActivityName = dataForWork.getNextExercise()?.activity?.name ?: "",
+            nextExerciseSummarizeSet = dataForWork.getSummarizeSet()
+        )
         return Buffer(
             heartRate = dataFromBle.heartRate,
             scannedBle = dataFromBle.scannedBle,
             foundDevices = dataFromBle.foundDevices,
-            connectingState = dataFromBle.connectingState,
+            bleConnectState = dataFromBle.connectingState,
             lastConnectHearthRateDevice = dataFromBle.lastConnectHearthRateDevice,
 
-            speakingSet = dataFromWork.speakingSet,
-            nextSet = dataFromWork.nextSet,
-            rest = dataFromWork.rest,
-            activityId = dataFromWork.activityId,
-            message = dataFromWork.message,
-            flowTick = dataFromWork.flowTick,
             runningState = dataFromWork.runningState,
+            flowTime = dataFromWork.flowTime,
+            countRest = dataFromWork.countRest,
+            currentCount = dataFromWork.currentCount,
+            currentDuration = dataFromWork.currentDuration,
+            currentDistance = dataFromWork.currentDistance,
+            enableChangeInterval = dataFromWork.enableChangeInterval,
+            exerciseInfo = dataFromWork.exerciseInfo,
             durationSpeech = dataFromWork.durationSpeech,
 
             coordinate = dataFromSite.coordinate
@@ -66,8 +79,8 @@ class Router(private val dataForServ: DataForServ) {
     }
     private fun initDataForUI(buffer: Buffer): DataForUI {
         return DataForUI(
-            speakingSet = buffer.speakingSet,
             runningState = buffer.runningState,
+            exerciseInfo = buffer.exerciseInfo
         )
     }
     fun sendData(){
@@ -89,10 +102,9 @@ class Router(private val dataForServ: DataForServ) {
                         speed = buffer.coordinate.value?.speed ?: 0f,
                         heartRate = buffer.heartRate.value,
                         idTraining = dataForWork.training.value?.idTraining ?: 0,
-                        idSet = buffer.speakingSet.value?.idSet ?: 0,
-                        rest = buffer.rest.value ?: 0,
-                        activityId = buffer.activityId.value ?: 0,
-                        runningSet = if (buffer.speakingSet.value != null) 1 else 0,
+                        idSet = buffer.exerciseInfo.value?.currentSet?.idSet ?: 0,
+                        phaseWorkout = buffer.phaseWorkout.value,
+                        activityId = buffer.exerciseInfo.value?.activityId ?: 0,
                     )
                 }
                 delay(500L)
@@ -102,7 +114,8 @@ class Router(private val dataForServ: DataForServ) {
     private fun sendDataToUi(){
         CoroutineScope(Dispatchers.Default).launch {
             while (true){
-                if (buffer.runningState.value == RunningState.Started) { dataForUI.setWork(buffer) }
+                if (buffer.runningState.value == RunningState.Started) {
+                    dataForUI.setWork(buffer) }
                 dataForUI.setBle(buffer)
                 delay(1000L)
             }
@@ -113,9 +126,9 @@ class Router(private val dataForServ: DataForServ) {
             while (true){
                 if (buffer.runningState.value == RunningState.Started) {
                     dataForNotification.value = DataForNotification(
-                        hours = buffer.message.value?.tickTime?.hour ?: "00",
-                        minutes = buffer.message.value?.tickTime?.min ?: "00",
-                        seconds = buffer.message.value?.tickTime?.sec ?: "00",
+                        hours = buffer.flowTime.value.hour,
+                        minutes = buffer.flowTime.value.min,
+                        seconds = buffer.flowTime.value.sec,
                         heartRate = buffer.heartRate.value,
                         enableLocation = (buffer.coordinate.value?.longitude ?: 0.0) > 0.0
                     )

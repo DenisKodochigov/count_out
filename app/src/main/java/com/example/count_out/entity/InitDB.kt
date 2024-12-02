@@ -609,15 +609,15 @@ private fun addRecordCount(db: AppDatabase){
         altitude = 41.39999771118160, timeLocation = 1728844945990, accuracy = 100.0f,
         speed = 0.0f, distance = 0.0f, idTraining = 1,
         sensor1 = 0.0, sensor2 = 0.0, sensor3 = 0.0,
-        idSet = 0, rest = 0, activityId = 0, runningSet = 0,
+        idSet = 0, phaseWorkout = 0, activityId = 0,
     )
 
     db.dataDao().addCounts(
         listOf( count, count, count, count,count, count, count, count, count,
-            count.copy(idSet = 1, rest = 0, activityId = 4, runningSet = 1),
-            count.copy(idSet = 1, rest = 0, activityId = 4, runningSet = 1),
-            count.copy(idSet = 1, rest = 0, activityId = 4, runningSet = 1),
-            count.copy(idSet = 1, rest = 0, activityId = 4, runningSet = 1),
+            count.copy(idSet = 1, phaseWorkout = 0, activityId = 4),
+            count.copy(idSet = 1, phaseWorkout = 0, activityId = 4),
+            count.copy(idSet = 1, phaseWorkout = 0, activityId = 4),
+            count.copy(idSet = 1, phaseWorkout = 0, activityId = 4),
         )
     )
 }

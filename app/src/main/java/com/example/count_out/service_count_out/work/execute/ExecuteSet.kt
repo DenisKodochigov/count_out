@@ -8,6 +8,7 @@ import com.example.count_out.entity.GoalSet
 import com.example.count_out.entity.RunningState
 import com.example.count_out.entity.router.DataForWork
 import com.example.count_out.entity.router.DataFromWork
+import com.example.count_out.entity.ui.ExecuteSetInfo
 import com.example.count_out.entity.workout.Set
 import com.example.count_out.service_count_out.stopwatch.delayMy
 import kotlinx.coroutines.CoroutineScope
@@ -20,19 +21,25 @@ import kotlin.math.roundToInt
 
 class ExecuteSet @Inject constructor(val speechManager:SpeechManager, val context: Context)
 {
-    private val countRest: MutableStateFlow<Boolean> = MutableStateFlow(true)
+    private val runningCountRest: MutableStateFlow<Boolean> = MutableStateFlow(true)
 
     suspend fun executeSet(dataForWork: DataForWork, dataFromWork: DataFromWork){
         dataFromWork.equalsStop()
-        while (!countRest.value) { delay(100L) }
+        while (!runningCountRest.value) { delay(100L) }
         dataForWork.getSet()?.let { setCurrent->
-            dataFromWork.speakingSet.value = setCurrent
-            dataFromWork.activityId.value = dataForWork.getExercise()?.activity?.idActivity
+            dataFromWork.phaseWorkout.value = 1
+            dataFromWork.exerciseInfo.value = ExecuteSetInfo(
+                activityName = dataForWork.getExercise()?.activity?.name ?: "",
+                activityId = dataForWork.getExercise()?.activity?.idActivity ?: 0,
+                countSet = dataForWork.getExercise()?.sets?.count() ?: 0,
+                currentSet = setCurrent,
+                currentIndexSet = dataForWork.indexSet,
+                nextExercise = dataForWork.getNextExercise()?.idExercise ?: 0,
+                nextActivityName = dataForWork.getNextExercise()?.activity?.name ?: "",
+                nextExerciseSummarizeSet = dataForWork.getSummarizeSet()
+            )
             speakSetBegin(set = setCurrent, dataFromWork = dataFromWork)
             speakSetBody(set = setCurrent, dataForWork = dataForWork, dataFromWork = dataFromWork)
-            dataFromWork.speakingSet.value = null
-            dataFromWork.activityId.value = null
-            dataFromWork.nextSet.value = dataForWork.getNextSet()
             speakSetEnd(setCurrent, dataFromWork)
         }
     }
@@ -43,16 +50,22 @@ class ExecuteSet @Inject constructor(val speechManager:SpeechManager, val contex
     }
     private suspend fun speakSetBody(set: Set, dataForWork: DataForWork, dataFromWork: DataFromWork){
         when (set.goal){
-            GoalSet.COUNT -> speakingSetCOUNT(set,dataForWork, dataFromWork)
-            GoalSet.DURATION -> speakingSetDURATION(set, dataFromWork)
-            GoalSet.DISTANCE -> speakingSetDISTANCE(set, dataForWork, dataFromWork)
-            GoalSet.COUNT_GROUP -> speakingSetCOUNTGROUP(set, dataForWork, dataFromWork)
+            GoalSet.COUNT -> speakingCOUNT(set,dataForWork, dataFromWork)
+            GoalSet.COUNT_GROUP -> speakingCOUNTGROUP(set, dataForWork, dataFromWork)
+            GoalSet.DURATION -> speakingDURATION(set, dataFromWork)
+            GoalSet.DISTANCE -> speakingDISTANCE(set, dataForWork, dataFromWork)
         }
     }
-    private suspend fun speakingSetDURATION(set: Set, dataFromWork: DataFromWork){
-            speakInterval( duration = (set.duration * 60).toInt(), dataFromWork = dataFromWork)
+    private suspend fun speakingCOUNT(set: Set, dataForWork: DataForWork, dataFromWork: DataFromWork ){
+        dataFromWork.enableChangeInterval.value = true
+        for (count in 1..set.reps){
+            dataFromWork.currentCount.value = count
+            speechManager.speakOutFlush(text = count.toString(), dataFromWork)
+            delayMy((dataForWork.getSetIntervalReps() * 1000).toLong(), dataFromWork.runningState)
+        }
+        dataFromWork.enableChangeInterval.value = false
     }
-    private suspend fun speakingSetCOUNTGROUP(set: Set, dataForWork: DataForWork,dataFromWork: DataFromWork){
+    private suspend fun speakingCOUNTGROUP(set: Set, dataForWork: DataForWork, dataFromWork: DataFromWork){
         val listWordCount = set.groupCount.split(",")
         if ( listWordCount.isNotEmpty()){
             for (count in 0..< set.reps){
@@ -61,13 +74,10 @@ class ExecuteSet @Inject constructor(val speechManager:SpeechManager, val contex
             }
         }
     }
-    private suspend fun speakingSetDISTANCE(set: Set, dataForWork: DataForWork, dataFromWork: DataFromWork ){}
-    private suspend fun speakingSetCOUNT(set: Set, dataForWork: DataForWork, dataFromWork: DataFromWork ){
-        for (count in 1..set.reps){
-            speechManager.speakOutFlush(text = count.toString(), dataFromWork)
-            delayMy((dataForWork.getSetIntervalReps() * 1000).toLong(), dataFromWork.runningState)
-        }
+    private suspend fun speakingDURATION(set: Set, dataFromWork: DataFromWork){
+            speakInterval( duration = (set.duration * 60), dataFromWork = dataFromWork)
     }
+    private suspend fun speakingDISTANCE(set: Set, dataForWork: DataForWork, dataFromWork: DataFromWork ){}
 
     private suspend fun speakSetEnd(setCurrent: Set, dataFromWork: DataFromWork){
         speakingSetEnd(setCurrent, dataFromWork)
@@ -76,12 +86,11 @@ class ExecuteSet @Inject constructor(val speechManager:SpeechManager, val contex
             "${setCurrent.timeRest} ${getStr(R.string.rest_time)}"))
     }
     private suspend fun speakingSetRest(set: Set, dataFromWork: DataFromWork ){
+        dataFromWork.phaseWorkout.value = 0
         if (set.timeRest > 0) {
-            countRest.value = false
-            dataFromWork.rest.value = 1
+            runningCountRest.value = false
             speakInterval(duration = set.timeRest, dataFromWork = dataFromWork)
-            dataFromWork.rest.value = 0
-            countRest.value = true
+            runningCountRest.value = true
         }
     }
     private suspend fun speakInterval(duration: Int, dataFromWork: DataFromWork) {
@@ -100,6 +109,7 @@ class ExecuteSet @Inject constructor(val speechManager:SpeechManager, val contex
             if (dataFromWork.runningState.value == RunningState.Stopped) return
             if ( count % divider == 0 && !speechManager.getSpeeching())
                 speechManager.speakOutFlushBusy(text = count.toString(), dataFromWork)
+            if (!runningCountRest.value) dataFromWork.countRest.value = count
             delayMy(1000L, dataFromWork.runningState)
         }
     }

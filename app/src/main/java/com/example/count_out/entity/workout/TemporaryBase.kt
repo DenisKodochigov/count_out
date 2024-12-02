@@ -11,7 +11,6 @@ interface TemporaryBase: Coordinate {
     val heartRate: Int
     val idTraining: Long
     val idSet: Long
-    val rest: Int
+    val phaseWorkout: Int
     val activityId: Long
-    val runningSet: Int // 0 - end, 1 - running
 }

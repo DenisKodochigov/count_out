@@ -6,7 +6,6 @@ import com.example.count_out.entity.router.DataForWork
 import com.example.count_out.entity.router.DataFromWork
 import com.example.count_out.service_count_out.stopwatch.Watcher
 import com.example.count_out.service_count_out.work.execute.ExecuteWork
-import com.example.count_out.ui.view_components.lg
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -40,7 +39,7 @@ class Work @Inject constructor(val speechManager: SpeechManager, val executeWork
     private fun getTick( dataFromWork: DataFromWork ){
         Watcher.start(dataFromWork.runningState)
         CoroutineScope(Dispatchers.Default).launch {
-            Watcher.getTickTime().collect{ tick -> dataFromWork.flowTick.value = tick }
+            Watcher.getTickTime().collect{ tick -> dataFromWork.flowTime.value = tick }
         }
     }
 }

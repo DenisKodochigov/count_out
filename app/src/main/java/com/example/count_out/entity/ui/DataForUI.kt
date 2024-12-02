@@ -6,7 +6,6 @@ import com.example.count_out.entity.TickTime
 import com.example.count_out.entity.bluetooth.DeviceUI
 import com.example.count_out.entity.router.Buffer
 import com.example.count_out.entity.workout.Coordinate
-import com.example.count_out.entity.workout.MessageWorkOut
 import com.example.count_out.entity.workout.Set
 import kotlinx.coroutines.flow.MutableStateFlow
 
@@ -14,36 +13,36 @@ data class DataForUI (
     val speakingSet: MutableStateFlow<Set?> = MutableStateFlow(null),
     val runningState: MutableStateFlow<RunningState?> = MutableStateFlow(null),
 
-    val flowTick: MutableStateFlow<TickTime> = MutableStateFlow(TickTime()),
-    val message: MutableStateFlow<MessageWorkOut?> = MutableStateFlow(null),
-    val nextSet: MutableStateFlow<Set?> = MutableStateFlow(null),
-    val durationSpeech:MutableStateFlow<Pair<Long, Long>> = MutableStateFlow(Pair(0,0)),
+    val flowTime: MutableStateFlow<TickTime> = MutableStateFlow(TickTime()),
+    val countRest: MutableStateFlow<Int> = MutableStateFlow(0),
+    val currentCount: MutableStateFlow<Int> = MutableStateFlow(0),
+    val currentDuration: MutableStateFlow<Int> = MutableStateFlow(0),
+    val currentDistance: MutableStateFlow<Int> = MutableStateFlow(0),
+    val enableChangeInterval: MutableStateFlow<Boolean> = MutableStateFlow(false),
+    val exerciseInfo: MutableStateFlow<ExecuteSetInfo?> = MutableStateFlow(null),
+    val durationSpeech: MutableStateFlow<Pair<Long, Long>> = MutableStateFlow(Pair(0,0)),
 
     val heartRate: MutableStateFlow<Int> = MutableStateFlow(0),
     val scannedBle: MutableStateFlow<Boolean> = MutableStateFlow(false),
-    val connectingState: MutableStateFlow<ConnectState> = MutableStateFlow(ConnectState.NOT_CONNECTED),
+    val bleConnectState: MutableStateFlow<ConnectState> = MutableStateFlow(ConnectState.NOT_CONNECTED),
     val foundDevices: MutableStateFlow<List<DeviceUI>> = MutableStateFlow(emptyList()),
     val coordinate: MutableStateFlow<Coordinate?> = MutableStateFlow( null),
     var cancelCoroutineWork: ()-> Unit = {}
 ){
-//    fun empty(){
-//        flowTick.value = TickTime()
-//        speakingSet.value = null
-//        nextSet.value = null
-//        durationSpeech.value = Pair(0,0)
-//        runningState.value = RunningState.Stopped
-//        heartRate.value = 0
-//    }
     fun setWork(buffer: Buffer){
-        this.flowTick.value = buffer.flowTick.value
-        this.message.value = buffer.message.value
-        this.nextSet.value = buffer.nextSet.value
+        this.flowTime.value = buffer.flowTime.value
+        this.countRest.value = buffer.countRest.value
+        this.currentCount.value = buffer.currentCount.value
+        this.currentDuration.value = buffer.currentDuration.value
+        this.currentDistance.value = buffer.currentDistance.value
+        this.enableChangeInterval.value = buffer.enableChangeInterval.value
+        this.exerciseInfo.value = buffer.exerciseInfo.value
         this.durationSpeech.value = buffer.durationSpeech.value
     }
     fun setBle(buffer: Buffer){
         this.heartRate.value = buffer.heartRate.value
         this.scannedBle.value = buffer.scannedBle.value
-        this.connectingState.value = buffer.connectingState.value
+        this.bleConnectState.value = buffer.bleConnectState.value
         this.foundDevices.value = buffer.foundDevices.value
         this.coordinate.value = buffer.coordinate.value
     }
