@@ -1,9 +1,5 @@
 package com.example.count_out.entity.router
 
-import com.example.count_out.R
-import com.example.count_out.entity.DistanceE
-import com.example.count_out.entity.GoalSet
-import com.example.count_out.entity.TimeE
 import com.example.count_out.entity.workout.Exercise
 import com.example.count_out.entity.workout.Round
 import com.example.count_out.entity.workout.Set
@@ -96,45 +92,45 @@ data class DataForWork (
         }
         return null
     }
-    fun getNextExercise(): Exercise? {
-        var finding = false
-        val idExercise = getExercise()?.idExercise
-
-        training.value?.let { trainingIt ->
-            trainingIt.rounds.forEachIndexed { _, round ->
-                round.exercise.forEachIndexed { _, exercise ->
-                    if (finding) { return exercise }
-                    if (exercise.idExercise == idExercise) finding = true
-                }
-            }
-        }
-        return null
-    }
-    fun getSummarizeSet(): List<Pair<String, Int>>{
-        var finding = false
-        val idExercise = getExercise()?.idExercise
-        val list: MutableList<Pair<String, Int>> = mutableListOf()
-        training.value?.let { trainingIt ->
-            trainingIt.rounds.forEachIndexed { _, round ->
-                round.exercise.forEachIndexed { _, exercise ->
-                    if (finding) {
-                        exercise.sets.forEachIndexed { _, set ->
-                            when(set.goal){
-                                GoalSet.DURATION -> list.add(
-                                    "${set.duration/(if(set.durationE == TimeE.SEC) 1 else 60)}" to set.durationE.id)
-                                GoalSet.DISTANCE -> list.add(
-                                    "${set.distance/(if(set.distanceE == DistanceE.M) 1 else 1000)}" to set.distanceE.id)
-                                GoalSet.COUNT -> list.add("${set.reps}" to R.string.rep)
-                                GoalSet.COUNT_GROUP -> "" to 0
-                            }
-                        }
-                        return list
-                    }
-                    if (exercise.idExercise == idExercise) finding = true
-                }
-            }
-        }
-        return list
-    }
+//    fun getNextExercise(): Exercise? {
+//        var finding = false
+//        val idExercise = getExercise()?.idExercise
+//
+//        training.value?.let { trainingIt ->
+//            trainingIt.rounds.forEachIndexed { _, round ->
+//                round.exercise.forEachIndexed { _, exercise ->
+//                    if (finding) { return exercise }
+//                    if (exercise.idExercise == idExercise) finding = true
+//                }
+//            }
+//        }
+//        return null
+//    }
+//    fun getSummarizeSet(): List<Pair<String, Int>>{
+//        var finding = false
+//        val idExercise = getExercise()?.idExercise
+//        val list: MutableList<Pair<String, Int>> = mutableListOf()
+//        training.value?.let { trainingIt ->
+//            trainingIt.rounds.forEachIndexed { _, round ->
+//                round.exercise.forEachIndexed { _, exercise ->
+//                    if (finding) {
+//                        exercise.sets.forEachIndexed { _, set ->
+//                            when(set.goal){
+//                                GoalSet.DURATION -> list.add(
+//                                    "${set.duration/(if(set.durationE == TimeE.SEC) 1 else 60)}" to set.durationE.id)
+//                                GoalSet.DISTANCE -> list.add(
+//                                    "${set.distance/(if(set.distanceE == DistanceE.M) 1 else 1000)}" to set.distanceE.id)
+//                                GoalSet.COUNT -> list.add("${set.reps}" to R.string.rep)
+//                                GoalSet.COUNT_GROUP -> "" to 0
+//                            }
+//                        }
+//                        return list
+//                    }
+//                    if (exercise.idExercise == idExercise) finding = true
+//                }
+//            }
+//        }
+//        return list
+//    }
 }
 

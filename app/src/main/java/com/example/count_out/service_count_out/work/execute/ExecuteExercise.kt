@@ -6,7 +6,8 @@ import com.example.count_out.data.room.tables.SpeechDB
 import com.example.count_out.domain.SpeechManager
 import com.example.count_out.entity.router.DataForWork
 import com.example.count_out.entity.router.DataFromWork
-import com.example.count_out.ui.view_components.lg
+import com.example.count_out.entity.ui.ExecuteInfoExercise
+import com.example.count_out.entity.ui.NextExercise
 import javax.inject.Inject
 
 class ExecuteExercise @Inject constructor(
@@ -14,6 +15,10 @@ class ExecuteExercise @Inject constructor(
     suspend fun executeExercise(dataForWork: DataForWork, dataFromWork: DataFromWork){
         dataFromWork.equalsStop()
         dataForWork.getExercise()?.let { exercise ->
+            dataFromWork.executeInfoExercise.value = ExecuteInfoExercise(
+                activity = exercise.activity,
+                nextExercise = dataForWork.training.value?.getNextExercise(exercise) ?: NextExercise(),
+            )
             speechManager.speech(dataFromWork, exercise.speech.beforeStart)
             val desc = if (dataForWork.enableSpeechDescription.value) exercise.activity.description else ""
             speechManager.speech(dataFromWork, SpeechDB(message =

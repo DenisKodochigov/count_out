@@ -34,6 +34,7 @@ import com.example.count_out.domain.minus
 import com.example.count_out.domain.plus
 import com.example.count_out.entity.ConnectState
 import com.example.count_out.entity.GoalSet
+import com.example.count_out.entity.RunningState
 import com.example.count_out.ui.bottomsheet.BottomSheetSaveTraining
 import com.example.count_out.ui.theme.mTypography
 import com.example.count_out.ui.view_components.TextApp
@@ -53,7 +54,6 @@ import java.math.RoundingMode
     ExecuteWorkoutScreenLayout(uiState = uiState)
 }
 @Composable fun ExecuteWorkoutScreenLayout( uiState: ExecuteWorkoutScreenState){
-//    if(uiState.listActivity.isEmpty()) { uiState.listActivity = uiState.activityList()}
     if (uiState.showBottomSheetSaveTraining.value) BottomSheetSaveTraining(uiState)
     Column(
         modifier = Modifier.fillMaxSize().padding(horizontal = 4.dp),
@@ -98,8 +98,10 @@ import java.math.RoundingMode
 @Composable fun ExerciseInfo(uiState: ExecuteWorkoutScreenState) {
     Frame{
         Column (modifier = Modifier.padding(horizontal = 6.dp)){
-            TextApp(text = uiState.executeInfo?.activityName ?: "", style = mTypography.titleLarge)
-            when(uiState.currentSet?.goal ?: GoalSet.COUNT){
+            TextApp(text = uiState.executeInfoExercise?.activity?.name ?: "",
+                modifier = Modifier.padding(bottom = 12.dp),
+                style = mTypography.titleLarge)
+            when(uiState.executeInfoSet?.currentSet?.goal ?: GoalSet.COUNT){
                 GoalSet.COUNT -> LayoutCount(uiState)
                 GoalSet.DISTANCE -> LayoutDistance(uiState)
                 GoalSet.DURATION -> LayoutDuration(uiState)
@@ -120,14 +122,26 @@ import java.math.RoundingMode
     }
 }
 @Composable fun ButtonStartedService(uiState: ExecuteWorkoutScreenState){
-    IconQ.Play(onClick = {uiState.training?.let { uiState.startWorkOutService(it) } })
+    IconQ.Play(
+        onClick = { if (uiState.stateWorkOutService != RunningState.Started)
+                        uiState.training?.let { uiState.startWorkOutService(it) }},
+        color = if (uiState.stateWorkOutService == RunningState.Started) MaterialTheme.colorScheme.surfaceContainerLow
+                 else MaterialTheme.colorScheme.outline)
 }
 @Composable fun ButtonStoppedService(uiState: ExecuteWorkoutScreenState){
-    IconQ.Stop(onClick = {uiState.stopWorkOutService()
-                uiState.showBottomSheetSaveTraining.value = true })
+    IconQ.Stop(
+        onClick = { if (uiState.stateWorkOutService != RunningState.Stopped){
+            uiState.stopWorkOutService()
+            uiState.showBottomSheetSaveTraining.value = true
+        } },
+        color = if (uiState.stateWorkOutService == RunningState.Stopped) MaterialTheme.colorScheme.surfaceContainerLow
+                else MaterialTheme.colorScheme.outline)
 }
 @Composable fun ButtonPauseService(uiState: ExecuteWorkoutScreenState){
-    IconQ.Pause(onClick = { uiState.pauseWorkOutService() })
+    IconQ.Pause(
+        onClick = { if (uiState.stateWorkOutService != RunningState.Paused) uiState.pauseWorkOutService()},
+        color = if (uiState.stateWorkOutService == RunningState.Paused) MaterialTheme.colorScheme.surfaceContainerLow
+                    else MaterialTheme.colorScheme.outline)
 }
 
 @Composable fun LayoutCount(uiState: ExecuteWorkoutScreenState) {
@@ -152,7 +166,7 @@ import java.math.RoundingMode
             TextApp(style = mTypography.bodyLarge, modifier = Modifier.width(widthValue),
                 textAlign = TextAlign.Start, text = stringResource(R.string.sets) + ":")
             TextApp(style = mTypography.titleLarge, modifier = Modifier,
-                text = "${(uiState.executeInfo?.currentIndexSet ?: 0) + 1}/${uiState.executeInfo?.countSet ?: ""}")
+                text = "${(uiState.executeInfoSet?.currentIndexSet ?: 0) + 1}/${uiState.executeInfoSet?.quantitySet ?: ""}")
         }
         Row(modifier = Modifier.weight(2f), verticalAlignment = Alignment.Bottom,){
             TextApp(style = mTypography.bodyLarge, modifier = Modifier.padding(end = 12.dp),
@@ -165,7 +179,7 @@ import java.math.RoundingMode
     var downInterval = {}
     var upInterval = {}
     uiState.training?.let { training ->
-        uiState.currentSet?.let { set ->
+        uiState.executeInfoSet?.currentSet?.let { set ->
             downInterval = { uiState.updateSet(
                 training.idTraining, (set as SetDB).copy(intervalReps = set.intervalReps.minus())) }
             upInterval = { uiState.updateSet(
@@ -180,7 +194,7 @@ import java.math.RoundingMode
     {
         IconQ.Slower( onClick = { if(uiState.enableChangeInterval) upInterval()}, color = color)
         TextApp(style = mTypography.titleLarge, modifier = Modifier.padding(horizontal = 6.dp),
-            text = (uiState.currentSet?.intervalReps?.toBigDecimal()?.setScale(1, RoundingMode.UP) ?: "  ").toString())
+            text = (uiState.executeInfoSet?.currentSet?.intervalReps?.toBigDecimal()?.setScale(1, RoundingMode.UP) ?: "  ").toString())
         IconQ.Faster( onClick = { if(uiState.enableChangeInterval) downInterval()}, color = color)
     }
 }
@@ -193,22 +207,22 @@ import java.math.RoundingMode
             TextApp(style = mTypography.bodyLarge, modifier = Modifier.width(widthValue),
                 textAlign = TextAlign.Start, text = stringResource(R.string.reps) + ":")
             TextApp(style = mTypography.titleLarge, modifier = Modifier,
-                text = "${uiState.countReps}/${uiState.currentSet?.reps ?: ""}")
+                text = "${uiState.countReps}/${uiState.executeInfoSet?.currentSet?.reps ?: ""}")
         }
         Row(modifier = Modifier.weight(2f), verticalAlignment = Alignment.Bottom){
             TextApp(style = mTypography.bodyLarge, modifier = Modifier.padding(end = 98.dp),
                 textAlign = TextAlign.Start, text = stringResource(R.string.rest) + ":")
             TextApp(style = mTypography.titleLarge, modifier = Modifier,
-                text = "${uiState.countRest}/${uiState.currentSet?.timeRest ?: ""}")
+                text = "${uiState.countRest}/${uiState.executeInfoSet?.currentSet?.timeRest ?: ""}")
         }
     }
 }
 @Composable fun NextExercise(uiState: ExecuteWorkoutScreenState){
     TextApp(style = mTypography.bodyLarge, modifier = Modifier.padding(top = 18.dp),
-        text = "${ stringResource(R.string.next_exercise)}: ${uiState.executeInfo?.nextActivityName ?: ""}")
+        text = "${ stringResource(R.string.next_exercise)}: ${uiState.executeInfoExercise?.nextExercise?.nextActivityName ?: ""}")
     TextApp(style = mTypography.bodyLarge,modifier = Modifier.padding(start = 12.dp),
-        text = "${stringResource(R.string.sets)}: ${(uiState.executeInfo?.countSet ?: 0) + 1}" +
-                " (${ uiState.executeInfo?.nextExerciseSummarizeSet?.let { viewNextSets(it) }}) ")
+        text = "${stringResource(R.string.sets)}: ${(uiState.executeInfoSet?.quantitySet ?: 0) + 1}" +
+                " (${ uiState.executeInfoExercise?.nextExercise?.nextExerciseSummarizeSet?.let { viewNextSets(it) }}) ")
 }
 @Composable fun viewNextSets(list: List<Pair<String, Int>>): String{
     return list.map{"${it.first}${stringResource(it.second).lowercase()}"}.joinToString(separator = "-")

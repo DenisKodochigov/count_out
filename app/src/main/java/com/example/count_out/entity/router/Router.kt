@@ -4,7 +4,6 @@ import com.example.count_out.data.room.tables.TemporaryDB
 import com.example.count_out.entity.RunningState
 import com.example.count_out.entity.ui.DataForServ
 import com.example.count_out.entity.ui.DataForUI
-import com.example.count_out.entity.ui.ExecuteSetInfo
 import com.example.count_out.entity.workout.TemporaryBase
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -28,17 +27,6 @@ class Router(private val dataForServ: DataForServ) {
     val dataForBase: MutableStateFlow<TemporaryBase?> = MutableStateFlow(null)
 
     private fun bufferInit(dataFromBle: DataFromBle, dataFromWork: DataFromWork, dataFromSite: DataFromSite): Buffer{
-
-        dataFromWork.exerciseInfo.value = ExecuteSetInfo(
-            activityName = dataForWork.getExercise()?.activity?.name ?: "",
-            activityId = dataForWork.getExercise()?.activity?.idActivity ?: 0,
-            countSet = dataForWork.getExercise()?.sets?.count() ?: 0,
-            currentSet = dataForWork.getSet(),
-            currentIndexSet = dataForWork.indexSet,
-            nextExercise = dataForWork.getNextExercise()?.idExercise ?: 0,
-            nextActivityName = dataForWork.getNextExercise()?.activity?.name ?: "",
-            nextExerciseSummarizeSet = dataForWork.getSummarizeSet()
-        )
         return Buffer(
             heartRate = dataFromBle.heartRate,
             scannedBle = dataFromBle.scannedBle,
@@ -53,7 +41,8 @@ class Router(private val dataForServ: DataForServ) {
             currentDuration = dataFromWork.currentDuration,
             currentDistance = dataFromWork.currentDistance,
             enableChangeInterval = dataFromWork.enableChangeInterval,
-            exerciseInfo = dataFromWork.exerciseInfo,
+            executeInfoSet = dataFromWork.executeInfoSet,
+            executeInfoExercise = dataFromWork.executeInfoExercise,
             durationSpeech = dataFromWork.durationSpeech,
 
             coordinate = dataFromSite.coordinate
@@ -80,7 +69,7 @@ class Router(private val dataForServ: DataForServ) {
     private fun initDataForUI(buffer: Buffer): DataForUI {
         return DataForUI(
             runningState = buffer.runningState,
-            exerciseInfo = buffer.exerciseInfo
+            executeInfoExercise = buffer.executeInfoExercise
         )
     }
     fun sendData(){
@@ -102,9 +91,9 @@ class Router(private val dataForServ: DataForServ) {
                         speed = buffer.coordinate.value?.speed ?: 0f,
                         heartRate = buffer.heartRate.value,
                         idTraining = dataForWork.training.value?.idTraining ?: 0,
-                        idSet = buffer.exerciseInfo.value?.currentSet?.idSet ?: 0,
+                        idSet = buffer.executeInfoSet.value?.currentSet?.idSet ?: 0,
                         phaseWorkout = buffer.phaseWorkout.value,
-                        activityId = buffer.exerciseInfo.value?.activityId ?: 0,
+                        activityId = buffer.executeInfoExercise.value?.activity?.idActivity ?: 0,
                     )
                 }
                 delay(500L)

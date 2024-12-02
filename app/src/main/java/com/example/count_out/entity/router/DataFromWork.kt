@@ -2,7 +2,8 @@ package com.example.count_out.entity.router
 
 import com.example.count_out.entity.RunningState
 import com.example.count_out.entity.TickTime
-import com.example.count_out.entity.ui.ExecuteSetInfo
+import com.example.count_out.entity.ui.ExecuteInfoExercise
+import com.example.count_out.entity.ui.ExecuteInfoSet
 import kotlinx.coroutines.flow.MutableStateFlow
 
 data class DataFromWork (
@@ -15,7 +16,8 @@ data class DataFromWork (
     val currentDistance: MutableStateFlow<Int> = MutableStateFlow(0),
     val enableChangeInterval: MutableStateFlow<Boolean> = MutableStateFlow(false),
     val phaseWorkout: MutableStateFlow<Int> = MutableStateFlow(0),
-    val exerciseInfo: MutableStateFlow<ExecuteSetInfo?> = MutableStateFlow(null),
+    val executeInfoExercise: MutableStateFlow<ExecuteInfoExercise?> = MutableStateFlow(null),
+    val executeInfoSet: MutableStateFlow<ExecuteInfoSet?> = MutableStateFlow(null),
     val durationSpeech: MutableStateFlow<Pair<Long, Long>> = MutableStateFlow(Pair(0,0)),
     var equalsStop: ()-> Unit = {}
 ){
@@ -27,7 +29,7 @@ data class DataFromWork (
         this.currentDistance.value = 0
         this.phaseWorkout.value = 0
         this.enableChangeInterval.value = false
-        this.exerciseInfo.value = null
+        this.executeInfoExercise.value = null
         this.runningState.value = RunningState.Stopped
         this.durationSpeech.value = Pair(0,0)
         this.equalsStop = {}

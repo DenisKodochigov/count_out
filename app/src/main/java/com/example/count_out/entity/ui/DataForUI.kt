@@ -19,7 +19,8 @@ data class DataForUI (
     val currentDuration: MutableStateFlow<Int> = MutableStateFlow(0),
     val currentDistance: MutableStateFlow<Int> = MutableStateFlow(0),
     val enableChangeInterval: MutableStateFlow<Boolean> = MutableStateFlow(false),
-    val exerciseInfo: MutableStateFlow<ExecuteSetInfo?> = MutableStateFlow(null),
+    val executeInfoExercise: MutableStateFlow<ExecuteInfoExercise?> = MutableStateFlow(null),
+    val executeInfoSet: MutableStateFlow<ExecuteInfoSet?> = MutableStateFlow(null),
     val durationSpeech: MutableStateFlow<Pair<Long, Long>> = MutableStateFlow(Pair(0,0)),
 
     val heartRate: MutableStateFlow<Int> = MutableStateFlow(0),
@@ -36,7 +37,8 @@ data class DataForUI (
         this.currentDuration.value = buffer.currentDuration.value
         this.currentDistance.value = buffer.currentDistance.value
         this.enableChangeInterval.value = buffer.enableChangeInterval.value
-        this.exerciseInfo.value = buffer.exerciseInfo.value
+        this.executeInfoSet.value = buffer.executeInfoSet.value
+        this.executeInfoExercise.value = buffer.executeInfoExercise.value
         this.durationSpeech.value = buffer.durationSpeech.value
     }
     fun setBle(buffer: Buffer){

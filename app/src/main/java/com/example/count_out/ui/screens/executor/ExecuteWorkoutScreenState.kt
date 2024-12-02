@@ -8,9 +8,9 @@ import com.example.count_out.entity.ConnectState
 import com.example.count_out.entity.RunningState
 import com.example.count_out.entity.TickTime
 import com.example.count_out.entity.bluetooth.DeviceUI
-import com.example.count_out.entity.ui.ExecuteSetInfo
+import com.example.count_out.entity.ui.ExecuteInfoExercise
+import com.example.count_out.entity.ui.ExecuteInfoSet
 import com.example.count_out.entity.workout.Coordinate
-import com.example.count_out.entity.workout.Set
 import com.example.count_out.entity.workout.Training
 import javax.inject.Singleton
 
@@ -21,11 +21,11 @@ data class ExecuteWorkoutScreenState(
     val flowTime: TickTime = TickTime(hour = "00", min="00", sec= "00"),
     val countRest: Int = 0,
     val countReps: Int = 0,
-    val currentSet: Set? = null,
     val currentDuration: Int = 0,
     val currentDistance: Int = 0,
     val enableChangeInterval: Boolean = false,
-    val executeInfo: ExecuteSetInfo? = null,
+    val executeInfoExercise: ExecuteInfoExercise? = null,
+    val executeInfoSet: ExecuteInfoSet? = null,
 
     val heartRate: Int = 0,
     val lastConnectHearthRateDevice: DeviceUI? = null,

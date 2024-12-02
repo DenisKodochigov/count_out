@@ -8,7 +8,7 @@ import com.example.count_out.entity.GoalSet
 import com.example.count_out.entity.RunningState
 import com.example.count_out.entity.router.DataForWork
 import com.example.count_out.entity.router.DataFromWork
-import com.example.count_out.entity.ui.ExecuteSetInfo
+import com.example.count_out.entity.ui.ExecuteInfoSet
 import com.example.count_out.entity.workout.Set
 import com.example.count_out.service_count_out.stopwatch.delayMy
 import kotlinx.coroutines.CoroutineScope
@@ -28,15 +28,10 @@ class ExecuteSet @Inject constructor(val speechManager:SpeechManager, val contex
         while (!runningCountRest.value) { delay(100L) }
         dataForWork.getSet()?.let { setCurrent->
             dataFromWork.phaseWorkout.value = 1
-            dataFromWork.exerciseInfo.value = ExecuteSetInfo(
-                activityName = dataForWork.getExercise()?.activity?.name ?: "",
-                activityId = dataForWork.getExercise()?.activity?.idActivity ?: 0,
-                countSet = dataForWork.getExercise()?.sets?.count() ?: 0,
+            dataFromWork.executeInfoSet.value = ExecuteInfoSet(
+                quantitySet = dataForWork.getExercise()?.sets?.count() ?: 0,
                 currentSet = setCurrent,
                 currentIndexSet = dataForWork.indexSet,
-                nextExercise = dataForWork.getNextExercise()?.idExercise ?: 0,
-                nextActivityName = dataForWork.getNextExercise()?.activity?.name ?: "",
-                nextExerciseSummarizeSet = dataForWork.getSummarizeSet()
             )
             speakSetBegin(set = setCurrent, dataFromWork = dataFromWork)
             speakSetBody(set = setCurrent, dataForWork = dataForWork, dataFromWork = dataFromWork)

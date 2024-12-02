@@ -16,6 +16,6 @@ data class TrainingDB(
     @Ignore override var amountActivity: Int = 0,
     @Ignore override var speech: SpeechKit = SpeechKitDB(),
     @Ignore override var rounds: List<Round> = emptyList(),
-) : Training
+) : Training()
 
 
