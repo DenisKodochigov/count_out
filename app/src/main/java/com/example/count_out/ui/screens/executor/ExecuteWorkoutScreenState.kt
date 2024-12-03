@@ -21,7 +21,6 @@ data class ExecuteWorkoutScreenState(
     val flowTime: TickTime = TickTime(hour = "00", min="00", sec= "00"),
     val countRest: Int = 0,
     val countReps: Int = 0,
-//    val currentSet: SetDB? = null,
     val currentCount: Int = 0,
     val currentDuration: Int = 0,
     val currentDistance: Int = 0,
@@ -53,109 +52,7 @@ data class ExecuteWorkoutScreenState(
         uiState.showBottomSheetSaveTraining.value = false
         saveTraining()
     },
-){
-//    fun getExecuteSetInfo(training: Training, setId: Long): ExecuteSetInfo {
-//
-//        var setInfo = ExecuteSetInfo()
-//        var flag = false
-//        training.rounds.forEach{ round->
-//            round.exercise.forEach{ exercise->
-//                if (flag) {
-//                    lg("getExecuteSetInfo nextActivityName:${exercise.activity.name}")
-//                    return setInfo.copy(
-//                        nextActivityName = exercise.activity.name,
-//                        nextExercise = exercise.idExercise)
-//                }
-//                exercise.sets.forEachIndexed{ ind, set->
-//                    if ((!flag && setId == 0L) || (set.idSet == setId)){
-//                        setInfo = ExecuteSetInfo(
-//                            activityName = exercise.activity.name,
-//                            countSet = exercise.sets.count(),
-//                            currentIndexSet = ind + 1,
-//                            countRing = round.countRing,)
-//                        flag = true
-//                    }
-//                }
-//            }
-//        }
-//        lg("getExecuteSetInfo setId:${setId}")
-//        return setInfo
-//    }
-//    fun getBeginningSet(training: Training): Set? {
-//        training.rounds.forEach{ round->
-//            round.exercise.forEach{ exercise->
-//                exercise.sets.forEach{ set-> return set }
-//            }
-//        }
-//        return null
-//    }
-//    fun addMessage(messageWorkOut: MessageWorkOut):List<MessageWorkOut>{
-//        return messageWorkout.toMutableList().apply { this.add(messageWorkOut) }
-//    }
-//    fun activityList(setId: Long = -1): List<ExecuteSetInfo>{
-//
-//        var findingSet = false
-//        var currentSet = 0
-//        val resultList: MutableList<ExecuteSetInfo> = mutableListOf()
-//        if (setId > -1){
-//            training?.let { trainingIt->
-//                trainingIt.rounds.forEachIndexed { _, round ->
-//                    if (findingSet) resultList.add(ExecuteSetInfo())
-//                    round.exercise.forEachIndexed{ _, exercise ->
-//                        exercise.sets.forEachIndexed{ indexSet, set ->
-//                            if (findingSet){
-//                                resultList.add(
-//                                    ExecuteSetInfo(
-//                                    activityName = exercise.activity.name,
-//                                    typeDescription = true,
-//                                    countSet = exercise.sets.count(),
-//                                    currentIndexSet = currentSet,
-//                                    countRing = 0,
-//                                    currentRing = 0,
-//                                )
-//                                )
-//                                currentSet = 0
-//                            }
-//                            if (set.idSet == setId) {
-//                                findingSet = true
-//                                currentSet = indexSet
-//                                resultList.add(ExecuteSetInfo())
-//                                resultList.add(
-//                                    ExecuteSetInfo(
-//                                    activityName = exercise.activity.name,
-//                                    typeDescription = false,
-//                                    countSet = exercise.sets.count(),
-//                                    currentIndexSet = currentSet,
-//                                    countRing = 0,
-//                                    currentRing = 0,
-//                                )
-//                                )
-//                            }
-//                        }
-//                    }
-//                }
-//            }
-//        } else {
-//            training?.let { trainingIt->
-//                trainingIt.rounds.forEachIndexed { _, round ->
-//                    resultList.add(ExecuteSetInfo())
-//                    round.exercise.forEachIndexed{ _, exercise ->
-//                        resultList.add(
-//                            ExecuteSetInfo(
-//                            activityName = exercise.activity.name,
-//                            typeDescription = true,
-//                            countSet = exercise.sets.count(),
-//                            currentIndexSet = 0,
-//                            countRing = 0,
-//                            currentRing = 0,
-//                        )
-//                        )
-//                    }
-//                }
-//            }
-//        }
-//        return resultList
-//    }
-}
+)
+
 
 

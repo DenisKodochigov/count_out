@@ -8,7 +8,6 @@ import com.example.count_out.entity.GoalSet
 import com.example.count_out.entity.RunningState
 import com.example.count_out.entity.router.DataForWork
 import com.example.count_out.entity.router.DataFromWork
-import com.example.count_out.entity.ui.ExecuteInfoSet
 import com.example.count_out.entity.workout.Set
 import com.example.count_out.service_count_out.stopwatch.delayMy
 import kotlinx.coroutines.CoroutineScope
@@ -22,16 +21,18 @@ import kotlin.math.roundToInt
 class ExecuteSet @Inject constructor(val speechManager:SpeechManager, val context: Context)
 {
     private val runningCountRest: MutableStateFlow<Boolean> = MutableStateFlow(true)
+    var indexExercise = 0
 
     suspend fun executeSet(dataForWork: DataForWork, dataFromWork: DataFromWork){
         dataFromWork.equalsStop()
         while (!runningCountRest.value) { delay(100L) }
+        if (indexExercise != dataForWork.indexExercise) {
+            dataForWork.setExecuteInfoExercise()
+            indexExercise = dataForWork.indexExercise
+        }
         dataForWork.getSet()?.let { currentSet->
+            dataFromWork.countRest.value = 0
             dataFromWork.phaseWorkout.value = 1
-            dataFromWork.executeInfoSet.value = ExecuteInfoSet(
-                quantitySet = dataForWork.getExercise()?.sets?.count() ?: 0,
-                currentSet = currentSet,
-                currentIndexSet = dataForWork.indexSet,)
             speakSetBegin(set = currentSet, dataFromWork = dataFromWork)
             speakSetBody(set = currentSet, dataForWork = dataForWork, dataFromWork = dataFromWork)
             speakSetEnd(currentSet, dataFromWork)
@@ -103,7 +104,7 @@ class ExecuteSet @Inject constructor(val speechManager:SpeechManager, val contex
             if (dataFromWork.runningState.value == RunningState.Stopped) return
             if ( count % divider == 0 && !speechManager.getSpeeching())
                 speechManager.speakOutFlushBusy(text = count.toString(), dataFromWork)
-            if (!runningCountRest.value) dataFromWork.countRest.value = count
+            dataFromWork.countRest.value = if (!runningCountRest.value) count else 0
             delayMy(1000L, dataFromWork.runningState)
         }
     }

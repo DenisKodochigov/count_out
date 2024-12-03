@@ -34,9 +34,9 @@ data class DataForUI (
 //        this.currentCount.value = buffer.currentCount.value
 //        this.currentDuration.value = buffer.currentDuration.value
 //        this.currentDistance.value = buffer.currentDistance.value
+//        this.executeInfoSet.value = buffer.executeInfoSet.value
+//        this.executeInfoExercise.value = buffer.executeInfoExercise.value
         this.enableChangeInterval.value = buffer.enableChangeInterval.value
-        this.executeInfoSet.value = buffer.executeInfoSet.value
-        this.executeInfoExercise.value = buffer.executeInfoExercise.value
         this.durationSpeech.value = buffer.durationSpeech.value
     }
     fun setBle(buffer: Buffer){

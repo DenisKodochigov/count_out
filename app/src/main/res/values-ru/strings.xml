@@ -40,7 +40,7 @@
     <string name="work_out">Основнная часть</string>
     <string name="work_down">Заминка</string>
     <string name="weight">Вес</string>
-    <string name="rest">Отдыха</string>
+    <string name="rest">Отдых</string>
     <string name="intensity">Интенсивность</string>
     <string name="distance">Расстояние</string>
     <string name="duration_of_the_approach">Длительность подхода</string>
@@ -249,7 +249,7 @@
     <string name="zone5">ZONE V</string>
     <string name="gr">гр</string>
     <string name="interval">Интервал</string>
-    <string name="reps">Reps</string>
+    <string name="reps">Повтор</string>
     <string name="rep">р.</string>
     <string name="repeat_time">раз</string>
 </resources>

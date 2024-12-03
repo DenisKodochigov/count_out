@@ -13,9 +13,7 @@ import com.example.count_out.entity.RunningState
 import com.example.count_out.entity.TickTime
 import com.example.count_out.entity.ui.DataForServ
 import com.example.count_out.entity.ui.DataForUI
-import com.example.count_out.entity.ui.ExecuteInfoExercise
 import com.example.count_out.service_count_out.CountOutServiceBind
-import com.example.count_out.ui.view_components.lg
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -84,19 +82,12 @@ class ExecuteWorkViewModel @Inject constructor(
             }
         }
     }
-
     fun getTraining(id: Long) {
         viewModelScope.launch(Dispatchers.IO) {
             kotlin.runCatching { dataRepository.getTraining(id) }.fold(
-                onSuccess = { dataForServ.training.value = it
-                    lg("getTraining ${it.idTraining}")
-                    _executeWorkoutScreenState.update { state ->
-                        state.copy( training = it,
-                                    executeInfoExercise = ExecuteInfoExercise(
-                                        activity = it.getActivity( null),
-                                        nextExercise = it.getNextExercise(null)),
-                                    executeInfoSet = it.executeInfoSet(null)
-                        ) } },
+                onSuccess = {
+                    dataForServ.training.value = it
+                    _executeWorkoutScreenState.update { state -> state.copy( training = it,) } },
                 onFailure = { messageApp.errorApi(it.message ?: "") }
             )
         }
@@ -135,18 +126,23 @@ class ExecuteWorkViewModel @Inject constructor(
             } } //stateWorkOutService
         viewModelScope.launch(Dispatchers.IO) {
             dataForUI.flowTime.collect { tick ->
-                if (dataForUI.executeInfoExercise.value != null) {
-                    _executeWorkoutScreenState.update { state -> state.copy(
+//                if (dataForUI.executeInfoExercise.value != null) {
+                    _executeWorkoutScreenState.update { state ->
+                        state.copy(
                         flowTime = tick,
                         countRest = dataForUI.countRest.value,
-                        currentDuration = dataForUI.currentDuration.value,
-                        currentDistance = dataForUI.currentDistance.value,
                         enableChangeInterval = dataForUI.enableChangeInterval.value,
                         executeInfoExercise = dataForUI.executeInfoExercise.value,
-                        executeInfoSet = dataForUI.executeInfoSet.value,
-                    )}}
+                    )}
+//                }
             }
         } //tickTime
+        viewModelScope.launch(Dispatchers.IO) {
+            dataForUI.executeInfoSet.collect {
+                _executeWorkoutScreenState.update { state -> state.copy(executeInfoSet = it) } } } //executeInfoSet
+        viewModelScope.launch(Dispatchers.IO) {
+            dataForUI.executeInfoExercise.collect {
+                _executeWorkoutScreenState.update { state -> state.copy(executeInfoExercise = it) } } } //executeInfoExercise
         viewModelScope.launch(Dispatchers.IO) {
             dataForUI.currentCount.collect { count ->
                 _executeWorkoutScreenState.update { state -> state.copy(countReps = count) } } } //currentCount

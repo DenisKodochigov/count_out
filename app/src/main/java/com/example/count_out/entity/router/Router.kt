@@ -10,6 +10,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 
 class Router(private val dataForServ: DataForServ) {
 
@@ -54,15 +55,21 @@ class Router(private val dataForServ: DataForServ) {
             indexSet = dataForServ.indexSet,
             indexRound = dataForServ.indexRound,
             indexExercise = dataForServ.indexExercise,
-            enableSpeechDescription = dataForServ.enableSpeechDescription
+            enableSpeechDescription = dataForServ.enableSpeechDescription,
+            dataFromWork = dataFromWork
         )
     }
     private fun initDataForUI(buffer: Buffer): DataForUI {
+        while (dataForServ.training.value == null) runBlocking{delay (100L)}
+        dataForWork.setExecuteInfoSet()
+        dataForWork.setExecuteInfoExercise()
         return DataForUI(
             runningState = buffer.runningState,
             currentCount = buffer.currentCount,
             currentDistance = buffer.currentDistance,
             currentDuration = buffer.currentDuration,
+            executeInfoSet = buffer.executeInfoSet,
+            executeInfoExercise = buffer.executeInfoExercise
         )
     }
     private fun initDataForSite(): DataForSite{
