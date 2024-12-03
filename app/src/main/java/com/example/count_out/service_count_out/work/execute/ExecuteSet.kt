@@ -26,16 +26,15 @@ class ExecuteSet @Inject constructor(val speechManager:SpeechManager, val contex
     suspend fun executeSet(dataForWork: DataForWork, dataFromWork: DataFromWork){
         dataFromWork.equalsStop()
         while (!runningCountRest.value) { delay(100L) }
-        dataForWork.getSet()?.let { setCurrent->
+        dataForWork.getSet()?.let { currentSet->
             dataFromWork.phaseWorkout.value = 1
             dataFromWork.executeInfoSet.value = ExecuteInfoSet(
                 quantitySet = dataForWork.getExercise()?.sets?.count() ?: 0,
-                currentSet = setCurrent,
-                currentIndexSet = dataForWork.indexSet,
-            )
-            speakSetBegin(set = setCurrent, dataFromWork = dataFromWork)
-            speakSetBody(set = setCurrent, dataForWork = dataForWork, dataFromWork = dataFromWork)
-            speakSetEnd(setCurrent, dataFromWork)
+                currentSet = currentSet,
+                currentIndexSet = dataForWork.indexSet,)
+            speakSetBegin(set = currentSet, dataFromWork = dataFromWork)
+            speakSetBody(set = currentSet, dataForWork = dataForWork, dataFromWork = dataFromWork)
+            speakSetEnd(currentSet, dataFromWork)
         }
     }
     private suspend fun speakSetBegin(set: Set, dataFromWork: DataFromWork){

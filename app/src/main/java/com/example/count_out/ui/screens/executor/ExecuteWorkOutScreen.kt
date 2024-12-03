@@ -171,11 +171,11 @@ import java.math.RoundingMode
         Row(modifier = Modifier.weight(2f), verticalAlignment = Alignment.Bottom,){
             TextApp(style = mTypography.bodyLarge, modifier = Modifier.padding(end = 12.dp),
                 textAlign = TextAlign.Start, text = stringResource(R.string.interval))
-            ButtonFasterSlower1(uiState = uiState)
+            ButtonFasterSlower(uiState = uiState)
         }
     }
 }
-@Composable fun ButtonFasterSlower1(uiState: ExecuteWorkoutScreenState){
+@Composable fun ButtonFasterSlower(uiState: ExecuteWorkoutScreenState){
     var downInterval = {}
     var upInterval = {}
     uiState.training?.let { training ->

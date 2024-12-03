@@ -48,12 +48,6 @@ class Router(private val dataForServ: DataForServ) {
             coordinate = dataFromSite.coordinate
         )
     }
-    private fun initDataForBle(dataForServ: DataForServ):DataForBle{
-        return DataForBle(
-            addressForSearch = dataForServ.addressForSearch,
-            currentConnection = dataForServ.currentConnection
-        )
-    }
     private fun initDataForWork(dataForServ: DataForServ): DataForWork{
         return DataForWork(
             training = dataForServ.training,
@@ -63,21 +57,29 @@ class Router(private val dataForServ: DataForServ) {
             enableSpeechDescription = dataForServ.enableSpeechDescription
         )
     }
-    private fun initDataForSite(): DataForSite{
-        return DataForSite(site = "", state = MutableStateFlow(RunningState.Stopped))
-    }
     private fun initDataForUI(buffer: Buffer): DataForUI {
         return DataForUI(
             runningState = buffer.runningState,
-            executeInfoExercise = buffer.executeInfoExercise
+            currentCount = buffer.currentCount,
+            currentDistance = buffer.currentDistance,
+            currentDuration = buffer.currentDuration,
         )
     }
+    private fun initDataForSite(): DataForSite{
+        return DataForSite(site = "", state = MutableStateFlow(RunningState.Stopped))
+    }
+    private fun initDataForBle(dataForServ: DataForServ):DataForBle{
+        return DataForBle(
+            addressForSearch = dataForServ.addressForSearch,
+            currentConnection = dataForServ.currentConnection
+        )
+    }
+
     fun sendData(){
         sendDataToBase()
         sendDataToUi()
         sendDataToNotification()
     }
-
     private fun sendDataToBase(){
         CoroutineScope(Dispatchers.Default).launch {
             while (true){

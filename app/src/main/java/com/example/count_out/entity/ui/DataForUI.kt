@@ -6,11 +6,9 @@ import com.example.count_out.entity.TickTime
 import com.example.count_out.entity.bluetooth.DeviceUI
 import com.example.count_out.entity.router.Buffer
 import com.example.count_out.entity.workout.Coordinate
-import com.example.count_out.entity.workout.Set
 import kotlinx.coroutines.flow.MutableStateFlow
 
 data class DataForUI (
-    val speakingSet: MutableStateFlow<Set?> = MutableStateFlow(null),
     val runningState: MutableStateFlow<RunningState?> = MutableStateFlow(null),
 
     val flowTime: MutableStateFlow<TickTime> = MutableStateFlow(TickTime()),
@@ -33,9 +31,9 @@ data class DataForUI (
     fun setWork(buffer: Buffer){
         this.flowTime.value = buffer.flowTime.value
         this.countRest.value = buffer.countRest.value
-        this.currentCount.value = buffer.currentCount.value
-        this.currentDuration.value = buffer.currentDuration.value
-        this.currentDistance.value = buffer.currentDistance.value
+//        this.currentCount.value = buffer.currentCount.value
+//        this.currentDuration.value = buffer.currentDuration.value
+//        this.currentDistance.value = buffer.currentDistance.value
         this.enableChangeInterval.value = buffer.enableChangeInterval.value
         this.executeInfoSet.value = buffer.executeInfoSet.value
         this.executeInfoExercise.value = buffer.executeInfoExercise.value

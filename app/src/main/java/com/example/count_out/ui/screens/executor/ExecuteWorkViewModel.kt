@@ -14,7 +14,6 @@ import com.example.count_out.entity.TickTime
 import com.example.count_out.entity.ui.DataForServ
 import com.example.count_out.entity.ui.DataForUI
 import com.example.count_out.entity.ui.ExecuteInfoExercise
-import com.example.count_out.entity.workout.Training
 import com.example.count_out.service_count_out.CountOutServiceBind
 import com.example.count_out.ui.view_components.lg
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -49,9 +48,7 @@ class ExecuteWorkViewModel @Inject constructor(
 
     private val dataForServ = DataForServ()
 
-    init {
-        startServiceApp()
-    }
+    init { startServiceApp() }
     private fun startServiceApp(){
         viewModelScope.launch(Dispatchers.IO) {
             kotlin.runCatching {
@@ -76,6 +73,17 @@ class ExecuteWorkViewModel @Inject constructor(
             )
         }
     }
+    private fun connectToStoredBleDev() {
+        viewModelScope.launch(Dispatchers.IO) {
+            dataRepository.getBleDevStoreFlow().collect{ device->
+                if (device.address.isNotEmpty()) { _executeWorkoutScreenState.update { state ->
+                    state.copy(lastConnectHearthRateDevice = device) }
+                    dataForServ.addressForSearch = device.address
+                    commandSrv( CommandService.CONNECT_DEVICE)
+                }
+            }
+        }
+    }
 
     fun getTraining(id: Long) {
         viewModelScope.launch(Dispatchers.IO) {
@@ -98,26 +106,9 @@ class ExecuteWorkViewModel @Inject constructor(
             kotlin.runCatching { dataRepository.updateSet(trainingId, set) }.fold(
                 onSuccess = { dataForServ.training.value = it
                     _executeWorkoutScreenState.update { state ->
-                        state.copy( training = it,
-                                    executeInfoExercise = ExecuteInfoExercise(
-                                        activity = it.getActivity( null),
-                                        nextExercise = it.getNextExercise(null)),
-                                    executeInfoSet = it.executeInfoSet(null)
-                                    ) } },
+                        state.copy( training = it ) } },
                 onFailure = { messageApp.errorApi(it.message ?: "") }
             )
-        }
-    }
-
-    private fun connectToStoredBleDev() {
-        viewModelScope.launch(Dispatchers.IO) {
-            dataRepository.getBleDevStoreFlow().collect{ device->
-                if (device.address.isNotEmpty()) { _executeWorkoutScreenState.update { state ->
-                        state.copy(lastConnectHearthRateDevice = device) } 
-                    dataForServ.addressForSearch = device.address
-                    commandSrv( CommandService.CONNECT_DEVICE)
-                }
-            }
         }
     }
 
@@ -148,50 +139,29 @@ class ExecuteWorkViewModel @Inject constructor(
                     _executeWorkoutScreenState.update { state -> state.copy(
                         flowTime = tick,
                         countRest = dataForUI.countRest.value,
-                        countReps = dataForUI.currentCount.value,
                         currentDuration = dataForUI.currentDuration.value,
                         currentDistance = dataForUI.currentDistance.value,
                         enableChangeInterval = dataForUI.enableChangeInterval.value,
                         executeInfoExercise = dataForUI.executeInfoExercise.value,
                         executeInfoSet = dataForUI.executeInfoSet.value,
                     )}}
-            } //tickTime
-        }
+            }
+        } //tickTime
+        viewModelScope.launch(Dispatchers.IO) {
+            dataForUI.currentCount.collect { count ->
+                _executeWorkoutScreenState.update { state -> state.copy(countReps = count) } } } //currentCount
+        viewModelScope.launch(Dispatchers.IO) {
+            dataForUI.currentDistance.collect { count ->
+                _executeWorkoutScreenState.update { state -> state.copy(countReps = count) } } } //currentDistance
+        viewModelScope.launch(Dispatchers.IO) {
+            dataForUI.currentDuration.collect { count ->
+                _executeWorkoutScreenState.update { state -> state.copy(countReps = count) } } } //currentDuration
         viewModelScope.launch(Dispatchers.IO) {
             dataForUI.bleConnectState.collect { stateC ->
                 _executeWorkoutScreenState.update { state -> state.copy( bleConnectState = stateC) } } } //connectingState
         viewModelScope.launch(Dispatchers.IO) {
             dataForUI.heartRate.collect { hr ->
                 _executeWorkoutScreenState.update { state -> state.copy(heartRate = hr) } } } //heartRate
-
-//        viewModelScope.launch(Dispatchers.IO) {
-//            dataForUI.speakingSet.collect{ setCollect->
-//                setCollect?.let { set->
-//                    _executeWorkoutScreenState.update { state ->
-//                        state.copy( speakingSet = set,
-//                                    executeSetInfo = state.training?.let { train->
-//                                        state.getExecuteSetInfo(train, set.idSet)} )}}}} //speakingSet
-//        viewModelScope.launch(Dispatchers.IO) {
-//            dataForUI.nextSet.collect{ nextSet->
-//                _executeWorkoutScreenState.update { state ->
-//                    state.copy(listActivity = if (nextSet != null ) state.activityList(nextSet.idSet)
-//                                                else state.listActivity)}} } //listActivity
-        //        viewModelScope.launch(Dispatchers.IO) {
-//            dataForUI.message.collect { message ->
-//                message?.let { mes -> _executeWorkoutScreenState.update { state ->
-//                        state.copy(messageWorkout = state.addMessage(mes)) } } } } //messageWorkout
     }
     fun availableInternet() = internet.isOnline()
-    private fun initExerciseInfo(training: Training): ExecuteInfoExercise {
-        return ExecuteInfoExercise(
-//            activityName = dataForWork.getExercise()?.activity?.name ?: "",
-//            activityId = dataForWork.getExercise()?.activity?.idActivity ?: 0,
-//            countSet = dataForWork.getExercise()?.sets?.count() ?: 0,
-//            currentSet = dataForWork.getSet(),
-//            currentIndexSet = dataForWork.indexSet,
-//            nextExercise = dataForWork.getNextExercise()?.idExercise ?: 0,
-//            nextActivityName = dataForWork.getNextExercise()?.activity?.name ?: "",
-//            nextExerciseSummarizeSet = dataForWork.getSummarizeSet()
-        )
-    }
 }

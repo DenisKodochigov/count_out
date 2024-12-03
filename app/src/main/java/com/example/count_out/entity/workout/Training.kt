@@ -60,7 +60,7 @@ open class Training {
         val idExercise = exercise?.idExercise ?: 0L
         rounds.forEachIndexed { _, round ->
             round.exercise.forEachIndexed { _, exerciseL ->
-                if (finding && exerciseL.sets.count() > 0){
+                if (finding && exerciseL.sets.isNotEmpty()){
                     return ExecuteInfoSet(
                         currentSet = exerciseL.sets[0],
                         currentIndexSet = 0,
@@ -69,7 +69,7 @@ open class Training {
                 }
                 if (exerciseL.idExercise == idExercise || idExercise == 0L) {
                     finding = true
-                    if (exerciseL.sets.count() > 0){
+                    if (exerciseL.sets.isNotEmpty()){
                         return ExecuteInfoSet(
                             currentSet = exerciseL.sets[0],
                             currentIndexSet = 0,

@@ -74,24 +74,24 @@ data class DataForWork (
             0.0
         }
     }
-    fun getNextSet(): Set? {
-        var findingSet = false
-        val currentIdSet = getSet()?.idSet
-
-        training.value?.let { trainingIt ->
-            trainingIt.rounds.forEachIndexed { _, round ->
-                round.exercise.forEachIndexed { _, exercise ->
-                    exercise.sets.forEachIndexed { _, set ->
-                        if (findingSet) {
-                            return set
-                        }
-                        if (set.idSet == currentIdSet) findingSet = true
-                    }
-                }
-            }
-        }
-        return null
-    }
+//    fun getNextSet(): Set? {
+//        var findingSet = false
+//        val currentIdSet = getSet()?.idSet
+//
+//        training.value?.let { trainingIt ->
+//            trainingIt.rounds.forEachIndexed { _, round ->
+//                round.exercise.forEachIndexed { _, exercise ->
+//                    exercise.sets.forEachIndexed { _, set ->
+//                        if (findingSet) {
+//                            return set
+//                        }
+//                        if (set.idSet == currentIdSet) findingSet = true
+//                    }
+//                }
+//            }
+//        }
+//        return null
+//    }
 //    fun getNextExercise(): Exercise? {
 //        var finding = false
 //        val idExercise = getExercise()?.idExercise
