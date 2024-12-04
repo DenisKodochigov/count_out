@@ -115,6 +115,7 @@ import com.example.count_out.ui.view_components.custom_view.IconQ
     )
     Box(modifier = Modifier.size( sizeIcon)){
         Icon(imageVector = icon, contentDescription = "",
+            tint = MaterialTheme.colorScheme.outline,
             modifier = Modifier.align(Alignment.Center).size(size).clickable { onClick() })
     }
 }

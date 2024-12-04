@@ -4,11 +4,13 @@ import androidx.compose.foundation.focusable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.material3.Button
@@ -21,7 +23,6 @@ import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -30,14 +31,12 @@ import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.VisualTransformation
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.example.count_out.R
 import com.example.count_out.entity.TagsTesting.BUTTON_OK
@@ -52,34 +51,38 @@ import com.example.count_out.ui.theme.mTypography
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
 ){
+    val color = with( MaterialTheme.colorScheme.outline){
+        Color(red, green, blue, alpha = if (enabled) alpha else alpha * 0.6f)}
+    val colorDisable = with( MaterialTheme.colorScheme.outline){
+        Color(red, green, blue, alpha = alpha * 0.6f)}
     Button(
         onClick = onClick,
         enabled = enabled,
+        shape = MaterialTheme.shapes.small,
         colors = ButtonDefaults.buttonColors (
-            containerColor= MaterialTheme.colorScheme.tertiaryContainer,
-            contentColor = MaterialTheme.colorScheme.onTertiaryContainer ,
-            disabledContainerColor = MaterialTheme.colorScheme.surface,
-            disabledContentColor = MaterialTheme.colorScheme.onSurface
+            containerColor= color,
+            contentColor = MaterialTheme.colorScheme.outlineVariant ,
+            disabledContainerColor = Color.Transparent,
+            disabledContentColor = colorDisable
         ),
-        elevation = ButtonDefaults.buttonElevation(
-            defaultElevation = 6.dp,
-            pressedElevation = 0.dp,
-            focusedElevation = 8.dp,
-            hoveredElevation = 6.dp,
-            disabledElevation= 6.dp
-        ),
+//        elevation = ButtonDefaults.buttonElevation(
+//            defaultElevation = 6.dp,
+//            pressedElevation = 0.dp,
+//            focusedElevation = 8.dp,
+//            hoveredElevation = 6.dp,
+//            disabledElevation= 6.dp
+//        ),
         modifier = modifier,
     ) {
         Text(text = text)
     }
 }
 
-@Composable fun TextButtonOK(onConfirm: () -> Unit, enabled: Boolean = true)
-{
+@Composable fun TextButtonOK(onConfirm: () -> Unit, enabled: Boolean = true){
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier.fillMaxWidth()
-    ) {
+    ){
         TextButton(onClick = onConfirm, enabled = enabled) {
             TextApp(
                 text = stringResource(R.string.ok),
@@ -101,27 +104,20 @@ import com.example.count_out.ui.theme.mTypography
     onChangeValue:(String)->Unit = {},
     edit: Boolean = false,
     colorLine: Color = MaterialTheme.colorScheme.surfaceBright,
-    width: Dp = 30.dp
 ){
-    val widthField = remember {mutableStateOf(0f)}
     val keyboardController = LocalSoftwareKeyboardController.current
     val focusManager = LocalFocusManager.current
     var text by rememberSaveable { mutableStateOf(if (edit) placeholder else "") }
-//    val interactionSource = remember { MutableInteractionSource() }
-//    val enabled = typeKeyboard != TypeKeyboard.NONE
-//    val enabled = edit
     BasicTextField(
         value = text,
         enabled = edit, //enabled,
         singleLine = maxLines == 1,
         maxLines = maxLines,
         textStyle = LocalTextStyle.current.merge(textStyle.copy(color = LocalContentColor.current,)),
-//        interactionSource = interactionSource,
         visualTransformation = VisualTransformation.None,
         modifier = modifier
-//            .width(IntrinsicSize.Min)
+            .width(IntrinsicSize.Max)
             .focusable()
-            .onGloballyPositioned { widthField.value = it.size.width.toFloat()}
             .onFocusChanged {
                 if ((!it.isFocused || !onLossFocus) && text.isNotEmpty()) { onChangeValue(text) } },
         keyboardOptions = keyBoardOpt(typeKeyboard),
@@ -135,15 +131,13 @@ import com.example.count_out.ui.theme.mTypography
         decorationBox = {
             Row( verticalAlignment = Alignment.CenterVertically){
                 Box( contentAlignment = contentAlignment,
-                    modifier = Modifier
-//                        .widthIn(min = width)
-                        .drawBehind {
+                    modifier = modifier.drawBehind {
                             val y = size.height - 1.dp.toPx() / 2
                             if (edit && showLine) {
                                 drawLine(
                                     color = colorLine,
                                     start = Offset(0f, y),
-                                    end = Offset(widthField.value, y),
+                                    end = Offset(size.width, y),
                                     strokeWidth = 1.dp.toPx()) } }
                 ){
                     if (text.isEmpty()) Text(text = if (edit) "" else placeholder, style = textStyle)
@@ -168,6 +162,7 @@ import com.example.count_out.ui.theme.mTypography
         ButtonApp(text = stringResource(id = R.string.no), onClick = onDismiss)
     }
 }
+
 
 //@Composable fun TextStringAndField(
 //    text:String,

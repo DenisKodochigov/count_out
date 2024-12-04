@@ -138,8 +138,7 @@ import com.example.count_out.ui.view_components.icons.IconsCollapsing
 }
 @Composable fun SettingsBluetooth(uiState: SettingScreenState){
     Spacer(modifier = Modifier.height(12.dp))
-//    Card ( elevation = elevationTraining(), shape = MaterialTheme.shapes.extraSmall){
-    Frame(){
+    Frame{
         Column (modifier = Modifier.padding(start = 4.dp, top = 12.dp, bottom = 12.dp).fillMaxWidth()){
             SettingBluetoothTitle(uiState)
             RowBleDevice(uiState)

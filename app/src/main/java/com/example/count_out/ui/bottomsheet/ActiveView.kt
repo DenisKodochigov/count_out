@@ -17,6 +17,8 @@ import androidx.compose.material.icons.filled.DeleteSweep
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.MaterialTheme.colorScheme
+import androidx.compose.material3.MaterialTheme.shapes
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
@@ -82,8 +84,8 @@ import com.example.count_out.ui.view_components.custom_view.Frame
         Icon(painter = painterResource(id = activity.value.icon), contentDescription = null)
         Spacer(modifier = Modifier.padding(end= 12.dp))
         TextFieldApp(
+            modifier = Modifier.weight(1f).padding(end = 8.dp),
             edit = edit,
-            modifier = Modifier.weight(1f),
             placeholder = activity.value.name,
             typeKeyboard = TypeKeyboard.TEXT,
             textStyle = mTypography.bodyLarge,
@@ -110,8 +112,9 @@ import com.example.count_out.ui.view_components.custom_view.Frame
     onChange: (ActivityDB) -> Unit = {},
     onChangeColor: (Int) -> Unit = {}
 ){
-    val modifier = Modifier.padding(horizontal = 12.dp, vertical = 4.dp)
-    Column(horizontalAlignment = Alignment.Start, modifier = Modifier.fillMaxWidth().padding(horizontal = 0.dp))
+    val modifier = Modifier.padding(horizontal = 6.dp, vertical = 4.dp)
+    val modifier1 = Modifier.padding(horizontal = 6.dp, vertical = 0.dp)
+    Column(horizontalAlignment = Alignment.Start, modifier = Modifier.fillMaxWidth())
     {
         ActivityInfo(
             activity = activity,
@@ -119,26 +122,34 @@ import com.example.count_out.ui.view_components.custom_view.Frame
             onChange = onChange,
             onChangeColor = onChangeColor
         )
-        Row(verticalAlignment = Alignment.CenterVertically, modifier = modifier){
-            TextApp(text = stringResource(id = R.string.audio_track) + ":", style = mTypography.bodyLarge)
-            FieldF(activity.value.audioTrack) {onChange((activity.value as ActivityDB).copy(audioTrack = it))}
+        Row(verticalAlignment = Alignment.CenterVertically, modifier = modifier
+            .background(color = colorScheme.onSecondary, shape = shapes.small),){
+            TextApp(text = stringResource(id = R.string.audio_track) + ":", style = mTypography.bodyLarge, modifier = modifier1)
+            FieldF(activity.value.audioTrack, modifier.weight(1f)) {
+                onChange((activity.value as ActivityDB).copy(audioTrack = it))}
         }
-        Row(verticalAlignment = Alignment.CenterVertically, modifier = modifier ){
-            TextApp(text = stringResource(id = R.string.video_clip) + ":", style = mTypography.bodyLarge)
-            FieldF(activity.value.videoClip) {onChange((activity.value as ActivityDB).copy(videoClip = it))}
+        Row(verticalAlignment = Alignment.CenterVertically, modifier = modifier
+            .background(color = colorScheme.onSecondary, shape = shapes.small), ){
+            TextApp(text = stringResource(id = R.string.video_clip) + ":", style = mTypography.bodyLarge, modifier = modifier1)
+            FieldF(activity.value.videoClip, modifier.weight(1f)) {
+                onChange((activity.value as ActivityDB).copy(videoClip = it))}
         }
-        Column( modifier = modifier ){
-            TextApp(text = stringResource(id = R.string.description) + ":", style = mTypography.bodyLarge)
-            FieldF(activity.value.description) {onChange((activity.value as ActivityDB).copy(description = it))}
+        Column( modifier = modifier.background(color = colorScheme.onSecondary, shape = shapes.small)){
+            TextApp(text = stringResource(id = R.string.description) + ":", style = mTypography.bodyLarge, modifier = modifier1)
+            Row(Modifier.fillMaxWidth()) {
+                FieldF(activity.value.description, Modifier.weight(1f)) {
+                    onChange((activity.value as ActivityDB).copy(description = it))}
+            }
         }
     }
 }
-@Composable fun FieldF(placeholder: String, onChangeValue: (String)->Unit){
+@Composable fun FieldF(placeholder: String, modifier:Modifier = Modifier, onChangeValue: (String)->Unit){
     TextFieldApp(
+        modifier = modifier,
         edit = true,
-        modifier = Modifier.fillMaxWidth().padding(start = 6.dp),
         placeholder = placeholder,
         typeKeyboard = TypeKeyboard.TEXT,
+        contentAlignment = Alignment.CenterStart,
         onLossFocus = false,
         maxLines = 3,
         textStyle = mTypography.bodyLarge,

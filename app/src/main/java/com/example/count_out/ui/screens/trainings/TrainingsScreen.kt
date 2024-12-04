@@ -105,7 +105,6 @@ import com.example.count_out.ui.view_components.custom_view.IconQ
         }
     }
 }
-
 @Composable fun IconSelected(training: Training, uiState: TrainingsScreenState){
     uiState.selectedId.value?.let { selectedId->
         if (training.idTraining == selectedId) IconQ.Mark(onClick = { uiState.selectedId.value = null})

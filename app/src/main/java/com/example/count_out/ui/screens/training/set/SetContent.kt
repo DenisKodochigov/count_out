@@ -5,6 +5,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -15,15 +16,9 @@ import androidx.compose.material3.MaterialTheme.shapes
 import androidx.compose.material3.MaterialTheme.typography
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.onGloballyPositioned
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
@@ -143,9 +138,8 @@ val interval_between_pole = 4.dp
         CountGroupFieldText(uiState, set)
     }
 }
-
 @Composable fun DistancePole(uiState: TrainingScreenState, set: Set, modifier: Modifier = Modifier,){   //B7B7B7
-    PoleInput(
+    PoleInputWithUnit(
         unitId1 = R.string.m,
         unitId2 = R.string.km,
         headId = R.string.distance,
@@ -160,7 +154,7 @@ val interval_between_pole = 4.dp
     )
 }
 @Composable fun DurationPole(uiState: TrainingScreenState, set: Set, modifier: Modifier = Modifier){   //B7B7B7
-    PoleInput(
+    PoleInputWithUnit(
         unitId1 = R.string.sec,
         unitId2 = R.string.min,
         headId = R.string.duration,
@@ -175,7 +169,7 @@ val interval_between_pole = 4.dp
     )
 }
 @Composable fun IntervalPole(uiState: TrainingScreenState, set: Set, modifier: Modifier = Modifier){   //B7B7B7
-    PoleInput(
+    PoleInputWithUnit(
         unitId1 = R.string.sec,
         headId = R.string.interval,
         term = true,
@@ -187,7 +181,7 @@ val interval_between_pole = 4.dp
     )
 }
 @Composable fun WeightPole(uiState: TrainingScreenState, set: Set, modifier: Modifier = Modifier){   //B7B7B7
-    PoleInput(
+    PoleInputWithUnit(
         unitId1 = R.string.gr,
         unitId2 = R.string.kg,
         headId = R.string.weight,
@@ -203,7 +197,7 @@ val interval_between_pole = 4.dp
 
 }
 @Composable fun RestPole(uiState: TrainingScreenState, set: Set, modifier: Modifier = Modifier){
-    PoleInput(
+    PoleInputWithUnit(
         unitId1 = R.string.sec,
         unitId2 = R.string.min,
         headId = R.string.rest_time,
@@ -218,14 +212,18 @@ val interval_between_pole = 4.dp
     )
 }
 
-@Composable fun CountFieldText(uiState: TrainingScreenState, set: Set){   //B7B7B7
-    FieldText( idText = R.string.counts, typeKey = TypeKeyboard.DIGIT, placeholder = "${ set.reps }",
-        onChange = { uiState.onChangeSet ((set as SetDB).copy(reps = it.toIntMy()))  },)
+@Composable fun CountFieldText(uiState: TrainingScreenState, set: Set){
+    PoleInput(
+        headId = R.string.counts, typeKey = TypeKeyboard.DIGIT, placeholder = "${ set.reps }",
+        modifier = Modifier.width(IntrinsicSize.Min),
+        onChangeValue = { uiState.onChangeSet ((set as SetDB).copy(reps = it.toIntMy())) })
+
 }
-@Composable fun CountGroupFieldText(uiState: TrainingScreenState, set: Set){   //B7B7B7
-    FieldText( idText = R.string.counts_by_group_add,
+@Composable fun CountGroupFieldText(uiState: TrainingScreenState, set: Set){
+    PoleInput(
+        headId = R.string.counts_by_group_add,
         placeholder = set.groupCount,
-        onChange = { uiState.onChangeSet ((set as SetDB).copy(groupCount = it)) },)
+        onChangeValue ={ uiState.onChangeSet ((set as SetDB).copy(groupCount = it)) })
 }
 
 @Composable fun TaskSwitch(uiState: TrainingScreenState, set: Set, index: Int, amountSet: Int){
@@ -298,7 +296,7 @@ val interval_between_pole = 4.dp
     }
 }
 
-@Composable fun PoleInput(
+@Composable fun PoleInputWithUnit(
     unitId1: Int,
     unitId2: Int = R.string.no,
     headId: Int,
@@ -316,9 +314,9 @@ val interval_between_pole = 4.dp
             .padding(top = 2.dp, bottom = 6.dp, start = 4.dp, end = 4.dp)
     ) {
         TextApp(text = stringResource(headId), textAlign = TextAlign.Center, style = alumBodySmall)
-        Row (verticalAlignment = Alignment.Top,
-        ) {
+        Row (verticalAlignment = Alignment.Top,) {
             TextFieldApp(
+                modifier = Modifier.weight(1f),
                 edit = true,
                 typeKeyboard = typeKey,
                 contentAlignment = Alignment.Center,
@@ -345,25 +343,35 @@ val interval_between_pole = 4.dp
         }
     }
 }
-@Composable fun FieldText (typeKey: TypeKeyboard = TypeKeyboard.TEXT,
-    placeholder: String, idText: Int, onChange: (String)-> Unit,)
-{
-    val density = LocalDensity.current.density
-    var width by remember { mutableStateOf( 40.dp) }
-    Column (horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.padding(start = 12.dp)) {
-        TextFieldApp(
-            edit = true,
-            typeKeyboard = typeKey,
-            contentAlignment = Alignment.Center,
-            textStyle = typography.bodyLarge.copy(textAlign = TextAlign.Center),
-            onChangeValue = {onChange(it)},
-            placeholder = placeholder,
-            width = width
-        )
-        TextApp(text = stringResource(idText), textAlign = TextAlign.Center, style = alumBodySmall,
-            modifier = Modifier.onGloballyPositioned { width = (it.size.width / density).dp },)
+
+@Composable fun PoleInput(
+    headId: Int,
+    placeholder: String,
+    modifier: Modifier = Modifier,
+    typeKey: TypeKeyboard = TypeKeyboard.TEXT,
+    onChangeValue: (String)-> Unit,
+){
+    Column (horizontalAlignment = Alignment.CenterHorizontally,
+        modifier = modifier
+            .padding(start = interval_between_pole)
+            .background(color = colorScheme.onSecondary, shape = shapes.small)
+            .padding(top = 2.dp, bottom = 6.dp, start = 4.dp, end = 4.dp)
+    ) {
+        Row (verticalAlignment = Alignment.Top, modifier =Modifier) {
+            TextFieldApp(
+                modifier = Modifier.weight(1f),
+                edit = true,
+                typeKeyboard = typeKey,
+                contentAlignment = Alignment.Center,
+                textStyle = typography.bodyLarge.copy(textAlign = TextAlign.Center),
+                onChangeValue = { onChangeValue(it) },
+                placeholder = placeholder,
+            )
+        }
+        TextApp(text = stringResource(headId), textAlign = TextAlign.Center, style = alumBodySmall)
     }
 }
+
 fun viewDistance(set:Set):String {
     return "${ if (set.distanceE == DistanceE.KM) set.distance/1000 else set.distance }"
 }

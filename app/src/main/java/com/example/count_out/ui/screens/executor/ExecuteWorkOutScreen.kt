@@ -97,8 +97,8 @@ import java.math.RoundingMode
     Frame{
         Column (modifier = Modifier.padding(horizontal = 12.dp, vertical = 12.dp)){
             val text = if (uiState.executeInfoExercise?.activity?.name.isNullOrEmpty()) "" else
-                "${uiState.executeInfoExercise.activity.name}:" +
-                " ${uiState.executeInfoExercise.currentExercise}/${uiState.executeInfoExercise.quantityExercise}"
+                "${uiState.executeInfoExercise?.activity?.name}:" +
+                " ${uiState.executeInfoExercise?.currentExercise}/${uiState.executeInfoExercise?.quantityExercise}"
             TextApp(text = text,
                 modifier = Modifier.padding(bottom = 12.dp),
                 style = mTypography.titleLarge)
