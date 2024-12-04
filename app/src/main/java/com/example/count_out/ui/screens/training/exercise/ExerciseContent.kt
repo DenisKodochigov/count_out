@@ -34,7 +34,6 @@ import com.example.count_out.ui.view_components.custom_view.Frame
 import com.example.count_out.ui.view_components.drag_drop_column.column.ColumnDD
 import com.example.count_out.ui.view_components.icons.IconsCollapsing
 import com.example.count_out.ui.view_components.icons.IconsGroup
-import com.example.count_out.ui.view_components.lg
 import kotlin.math.roundToInt
 
 @Composable
@@ -60,7 +59,7 @@ fun ListExercises(
 @Composable fun <T>ElementColum (item:T, uiState: TrainingScreenState){
     Spacer(modifier = Modifier.padding(top = 1.dp))
     uiState.exercise = item as Exercise
-    Frame(color = MaterialTheme.colorScheme.surfaceContainerLow, contour = contourAll1) {
+    Frame(contour = contourAll1) {
         Column (modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp),) {
             SelectActivity(uiState, item as Exercise)
             BodyExercise(uiState, item as Exercise)

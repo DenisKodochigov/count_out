@@ -60,7 +60,7 @@ val interval_between_pole = 4.dp
 
 @Composable fun SetContent(uiState: TrainingScreenState, set: Set, amountSet: Int, index: Int){
     AnimatedVisibility(modifier = Modifier.padding(horizontal = 4.dp, vertical = 1.dp), visible = true) {
-        Frame(color = colorScheme.surfaceContainerLowest, contour = contourAll1) {
+        Frame(colorAlpha = 0.4f, contour = contourAll1) {
             Column (horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp)) {
                 if (amountSet > 1 && uiState.listCollapsingSet.value.find { it == set.idSet } == null)
                     FirstLine(uiState, set, index)
@@ -289,7 +289,7 @@ val interval_between_pole = 4.dp
     idString: Int,
     style: TextStyle = typography.bodySmall)
 {
-    Frame (color = color, contour = if (selected) contourAll1 else contourBot1,
+    Frame (colorBorder = color, contour = if (selected) contourAll1 else contourBot1,
             background = background,) {
         TextApp( modifier = modifier.clickable { onClick() },
             fontWeight =  if (selected) FontWeight.Bold else FontWeight.Normal,
@@ -319,6 +319,7 @@ val interval_between_pole = 4.dp
         Row (verticalAlignment = Alignment.Top,
         ) {
             TextFieldApp(
+                edit = true,
                 typeKeyboard = typeKey,
                 contentAlignment = Alignment.Center,
                 textStyle = typography.bodyLarge.copy(textAlign = TextAlign.Center),
@@ -351,6 +352,7 @@ val interval_between_pole = 4.dp
     var width by remember { mutableStateOf( 40.dp) }
     Column (horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.padding(start = 12.dp)) {
         TextFieldApp(
+            edit = true,
             typeKeyboard = typeKey,
             contentAlignment = Alignment.Center,
             textStyle = typography.bodyLarge.copy(textAlign = TextAlign.Center),

@@ -30,24 +30,18 @@ fun BottomSheetAddActivity(uiState: SettingScreenState)
         content = { BottomSheetAddActivityContent(uiState) }
     )
 }
-@Composable
-fun BottomSheetAddActivityContent(uiState: SettingScreenState)
-{
+@Composable fun BottomSheetAddActivityContent(uiState: SettingScreenState) {
     Column( horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(Dimen.bsItemPaddingHor)
-    ) {
+        modifier = Modifier.fillMaxWidth().padding(Dimen.bsItemPaddingHor))
+    {
         Spacer(Modifier.height(Dimen.bsSpacerHeight))
-        ActivityValueFull(
+        ActivityInfoFull(
             activity = uiState.activity,
             onChange = { uiState.onUpdateActivity(it) },
             onChangeColor = { uiState.onSetColorActivity(uiState.activity.value.idActivity, it ) }
         )
         Spacer(Modifier.height(Dimen.bsSpacerHeight))
-        ButtonConfirm( onConfirm = {
-            uiState.onConfirmAddActivity(uiState)
-        } )
+        ButtonConfirm( onConfirm = { uiState.onConfirmAddActivity(uiState) } )
         Spacer(Modifier.height(Dimen.bsSpacerBottomHeight))
     }
 }

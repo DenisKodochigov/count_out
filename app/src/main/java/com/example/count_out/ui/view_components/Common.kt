@@ -1,18 +1,14 @@
 package com.example.count_out.ui.view_components
 
 import androidx.compose.foundation.focusable
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.material3.Button
@@ -34,6 +30,7 @@ import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.platform.testTag
@@ -103,27 +100,28 @@ import com.example.count_out.ui.theme.mTypography
     maxLines: Int = 1,
     onChangeValue:(String)->Unit = {},
     edit: Boolean = false,
-    colorLine: Color = MaterialTheme.colorScheme.surfaceContainerLowest,
+    colorLine: Color = MaterialTheme.colorScheme.surfaceBright,
     width: Dp = 30.dp
 ){
-
+    val widthField = remember {mutableStateOf(0f)}
     val keyboardController = LocalSoftwareKeyboardController.current
     val focusManager = LocalFocusManager.current
-    val interactionSource = remember { MutableInteractionSource() }
     var text by rememberSaveable { mutableStateOf(if (edit) placeholder else "") }
-    val enabled = typeKeyboard != TypeKeyboard.NONE
-    val mergedStyle = LocalTextStyle.current.merge(textStyle.copy(color = LocalContentColor.current,))
+//    val interactionSource = remember { MutableInteractionSource() }
+//    val enabled = typeKeyboard != TypeKeyboard.NONE
+//    val enabled = edit
     BasicTextField(
         value = text,
-        enabled = enabled,
+        enabled = edit, //enabled,
         singleLine = maxLines == 1,
         maxLines = maxLines,
-        textStyle = mergedStyle,
-        interactionSource = interactionSource,
+        textStyle = LocalTextStyle.current.merge(textStyle.copy(color = LocalContentColor.current,)),
+//        interactionSource = interactionSource,
         visualTransformation = VisualTransformation.None,
         modifier = modifier
-            .width(IntrinsicSize.Min)
+//            .width(IntrinsicSize.Min)
             .focusable()
+            .onGloballyPositioned { widthField.value = it.size.width.toFloat()}
             .onFocusChanged {
                 if ((!it.isFocused || !onLossFocus) && text.isNotEmpty()) { onChangeValue(text) } },
         keyboardOptions = keyBoardOpt(typeKeyboard),
@@ -138,20 +136,17 @@ import com.example.count_out.ui.theme.mTypography
             Row( verticalAlignment = Alignment.CenterVertically){
                 Box( contentAlignment = contentAlignment,
                     modifier = Modifier
-                        .widthIn(min = width)
+//                        .widthIn(min = width)
                         .drawBehind {
-                            val strokeWidth = 1.dp.toPx()
-                            val y = size.height - strokeWidth / 2
-                            if (enabled && showLine) {
+                            val y = size.height - 1.dp.toPx() / 2
+                            if (edit && showLine) {
                                 drawLine(
                                     color = colorLine,
                                     start = Offset(0f, y),
-                                    end = Offset(size.width, y),
-                                    strokeWidth = strokeWidth) } }
+                                    end = Offset(widthField.value, y),
+                                    strokeWidth = 1.dp.toPx()) } }
                 ){
-                    if (text.isEmpty()) {
-                        Text(text = if (edit) "" else placeholder, style = textStyle)
-                    }
+                    if (text.isEmpty()) Text(text = if (edit) "" else placeholder, style = textStyle)
                     it()
                 }
             }

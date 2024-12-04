@@ -15,7 +15,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -67,11 +66,8 @@ import com.example.count_out.ui.view_components.custom_view.IconQ
 }
 @Composable fun TrainingsScreenLayout( uiState: TrainingsScreenState){
     Column( modifier = Modifier.fillMaxSize()) {
-        Frame( color = MaterialTheme.colorScheme.surfaceContainerLow,
-            contour= contourHor2,
-            modifier = Modifier.weight(1f)){
-            TrainingList(uiState, modifier = Modifier.weight(1f))
-        }
+        Frame( contour= contourHor2, modifier = Modifier.weight(1f)){
+            TrainingList(uiState, modifier = Modifier.weight(1f)) }
         Spacer(modifier = Modifier.height(18.dp))
         DownPlace(uiState)
     }
@@ -93,7 +89,7 @@ import com.example.count_out.ui.view_components.custom_view.IconQ
     }
 }
 @Composable fun TrainingCard(item: Training, uiState: TrainingsScreenState, modifier: Modifier) {
-    Frame( color = MaterialTheme.colorScheme.surfaceContainerLow, contour = contourAll2){
+    Frame( contour = contourAll2){
         Row(
             horizontalArrangement = Arrangement.Start,
             verticalAlignment = Alignment.CenterVertically,

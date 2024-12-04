@@ -3,7 +3,6 @@ package com.example.count_out.ui.screens.settings
 import android.annotation.SuppressLint
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -18,8 +17,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.BluetoothSearching
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.rounded.CleaningServices
-import androidx.compose.material3.Card
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -29,6 +26,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -40,10 +38,10 @@ import com.example.count_out.ui.bottomsheet.BottomSheetAddActivity
 import com.example.count_out.ui.bottomsheet.BottomSheetBle
 import com.example.count_out.ui.bottomsheet.CardActivity
 import com.example.count_out.ui.theme.alumBodySmall
-import com.example.count_out.ui.theme.elevationTraining
 import com.example.count_out.ui.theme.mTypography
 import com.example.count_out.ui.view_components.SwitchApp
 import com.example.count_out.ui.view_components.TextApp
+import com.example.count_out.ui.view_components.custom_view.Frame
 import com.example.count_out.ui.view_components.icons.AnimateIcon
 import com.example.count_out.ui.view_components.icons.IconSingle
 import com.example.count_out.ui.view_components.icons.IconsCollapsing
@@ -70,7 +68,6 @@ import com.example.count_out.ui.view_components.icons.IconsCollapsing
             .padding(8.dp)
             .fillMaxSize(),
         content = {
-//            NameScreen(id = R.string.title_setting_screen)
             ActivitySection(uiState = uiState)
             OtherSettings(uiState = uiState)
         }
@@ -78,16 +75,13 @@ import com.example.count_out.ui.view_components.icons.IconsCollapsing
 }
 
 @Composable fun ActivitySection(uiState: SettingScreenState) {
-    Card ( elevation = elevationTraining(), shape = MaterialTheme.shapes.extraSmall
-    ){
-        Box {
+        Frame {
             Column( modifier = Modifier.padding(start = 6.dp, top = 6.dp, bottom = 6.dp))
             {
                 ActivitySectionTitle(uiState = uiState)
                 ActivitySectionBody(uiState = uiState)
             }
         }
-    }
 }
 @Composable fun ActivitySectionTitle(uiState: SettingScreenState){
     Row(
@@ -130,7 +124,7 @@ import com.example.count_out.ui.view_components.icons.IconsCollapsing
 }
 @Composable fun SettingSpeechDescription(uiState: SettingScreenState){
     Spacer(modifier = Modifier.height(12.dp))
-    Card ( elevation = elevationTraining(), shape = MaterialTheme.shapes.extraSmall ){
+    Frame{
         uiState.settings.find{
             it.parameter == R.string.speech_description}?.let { setting->
             SwitchApp(
@@ -144,7 +138,8 @@ import com.example.count_out.ui.view_components.icons.IconsCollapsing
 }
 @Composable fun SettingsBluetooth(uiState: SettingScreenState){
     Spacer(modifier = Modifier.height(12.dp))
-    Card ( elevation = elevationTraining(), shape = MaterialTheme.shapes.extraSmall){
+//    Card ( elevation = elevationTraining(), shape = MaterialTheme.shapes.extraSmall){
+    Frame(){
         Column (modifier = Modifier.padding(start = 4.dp, top = 12.dp, bottom = 12.dp).fillMaxWidth()){
             SettingBluetoothTitle(uiState)
             RowBleDevice(uiState)
@@ -204,6 +199,10 @@ import com.example.count_out.ui.view_components.icons.IconsCollapsing
     TextApp(text = heartRate, style = mTypography.displayMedium, modifier = Modifier.padding(start = 12.dp, end = 12.dp))
 }
 
+@Preview
+@Composable fun Preview(){
+    ActivitySection(SettingScreenState())
+}
 
 
 

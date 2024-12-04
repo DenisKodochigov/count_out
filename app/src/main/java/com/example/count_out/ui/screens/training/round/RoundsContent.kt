@@ -31,7 +31,7 @@ import kotlin.math.roundToInt
 fun Round(uiState: TrainingScreenState, roundType: MutableState<RoundType>){
     roundType.value.amount = amountExercise(uiState, roundType)
     roundType.value.duration = durationRound(uiState, roundType)
-    Frame(color = MaterialTheme.colorScheme.surfaceContainerHigh, contour = contourHor2){
+    Frame(colorAlpha = 0.8f, contour = contourHor2){
         Column( modifier = Modifier.padding(start = 6.dp, bottom = 4.dp, top = 4.dp)){
             Row1Round(uiState = uiState, roundType)
             Row2Round(uiState = uiState, roundType)
