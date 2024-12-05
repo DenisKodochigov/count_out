@@ -21,6 +21,7 @@ import com.example.count_out.data.room.tables.SpeechKitDB
 import com.example.count_out.data.room.tables.TemporaryDB
 import com.example.count_out.data.room.tables.TrainingDB
 import com.example.count_out.data.room.tables.WorkoutDB
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface DataDao {
@@ -36,6 +37,9 @@ interface DataDao {
 
     @Transaction @Query("SELECT * FROM tb_trainings WHERE idTraining != 1")
     fun getTrainingsRel(): List<TrainingRel>
+
+    @Transaction @Query("SELECT * FROM tb_trainings WHERE idTraining != 1")
+    fun getTrainingsRelFlow(): Flow<List<TrainingRel>>
 
     @Query("DELETE FROM tb_trainings WHERE idTraining = :id")
     fun delTraining(id: Long)

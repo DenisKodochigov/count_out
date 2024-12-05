@@ -9,6 +9,7 @@ import com.example.count_out.data.room.DataDao
 import com.example.count_out.entity.Const.MODE_DATABASE
 import com.example.count_out.entity.prepopulateRealDb
 import com.example.count_out.entity.prepopulateTestDb
+import com.example.count_out.ui.view_components.lg
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -26,8 +27,7 @@ class DatabaseModule {
     fun provideDatabase(@ApplicationContext appContext: Context): AppDatabase {
         when (mode) {
             0 -> database = Room.inMemoryDatabaseBuilder( appContext, AppDatabase::class.java).build()
-            1 -> {
-                database = Room.inMemoryDatabaseBuilder(appContext, AppDatabase::class.java)
+            1 -> { database = Room.inMemoryDatabaseBuilder(appContext, AppDatabase::class.java)
                     .addCallback(object : RoomDatabase.Callback() {
                         override fun onCreate(db: SupportSQLiteDatabase) {
                             super.onCreate(db)
@@ -36,8 +36,7 @@ class DatabaseModule {
                     })
                     .build()
             }
-            2 -> {
-                database = Room.databaseBuilder(appContext, AppDatabase::class.java, "data.db")
+            2 -> { database = Room.databaseBuilder(appContext, AppDatabase::class.java, "data.db")
                     .addCallback( object: RoomDatabase.Callback(){
                         override fun onCreate(db: SupportSQLiteDatabase) {
                             super.onCreate(db)

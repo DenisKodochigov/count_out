@@ -13,6 +13,7 @@ import com.example.count_out.data.room.tables.SpeechKitDB
 import com.example.count_out.data.room.tables.TrainingDB
 import com.example.count_out.data.room.tables.WorkoutDB
 import com.example.count_out.entity.workout.Training
+import com.example.count_out.ui.view_components.lg
 
 object Plugins
 {
@@ -44,16 +45,14 @@ object Plugins
     }
 }
 
-fun prepopulateRealDb( db: AppDatabase
-){
+fun prepopulateRealDb( db: AppDatabase){
     createSetting(db)
     createActivity(db)
     createTrainingPlansReal(db)
     createTrainingPlansArm(db)
     createTrainingPlansLeg(db)
 }
-fun prepopulateTestDb( db: AppDatabase
-){
+fun prepopulateTestDb( db: AppDatabase){
     createSetting(db)
     createActivity(db)
     createTrainingPlansTesting(db)
@@ -127,6 +126,7 @@ private fun createTrainingId0( db: AppDatabase) {
     addRecordCount(db)
 }
 private fun createTrainingPlansTesting( db: AppDatabase) {
+    lg("createTrainingPlansTesting")
     createTrainingId0( db )
     val rest = 10
     val reps = 3

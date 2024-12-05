@@ -62,7 +62,7 @@ val interval_between_pole = 4.dp
                 else {
                     TaskSwitch( uiState, set, index, amountSet )
                     BodySet( uiState, set)
-                    ZoneSwitch( uiState, set )
+                    ZonePulseSwitch( uiState, set )
                 }
             }
         }
@@ -112,17 +112,17 @@ val interval_between_pole = 4.dp
     Row( horizontalArrangement = Arrangement.Center,
         verticalAlignment = Alignment.Top,
         modifier = Modifier.fillMaxWidth().padding(vertical = 12.dp)){
-        DistancePole(uiState, set)
-        RestPole(uiState, set)
+        DistancePole(uiState, set, Modifier.weight(1f))
+        RestPole(uiState, set, Modifier.weight(1f))
     }
 }
 @Composable fun Duration(uiState: TrainingScreenState, set: Set) {
     Row( horizontalArrangement = Arrangement.Center,
         verticalAlignment = Alignment.Top,
         modifier = Modifier.fillMaxWidth().padding(vertical = 18.dp)){
-        DurationPole(uiState, set)
-        WeightPole(uiState, set)
-        RestPole(uiState, set)
+        DurationPole(uiState, set, Modifier.weight(1f))
+        WeightPole(uiState, set, Modifier.weight(1f))
+        RestPole(uiState, set, Modifier.weight(1f))
     }
 }
 @Composable fun Count(uiState: TrainingScreenState, set: Set) {
@@ -257,23 +257,23 @@ val interval_between_pole = 4.dp
                 uiState.showSpeechSet.value = true},)
     }
 }
-@Composable fun ZoneSwitch(uiState: TrainingScreenState, set: Set){
+@Composable fun ZonePulseSwitch(uiState: TrainingScreenState, set: Set){
     Row(verticalAlignment = Alignment.CenterVertically){
         Spacer(modifier = Modifier.weight(1f))
-        ZoneButtonSwitch(selected = set.intensity == Zone.EXTRA_SLOW, idString = R.string.zone1,
+        ButtonSwitchPulse(selected = set.intensity == Zone.EXTRA_SLOW, idString = R.string.zone1,
             onClick = {uiState.onChangeSet ((set as SetDB).copy(intensity = Zone.EXTRA_SLOW))})
-        ZoneButtonSwitch(selected = set.intensity == Zone.SLOW, idString = R.string.zone2,
+        ButtonSwitchPulse(selected = set.intensity == Zone.SLOW, idString = R.string.zone2,
             onClick = {uiState.onChangeSet ((set as SetDB).copy(intensity = Zone.SLOW))})
-        ZoneButtonSwitch(selected = set.intensity == Zone.MEDIUM, idString = R.string.zone3,
+        ButtonSwitchPulse(selected = set.intensity == Zone.MEDIUM, idString = R.string.zone3,
             onClick = {uiState.onChangeSet ((set as SetDB).copy(intensity = Zone.MEDIUM))})
-        ZoneButtonSwitch(selected = set.intensity == Zone.HIGH, idString = R.string.zone4,
+        ButtonSwitchPulse(selected = set.intensity == Zone.HIGH, idString = R.string.zone4,
             onClick = {uiState.onChangeSet ((set as SetDB).copy(intensity = Zone.HIGH))})
-        ZoneButtonSwitch(selected = set.intensity == Zone.MAX, idString = R.string.zone5,
+        ButtonSwitchPulse(selected = set.intensity == Zone.MAX, idString = R.string.zone5,
             onClick = {uiState.onChangeSet ((set as SetDB).copy(intensity = Zone.MAX))})
         Spacer(modifier = Modifier.weight(1f))
     }
 }
-@Composable fun ZoneButtonSwitch(selected: Boolean, onClick: () -> Unit, idString: Int,){
+@Composable fun ButtonSwitchPulse(selected: Boolean, onClick: () -> Unit, idString: Int,){
     ButtonSwitch(selected = selected, idString = idString, onClick = onClick,
         style = alumBodyMedium, modifier = Modifier.width(50.dp))
 }
@@ -386,6 +386,7 @@ fun setCollapsing(uiState: TrainingScreenState, set: Set) {
         uiState.listCollapsingSet.value = listCollapsingSet
     }
 }
+
 //        TaskButtonSwitch(selected = set.goal == GoalSet.DISTANCE, idString = R.string.distance,
 //            onClick = {uiState.onChangeSet ((set as SetDB).copy(goal = GoalSet.DISTANCE))},)
 //        TaskButtonSwitch(selected = set.goal == GoalSet.DURATION, idString = R.string.duration,

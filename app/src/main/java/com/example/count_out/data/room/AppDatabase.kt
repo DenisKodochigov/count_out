@@ -33,8 +33,12 @@ import com.example.count_out.data.room.tables.WorkoutDB
     WorkoutDB::class,
     TemporaryDB::class,
     ], version = 1, exportSchema = false)
-@TypeConverters(ConverterZone::class, ConverterGoalSet::class, ConverterDistanceE::class,
-    ConverterTimeE::class, ConverterWeightE::class)
+@TypeConverters(
+    ConverterZone::class,
+    ConverterGoalSet::class,
+    ConverterDistanceE::class,
+    ConverterTimeE::class,
+    ConverterWeightE::class)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun dataDao(): DataDao
 }

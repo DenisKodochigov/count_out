@@ -37,6 +37,7 @@ import com.example.count_out.ui.view_components.ItemSwipe
 import com.example.count_out.ui.view_components.TextApp
 import com.example.count_out.ui.view_components.custom_view.Frame
 import com.example.count_out.ui.view_components.custom_view.IconQ
+import com.example.count_out.ui.view_components.lg
 
 @Composable fun TrainingsScreen(
     onClickTraining: (Long) -> Unit,
