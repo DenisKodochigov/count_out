@@ -20,11 +20,16 @@ import com.example.count_out.entity.workout.Set
 import com.example.count_out.entity.workout.TemporaryBase
 import com.example.count_out.entity.workout.Training
 import com.example.count_out.ui.view_components.lg
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.stateIn
 import javax.inject.Inject
 import javax.inject.Singleton
-import kotlin.collections.map
 
 @Singleton
 class DataSource @Inject constructor(private val dataDao: DataDao) {
@@ -33,41 +38,14 @@ class DataSource @Inject constructor(private val dataDao: DataDao) {
         val training = dataDao.getTrainingRel(id).toTraining()
         return training
     }
-//    suspend fun getTrainingsFlow(): MutableStateFlow<List<Training>> {
-//        lg("getTrainingsFlow")
-//        val trainings: MutableStateFlow<List<Training>> = MutableStateFlow(emptyList())
-//        dataDao.getTrainingsRelFlow().collect{
-//            trainings.value = it.map { it.toTraining() }
-//        }
-//        val bookmark = dataDao.getTrainingsRelFlow().stateIn(
-//                scope = CoroutineScope(Dispatchers.IO),
-//                started = SharingStarted.WhileSubscribed(1000L),
-//                initialValue = false
-//            )
-//
-//        val flow: Flow<List<Training>> = dataDao.getTrainingsRelFlow().map {list-> list.map { it.toTraining() } }
-//        return trainings
-//    }
-suspend fun getTrainingsFlow(): Flow<List<Training>> {
-    lg("getTrainingsFlow")
-//    val trainings: MutableStateFlow<List<Training>> = MutableStateFlow(emptyList())
-//    dataDao.getTrainingsRelFlow().collect{ trainings.value = it.map { it.toTraining() } }
-//    val trainings: StateFlow<Any> = dataDao.getTrainingsRelFlow().stateIn(
-//        scope = CoroutineScope(Dispatchers.IO),
-//        started = SharingStarted.WhileSubscribed(1000L),
-//        initialValue = false
-//    )
+    @OptIn(ExperimentalCoroutinesApi::class)
+    suspend fun getTrainingsFlow(): StateFlow<List<Training>> = dataDao.getTrainingsRelFlow()
+        .flatMapLatest { value ->
+            flow {
+                delay(200)
+                emit(value.map { it.toTraining() } ) } }
+        .stateIn(scope = CoroutineScope(Dispatchers.IO))
 
-    val trainings = dataDao.getTrainingsRelFlow().map {list-> list.map { it.toTraining() } }
-    return trainings
-}
-    fun getTrainings(): List<Training> {
-//        if (MODE_DATABASE == 1 || MODE_DATABASE == 3) {
-//            dataDao.getTrainingsRel()
-//            Thread.sleep(3000)
-//        }
-        return dataDao.getTrainingsRel().map { it.toTraining() }
-    }
     fun addTraining(): List<Training> {
         createTraining()
         return dataDao.getTrainingsRel().map { it.toTraining() }

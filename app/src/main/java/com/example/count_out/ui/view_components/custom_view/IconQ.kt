@@ -51,6 +51,7 @@ object IconQ{
     private const val widthVer = 40f
 
     fun text(){}
+    @Composable fun color() = MaterialTheme.colorScheme.outline
     @Composable fun ArrowLeft() {
         val colorLine = MaterialTheme.colorScheme.primary
         Spacer(modifier = Modifier
@@ -171,7 +172,6 @@ object IconQ{
             .height(Dp(heightHor))
             .width(Dp(widthHor))) {}
     }
-    @Composable fun color() = MaterialTheme.colorScheme.outline
     @Composable fun Add(color: Color = color(), onClick: ()->Unit = {}){
         Spacer(modifier = Modifier
             .width(width)
@@ -179,36 +179,34 @@ object IconQ{
             .clickable { onClick() }
             .drawWithCache {
                 onDrawWithContent {
-                    val xPx = width.toPx()
-                    val yPx = height.toPx()
-                    val thickPx = thick.toPx()
-                    onDrawWithContent {
-                        drawOval(
-                            color = color,
-                            style = Stroke(width = thickPx),
-                            topLeft = Offset(x = thickPx / 2, y = thickPx / 2),
-                            size = Size(xPx - thickPx, yPx - thickPx)
-                        )
-                        drawLine(
-                            color = color,
-                            strokeWidth = thickPx,
-                            start = Offset(xPx / 2, yPx / 4),
-                            end = Offset(xPx / 2, yPx * 3 / 4)
-                        )
-                        drawLine(
-                            color = color,
-                            strokeWidth = thickPx,
-                            start = Offset(xPx / 4, yPx / 2),
-                            end = Offset(xPx * 3 / 4, yPx / 2)
-                        )
-                    }
+                val xPx = width.toPx()
+                val yPx = height.toPx()
+                val thickPx = thick.toPx()
+                    drawOval(
+                        color = color,
+                        style = Stroke(width = thickPx),
+                        topLeft = Offset(x = thickPx / 2, y = thickPx / 2),
+                        size = Size(xPx - thickPx, yPx - thickPx)
+                    )
+                    drawLine(
+                        color = color,
+                        strokeWidth = thickPx,
+                        start = Offset(xPx / 2, yPx / 4),
+                        end = Offset(xPx / 2, yPx * 3 / 4)
+                    )
+                    drawLine(
+                        color = color,
+                        strokeWidth = thickPx,
+                        start = Offset(xPx / 4, yPx / 2),
+                        end = Offset(xPx * 3 / 4, yPx / 2)
+                    )
                 }
             }
         )
     }
-    @Composable fun Faster(color: Color = color(), onClick: ()->Unit = {}){
+    @Composable fun Faster(color: Color = color(), modifier: Modifier = Modifier, onClick: ()->Unit = {}){
         val textMeasurer = rememberTextMeasurer()
-        Spacer(modifier = Modifier
+        Spacer(modifier = modifier
             .width(width)
             .height(height/2 + thick *2)
             .clickable { onClick() }
@@ -271,9 +269,9 @@ object IconQ{
             }
         )
     }
-    @Composable fun Slower(color: Color = color(), onClick: ()->Unit = {}){
+    @Composable fun Slower(color: Color = color(), modifier: Modifier = Modifier, onClick: ()->Unit = {}){
         val textMeasurer = rememberTextMeasurer()
-        Spacer(modifier = Modifier
+        Spacer(modifier = modifier
             .width(width)
             .height(height/2 + thick *2)
             .clickable { onClick() }
@@ -342,10 +340,10 @@ object IconQ{
             .height(height)
             .clickable { onClick() }
             .drawWithCache {
-                val xPx = width.toPx()
-                val yPx = height.toPx()
-                val thickPx = thick.toPx()
                 onDrawWithContent {
+                    val xPx = width.toPx()
+                    val yPx = height.toPx()
+                    val thickPx = thick.toPx()
                     drawOval(
                         color = color,
                         style = Stroke(width = thickPx),
@@ -374,18 +372,18 @@ object IconQ{
             .height(height)
             .clickable { onClick() }
             .drawWithCache {
-                val xPx = width.toPx()
-                val yPx = height.toPx()
-                val thickPx = thick.toPx()
-                val offsetX = 2.dp.toPx()
-                val triangle = Path().apply {
-                    moveTo(xPx * 0.3f + offsetX, yPx / 4)
-                    lineTo(xPx * 0.7f + offsetX, yPx / 2)
-                    lineTo(xPx * 0.3f + offsetX, yPx * 3 / 4)
-                    lineTo(xPx * 0.3f + offsetX, yPx / 3)
-                    close()
-                }
                 onDrawWithContent {
+                    val xPx = width.toPx()
+                    val yPx = height.toPx()
+                    val thickPx = thick.toPx()
+                    val offsetX = 2.dp.toPx()
+                    val triangle = Path().apply {
+                        moveTo(xPx * 0.3f + offsetX, yPx / 4)
+                        lineTo(xPx * 0.7f + offsetX, yPx / 2)
+                        lineTo(xPx * 0.3f + offsetX, yPx * 3 / 4)
+                        lineTo(xPx * 0.3f + offsetX, yPx / 3)
+                        close()
+                    }
                     drawOval(
                         color = color,
                         style = Stroke(width = thickPx),
@@ -403,11 +401,10 @@ object IconQ{
             .height(height)
             .clickable { onClick() }
             .drawWithCache {
-                val xPx = width.toPx()
-                val yPx = height.toPx()
-                val thickPx = thick.toPx()
-
                 onDrawWithContent {
+                    val xPx = width.toPx()
+                    val yPx = height.toPx()
+                    val thickPx = thick.toPx()
                     drawOval(
                         color = color,
                         style = Stroke(width = thickPx),
@@ -430,15 +427,14 @@ object IconQ{
             .height(height)
             .clickable { onClick() }
             .drawWithCache {
-                val xPx = width.toPx()
-                val yPx = height.toPx()
-                val thickPx = thick.toPx()
-                val diameter = 5f
-                val x0 = xPx / 2 - thickPx * diameter / 2
-                val y0 = yPx / 2 - thickPx * diameter / 2
-                val delta1 = yPx * 0.2f
-
                 onDrawWithContent {
+                    val xPx = width.toPx()
+                    val yPx = height.toPx()
+                    val thickPx = thick.toPx()
+                    val diameter = 5f
+                    val x0 = xPx / 2 - thickPx * diameter / 2
+                    val y0 = yPx / 2 - thickPx * diameter / 2
+                    val delta1 = yPx * 0.2f
                     drawOval(
                         color = color, topLeft = Offset(x = x0, y = y0 - delta1),
                         size = Size(thickPx * diameter, thickPx * diameter)
@@ -461,10 +457,10 @@ object IconQ{
             .height(height)
             .clickable { onClick() }
             .drawWithCache {
-                val xPx = width.toPx()
-                val yPx = height.toPx()
-                val thickPx = thick.toPx()
                 onDrawWithContent {
+                    val xPx = width.toPx()
+                    val yPx = height.toPx()
+                    val thickPx = thick.toPx()
                     drawPath(color = color, path = Path().apply {
                         moveTo(xPx / 2, yPx * 0.4f)
                         lineTo(thickPx * 9, yPx * 0.6f)
@@ -481,10 +477,10 @@ object IconQ{
             .height(height)
             .clickable { onClick() }
             .drawWithCache {
-                val xPx = width.toPx()
-                val yPx = height.toPx()
-                val thickPx = thick.toPx()
                 onDrawWithContent {
+                    val xPx = width.toPx()
+                    val yPx = height.toPx()
+                    val thickPx = thick.toPx()
                     drawPath(color = color, path = Path().apply {
                         moveTo(xPx / 2, yPx * 0.6f)
                         lineTo(thickPx * 9, yPx * 0.4f)
@@ -501,10 +497,10 @@ object IconQ{
             .height(height)
             .clickable { onClick() }
             .drawWithCache {
-                val xPx = width.toPx()
-                val yPx = height.toPx()
-                val thickPx = thick.toPx()
                 onDrawWithContent {
+                    val xPx = width.toPx()
+                    val yPx = height.toPx()
+                    val thickPx = thick.toPx()
                     val pathEffect = PathEffect.dashPathEffect(
                         intervals = floatArrayOf(3.dp.toPx(), 1.dp.toPx()), phase = 0f
                     )
@@ -538,10 +534,10 @@ object IconQ{
             .height(height)
             .clickable { onClick() }
             .drawWithCache {
-                val xPx = width.toPx()
-                val yPx = height.toPx()
-                val thickPx = thick.toPx()
                 onDrawWithContent {
+                    val xPx = width.toPx()
+                    val yPx = height.toPx()
+                    val thickPx = thick.toPx()
                     drawLine(
                         color = color,
                         strokeWidth = thickPx,
@@ -558,10 +554,10 @@ object IconQ{
             .height(height)
             .clickable { onClick() }
             .drawWithCache {
-                val xPx = width.toPx()
-                val yPx = height.toPx()
-                val thickPx = thick.toPx()
                 onDrawWithContent {
+                    val xPx = width.toPx()
+                    val yPx = height.toPx()
+                    val thickPx = thick.toPx()
                     drawLine(
                         color = color,
                         strokeWidth = thickPx * 2,
@@ -587,12 +583,12 @@ object IconQ{
             .height(height)
             .clickable { onClick() }
             .drawWithCache {
-                val xPx = width.toPx()
-                val yPx = (height * 0.7f).toPx()
-                val yPx0 = (height).toPx()
-                val delta1 = xPx * 0.18f
-                val thickPx = 1.dp.toPx()
                 onDrawWithContent {
+                    val xPx = width.toPx()
+                    val yPx = (height * 0.7f).toPx()
+                    val yPx0 = (height).toPx()
+                    val delta1 = xPx * 0.18f
+                    val thickPx = 1.dp.toPx()
                     drawOval(
                         color = colorL, style = Stroke(width = thickPx),
                         topLeft = Offset(x = thickPx / 2, y = thickPx / 2),
@@ -667,25 +663,24 @@ object IconQ{
             .height(height)
             .clickable { onClick() }
             .drawWithCache {
-                val xPx = width.toPx()
-                val yPx = height.toPx() * 0.67f
-                val yPx0 = height.toPx()
-                val thickPx = 1.dp.toPx()
-                val widthPx2 = if (selected) 2.dp.toPx() else 1.dp.toPx()
-
-                val diameter = yPx * 0.7f
-                val diameter1 = diameter * 0.15f
-                val x0 = xPx / 2 - diameter / 2
-                val y0 = yPx - diameter * 0.7f
-                val metka = diameter / 8
-                val arrow = diameter / 4
-                val x1 = diameter / 8
-                val y1 = diameter / 5
-                val x2 = diameter / 4
-                val y2 = diameter / 3
-                val y21 = diameter / 10
-
                 onDrawWithContent {
+                    val xPx = width.toPx()
+                    val yPx = height.toPx() * 0.67f
+                    val yPx0 = height.toPx()
+                    val thickPx = 1.dp.toPx()
+                    val widthPx2 = if (selected) 2.dp.toPx() else 1.dp.toPx()
+
+                    val diameter = yPx * 0.7f
+                    val diameter1 = diameter * 0.15f
+                    val x0 = xPx / 2 - diameter / 2
+                    val y0 = yPx - diameter * 0.7f
+                    val metka = diameter / 8
+                    val arrow = diameter / 4
+                    val x1 = diameter / 8
+                    val y1 = diameter / 5
+                    val x2 = diameter / 4
+                    val y2 = diameter / 3
+                    val y21 = diameter / 10
                     drawOval(
                         color = colorL, style = Stroke(width = thickPx),
                         topLeft = Offset(x = thickPx / 2, y = thickPx / 2),

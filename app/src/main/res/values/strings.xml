@@ -151,14 +151,20 @@
         <item quantity="many">%d repetitions</item>
         <item quantity="other">repetitions</item>
     </plurals>
-    <plurals name="minutes">
+    <plurals name="hour">
+        <item quantity="one">%d hour</item>
+        <item quantity="few">%d hour</item>
+        <item quantity="many">%d hours</item>
+        <item quantity="other">hours</item>
+    </plurals>
+    <plurals name="min">
         <item quantity="one">%d minute</item>
         <item quantity="two">%d minutes</item>
         <item quantity="few">%d minutes</item>
         <item quantity="many">%d minutes</item>
         <item quantity="other">minutes</item>
     </plurals>
-    <plurals name="second">
+    <plurals name="sec">
         <item quantity="one">%d second</item>
         <item quantity="two">%d seconds</item>
         <item quantity="few">%d seconds</item>
@@ -172,14 +178,25 @@
         <item quantity="many">%d kilometers</item>
         <item quantity="other">kilometers</item>
     </plurals>
-    <plurals name="metr">
+    <plurals name="m">
         <item quantity="one">%d meter</item>
         <item quantity="two">%d meters</item>
         <item quantity="few">%d meters</item>
         <item quantity="many">%d meters</item>
         <item quantity="other">meters</item>
     </plurals>
-
+    <plurals name="kg">
+        <item quantity="one">%d kilogram</item>
+        <item quantity="few">%d kilograms</item>
+        <item quantity="many">%d kilograms</item>
+        <item quantity="other">kilograms</item>
+    </plurals>
+    <plurals name="gr">
+        <item quantity="one">%d gram</item>
+        <item quantity="few">%d grams</item>
+        <item quantity="many">%d grams</item>
+        <item quantity="other">grams</item>
+    </plurals>
 
     <string name="select_position">Select position.</string>
     <string name="not_text" />

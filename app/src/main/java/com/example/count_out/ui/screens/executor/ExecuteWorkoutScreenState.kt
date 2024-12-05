@@ -35,7 +35,7 @@ data class ExecuteWorkoutScreenState(
     val coordinate: Coordinate? = null,
 
     val showBottomSheetSaveTraining: MutableState<Boolean> = mutableStateOf(false),
-    val stateWorkOutService: RunningState? = null,
+    val stateWorkOutService: RunningState = RunningState.Binding,
     val updateSet: (Long, SetDB)->Unit = { _, _->},
     val startWorkOutService: (Training)->Unit = {},
     val stopWorkOutService: ()->Unit = {},

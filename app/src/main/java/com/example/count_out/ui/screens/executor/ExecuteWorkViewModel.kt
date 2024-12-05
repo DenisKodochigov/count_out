@@ -110,18 +110,20 @@ class ExecuteWorkViewModel @Inject constructor(
             dataForUI.coordinate.collect{ loc->
                 _executeWorkoutScreenState.update { state -> state.copy( coordinate = loc )}} } //coordinate
         viewModelScope.launch(Dispatchers.IO) {
-            dataForUI.runningState.collect{
-                _executeWorkoutScreenState.update { state -> state.copy(stateWorkOutService = it) }
-                if (it == RunningState.Stopped) {
-                    dataForServ.empty()
-                    _executeWorkoutScreenState.update { state ->
-                        state.copy(
-                            startTime = 0L,
-                            flowTime = TickTime(hour = "00", min = "00", sec = "00"),
-                            showBottomSheetSaveTraining = mutableStateOf(true)
-                        )
+            dataForUI.runningState.collect{ runningState->
+                runningState?.let { runState->
+                    _executeWorkoutScreenState.update { state -> state.copy(stateWorkOutService = runState) }
+                    if (runState == RunningState.Stopped) {
+                        dataForServ.empty()
+                        _executeWorkoutScreenState.update { state ->
+                            state.copy(
+                                startTime = 0L,
+                                flowTime = TickTime(hour = "00", min = "00", sec = "00"),
+                                showBottomSheetSaveTraining = mutableStateOf(true)
+                            )
+                        }
+                        return@collect
                     }
-                    return@collect
                 }
             } } //stateWorkOutService
         viewModelScope.launch(Dispatchers.IO) {

@@ -149,13 +149,19 @@
         <item quantity="many">%d раз</item>
         <item quantity="other">раз</item>
     </plurals>
-    <plurals name="minutes">
+    <plurals name="hour">
+        <item quantity="one">%d час</item>
+        <item quantity="few">%d часа</item>
+        <item quantity="many">%d чосов</item>
+        <item quantity="other">час</item>
+    </plurals>
+    <plurals name="min">
         <item quantity="one">%d минута</item>
         <item quantity="few">%d минуты</item>
         <item quantity="many">%d минут</item>
         <item quantity="other">минту</item>
     </plurals>
-    <plurals name="second">
+    <plurals name="sec">
         <item quantity="one">%d секунда</item>
         <item quantity="few">%d секунды</item>
         <item quantity="many">%d секунд</item>
@@ -167,11 +173,23 @@
         <item quantity="many">%d километров</item>
         <item quantity="other">километр</item>
     </plurals>
-    <plurals name="metr">
+    <plurals name="m">
         <item quantity="one">%d метр</item>
         <item quantity="few">%d метра</item>
         <item quantity="many">%d метров</item>
         <item quantity="other">метр</item>
+    </plurals>
+    <plurals name="kg">
+        <item quantity="one">%d килограмм</item>
+        <item quantity="few">%d килограмма</item>
+        <item quantity="many">%d килограммов</item>
+        <item quantity="other">килограммов</item>
+    </plurals>
+    <plurals name="gr">
+        <item quantity="one">%d грам</item>
+        <item quantity="few">%d грамма</item>
+        <item quantity="many">%d граммов</item>
+        <item quantity="other">граммов</item>
     </plurals>
 
     <string name="select_position">Выбор местоположения.</string>

@@ -40,6 +40,7 @@ import com.example.count_out.ui.theme.mTypography
 import com.example.count_out.ui.view_components.TextApp
 import com.example.count_out.ui.view_components.custom_view.Frame
 import com.example.count_out.ui.view_components.custom_view.IconQ
+import com.example.count_out.ui.view_components.lg
 import java.math.RoundingMode
 
 @Composable fun ExecuteWorkoutScreen(trainingId: Long ){
@@ -54,7 +55,9 @@ import java.math.RoundingMode
 @Composable fun ExecuteWorkoutScreenLayout( uiState: ExecuteWorkoutScreenState){
     if (uiState.showBottomSheetSaveTraining.value) BottomSheetSaveTraining(uiState)
     Column(
-        modifier = Modifier.fillMaxSize().padding(horizontal = 4.dp),
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(horizontal = 4.dp),
         content = {
             SensorInfo(uiState)
             AdditionalInformation(uiState, modifier = Modifier.weight(1f))
@@ -113,7 +116,9 @@ import java.math.RoundingMode
     }
 }
 @Composable fun DownPlace(uiState: ExecuteWorkoutScreenState) {
-    Row(modifier = Modifier.fillMaxWidth().padding(bottom = 0.dp, top = 12.dp),
+    Row(modifier = Modifier
+        .fillMaxWidth()
+        .padding(bottom = 0.dp, top = 12.dp),
         horizontalArrangement = Arrangement.Center) {
         ButtonStartedService(uiState)
         Spacer(modifier = Modifier.width(32.dp))
@@ -123,60 +128,54 @@ import java.math.RoundingMode
     }
 }
 @Composable fun ButtonStartedService(uiState: ExecuteWorkoutScreenState){
+    val ifValue = (uiState.stateWorkOutService != RunningState.Started) || (uiState.stateWorkOutService == RunningState.Binding)
     IconQ.Play(
-        onClick = { if (uiState.stateWorkOutService != RunningState.Started)
-                        uiState.training?.let { uiState.startWorkOutService(it) }},
-        color = if (uiState.stateWorkOutService == RunningState.Started) MaterialTheme.colorScheme.surfaceContainerLow
-                 else MaterialTheme.colorScheme.outline)
+        onClick = { if (ifValue) uiState.training?.let { uiState.startWorkOutService(it) }  },
+        color = with(MaterialTheme.colorScheme) { if (ifValue) outline else surfaceContainerLow})
 }
 @Composable fun ButtonStoppedService(uiState: ExecuteWorkoutScreenState){
+    val ifValue = (uiState.stateWorkOutService == RunningState.Started) || (uiState.stateWorkOutService == RunningState.Paused)
     IconQ.Stop(
-        onClick = { if (uiState.stateWorkOutService != RunningState.Stopped){
-            uiState.stopWorkOutService()
-            uiState.showBottomSheetSaveTraining.value = true
-        } },
-        color = if (uiState.stateWorkOutService == RunningState.Stopped) MaterialTheme.colorScheme.surfaceContainerLow
-                else MaterialTheme.colorScheme.outline)
+        onClick = {
+            if (ifValue){
+                uiState.stopWorkOutService()
+                uiState.showBottomSheetSaveTraining.value = true
+            }
+        },
+        color = with(MaterialTheme.colorScheme) { if (ifValue) outline else surfaceContainerLow })
 }
 @Composable fun ButtonPauseService(uiState: ExecuteWorkoutScreenState){
+    val ifValue = (uiState.stateWorkOutService == RunningState.Started)
     IconQ.Pause(
-        onClick = { if (uiState.stateWorkOutService != RunningState.Paused) uiState.pauseWorkOutService()},
-        color = if (uiState.stateWorkOutService == RunningState.Paused) MaterialTheme.colorScheme.surfaceContainerLow
-                    else MaterialTheme.colorScheme.outline)
+        onClick = { if (ifValue){ uiState.pauseWorkOutService() } },
+        color = with(MaterialTheme.colorScheme) { if (ifValue) outline else surfaceContainerLow })
 }
 
 @Composable fun LayoutCount(uiState: ExecuteWorkoutScreenState) {
-
     val top = 4.dp
-    Row(modifier = Modifier.fillMaxWidth().padding(start = 8.dp)) {
-        //Description set reps
+    Row(modifier = Modifier
+        .fillMaxWidth()
+        .padding(start = 8.dp)) {
+        //Description
         Column (verticalArrangement = Arrangement.Bottom) {
             TextApp(style = mTypography.bodyLarge, modifier = Modifier.padding(top = 4.dp),
                 textAlign = TextAlign.Start, text = stringResource(R.string.sets) + ":")
             TextApp(style = mTypography.bodyLarge, modifier = Modifier.padding(top = top + 4.dp),
                 textAlign = TextAlign.Start, text = stringResource(R.string.reps) + ":")
-        }
-        //Value set reps
-        Column( modifier = Modifier.padding(horizontal = 12.dp)) {
-            TextApp(style = mTypography.titleLarge, modifier = Modifier,
-                text = "${(uiState.executeInfoSet?.currentIndexSet ?: 1)}/${uiState.executeInfoSet?.quantitySet ?: ""}")
-            TextApp(style = mTypography.titleLarge, modifier = Modifier.padding(top = top),
-                text = "${uiState.countReps}/${uiState.executeInfoSet?.currentSet?.reps ?: ""}")
-        }
-        Spacer(modifier = Modifier.weight(1f))
-        //Description interval rest
-        Column(verticalArrangement = Arrangement.Bottom)  {
-            TextApp(style = mTypography.bodyLarge, modifier = Modifier.padding(top = 4.dp, end = 12.dp),
-                textAlign = TextAlign.Start, text = stringResource(R.string.interval))
             TextApp(style = mTypography.bodyLarge, modifier = Modifier.padding(top = top + 4.dp, end = 12.dp),
                 textAlign = TextAlign.Start, text = stringResource(R.string.rest) + ":")
+            TextApp(style = mTypography.bodyLarge, modifier = Modifier.padding(top = top + 4.dp, end = 12.dp),
+                textAlign = TextAlign.Start, text = stringResource(R.string.interval))
         }
-        //Value try / catch
-        Column {
-            ButtonFasterSlower(uiState = uiState)
+        //Value
+        Column( modifier = Modifier.padding(horizontal = 12.dp)) {
+            TextApp(style = mTypography.titleLarge, modifier = Modifier.padding(start = 40.dp),
+                text = "${(uiState.executeInfoSet?.currentIndexSet ?: 1)}/${uiState.executeInfoSet?.quantitySet ?: ""}")
+            TextApp(style = mTypography.titleLarge, modifier = Modifier.padding(start = 40.dp, top = top),
+                text = "${uiState.countReps}/${uiState.executeInfoSet?.currentSet?.reps ?: ""}")
             TextApp(style = mTypography.titleLarge, modifier = Modifier.padding(start = 40.dp, top = top),
                 text = "${uiState.countRest}/${uiState.executeInfoSet?.currentSet?.timeRest ?: ""}")
-
+            ButtonFasterSlower(uiState = uiState, modifier = Modifier.padding(top = top, start = 2.dp, end = 2.dp),)
         }
     }
     NextExercise(uiState.executeInfoExercise?.nextExercise)
@@ -185,7 +184,7 @@ import java.math.RoundingMode
 @Composable fun LayoutDistance(uiState: ExecuteWorkoutScreenState) {}
 @Composable fun LayoutDuration(uiState: ExecuteWorkoutScreenState) {}
 
-@Composable fun ButtonFasterSlower(uiState: ExecuteWorkoutScreenState){
+@Composable fun ButtonFasterSlower(uiState: ExecuteWorkoutScreenState, modifier: Modifier = Modifier){
     var downInterval = {}
     var upInterval = {}
     uiState.training?.let { training ->
@@ -199,13 +198,14 @@ import java.math.RoundingMode
     val color = if(!uiState.enableChangeInterval) MaterialTheme.colorScheme.surfaceContainerLow
                 else MaterialTheme.colorScheme.outline
 
-    Row(verticalAlignment = Alignment.CenterVertically,
-        modifier = Modifier.padding(start = 2.dp, end = 2.dp))
+    Row(verticalAlignment = Alignment.Bottom, modifier = modifier)
     {
-        IconQ.Slower( onClick = { if(uiState.enableChangeInterval) upInterval()}, color = color)
+        IconQ.Slower(modifier = Modifier.padding(bottom = 4.dp),
+            onClick = { if(uiState.enableChangeInterval) upInterval()}, color = color)
         TextApp(style = mTypography.titleLarge, modifier = Modifier.padding(horizontal = 6.dp),
             text = (uiState.executeInfoSet?.currentSet?.intervalReps?.toBigDecimal()?.setScale(1, RoundingMode.UP) ?: "  ").toString())
-        IconQ.Faster( onClick = { if(uiState.enableChangeInterval) downInterval()}, color = color)
+        IconQ.Faster(modifier = Modifier.padding(bottom = 4.dp),
+            onClick = { if(uiState.enableChangeInterval) downInterval()}, color = color)
     }
 }
 

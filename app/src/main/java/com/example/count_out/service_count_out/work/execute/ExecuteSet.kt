@@ -4,8 +4,10 @@ import android.content.Context
 import com.example.count_out.R
 import com.example.count_out.data.room.tables.SpeechDB
 import com.example.count_out.domain.SpeechManager
+import com.example.count_out.entity.DistanceE
 import com.example.count_out.entity.GoalSet
 import com.example.count_out.entity.RunningState
+import com.example.count_out.entity.TimeE
 import com.example.count_out.entity.router.DataForWork
 import com.example.count_out.entity.router.DataFromWork
 import com.example.count_out.entity.workout.Set
@@ -16,7 +18,6 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
-import kotlin.math.roundToInt
 
 class ExecuteSet @Inject constructor(val speechManager:SpeechManager, val context: Context)
 {
@@ -77,8 +78,9 @@ class ExecuteSet @Inject constructor(val speechManager:SpeechManager, val contex
     private suspend fun speakSetEnd(setCurrent: Set, dataFromWork: DataFromWork){
         speakingSetEnd(setCurrent, dataFromWork)
         CoroutineScope(Dispatchers.IO).launch { speakingSetRest(setCurrent, dataFromWork)}
-        speechManager.speech(dataFromWork, SpeechDB( message =
-            "${setCurrent.timeRest} ${getStr(R.string.rest_time)}"))
+        speechManager.speech(dataFromWork, SpeechDB( message = getStr(R.string.rest) + "  " +
+             getPlurals(setCurrent.timeRest / (if (setCurrent.durationE == TimeE.MIN) 60 else 1),setCurrent.timeRestE.idS)
+        ))
     }
     private suspend fun speakingSetRest(set: Set, dataFromWork: DataFromWork ){
         dataFromWork.phaseWorkout.value = 0
@@ -114,11 +116,9 @@ class ExecuteSet @Inject constructor(val speechManager:SpeechManager, val contex
             GoalSet.COUNT -> " " + getPlurals(set.reps, R.plurals.repeat)
             GoalSet.COUNT_GROUP -> " " + getPlurals(set.reps, R.plurals.repeat)
             GoalSet.DURATION ->
-                if (set.duration < 1) " " + getPlurals((set.duration * 60), R.plurals.second)
-                else getPlurals(set.duration, R.plurals.minutes)
+                getPlurals(set.duration / (if (set.durationE == TimeE.MIN) 60 else 1), set.durationE.idS)
             GoalSet.DISTANCE ->
-                getPlurals(set.distance.toInt(), R.plurals.km) +
-                " " + getPlurals((set.distance - (set.distance *1000)).roundToInt(), R.plurals.km)
+                getPlurals(set.duration / (if (set.distanceE == DistanceE.KM) 1000 else 1), set.distanceE.idS)
         }
     }
     private fun getPlurals(count: Int, id: Int): String {

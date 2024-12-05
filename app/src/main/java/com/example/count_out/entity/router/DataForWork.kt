@@ -88,8 +88,7 @@ data class DataForWork (
             0.0
         }
     }
-    fun executeInfoExercise( idExercise: Long = 0L): ExecuteInfoExercise? {
-        lg("executeInfoExercise")
+    private fun executeInfoExercise(idExercise: Long = 0L): ExecuteInfoExercise? {
         var finding = false
         var activity: Activity? = null
         var nextExercise: NextExercise? = null

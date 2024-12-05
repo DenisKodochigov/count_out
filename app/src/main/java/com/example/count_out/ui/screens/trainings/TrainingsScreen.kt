@@ -58,6 +58,7 @@ import com.example.count_out.ui.view_components.lg
     screen: ScreenDestination,
     viewModel: TrainingsViewModel,
 ){
+    viewModel.getTrainings()
     val uiState by viewModel.trainingsScreenState.collectAsState()
     uiState.onClickTraining = remember {{id -> onClickTraining(id)}}
     uiState.onSelectItem = remember {{ onClickTraining(it) }}
@@ -126,11 +127,15 @@ import com.example.count_out.ui.view_components.lg
 //##################################################################################################
 @Composable fun DownPlace(uiState: TrainingsScreenState) {
     Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
-        IconQ.Play(onClick = {
-            if (uiState.selectedId.value == null) uiState.onStartWorkout(1)
-            else uiState.selectedId.value?.let { id-> uiState.onStartWorkout(id)}
+
+        lg("DownPlace 1")
+        IconQ.Play(
+            onClick = {
+                if (uiState.selectedId.value == null) uiState.onStartWorkout(1)
+                else uiState.selectedId.value?.let { id-> uiState.onStartWorkout(id)}
         })
         Spacer(modifier = Modifier.width(32.dp))
+        lg("DownPlace 2")
         IconQ.Add(onClick = { uiState.onAddTraining() })
     }
 }

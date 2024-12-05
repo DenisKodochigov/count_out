@@ -3,7 +3,7 @@
 kotlin = "2.0.21"
 kspVersion = "2.0.21-1.0.25"
 serialization_plugin = "2.0.21"
-agp = "8.7.2"
+agp = "8.7.3"
 composeV = "1.7.5"
 composeBom = "2024.11.00"
 composeActivity = "1.9.3"

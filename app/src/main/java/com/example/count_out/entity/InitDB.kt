@@ -126,7 +126,6 @@ private fun createTrainingId0( db: AppDatabase) {
     addRecordCount(db)
 }
 private fun createTrainingPlansTesting( db: AppDatabase) {
-    lg("createTrainingPlansTesting")
     createTrainingId0( db )
     val rest = 10
     val reps = 3
