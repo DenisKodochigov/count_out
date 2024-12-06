@@ -106,6 +106,7 @@ class ExecuteSet @Inject constructor(val speechManager:SpeechManager, val contex
             if (dataFromWork.runningState.value == RunningState.Stopped) return
             if ( count % divider == 0 && !speechManager.getSpeeching())
                 speechManager.speakOutFlushBusy(text = count.toString(), dataFromWork)
+            dataFromWork.currentDuration.value = if (runningCountRest.value) count else 0
             dataFromWork.countRest.value = if (!runningCountRest.value) count else 0
             delayMy(1000L, dataFromWork.runningState)
         }

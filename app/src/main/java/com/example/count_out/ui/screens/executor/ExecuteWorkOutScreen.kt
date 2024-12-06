@@ -40,7 +40,6 @@ import com.example.count_out.ui.theme.mTypography
 import com.example.count_out.ui.view_components.TextApp
 import com.example.count_out.ui.view_components.custom_view.Frame
 import com.example.count_out.ui.view_components.custom_view.IconQ
-import com.example.count_out.ui.view_components.lg
 import java.math.RoundingMode
 
 @Composable fun ExecuteWorkoutScreen(trainingId: Long ){
@@ -98,10 +97,10 @@ import java.math.RoundingMode
 }
 @Composable fun ExerciseInfo(uiState: ExecuteWorkoutScreenState) {
     Frame{
-        Column (modifier = Modifier.padding(horizontal = 12.dp, vertical = 12.dp)){
+        Column (modifier = Modifier.fillMaxWidth().padding(horizontal = 12.dp, vertical = 12.dp)){
             val text = if (uiState.executeInfoExercise?.activity?.name.isNullOrEmpty()) "" else
-                "${uiState.executeInfoExercise?.activity?.name}:" +
-                " ${uiState.executeInfoExercise?.currentExercise}/${uiState.executeInfoExercise?.quantityExercise}"
+                "${uiState.executeInfoExercise.activity.name}:" +
+                " ${uiState.executeInfoExercise.currentExercise}/${uiState.executeInfoExercise.quantityExercise}"
             TextApp(text = text,
                 modifier = Modifier.padding(bottom = 12.dp),
                 style = mTypography.titleLarge)
@@ -111,7 +110,7 @@ import java.math.RoundingMode
                 GoalSet.DURATION -> LayoutDuration(uiState)
                 GoalSet.COUNT_GROUP -> {}
             }
-
+            NextExercise(uiState.executeInfoExercise?.nextExercise)
         }
     }
 }
@@ -178,11 +177,40 @@ import java.math.RoundingMode
             ButtonFasterSlower(uiState = uiState, modifier = Modifier.padding(top = top, start = 2.dp, end = 2.dp),)
         }
     }
-    NextExercise(uiState.executeInfoExercise?.nextExercise)
 }
-
 @Composable fun LayoutDistance(uiState: ExecuteWorkoutScreenState) {}
-@Composable fun LayoutDuration(uiState: ExecuteWorkoutScreenState) {}
+@Composable fun LayoutDuration(uiState: ExecuteWorkoutScreenState) {
+    val top = 4.dp
+    Row(modifier = Modifier
+        .fillMaxWidth()
+        .padding(start = 8.dp)) {
+        //Description
+        Column (verticalArrangement = Arrangement.Bottom) {
+            TextApp(style = mTypography.bodyLarge, modifier = Modifier.padding(top = 4.dp),
+                textAlign = TextAlign.Start, text = stringResource(R.string.sets) + ":")
+            TextApp(style = mTypography.bodyLarge, modifier = Modifier.padding(top = top + 4.dp),
+                textAlign = TextAlign.Start, text = stringResource(R.string.duration_set) + ":")
+            TextApp(style = mTypography.bodyLarge, modifier = Modifier.padding(top = top + 4.dp),
+                textAlign = TextAlign.Start, text = stringResource(R.string.weight) + ":")
+            TextApp(style = mTypography.bodyLarge, modifier = Modifier.padding(top = top + 4.dp, end = 12.dp),
+                textAlign = TextAlign.Start, text = stringResource(R.string.rest) + ":")
+//            TextApp(style = mTypography.bodyLarge, modifier = Modifier.padding(top = top + 4.dp, end = 12.dp),
+//                textAlign = TextAlign.Start, text = stringResource(R.string.interval))
+        }
+        //Value
+        Column( modifier = Modifier.padding(horizontal = 12.dp)) {
+            TextApp(style = mTypography.titleLarge, modifier = Modifier.padding(start = 40.dp),
+                text = "${(uiState.executeInfoSet?.currentIndexSet ?: 1)}/${uiState.executeInfoSet?.quantitySet ?: ""}")
+            TextApp(style = mTypography.titleLarge, modifier = Modifier.padding(start = 40.dp, top = top),
+                text = "${uiState.currentDuration}/${uiState.executeInfoSet?.currentSet?.duration ?: ""}")
+            TextApp(style = mTypography.titleLarge, modifier = Modifier.padding(start = 40.dp, top = top),
+                text = "${uiState.executeInfoSet?.currentSet?.weight ?: ""}")
+            TextApp(style = mTypography.titleLarge, modifier = Modifier.padding(start = 40.dp, top = top),
+                text = "${uiState.countRest}/${uiState.executeInfoSet?.currentSet?.timeRest ?: ""}")
+//            ButtonFasterSlower(uiState = uiState, modifier = Modifier.padding(top = top, start = 2.dp, end = 2.dp),)
+        }
+    }
+}
 
 @Composable fun ButtonFasterSlower(uiState: ExecuteWorkoutScreenState, modifier: Modifier = Modifier){
     var downInterval = {}

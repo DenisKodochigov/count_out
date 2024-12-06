@@ -56,7 +56,7 @@
     <string name="time">Время</string>
     <string name="km">км</string>
     <string name="kg">кг</string>
-    <string name="duration_set">Продолжительность подода</string>
+    <string name="duration_set">Продолжительность подхода</string>
     <string name="task_in_approach">Задание в подходе</string>
     <string name="zone">зона</string>
     <string name="quantity_reps">Отстчет по порядку.</string>
