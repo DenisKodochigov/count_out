@@ -25,7 +25,7 @@ fun CollapsingToolbar(
 {
     Row(
         verticalAlignment = Alignment.CenterVertically,
-        modifier = Modifier. padding(top = 40.dp, bottom = 12.dp).height(30.dp).fillMaxWidth()
+        modifier = Modifier. padding(top = 50.dp, bottom = 12.dp).height(40.dp).fillMaxWidth()
 //            .background(color = MaterialTheme.colorScheme.surface, shape = topBarShape)
     ){
         IconButton( onClick = backScreen ) {

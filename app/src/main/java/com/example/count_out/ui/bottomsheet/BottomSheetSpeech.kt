@@ -15,7 +15,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import com.example.count_out.R
 import com.example.count_out.data.room.tables.SpeechDB
 import com.example.count_out.data.room.tables.SpeechKitDB
@@ -26,8 +28,7 @@ import com.example.count_out.entity.workout.Round
 import com.example.count_out.entity.workout.Set
 import com.example.count_out.entity.workout.Training
 import com.example.count_out.ui.theme.Dimen
-import com.example.count_out.ui.theme.interLight14Start
-import com.example.count_out.ui.theme.interThin12Start
+import com.example.count_out.ui.theme.mTypography
 import com.example.count_out.ui.theme.shapes
 import com.example.count_out.ui.view_components.ButtonConfirm
 import com.example.count_out.ui.view_components.ModalBottomSheetApp
@@ -97,24 +98,23 @@ fun BottomSheetSpeechContent(uiState: BottomSheetState)
 
 
 @Composable fun FieldTextForSpeech(enterValue: MutableState<String>, nameSection: String){
-    Column {
+    Column(modifier = Modifier.padding(horizontal = 12.dp)) {
         TextFieldApp(
-            textStyle = interLight14Start,
+            textStyle = mTypography.bodyLarge,
             showLine = true,
             onLossFocus = false,
             maxLines = 3,
             edit = true,
+            contentAlignment = Alignment.CenterStart,
             modifier = Modifier.fillMaxWidth(),
             placeholder = enterValue.value,
             onChangeValue = { enterValue.value = it },
             typeKeyboard = TypeKeyboard.TEXT )
-        TextApp(text = nameSection, style = interThin12Start,
+        TextApp(text = nameSection, style = mTypography.bodySmall.copy(fontWeight = FontWeight.ExtraLight),
             modifier = Modifier.padding(start = Dimen.bsItemPaddingHor))
     }
 }
-@Composable
-fun ButtonOK(uiState: BottomSheetState)
-{
+@Composable fun ButtonOK(uiState: BottomSheetState) {
     ButtonConfirm(onConfirm = {
         uiState.onConfirmationSpeech(
             SpeechKitDB(

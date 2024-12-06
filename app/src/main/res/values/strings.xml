@@ -4,6 +4,7 @@
     <string name="exercises">Activities</string>
     <string name="exercise1">Activity</string>
     <string name="exercise">Activity</string>
+    <string name="exercise2">activity</string>
     <string name="add_activity">Add activity</string>
     <string name="list_activity">ACTIVITIES</string>
     <string name="add_set">Add set</string>
@@ -47,8 +48,11 @@
     <string name="weight">Weight</string>
     <string name="rest">Rest</string>
     <string name="work_down">Work-down</string>
+    <string name="work_down1">work-down</string>
     <string name="work_out">Work out</string>
+    <string name="work_out1">work out</string>
     <string name="work_up">Work-up</string>
+    <string name="work_up1">work-up</string>
     <string name="Workout">Workout</string>
     <string name="workout">Workout</string>
     <string name="workout_text_fab">Workout</string>
@@ -276,6 +280,7 @@
     <string name="reps">Reps</string>
     <string name="rep">r.</string>
     <string name="repeat_time">repeat</string>
+    <string name="set2">set</string>
 
 
 </resources>

@@ -71,7 +71,8 @@ class ExecuteSet @Inject constructor(val speechManager:SpeechManager, val contex
         }
     }
     private suspend fun speakingDURATION(set: Set, dataFromWork: DataFromWork){
-            speakInterval( duration = (set.duration * 60), dataFromWork = dataFromWork)
+            speakInterval( duration = (set.duration / (if (set.durationE == TimeE.MIN) 60 else 1)),
+                dataFromWork = dataFromWork)
     }
     private suspend fun speakingDISTANCE(set: Set, dataForWork: DataForWork, dataFromWork: DataFromWork ){}
 

@@ -19,8 +19,7 @@ data class ExecuteWorkoutScreenState(
     val training: Training? = null,
 
     val flowTime: TickTime = TickTime(hour = "00", min="00", sec= "00"),
-    val countRest: Int = 0,
-    val countReps: Int = 0,
+    val currentRest: Int = 0,
     val currentCount: Int = 0,
     val currentDuration: Int = 0,
     val currentDistance: Int = 0,

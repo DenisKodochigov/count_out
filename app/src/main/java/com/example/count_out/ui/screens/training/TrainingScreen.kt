@@ -59,31 +59,31 @@ import com.example.count_out.ui.view_components.icons.IconsGroup
         BottomSheetSpeech(uiState)
     }
     if (uiState.showSpeechWorkUp.value) {
-        uiState.nameSection = stringResource(id = R.string.work_up)
+        uiState.nameSection = stringResource(id = R.string.work_up1)
         uiState.item = uiState.training.rounds.find { it.roundType == RoundType.UP }
         uiState.onDismissSpeech = { uiState.showSpeechWorkUp.value = false }
         BottomSheetSpeech(uiState)
     }
     if (uiState.showSpeechWorkOut.value) {
-        uiState.nameSection = stringResource(id = R.string.work_out)
+        uiState.nameSection = stringResource(id = R.string.work_out1)
         uiState.item = uiState.training.rounds.find { it.roundType == RoundType.OUT }
         uiState.onDismissSpeech = { uiState.showSpeechWorkOut.value = false }
         BottomSheetSpeech(uiState)
     }
     if (uiState.showSpeechWorkDown.value) {
-        uiState.nameSection = stringResource(id = R.string.work_down)
+        uiState.nameSection = stringResource(id = R.string.work_down1)
         uiState.item = uiState.training.rounds.find { it.roundType == RoundType.DOWN }
         uiState.onDismissSpeech = { uiState.showSpeechWorkDown.value = false}
         BottomSheetSpeech(uiState)
     }
     if (uiState.showSpeechExercise.value) {
-        uiState.nameSection = stringResource(id = R.string.exercise)
+        uiState.nameSection = stringResource(id = R.string.exercise2)
         uiState.item = uiState.exercise
         uiState.onDismissSpeech = { uiState.showSpeechExercise.value = false}
         BottomSheetSpeech(uiState)
     }
     if (uiState.showSpeechSet.value) {
-        uiState.nameSection = stringResource(id = R.string.set)
+        uiState.nameSection = stringResource(id = R.string.set2)
         uiState.item = uiState.set
         uiState.onDismissSpeech = { uiState.showSpeechSet.value = false}
         BottomSheetSpeech(uiState)

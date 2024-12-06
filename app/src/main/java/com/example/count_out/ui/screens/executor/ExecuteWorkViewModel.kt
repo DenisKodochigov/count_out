@@ -132,7 +132,7 @@ class ExecuteWorkViewModel @Inject constructor(
                     _executeWorkoutScreenState.update { state ->
                         state.copy(
                         flowTime = tick,
-                        countRest = dataForUI.countRest.value,
+                        currentRest = dataForUI.countRest.value,
                         enableChangeInterval = dataForUI.enableChangeInterval.value,
                         executeInfoExercise = dataForUI.executeInfoExercise.value,
                     )}
@@ -147,13 +147,13 @@ class ExecuteWorkViewModel @Inject constructor(
                 _executeWorkoutScreenState.update { state -> state.copy(executeInfoExercise = it) } } } //executeInfoExercise
         viewModelScope.launch(Dispatchers.IO) {
             dataForUI.currentCount.collect { count ->
-                _executeWorkoutScreenState.update { state -> state.copy(countReps = count) } } } //currentCount
+                _executeWorkoutScreenState.update { state -> state.copy(currentCount = count) } } } //currentCount
         viewModelScope.launch(Dispatchers.IO) {
             dataForUI.currentDistance.collect { count ->
-                _executeWorkoutScreenState.update { state -> state.copy(countReps = count) } } } //currentDistance
+                _executeWorkoutScreenState.update { state -> state.copy(currentDistance = count) } } } //currentDistance
         viewModelScope.launch(Dispatchers.IO) {
             dataForUI.currentDuration.collect { count ->
-                _executeWorkoutScreenState.update { state -> state.copy(countReps = count) } } } //currentDuration
+                _executeWorkoutScreenState.update { state -> state.copy(currentDuration = count) } } } //currentDuration
         viewModelScope.launch(Dispatchers.IO) {
             dataForUI.bleConnectState.collect { stateC ->
                 _executeWorkoutScreenState.update { state -> state.copy( bleConnectState = stateC) } } } //connectingState

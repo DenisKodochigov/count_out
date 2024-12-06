@@ -137,13 +137,16 @@ private fun createTrainingPlansTesting( db: AppDatabase) {
     var idExercise = db.dataDao().addExercise(ExerciseDB(roundId = idRound, activityId = 4, idView = 0,  //"Растереть уши"
         speechId = addSpeechKit(db, bs = "", ast = "", be = "", ae = "",)))
     db.dataDao().addSet(
+        SetDB(exerciseId = idExercise, name = "Set 2", reps = reps, distance = 10.0, distanceE = DistanceE.KM, timeRest = rest, goal = GoalSet.DISTANCE,
+            speechId = addSpeechKit(db, bs = "Старт", ast = "", be = "", ae = "Конец",)))
+    db.dataDao().addSet(
         SetDB(exerciseId = idExercise, name = "Set 1", reps = reps, duration = 15, durationE = TimeE.SEC, timeRest = rest, goal = GoalSet.DURATION,
         speechId = addSpeechKit(db, bs = "Старт", ast = "", be = "", ae = "Конец",)))
     //Упражнение 2
     idExercise = db.dataDao().addExercise(ExerciseDB(roundId = idRound, activityId = 5, idView = 1,  //"Растереть макушку"
         speechId = addSpeechKit(db, bs = "", ast = "", be = "", ae = "",)))
     db.dataDao().addSet(
-        SetDB(exerciseId = idExercise, name = "Set 2", reps = reps, intervalReps = 1.0, timeRest = rest, goal = GoalSet.COUNT,
+        SetDB(exerciseId = idExercise, name = "Set 2", reps = reps, distance = 10.0, distanceE = DistanceE.KM, timeRest = rest, goal = GoalSet.DISTANCE,
         speechId = addSpeechKit(db, bs = "Старт", ast = "", be = "", ae = "Конец",)))
     //Упражнение 3
     idExercise = db.dataDao().addExercise(ExerciseDB(roundId = idRound, activityId = 6, idView = 2,  //"Растереть макушку"

@@ -1,6 +1,7 @@
 package com.example.count_out.ui.screens.training.set
 
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -119,7 +120,7 @@ val interval_between_pole = 4.dp
 @Composable fun Duration(uiState: TrainingScreenState, set: Set) {
     Row( horizontalArrangement = Arrangement.Center,
         verticalAlignment = Alignment.Top,
-        modifier = Modifier.fillMaxWidth().padding(vertical = 18.dp)){
+        modifier = Modifier.fillMaxWidth().padding(vertical = 12.dp)){
         DurationPole(uiState, set, Modifier.weight(1f))
         WeightPole(uiState, set, Modifier.weight(1f))
         RestPole(uiState, set, Modifier.weight(1f))
@@ -127,13 +128,13 @@ val interval_between_pole = 4.dp
 }
 @Composable fun Count(uiState: TrainingScreenState, set: Set) {
     Row( horizontalArrangement = Arrangement.Center, verticalAlignment = Alignment.Top,
-        modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp)){
+        modifier = Modifier.fillMaxWidth().padding(vertical = 12.dp)){
         IntervalPole(uiState, set, Modifier.weight(1f))
         WeightPole(uiState, set, Modifier.weight(1f))
         RestPole(uiState, set, Modifier.weight(1f))
     }
     Row( horizontalArrangement = Arrangement.Center, verticalAlignment = Alignment.Top,
-        modifier = Modifier.fillMaxWidth().padding(bottom = 18.dp)){
+        modifier = Modifier.fillMaxWidth().padding(bottom = 12.dp)){
         CountFieldText(uiState, set)
         CountGroupFieldText(uiState, set)
     }
@@ -308,7 +309,7 @@ val interval_between_pole = 4.dp
     onChangeUnit: ()-> Unit,
 ){
     Column (horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = modifier
+        modifier = modifier.animateContentSize()
             .padding(start = interval_between_pole)
             .background(color = colorScheme.onSecondary, shape = shapes.small)
             .padding(top = 2.dp, bottom = 6.dp, start = 4.dp, end = 4.dp)
@@ -352,7 +353,7 @@ val interval_between_pole = 4.dp
     onChangeValue: (String)-> Unit,
 ){
     Column (horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = modifier
+        modifier = modifier.animateContentSize()
             .padding(start = interval_between_pole)
             .background(color = colorScheme.onSecondary, shape = shapes.small)
             .padding(top = 2.dp, bottom = 6.dp, start = 4.dp, end = 4.dp)

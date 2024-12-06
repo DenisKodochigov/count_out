@@ -1,5 +1,6 @@
 package com.example.count_out.ui.view_components.custom_view
 
+import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
@@ -25,9 +26,10 @@ import androidx.compose.ui.unit.dp
 
     Box( content = { content() },
         modifier = modifier
-        .background(color, shape = shape)
-        .padding(contour)// отступ от границ фрагмента
-        .background( color = background ))
+            .animateContentSize()
+            .background(color, shape = shape)
+            .padding(contour)// отступ от границ фрагмента
+            .background( color = background ))
 }
 
 //@Preview

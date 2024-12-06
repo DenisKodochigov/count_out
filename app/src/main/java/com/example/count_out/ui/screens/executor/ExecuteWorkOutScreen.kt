@@ -17,12 +17,14 @@ import androidx.compose.material.icons.outlined.LocationOn
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -32,8 +34,11 @@ import com.example.count_out.data.room.tables.SetDB
 import com.example.count_out.domain.minus
 import com.example.count_out.domain.plus
 import com.example.count_out.entity.ConnectState
+import com.example.count_out.entity.DistanceE
 import com.example.count_out.entity.GoalSet
 import com.example.count_out.entity.RunningState
+import com.example.count_out.entity.TimeE
+import com.example.count_out.entity.WeightE
 import com.example.count_out.entity.ui.NextExercise
 import com.example.count_out.ui.bottomsheet.BottomSheetSaveTraining
 import com.example.count_out.ui.theme.mTypography
@@ -99,8 +104,8 @@ import java.math.RoundingMode
     Frame{
         Column (modifier = Modifier.fillMaxWidth().padding(horizontal = 12.dp, vertical = 12.dp)){
             val text = if (uiState.executeInfoExercise?.activity?.name.isNullOrEmpty()) "" else
-                "${uiState.executeInfoExercise.activity.name}:" +
-                " ${uiState.executeInfoExercise.currentExercise}/${uiState.executeInfoExercise.quantityExercise}"
+                "${uiState.executeInfoExercise?.activity?.name}:" +
+                " ${uiState.executeInfoExercise?.currentExercise}/${uiState.executeInfoExercise?.quantityExercise}"
             TextApp(text = text,
                 modifier = Modifier.padding(bottom = 12.dp),
                 style = mTypography.titleLarge)
@@ -151,68 +156,136 @@ import java.math.RoundingMode
 }
 
 @Composable fun LayoutCount(uiState: ExecuteWorkoutScreenState) {
-    val top = 4.dp
-    Row(modifier = Modifier
-        .fillMaxWidth()
-        .padding(start = 8.dp)) {
-        //Description
-        Column (verticalArrangement = Arrangement.Bottom) {
-            TextApp(style = mTypography.bodyLarge, modifier = Modifier.padding(top = 4.dp),
-                textAlign = TextAlign.Start, text = stringResource(R.string.sets) + ":")
-            TextApp(style = mTypography.bodyLarge, modifier = Modifier.padding(top = top + 4.dp),
-                textAlign = TextAlign.Start, text = stringResource(R.string.reps) + ":")
-            TextApp(style = mTypography.bodyLarge, modifier = Modifier.padding(top = top + 4.dp, end = 12.dp),
-                textAlign = TextAlign.Start, text = stringResource(R.string.rest) + ":")
-            TextApp(style = mTypography.bodyLarge, modifier = Modifier.padding(top = top + 4.dp, end = 12.dp),
-                textAlign = TextAlign.Start, text = stringResource(R.string.interval))
+    Row(modifier = Modifier.fillMaxWidth().padding(start = 8.dp)) {
+        uiState.executeInfoSet?.currentSet?.let { set ->
+            //Description
+            ColumnsA(
+                style1 = mTypography.bodyLarge,
+                style2 = mTypography.titleLarge,
+                modifier = Modifier.padding(start = 12.dp).weight(1f),
+                text1 = stringResource(R.string.sets) + ":",
+                text2 = stringResource(R.string.reps) + ":",
+                text3 = stringResource(R.string.weight) + ":",
+                text4 = stringResource(R.string.rest) + ":",
+            )
+            //Value
+            ColumnsA(
+                style1 = mTypography.titleLarge,
+                style2 = mTypography.titleLarge,
+                modifier = Modifier.width(50.dp),
+                text1 = "${(uiState.executeInfoSet.currentIndexSet ?: 1)}",
+                text2 = "${uiState.currentCount}",
+                text3 = "${set.weight / ( if (set.weightE == WeightE.KG) 1000 else 1 ) }",
+                text4 = "${uiState.currentRest}",
+            )
+            //Total target (unit)
+            ColumnsA(
+                style1 = mTypography.bodyLarge,
+                style2 = mTypography.titleLarge,
+                modifier = Modifier.padding(start = 12.dp).width(100.dp),
+                text1 = "${uiState.executeInfoSet.quantitySet ?: ""}",
+                text2 = "${set.reps}",
+                text3 = "(${stringResource(set.weightE.id) })",
+                text4 = "${set.timeRest/( if (set.timeRestE == TimeE.MIN) 60 else 1)}" +
+                        " (${ stringResource(set.timeRestE.id) })",
+            )
         }
-        //Value
-        Column( modifier = Modifier.padding(horizontal = 12.dp)) {
-            TextApp(style = mTypography.titleLarge, modifier = Modifier.padding(start = 40.dp),
-                text = "${(uiState.executeInfoSet?.currentIndexSet ?: 1)}/${uiState.executeInfoSet?.quantitySet ?: ""}")
-            TextApp(style = mTypography.titleLarge, modifier = Modifier.padding(start = 40.dp, top = top),
-                text = "${uiState.countReps}/${uiState.executeInfoSet?.currentSet?.reps ?: ""}")
-            TextApp(style = mTypography.titleLarge, modifier = Modifier.padding(start = 40.dp, top = top),
-                text = "${uiState.countRest}/${uiState.executeInfoSet?.currentSet?.timeRest ?: ""}")
-            ButtonFasterSlower(uiState = uiState, modifier = Modifier.padding(top = top, start = 2.dp, end = 2.dp),)
+    }
+    Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End) {
+        TextApp(text = stringResource(R.string.interval) + ":", style = mTypography.bodyLarge,
+            modifier = Modifier.padding(top = 8.dp,))
+        ButtonFasterSlower(uiState)
+    }
+}
+@Composable fun LayoutDistance(uiState: ExecuteWorkoutScreenState) {
+    Row(modifier = Modifier.fillMaxWidth().padding(start = 0.dp)) {
+        uiState.executeInfoSet?.currentSet?.let { set ->
+            //Description
+            ColumnsA(
+                style1 = mTypography.bodyLarge,
+                style2 = mTypography.titleLarge,
+                modifier = Modifier.padding(start = 12.dp).weight(1f),
+                text1 = stringResource(R.string.sets) + ":",
+                text2 = stringResource(R.string.distance) + ":",
+                text3 = stringResource(R.string.rest) + ":",
+            )
+            //Value
+            ColumnsA(
+                style1 = mTypography.titleLarge,
+                style2 = mTypography.titleLarge,
+                modifier = Modifier.width(50.dp),
+                text1 = "${(uiState.executeInfoSet.currentIndexSet ?: 1)}",
+                text2 = "${uiState.currentDistance/( if (set.distanceE == DistanceE.KM) 1000 else 1)}",
+                text3 = "${uiState.currentRest}",
+            )
+            //Total target (unit)
+            ColumnsA(
+                style1 = mTypography.bodyLarge,
+                style2 = mTypography.titleLarge,
+                modifier = Modifier.padding(start = 12.dp).width(100.dp),
+                text1 = "${uiState.executeInfoSet.quantitySet}",
+                text2 = "${set.distance/( if (set.distanceE == DistanceE.KM) 1000 else 1) }" +
+                        " (${stringResource(set.distanceE.id)})",
+                text3 = "${set.timeRest/( if (set.timeRestE == TimeE.MIN) 60 else 1)}" +
+                        " (${ stringResource(set.timeRestE.id) })",
+            )
         }
     }
 }
-@Composable fun LayoutDistance(uiState: ExecuteWorkoutScreenState) {}
 @Composable fun LayoutDuration(uiState: ExecuteWorkoutScreenState) {
-    val top = 4.dp
-    Row(modifier = Modifier
-        .fillMaxWidth()
-        .padding(start = 8.dp)) {
-        //Description
-        Column (verticalArrangement = Arrangement.Bottom) {
-            TextApp(style = mTypography.bodyLarge, modifier = Modifier.padding(top = 4.dp),
-                textAlign = TextAlign.Start, text = stringResource(R.string.sets) + ":")
-            TextApp(style = mTypography.bodyLarge, modifier = Modifier.padding(top = top + 4.dp),
-                textAlign = TextAlign.Start, text = stringResource(R.string.duration_set) + ":")
-            TextApp(style = mTypography.bodyLarge, modifier = Modifier.padding(top = top + 4.dp),
-                textAlign = TextAlign.Start, text = stringResource(R.string.weight) + ":")
-            TextApp(style = mTypography.bodyLarge, modifier = Modifier.padding(top = top + 4.dp, end = 12.dp),
-                textAlign = TextAlign.Start, text = stringResource(R.string.rest) + ":")
-//            TextApp(style = mTypography.bodyLarge, modifier = Modifier.padding(top = top + 4.dp, end = 12.dp),
-//                textAlign = TextAlign.Start, text = stringResource(R.string.interval))
-        }
-        //Value
-        Column( modifier = Modifier.padding(horizontal = 12.dp)) {
-            TextApp(style = mTypography.titleLarge, modifier = Modifier.padding(start = 40.dp),
-                text = "${(uiState.executeInfoSet?.currentIndexSet ?: 1)}/${uiState.executeInfoSet?.quantitySet ?: ""}")
-            TextApp(style = mTypography.titleLarge, modifier = Modifier.padding(start = 40.dp, top = top),
-                text = "${uiState.currentDuration}/${uiState.executeInfoSet?.currentSet?.duration ?: ""}")
-            TextApp(style = mTypography.titleLarge, modifier = Modifier.padding(start = 40.dp, top = top),
-                text = "${uiState.executeInfoSet?.currentSet?.weight ?: ""}")
-            TextApp(style = mTypography.titleLarge, modifier = Modifier.padding(start = 40.dp, top = top),
-                text = "${uiState.countRest}/${uiState.executeInfoSet?.currentSet?.timeRest ?: ""}")
-//            ButtonFasterSlower(uiState = uiState, modifier = Modifier.padding(top = top, start = 2.dp, end = 2.dp),)
+    Row(modifier = Modifier.fillMaxWidth().padding(start = 8.dp)) {
+        uiState.executeInfoSet?.currentSet?.let { set->
+            //Description
+            ColumnsA(
+                style1 = mTypography.bodyLarge,
+                style2 = mTypography.titleLarge,
+                modifier = Modifier.padding(start = 12.dp).weight(1f),
+                text1 = stringResource(R.string.sets) + ":",
+                text2 = stringResource(R.string.duration_set) + ":",
+                text3 = stringResource(R.string.weight) + ":",
+                text4 = stringResource(R.string.rest) + ":",
+            )
+            //Value
+            ColumnsA(
+                style1 = mTypography.titleLarge,
+                style2 = mTypography.titleLarge,
+                modifier = Modifier.width(50.dp),
+                text1 = "${(uiState.executeInfoSet.currentIndexSet)}",
+                text2 = "${uiState.currentDuration/( if (set.durationE == TimeE.MIN) 60 else 1)}",
+                text3 = "${set.weight / ( if (set.weightE == WeightE.KG) 1000 else 1 ) }",
+                text4 = "${uiState.currentRest}",
+            )
+            //Total target (unit)
+            ColumnsA(
+                style1 = mTypography.bodyLarge,
+                style2 = mTypography.titleLarge,
+                modifier = Modifier.padding(start = 12.dp).width(100.dp),
+                text1 = "${uiState.executeInfoSet.quantitySet }",
+                text2 = "${set.duration/( if (set.durationE == TimeE.MIN) 60 else 1) }" +
+                        " (${ stringResource(set.durationE.id) })",
+                text3 = "(${stringResource(set.weightE.id) })",
+                text4 = "${set.timeRest/( if (set.timeRestE == TimeE.MIN) 60 else 1)}" +
+                        " (${ stringResource(set.timeRestE.id) })",
+            )
         }
     }
 }
 
-@Composable fun ButtonFasterSlower(uiState: ExecuteWorkoutScreenState, modifier: Modifier = Modifier){
+@Composable fun ColumnsA(modifier: Modifier = Modifier, text1: String, text2: String, text3: String,
+                         text4: String = "", style1: TextStyle, style2: TextStyle){
+    Column( modifier = modifier, horizontalAlignment = Alignment.End) {
+        Position(text1, style1, style2)
+        Position(text2, style1, style2)
+        Position(text3, style1, style2)
+        Position(text4, style1, style2)
+    }
+}
+@Composable fun Position(text:String, style1: TextStyle, style2: TextStyle){
+    Row(modifier = Modifier.padding(top = 4.dp)){ TextApp(style = style1, text = text)
+        Text(text = "",style = style2)
+    }
+}
+@Composable fun ButtonFasterSlower(uiState: ExecuteWorkoutScreenState){
     var downInterval = {}
     var upInterval = {}
     uiState.training?.let { training ->
@@ -226,7 +299,8 @@ import java.math.RoundingMode
     val color = if(!uiState.enableChangeInterval) MaterialTheme.colorScheme.surfaceContainerLow
                 else MaterialTheme.colorScheme.outline
 
-    Row(verticalAlignment = Alignment.Bottom, modifier = modifier)
+    Row(verticalAlignment = Alignment.Bottom,
+        modifier = Modifier.padding(top = 4.dp, start = 12.dp, end = 2.dp).width(148.dp))
     {
         IconQ.Slower(modifier = Modifier.padding(bottom = 4.dp),
             onClick = { if(uiState.enableChangeInterval) upInterval()}, color = color)
@@ -238,9 +312,10 @@ import java.math.RoundingMode
 }
 
 @Composable fun NextExercise(nextExercise: NextExercise?){
-    TextApp(style = mTypography.bodyLarge, modifier = Modifier.padding(top = 18.dp),
-        text = "${ stringResource(R.string.next_exercise)}: ${nextExercise?.nextActivityName ?: ""}")
-    TextApp(style = mTypography.bodyLarge,modifier = Modifier.padding(start = 8.dp),
+    TextApp(style = mTypography.bodyLarge, maxLines = 2, textAlign = TextAlign.Start,
+            modifier = Modifier.padding(top = 18.dp),
+            text = "${ stringResource(R.string.next_exercise)}: ${nextExercise?.nextActivityName ?: ""}")
+    TextApp(style = mTypography.bodyLarge,modifier = Modifier.padding(start = 12.dp),
         text = "${stringResource(R.string.sets)}:" +
                 " ${ nextExercise?.nextExerciseQuantitySet?.let { if(it != 0) it else "" }}" +
                 " ${ nextExercise?.nextExerciseSummarizeSet?.let { viewNextSets(it)}} ")

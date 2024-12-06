@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <string name="app_name">count_out</string>
     <string name="error_1">Ошибка</string>
     <string name="error_2">Ошибка</string>
@@ -17,6 +17,7 @@
     <string name="exercise">Упражнения</string>
     <string name="exercises">Упражнений</string>
     <string name="exercise1">упражнение</string>
+    <string name="exercise2">упражнения</string>
 
     <string name="timing">Длителность</string>
     <string name="h">ч</string>
@@ -37,8 +38,11 @@
     <string name="list_activity">Упражнения</string>
     <string name="add_set">Добавить подход</string>
     <string name="work_up">Разминка</string>
+    <string name="work_up1">разминки</string>
     <string name="work_out">Основнная часть</string>
+    <string name="work_out1">основнной части</string>
     <string name="work_down">Заминка</string>
+    <string name="work_down1">заминки</string>
     <string name="weight">Вес</string>
     <string name="rest">Отдых</string>
     <string name="intensity">Интенсивность</string>
@@ -75,7 +79,7 @@
     <string name="add_ring">Добавить круг</string>
     <string name="counts">Отсчеты</string>
     <string name="count">Отсчет</string>
-    <string name="next_exercise">Следующее упражнение</string>
+    <string name="next_exercise">След. упражнение</string>
     <string name="rest_time">Время отдыха.</string>
     <string name="section_heart_rate">Доступные устройства.</string>
     <string name="heart_rate_device">Датчик пульса.</string>
@@ -132,9 +136,9 @@
         <item quantity="other">подходы</item>
     </plurals>
     <plurals name="set_2">
-        <item quantity="one">%1$d подход</item>
-        <item quantity="few">%d = подхода</item>
-        <item quantity="many">%d = подходов</item>
+        <item quantity="one" tools:ignore="ImpliedQuantity">подход</item>
+        <item quantity="few">подхода</item>
+        <item quantity="many">подходов</item>
         <item quantity="other">подходы</item>
     </plurals>
     <plurals name="repeat">
@@ -270,4 +274,5 @@
     <string name="reps">Повтор</string>
     <string name="rep">р.</string>
     <string name="repeat_time">раз</string>
+    <string name="set2">подхода</string>
 </resources>
