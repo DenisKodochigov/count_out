@@ -103,11 +103,12 @@ import com.example.count_out.ui.theme.mTypography
     maxLines: Int = 1,
     onChangeValue:(String)->Unit = {},
     edit: Boolean = false,
+    beginValueZero: Boolean = false,
     colorLine: Color = MaterialTheme.colorScheme.surfaceBright,
 ){
     val keyboardController = LocalSoftwareKeyboardController.current
     val focusManager = LocalFocusManager.current
-    var text by rememberSaveable { mutableStateOf(if (edit) placeholder else "") }
+    var text by rememberSaveable { mutableStateOf(if (!beginValueZero) placeholder else "") }
     BasicTextField(
         value = text,
         enabled = edit, //enabled,
@@ -140,7 +141,7 @@ import com.example.count_out.ui.theme.mTypography
                                     end = Offset(size.width, y),
                                     strokeWidth = 1.dp.toPx()) } }
                 ){
-                    if (text.isEmpty()) Text(text = if (edit) "" else placeholder, style = textStyle)
+                    if (text.isEmpty()) Text(text = if (!beginValueZero) "" else placeholder, style = textStyle)
                     it()
                 }
             }

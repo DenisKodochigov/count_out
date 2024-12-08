@@ -113,7 +113,7 @@ val interval_between_pole = 4.dp
     Row( horizontalArrangement = Arrangement.Center,
         verticalAlignment = Alignment.Top,
         modifier = Modifier.fillMaxWidth().padding(vertical = 12.dp)){
-        DistancePole(uiState, set, Modifier.weight(1f))
+        DistancePole(uiState, set, Modifier.weight(0.8f))
         RestPole(uiState, set, Modifier.weight(1f))
     }
 }
@@ -122,7 +122,7 @@ val interval_between_pole = 4.dp
         verticalAlignment = Alignment.Top,
         modifier = Modifier.fillMaxWidth().padding(vertical = 12.dp)){
         DurationPole(uiState, set, Modifier.weight(1f))
-        WeightPole(uiState, set, Modifier.weight(1f))
+        WeightPole(uiState, set, Modifier.weight(0.9f))
         RestPole(uiState, set, Modifier.weight(1f))
     }
 }
@@ -130,7 +130,7 @@ val interval_between_pole = 4.dp
     Row( horizontalArrangement = Arrangement.Center, verticalAlignment = Alignment.Top,
         modifier = Modifier.fillMaxWidth().padding(vertical = 12.dp)){
         IntervalPole(uiState, set, Modifier.weight(1f))
-        WeightPole(uiState, set, Modifier.weight(1f))
+        WeightPole(uiState, set, Modifier.weight(0.8f))
         RestPole(uiState, set, Modifier.weight(1f))
     }
     Row( horizontalArrangement = Arrangement.Center, verticalAlignment = Alignment.Top,
@@ -319,6 +319,7 @@ val interval_between_pole = 4.dp
             TextFieldApp(
                 modifier = Modifier.weight(1f),
                 edit = true,
+                beginValueZero = true,
                 typeKeyboard = typeKey,
                 contentAlignment = Alignment.Center,
                 textStyle = typography.bodyLarge.copy(textAlign = TextAlign.Center),

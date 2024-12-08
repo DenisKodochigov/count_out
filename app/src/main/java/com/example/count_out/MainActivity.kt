@@ -20,6 +20,7 @@ import com.example.count_out.ui.view_components.lg
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
+
 @AndroidEntryPoint
 class MainActivity: ComponentActivity()
 {
@@ -39,7 +40,7 @@ class MainActivity: ComponentActivity()
         super.onStart()
         serviceBind.bindService()
         ignoreBatteryOptimisation()
-        if ( !checkBluetoothEnable()) messageApp.errorApi(R.string.bluetootj_not_available)
+        if ( !checkBluetoothEnable()) messageApp.errorApi(R.string.bluetooth_not_available)
     }
 
     override fun onDestroy() {

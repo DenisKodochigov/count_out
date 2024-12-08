@@ -26,9 +26,11 @@ import com.example.count_out.ui.view_components.CollapsingToolbar
 )
 @Composable
 fun StartApp() {
+
     AppTheme {
         val navController = rememberNavController()
         val currentScreen = navController.backScreenDestination()
+
         Scaffold(
             modifier = Modifier.semantics { testTagsAsResourceId = true },
             topBar = {

@@ -123,7 +123,7 @@
     <string name="init_service">Initialization foreground service</string>
     <string name="stop_distribution_service">Stop Distribution Service</string>
     <string name="speech_manager_error">SpeechManager</string>
-    <string name="bluetootj_not_available">Bluetooth not available.</string>
+    <string name="bluetooth_not_available">Bluetooth not available.</string>
     <string name="heart_rate">Heart rate:</string>
     <string name="history">History</string>
     <string name="history_">History</string>
