@@ -50,9 +50,8 @@ class ExecuteWorkViewModel @Inject constructor(
     private fun startServiceApp(){
         viewModelScope.launch(Dispatchers.IO) {
             kotlin.runCatching {
-                serviceBind.service.startCountOutService(
-                    dataForServ = dataForServ,
-                    callBack = { connectToStoredBleDev() })
+                connectToStoredBleDev()
+                serviceBind.service.startCountOutService(dataForServ = dataForServ)
             }.fold(
                 onSuccess = { receiveState( it ) },
                 onFailure = { messageApp.errorApi(

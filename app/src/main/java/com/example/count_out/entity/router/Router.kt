@@ -10,7 +10,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 
 class Router(private val dataForServ: DataForServ) {
 
@@ -60,7 +59,7 @@ class Router(private val dataForServ: DataForServ) {
         )
     }
     private fun initDataForUI(buffer: Buffer): DataForUI {
-        while (dataForServ.training.value == null) runBlocking{delay (100L)}
+//        while (dataForServ.training.value == null) runBlocking{delay (100L)}
         dataForWork.setExecuteInfoSet()
         dataForWork.setExecuteInfoExercise()
         return DataForUI(
@@ -112,8 +111,15 @@ class Router(private val dataForServ: DataForServ) {
     private fun sendDataToUi(){
         CoroutineScope(Dispatchers.Default).launch {
             while (true){
-                if (buffer.runningState.value == RunningState.Started) {
-                    dataForUI.setWork(buffer) }
+                if (buffer.runningState.value == RunningState.Started) { dataForUI.setWork(buffer) }
+                dataForUI.setBle(buffer)
+                delay(1000L)
+            }
+        }
+    }
+    fun sendBleToUi(){
+        CoroutineScope(Dispatchers.Default).launch {
+            while (true){
                 dataForUI.setBle(buffer)
                 delay(1000L)
             }

@@ -60,7 +60,7 @@ class CountOutService @Inject constructor(): Service() {
             CommandService.START_WORK->{ startWork() }
             CommandService.STOP_WORK->{ stopWork() }
             CommandService.PAUSE_WORK->{ pauseWork() }
-            CommandService.CONNECT_DEVICE->{ble.connectDevice( router.dataFromBle, router.dataForBle ) }
+            CommandService.CONNECT_DEVICE->{ ble.connectDevice(router.dataFromBle, router.dataForBle) }
             CommandService.DISCONNECT_DEVICE->{ ble.disconnectDevice() }
             CommandService.START_SCANNING->{ ble.startScanning(router.dataFromBle) }
             CommandService.STOP_SCANNING->{ ble.stopScanning(router.dataFromBle) }
@@ -72,14 +72,19 @@ class CountOutService @Inject constructor(): Service() {
         }
     }
 
-    fun startCountOutService(dataForServ: DataForServ, callBack: ()->Unit): DataForUI {
+    fun startCountOutService(dataForServ: DataForServ): DataForUI {
         running = true
         router = Router(dataForServ)
         startForegroundService()
         sendDataToNotification()
-        callBack()
         startSite()
         router.sendData()
+        return router.dataForUI
+    }
+
+    fun startBle(dataForServ: DataForServ): DataForUI{
+        router = Router(dataForServ)
+        router.sendBleToUi()
         return router.dataForUI
     }
     private fun startForegroundService() {

@@ -6,6 +6,7 @@ import com.example.count_out.entity.TickTime
 import com.example.count_out.entity.bluetooth.DeviceUI
 import com.example.count_out.entity.router.Buffer
 import com.example.count_out.entity.workout.Coordinate
+import com.example.count_out.ui.view_components.lg
 import kotlinx.coroutines.flow.MutableStateFlow
 
 data class DataForUI (

@@ -2,15 +2,14 @@ package com.example.count_out.ui.screens.settings
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.count_out.R
 import com.example.count_out.data.DataRepository
 import com.example.count_out.data.room.tables.SettingDB
-import com.example.count_out.entity.workout.Activity
 import com.example.count_out.entity.CommandService
-import com.example.count_out.entity.ui.DataForServ
-import com.example.count_out.entity.ui.DataForUI
 import com.example.count_out.entity.MessageApp
 import com.example.count_out.entity.bluetooth.BleDevSerializable
+import com.example.count_out.entity.ui.DataForServ
+import com.example.count_out.entity.ui.DataForUI
+import com.example.count_out.entity.workout.Activity
 import com.example.count_out.service_count_out.CountOutServiceBind
 import com.example.count_out.ui.view_components.lg
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -50,29 +49,22 @@ class SettingViewModel @Inject constructor(
     private val dataForServ = DataForServ()
 
     init {
-        initServiceApp()
+        connectToStoredBleDev()
         getSettings()
         templateActivity {dataRepository.getActivities()}
     }
-    private fun initServiceApp(){
+    private fun connectToStoredBleDev() {
         viewModelScope.launch(Dispatchers.IO) {
-            kotlin.runCatching {
-                serviceBind.service.startCountOutService(
-                    dataForServ = dataForServ,
-                    callBack = { connectToStoredBleDev() })
-            }.fold(
+            kotlin.runCatching { serviceBind.service.startBle(dataForServ) }.fold(
                 onSuccess = { receiveState( it ) },
-                onFailure = { messageApp.errorApi(
-                    id = R.string.start_service, errorMessage = " ${it.message ?: ""}") }
+                onFailure ={}
             )
         }
     }
-    private fun commandSrv(command: CommandService){
-        serviceBind.service.commandService( command)
-    }
+
     private fun commandService(command: CommandService){
         viewModelScope.launch(Dispatchers.IO) {
-            kotlin.runCatching { commandSrv( command) }.fold(
+            kotlin.runCatching { serviceBind.service.commandService( command) }.fold(
                 onSuccess = { },
                 onFailure = { messageApp.errorApi("initServiceApp ${it.message ?: ""}") }
             )
@@ -88,8 +80,6 @@ class SettingViewModel @Inject constructor(
         templateActivity{ dataRepository.onDeleteActivity(activityId) } }
     private fun onSetColorActivityForSettings(activityId: Long, color: Int){
         templateActivity{ dataRepository.onSetColorActivityForSettings(activityId, color) } }
-    private fun getSettings(){
-        templateSetting {dataRepository.getSettings()} }
     private fun updateSetting( setting: SettingDB ){
         templateSetting {dataRepository.updateSetting(setting)} }
 
@@ -101,19 +91,16 @@ class SettingViewModel @Inject constructor(
         }
     }
 
-    private fun connectToStoredBleDev() {
+    private fun receiveState(dataForUI: DataForUI) { //
         viewModelScope.launch(Dispatchers.IO) {
-            dataRepository.getBleDevStoreFlow().collect{ device->
+            dataRepository.getBleDevStoreFlow().collect { device ->
                 if (device.address.isNotEmpty()) {
-                    _settingScreenState.update { state ->
-                        state.copy(lastConnectHearthRateDevice = device) }
+                    _settingScreenState.update { state -> state.copy(lastConnectHearthRateDevice = device) }
                     dataForServ.addressForSearch = device.address
                     commandService(CommandService.CONNECT_DEVICE)
                 }
             }
         }
-    }
-    private fun receiveState(dataForUI: DataForUI) { //
         viewModelScope.launch(Dispatchers.IO) {
             dataForUI.bleConnectState.collect { state ->
 //                if (dataForUI.runningState.value == RunningState.Stopped) return@collect
@@ -137,12 +124,15 @@ class SettingViewModel @Inject constructor(
         }
         viewModelScope.launch(Dispatchers.IO) {
             dataForUI.foundDevices.collect { foundDevices ->
+                lg("viewModelScope $foundDevices")
 //                if (dataForUI.runningState.value == RunningState.Stopped) return@collect
                 _settingScreenState.update { currentState ->
                     currentState.copy(devicesUI = foundDevices) }
             }
         }
     }
+    private fun getSettings(){
+        templateSetting {dataRepository.getSettings()} }
     private fun templateSetting( funDataRepository:() -> List<SettingDB> ){
         viewModelScope.launch(Dispatchers.IO) {
             kotlin.runCatching { funDataRepository() }.fold(
