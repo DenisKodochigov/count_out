@@ -188,6 +188,7 @@ import com.example.count_out.ui.view_components.icons.IconsCollapsing
     }
 }
 @Composable fun RowBleDeviceItem(modifier: Modifier, uiState: SettingScreenState, style: TextStyle){
+//    lg("RowBleDeviceItem ${uiState.lastConnectHearthRateDevice?.name}")
     val nameDevice = uiState.lastConnectHearthRateDevice?.name?.ifEmpty { stringResource(id = R.string.no_name)}
         ?: stringResource(id = R.string.not_select_device)
     val heartRate = if (uiState.heartRate > 0) uiState.heartRate.toString() else ""

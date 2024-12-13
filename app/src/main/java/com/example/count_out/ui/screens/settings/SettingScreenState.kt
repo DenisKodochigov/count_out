@@ -28,7 +28,7 @@ data class SettingScreenState(
     @Stable val onAddActivity: (Activity) ->Unit = {},
     @Stable val onUpdateActivity: (Activity) ->Unit = {},
     @Stable val onDeleteActivity: (Long) ->Unit = {},
-    @Stable val onSelectDevice: (String) ->Unit = {},
+    @Stable val onSelectDevice: ( DeviceUI ) ->Unit = {},
 
     @Stable val onUpdateSetting: (SettingDB) ->Unit = {},
     @Stable val onGetSettings: () ->Unit = {},
@@ -44,7 +44,7 @@ data class SettingScreenState(
     @Stable var onDismissBLEScan: (SettingScreenState) -> Unit = {uiState ->
         onStopScanBLE()
         uiState.showBottomSheetBLE.value = false },
-    @Stable var onConfirmBLEScan: (String, SettingScreenState) -> Unit = { addr, uiState->
-        onSelectDevice(addr)
-        uiState.showBottomSheetBLE.value = false },
+//    @Stable var onConfirmBLEScan: (String, SettingScreenState) -> Unit = { addr, uiState->
+//        onSelectDevice(addr)
+//        uiState.showBottomSheetBLE.value = false },
 )

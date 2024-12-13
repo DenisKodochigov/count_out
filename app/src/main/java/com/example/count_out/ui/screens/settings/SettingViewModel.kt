@@ -7,6 +7,7 @@ import com.example.count_out.data.room.tables.SettingDB
 import com.example.count_out.entity.CommandService
 import com.example.count_out.entity.MessageApp
 import com.example.count_out.entity.bluetooth.BleDevSerializable
+import com.example.count_out.entity.bluetooth.DeviceUI
 import com.example.count_out.entity.ui.DataForServ
 import com.example.count_out.entity.ui.DataForUI
 import com.example.count_out.entity.workout.Activity
@@ -39,8 +40,10 @@ class SettingViewModel @Inject constructor(
             onGetSettings = { getSettings()},
             onStartScanBLE = { commandService(CommandService.START_SCANNING) },
             onStopScanBLE = { commandService(CommandService.STOP_SCANNING) },
-            onClearCacheBLE = { commandService(CommandService.CLEAR_CACHE_BLE) },
             onSelectDevice = { address-> selectDevice(address) },
+            onClearCacheBLE = {
+                clearStoredDevice()
+                commandService(CommandService.CLEAR_CACHE_BLE) },
             onSetColorActivity = { activityId, color ->
                 onSetColorActivityForSettings( activityId = activityId, color = color) },
         ))
@@ -49,14 +52,19 @@ class SettingViewModel @Inject constructor(
     private val dataForServ = DataForServ()
 
     init {
-        connectToStoredBleDev()
+        startBle()
         getSettings()
         templateActivity {dataRepository.getActivities()}
     }
-    private fun connectToStoredBleDev() {
+
+    private fun clearStoredDevice(){
+        viewModelScope.launch(Dispatchers.IO) {
+            dataRepository.storeSelectBleDev( BleDevSerializable())}
+    }
+    private fun startBle() {
         viewModelScope.launch(Dispatchers.IO) {
             kotlin.runCatching { serviceBind.service.startBle(dataForServ) }.fold(
-                onSuccess = { receiveState( it ) },
+                onSuccess = { receiveFormBle( it ) },
                 onFailure ={}
             )
         }
@@ -83,61 +91,53 @@ class SettingViewModel @Inject constructor(
     private fun updateSetting( setting: SettingDB ){
         templateSetting {dataRepository.updateSetting(setting)} }
 
-    private fun selectDevice(address: String) {
+    private fun selectDevice(device:  DeviceUI) {
         viewModelScope.launch(Dispatchers.IO) {
-            dataRepository.storeSelectBleDev( BleDevSerializable( address = address))
-            dataForServ.addressForSearch = address
+            dataRepository.storeSelectBleDev( BleDevSerializable( address = device.address, name = device.name))
+            dataForServ.addressForSearch = device.address
             commandService(CommandService.CONNECT_DEVICE)
         }
     }
 
-    private fun receiveState(dataForUI: DataForUI) { //
+    private fun receiveFormBle(dataForUI: DataForUI) { //
         viewModelScope.launch(Dispatchers.IO) {
             dataRepository.getBleDevStoreFlow().collect { device ->
+                lg("SettingViewModel device:${device} ")
                 if (device.address.isNotEmpty()) {
                     _settingScreenState.update { state -> state.copy(lastConnectHearthRateDevice = device) }
                     dataForServ.addressForSearch = device.address
                     commandService(CommandService.CONNECT_DEVICE)
                 }
             }
-        }
+        } //lastConnectHearthRateDevice
         viewModelScope.launch(Dispatchers.IO) {
-            dataForUI.bleConnectState.collect { state ->
-//                if (dataForUI.runningState.value == RunningState.Stopped) return@collect
-                _settingScreenState.update { currentState ->
-                    currentState.copy( connectingState = state) }
+            dataForUI.bleConnectState.collect { bleState ->
+                _settingScreenState.update { state -> state.copy( connectingState = bleState) }
             }
-        }
+        } //connectingState
         viewModelScope.launch(Dispatchers.IO) {
             dataForUI.heartRate.collect { hr ->
-//                if (dataForUI.runningState.value == RunningState.Stopped) return@collect
-                _settingScreenState.update { currentState ->
-                    currentState.copy(heartRate = hr) }
+                _settingScreenState.update { state -> state.copy(heartRate = hr) }
             }
-        }
+        } //heartRate
         viewModelScope.launch(Dispatchers.IO) {
             dataForUI.scannedBle.collect { scannedBle ->
-//                if (dataForUI.runningState.value == RunningState.Stopped) return@collect
-                _settingScreenState.update { currentState ->
-                    currentState.copy(scannedBle = scannedBle) }
+                _settingScreenState.update { state -> state.copy(scannedBle = scannedBle) }
             }
-        }
+        } //scannedBle
         viewModelScope.launch(Dispatchers.IO) {
             dataForUI.foundDevices.collect { foundDevices ->
-                lg("viewModelScope $foundDevices")
-//                if (dataForUI.runningState.value == RunningState.Stopped) return@collect
-                _settingScreenState.update { currentState ->
-                    currentState.copy(devicesUI = foundDevices) }
+                lg("SettingViewModel foundDevices:$foundDevices")
+                _settingScreenState.update { state -> state.copy(devicesUI = foundDevices) }
             }
-        }
+        } //devicesUI
     }
     private fun getSettings(){
-        templateSetting {dataRepository.getSettings()} }
+        templateSetting { dataRepository.getSettings() } }
     private fun templateSetting( funDataRepository:() -> List<SettingDB> ){
         viewModelScope.launch(Dispatchers.IO) {
             kotlin.runCatching { funDataRepository() }.fold(
-                onSuccess = { _settingScreenState.update { currentState ->
-                    currentState.copy( settings = it ) } },
+                onSuccess = { _settingScreenState.update { state -> state.copy( settings = it ) } },
                 onFailure = { messageApp.errorApi(it.message ?: "") }
             )
         }

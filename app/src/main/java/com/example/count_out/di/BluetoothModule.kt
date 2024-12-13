@@ -54,5 +54,5 @@ class BluetoothModule {
         messengerA: MessageApp,
         bleConnecting: BleConnecting,
         bluetoothAdapter: BluetoothAdapter,
-    ): Bluetooth = Bluetooth(bleScanner, messengerA, bleConnecting, bluetoothAdapter)
+    ): Bluetooth = Bluetooth(bleScanner, bleConnecting, messengerA, bluetoothAdapter)
 }

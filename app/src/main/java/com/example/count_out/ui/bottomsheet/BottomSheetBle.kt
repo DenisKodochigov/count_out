@@ -30,9 +30,9 @@ import com.example.count_out.ui.theme.Dimen.bsHeightWindowsListBle
 import com.example.count_out.ui.theme.Dimen.bsSpacerBottomHeight
 import com.example.count_out.ui.theme.mTypography
 import com.example.count_out.ui.theme.shapes
-import com.example.count_out.ui.view_components.icons.AnimateIcon
 import com.example.count_out.ui.view_components.ModalBottomSheetApp
 import com.example.count_out.ui.view_components.TextApp
+import com.example.count_out.ui.view_components.icons.AnimateIcon
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -85,7 +85,7 @@ fun BottomSheetBleContent(uiState: SettingScreenState)
                 .padding(top = 16.dp, start = 12.dp, end = 12.dp)
                 .clickable {
                     uiState.showBottomSheetBLE.value = false
-                    uiState.onSelectDevice(item.address)
+                    uiState.onSelectDevice(item)
                 }) {
                 TextApp(text = item.address, style = mTypography.bodyMedium)
                 Spacer(modifier = Modifier.width(12.dp))

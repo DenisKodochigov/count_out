@@ -46,11 +46,21 @@ class ExecuteWorkViewModel @Inject constructor(
 
     private val dataForServ = DataForServ()
 
-    init { startServiceApp() }
-    private fun startServiceApp(){
+    fun getTraining(id: Long) {
+        viewModelScope.launch(Dispatchers.IO) {
+            kotlin.runCatching { dataRepository.getTraining(id) }.fold(
+                onSuccess = {
+                    dataForServ.training.value = it
+                    startCountOutService()
+                    connectToStoredBleDev()
+                    _executeWorkoutScreenState.update { state -> state.copy( training = it,) } },
+                onFailure = { messageApp.errorApi(it.message ?: "") }
+            )
+        }
+    }
+    private fun startCountOutService(){
         viewModelScope.launch(Dispatchers.IO) {
             kotlin.runCatching {
-                connectToStoredBleDev()
                 serviceBind.service.startCountOutService(dataForServ = dataForServ)
             }.fold(
                 onSuccess = { receiveState( it ) },
@@ -59,12 +69,10 @@ class ExecuteWorkViewModel @Inject constructor(
             )
         }
     }
-    private fun commandSrv(command: CommandService){
-        serviceBind.service.commandService( command)
-    }
+
     private fun commandService(command: CommandService){
         viewModelScope.launch(Dispatchers.IO) {
-            kotlin.runCatching { commandSrv( command) }.fold(
+            kotlin.runCatching { serviceBind.service.commandService(command) }.fold(
                 onSuccess = { },
                 onFailure = { messageApp.errorApi("initServiceApp ${it.message ?: ""}") }
             )
@@ -73,22 +81,12 @@ class ExecuteWorkViewModel @Inject constructor(
     private fun connectToStoredBleDev() {
         viewModelScope.launch(Dispatchers.IO) {
             dataRepository.getBleDevStoreFlow().collect{ device->
-                if (device.address.isNotEmpty()) { _executeWorkoutScreenState.update { state ->
-                    state.copy(lastConnectHearthRateDevice = device) }
+                if (device.address.isNotEmpty()) {
+                    _executeWorkoutScreenState.update { state -> state.copy(lastConnectHearthRateDevice = device) }
                     dataForServ.addressForSearch = device.address
-                    commandSrv( CommandService.CONNECT_DEVICE)
+                    serviceBind.service.commandService(CommandService.CONNECT_DEVICE)
                 }
             }
-        }
-    }
-    fun getTraining(id: Long) {
-        viewModelScope.launch(Dispatchers.IO) {
-            kotlin.runCatching { dataRepository.getTraining(id) }.fold(
-                onSuccess = {
-                    dataForServ.training.value = it
-                    _executeWorkoutScreenState.update { state -> state.copy( training = it,) } },
-                onFailure = { messageApp.errorApi(it.message ?: "") }
-            )
         }
     }
     private fun updateSet(trainingId: Long, set: SetDB) {
