@@ -12,6 +12,7 @@ import com.example.count_out.service_count_out.location.Site
 import com.example.count_out.service_count_out.logging.Logging
 import com.example.count_out.service_count_out.work.Work
 import com.example.count_out.service_count_out.work.execute.ExecuteWork
+import com.example.count_out.service_count_out.work.execute.RunWorkOut
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -37,8 +38,8 @@ class CountOutServiceModule {
     }
     @Singleton
     @Provides
-    fun provideWorkOutService(speechManager: SpeechManager, executeWork: ExecuteWork): Work {
-        return Work(speechManager, executeWork)
+    fun provideWorkOutService(speechManager: SpeechManager, executeWork: ExecuteWork, runWorkOut: RunWorkOut): Work {
+        return Work(speechManager, executeWork, runWorkOut)
     }
 
     @Singleton

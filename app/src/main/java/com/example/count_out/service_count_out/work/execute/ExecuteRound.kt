@@ -10,7 +10,7 @@ class ExecuteRound @Inject constructor(
     val speechManager:SpeechManager, private val executeExercise: ExecuteExercise, val context: Context
 ){
     suspend fun executeRound(dataForWork: DataForWork, dataFromWork: DataFromWork){
-        dataFromWork.equalsStop()
+        dataFromWork.trap()
         dataForWork.getRound()?.let { round->
             speechManager.speech(dataFromWork, round.speech.beforeStart)
             speechManager.speech(dataFromWork, round.speech.afterStart)

@@ -19,7 +19,8 @@ data class DataFromWork (
     val executeInfoExercise: MutableStateFlow<ExecuteInfoExercise?> = MutableStateFlow(null),
     val executeInfoSet: MutableStateFlow<ExecuteInfoSet?> = MutableStateFlow(null),
     val durationSpeech: MutableStateFlow<Pair<Long, Long>> = MutableStateFlow(Pair(0,0)),
-    var equalsStop: ()-> Unit = {}
+    var trap: ()-> Unit = {},
+    var trapNew: ()-> Unit = {}
 ){
     fun empty(){
         this.flowTime.value = TickTime()
@@ -32,6 +33,7 @@ data class DataFromWork (
         this.executeInfoExercise.value = null
         this.runningState.value = RunningState.Stopped
         this.durationSpeech.value = Pair(0,0)
-        this.equalsStop = {}
+        this.trap = {}
+        this.trapNew = {}
     }
 }

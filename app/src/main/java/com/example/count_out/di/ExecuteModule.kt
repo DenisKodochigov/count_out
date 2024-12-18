@@ -6,6 +6,7 @@ import com.example.count_out.service_count_out.work.execute.ExecuteExercise
 import com.example.count_out.service_count_out.work.execute.ExecuteRound
 import com.example.count_out.service_count_out.work.execute.ExecuteSet
 import com.example.count_out.service_count_out.work.execute.ExecuteWork
+import com.example.count_out.service_count_out.work.execute.RunWorkOut
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -23,6 +24,14 @@ class ExecuteModule {
         executeRound: ExecuteRound,
     ): ExecuteWork {
         return ExecuteWork(speechManager, executeRound)
+    }
+    @Singleton
+    @Provides
+    fun provideRunWorkOut(
+        speechManager: SpeechManager,
+        @ApplicationContext appContext: Context,
+    ): RunWorkOut {
+        return RunWorkOut(speechManager, appContext)
     }
 
     @Singleton

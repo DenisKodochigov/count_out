@@ -114,6 +114,7 @@ class CountOutService @Inject constructor(): Service() {
     private fun startWriteBase(){
         logging.runLogging(router.dataForBase, router.dataFromWork.runningState) }
     private fun stopWriteBase(){ logging.stop()}
+
     private fun startWork(){
          if (router.dataForUI.runningState.value == RunningState.Paused){
             router.dataFromWork.runningState.value = RunningState.Started

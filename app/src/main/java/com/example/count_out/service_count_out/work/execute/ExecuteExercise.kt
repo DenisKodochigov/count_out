@@ -11,7 +11,7 @@ import javax.inject.Inject
 class ExecuteExercise @Inject constructor(
     val speechManager:SpeechManager, private val executeSet: ExecuteSet, val context: Context){
     suspend fun executeExercise(dataForWork: DataForWork, dataFromWork: DataFromWork){
-        dataFromWork.equalsStop()
+        dataFromWork.trap()
         dataForWork.getExercise()?.let { exercise ->
             speechManager.speech(dataFromWork, exercise.speech.beforeStart)
             val desc = if (dataForWork.enableSpeechDescription.value) exercise.activity.description else ""

@@ -6,13 +6,17 @@ import com.example.count_out.entity.router.DataForWork
 import com.example.count_out.entity.router.DataFromWork
 import com.example.count_out.service_count_out.stopwatch.Watcher
 import com.example.count_out.service_count_out.work.execute.ExecuteWork
+import com.example.count_out.service_count_out.work.execute.RunWorkOut
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.util.concurrent.CancellationException
 import javax.inject.Inject
-import kotlin.coroutines.cancellation.CancellationException
 
-class Work @Inject constructor(val speechManager: SpeechManager, val executeWork: ExecuteWork){
+class Work @Inject constructor(
+    val speechManager: SpeechManager,
+    val executeWork: ExecuteWork,
+    val runWorkOut: RunWorkOut){
 
     fun start(dataForWork: DataForWork, dataFromWork: DataFromWork){
         speechManager.init {
@@ -27,13 +31,14 @@ class Work @Inject constructor(val speechManager: SpeechManager, val executeWork
     }
     private fun speaking(dataForWork: DataForWork, dataFromWork: DataFromWork) {
         CoroutineScope(Dispatchers.Default).launch {
-            dataFromWork.equalsStop = {
+            dataFromWork.trap = {
                 if (dataFromWork.runningState.value == RunningState.Stopped) {
                     dataFromWork.empty()
                     dataForWork.empty()
                     stop()
                 } }
-            executeWork.executeWorkOut( dataForWork, dataFromWork)
+//            executeWork.executeWorkOut( dataForWork, dataFromWork)
+            runWorkOut.runWorkOut(dataForWork, dataFromWork)
         }
     }
     private fun getTick( dataFromWork: DataFromWork ){

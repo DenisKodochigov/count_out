@@ -57,7 +57,7 @@ class SpeechManager(val context: Context) {
     }
 
     suspend fun speech(dataFromWork: DataFromWork, speech: Speech): Long {
-        dataFromWork.equalsStop()
+        dataFromWork.trap()
         val speechText = speech.message + " " + speech.addMessage
         if ((speechText).length > 1) {
             speakOutAdd(speechText, dataFromWork)
@@ -70,15 +70,15 @@ class SpeechManager(val context: Context) {
         return durationEnd
     }
     private fun speakOutAdd(text: String, dataFromWork: DataFromWork){
-        dataFromWork.equalsStop()
+        dataFromWork.trap()
         tts?.speak(text, TextToSpeech.QUEUE_ADD, null,"speakOut$idSpeech")
     }
     fun speakOutFlush(text: String, dataFromWork: DataFromWork){
-        dataFromWork.equalsStop()
+        dataFromWork.trap()
         tts?.speak(text, TextToSpeech.QUEUE_FLUSH, null,"speakOut$idSpeech")
     }
     fun speakOutFlushBusy(text: String, dataFromWork: DataFromWork){
-        dataFromWork.equalsStop()
+        dataFromWork.trap()
         if (tts?.isSpeaking == false) tts?.speak(text, TextToSpeech.QUEUE_FLUSH, null,"speakOut$idSpeech")
     }
     fun getSpeeching() = tts?.isSpeaking ?: false
