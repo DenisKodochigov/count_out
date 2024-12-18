@@ -10,7 +10,6 @@ import com.example.count_out.entity.ui.NextExercise
 import com.example.count_out.entity.workout.Activity
 import com.example.count_out.entity.workout.EntityTraining
 import com.example.count_out.entity.workout.Exercise
-import com.example.count_out.entity.workout.ListEntityTraining
 import com.example.count_out.entity.workout.Round
 import com.example.count_out.entity.workout.Set
 import com.example.count_out.entity.workout.Training
@@ -27,9 +26,9 @@ data class DataForWork (
     var cancelCoroutineWork: ()-> Unit = {},
     val dataFromWork: DataFromWork? = null,
 
-    val map: List<EntityTraining> = emptyList<EntityTraining>(),
-    val roundCount: Int = 0,
-    val exerciseCount: Int = 0,
+    var map: List<EntityTraining> = emptyList<EntityTraining>(),
+    var roundCount: Int = 0,
+    var exerciseCount: Int = 0,
 
 ){
     fun empty(){
@@ -159,10 +158,9 @@ data class DataForWork (
         }
         return null
     }
-    fun createMapTraining(): ListEntityTraining{
+
+    fun createMapTraining(){
         val list: MutableList<EntityTraining> = mutableListOf()
-        var roundsCount = 0
-        var exerciseCount = 0
         this.training.value?.let { tr->
             tr.rounds.forEachIndexed { indR, round->
                 round.exercise.forEachIndexed { indE,exercise ->
@@ -179,7 +177,7 @@ data class DataForWork (
                         ))
                     }
                     val nextExercise = nextExercise(exercise)
-                    for (ind in list.lastIndex..0 step (-1)){
+                    for (ind in list.lastIndex..0){
                         if (list[ind].nextExercise == null){
                             list[ind] = list[ind].copy(nextExercise = nextExercise)
                         }
@@ -187,9 +185,9 @@ data class DataForWork (
                     exerciseCount ++
                 }
             }
-            roundsCount = tr.rounds.count()
+            roundCount = tr.rounds.count()
         }
-        return ListEntityTraining(list = list, roundCount = roundsCount, exerciseCount = exerciseCount)
+        this.map = list
     }
 
     fun nextExercise(exercise: Exercise): NextExercise {
