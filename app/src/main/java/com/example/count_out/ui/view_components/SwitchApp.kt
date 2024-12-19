@@ -38,10 +38,6 @@ fun SwitchApp(setting: SettingDB, modifier: Modifier = Modifier, change:(Boolean
                 uncheckedThumbColor = MaterialTheme.colorScheme.surfaceContainerLow,
                 uncheckedTrackColor = Color.Transparent,
                 uncheckedBorderColor = MaterialTheme.colorScheme.outline,
-//                disabledCheckedTrackColor = Color.Red,
-//                disabledUncheckedTrackColor = Color.Red,
-//                disabledCheckedThumbColor = Color.Red,
-//                disabledUncheckedThumbColor = Color.Red,
             ),
             onCheckedChange = {
                 checked = it

@@ -102,8 +102,8 @@ import java.math.RoundingMode
     Frame{
         Column (modifier = Modifier.fillMaxWidth().padding(horizontal = 12.dp, vertical = 12.dp)){
             val text = if (uiState.executeInfoExercise?.activity?.name.isNullOrEmpty()) "" else
-                "${uiState.executeInfoExercise.activity.name}:" +
-                " ${uiState.executeInfoExercise.currentExercise}/${uiState.executeInfoExercise.quantityExercise}"
+                "${uiState.executeInfoExercise?.activity?.name}:" +
+                " ${uiState.executeInfoExercise?.currentExercise}/${uiState.executeInfoExercise?.quantityExercise}"
             TextApp(text = text,
                 modifier = Modifier.padding(bottom = 12.dp),
                 style = mTypography.titleLarge)
@@ -171,7 +171,7 @@ import java.math.RoundingMode
                 style1 = mTypography.titleLarge,
                 style2 = mTypography.titleLarge,
                 modifier = Modifier.width(50.dp),
-                text1 = "${uiState.executeInfoSet.currentIndexSet}",
+                text1 = "${uiState.executeInfoSet.setNumber}",
                 text2 = "${uiState.currentCount}",
                 text3 = "${set.weight / ( if (set.weightE == WeightE.KG) 1000 else 1 ) }",
                 text4 = "${uiState.currentRest}",
@@ -212,7 +212,7 @@ import java.math.RoundingMode
                 style1 = mTypography.titleLarge,
                 style2 = mTypography.titleLarge,
                 modifier = Modifier.width(50.dp),
-                text1 = "${uiState.executeInfoSet.currentIndexSet}",
+                text1 = "${uiState.executeInfoSet.setNumber}",
                 text2 = "${uiState.currentDistance/( if (set.distanceE == DistanceE.KM) 1000 else 1)}",
                 text3 = "${uiState.currentRest}",
             )
@@ -248,7 +248,7 @@ import java.math.RoundingMode
                 style1 = mTypography.titleLarge,
                 style2 = mTypography.titleLarge,
                 modifier = Modifier.width(50.dp),
-                text1 = "${(uiState.executeInfoSet.currentIndexSet)}",
+                text1 = "${(uiState.executeInfoSet.setNumber)}",
                 text2 = "${uiState.currentDuration/( if (set.durationE == TimeE.MIN) 60 else 1)}",
                 text3 = "${set.weight / ( if (set.weightE == WeightE.KG) 1000 else 1 ) }",
                 text4 = "${uiState.currentRest}",

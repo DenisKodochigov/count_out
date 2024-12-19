@@ -46,6 +46,7 @@ class RunWorkOut @Inject constructor( val speechManager:SpeechManager, val conte
                     }
                     dataForWork.setExecuteInfoExercise(index = indM)
                 }
+                dataForWork.setExecuteInfoSet(indM)
                 executeSet( item.set, dataFromWork )
                 if ( currentIndExercise != item.exerciseNumber )
                     item.exercise?.speech?.let { speechEnd(dataFromWork, it)}
@@ -59,7 +60,7 @@ class RunWorkOut @Inject constructor( val speechManager:SpeechManager, val conte
         }
     }
 
-    suspend fun executeSet(set: Set?, dataFromWork: DataFromWork){
+    private suspend fun executeSet(set: Set?, dataFromWork: DataFromWork){
         dataFromWork.trap()
         while (!runningCountRest.value) { delay(100L) }
         set?.let { currentSet->
@@ -153,11 +154,11 @@ class RunWorkOut @Inject constructor( val speechManager:SpeechManager, val conte
     }
     private fun getStr(id: Int) = context.getString(id)
     fun trap(){}
-    suspend fun speechStart(dataFromWork: DataFromWork, speech: SpeechKit){
+    private suspend fun speechStart(dataFromWork: DataFromWork, speech: SpeechKit){
         speechManager.speech(dataFromWork, speech.beforeStart)
         speechManager.speech(dataFromWork, speech.afterStart)
     }
-    suspend fun speechEnd(dataFromWork: DataFromWork, speech: SpeechKit){
+    private suspend fun speechEnd(dataFromWork: DataFromWork, speech: SpeechKit){
         speechManager.speech(dataFromWork, speech.beforeEnd)
         speechManager.speech(dataFromWork, speech.afterEnd)
     }

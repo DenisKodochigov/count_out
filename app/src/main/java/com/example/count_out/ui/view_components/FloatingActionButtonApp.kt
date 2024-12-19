@@ -32,21 +32,4 @@ import com.example.count_out.ui.theme.alumBodyMedium
     )
 }
 
-//            FABCorrectInterval(
-//                currentValue = playSet.intervalReps,
-//                downInterval = {
-//                    uiState.training?.let {
-//                        uiState.updateSet( it.idTraining,
-//                            (playSet as SetDB).copy(
-//                                intervalReps = (playSet.intervalReps - 0.1).toPositive()))
-//                    }
-//                },
-//                upInterval = {
-//                    uiState.training?.let {
-//                        uiState.updateSet(it.idTraining,
-//                            (playSet as SetDB).copy( intervalReps = playSet.intervalReps + 0.1 ))
-//                    }
-//                }
-//            )
-//        }
 

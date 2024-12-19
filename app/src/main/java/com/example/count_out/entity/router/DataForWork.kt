@@ -19,6 +19,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 data class DataForWork (
     var training: MutableStateFlow<Training?> = MutableStateFlow(null),
     var enableSpeechDescription: MutableStateFlow<Boolean> = MutableStateFlow(true),
+    var intervalReps: MutableStateFlow<Double> = MutableStateFlow(0.0),
     var indexMap: Int = 0,
     var indexRound: Int = 0,
     var indexExercise: Int = 0,
@@ -26,10 +27,9 @@ data class DataForWork (
     var cancelCoroutineWork: ()-> Unit = {},
     val dataFromWork: DataFromWork? = null,
 
-    var map: List<EntityTraining> = emptyList<EntityTraining>(),
+    var map: List<EntityTraining> = emptyList(),
     var roundCount: Int = 0,
-    var exerciseCount: Int = 0,
-
+    var exerciseNumber: Int = 1,
 ){
     fun empty(){
         indexRound = 0
@@ -80,13 +80,6 @@ data class DataForWork (
         }
     }
 
-    fun setExecuteInfoSet(set: Set? = null): Set?{
-        dataFromWork?.executeInfoSet?.value = executeInfoSet(set?.idSet ?: 0L)
-        return set
-    }
-    fun setExecuteInfoExercise(){
-        dataFromWork?.executeInfoExercise?.value = executeInfoExercise(getExercise()?.idExercise ?: 0)
-    }
     fun getSetIntervalReps(): Double {
         return try {
             getSet()?.intervalReps ?: 0.0
@@ -95,7 +88,14 @@ data class DataForWork (
             0.0
         }
     }
-    private fun executeInfoExercise(idExercise: Long = 0L): ExecuteInfoExercise? {
+    fun setExecuteInfoSet(set: Set? = null): Set?{
+        dataFromWork?.executeInfoSet?.value = executeInfoSet(set?.idSet ?: 0L)
+        return set
+    }
+    fun setExecuteInfoExercise(){
+        dataFromWork?.executeInfoExercise?.value = fillInfoExercise(getExercise()?.idExercise ?: 0)
+    }
+    private fun fillInfoExercise(idExercise: Long = 0L): ExecuteInfoExercise {
         var finding = false
         var activity: Activity? = null
         var nextExercise: NextExercise? = null
@@ -106,7 +106,7 @@ data class DataForWork (
         training.value?.let { tr->
             tr.rounds.forEachIndexed { _, round ->
                 round.exercise.forEachIndexed { _, exerciseL ->
-                    if (finding && exerciseL.sets.count() > 0) {
+                    if (finding && exerciseL.sets.isNotEmpty()) {
                         exerciseL.sets.forEachIndexed { _, set ->
                             list.add( when (set.goal) {
                                 GoalSet.DURATION -> "${set.duration / (if (set.durationE == TimeE.SEC) 1 else 60)}" to set.durationE.id
@@ -140,7 +140,7 @@ data class DataForWork (
             currentExercise = currentExercise,
             quantityExercise = quantityExercise - 1 )
     }
-    fun executeInfoSet( idSet: Long = 0L): ExecuteInfoSet? {
+    private fun executeInfoSet(idSet: Long = 0L): ExecuteInfoSet? {
         training.value?.let { tr->
             tr.rounds.forEachIndexed { _, round ->
                 round.exercise.forEachIndexed { _, exerciseL ->
@@ -148,7 +148,7 @@ data class DataForWork (
                         if (setL.idSet == idSet || idSet == 0L) {
                             return ExecuteInfoSet(
                                 currentSet = setL,
-                                currentIndexSet = indSet + 1,
+                                setNumber = indSet + 1,
                                 quantitySet = exerciseL.sets.count()
                             )
                         }
@@ -158,39 +158,40 @@ data class DataForWork (
         }
         return null
     }
-
+//#################################################################################
     fun createMapTraining(){
         val list: MutableList<EntityTraining> = mutableListOf()
         this.training.value?.let { tr->
             tr.rounds.forEachIndexed { indR, round->
                 round.exercise.forEachIndexed { indE,exercise ->
+                    if (list.isNotEmpty()) {
+                        val nextExercise = nextExercise(exercise)
+                        for (ind in list.lastIndex downTo 0){
+                            if (list[ind].nextExercise == null){
+                                list[ind] = list[ind].copy(nextExercise = nextExercise)
+                            }
+                        }
+                    }
                     exercise.sets.forEachIndexed { indS, set->
                         list.add(
                             EntityTraining(
                                 round = round,
                                 roundCurrent = indR,
                                 exercise = exercise,
-                                exerciseNumber = exerciseCount,
+                                exerciseNumber = exerciseNumber,
                                 set = set,
-                                setCurrent = indS,
-                                setCount = exercise.sets.count()
+                                setNumber = indS + 1,
+                                quantitySet = exercise.sets.count()
                         ))
                     }
-                    val nextExercise = nextExercise(exercise)
-                    for (ind in list.lastIndex..0){
-                        if (list[ind].nextExercise == null){
-                            list[ind] = list[ind].copy(nextExercise = nextExercise)
-                        }
-                    }
-                    exerciseCount ++
+                    exerciseNumber ++
                 }
             }
             roundCount = tr.rounds.count()
         }
         this.map = list
     }
-
-    fun nextExercise(exercise: Exercise): NextExercise {
+    private fun nextExercise(exercise: Exercise): NextExercise {
         val list: MutableList<Pair<String, Int>> = mutableListOf()
         exercise.sets.forEachIndexed { _, set ->
             list.add( when (set.goal) {
@@ -201,7 +202,7 @@ data class DataForWork (
             )
         }
         return NextExercise(
-                    nextActivityName = exercise.activity.name.toString(),
+                    nextActivityName = exercise.activity.name,
                     nextExerciseId = exercise.idExercise,
                     nextExerciseQuantitySet = exercise.sets.count(),
                     nextExerciseSummarizeSet = list )
@@ -211,7 +212,14 @@ data class DataForWork (
             activity = map[index].exercise?.activity,
             nextExercise = map[index].nextExercise,
             currentExercise = map[index].exerciseNumber,
-            quantityExercise = exerciseCount
+            quantityExercise = exerciseNumber
+        )
+    }
+    fun setExecuteInfoSet(index: Int){
+        dataFromWork?.executeInfoSet?.value = ExecuteInfoSet(
+            currentSet = map[index].set,
+            setNumber = map[index].setNumber,
+            quantitySet = map[index].quantitySet,
         )
     }
 }

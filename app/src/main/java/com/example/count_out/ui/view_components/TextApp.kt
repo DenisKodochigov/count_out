@@ -33,22 +33,7 @@ import androidx.compose.ui.text.style.TextOverflow
         color = color
     )
 }
-@Composable
-fun TextAppLines(
-    text: String,
-    modifier: Modifier = Modifier,
-    textAlign: TextAlign = TextAlign.Start,
-    style: TextStyle,
-    fontWeight: FontWeight = FontWeight.Normal
-) {
-    Text(
-        text = text,
-        style = style,
-        fontWeight = fontWeight,
-        textAlign = textAlign,
-        modifier = modifier,
-    )
-}
+
 @Composable
 fun TextAppEllipsis(
     text: String,

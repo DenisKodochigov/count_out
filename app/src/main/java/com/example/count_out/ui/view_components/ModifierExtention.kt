@@ -40,11 +40,8 @@ fun Modifier.simpleVerticalScrollbar(
         val firstVisibleElementIndex = state.layoutInfo.visibleItemsInfo.firstOrNull()?.index
         val needDrawScrollbar = state.isScrollInProgress || alpha > 0.0f
 
-        // Draw scrollbar if scrolling or if the animation is still running and lazy column has content
         if (needDrawScrollbar && firstVisibleElementIndex != null) {
             val elementHeight = this.size.height / state.layoutInfo.totalItemsCount
-//            val scrollbarOffsetY = firstVisibleElementIndex * elementHeight
-//            val scrollbarHeight = state.layoutInfo.visibleItemsInfo.size * elementHeight
             val scrollbarOffsetY = firstVisibleElementIndex * elementHeight +
                     state.firstVisibleItemScrollOffset / 4
             val scrollbarHeight = elementHeight * 4

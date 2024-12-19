@@ -9,8 +9,8 @@ data class EntityTraining (
     val round: Round? = null,
     val roundCurrent: Int = 0,
     val set: Set? = null,
-    val setCurrent: Int = 0,
-    val setCount: Int = 0,
+    val setNumber: Int = 0,
+    val quantitySet: Int = 0,
     val setExercise: Int = 0,
 
     )

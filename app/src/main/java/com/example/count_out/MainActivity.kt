@@ -46,7 +46,6 @@ class MainActivity: ComponentActivity()
     override fun onDestroy() {
         super.onDestroy()
         serviceBind.unbindService()
-        lg(" Activity destroy")
     }
     private fun checkBluetoothEnable(): Boolean {
         if (ActivityCompat.checkSelfPermission(this,BLUETOOTH) == PackageManager.PERMISSION_GRANTED){
