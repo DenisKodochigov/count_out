@@ -11,6 +11,7 @@ import com.example.count_out.entity.bluetooth.DeviceUI
 import com.example.count_out.entity.ui.ExecuteInfoExercise
 import com.example.count_out.entity.ui.ExecuteInfoSet
 import com.example.count_out.entity.workout.Coordinate
+import com.example.count_out.entity.workout.StepTraining
 import com.example.count_out.entity.workout.Training
 import javax.inject.Singleton
 
@@ -25,6 +26,7 @@ data class ExecuteWorkoutScreenState(
     val currentDistance: Int = 0,
     val enableChangeInterval: Boolean = false,
     val executeInfoExercise: ExecuteInfoExercise? = null,
+    val stepTraining: StepTraining? = null,
     val executeInfoSet: ExecuteInfoSet? = null,
 
     val heartRate: Int = 0,

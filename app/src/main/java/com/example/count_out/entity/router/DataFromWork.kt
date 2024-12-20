@@ -4,6 +4,7 @@ import com.example.count_out.entity.RunningState
 import com.example.count_out.entity.TickTime
 import com.example.count_out.entity.ui.ExecuteInfoExercise
 import com.example.count_out.entity.ui.ExecuteInfoSet
+import com.example.count_out.entity.workout.StepTraining
 import kotlinx.coroutines.flow.MutableStateFlow
 
 data class DataFromWork (
@@ -18,6 +19,7 @@ data class DataFromWork (
     val phaseWorkout: MutableStateFlow<Int> = MutableStateFlow(0),
     val executeInfoExercise: MutableStateFlow<ExecuteInfoExercise?> = MutableStateFlow(null),
     val executeInfoSet: MutableStateFlow<ExecuteInfoSet?> = MutableStateFlow(null),
+    val stepTraining: MutableStateFlow<StepTraining?> = MutableStateFlow(null),
     val durationSpeech: MutableStateFlow<Pair<Long, Long>> = MutableStateFlow(Pair(0,0)),
     var trap: ()-> Unit = {},
     var trapNew: ()-> Unit = {}

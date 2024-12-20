@@ -41,6 +41,7 @@ class Router(private val dataForServ: DataForServ) {
             currentDuration = dataFromWork.currentDuration,
             currentDistance = dataFromWork.currentDistance,
             enableChangeInterval = dataFromWork.enableChangeInterval,
+            stepTraining = dataFromWork.stepTraining,
             executeInfoSet = dataFromWork.executeInfoSet,
             executeInfoExercise = dataFromWork.executeInfoExercise,
             durationSpeech = dataFromWork.durationSpeech,
@@ -54,19 +55,26 @@ class Router(private val dataForServ: DataForServ) {
             indexSet = dataForServ.indexSet,
             indexRound = dataForServ.indexRound,
             indexExercise = dataForServ.indexExercise,
+            idSetChangeInterval = dataForServ.idSetChangeInterval,
+            interval = dataForServ.interval,
             enableSpeechDescription = dataForServ.enableSpeechDescription,
-            dataFromWork = dataFromWork
+            dataFromWork = dataFromWork,
         )
     }
     private fun initDataForUI(buffer: Buffer): DataForUI {
 //        while (dataForServ.training.value == null) runBlocking{delay (100L)}
-        dataForWork.setExecuteInfoSet()
-        dataForWork.setExecuteInfoExercise()
+//        dataForWork.setExecuteInfoSet()
+//        dataForWork.setExecuteInfoExercise()
+        dataForWork.createMapTraining()
+        dataForWork.initStepTraining()
+        dataForWork.initDataForUISetInfo()
+        dataForWork.initDataForUIExerciseInfo()
         return DataForUI(
             runningState = buffer.runningState,
             currentCount = buffer.currentCount,
             currentDistance = buffer.currentDistance,
             currentDuration = buffer.currentDuration,
+            stepTraining = buffer.stepTraining,
             executeInfoSet = buffer.executeInfoSet,
             executeInfoExercise = buffer.executeInfoExercise
         )

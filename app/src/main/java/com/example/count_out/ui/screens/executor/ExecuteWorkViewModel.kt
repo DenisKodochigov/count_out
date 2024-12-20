@@ -92,12 +92,14 @@ class ExecuteWorkViewModel @Inject constructor(
     private fun updateSet(trainingId: Long, set: SetDB) {
         viewModelScope.launch(Dispatchers.IO) {
             kotlin.runCatching { dataRepository.updateSet(trainingId, set) }.fold(
-                onSuccess = { dataForServ.training.value = it
-                    _executeWorkoutScreenState.update { state ->
-                        state.copy( training = it ) } },
+                onSuccess = {
+                    dataForServ.training.value = it
+                    _executeWorkoutScreenState.update { state -> state.copy( training = it ) } },
                 onFailure = { messageApp.errorApi(it.message ?: "") }
             )
         }
+        dataForServ.interval.value = set.intervalReps
+        dataForServ.idSetChangeInterval.value = set.idSet
     }
 
     private fun receiveState(dataForUI: DataForUI){
@@ -137,11 +139,14 @@ class ExecuteWorkViewModel @Inject constructor(
             }
         } //tickTime
         viewModelScope.launch(Dispatchers.IO) {
-            dataForUI.executeInfoSet.collect {
-                _executeWorkoutScreenState.update { state -> state.copy(executeInfoSet = it) } } } //executeInfoSet
-        viewModelScope.launch(Dispatchers.IO) {
-            dataForUI.executeInfoExercise.collect {
-                _executeWorkoutScreenState.update { state -> state.copy(executeInfoExercise = it) } } } //executeInfoExercise
+            dataForUI.stepTraining.collect {
+                _executeWorkoutScreenState.update { state -> state.copy(stepTraining = it) } } } //stepInfo
+//        viewModelScope.launch(Dispatchers.IO) {
+//            dataForUI.executeInfoSet.collect {
+//                _executeWorkoutScreenState.update { state -> state.copy(executeInfoSet = it) } } } //executeInfoSet
+//        viewModelScope.launch(Dispatchers.IO) {
+//            dataForUI.executeInfoExercise.collect {
+//                _executeWorkoutScreenState.update { state -> state.copy(executeInfoExercise = it) } } } //executeInfoExercise
         viewModelScope.launch(Dispatchers.IO) {
             dataForUI.currentCount.collect { count ->
                 _executeWorkoutScreenState.update { state -> state.copy(currentCount = count) } } } //currentCount

@@ -7,6 +7,7 @@ import com.example.count_out.entity.bluetooth.DeviceUI
 import com.example.count_out.entity.ui.ExecuteInfoExercise
 import com.example.count_out.entity.ui.ExecuteInfoSet
 import com.example.count_out.entity.workout.Coordinate
+import com.example.count_out.entity.workout.StepTraining
 import kotlinx.coroutines.flow.MutableStateFlow
 
 data class Buffer (
@@ -23,6 +24,7 @@ data class Buffer (
     val currentDistance: MutableStateFlow<Int> = MutableStateFlow(0),
     val phaseWorkout: MutableStateFlow<Int> = MutableStateFlow(0),
     val enableChangeInterval: MutableStateFlow<Boolean> = MutableStateFlow(false),
+    val stepTraining: MutableStateFlow<StepTraining?> = MutableStateFlow(null),
     val executeInfoSet: MutableStateFlow<ExecuteInfoSet?> = MutableStateFlow(null),
     val executeInfoExercise: MutableStateFlow<ExecuteInfoExercise?> = MutableStateFlow(null),
     val runningState: MutableStateFlow<RunningState?> = MutableStateFlow(null),

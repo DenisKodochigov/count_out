@@ -6,7 +6,7 @@ import com.example.count_out.entity.TickTime
 import com.example.count_out.entity.bluetooth.DeviceUI
 import com.example.count_out.entity.router.Buffer
 import com.example.count_out.entity.workout.Coordinate
-import com.example.count_out.ui.view_components.lg
+import com.example.count_out.entity.workout.StepTraining
 import kotlinx.coroutines.flow.MutableStateFlow
 
 data class DataForUI (
@@ -20,6 +20,7 @@ data class DataForUI (
     val enableChangeInterval: MutableStateFlow<Boolean> = MutableStateFlow(false),
     val executeInfoExercise: MutableStateFlow<ExecuteInfoExercise?> = MutableStateFlow(null),
     val executeInfoSet: MutableStateFlow<ExecuteInfoSet?> = MutableStateFlow(null),
+    val stepTraining: MutableStateFlow<StepTraining?> = MutableStateFlow(null),
     val durationSpeech: MutableStateFlow<Pair<Long, Long>> = MutableStateFlow(Pair(0,0)),
 
     val heartRate: MutableStateFlow<Int> = MutableStateFlow(0),

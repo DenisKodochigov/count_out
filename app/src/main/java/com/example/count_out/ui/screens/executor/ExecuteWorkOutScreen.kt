@@ -101,19 +101,19 @@ import java.math.RoundingMode
 @Composable fun ExerciseInfo(uiState: ExecuteWorkoutScreenState) {
     Frame{
         Column (modifier = Modifier.fillMaxWidth().padding(horizontal = 12.dp, vertical = 12.dp)){
-            val text = if (uiState.executeInfoExercise?.activity?.name.isNullOrEmpty()) "" else
-                "${uiState.executeInfoExercise.activity.name}:" +
-                " ${uiState.executeInfoExercise.currentExercise}/${uiState.executeInfoExercise.quantityExercise}"
+            val text = if (uiState.stepTraining?.exercise?.activity?.name.isNullOrEmpty()) "" else
+                "${uiState.stepTraining.exercise.activity.name}:" +
+                " ${uiState.stepTraining.numberExercise}/${uiState.stepTraining.quantityExercise}"
             TextApp(text = text,
                 modifier = Modifier.padding(bottom = 12.dp),
                 style = mTypography.titleLarge)
-            when(uiState.executeInfoSet?.currentSet?.goal ?: GoalSet.COUNT){
+            when(uiState.stepTraining?.currentSet?.goal ?: GoalSet.COUNT){
                 GoalSet.COUNT -> LayoutCount(uiState)
                 GoalSet.DISTANCE -> LayoutDistance(uiState)
                 GoalSet.DURATION -> LayoutDuration(uiState)
                 GoalSet.COUNT_GROUP -> {}
             }
-            NextExercise(uiState.executeInfoExercise?.nextExercise)
+            NextExercise(uiState.stepTraining?.nextExercise)
         }
     }
 }
@@ -155,7 +155,7 @@ import java.math.RoundingMode
 
 @Composable fun LayoutCount(uiState: ExecuteWorkoutScreenState) {
     Row(modifier = Modifier.fillMaxWidth().padding(start = 8.dp)) {
-        uiState.executeInfoSet?.currentSet?.let { set ->
+        uiState.stepTraining?.currentSet?.let { set ->
             //Description
             ColumnsA(
                 style1 = mTypography.bodyLarge,
@@ -171,7 +171,7 @@ import java.math.RoundingMode
                 style1 = mTypography.titleLarge,
                 style2 = mTypography.titleLarge,
                 modifier = Modifier.width(50.dp),
-                text1 = "${uiState.executeInfoSet.currentIndexSet}",
+                text1 = "${uiState.stepTraining.numberSet}",
                 text2 = "${uiState.currentCount}",
                 text3 = "${set.weight / ( if (set.weightE == WeightE.KG) 1000 else 1 ) }",
                 text4 = "${uiState.currentRest}",
@@ -181,7 +181,7 @@ import java.math.RoundingMode
                 style1 = mTypography.bodyLarge,
                 style2 = mTypography.titleLarge,
                 modifier = Modifier.padding(start = 12.dp).width(100.dp),
-                text1 = "${uiState.executeInfoSet.quantitySet}",
+                text1 = "${uiState.stepTraining.quantitySet}",
                 text2 = "${set.reps}",
                 text3 = "(${stringResource(set.weightE.id) })",
                 text4 = "${set.timeRest/( if (set.timeRestE == TimeE.MIN) 60 else 1)}" +
@@ -197,7 +197,7 @@ import java.math.RoundingMode
 }
 @Composable fun LayoutDistance(uiState: ExecuteWorkoutScreenState) {
     Row(modifier = Modifier.fillMaxWidth().padding(start = 0.dp)) {
-        uiState.executeInfoSet?.currentSet?.let { set ->
+        uiState.stepTraining?.currentSet?.let { set ->
             //Description
             ColumnsA(
                 style1 = mTypography.bodyLarge,
@@ -212,7 +212,7 @@ import java.math.RoundingMode
                 style1 = mTypography.titleLarge,
                 style2 = mTypography.titleLarge,
                 modifier = Modifier.width(50.dp),
-                text1 = "${uiState.executeInfoSet.currentIndexSet}",
+                text1 = "${uiState.stepTraining.numberSet}",
                 text2 = "${uiState.currentDistance/( if (set.distanceE == DistanceE.KM) 1000 else 1)}",
                 text3 = "${uiState.currentRest}",
             )
@@ -221,7 +221,7 @@ import java.math.RoundingMode
                 style1 = mTypography.bodyLarge,
                 style2 = mTypography.titleLarge,
                 modifier = Modifier.padding(start = 12.dp).width(100.dp),
-                text1 = "${uiState.executeInfoSet.quantitySet}",
+                text1 = "${uiState.stepTraining.quantitySet}",
                 text2 = "${set.distance/( if (set.distanceE == DistanceE.KM) 1000 else 1) }" +
                         " (${stringResource(set.distanceE.id)})",
                 text3 = "${set.timeRest/( if (set.timeRestE == TimeE.MIN) 60 else 1)}" +
@@ -232,7 +232,7 @@ import java.math.RoundingMode
 }
 @Composable fun LayoutDuration(uiState: ExecuteWorkoutScreenState) {
     Row(modifier = Modifier.fillMaxWidth().padding(start = 8.dp)) {
-        uiState.executeInfoSet?.currentSet?.let { set->
+        uiState.stepTraining?.currentSet?.let { set->
             //Description
             ColumnsA(
                 style1 = mTypography.bodyLarge,
@@ -248,7 +248,7 @@ import java.math.RoundingMode
                 style1 = mTypography.titleLarge,
                 style2 = mTypography.titleLarge,
                 modifier = Modifier.width(50.dp),
-                text1 = "${(uiState.executeInfoSet.currentIndexSet)}",
+                text1 = "${(uiState.stepTraining.numberSet)}",
                 text2 = "${uiState.currentDuration/( if (set.durationE == TimeE.MIN) 60 else 1)}",
                 text3 = "${set.weight / ( if (set.weightE == WeightE.KG) 1000 else 1 ) }",
                 text4 = "${uiState.currentRest}",
@@ -258,7 +258,7 @@ import java.math.RoundingMode
                 style1 = mTypography.bodyLarge,
                 style2 = mTypography.titleLarge,
                 modifier = Modifier.padding(start = 12.dp).width(100.dp),
-                text1 = "${uiState.executeInfoSet.quantitySet }",
+                text1 = "${uiState.stepTraining.quantitySet }",
                 text2 = "${set.duration/( if (set.durationE == TimeE.MIN) 60 else 1) }" +
                         " (${ stringResource(set.durationE.id) })",
                 text3 = "(${stringResource(set.weightE.id) })",
@@ -287,7 +287,7 @@ import java.math.RoundingMode
     var downInterval = {}
     var upInterval = {}
     uiState.training?.let { training ->
-        uiState.executeInfoSet?.currentSet?.let { set ->
+        uiState.stepTraining?.currentSet?.let { set ->
             downInterval = { uiState.updateSet(
                 training.idTraining, (set as SetDB).copy(intervalReps = set.intervalReps.minus())) }
             upInterval = { uiState.updateSet(
@@ -303,7 +303,7 @@ import java.math.RoundingMode
         IconQ.Slower(modifier = Modifier.padding(bottom = 4.dp),
             onClick = { if(uiState.enableChangeInterval) upInterval()}, color = color)
         TextApp(style = mTypography.titleLarge, modifier = Modifier.padding(horizontal = 6.dp),
-            text = (uiState.executeInfoSet?.currentSet?.intervalReps?.toBigDecimal()?.setScale(1, RoundingMode.UP) ?: "  ").toString())
+            text = (uiState.stepTraining?.currentSet?.intervalReps?.toBigDecimal()?.setScale(1, RoundingMode.UP) ?: "  ").toString())
         IconQ.Faster(modifier = Modifier.padding(bottom = 4.dp),
             onClick = { if(uiState.enableChangeInterval) downInterval()}, color = color)
     }
