@@ -25,6 +25,6 @@ class CountOutServiceBind @Inject constructor(val context: Context, private val 
 
     private fun <T>bind(clazz: Class<T>) { serviceUtils.bindService(clazz, serviceConnection) }
     fun unbindService()  {
-        service.stopCountOutService()
+        if (service.running) service.stopCountOutService()
         serviceUtils.unbindService(serviceConnection, true) }
 }

@@ -36,7 +36,7 @@ class CountOutService @Inject constructor(): Service() {
 
     private lateinit var router: Router
     private lateinit var workout: WorkoutDB
-    private var running: Boolean = false
+    var running: Boolean = false
     @Inject lateinit var notificationHelper: NotificationHelper
     @Inject lateinit var messageApp: MessageApp
     @Inject lateinit var ble: Bluetooth

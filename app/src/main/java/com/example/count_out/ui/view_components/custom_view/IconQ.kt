@@ -179,9 +179,9 @@ object IconQ{
             .clickable { onClick() }
             .drawWithCache {
                 onDrawWithContent {
-                val xPx = width.toPx()
-                val yPx = height.toPx()
-                val thickPx = thick.toPx()
+                    val xPx = width.toPx()
+                    val yPx = height.toPx()
+                    val thickPx = thick.toPx()
                     drawOval(
                         color = color,
                         style = Stroke(width = thickPx),

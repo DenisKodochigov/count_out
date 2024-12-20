@@ -51,7 +51,6 @@ data class StateDDColumn( var sizeList: Int = 0, ) {
 
     private fun addOffset( koef: Int ): Map<Int, Int>{
         if ((indexMoved.value + koef) in 0..< sizeList) indexMoved.value += koef
-//        lg("indexMoved ${indexMoved.value}  indexDD ${indexDD.value}  koef $koef   size $sizeList")
         val map = offsetItems.value.toMutableMap()
         map[indexMoved.value] = (map[indexMoved.value] ?: 0) + (-1 * koef) * heightItem.value
         return map

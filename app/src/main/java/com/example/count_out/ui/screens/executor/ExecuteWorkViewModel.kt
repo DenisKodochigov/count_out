@@ -127,15 +127,13 @@ class ExecuteWorkViewModel @Inject constructor(
             } } //stateWorkOutService
         viewModelScope.launch(Dispatchers.IO) {
             dataForUI.flowTime.collect { tick ->
-//                if (dataForUI.executeInfoExercise.value != null) {
-                    _executeWorkoutScreenState.update { state ->
-                        state.copy(
-                        flowTime = tick,
-                        currentRest = dataForUI.countRest.value,
-                        enableChangeInterval = dataForUI.enableChangeInterval.value,
-                        executeInfoExercise = dataForUI.executeInfoExercise.value,
-                    )}
-//                }
+                _executeWorkoutScreenState.update { state ->
+                    state.copy(
+                    flowTime = tick,
+                    currentRest = dataForUI.countRest.value,
+                    enableChangeInterval = dataForUI.enableChangeInterval.value,
+                    executeInfoExercise = dataForUI.executeInfoExercise.value,
+                )}
             }
         } //tickTime
         viewModelScope.launch(Dispatchers.IO) {
