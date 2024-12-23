@@ -3,16 +3,13 @@ package com.example.count_out.di
 import android.content.Context
 import com.example.count_out.data.DataRepository
 import com.example.count_out.domain.SpeechManager
-import com.example.count_out.permission.PermissionApp
-import com.example.count_out.service_count_out.CountOutService
-import com.example.count_out.service_count_out.CountOutServiceBind
-import com.example.count_out.service_count_out.ServiceUtils
-import com.example.count_out.service_count_out.location.LocationWithOutGoogle
-import com.example.count_out.service_count_out.location.Site
-import com.example.count_out.service_count_out.logging.Logging
-import com.example.count_out.service_count_out.work.Work
-import com.example.count_out.service_count_out.work.execute.ExecuteWork
-import com.example.count_out.service_count_out.work.execute.RunWorkOut
+import com.example.count_out.ui.permission.PermissionApp
+import com.example.count_out.services.count_out.CountOutService
+import com.example.count_out.services.count_out.CountOutServiceBind
+import com.example.count_out.services.count_out.ServiceUtils
+import com.example.count_out.data.location.LocationWithOutGoogle
+import com.example.count_out.data.location.Site
+import com.example.count_out.data.logging.Logging
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -36,11 +33,7 @@ class CountOutServiceModule {
     ): CountOutServiceBind {
         return CountOutServiceBind(appContext, serviceUtils)
     }
-    @Singleton
-    @Provides
-    fun provideWorkOutService(speechManager: SpeechManager, executeWork: ExecuteWork, runWorkOut: RunWorkOut): Work {
-        return Work(speechManager, executeWork, runWorkOut)
-    }
+
 
     @Singleton
     @Provides

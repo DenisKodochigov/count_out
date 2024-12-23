@@ -3,10 +3,10 @@ package com.example.count_out.ui.screens.settings
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.mutableStateOf
+import com.example.count_out.data.bluetooth.modules.DeviceUI
 import com.example.count_out.data.room.tables.ActivityDB
 import com.example.count_out.data.room.tables.SettingDB
 import com.example.count_out.entity.ConnectState
-import com.example.count_out.entity.bluetooth.DeviceUI
 import com.example.count_out.entity.workout.Activity
 
 data class SettingScreenState(

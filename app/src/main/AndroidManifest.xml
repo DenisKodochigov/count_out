@@ -52,7 +52,7 @@
         tools:targetApi="34">
 
         <service
-            android:name=".service_count_out.CountOutService"
+            android:name=".services.count_out.CountOutService"
             android:foregroundServiceType="dataSync"
             android:exported="true"/>
         <activity

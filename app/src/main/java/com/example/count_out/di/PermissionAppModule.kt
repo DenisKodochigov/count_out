@@ -1,7 +1,7 @@
 package com.example.count_out.di
 
 import android.content.Context
-import com.example.count_out.permission.PermissionApp
+import com.example.count_out.ui.permission.PermissionApp
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

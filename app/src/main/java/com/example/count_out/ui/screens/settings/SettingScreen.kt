@@ -34,9 +34,9 @@ import com.example.count_out.R
 import com.example.count_out.data.room.tables.ActivityDB
 import com.example.count_out.domain.to01
 import com.example.count_out.entity.ConnectState
-import com.example.count_out.ui.bottomsheet.BottomSheetAddActivity
-import com.example.count_out.ui.bottomsheet.BottomSheetBle
-import com.example.count_out.ui.bottomsheet.CardActivity
+import com.example.count_out.ui.bottom_sheet.BottomSheetAddActivity
+import com.example.count_out.ui.bottom_sheet.BottomSheetBle
+import com.example.count_out.ui.bottom_sheet.CardActivity
 import com.example.count_out.ui.theme.alumBodySmall
 import com.example.count_out.ui.theme.mTypography
 import com.example.count_out.ui.view_components.SwitchApp

@@ -29,7 +29,7 @@ import com.example.count_out.R
 import com.example.count_out.entity.Const.contourAll2
 import com.example.count_out.entity.Const.contourHor2
 import com.example.count_out.entity.workout.Training
-import com.example.count_out.navigation.ScreenDestination
+import com.example.count_out.ui.navigation.ScreenDestination
 import com.example.count_out.ui.theme.Dimen
 import com.example.count_out.ui.theme.getIdImage
 import com.example.count_out.ui.theme.mTypography
@@ -37,7 +37,6 @@ import com.example.count_out.ui.view_components.ItemSwipe
 import com.example.count_out.ui.view_components.TextApp
 import com.example.count_out.ui.view_components.custom_view.Frame
 import com.example.count_out.ui.view_components.custom_view.IconQ
-import com.example.count_out.ui.view_components.lg
 
 @Composable fun TrainingsScreen(
     onClickTraining: (Long) -> Unit,

@@ -13,10 +13,9 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.core.app.ActivityCompat
 import com.example.count_out.entity.MessageApp
-import com.example.count_out.permission.RequestPermissionsAll
-import com.example.count_out.service_count_out.CountOutServiceBind
+import com.example.count_out.ui.permission.RequestPermissionsAll
+import com.example.count_out.services.count_out.CountOutServiceBind
 import com.example.count_out.ui.StartApp
-import com.example.count_out.ui.view_components.lg
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 

@@ -10,10 +10,10 @@ import com.example.count_out.entity.CommandService
 import com.example.count_out.entity.Internet
 import com.example.count_out.entity.MessageApp
 import com.example.count_out.entity.RunningState
-import com.example.count_out.entity.TickTime
+import com.example.count_out.entity.speech.TickTime
 import com.example.count_out.entity.ui.DataForServ
 import com.example.count_out.entity.ui.DataForUI
-import com.example.count_out.service_count_out.CountOutServiceBind
+import com.example.count_out.services.count_out.CountOutServiceBind
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -132,19 +132,12 @@ class ExecuteWorkViewModel @Inject constructor(
                     flowTime = tick,
                     currentRest = dataForUI.countRest.value,
                     enableChangeInterval = dataForUI.enableChangeInterval.value,
-                    executeInfoExercise = dataForUI.executeInfoExercise.value,
                 )}
             }
         } //tickTime
         viewModelScope.launch(Dispatchers.IO) {
             dataForUI.stepTraining.collect {
                 _executeWorkoutScreenState.update { state -> state.copy(stepTraining = it) } } } //stepInfo
-//        viewModelScope.launch(Dispatchers.IO) {
-//            dataForUI.executeInfoSet.collect {
-//                _executeWorkoutScreenState.update { state -> state.copy(executeInfoSet = it) } } } //executeInfoSet
-//        viewModelScope.launch(Dispatchers.IO) {
-//            dataForUI.executeInfoExercise.collect {
-//                _executeWorkoutScreenState.update { state -> state.copy(executeInfoExercise = it) } } } //executeInfoExercise
         viewModelScope.launch(Dispatchers.IO) {
             dataForUI.currentCount.collect { count ->
                 _executeWorkoutScreenState.update { state -> state.copy(currentCount = count) } } } //currentCount

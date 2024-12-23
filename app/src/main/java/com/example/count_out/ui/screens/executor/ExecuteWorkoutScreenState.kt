@@ -3,13 +3,11 @@ package com.example.count_out.ui.screens.executor
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.mutableStateOf
+import com.example.count_out.data.bluetooth.modules.DeviceUI
 import com.example.count_out.data.room.tables.SetDB
 import com.example.count_out.entity.ConnectState
 import com.example.count_out.entity.RunningState
-import com.example.count_out.entity.TickTime
-import com.example.count_out.entity.bluetooth.DeviceUI
-import com.example.count_out.entity.ui.ExecuteInfoExercise
-import com.example.count_out.entity.ui.ExecuteInfoSet
+import com.example.count_out.entity.speech.TickTime
 import com.example.count_out.entity.workout.Coordinate
 import com.example.count_out.entity.workout.StepTraining
 import com.example.count_out.entity.workout.Training
@@ -25,9 +23,7 @@ data class ExecuteWorkoutScreenState(
     val currentDuration: Int = 0,
     val currentDistance: Int = 0,
     val enableChangeInterval: Boolean = false,
-    val executeInfoExercise: ExecuteInfoExercise? = null,
     val stepTraining: StepTraining? = null,
-    val executeInfoSet: ExecuteInfoSet? = null,
 
     val heartRate: Int = 0,
     val lastConnectHearthRateDevice: DeviceUI? = null,

@@ -26,7 +26,7 @@ import android.Manifest.permission.VIBRATE
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.ui.unit.dp
 import com.example.count_out.R
-import com.example.count_out.navigation.TrainingsDestination
+import com.example.count_out.ui.navigation.TrainingsDestination
 import java.util.UUID
 
 object Const {

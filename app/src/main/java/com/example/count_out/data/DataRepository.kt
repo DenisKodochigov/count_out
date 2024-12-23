@@ -1,6 +1,7 @@
 package com.example.count_out.data
 
 import androidx.datastore.core.DataStore
+import com.example.count_out.data.bluetooth.modules.BleDevSerializable
 import com.example.count_out.data.openmeteo_api.DataSourceAPI
 import com.example.count_out.data.room.DataSource
 import com.example.count_out.data.room.tables.ActivityDB
@@ -12,7 +13,6 @@ import com.example.count_out.data.room.tables.SpeechKitDB
 import com.example.count_out.data.room.tables.TrainingDB
 import com.example.count_out.data.room.tables.WorkoutDB
 import com.example.count_out.entity.Plugins
-import com.example.count_out.entity.bluetooth.BleDevSerializable
 import com.example.count_out.entity.speech.SpeechKit
 import com.example.count_out.entity.workout.Activity
 import com.example.count_out.entity.workout.Exercise

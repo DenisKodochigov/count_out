@@ -12,9 +12,9 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTagsAsResourceId
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.rememberNavController
-import com.example.count_out.navigation.NavHostApp
-import com.example.count_out.navigation.backScreenDestination
-import com.example.count_out.navigation.navigateToScreen
+import com.example.count_out.ui.navigation.NavHostApp
+import com.example.count_out.ui.navigation.backScreenDestination
+import com.example.count_out.ui.navigation.navigateToScreen
 import com.example.count_out.ui.theme.AppTheme
 import com.example.count_out.ui.view_components.BottomBarApp
 import com.example.count_out.ui.view_components.CollapsingToolbar

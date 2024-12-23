@@ -7,7 +7,7 @@ import com.example.count_out.data.room.tables.ExerciseDB
 import com.example.count_out.data.room.tables.SetDB
 import com.example.count_out.data.room.tables.TrainingDB
 import com.example.count_out.entity.speech.SpeechKit
-import com.example.count_out.entity.ui.BottomSheetInterface
+import com.example.count_out.ui.modules.BottomSheetInterface
 import com.example.count_out.entity.workout.Activity
 import com.example.count_out.entity.workout.Exercise
 import com.example.count_out.entity.workout.Set

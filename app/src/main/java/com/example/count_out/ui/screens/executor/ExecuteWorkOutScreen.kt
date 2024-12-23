@@ -40,7 +40,7 @@ import com.example.count_out.entity.RunningState
 import com.example.count_out.entity.TimeE
 import com.example.count_out.entity.WeightE
 import com.example.count_out.entity.ui.NextExercise
-import com.example.count_out.ui.bottomsheet.BottomSheetSaveTraining
+import com.example.count_out.ui.bottom_sheet.BottomSheetSaveTraining
 import com.example.count_out.ui.theme.mTypography
 import com.example.count_out.ui.view_components.TextApp
 import com.example.count_out.ui.view_components.custom_view.Frame

@@ -29,8 +29,8 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.count_out.R
 import com.example.count_out.entity.RoundType
 import com.example.count_out.entity.TypeKeyboard
-import com.example.count_out.ui.bottomsheet.BottomSheetSelectActivity
-import com.example.count_out.ui.bottomsheet.BottomSheetSpeech
+import com.example.count_out.ui.bottom_sheet.BottomSheetSelectActivity
+import com.example.count_out.ui.bottom_sheet.BottomSheetSpeech
 import com.example.count_out.ui.screens.training.round.Round
 import com.example.count_out.ui.theme.Dimen
 import com.example.count_out.ui.theme.mTypography
