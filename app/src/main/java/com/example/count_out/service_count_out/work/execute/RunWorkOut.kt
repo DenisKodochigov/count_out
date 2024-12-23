@@ -95,8 +95,7 @@ class RunWorkOut @Inject constructor( val speechManager:SpeechManager, val conte
             dataFromWork.currentCount.value = count
             speechManager.speakOutFlush(text = count.toString(), dataFromWork)
             val interval =
-                if ( dataForWork.idSetChangeInterval.value == set.idSet &&
-                    dataForWork.interval.value != set.intervalReps) {
+                if ( dataForWork.idSetChangeInterval.value == set.idSet ) {
                     dataForWork.sendStepTraining()
                     dataForWork.interval.value
                 } else set.intervalReps

@@ -29,10 +29,10 @@ data class DataForWork (
     var cancelCoroutineWork: ()-> Unit = {},
     val dataFromWork: DataFromWork? = null,
 
-    var map: List<StepTraining> = emptyList<StepTraining>(),
+    var map: MutableList<StepTraining> = mutableListOf<StepTraining>(),
     var exerciseCount: Int = 0,
 
-    ){
+){
     fun empty(){
         indexRound = 0
         indexExercise = 0
@@ -234,10 +234,11 @@ data class DataForWork (
         dataFromWork?.stepTraining?.value = map[indexMap]
     }
     fun sendStepTraining(){
-        map[indexMap].currentSet = map[indexMap].currentSet.also {
-            if( it?.idSet == idSetChangeInterval.value && it.intervalReps != interval.value)
-                (it as SetDB).copy(intervalReps = interval.value) }
-        dataFromWork?.stepTraining?.value = map[indexMap]
+        dataFromWork?.stepTraining?.value =
+            if (interval.value > 0) {
+                map[indexMap].copy(currentSet = map[indexMap].currentSet?.let { set ->
+                   (set as SetDB).copy(intervalReps = interval.value) })}
+            else map[indexMap]
     }
 
     fun createMapTraining(){
@@ -247,6 +248,14 @@ data class DataForWork (
             tr.rounds.forEachIndexed { indR, round-> exerciseCount += round.exercise.count() }
             tr.rounds.forEachIndexed { indR, round->
                 round.exercise.forEachIndexed { indE,exercise ->
+                    if (list.isNotEmpty()){
+                        val nextExercise = nextExercise(exercise)
+                        for (ind in list.lastIndex downTo 0){
+                            if (list[ind].nextExercise == null){
+                                list[ind] = list[ind].copy(nextExercise = nextExercise)
+                            }
+                        }
+                    }
                     exercise.sets.forEachIndexed { indS, set->
                         list.add(
                             StepTraining(
@@ -258,12 +267,6 @@ data class DataForWork (
                                 numberSet = indS + 1,
                                 quantitySet = exercise.sets.count()
                         ))
-                    }
-                    val nextExercise = nextExercise(exercise)
-                    for (ind in list.lastIndex..0){
-                        if (list[ind].nextExercise == null){
-                            list[ind] = list[ind].copy(nextExercise = nextExercise)
-                        }
                     }
                     numberExercise ++
                 }
