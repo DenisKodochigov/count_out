@@ -16,9 +16,9 @@ enum class ConnectState(val strId: Int) {
     NOT_CONNECTED(R.string.not_connected) ,
     CONNECTING(R.string.connecting),
     CONNECTED(R.string.connected) }
-enum class StateBleScanner { RUNNING, END, }
 enum class StateBleConnecting { NONE, GET_REMOTE_DEVICE, CONNECT_GAT}
 enum class RunningState { Binding, Started, Paused, Stopped }
+
 enum class RoundType(val strId: Int, var amount: Int, var duration: Int){
     UP (R.string.work_up,0,0),
     OUT (R.string.work_out,0,0),

@@ -3,7 +3,7 @@ package com.example.count_out.ui.screens.settings
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.mutableStateOf
-import com.example.count_out.data.bluetooth.modules.DeviceUI
+import com.example.count_out.entity.bluetooth.DeviceUI
 import com.example.count_out.data.room.tables.ActivityDB
 import com.example.count_out.data.room.tables.SettingDB
 import com.example.count_out.entity.ConnectState
@@ -28,7 +28,7 @@ data class SettingScreenState(
     @Stable val onAddActivity: (Activity) ->Unit = {},
     @Stable val onUpdateActivity: (Activity) ->Unit = {},
     @Stable val onDeleteActivity: (Long) ->Unit = {},
-    @Stable val onSelectDevice: ( DeviceUI ) ->Unit = {},
+    @Stable val onSelectDevice: (DeviceUI) ->Unit = {},
 
     @Stable val onUpdateSetting: (SettingDB) ->Unit = {},
     @Stable val onGetSettings: () ->Unit = {},

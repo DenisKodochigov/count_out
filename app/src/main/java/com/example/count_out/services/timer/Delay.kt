@@ -1,55 +1,82 @@
 package com.example.count_out.services.timer
 
-import android.os.CountDownTimer
-import android.os.Looper
 import android.os.SystemClock
 import com.example.count_out.entity.RunningState
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 
+class Delay{
 
-suspend fun delayMy(delay: Long, pause: MutableStateFlow<RunningState?>){
-    val state: MutableStateFlow <RunningState?> = pause
-    val startTime: Long = SystemClock.elapsedRealtime()
-    var pauseTime: Long = 0
-    val endTime: MutableStateFlow<Long> = MutableStateFlow(startTime + delay)
-    while (endTime.value > SystemClock.elapsedRealtime() ) {
-        when (state.value){
-            RunningState.Started -> {
-                if (pauseTime != 0L) {
-                    endTime.value = pauseTime + (SystemClock.elapsedRealtime() - pauseTime)
-                    pauseTime = 0L
+    suspend fun run(delay: Long, pause: MutableStateFlow<RunningState?>){
+        val startTime: Long = SystemClock.elapsedRealtime()
+        var pauseTime: Long = 0
+        val endTime: MutableStateFlow<Long> = MutableStateFlow(startTime + delay)
+        while (endTime.value > SystemClock.elapsedRealtime() ) {
+            when (pause.value){
+                RunningState.Started -> {
+                    if (pauseTime != 0L) {
+                        endTime.value = pauseTime + (SystemClock.elapsedRealtime() - pauseTime)
+                        pauseTime = 0L
+                    }
                 }
-            }
-            RunningState.Stopped -> {
-                endTime.value = SystemClock.elapsedRealtime()
-            }
-            RunningState.Paused -> {
-                if (pauseTime == 0L) {
-                    pauseTime = endTime.value
-                    endTime.value += 100000000000L
+                RunningState.Stopped -> {
+                    endTime.value = SystemClock.elapsedRealtime()
                 }
+                RunningState.Paused -> {
+                    if (pauseTime == 0L) {
+                        pauseTime = endTime.value
+                        endTime.value += 100000000000L
+                    }
+                }
+                else-> {}
             }
-            else-> {}
+            delay(1)
         }
-        delay(1)
     }
 }
 
-class TimerMy {
-    private lateinit var timer: CountDownTimer
-
-    fun start(sec: Int, endCommand: ()-> Unit) {
-        if (!this::timer.isInitialized) {
-            Looper.prepare()
-            timer = object:CountDownTimer(sec * 1000L, 1000) {
-                override fun onTick(millisUntilFinished: Long) {}
-                override fun onFinish() { endCommand() }
-            }.start()
-        }
-    }
-    fun cancel() { timer.cancel() }
-}
+//suspend fun delayMy(delay: Long, pause: MutableStateFlow<RunningState?>){
+//    val state: MutableStateFlow <RunningState?> = pause
+//    val startTime: Long = SystemClock.elapsedRealtime()
+//    var pauseTime: Long = 0
+//    val endTime: MutableStateFlow<Long> = MutableStateFlow(startTime + delay)
+//    while (endTime.value > SystemClock.elapsedRealtime() ) {
+//        when (state.value){
+//            RunningState.Started -> {
+//                if (pauseTime != 0L) {
+//                    endTime.value = pauseTime + (SystemClock.elapsedRealtime() - pauseTime)
+//                    pauseTime = 0L
+//                }
+//            }
+//            RunningState.Stopped -> {
+//                endTime.value = SystemClock.elapsedRealtime()
+//            }
+//            RunningState.Paused -> {
+//                if (pauseTime == 0L) {
+//                    pauseTime = endTime.value
+//                    endTime.value += 100000000000L
+//                }
+//            }
+//            else-> {}
+//        }
+//        delay(1)
+//    }
+//}
+//
+//class TimerMy {
+//    private lateinit var timer: CountDownTimer
+//
+//    fun start(sec: Int, endCommand: ()-> Unit) {
+//        if (!this::timer.isInitialized) {
+//            Looper.prepare()
+//            timer = object:CountDownTimer(sec * 1000L, 1000) {
+//                override fun onTick(millisUntilFinished: Long) {}
+//                override fun onFinish() { endCommand() }
+//            }.start()
+//        }
+//    }
+//    fun cancel() { timer.cancel() }
+//}
 
 
 //class Timer {

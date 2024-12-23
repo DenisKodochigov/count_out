@@ -4,7 +4,7 @@ import com.example.count_out.domain.SpeechManager
 import com.example.count_out.entity.RunningState
 import com.example.count_out.domain.router.DataForWork
 import com.example.count_out.domain.router.DataFromWork
-import com.example.count_out.services.timer.Watcher
+import com.example.count_out.services.timer.Ticker
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -23,7 +23,7 @@ class Work @Inject constructor(
         }
     }
     fun stop(){
-        Watcher.stop()
+        Ticker.stop()
         speechManager.stopTts()
         throw CancellationException()
     }
@@ -39,9 +39,9 @@ class Work @Inject constructor(
         }
     }
     private fun getTick( dataFromWork: DataFromWork ){
-        Watcher.start(dataFromWork.runningState)
+        Ticker.start(dataFromWork.runningState)
         CoroutineScope(Dispatchers.Default).launch {
-            Watcher.getTickTime().collect{ tick -> dataFromWork.flowTime.value = tick }
+            Ticker.getTickTime().collect{ tick -> dataFromWork.flowTime.value = tick }
         }
     }
 }

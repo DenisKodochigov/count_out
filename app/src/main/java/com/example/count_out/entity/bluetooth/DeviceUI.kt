@@ -1,4 +1,4 @@
-package com.example.count_out.data.bluetooth.modules
+package com.example.count_out.entity.bluetooth
 
 interface DeviceUI {
     var name: String

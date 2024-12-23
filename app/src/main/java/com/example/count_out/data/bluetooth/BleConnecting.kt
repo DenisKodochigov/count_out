@@ -12,7 +12,7 @@ import android.bluetooth.BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE
 import android.content.Context
 import android.os.Build
 import com.example.count_out.R
-import com.example.count_out.data.bluetooth.modules.BleConnection
+import com.example.count_out.data.bluetooth.modules.BleConnectionImpl
 import com.example.count_out.data.bluetooth.modules.BleStates
 import com.example.count_out.domain.router.DataForBle
 import com.example.count_out.entity.Const.UUIDBle
@@ -31,7 +31,7 @@ class BleConnecting @Inject constructor(
     private val permissionApp: PermissionApp,
     private val messengerA: MessageApp
 ) {
-    private var connection = BleConnection()
+    private var connection = BleConnectionImpl()
     val heartRate: MutableStateFlow<Int> = MutableStateFlow(0)
     private val uuidHeartRateMeasurement = UUID.fromString(UUIDBle.HEART_RATE_MEASUREMENT)
     private val uuidClientCharacteristicConfig = UUID.fromString(UUIDBle.CLIENT_CHARACTERISTIC_CONFIG)
@@ -190,4 +190,21 @@ class BleConnecting @Inject constructor(
         }
     }
 
+    private fun BluetoothGatt.findCharacteristic(uuid: UUID): BluetoothGattCharacteristic?{
+        if (services.isEmpty()) return null
+        services.forEach { service ->
+            service.characteristics.find { ch-> ch.uuid == uuid }.apply { if (this != null) return this }
+        }
+        return null
+    }
+
+    private fun BluetoothGattCharacteristic.containsProperty(property: Int) = properties and property != 0
+    private fun BluetoothGattCharacteristic.isNotify(): Boolean =
+        containsProperty(BluetoothGattCharacteristic.PROPERTY_NOTIFY)
+//    fun BluetoothGattCharacteristic.isReadable(): Boolean =
+//        containsProperty(BluetoothGattCharacteristic.PROPERTY_READ)
+//    fun BluetoothGattCharacteristic.isWritable(): Boolean =
+//        containsProperty(BluetoothGattCharacteristic.PROPERTY_WRITE)
+//    fun BluetoothGattCharacteristic.isIndicatable(): Boolean =
+//        containsProperty(BluetoothGattCharacteristic.PROPERTY_INDICATE)
 }

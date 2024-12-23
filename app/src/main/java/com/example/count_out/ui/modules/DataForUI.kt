@@ -1,10 +1,10 @@
 package com.example.count_out.ui.modules
 
-import com.example.count_out.data.bluetooth.modules.DeviceUI
+import com.example.count_out.entity.bluetooth.DeviceUI
 import com.example.count_out.domain.router.Buffer
 import com.example.count_out.entity.ConnectState
 import com.example.count_out.entity.RunningState
-import com.example.count_out.entity.speech.TickTime
+import com.example.count_out.services.timer.models.TickTimeImpl
 import com.example.count_out.entity.workout.Coordinate
 import com.example.count_out.entity.workout.StepTraining
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -12,7 +12,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 data class DataForUI (
     val runningState: MutableStateFlow<RunningState?> = MutableStateFlow(null),
 
-    val flowTime: MutableStateFlow<TickTime> = MutableStateFlow(TickTime()),
+    val flowTime: MutableStateFlow<TickTimeImpl> = MutableStateFlow(TickTimeImpl()),
     val countRest: MutableStateFlow<Int> = MutableStateFlow(0),
     val currentCount: MutableStateFlow<Int> = MutableStateFlow(0),
     val currentDuration: MutableStateFlow<Int> = MutableStateFlow(0),

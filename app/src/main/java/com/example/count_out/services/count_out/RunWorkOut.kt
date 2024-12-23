@@ -4,15 +4,15 @@ import android.content.Context
 import com.example.count_out.R
 import com.example.count_out.data.room.tables.SpeechDB
 import com.example.count_out.domain.SpeechManager
+import com.example.count_out.domain.router.DataForWork
+import com.example.count_out.domain.router.DataFromWork
 import com.example.count_out.entity.DistanceE
 import com.example.count_out.entity.GoalSet
 import com.example.count_out.entity.RunningState
 import com.example.count_out.entity.TimeE
-import com.example.count_out.domain.router.DataForWork
-import com.example.count_out.domain.router.DataFromWork
 import com.example.count_out.entity.speech.SpeechKit
 import com.example.count_out.entity.workout.Set
-import com.example.count_out.services.timer.delayMy
+import com.example.count_out.services.timer.Delay
 import com.example.count_out.ui.view_components.lg
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -64,7 +64,7 @@ class RunWorkOut @Inject constructor( val speechManager:SpeechManager, val conte
         }
     }
 
-    suspend fun executeSet(set: Set?, dataForWork: DataForWork, dataFromWork: DataFromWork){
+    private suspend fun executeSet(set: Set?, dataForWork: DataForWork, dataFromWork: DataFromWork){
         dataForWork.sendStepTraining()
         dataFromWork.trap()
         while (!runningCountRest.value) { delay(100L) }
@@ -100,7 +100,7 @@ class RunWorkOut @Inject constructor( val speechManager:SpeechManager, val conte
                     dataForWork.interval.value
                 } else set.intervalReps
             lg("interval $interval")
-            delayMy(((interval * 1000).toLong()), dataFromWork.runningState)
+            Delay().run(((interval * 1000).toLong()), dataFromWork.runningState)
         }
         dataFromWork.enableChangeInterval.value = false
     }
@@ -109,7 +109,7 @@ class RunWorkOut @Inject constructor( val speechManager:SpeechManager, val conte
         if ( listWordCount.isNotEmpty()){
             for (count in 0..< set.reps){
                 speechManager.speakOutFlush(text = listWordCount[count%listWordCount.size], dataFromWork)
-                delayMy((set.intervalReps * 1000).toLong(), dataFromWork.runningState)
+                Delay().run((set.intervalReps * 1000).toLong(), dataFromWork.runningState)
             }
         }
     }
@@ -149,7 +149,7 @@ class RunWorkOut @Inject constructor( val speechManager:SpeechManager, val conte
                 speechManager.speakOutFlushBusy(text = count.toString(), dataFromWork)
             dataFromWork.currentDuration.value = if (runningCountRest.value) count else 0
             dataFromWork.countRest.value = if (!runningCountRest.value) count else 0
-            delayMy(1000L, dataFromWork.runningState)
+            Delay().run(1000L, dataFromWork.runningState)
         }
     }
     private fun textBeforeSet(set: Set): String{
@@ -167,11 +167,11 @@ class RunWorkOut @Inject constructor( val speechManager:SpeechManager, val conte
     }
     private fun getStr(id: Int) = context.getString(id)
     fun trap(){}
-    suspend fun speechStart(dataFromWork: DataFromWork, speech: SpeechKit){
+    private suspend fun speechStart(dataFromWork: DataFromWork, speech: SpeechKit){
         speechManager.speech(dataFromWork, speech.beforeStart)
         speechManager.speech(dataFromWork, speech.afterStart)
     }
-    suspend fun speechEnd(dataFromWork: DataFromWork, speech: SpeechKit){
+    private suspend fun speechEnd(dataFromWork: DataFromWork, speech: SpeechKit){
         speechManager.speech(dataFromWork, speech.beforeEnd)
         speechManager.speech(dataFromWork, speech.afterEnd)
     }

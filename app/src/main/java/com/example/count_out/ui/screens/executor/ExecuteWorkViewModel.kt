@@ -10,10 +10,10 @@ import com.example.count_out.entity.CommandService
 import com.example.count_out.entity.Internet
 import com.example.count_out.entity.MessageApp
 import com.example.count_out.entity.RunningState
-import com.example.count_out.entity.speech.TickTime
+import com.example.count_out.services.count_out.CountOutServiceBind
+import com.example.count_out.services.timer.models.TickTimeImpl
 import com.example.count_out.ui.modules.DataForServ
 import com.example.count_out.ui.modules.DataForUI
-import com.example.count_out.services.count_out.CountOutServiceBind
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -117,7 +117,7 @@ class ExecuteWorkViewModel @Inject constructor(
                         _executeWorkoutScreenState.update { state ->
                             state.copy(
                                 startTime = 0L,
-                                flowTime = TickTime(hour = "00", min = "00", sec = "00"),
+                                flowTime = TickTimeImpl(hour = "00", min = "00", sec = "00"),
                                 showBottomSheetSaveTraining = mutableStateOf(true)
                             )
                         }

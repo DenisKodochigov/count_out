@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.count_out.data.DataRepository
 import com.example.count_out.data.bluetooth.modules.BleDevSerializable
-import com.example.count_out.data.bluetooth.modules.DeviceUI
+import com.example.count_out.entity.bluetooth.DeviceUI
 import com.example.count_out.data.room.tables.SettingDB
 import com.example.count_out.entity.CommandService
 import com.example.count_out.entity.MessageApp
@@ -91,7 +91,7 @@ class SettingViewModel @Inject constructor(
     private fun updateSetting( setting: SettingDB ){
         templateSetting {dataRepository.updateSetting(setting)} }
 
-    private fun selectDevice(device:  DeviceUI) {
+    private fun selectDevice(device: DeviceUI) {
         viewModelScope.launch(Dispatchers.IO) {
             dataRepository.storeSelectBleDev( BleDevSerializable( address = device.address, name = device.name))
             dataForServ.addressForSearch = device.address

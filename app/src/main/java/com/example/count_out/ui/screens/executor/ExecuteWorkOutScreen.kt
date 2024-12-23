@@ -39,8 +39,8 @@ import com.example.count_out.entity.GoalSet
 import com.example.count_out.entity.RunningState
 import com.example.count_out.entity.TimeE
 import com.example.count_out.entity.WeightE
-import com.example.count_out.ui.modules.NextExercise
 import com.example.count_out.ui.bottom_sheet.BottomSheetSaveTraining
+import com.example.count_out.ui.modules.NextExercise
 import com.example.count_out.ui.theme.mTypography
 import com.example.count_out.ui.view_components.TextApp
 import com.example.count_out.ui.view_components.custom_view.Frame
@@ -102,8 +102,8 @@ import java.math.RoundingMode
     Frame{
         Column (modifier = Modifier.fillMaxWidth().padding(horizontal = 12.dp, vertical = 12.dp)){
             val text = if (uiState.stepTraining?.exercise?.activity?.name.isNullOrEmpty()) "" else
-                "${uiState.stepTraining.exercise.activity.name}:" +
-                " ${uiState.stepTraining.numberExercise}/${uiState.stepTraining.quantityExercise}"
+                "${uiState.stepTraining?.exercise?.activity?.name ?: ""}:" +
+                " ${uiState.stepTraining?.numberExercise ?: ""}/${uiState.stepTraining?.quantityExercise}"
             TextApp(text = text,
                 modifier = Modifier.padding(bottom = 12.dp),
                 style = mTypography.titleLarge)

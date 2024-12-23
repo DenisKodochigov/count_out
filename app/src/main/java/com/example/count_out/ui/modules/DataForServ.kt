@@ -1,6 +1,6 @@
 package com.example.count_out.ui.modules
 
-import com.example.count_out.data.bluetooth.modules.BleConnection
+import com.example.count_out.data.bluetooth.modules.BleConnectionImpl
 import com.example.count_out.entity.RunningState
 import com.example.count_out.entity.workout.Training
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -15,7 +15,7 @@ data class DataForServ(
     var indexExercise: Int = 0,
     var indexSet: Int = 0,
     var addressForSearch: String = "",
-    var currentConnection: BleConnection? = null
+    var currentConnection: BleConnectionImpl? = null
 ){
     fun empty(){
         training = MutableStateFlow(null)

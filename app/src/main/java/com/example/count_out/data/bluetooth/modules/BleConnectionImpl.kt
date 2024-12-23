@@ -3,9 +3,10 @@ package com.example.count_out.data.bluetooth.modules
 import android.bluetooth.BluetoothDevice
 import android.bluetooth.BluetoothGatt
 import com.example.count_out.entity.ErrorBleService
+import com.example.count_out.entity.bluetooth.BleDevice
 import kotlinx.coroutines.flow.MutableStateFlow
 
-class BleConnection (
+class BleConnectionImpl (
     override var name: String = "",
     override var address: String = "",
     override var device: BluetoothDevice? = null,
@@ -14,4 +15,4 @@ class BleConnection (
     val newState: MutableStateFlow<Int> = MutableStateFlow(BluetoothGatt.STATE_DISCONNECTED),
     val gattStatus: MutableStateFlow<Int> = MutableStateFlow(0),
     var error: MutableStateFlow<ErrorBleService> = MutableStateFlow(ErrorBleService.NONE),
-): BleDevice()
+): BleDevice

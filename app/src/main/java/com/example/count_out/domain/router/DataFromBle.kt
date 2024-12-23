@@ -1,6 +1,6 @@
 package com.example.count_out.domain.router
 
-import com.example.count_out.data.bluetooth.modules.DeviceUI
+import com.example.count_out.entity.bluetooth.DeviceUI
 import com.example.count_out.entity.ConnectState
 import kotlinx.coroutines.flow.MutableStateFlow
 
