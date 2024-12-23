@@ -2,8 +2,8 @@ package com.example.count_out.domain.router
 
 import com.example.count_out.data.room.tables.TemporaryDB
 import com.example.count_out.entity.RunningState
-import com.example.count_out.entity.ui.DataForServ
-import com.example.count_out.entity.ui.DataForUI
+import com.example.count_out.ui.modules.DataForServ
+import com.example.count_out.ui.modules.DataForUI
 import com.example.count_out.entity.workout.TemporaryBase
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers

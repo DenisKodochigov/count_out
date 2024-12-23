@@ -1,4 +1,4 @@
-package com.example.count_out.entity.ui
+package com.example.count_out.ui.modules
 
 import com.example.count_out.data.bluetooth.modules.DeviceUI
 import com.example.count_out.domain.router.Buffer

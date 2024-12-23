@@ -1,6 +1,6 @@
 package com.example.count_out.entity.workout
 
-import com.example.count_out.entity.ui.NextExercise
+import com.example.count_out.ui.modules.NextExercise
 
 data class StepTraining (
     val round: Round? = null,

@@ -1,4 +1,4 @@
-package com.example.count_out.entity.ui
+package com.example.count_out.ui.modules
 
 data class NextExercise(
     val nextActivityName: String = "",

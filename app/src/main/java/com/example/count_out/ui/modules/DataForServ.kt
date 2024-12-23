@@ -1,4 +1,4 @@
-package com.example.count_out.entity.ui
+package com.example.count_out.ui.modules
 
 import com.example.count_out.data.bluetooth.modules.BleConnection
 import com.example.count_out.entity.RunningState
@@ -16,7 +16,7 @@ data class DataForServ(
     var indexSet: Int = 0,
     var addressForSearch: String = "",
     var currentConnection: BleConnection? = null
-) {
+){
     fun empty(){
         training = MutableStateFlow(null)
         runningState = MutableStateFlow(RunningState.Stopped)
