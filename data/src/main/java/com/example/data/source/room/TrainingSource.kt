@@ -5,7 +5,7 @@ import com.example.domain.entity.Training
 import kotlinx.coroutines.flow.Flow
 
 interface TrainingSource {
-    fun add(training: TrainingImpl): Flow<List<Training>>
+    fun addCopy(training: TrainingImpl): Flow<List<Training>>
     fun gets(): Flow<List<Training>>
     fun get(id: Long): Flow<Training>
     fun update(training: TrainingImpl): Flow<Training>

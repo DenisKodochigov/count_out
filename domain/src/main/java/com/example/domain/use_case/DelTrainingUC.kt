@@ -8,7 +8,7 @@ import javax.inject.Inject
 
 class DelTrainingUC @Inject constructor(configuration: Configuration, private val repo: TrainingRepo
 ): UseCase<DelTrainingUC.Request, DelTrainingUC.Response>(configuration)  {
-    override fun executeData(input: Request): Flow<Response> = repo.del(input.id).map { Response(it) }
-    data class Request(val id: Long) : UseCase.Request
+    override fun executeData(input: Request): Flow<Response> = repo.del(input.training).map { Response(it) }
+    data class Request(val training: Training) : UseCase.Request
     data class Response(val training: List<Training>) : UseCase.Response
 }

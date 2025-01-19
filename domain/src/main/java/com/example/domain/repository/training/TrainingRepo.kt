@@ -6,9 +6,8 @@ import kotlinx.coroutines.flow.Flow
 interface TrainingRepo {
     fun get(id: Long): Flow<Training>
     fun gets(): Flow<List<Training>>
-    fun del(id: Long): Flow<List<Training>>
-    fun copy(id: Long): Flow<List<Training>>
-    fun add(training: Training): Flow<List<Training>>
+    fun del(training: Training): Flow<List<Training>>
+    fun addCopy(training: Training): Flow<List<Training>>
     fun update(training: Training): Flow<Training>
 //    override fun <Training> gets(): Flow<List<Training>>
 //    override fun <T> get(): Flow<T>

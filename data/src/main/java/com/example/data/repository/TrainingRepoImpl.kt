@@ -16,25 +16,18 @@ class TrainingRepoImpl @Inject constructor(
 
     override fun gets(): Flow<List<Training>> = trainingSource.gets()
 
-    override fun del(id: Long): Flow<List<Training>> {
-        trainingSource.del(id)
+    override fun del(training: Training): Flow<List<Training>> {
+        trainingSource.del(training as TrainingImpl)
         return trainingSource.gets()
     }
 
-    override fun add(training: Training): Flow<List<Training>> {
-        val idTraining = trainingSource.add(training as TrainingImpl)
-//        roundSource.add(idTraining)
+    override fun addCopy(training: Training): Flow<List<Training>> {
+        trainingSource.addCopy(training as TrainingImpl)
         return trainingSource.gets()
-    }
-
-    override fun copy(id: Long): Flow<List<Training>> {
-        TODO("Not yet implemented")
     }
 
     override fun update(training: Training): Flow<Training> {
         trainingSource.update(training as TrainingImpl)
         return trainingSource.get(training.idTraining)
     }
-
-
 }

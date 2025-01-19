@@ -14,9 +14,7 @@ class RingRepoImpl @Inject constructor(private val ringSource: RingSource): Ring
 
     override fun del(ring: Ring) = ringSource.del(ring as RingImpl)
 
-    override fun copy(ring: Ring): Flow<List<Ring>> = ringSource.copy(ring as RingImpl)
-
-    override fun add(ring: Ring): Flow<List<Ring>> = ringSource.add(ring as RingImpl)
+    override fun addCopy(ring: Ring): Flow<List<Ring>> = ringSource.addCopy(ring as RingImpl)
 
     override fun update(ring: Ring): Flow<Ring> = ringSource.update(ring as RingImpl)
 }

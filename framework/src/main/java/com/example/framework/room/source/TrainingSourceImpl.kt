@@ -17,7 +17,7 @@ class TrainingSourceImpl @Inject constructor(
     private val speechKitSource: SpeechKitSourceImpl,
     private val dao: TrainingDao): TrainingSource {
 
-    override fun add(training: TrainingImpl): Flow<List<TrainingImpl>> {
+    override fun addCopy(training: TrainingImpl): Flow<List<TrainingImpl>> {
         val idSpeechKit = (speechKitSource.add(training.speech as SpeechKitImpl) as StateFlow).value.idSpeechKit
         val trainingId = (dao.add(toTrainingTable(training.copy(speechId = idSpeechKit)))
             .map { it.toTraining() } as StateFlow).value.idTraining

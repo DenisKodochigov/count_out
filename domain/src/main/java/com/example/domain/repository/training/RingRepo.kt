@@ -7,7 +7,6 @@ interface RingRepo {
     fun get(id: Long): Flow<Ring>
     fun gets(trainingId: Long): Flow<List<Ring>>
     fun del(ring: Ring)
-    fun copy(ring: Ring): Flow<List<Ring>>
-    fun add(ring: Ring): Flow<List<Ring>>
+    fun addCopy(ring: Ring): Flow<List<Ring>>
     fun update(ring: Ring): Flow<Ring>
 }
