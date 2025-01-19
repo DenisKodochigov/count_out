@@ -15,12 +15,9 @@
     <string name="duration_of_the_approach">Duration of the approach</string>
     <string name="error_1">Error 1.</string>
     <string name="error_2">Error 2.</string>
-    <string name="h">h</string>
     <string name="History">History</string>
-    <string name="hour">hour</string>
     <string name="intensity">Intencity</string>
     <string name="Interval_between_counts">Interval between reports</string>
-    <string name="m">m</string>
     <string name="message_after_end">Message after the end</string>
     <string name="message_after_start">Message after the start</string>
     <string name="message_before_end">Message before the end</string>
@@ -32,9 +29,7 @@
     <string name="plan_workout">Plan workout</string>
     <string name="plans_workout">Plans workout</string>
     <string name="ratio">ratio</string>
-    <string name="s">s</string>
     <string name="save">Save</string>
-    <string name="sec">sec</string>
     <string name="sets">Sets</string>
     <string name="set">Set</string>
     <string name="setting">Setting</string>
@@ -59,8 +54,15 @@
     <string name="part_work">Part training</string>
     <string name="message">"Message "</string>
     <string name="time">Time</string>
+
+    <string name="hour">hour</string>
+    <string name="sec">sec</string>
+    <string name="h">h</string>
+    <string name="s">s</string>
     <string name="km">km</string>
+    <string name="m">m</string>
     <string name="kg">kg</string>
+
     <string name="duration_set">Duration set</string>
     <string name="task_in_approach">The task is in the approach</string>
     <string name="zone">zone</string>

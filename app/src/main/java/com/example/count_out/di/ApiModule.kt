@@ -16,10 +16,9 @@ object ApiModule {
     @Provides
     @Singleton
     fun provideRetrofit(): Retrofit {
-        val serverApi = "https://api.open-meteo.com/v1/"
         return Retrofit
             .Builder()
-            .baseUrl(serverApi)
+            .baseUrl("https://api.open-meteo.com/v1/")
             .addConverterFactory(MoshiConverterFactory.create())
             .build()
     }

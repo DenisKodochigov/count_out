@@ -1,28 +1,28 @@
 [versions]
 
-kotlin = "2.0.21"
-kspVersion = "2.0.21-1.0.25"
+kotlin = "2.1.0"
+kspVersion = "2.1.0-1.0.29"
 serialization_plugin = "2.0.21"
-agp = "8.7.3"
+agp = "8.8.0"
 composeV = "1.7.6"
-composeBom = "2024.12.01"
-composeActivity = "1.9.3"
+composeBom = "2025.01.00"
+composeActivity = "1.10.0"
 #graphics = "1.0.2"
 #graphics1 = "1.0.1"
 #fragmentKtx = "1.8.5"
-hiltAndroid = "2.52"
+hiltAndroid = "2.54"
 hiltNavigationCompose = "1.2.0"
 
 coreKtx = "1.15.0"
 lifecycleRuntimeKtx = "2.8.7"
 material3 = "1.3.1"
 
-permissions = "0.36.0"
-moshi = "1.15.1"
+permissions = "0.37.0"
+moshi = "1.15.2"
 
 navigationCompose = "2.8.5"
 roomV = "2.6.1"
-datastore = "1.1.1"
+datastore = "1.1.2"
 serialization = "1.7.3"
 gmsV = "21.3.0"
 retrofit = "2.11.0"
@@ -32,9 +32,11 @@ paletteKtx = "1.0.0"
 junit = "4.13.2"
 espressoCore = "3.6.1"
 junitVersion = "1.2.1"
-appcompat = "1.7.0"
-material = "1.12.0"
-
+#appcompat = "1.7.0"
+#material = "1.12.0"
+coroutines-test = "1.10.1"
+moskito = "5.4.0"
+ui-test = "1.7.6"
 #storage = "1.5.0"
 #androidMapsUtils = "2.3.0"
 #firebase_crashlytics = "3.0.2"
@@ -113,6 +115,8 @@ gms = { module = "com.google.android.gms:play-services-location", version.ref = 
 
 #DataStore
 datastore = { module = "androidx.datastore:datastore", version.ref = "datastore" }
+datastore-preferences = {module = "androidx.datastore:datastore-preferences", version.ref = "datastore"}
+datastore-preferences-core = {module = "androidx.datastore:datastore-preferences-core", version.ref = "datastore"}
 #datastore-core = { group = "androidx.datastore", name = "datastore-core", version.ref = "datastore" }
 #immutable = { module = "org.jetbrains.kotlinx:kotlinx-collections-immutable", version.ref = "immutable"}
 
@@ -124,15 +128,17 @@ datastore = { module = "androidx.datastore:datastore", version.ref = "datastore"
 
 #TEST
 junit = { module = "junit:junit", version.ref = "junit" }
+moskito = { module = "org.mockito.kotlin:mockito-kotlin", version.ref = "moskito" }
+coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test" , version.ref = "coroutines-test"}
 #kotlin-test-common = { module = "org.jetbrains.kotlin:kotlin-test-common", version.ref = "kotlin" }
 #kotlin-test-annotations-common = { module = "org.jetbrains.kotlin:kotlin-test-annotations-common", version.ref = "kotlin" }
 hilt-testing = { module = "com.google.dagger:hilt-android-testing", version.ref = "hiltAndroid" }
 espresso-core = { module = "androidx.test.espresso:espresso-core", version.ref = "espressoCore" }
-ui-test-junit4 = { module = "androidx.compose.ui:ui-test-junit4" }
-ui-test-manifest = { module = "androidx.compose.ui:ui-test-manifest" }
+ui-test-junit4 = { module = "androidx.compose.ui:ui-test-junit4", version.ref = "ui-test" }
+ui-test-manifest = { module = "androidx.compose.ui:ui-test-manifest", version.ref = "ui-test" }
 ext-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
-material = { group = "com.google.android.material", name = "material", version.ref = "material" }
+#appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
+#material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 #test-storage = { module = "androidx.test.services:storage", version.ref = "storage" }
 
 
@@ -169,11 +175,12 @@ serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref 
     moshi =["moshi", "moshi-kotlin", ]
     retrofit = ["retrofit", "retrofit-moshi", "okhttp3"]
     room = ["room-runtime", "room-ktx"]
+    datastore = ["datastore", "datastore-preferences"]
     lifecycle = ["lifecycle-viewmodel-compose", "lifecycle-viewmodel-ktx", "lifecycle-runtime-ktx", ]
     material3 = ["material3", "material-icons-core", "material-icons-extended", "compose-ui-text-google-fonts", "palette-ktx"]
     hilt = ["hilt-android", "hilt-navigation-compose"]
     hiltksp = ["hilt-compiler", "dagger-compiler"]
     gms = [ "gms"]
 
-    testing = ["junit", "hilt-testing"]
-    testingAndroid = ["espresso-core", "ui-test-junit4"]
+    testing = ["junit", "hilt-testing", "moskito", "coroutines-test"]
+    testingAndroid = ["ext-junit", "espresso-core", "ui-test-junit4"]

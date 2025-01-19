@@ -70,6 +70,7 @@ android {
 }
 
 dependencies {
+    implementation(project(":domain"))
     implementation(libs.bundles.core)
     //Hilt
     implementation (libs.bundles.hilt)

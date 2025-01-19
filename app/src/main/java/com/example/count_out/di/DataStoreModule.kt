@@ -30,6 +30,7 @@ class DataStoreModule {
             produceFile = { appContext.dataStoreFile( DATA_STORE_FILE_NAME )}
         )
     }
+
     @Provides
     @Singleton
     fun provideDataSourceApi(openMeteo: OpenMeteoAPI) = DataSourceAPI(openMeteo)
