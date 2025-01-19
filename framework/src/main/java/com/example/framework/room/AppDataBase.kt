@@ -19,8 +19,8 @@ import com.example.framework.room.db.set.SetTable
 import com.example.framework.room.db.settings.SettingDao
 import com.example.framework.room.db.settings.SettingTable
 import com.example.framework.room.db.speech.SpeechDao
-import com.example.framework.room.db.speech.SpeechKitTable
 import com.example.framework.room.db.speech.SpeechTable
+import com.example.framework.room.db.speech_kit.SpeechKitTable
 import com.example.framework.room.db.training.TrainingDao
 import com.example.framework.room.db.training.TrainingTable
 import com.example.framework.room.db.traking.TemporaryTable

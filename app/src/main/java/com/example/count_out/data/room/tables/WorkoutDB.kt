@@ -3,7 +3,7 @@ package com.example.count_out.data.room.tables
 import androidx.room.Entity
 import androidx.room.Ignore
 import androidx.room.PrimaryKey
-import com.example.domain.entity.weather.Weather
+import com.example.count_out.entity.weather.Weather
 import com.example.count_out.entity.workout.Training
 import com.example.count_out.entity.workout.Workout
 

@@ -1,6 +1,6 @@
 package com.example.count_out.entity.workout
 
-import com.example.domain.entity.weather.Weather
+import com.example.count_out.entity.weather.Weather
 
 interface Workout {
     val idWorkout: Long
