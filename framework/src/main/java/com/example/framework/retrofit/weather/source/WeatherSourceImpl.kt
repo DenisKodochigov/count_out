@@ -12,11 +12,8 @@ import javax.inject.Inject
 
 class WeatherSourceImpl @Inject constructor(
     private val weatherService: WeatherService,
-    private val latitude: Double,
-    private val longitude: Double,
-    private val timezone: String
 ) : WeatherSource {
-    override fun get(): Flow<WeatherImpl> =
+    override fun get(latitude: Double, longitude: Double, timezone: String): Flow<WeatherImpl> =
         flow { emit ( weatherService.getWeather(latitude, longitude, timezone)) }
             .map { it.current.toWeatherSource() }
             .catch { throw ThrowableSD.WeatherTrow(it) }

@@ -4,5 +4,5 @@ import com.example.domain.entity.weather.Weather
 import kotlinx.coroutines.flow.Flow
 
 interface  WeatherSource {
-    fun get(): Flow<Weather>
+    fun get(latitude: Double, longitude: Double, timezone: String): Flow<Weather>
 }

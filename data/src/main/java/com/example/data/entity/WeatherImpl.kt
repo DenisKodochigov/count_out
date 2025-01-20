@@ -3,7 +3,7 @@ package com.example.data.entity
 import com.example.domain.entity.weather.Weather
 
 data class WeatherImpl(
-    override val time: String = System.currentTimeMillis().toString(),
+    override val time: Long = System.currentTimeMillis(),
     override val interval: Int,
     override val temperature2m: Double,
     override val relativeHumidity2m: Int,

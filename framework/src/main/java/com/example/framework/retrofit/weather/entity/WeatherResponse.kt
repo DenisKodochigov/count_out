@@ -25,7 +25,7 @@ data class WeatherResponse(
     @Json(name = "wind_gusts_10m")  val windGusts10m: Double = 0.0,
 ){
     fun toWeatherSource() = WeatherImpl(
-        time = this.time,
+        time = this.time.toLong(),
         rain = this.rain,
         isDay = this.isDay,
         showers = this.showers,
