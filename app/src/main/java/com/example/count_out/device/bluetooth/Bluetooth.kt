@@ -1,13 +1,13 @@
-package com.example.count_out.data.bluetooth
+package com.example.count_out.device.bluetooth
 
 import android.annotation.SuppressLint
 import android.bluetooth.BluetoothAdapter
 import com.example.count_out.R
-import com.example.count_out.data.bluetooth.modules.BleConnectionImpl
-import com.example.count_out.data.bluetooth.modules.BleDeviceImpl
-import com.example.count_out.data.bluetooth.modules.BleStates
-import com.example.count_out.domain.router.DataForBle
-import com.example.count_out.domain.router.DataFromBle
+import com.example.count_out.device.bluetooth.modules.BleConnectionImpl
+import com.example.count_out.device.bluetooth.modules.BleDeviceImpl
+import com.example.count_out.device.bluetooth.modules.BleStates
+import com.example.count_out.domain.router.models.DataForBle
+import com.example.count_out.domain.router.models.DataFromBle
 import com.example.count_out.entity.ConnectState
 import com.example.count_out.entity.ErrorBleService
 import com.example.count_out.entity.MessageApp
@@ -51,7 +51,7 @@ class Bluetooth @Inject constructor(
         dataFromBle.connectingState.value = ConnectState.CONNECTING
         getRemoteDevice(bluetoothAdapter, dataForBle, dataFromBle, state)
         sendHeartRate(bleConnecting.heartRate, dataFromBle)
-        if ( dataForBle.currentConnection != null ) { bleConnecting.connectDevice(state, dataForBle) }
+        if ( dataForBle.currentConnection == null ) { bleConnecting.connectDevice(state, dataForBle) }
     }
 
     private fun sendHeartRate(heartRate: MutableStateFlow<Int>, dataFromBle: DataFromBle){

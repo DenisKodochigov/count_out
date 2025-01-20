@@ -1,12 +1,12 @@
 package com.example.count_out.ui.modules
 
-import com.example.count_out.entity.bluetooth.DeviceUI
-import com.example.count_out.domain.router.Buffer
+import com.example.count_out.domain.router.models.Buffer
 import com.example.count_out.entity.ConnectState
 import com.example.count_out.entity.RunningState
-import com.example.count_out.services.timer.models.TickTimeImpl
+import com.example.count_out.entity.bluetooth.DeviceUI
 import com.example.count_out.entity.workout.Coordinate
 import com.example.count_out.entity.workout.StepTraining
+import com.example.count_out.device.timer.models.TickTimeImpl
 import kotlinx.coroutines.flow.MutableStateFlow
 
 data class DataForUI (

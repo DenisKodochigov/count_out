@@ -9,10 +9,10 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface SpeechDao {
     @Insert
-    fun add(item: SpeechTable): Flow<SpeechTable>
+    fun add(item: SpeechTable): Long
 
     @Update
-    fun update(item: SpeechTable): Flow<SpeechTable>
+    fun update(item: SpeechTable)
 
     @Query("SELECT * FROM tb_speech WHERE idSpeech = :id")
     fun get(id: Long): Flow<SpeechTable>
@@ -21,5 +21,5 @@ interface SpeechDao {
     fun del(id: Long)
 
     @Query("UPDATE tb_speech SET duration = :duration WHERE idSpeech =:id")
-    fun updateDuration(duration: Long, id: Long): Flow<SpeechTable>
+    fun updateDuration(duration: Long, id: Long)
 }

@@ -20,8 +20,9 @@ class SetSourceImpl @Inject constructor(
         */
         if (set.exerciseId > 0L) {
             if (set.idSet > 0) {
-                val idSpeechKit = (speechKitSource.add(set.speech) as StateFlow).value.idSpeechKit
-                setDao.add(toSetTable(set.copy(speechId = idSpeechKit))).map { it.toSet() }
+                val idSpeechKit = set.speech?.let {
+                    (speechKitSource.add(it) as StateFlow).value.idSpeechKit } ?: 0
+                setDao.add(toSetTable(set.copy(speechId = idSpeechKit)))
             }
         }
         return gets(set.exerciseId)
@@ -37,12 +38,14 @@ class SetSourceImpl @Inject constructor(
         setDao.del(set.idSet)
     }
 
-    override fun update(set: SetImpl): Flow<SetImpl> =
-        setDao.update(toSetTable(set).copy(idSet = set.idSet)).map { it.toSet() }
+    override fun update(set: SetImpl): Flow<SetImpl> {
+        setDao.update(toSetTable(set).copy(idSet = set.idSet))
+        return get(set.idSet)
+    }
 
     private fun toSetTable(set: SetImpl) = SetTable(
         name = set.name,
-        speechId = (speechKitSource.add(null) as StateFlow).value.idSpeechKit,
+        speechId = set.speechId,
         goal = set.goal.ordinal,
         exerciseId = set.exerciseId,
         reps = set.reps,

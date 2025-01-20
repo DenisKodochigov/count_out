@@ -1,7 +1,7 @@
 package com.example.count_out.di
 
 import android.content.Context
-import com.example.count_out.domain.SpeechManager
+import com.example.count_out.device.text_to_speech.SpeechManager
 import com.example.count_out.services.count_out.RunWorkOut
 import dagger.Module
 import dagger.Provides

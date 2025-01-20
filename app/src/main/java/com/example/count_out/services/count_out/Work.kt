@@ -1,10 +1,10 @@
 package com.example.count_out.services.count_out
 
-import com.example.count_out.domain.SpeechManager
+import com.example.count_out.device.text_to_speech.SpeechManager
 import com.example.count_out.entity.RunningState
-import com.example.count_out.domain.router.DataForWork
-import com.example.count_out.domain.router.DataFromWork
-import com.example.count_out.services.timer.Ticker
+import com.example.count_out.domain.router.models.DataForWork
+import com.example.count_out.domain.router.models.DataFromWork
+import com.example.count_out.device.timer.Ticker
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

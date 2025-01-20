@@ -1,4 +1,4 @@
-package com.example.count_out.domain.router
+package com.example.count_out.domain.router.models
 
 data class DataForNotification(
     val hours: String = "00",

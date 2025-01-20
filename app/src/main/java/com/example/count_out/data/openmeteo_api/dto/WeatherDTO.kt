@@ -1,6 +1,6 @@
 package com.example.count_out.data.openmeteo_api.dto
 
-import com.example.domain.entity.weather.Weather
+import com.example.count_out.entity.weather.Weather
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 

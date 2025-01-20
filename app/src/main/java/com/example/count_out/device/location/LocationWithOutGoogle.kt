@@ -6,7 +6,7 @@ import android.location.Location
 import android.location.LocationListener
 import android.location.LocationManager
 import com.example.count_out.data.room.tables.TemporaryDB
-import com.example.count_out.domain.router.DataFromSite
+import com.example.count_out.domain.router.models.DataFromSite
 import com.example.count_out.ui.permission.PermissionApp
 import com.example.count_out.ui.view_components.lg
 import javax.inject.Inject

@@ -8,9 +8,8 @@ import android.os.Build
 import android.os.IBinder
 import android.os.SystemClock
 import com.example.count_out.R
-import com.example.count_out.data.bluetooth.Bluetooth
+import com.example.count_out.device.bluetooth.Bluetooth
 import com.example.count_out.data.room.tables.WorkoutDB
-import com.example.count_out.data.location.Site
 import com.example.count_out.domain.router.Router
 import com.example.count_out.entity.CommandService
 import com.example.count_out.entity.Const.NOTIFICATION_EXTRA
@@ -21,6 +20,7 @@ import com.example.count_out.ui.modules.DataForServ
 import com.example.count_out.ui.modules.DataForUI
 import com.example.count_out.ui.notification.NotificationHelper
 import com.example.count_out.data.logging.Logging
+import com.example.count_out.device.Site
 import com.example.count_out.ui.view_components.lg
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope

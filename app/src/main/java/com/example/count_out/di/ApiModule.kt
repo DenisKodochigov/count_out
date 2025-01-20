@@ -9,19 +9,24 @@ import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 import javax.inject.Singleton
 
-
 @InstallIn(SingletonComponent::class)
 @Module
 object ApiModule {
-    @Provides
+
     @Singleton
-    fun provideRetrofit(): Retrofit {
+    @Provides
+    fun provideFactory(): MoshiConverterFactory = MoshiConverterFactory.create()
+
+    @Singleton
+    @Provides
+    fun provideRetrofit(gsonConverterFactory: MoshiConverterFactory): Retrofit {
         return Retrofit
             .Builder()
             .baseUrl("https://api.open-meteo.com/v1/")
-            .addConverterFactory(MoshiConverterFactory.create())
+            .addConverterFactory(gsonConverterFactory)
             .build()
     }
+    @Singleton
     @Provides
     fun provideApi(retrofit: Retrofit): OpenMeteoAPI {
         return retrofit.create(OpenMeteoAPI::class.java)

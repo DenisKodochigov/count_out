@@ -17,10 +17,11 @@ class SpeechKitSourceImpl @Inject constructor(
 
     override fun get(id: Long): Flow<SpeechKitImpl> = daoSpeechKit.get(id).map { it.toSpeechKit() }
 
-    override fun add(speechKit: SpeechKitImpl?): Flow<SpeechKitImpl> {
+    override fun add(speechKit: SpeechKitImpl): Flow<SpeechKitImpl> {
         val speechKitTable =
-            if (speechKit == null) { toSpeechKitTableNew() } else {toSpeechKitTableCopy(speechKit)}
-        return daoSpeechKit.add(speechKitTable).map { it.toSpeechKit() }
+            if (speechKit.idSpeechKit == 0L) { toSpeechKitTableNew() } else {toSpeechKitTableCopy(speechKit)}
+        daoSpeechKit.add(speechKitTable)
+        return get(speechKit.idSpeechKit)
     }
 
     override fun update(speechKit: SpeechKitImpl): Flow<SpeechKitImpl> {

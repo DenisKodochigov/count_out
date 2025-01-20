@@ -11,10 +11,10 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface RingDao {
     @Insert
-    fun add(item: RingTable): RingRel
+    fun add(item: RingTable): Long
 
     @Update
-    fun update(item: RingTable): Flow<RingRel>
+    fun update(item: RingTable)
 
     @Query("SELECT * FROM tb_ring WHERE idRing = :id")
     fun get(id: Long): Flow<RingRel>

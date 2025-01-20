@@ -8,7 +8,7 @@ import android.content.Intent
 import androidx.core.app.NotificationCompat
 import com.example.count_out.MainActivity
 import com.example.count_out.R
-import com.example.count_out.domain.router.DataForNotification
+import com.example.count_out.domain.router.models.DataForNotification
 import com.example.count_out.entity.Const.NOTIFICATION_CHANNEL_DESCRIPTION
 import com.example.count_out.entity.Const.NOTIFICATION_CHANNEL_ID
 import com.example.count_out.entity.Const.NOTIFICATION_CHANNEL_NAME

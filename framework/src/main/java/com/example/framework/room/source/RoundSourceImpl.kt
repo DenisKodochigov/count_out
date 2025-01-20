@@ -31,7 +31,7 @@ class RoundSourceImpl @Inject constructor(
         if (round.trainingId > 0){
             val idSpeechKit =
                 (speechKitSource.add(round.speech as SpeechKitImpl) as StateFlow).value.idSpeechKit
-            val roundId = dao.add(toRoundTable(round).copy(speechId = idSpeechKit)).round.idRound
+            val roundId = dao.add(toRoundTable(round).copy(speechId = idSpeechKit))
             if (round.exercise.isNotEmpty()) {
                 round.exercise.forEach { exercise->
                     exerciseSource.addCopy((exercise as ExerciseImpl).copy(roundId = roundId)) }
@@ -47,8 +47,10 @@ class RoundSourceImpl @Inject constructor(
         dao.del(round.idRound)
     }
 
-    override fun update(round: RoundImpl) =
-        dao.update(toRoundTable(round).copy(idRound = round.idRound)).map { it.toRound() }
+    override fun update(round: RoundImpl): Flow<RoundImpl> {
+        dao.update(toRoundTable(round).copy(idRound = round.idRound))
+        return get(round.idRound)
+    }
 
     private fun toRoundTable(round: RoundImpl) = RoundTable(
         trainingId = round.trainingId,

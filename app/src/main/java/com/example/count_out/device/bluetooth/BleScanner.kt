@@ -1,4 +1,4 @@
-package com.example.count_out.data.bluetooth
+package com.example.count_out.device.bluetooth
 
 import android.annotation.SuppressLint
 import android.bluetooth.BluetoothAdapter
@@ -8,13 +8,13 @@ import android.bluetooth.le.ScanResult
 import android.bluetooth.le.ScanSettings
 import android.content.Context
 import android.os.ParcelUuid
-import com.example.count_out.data.bluetooth.modules.BleDeviceImpl
-import com.example.count_out.data.bluetooth.modules.BleStates
+import com.example.count_out.device.bluetooth.modules.BleDeviceImpl
+import com.example.count_out.device.bluetooth.modules.BleStates
+import com.example.count_out.device.timer.Delay
 import com.example.count_out.domain.addApp
-import com.example.count_out.domain.router.DataFromBle
+import com.example.count_out.domain.router.models.DataFromBle
 import com.example.count_out.entity.Const
 import com.example.count_out.entity.RunningState
-import com.example.count_out.services.timer.Delay
 import com.example.count_out.ui.permission.PermissionApp
 import com.example.count_out.ui.view_components.lg
 import kotlinx.coroutines.CoroutineScope
@@ -84,7 +84,8 @@ class BleScanner @Inject constructor(
                 val fff = dataFromBle.foundDevices.value
 
                 if (dataFromBle.foundDevices.value.find { it.address == dev.address } == null){
-                    dataFromBle.foundDevices.value = dataFromBle.foundDevices.value.addApp(BleDeviceImpl().fromBluetoothDevice(dev))
+                    dataFromBle.foundDevices.value = dataFromBle.foundDevices.value.addApp(
+                        BleDeviceImpl().fromBluetoothDevice(dev))
                 }
             }
         }

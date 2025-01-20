@@ -3,7 +3,7 @@ package com.example.count_out.ui.screens.settings
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.count_out.data.DataRepository
-import com.example.count_out.data.bluetooth.modules.BleDevSerializable
+import com.example.count_out.device.bluetooth.modules.BleDevSerializable
 import com.example.count_out.entity.bluetooth.DeviceUI
 import com.example.count_out.data.room.tables.SettingDB
 import com.example.count_out.entity.CommandService

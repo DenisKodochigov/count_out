@@ -1,4 +1,4 @@
-package com.example.count_out.data.location
+package com.example.count_out.device
 
 import android.annotation.SuppressLint
 import android.content.Context
@@ -7,7 +7,7 @@ import android.location.Geocoder
 import android.os.Build
 import android.os.Looper
 import com.example.count_out.data.room.tables.TemporaryDB
-import com.example.count_out.domain.router.DataFromSite
+import com.example.count_out.domain.router.models.DataFromSite
 import com.example.count_out.ui.permission.PermissionApp
 import com.google.android.gms.location.Granularity
 import com.google.android.gms.location.LocationListener

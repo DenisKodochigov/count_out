@@ -1,4 +1,4 @@
-package com.example.count_out.services.timer
+package com.example.count_out.device.timer
 
 import android.os.SystemClock
 import com.example.count_out.entity.RunningState

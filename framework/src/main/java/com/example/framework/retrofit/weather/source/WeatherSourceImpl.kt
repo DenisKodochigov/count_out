@@ -18,6 +18,6 @@ class WeatherSourceImpl @Inject constructor(
 ) : WeatherSource {
     override fun get(): Flow<WeatherImpl> =
         flow { emit ( weatherService.getWeather(latitude, longitude, timezone)) }
-            .map { it.current?.toWeatherSource() ?: WeatherImpl() }
+            .map { it.current.toWeatherSource() }
             .catch { throw ThrowableSD.WeatherTrow(it) }
 }

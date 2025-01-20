@@ -3,9 +3,9 @@ package com.example.count_out.di
 import android.bluetooth.BluetoothAdapter
 import android.bluetooth.BluetoothManager
 import android.content.Context
-import com.example.count_out.data.bluetooth.BleConnecting
-import com.example.count_out.data.bluetooth.BleScanner
-import com.example.count_out.data.bluetooth.Bluetooth
+import com.example.count_out.device.bluetooth.BleConnecting
+import com.example.count_out.device.bluetooth.BleScanner
+import com.example.count_out.device.bluetooth.Bluetooth
 import com.example.count_out.entity.MessageApp
 import com.example.count_out.ui.permission.PermissionApp
 import dagger.Module

@@ -11,10 +11,10 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface TrainingDao {
     @Insert
-    fun add(item: TrainingTable): Flow<TrainingRel>
+    fun add(item: TrainingTable): Long
 
     @Update
-    fun update(item: TrainingTable): Flow<TrainingRel>
+    fun update(item: TrainingTable)
 
     @Query("DELETE FROM tb_trainings WHERE idTraining = :id")
     fun del(id: Long)

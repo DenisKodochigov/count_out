@@ -32,10 +32,10 @@ interface ExerciseDao {
     fun getFilter( list: List<Long>): Flow<List<ExerciseRel>>
 
     @Insert
-    fun add(item: ExerciseTable): Flow<ExerciseRel>
+    fun add(item: ExerciseTable): Long
 
     @Update
-    fun update( exercise: ExerciseTable): Flow<ExerciseRel>
+    fun update( exercise: ExerciseTable)
 
     @Query("DELETE FROM tb_exercise WHERE idExercise = :id")
     fun del(id: Long)
@@ -45,10 +45,10 @@ interface ExerciseDao {
 //    fun delRing(id: Long)
 
     @Query("UPDATE tb_exercise SET activityId = :activityId WHERE idExercise =:exerciseId")
-    fun setActivity(exerciseId: Long, activityId: Long): Flow<ExerciseRel>
+    fun setActivity(exerciseId: Long, activityId: Long)
 
-    @Query("SELECT max( idView) FROM tb_exercise WHERE roundId = :roundId")
-    fun getExerciseMaxSequential(roundId: Long): Flow<ExerciseRel>
+//    @Query("SELECT max( idView) FROM tb_exercise WHERE roundId = :roundId")
+//    fun getExerciseMaxSequential(roundId: Long): Flow<ExerciseRel>
 
 //    @Query("UPDATE tb_exercise SET idView = :idView WHERE idExercise =:exerciseId")
 //    fun updateIdView( exerciseId: Long, idView: Int)

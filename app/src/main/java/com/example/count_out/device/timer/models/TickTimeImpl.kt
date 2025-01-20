@@ -1,4 +1,4 @@
-package com.example.count_out.services.timer.models
+package com.example.count_out.device.timer.models
 
 import com.example.count_out.entity.workout.TickTime
 

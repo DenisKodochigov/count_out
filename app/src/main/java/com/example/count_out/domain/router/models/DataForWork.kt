@@ -1,14 +1,14 @@
-package com.example.count_out.domain.router
+package com.example.count_out.domain.router.models
 
 import com.example.count_out.R
 import com.example.count_out.data.room.tables.SetDB
 import com.example.count_out.entity.DistanceE
 import com.example.count_out.entity.GoalSet
 import com.example.count_out.entity.TimeE
-import com.example.count_out.ui.modules.NextExercise
 import com.example.count_out.entity.workout.Exercise
 import com.example.count_out.entity.workout.StepTraining
 import com.example.count_out.entity.workout.Training
+import com.example.count_out.ui.modules.NextExercise
 import kotlinx.coroutines.flow.MutableStateFlow
 
 data class DataForWork (
@@ -25,7 +25,6 @@ data class DataForWork (
 
     var map: MutableList<StepTraining> = mutableListOf<StepTraining>(),
     var exerciseCount: Int = 0,
-
 ){
     fun empty(){
         indexRound = 0

@@ -1,4 +1,4 @@
-package com.example.count_out.data.bluetooth
+package com.example.count_out.device.bluetooth
 
 import android.annotation.SuppressLint
 import android.bluetooth.BluetoothDevice.TRANSPORT_LE
@@ -12,9 +12,9 @@ import android.bluetooth.BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE
 import android.content.Context
 import android.os.Build
 import com.example.count_out.R
-import com.example.count_out.data.bluetooth.modules.BleConnectionImpl
-import com.example.count_out.data.bluetooth.modules.BleStates
-import com.example.count_out.domain.router.DataForBle
+import com.example.count_out.device.bluetooth.modules.BleConnectionImpl
+import com.example.count_out.device.bluetooth.modules.BleStates
+import com.example.count_out.domain.router.models.DataForBle
 import com.example.count_out.entity.Const.UUIDBle
 import com.example.count_out.entity.ErrorBleService
 import com.example.count_out.entity.MessageApp

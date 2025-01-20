@@ -1,4 +1,4 @@
-package com.example.count_out.data.bluetooth.modules
+package com.example.count_out.device.bluetooth.modules
 
 import com.example.count_out.entity.bluetooth.DeviceUI
 import kotlinx.serialization.Serializable

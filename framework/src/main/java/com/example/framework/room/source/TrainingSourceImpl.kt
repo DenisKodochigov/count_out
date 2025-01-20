@@ -19,8 +19,7 @@ class TrainingSourceImpl @Inject constructor(
 
     override fun addCopy(training: TrainingImpl): Flow<List<TrainingImpl>> {
         val idSpeechKit = (speechKitSource.add(training.speech as SpeechKitImpl) as StateFlow).value.idSpeechKit
-        val trainingId = (dao.add(toTrainingTable(training.copy(speechId = idSpeechKit)))
-            .map { it.toTraining() } as StateFlow).value.idTraining
+        val trainingId = (dao.add(toTrainingTable(training.copy(speechId = idSpeechKit))))
         if (training.rounds.isNotEmpty()) {
             training.rounds.forEach { round->
                 roundSource.addCopy((round as RoundImpl).copy(trainingId = trainingId)) }
@@ -32,8 +31,10 @@ class TrainingSourceImpl @Inject constructor(
         return gets()
     }
 
-    override fun update(training: TrainingImpl): Flow<TrainingImpl> =
-        dao.update(toTrainingTable(training)).map { it.toTraining() }
+    override fun update(training: TrainingImpl): Flow<TrainingImpl> {
+        dao.update(toTrainingTable(training))
+        return get(training.idTraining)
+    }
 
     override fun gets(): Flow<List<TrainingImpl>> =
         dao.getTrainingsRel().map { list-> list.map { item -> item.toTraining() } }

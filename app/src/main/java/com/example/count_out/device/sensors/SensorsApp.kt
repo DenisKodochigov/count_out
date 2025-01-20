@@ -1,4 +1,4 @@
-package com.example.count_out.data.sensors
+package com.example.count_out.device.sensors
 
 import android.content.Context
 import android.hardware.Sensor

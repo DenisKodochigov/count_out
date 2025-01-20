@@ -16,14 +16,16 @@ class ActivitySourceImpl @Inject constructor(
 
     override fun get(id: Long): Flow<ActivityImpl> = dao.get(id).map { it.toActivity() }
 
-    override fun add(activity: ActivityImpl): Flow<ActivityImpl> =
-        dao.add(toActivityTable(activity)).map { it.toActivity() }
+    override fun add(activity: ActivityImpl): Flow<ActivityImpl> {
+        return get(dao.add(toActivityTable(activity))) }
 
     override fun copy(activity: ActivityImpl): Flow<ActivityImpl> =
-        dao.add(toActivityTable(activity.copy(idActivity = 0))).map { it.toActivity() }
+        get( dao.add(toActivityTable(activity.copy(idActivity = 0))))
 
-    override fun update(activity: ActivityImpl): Flow<ActivityImpl> =
-        dao.update( toActivityTable(activity)).map { it.toActivity() }
+    override fun update(activity: ActivityImpl): Flow<ActivityImpl> {
+        dao.update( toActivityTable(activity))
+        return get(activity.idActivity)
+    }
 
     override fun del(id: Long) {
         dao.del(id)

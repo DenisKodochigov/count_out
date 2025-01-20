@@ -1,6 +1,6 @@
 package com.example.count_out.ui.modules
 
-import com.example.count_out.data.bluetooth.modules.BleConnectionImpl
+import com.example.count_out.device.bluetooth.modules.BleConnectionImpl
 import com.example.count_out.entity.RunningState
 import com.example.count_out.entity.workout.Training
 import kotlinx.coroutines.flow.MutableStateFlow

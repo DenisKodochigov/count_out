@@ -32,7 +32,7 @@ class RingSourceImpl @Inject constructor(
         if (ring.trainingId > 0) {
             val idSpeechKit =
                 (speechKitSource.add(ring.speech as SpeechKitImpl) as StateFlow).value.idSpeechKit
-            val ringId = dao.add(toRingTable(ring).copy(speechId = idSpeechKit)).ring.idRing
+            val ringId = dao.add(toRingTable(ring).copy(speechId = idSpeechKit))
             if (ring.exercise.isNotEmpty()) {
                 ring.exercise.forEach { exercise ->
                     exerciseSource.addCopy((exercise as ExerciseImpl).copy(ringId = ringId))
@@ -44,8 +44,10 @@ class RingSourceImpl @Inject constructor(
         return gets(ring.trainingId)
     }
 
-    override fun update(ring: RingImpl): Flow<RingImpl> =
-        dao.update(toRingTable(ring).copy(idRing = ring.idRing)).map { it.toRing() }
+    override fun update(ring: RingImpl): Flow<RingImpl> {
+        dao.update(toRingTable(ring).copy(idRing = ring.idRing))
+        return get(ring.idRing)
+    }
 
     private fun toRingTable(ring: RingImpl) = RingTable(
         trainingId = ring.trainingId,

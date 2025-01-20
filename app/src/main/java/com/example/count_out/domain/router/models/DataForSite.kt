@@ -1,4 +1,4 @@
-package com.example.count_out.domain.router
+package com.example.count_out.domain.router.models
 
 import com.example.count_out.entity.RunningState
 import kotlinx.coroutines.flow.MutableStateFlow

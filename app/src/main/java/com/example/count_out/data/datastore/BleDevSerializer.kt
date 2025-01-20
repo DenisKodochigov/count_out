@@ -1,7 +1,7 @@
 package com.example.count_out.data.datastore
 
 import androidx.datastore.core.Serializer
-import com.example.count_out.data.bluetooth.modules.BleDevSerializable
+import com.example.count_out.device.bluetooth.modules.BleDevSerializable
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import kotlinx.serialization.SerializationException

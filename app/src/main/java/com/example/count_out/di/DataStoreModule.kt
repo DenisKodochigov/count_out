@@ -4,7 +4,7 @@ import android.content.Context
 import androidx.datastore.core.DataStore
 import androidx.datastore.core.DataStoreFactory
 import androidx.datastore.dataStoreFile
-import com.example.count_out.data.bluetooth.modules.BleDevSerializable
+import com.example.count_out.device.bluetooth.modules.BleDevSerializable
 import com.example.count_out.data.datastore.BleDevSerializer
 import com.example.count_out.data.openmeteo_api.DataSourceAPI
 import com.example.count_out.data.openmeteo_api.OpenMeteoAPI

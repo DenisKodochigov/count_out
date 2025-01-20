@@ -1,8 +1,8 @@
-package com.example.count_out.services.timer
+package com.example.count_out.device.timer
 
+import com.example.count_out.device.timer.models.TickTimeImpl
 import com.example.count_out.domain.pad
 import com.example.count_out.entity.RunningState
-import com.example.count_out.services.timer.models.TickTimeImpl
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -19,10 +19,11 @@ object Ticker {
                 if (stateTimer.value == RunningState.Started){
                     delay(1000L)
                     currentTime += 1
-                    currentTickTime.value =  TickTimeImpl(
-                        hour = ( currentTime / 3600).toInt().pad(),
-                        min =  ( currentTime / 60).toInt().pad(),
-                        sec =  ( currentTime % 60).toInt().pad(),)
+                    currentTickTime.value = TickTimeImpl(
+                        hour = (currentTime / 3600).toInt().pad(),
+                        min = (currentTime / 60).toInt().pad(),
+                        sec = (currentTime % 60).toInt().pad(),
+                    )
                 }
             }
         }
@@ -32,6 +33,7 @@ object Ticker {
         currentTickTime.value = TickTimeImpl(hour = "00", min = "00", sec = "00")
         engineWatcher()
     }
-    fun stop(){ currentTickTime.value = TickTimeImpl(hour = "00", min = "00", sec = "00") }
+    fun stop(){ currentTickTime.value = TickTimeImpl(hour = "00", min = "00", sec = "00")
+    }
     fun getTickTime(): MutableStateFlow<TickTimeImpl> = currentTickTime
 }

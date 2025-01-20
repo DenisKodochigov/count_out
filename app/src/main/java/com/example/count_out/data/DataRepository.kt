@@ -1,7 +1,7 @@
 package com.example.count_out.data
 
 import androidx.datastore.core.DataStore
-import com.example.count_out.data.bluetooth.modules.BleDevSerializable
+import com.example.count_out.device.bluetooth.modules.BleDevSerializable
 import com.example.count_out.data.openmeteo_api.DataSourceAPI
 import com.example.count_out.data.room.DataSource
 import com.example.count_out.data.room.tables.ActivityDB

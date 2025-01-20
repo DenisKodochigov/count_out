@@ -1,10 +1,18 @@
 package com.example.count_out.domain.router
 
 import com.example.count_out.data.room.tables.TemporaryDB
+import com.example.count_out.domain.router.models.Buffer
+import com.example.count_out.domain.router.models.DataForBle
+import com.example.count_out.domain.router.models.DataForNotification
+import com.example.count_out.domain.router.models.DataForSite
+import com.example.count_out.domain.router.models.DataForWork
+import com.example.count_out.domain.router.models.DataFromBle
+import com.example.count_out.domain.router.models.DataFromSite
+import com.example.count_out.domain.router.models.DataFromWork
 import com.example.count_out.entity.RunningState
+import com.example.count_out.entity.workout.TemporaryBase
 import com.example.count_out.ui.modules.DataForServ
 import com.example.count_out.ui.modules.DataForUI
-import com.example.count_out.entity.workout.TemporaryBase
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -26,7 +34,7 @@ class Router(private val dataForServ: DataForServ) {
     val dataForNotification: MutableStateFlow<DataForNotification?> = MutableStateFlow(null)
     val dataForBase: MutableStateFlow<TemporaryBase?> = MutableStateFlow(null)
 
-    private fun bufferInit(dataFromBle: DataFromBle, dataFromWork: DataFromWork, dataFromSite: DataFromSite): Buffer{
+    private fun bufferInit(dataFromBle: DataFromBle, dataFromWork: DataFromWork, dataFromSite: DataFromSite): Buffer {
         return Buffer(
             heartRate = dataFromBle.heartRate,
             scannedBle = dataFromBle.scannedBle,
@@ -47,7 +55,7 @@ class Router(private val dataForServ: DataForServ) {
             coordinate = dataFromSite.coordinate
         )
     }
-    private fun initDataForWork(dataForServ: DataForServ): DataForWork{
+    private fun initDataForWork(dataForServ: DataForServ): DataForWork {
         return DataForWork(
             training = dataForServ.training,
             indexSet = dataForServ.indexSet,
@@ -70,10 +78,10 @@ class Router(private val dataForServ: DataForServ) {
             stepTraining = buffer.stepTraining,
         )
     }
-    private fun initDataForSite(): DataForSite{
+    private fun initDataForSite(): DataForSite {
         return DataForSite(site = "", state = MutableStateFlow(RunningState.Stopped))
     }
-    private fun initDataForBle(dataForServ: DataForServ):DataForBle{
+    private fun initDataForBle(dataForServ: DataForServ): DataForBle {
         return DataForBle(
             addressForSearch = dataForServ.addressForSearch,
             currentConnection = dataForServ.currentConnection

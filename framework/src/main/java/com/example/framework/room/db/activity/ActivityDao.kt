@@ -16,10 +16,10 @@ interface ActivityDao {
     fun get(id: Long): Flow<ActivityTable>
 
     @Insert
-    fun add(item: ActivityTable): Flow<ActivityTable>
+    fun add(item: ActivityTable): Long
 
     @Update
-    fun update(item: ActivityTable): Flow<ActivityTable>
+    fun update(item: ActivityTable)
 
     @Query("DELETE FROM tb_activity WHERE idActivity = :id")
     fun del(id: Long)
@@ -27,7 +27,7 @@ interface ActivityDao {
     @Query("UPDATE tb_activity SET color = :color WHERE idActivity =:activityId")
     fun setColor(activityId: Long, color: Int): Int
 
-    @Query("SELECT * FROM tb_exercise WHERE activityId =:activityId")
+    @Query("SELECT idExercise FROM tb_exercise WHERE activityId =:activityId")
     fun checkExerciseWithActivity(activityId: Long): Long?
 
 }

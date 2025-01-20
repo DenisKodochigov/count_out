@@ -11,11 +11,12 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface RoundDao {
     @Insert
-    fun add(item: RoundTable):RoundRel
+    fun add(item: RoundTable): Long
 
     @Update
-    fun update(item: RoundTable): Flow<RoundRel>
+    fun update(item: RoundTable)
 
+    @Transaction
     @Query("SELECT * FROM tb_round WHERE idRound = :id")
     fun get(id: Long): Flow<RoundRel>
 

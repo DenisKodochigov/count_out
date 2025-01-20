@@ -37,9 +37,9 @@ class ExerciseSourceImpl @Inject constructor(
 
     override fun addCopy(exercise: ExerciseImpl): Flow<List<ExerciseImpl>> {
         if (exercise.roundId > 0L || exercise.ringId > 0L) {
-            val idSpeechKit = (speechKitSource.add(exercise.speech) as StateFlow ).value.idSpeechKit
-            val idExercise = (dao.add(toExerciseTable(exercise.copy(speechId = idSpeechKit)))
-                .map { it.toExercise() } as StateFlow).value.idExercise
+            val idSpeechKit = exercise.speech?.let {
+                (speechKitSource.add(it) as StateFlow ).value.idSpeechKit } ?: 0
+            val idExercise = dao.add(toExerciseTable(exercise.copy(speechId = idSpeechKit)))
             if (exercise.sets.isNotEmpty()){
                 exercise.sets.forEach { set-> setSource.addCopy(set.copy(exerciseId = idExercise)) }
             } else {
@@ -49,11 +49,16 @@ class ExerciseSourceImpl @Inject constructor(
         return if (exercise.roundId > 0) getForRound(exercise.roundId) else getForRing(exercise.ringId)
     }
 
-    override fun update(exercise: ExerciseImpl): Flow<ExerciseImpl> =
-        dao.update(toExerciseTable(exercise).copy(idExercise = exercise.idExercise)).map { it.toExercise() }
+    override fun update(exercise: ExerciseImpl): Flow<ExerciseImpl> {
+        dao.update(toExerciseTable(exercise).copy(idExercise = exercise.idExercise))
+        return get(exercise.idExercise)
+    }
 
-    override fun setActivityIntoExercise(exerciseId: Long, activityId: Long): Flow<ExerciseImpl> =
-        dao.setActivity(exerciseId, activityId).map { it.toExercise() }
+
+    override fun setActivityIntoExercise(exerciseId: Long, activityId: Long): Flow<ExerciseImpl> {
+        dao.setActivity(exerciseId, activityId)
+        return get(exerciseId)
+    }
 
     override fun del(exercise: ExerciseImpl) {
         exercise.speech?.let { speechKitSource.del(it) }
@@ -67,8 +72,8 @@ class ExerciseSourceImpl @Inject constructor(
         speechId = exercise.speechId,
     )
     private fun newSetImpl(exerciseId: Long) = SetImpl(
-        exerciseId = exerciseId,
         idSet = 0,
+        exerciseId = exerciseId,
         name = "Set 1",
         speechId = 0,
         speech = null,

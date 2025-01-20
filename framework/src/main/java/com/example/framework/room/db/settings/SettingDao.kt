@@ -11,7 +11,7 @@ interface SettingDao {
     fun add(item: SettingTable): Long
 
     @Update
-    fun update(item: SettingTable): Int
+    fun update(item: SettingTable)
 
     @Query("SELECT * FROM tb_settings")
     fun gets(): List<SettingTable>

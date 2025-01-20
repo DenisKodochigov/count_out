@@ -1,4 +1,4 @@
-package com.example.count_out.data.bluetooth.modules
+package com.example.count_out.device.bluetooth.modules
 
 import android.annotation.SuppressLint
 import android.bluetooth.BluetoothDevice
