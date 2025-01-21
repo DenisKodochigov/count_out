@@ -24,20 +24,10 @@ class WeatherRepoImplTest {
     private val trainingRepoImpl = TrainingRepoImpl(trainingSource, roundSource)
     private val weatherRepoImpl = WeatherRepoImpl(weatherSource)
 
-//    private val LOG: Logger = Logger.getLogger(this.javaClass.name)
-
-//    companion object {
-//        val LOG: Logger = Logger.getLogger(WeatherRepoImplTest::class.java.name)
-//    }
     val target1Weather = WeatherImpl(time=0, interval = 0, temperature2m = 0.0, relativeHumidity2m = 0,
         apparentTemperature = 0.0, isDay = 0, precipitation = 0.0, rain = 0.0, showers = 0.0,
         snowfall = 0.0, weatherCode = 0, cloudCover = 0, pressureMsl = 0.0, surfacePressure = 0.0,
         windSpeed10m = 0.0, windDirection10m = 0, windGusts10m = 0.0,)
-    val target2Weather = WeatherImpl(time=1737396808979, interval=0, temperature2m=0.0,
-        relativeHumidity2m=0, apparentTemperature=0.0, isDay=0, precipitation=0.0, rain=0.0,
-        showers=0.0, snowfall=0.0, weatherCode=0, cloudCover=0, pressureMsl=0.0, surfacePressure=0.0,
-        windSpeed10m=0.0, windDirection10m=0, windGusts10m=0.0)
-
 
     @ExperimentalCoroutinesApi
     @Test
@@ -49,4 +39,5 @@ class WeatherRepoImplTest {
         assertEquals(weather, result)
         //verify(localUserDataSource).addUsers(weather)
     }
+
 }

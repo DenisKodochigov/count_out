@@ -35,7 +35,9 @@ junitVersion = "1.2.1"
 #appcompat = "1.7.0"
 #material = "1.12.0"
 coroutines-test = "1.10.1"
-moskito = "5.4.0"
+moskito = "5.12.0"
+moskito-inline = "5.2.0"
+moskito-kotlin = "5.4.0"
 ui-test = "1.7.6"
 #storage = "1.5.0"
 #androidMapsUtils = "2.3.0"
@@ -128,7 +130,9 @@ datastore-preferences-core = {module = "androidx.datastore:datastore-preferences
 
 #TEST
 junit = { module = "junit:junit", version.ref = "junit" }
-moskito = { module = "org.mockito.kotlin:mockito-kotlin", version.ref = "moskito" }
+moskito-core = { module = "org.mockito:mockito-core", version.ref = "moskito" }
+moskito-inline = { module = "org.mockito:mockito-inline", version.ref = "moskito-inline" }
+moskito-kotlin = { module = "org.mockito.kotlin:mockito-kotlin", version.ref = "moskito-kotlin" }
 coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test" , version.ref = "coroutines-test"}
 #kotlin-test-common = { module = "org.jetbrains.kotlin:kotlin-test-common", version.ref = "kotlin" }
 #kotlin-test-annotations-common = { module = "org.jetbrains.kotlin:kotlin-test-annotations-common", version.ref = "kotlin" }
@@ -182,5 +186,5 @@ serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref 
     hiltksp = ["hilt-compiler", "dagger-compiler"]
     gms = [ "gms"]
 
-    testing = ["junit", "hilt-testing", "moskito", "coroutines-test"]
+    testing = ["junit", "hilt-testing", "moskito-core", "moskito-inline", "moskito-kotlin", "coroutines-test"]
     testingAndroid = ["ext-junit", "espresso-core", "ui-test-junit4"]
