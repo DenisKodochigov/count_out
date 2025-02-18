@@ -19,9 +19,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.count_out.entity.TagsTesting.BOTTOM_APP_BAR
-import com.example.count_out.ui.navigation.ScreenDestination
-import com.example.count_out.ui.navigation.TrainingsDestination
-import com.example.count_out.ui.navigation.navBottomScreens
+import com.example.count_out.presentation.navigation.ScreenDestination
+import com.example.count_out.presentation.navigation.TrainingsDestination
+import com.example.count_out.presentation.navigation.navBottomScreens
 import com.example.count_out.ui.theme.bottomBarShape
 import com.example.count_out.ui.view_components.icons.IconSubscribe
 

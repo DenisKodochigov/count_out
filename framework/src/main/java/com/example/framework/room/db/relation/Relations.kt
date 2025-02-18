@@ -67,7 +67,7 @@ data class SetRel(
             intensity = Zone.entries[setTable.intensity],
             intervalDown = setTable.intervalDown,
             groupCount = setTable.groupCount,
-            timeRest = setTable.timeRest,
+            rest = setTable.timeRest,
             timeRestU = TimeUnit.entries[setTable.timeRestU],
             speech = speechKit?.toSpeechKit(),
         )

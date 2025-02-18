@@ -13,7 +13,7 @@ import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalInspectionMode
-import com.example.count_out.ui.navigation.ScreenDestination
+import com.example.count_out.presentation.navigation.ScreenDestination
 
 @Composable fun AppTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),

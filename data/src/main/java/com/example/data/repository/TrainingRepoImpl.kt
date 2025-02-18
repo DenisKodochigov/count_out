@@ -4,7 +4,7 @@ import com.example.data.entity.TrainingImpl
 import com.example.data.source.room.RoundSource
 import com.example.data.source.room.TrainingSource
 import com.example.domain.entity.Training
-import com.example.domain.repository.training.TrainingRepo
+import com.example.domain.repository.trainings.TrainingRepo
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
@@ -20,9 +20,17 @@ class TrainingRepoImpl @Inject constructor(
         trainingSource.del(training as TrainingImpl)
         return trainingSource.gets()
     }
+    override fun add(): Flow<List<Training>> {
+        trainingSource.add()
+        return trainingSource.gets()
+    }
+    override fun copy(training: Training): Flow<List<Training>> {
+        trainingSource.copy(training as TrainingImpl)
+        return trainingSource.gets()
+    }
 
-    override fun addCopy(training: Training): Flow<List<Training>> {
-        trainingSource.addCopy(training as TrainingImpl)
+    override fun select(training: Training): Flow<List<Training>> {
+        trainingSource.update(training as TrainingImpl)
         return trainingSource.gets()
     }
 

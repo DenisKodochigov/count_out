@@ -34,8 +34,8 @@ import com.example.count_out.R
 import com.example.count_out.data.room.tables.ActivityDB
 import com.example.count_out.entity.TypeKeyboard
 import com.example.count_out.entity.workout.Activity
+import com.example.count_out.presentation.screens.settings.SettingScreenState
 import com.example.count_out.ui.dialog.ChangeColorSectionDialog
-import com.example.count_out.ui.screens.settings.SettingScreenState
 import com.example.count_out.ui.theme.mTypography
 import com.example.count_out.ui.view_components.TextApp
 import com.example.count_out.ui.view_components.TextFieldApp

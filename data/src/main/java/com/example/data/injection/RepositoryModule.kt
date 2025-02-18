@@ -3,8 +3,8 @@ package com.example.data.injection
 import com.example.data.repository.ActivityRepoImpl
 import com.example.data.repository.TrainingRepoImpl
 import com.example.data.repository.WeatherRepoImpl
-import com.example.domain.repository.training.ActivityRepo
-import com.example.domain.repository.training.TrainingRepo
+import com.example.domain.repository.trainings.ActivityRepo
+import com.example.domain.repository.trainings.TrainingRepo
 import com.example.domain.repository.WeatherRepo
 import dagger.Binds
 import dagger.Module

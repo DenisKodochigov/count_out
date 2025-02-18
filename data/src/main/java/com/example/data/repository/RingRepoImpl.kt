@@ -3,7 +3,7 @@ package com.example.data.repository
 import com.example.data.entity.RingImpl
 import com.example.data.source.room.RingSource
 import com.example.domain.entity.Ring
-import com.example.domain.repository.training.RingRepo
+import com.example.domain.repository.trainings.RingRepo
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
@@ -14,7 +14,8 @@ class RingRepoImpl @Inject constructor(private val ringSource: RingSource): Ring
 
     override fun del(ring: Ring) = ringSource.del(ring as RingImpl)
 
-    override fun addCopy(ring: Ring): Flow<List<Ring>> = ringSource.addCopy(ring as RingImpl)
+    override fun add(trainingId: Long): Flow<List<Ring>> = ringSource.add(trainingId)
+    override fun copy(ring: Ring): Flow<List<Ring>> = ringSource.copy(ring as RingImpl)
 
     override fun update(ring: Ring): Flow<Ring> = ringSource.update(ring as RingImpl)
 }

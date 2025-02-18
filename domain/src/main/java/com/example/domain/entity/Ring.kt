@@ -8,4 +8,6 @@ interface Ring {
     val speechId: Long
     val speech: SpeechKit?
     val exercise: List<Exercise>
+    val amount: Int
+    val duration: Parameter
 }

@@ -10,4 +10,6 @@ interface Exercise {
     val speechId: Long
     val speech: SpeechKit?
     val sets: List<Set>
+    val amountSet: Int
+    val duration: Int
 }

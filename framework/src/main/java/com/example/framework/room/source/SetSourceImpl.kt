@@ -6,6 +6,7 @@ import com.example.framework.room.db.set.SetDao
 import com.example.framework.room.db.set.SetTable
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
@@ -13,19 +14,21 @@ class SetSourceImpl @Inject constructor(
     private val speechKitSource: SpeechKitSourceImpl,
     private val setDao: SetDao): SetSource {
 
-    override fun addCopy(set: SetImpl): Flow<List<SetImpl>> {
-        /**
-         *  Без idExersice создавать set нельзя.
-         *  Процедура копирует SET, если входной SET пустой, то создается новый.
-        */
-        if (set.exerciseId > 0L) {
+    override fun add(exerciseId: Long): Flow<List<SetImpl>> {
+         return if (exerciseId > 0L) {
+            setDao.add(SetTable(speechId = (speechKitSource.add() as StateFlow).value.idSpeechKit))
+            gets(exerciseId)
+        } else flow { emit ( emptyList()) }
+    }
+    override fun copy(set: SetImpl): Flow<List<SetImpl>> {
+        return if (set.exerciseId > 0L) {
             if (set.idSet > 0) {
                 val idSpeechKit = set.speech?.let {
-                    (speechKitSource.add(it) as StateFlow).value.idSpeechKit } ?: 0
+                    (speechKitSource.copy(it) as StateFlow).value.idSpeechKit } ?: 0
                 setDao.add(toSetTable(set.copy(speechId = idSpeechKit)))
             }
-        }
-        return gets(set.exerciseId)
+            gets(set.exerciseId)
+        } else flow { emit( emptyList()) }
     }
 
     override fun gets(exerciseId: Long): Flow<List<SetImpl>> {
@@ -59,7 +62,7 @@ class SetSourceImpl @Inject constructor(
         intensity = set.intensity.ordinal,
         intervalDown = set.intervalDown,
         groupCount = set.groupCount,
-        timeRest = set.timeRest,
+        timeRest = set.rest,
         timeRestU = set.timeRestU.ordinal
     )
 }

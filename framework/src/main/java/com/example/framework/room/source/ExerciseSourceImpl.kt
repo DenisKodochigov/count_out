@@ -14,6 +14,7 @@ import com.example.framework.room.db.exercise.ExerciseDao
 import com.example.framework.room.db.exercise.ExerciseTable
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
@@ -35,25 +36,40 @@ class ExerciseSourceImpl @Inject constructor(
     override fun getFilter(list: List<Long>): Flow<List<ExerciseImpl>> =
         dao.getFilter(list).map { lst-> lst.map { it.toExercise() }}
 
-    override fun addCopy(exercise: ExerciseImpl): Flow<List<ExerciseImpl>> {
-        if (exercise.roundId > 0L || exercise.ringId > 0L) {
+    override fun copy(exercise: ExerciseImpl): Flow<List<ExerciseImpl>> {
+        val result  = if (exercise.roundId > 0L || exercise.ringId > 0L) {
             val idSpeechKit = exercise.speech?.let {
-                (speechKitSource.add(it) as StateFlow ).value.idSpeechKit } ?: 0
+                (speechKitSource.copy(it) as StateFlow ).value.idSpeechKit } ?: 0
             val idExercise = dao.add(toExerciseTable(exercise.copy(speechId = idSpeechKit)))
             if (exercise.sets.isNotEmpty()){
                 exercise.sets.forEach { set-> setSource.addCopy(set.copy(exerciseId = idExercise)) }
             } else {
                 setSource.addCopy( newSetImpl(exerciseId = idExercise))
             }
-        } else (Log.d("KDS"," Не определен roundID or RING_ID"))
-        return if (exercise.roundId > 0) getForRound(exercise.roundId) else getForRing(exercise.ringId)
+            if (exercise.roundId > 0) getForRound(exercise.roundId) else getForRing(exercise.ringId)
+        } else {
+            Log.d("KDS", " Не определен roundID or RING_ID")
+            flow { emit( emptyList()) }
+        }
+        return result
     }
 
+    override fun add(roundId: Long, ringId: Long): Flow<List<ExerciseImpl>> {
+        val result  = if (roundId > 0L || ringId > 0L) {
+            val idExercise = dao.add(
+                ExerciseTable(speechId = (speechKitSource.add() as StateFlow ).value.idSpeechKit))
+            setSource.addCopy( newSetImpl(exerciseId = idExercise))
+            if (roundId > 0) getForRound(roundId) else getForRing(ringId)
+        } else {
+            Log.d("KDS", " Не определен roundID or RING_ID")
+            flow { emit( emptyList()) }
+        }
+        return result
+    }
     override fun update(exercise: ExerciseImpl): Flow<ExerciseImpl> {
         dao.update(toExerciseTable(exercise).copy(idExercise = exercise.idExercise))
         return get(exercise.idExercise)
     }
-
 
     override fun setActivityIntoExercise(exerciseId: Long, activityId: Long): Flow<ExerciseImpl> {
         dao.setActivity(exerciseId, activityId)
@@ -89,7 +105,7 @@ class ExerciseSourceImpl @Inject constructor(
         intervalReps = 1.0,
         intervalDown = 0,
         groupCount = "",
-        timeRest = 1,
+        rest = 1,
         timeRestU = TimeUnit.M
     )
 }

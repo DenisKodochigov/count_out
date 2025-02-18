@@ -6,7 +6,8 @@ import kotlinx.coroutines.flow.Flow
 
 interface SpeechKitSource {
     fun get(id: Long): Flow<SpeechKit>
-    fun add(speechKit: SpeechKitImpl): Flow<SpeechKit>
+    fun add(): Flow<SpeechKit>
+    fun copy(speechKit: SpeechKitImpl): Flow<SpeechKit>
     fun update(speechKit: SpeechKitImpl): Flow<SpeechKit>
     fun del(speechKit: SpeechKitImpl)
 }

@@ -12,7 +12,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import com.example.count_out.R
-import com.example.count_out.ui.screens.executor.ExecuteWorkoutScreenState
+import com.example.count_out.presentation.screens.executor.ExecuteWorkoutScreenState
 import com.example.count_out.ui.theme.Dimen
 import com.example.count_out.ui.theme.mTypography
 import com.example.count_out.ui.theme.shapes

@@ -3,7 +3,7 @@ package com.example.data.repository
 import com.example.data.entity.ExerciseImpl
 import com.example.data.source.room.ExerciseSource
 import com.example.domain.entity.Exercise
-import com.example.domain.repository.training.ExerciseRepo
+import com.example.domain.repository.trainings.ExerciseRepo
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
@@ -14,7 +14,9 @@ class ExerciseRepoImpl @Inject constructor(private val exerciseSource: ExerciseS
 
     override fun del(exercise: Exercise) { exerciseSource.del(exercise as ExerciseImpl) }
 
-    override fun addCopy(exercise: Exercise): Flow<List<Exercise>> = exerciseSource.addCopy(exercise as ExerciseImpl)
+    override fun add(roundId: Long, ringId: Long): Flow<List<Exercise>> = exerciseSource.add(roundId, ringId)
+
+    override fun copy(exercise: Exercise): Flow<List<Exercise>> = exerciseSource.copy(exercise as ExerciseImpl)
 
     override fun update(exercise: Exercise): Flow<Exercise> = exerciseSource.update(exercise as ExerciseImpl)
 

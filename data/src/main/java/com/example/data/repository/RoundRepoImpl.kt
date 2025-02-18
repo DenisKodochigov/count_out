@@ -2,7 +2,7 @@ package com.example.data.repository
 
 import com.example.data.source.room.RoundSource
 import com.example.domain.entity.Round
-import com.example.domain.repository.training.RoundRepo
+import com.example.domain.repository.trainings.RoundRepo
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 

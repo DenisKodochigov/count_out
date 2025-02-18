@@ -4,6 +4,7 @@ import com.example.data.entity.RoundImpl
 import com.example.data.entity.SpeechKitImpl
 import com.example.data.entity.TrainingImpl
 import com.example.data.source.room.TrainingSource
+import com.example.domain.entity.Training
 import com.example.domain.entity.enums.RoundType
 import com.example.framework.room.db.training.TrainingDao
 import com.example.framework.room.db.training.TrainingTable
@@ -17,23 +18,32 @@ class TrainingSourceImpl @Inject constructor(
     private val speechKitSource: SpeechKitSourceImpl,
     private val dao: TrainingDao): TrainingSource {
 
-    override fun addCopy(training: TrainingImpl): Flow<List<TrainingImpl>> {
-        val idSpeechKit = (speechKitSource.add(training.speech as SpeechKitImpl) as StateFlow).value.idSpeechKit
-        val trainingId = (dao.add(toTrainingTable(training.copy(speechId = idSpeechKit))))
-        if (training.rounds.isNotEmpty()) {
-            training.rounds.forEach { round->
-                roundSource.addCopy((round as RoundImpl).copy(trainingId = trainingId)) }
-        } else {
-            roundSource.addCopy( newRoundImpl(trainingId = trainingId, roundType = RoundType.WorkUp))
-            roundSource.addCopy( newRoundImpl(trainingId = trainingId, roundType = RoundType.WorkOut))
-            roundSource.addCopy( newRoundImpl(trainingId = trainingId, roundType = RoundType.WorkDown))
-        }
-        return gets()
-    }
-
     override fun update(training: TrainingImpl): Flow<TrainingImpl> {
         dao.update(toTrainingTable(training))
         return get(training.idTraining)
+    }
+
+    override fun add(): Flow<List<Training>> {
+        val trainingId = ( dao.add(
+                TrainingTable( speechId = (speechKitSource.add() as StateFlow).value.idSpeechKit)))
+        roundSource.add( newRoundImpl(trainingId = trainingId, roundType = RoundType.WorkUp))
+        roundSource.add( newRoundImpl(trainingId = trainingId, roundType = RoundType.WorkOut))
+        roundSource.add( newRoundImpl(trainingId = trainingId, roundType = RoundType.WorkDown))
+        return gets()
+    }
+
+    override fun copy(training: TrainingImpl): Flow<List<Training>> {
+        val idSpeechKit = (speechKitSource.copy(training.speech as SpeechKitImpl) as StateFlow).value.idSpeechKit
+        val trainingId = (dao.add(toTrainingTable(training.copy(speechId = idSpeechKit))))
+        if (training.rounds.isNotEmpty()) {
+            training.rounds.forEach { round->
+                roundSource.copy((round as RoundImpl).copy(trainingId = trainingId)) }
+        } else {
+            roundSource.copy( newRoundImpl(trainingId = trainingId, roundType = RoundType.WorkUp))
+            roundSource.copy( newRoundImpl(trainingId = trainingId, roundType = RoundType.WorkOut))
+            roundSource.copy( newRoundImpl(trainingId = trainingId, roundType = RoundType.WorkDown))
+        }
+        return gets()
     }
 
     override fun gets(): Flow<List<TrainingImpl>> =

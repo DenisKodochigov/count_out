@@ -25,6 +25,6 @@ data class SetImpl(
     override val intervalReps: Double,
     override val intervalDown: Int,
     override val groupCount: String,
-    override val timeRest: Int,
+    override val rest: Int,
     override val timeRestU: TimeUnit,
 ): Set

@@ -26,7 +26,8 @@ interface ExerciseSource {
     fun getForRound(id: Long): Flow<List<Exercise>>
     fun getForRing(id: Long): Flow<List<Exercise>>
     fun getFilter(list: List<Long>): Flow<List<Exercise>>
-    fun addCopy(exercise: ExerciseImpl): Flow<List<Exercise>>
+    fun add(roundId: Long = 0, ringId: Long = 0): Flow<List<Exercise>>
+    fun copy(exercise: ExerciseImpl): Flow<List<Exercise>>
     fun del(exercise: ExerciseImpl)
 //    fun delRound(idRound: Long)
 //    fun delRing(idRing: Long)

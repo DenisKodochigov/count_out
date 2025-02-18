@@ -9,4 +9,6 @@ interface Round {
     val roundType: RoundType
     val speech: SpeechKit?
     val exercise: List<Exercise>
+    val amount: Int
+    val duration: Parameter
 }

@@ -1,7 +1,7 @@
 package com.example.domain
 
-import com.example.domain.repository.training.ActivityRepo
-import com.example.domain.repository.training.TrainingRepo
+import com.example.domain.repository.trainings.ActivityRepo
+import com.example.domain.repository.trainings.TrainingRepo
 import com.example.domain.use_case.UseCase
 import junit.framework.TestCase.assertEquals
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -36,7 +36,7 @@ class UseCaseTest {
     @Test
     fun testExecuteSuccess() = runTest {
         val result = useCase.execute(request).first()
-        assertEquals(com.example.domain.entity.throwable.Result.Success(response), result)
+        assertEquals(com.example.domain.entity.throwable.ResultUC.Success(response), result)
     }
 }
 

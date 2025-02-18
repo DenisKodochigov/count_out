@@ -74,6 +74,7 @@ dependencies {
     implementation(libs.bundles.core)
     //Hilt
     implementation (libs.bundles.hilt)
+    implementation(libs.androidx.lifecycle.viewmodel.ktx)
     ksp (libs.bundles.hiltksp)
     //Location
     implementation(libs.bundles.gms)

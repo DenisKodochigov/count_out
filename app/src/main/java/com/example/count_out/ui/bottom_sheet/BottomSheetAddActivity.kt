@@ -10,7 +10,7 @@ import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import com.example.count_out.ui.screens.settings.SettingScreenState
+import com.example.count_out.presentation.screens.settings.SettingScreenState
 import com.example.count_out.ui.theme.Dimen
 import com.example.count_out.ui.theme.shapes
 import com.example.count_out.ui.view_components.ButtonConfirm

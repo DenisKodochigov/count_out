@@ -24,7 +24,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.example.count_out.R
-import com.example.count_out.ui.screens.settings.SettingScreenState
+import com.example.count_out.presentation.screens.settings.SettingScreenState
 import com.example.count_out.ui.theme.Dimen
 import com.example.count_out.ui.theme.Dimen.bsHeightWindowsListBle
 import com.example.count_out.ui.theme.Dimen.bsSpacerBottomHeight

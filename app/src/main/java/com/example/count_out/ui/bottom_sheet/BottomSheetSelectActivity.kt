@@ -18,7 +18,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.example.count_out.ui.screens.training.TrainingScreenState
+import com.example.count_out.presentation.screens.training.TrainingScreenState
 import com.example.count_out.ui.theme.Dimen
 import com.example.count_out.ui.theme.shapes
 import com.example.count_out.ui.view_components.ModalBottomSheetApp

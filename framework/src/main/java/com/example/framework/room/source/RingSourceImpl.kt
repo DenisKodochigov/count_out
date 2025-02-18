@@ -9,6 +9,7 @@ import com.example.framework.room.db.ring.RingDao
 import com.example.framework.room.db.ring.RingTable
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
@@ -28,22 +29,38 @@ class RingSourceImpl @Inject constructor(
         dao.del(ring.idRing)
     }
 
-    override fun addCopy(ring: RingImpl): Flow<List<RingImpl>> {
-        if (ring.trainingId > 0) {
+    override fun add(trainingId: Long): Flow<List<RingImpl>> {
+        val result = if (trainingId > 0) {
+            val ringId = dao.add(
+                RingTable(speechId = (speechKitSource.add() as StateFlow).value.idSpeechKit))
+            exerciseSource.add(ringId = ringId)
+            gets(trainingId)
+        } else {
+            Log.d("KDS", "The value is not defined TRAINING_ID")
+            flow { emit( emptyList()) }
+        }
+        return result
+    }
+
+    override fun copy(ring: RingImpl): Flow<List<RingImpl>> {
+        val result = if (ring.trainingId > 0) {
             val idSpeechKit =
-                (speechKitSource.add(ring.speech as SpeechKitImpl) as StateFlow).value.idSpeechKit
+                (speechKitSource.copy(ring.speech as SpeechKitImpl) as StateFlow).value.idSpeechKit
             val ringId = dao.add(toRingTable(ring).copy(speechId = idSpeechKit))
             if (ring.exercise.isNotEmpty()) {
                 ring.exercise.forEach { exercise ->
-                    exerciseSource.addCopy((exercise as ExerciseImpl).copy(ringId = ringId))
+                    exerciseSource.copy((exercise as ExerciseImpl).copy(ringId = ringId))
                 }
             } else {
-                exerciseSource.addCopy(createExerciseImpl(ringId = ringId))
+                exerciseSource.add(ringId = ringId)
             }
-        } else { Log.d("KDS", "The value is not defined TRAINING_ID")}
-        return gets(ring.trainingId)
+            gets(ring.trainingId)
+        } else {
+            Log.d("KDS", "The value is not defined TRAINING_ID")
+            flow { emit(emptyList()) }
+        }
+        return result
     }
-
     override fun update(ring: RingImpl): Flow<RingImpl> {
         dao.update(toRingTable(ring).copy(idRing = ring.idRing))
         return get(ring.idRing)

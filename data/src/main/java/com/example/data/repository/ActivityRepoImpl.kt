@@ -3,7 +3,7 @@ package com.example.data.repository
 import com.example.data.entity.ActivityImpl
 import com.example.data.source.room.ActivitySource
 import com.example.domain.entity.Activity
-import com.example.domain.repository.training.ActivityRepo
+import com.example.domain.repository.trainings.ActivityRepo
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 

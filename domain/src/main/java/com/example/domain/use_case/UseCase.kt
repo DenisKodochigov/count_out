@@ -1,12 +1,13 @@
 package com.example.domain.use_case
 
-import com.example.domain.entity.throwable.Result
+import com.example.domain.entity.throwable.ResultUC
 import com.example.domain.entity.throwable.ThrowableUC
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
+
 /**
  * В этом шаблоне мы определили абстракцию объектов передачи данных, а также класс Configuration,
  * который содержит CoroutineDispatcher. Цель создания этого класса Configuration заключается в том,
@@ -18,10 +19,10 @@ import kotlinx.coroutines.flow.map
 abstract class UseCase<I: UseCase.Request, O: UseCase.Response>(
     private val configuration: Configuration
 ) {
-    fun execute(input: I): Flow<Result<O>> = executeData(input)
-            .map { Result.Success(it) as Result<O> }
+    fun execute(input: I): Flow<ResultUC<O>> = executeData(input)
+            .map { ResultUC.Success(it) as ResultUC<O> }
             .flowOn(configuration.dispatcher)
-            .catch { emit(Result.Error(ThrowableUC.extractThrowable(it)) as Result<Nothing>) }
+            .catch { emit(ResultUC.Error(ThrowableUC.extractThrowable(it)) as ResultUC<Nothing>) }
     class Configuration(val dispatcher: CoroutineDispatcher)
     internal abstract fun executeData(input: I): Flow<O>
     interface Request

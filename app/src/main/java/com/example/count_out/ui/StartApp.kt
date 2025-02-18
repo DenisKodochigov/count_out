@@ -12,12 +12,14 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTagsAsResourceId
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.rememberNavController
-import com.example.count_out.ui.navigation.NavHostApp
-import com.example.count_out.ui.navigation.backScreenDestination
-import com.example.count_out.ui.navigation.navigateToScreen
+import com.example.count_out.R
+import com.example.count_out.presentation.navigation.NavHostApp
+import com.example.count_out.presentation.navigation.backScreenDestination
+import com.example.count_out.presentation.navigation.navigateToScreen
 import com.example.count_out.ui.theme.AppTheme
 import com.example.count_out.ui.view_components.BottomBarApp
 import com.example.count_out.ui.view_components.CollapsingToolbar
+import com.example.domain.entity.enums.Units
 
 
 @OptIn(ExperimentalComposeUiApi::class)
@@ -30,7 +32,7 @@ fun StartApp() {
     AppTheme {
         val navController = rememberNavController()
         val currentScreen = navController.backScreenDestination()
-
+        initUnits()
         Scaffold(
             modifier = Modifier.semantics { testTagsAsResourceId = true },
             topBar = {
@@ -57,6 +59,15 @@ fun StartApp() {
     }
 }
 
+fun initUnits(){
+    Units.S.id = R.string.sec
+    Units.M.id = R.string.min
+    Units.H.id = R.string.hour
+    Units.KM.id = R.string.km
+    Units.M.id = R.string.m
+    Units.KG.id = R.string.kg
+    Units.GR.id = R.string.gr
+}
 
 @Preview
 @Composable

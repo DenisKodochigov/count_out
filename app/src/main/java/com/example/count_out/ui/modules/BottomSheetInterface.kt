@@ -1,6 +1,6 @@
 package com.example.count_out.ui.modules
 
-import com.example.count_out.entity.speech.SpeechKit
+import com.example.domain.entity.SpeechKit
 
 interface BottomSheetInterface {
     var item: Any?

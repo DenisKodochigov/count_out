@@ -9,6 +9,7 @@ import com.example.framework.room.db.round.RoundDao
 import com.example.framework.room.db.round.RoundTable
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
@@ -26,21 +27,32 @@ class RoundSourceImpl @Inject constructor(
 
     override fun get(id: Long): Flow<RoundImpl> = dao.get(id).map { it.toRound() }
 
-    override fun addCopy(round: RoundImpl): Flow<List<RoundImpl>> {
+    override fun add(round: RoundImpl): Flow<List<RoundImpl>> {
+        //Создавть раунд имеет смысл только в связке с какимнибудь тренировочным планом.
+        return if (round.trainingId > 0){
+            val roundId = dao.add(
+                RoundTable(speechId = (speechKitSource.add() as StateFlow).value.idSpeechKit))
+            exerciseSource.add(roundId = roundId)
+            gets(round.trainingId)
+        } else {
+            Log.d("KDS", "The value is not defined: TRAININGID ")
+            flow { emit(emptyList()) }
+        }
+    }
+    override fun copy(round: RoundImpl): Flow<List<RoundImpl>> {
         //Создавть раунд имеет смысл только в связке с какимнибудь тренировочным планом.
         if (round.trainingId > 0){
             val idSpeechKit =
-                (speechKitSource.add(round.speech as SpeechKitImpl) as StateFlow).value.idSpeechKit
+                (speechKitSource.copy(round.speech as SpeechKitImpl) as StateFlow).value.idSpeechKit
             val roundId = dao.add(toRoundTable(round).copy(speechId = idSpeechKit))
             if (round.exercise.isNotEmpty()) {
                 round.exercise.forEach { exercise->
-                    exerciseSource.addCopy((exercise as ExerciseImpl).copy(roundId = roundId)) }
+                    exerciseSource.copy((exercise as ExerciseImpl).copy(roundId = roundId)) }
             }
-            else { exerciseSource.addCopy(createExerciseImpl(roundId = roundId)) }
+            else { exerciseSource.add(roundId = roundId) }
         } else { Log.d("KDS", "The value is not defined: TRAININGID ")}
         return gets(round.trainingId)
     }
-
     override fun del(round: RoundImpl) {
         round.exercise.forEach { exerciseSource.del(it as ExerciseImpl) }
         round.speech?.let { speechKitSource.del(it as SpeechKitImpl) }

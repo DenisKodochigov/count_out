@@ -8,6 +8,7 @@ interface RoundSource {
     fun get(id: Long): Flow<Round>
     fun gets(trainingId: Long): Flow<List<Round>>
     fun del(round: RoundImpl)
-    fun addCopy(round: RoundImpl): Flow<List<RoundImpl>>
+    fun add(round: RoundImpl): Flow<List<RoundImpl>>
+    fun copy(round: RoundImpl): Flow<List<RoundImpl>>
     fun update(round: RoundImpl): Flow<Round>
 }

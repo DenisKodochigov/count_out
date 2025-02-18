@@ -3,7 +3,7 @@ package com.example.data.repository
 import com.example.data.entity.SpeechKitImpl
 import com.example.data.source.room.SpeechKitSource
 import com.example.domain.entity.SpeechKit
-import com.example.domain.repository.training.SpeechRepo
+import com.example.domain.repository.trainings.SpeechRepo
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 

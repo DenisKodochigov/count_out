@@ -10,7 +10,7 @@ import kotlinx.coroutines.flow.Flow
 interface SpeechKitDao {
 
     @Insert
-    fun add(item: SpeechKitTable)
+    fun add(item: SpeechKitTable): Long
 
     @Query("SELECT * FROM tb_speech_kit WHERE idSpeechKit = :id")
     fun get(id: Long): Flow<SpeechKitRel>

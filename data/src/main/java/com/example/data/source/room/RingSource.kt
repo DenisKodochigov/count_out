@@ -8,6 +8,7 @@ interface RingSource {
     fun get(id: Long): Flow<Ring>
     fun gets(trainingId: Long): Flow<List<Ring>>
     fun del(ring: RingImpl)
-    fun addCopy(ring: RingImpl): Flow<List<Ring>>
+    fun add(trainingId: Long): Flow<List<Ring>>
+    fun copy(ring: RingImpl): Flow<List<Ring>>
     fun update(ring: RingImpl): Flow<Ring>
 }
