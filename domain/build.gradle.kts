@@ -6,7 +6,7 @@ plugins {
 }
 
 android {
-    namespace = "com.example.domain"
+    namespace = "com.count_out.domain"
     compileSdk = 35
 
     defaultConfig {

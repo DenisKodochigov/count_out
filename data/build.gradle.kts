@@ -6,7 +6,7 @@ plugins {
 }
 
 android {
-    namespace = "com.example.data"
+    namespace = "com.count_out.data"
     compileSdk = 35
 
     defaultConfig {

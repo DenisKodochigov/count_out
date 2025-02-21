@@ -3,7 +3,7 @@
 kotlin = "2.1.0"
 kspVersion = "2.1.0-1.0.29"
 serialization_plugin = "2.0.21"
-agp = "8.8.0"
+agp = "8.8.1"
 composeV = "1.7.8"
 composeBom = "2025.02.00"
 composeActivity = "1.10.0"
@@ -39,7 +39,7 @@ moskito = "5.12.0"
 moskito-inline = "5.2.0"
 moskito-kotlin = "5.4.0"
 ui-test = "1.7.8"
-lifecycleViewmodelKtx = "2.6.2"
+lifecycleViewmodelKtx = "2.8.7"
 #storage = "1.5.0"
 #androidMapsUtils = "2.3.0"
 #firebase_crashlytics = "3.0.2"
@@ -142,7 +142,7 @@ espresso-core = { module = "androidx.test.espresso:espresso-core", version.ref =
 ui-test-junit4 = { module = "androidx.compose.ui:ui-test-junit4", version.ref = "ui-test" }
 ui-test-manifest = { module = "androidx.compose.ui:ui-test-manifest", version.ref = "ui-test" }
 ext-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
-androidx-lifecycle-viewmodel-ktx = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-ktx", version.ref = "lifecycleViewmodelKtx" }
+androidx-lifecycle-viewmodel-ktx = { module = "androidx.lifecycle:lifecycle-viewmodel-ktx", version.ref = "lifecycleViewmodelKtx" }
 #appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
 #material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 #test-storage = { module = "androidx.test.services:storage", version.ref = "storage" }

@@ -10,12 +10,12 @@ plugins {
     }
 
 android {
-    namespace = "com.example.count_out"
+    namespace = "com.count_out.app"
     compileSdk = 35
     buildToolsVersion = "35.0.0"
 
     defaultConfig {
-        applicationId = "com.example.count_out"
+        applicationId = "com.count_out"
         minSdk = 28
         targetSdk = 35
         versionCode = 1
@@ -75,6 +75,7 @@ dependencies {
     //Hilt
     implementation (libs.bundles.hilt)
     implementation(libs.androidx.lifecycle.viewmodel.ktx)
+    implementation(project(":data"))
     ksp (libs.bundles.hiltksp)
     //Location
     implementation(libs.bundles.gms)

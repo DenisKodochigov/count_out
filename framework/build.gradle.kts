@@ -7,7 +7,7 @@ plugins {
 }
 
 android {
-    namespace = "com.example.framework"
+    namespace = "com.count_out.framework"
     compileSdk = 35
 
     defaultConfig {

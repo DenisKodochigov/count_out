@@ -6,7 +6,7 @@ pluginManagement {
     }
 }
 
-rootProject.name = "count_out"
+rootProject.name = "app"
 include(":app")
 include(":domain")
 include(":device")
