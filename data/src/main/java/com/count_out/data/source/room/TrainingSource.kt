@@ -1,6 +1,6 @@
 package com.count_out.data.source.room
 
-import com.count_out.data.entity.TrainingImpl
+import com.count_out.data.models.TrainingImpl
 import com.count_out.domain.entity.Training
 import kotlinx.coroutines.flow.Flow
 

@@ -15,7 +15,6 @@ import androidx.core.app.ActivityCompat
 import com.count_out.app.entity.MessageApp
 import com.count_out.app.ui.permission.RequestPermissionsAll
 import com.count_out.app.services.count_out.CountOutServiceBind
-import com.count_out.app.ui.StartApp
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -32,7 +31,7 @@ class MainActivity: ComponentActivity()
         enableEdgeToEdge()
         setContent {
             RequestPermissionsAll()
-            StartApp()
+            com.count_out.presentation.StartApp()
         }
     }
     override fun onStart() {

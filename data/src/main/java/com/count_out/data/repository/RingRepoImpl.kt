@@ -1,6 +1,6 @@
 package com.count_out.data.repository
 
-import com.count_out.data.entity.RingImpl
+import com.count_out.data.models.RingImpl
 import com.count_out.data.source.room.RingSource
 import com.count_out.domain.entity.Ring
 import com.count_out.domain.repository.trainings.RingRepo

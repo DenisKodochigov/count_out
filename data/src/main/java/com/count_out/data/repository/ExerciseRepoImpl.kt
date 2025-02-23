@@ -1,6 +1,6 @@
 package com.count_out.data.repository
 
-import com.count_out.data.entity.ExerciseImpl
+import com.count_out.data.models.ExerciseImpl
 import com.count_out.data.source.room.ExerciseSource
 import com.count_out.domain.entity.ActionWithActivity
 import com.count_out.domain.entity.DataForChangeSequence

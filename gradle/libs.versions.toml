@@ -40,6 +40,8 @@ moskito-inline = "5.2.0"
 moskito-kotlin = "5.4.0"
 ui-test = "1.7.8"
 lifecycleViewmodelKtx = "2.8.7"
+appcompat = "1.7.0"
+material = "1.12.0"
 #storage = "1.5.0"
 #androidMapsUtils = "2.3.0"
 #firebase_crashlytics = "3.0.2"
@@ -143,6 +145,8 @@ ui-test-junit4 = { module = "androidx.compose.ui:ui-test-junit4", version.ref = 
 ui-test-manifest = { module = "androidx.compose.ui:ui-test-manifest", version.ref = "ui-test" }
 ext-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
 androidx-lifecycle-viewmodel-ktx = { module = "androidx.lifecycle:lifecycle-viewmodel-ktx", version.ref = "lifecycleViewmodelKtx" }
+androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
+material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 #appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
 #material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 #test-storage = { module = "androidx.test.services:storage", version.ref = "storage" }

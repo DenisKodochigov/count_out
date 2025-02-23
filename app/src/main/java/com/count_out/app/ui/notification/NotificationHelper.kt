@@ -8,18 +8,17 @@ import android.content.Intent
 import androidx.core.app.NotificationCompat
 import com.count_out.app.MainActivity
 import com.count_out.app.R
-import com.count_out.app.domain.router.models.DataForNotification
-import com.count_out.app.entity.Const.NOTIFICATION_CHANNEL_DESCRIPTION
-import com.count_out.app.entity.Const.NOTIFICATION_CHANNEL_ID
-import com.count_out.app.entity.Const.NOTIFICATION_CHANNEL_NAME
-import com.count_out.app.entity.Const.NOTIFICATION_EXTRA
-import com.count_out.app.entity.Const.NOTIFICATION_ID
-import com.count_out.app.entity.Const.PAUSE_REQUEST_CODE
-import com.count_out.app.entity.Const.SET_CONTENT_TITLE
-import com.count_out.app.entity.Const.START_REQUEST_CODE
-import com.count_out.app.entity.Const.STOP_REQUEST_CODE
-import com.count_out.app.entity.RunningState
-import com.count_out.app.services.count_out.CountOutService
+import com.count_out.app.entity.NOTIFICATION_CHANNEL_DESCRIPTION
+import com.count_out.app.entity.NOTIFICATION_CHANNEL_ID
+import com.count_out.app.entity.NOTIFICATION_CHANNEL_NAME
+import com.count_out.app.entity.NOTIFICATION_EXTRA
+import com.count_out.app.entity.NOTIFICATION_ID
+import com.count_out.app.entity.PAUSE_REQUEST_CODE
+import com.count_out.app.entity.SET_CONTENT_TITLE
+import com.count_out.app.entity.START_REQUEST_CODE
+import com.count_out.app.entity.STOP_REQUEST_CODE
+import com.count_out.domain.entity.enums.RunningState
+import com.count_out.services.service_count_out.models.CountOutService
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -35,7 +34,7 @@ class NotificationHelper @Inject constructor(private val context: Context)
 
     private val builderPause: NotificationCompat.Builder = NotificationCompat.Builder(context, NOTIFICATION_CHANNEL_ID)
         .setContentTitle(SET_CONTENT_TITLE)
-        .setContentText(contextText(DataForNotification()))
+        .setContentText(contextText(DataNotificationImpl()))
 //        .setOngoing(false)
         .setContentIntent(pendingIntentA)
         .setSmallIcon(R.drawable.ic_timer)
@@ -45,7 +44,7 @@ class NotificationHelper @Inject constructor(private val context: Context)
         .setAutoCancel(true)
     private val builderContinue: NotificationCompat.Builder = NotificationCompat.Builder(context, NOTIFICATION_CHANNEL_ID)
         .setContentTitle(SET_CONTENT_TITLE)
-        .setContentText(contextText(DataForNotification()))
+        .setContentText(contextText(DataNotificationImpl()))
         .setOngoing(false)
         .setContentIntent(pendingIntentA)
         .setSmallIcon(R.drawable.ic_timer)
@@ -55,7 +54,7 @@ class NotificationHelper @Inject constructor(private val context: Context)
         .setAutoCancel(true)
     private val builderStart: NotificationCompat.Builder = NotificationCompat.Builder(context, NOTIFICATION_CHANNEL_ID)
         .setContentTitle(SET_CONTENT_TITLE)
-        .setContentText(contextText(DataForNotification()))
+        .setContentText(contextText(DataNotificationImpl()))
         .setOngoing(false)
         .setContentIntent(pendingIntentA)
         .setSmallIcon(R.drawable.ic_timer)
@@ -72,7 +71,7 @@ class NotificationHelper @Inject constructor(private val context: Context)
     }
     fun build() = builderStart.build()
     fun cancel(){ manager.cancel(NOTIFICATION_ID) }
-    fun updateNotification(data: DataForNotification?, state: RunningState) {
+    fun updateNotification(data: DataNotificationImpl?, state: RunningState) {
         data?.let {
             when(state){
                 RunningState.Started->manager
@@ -85,7 +84,7 @@ class NotificationHelper @Inject constructor(private val context: Context)
             }
         }
     }
-    private fun contextText(data: DataForNotification) = "${data.hours}:${data.minutes}:${data.seconds}" +
+    private fun contextText(data: DataNotificationImpl) = "${data.hours}:${data.minutes}:${data.seconds}" +
             "    ${data.heartRate}    " + if (data.enableLocation) "GPS YES" else "GPS NO"
 
     private fun intentAction(value: String, code: Int):PendingIntent =

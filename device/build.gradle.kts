@@ -41,6 +41,7 @@ dependencies {
 
     implementation(project(":data"))
     implementation(project(":domain"))
+    implementation(project(":services"))
     implementation(libs.bundles.core)
     implementation (libs.bundles.hilt)
     ksp (libs.bundles.hiltksp)

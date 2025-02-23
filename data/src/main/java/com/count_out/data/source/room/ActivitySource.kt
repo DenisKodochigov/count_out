@@ -1,6 +1,6 @@
 package com.count_out.data.source.room
 
-import com.count_out.data.entity.ActivityImpl
+import com.count_out.data.models.ActivityImpl
 import kotlinx.coroutines.flow.Flow
 
 interface ActivitySource {

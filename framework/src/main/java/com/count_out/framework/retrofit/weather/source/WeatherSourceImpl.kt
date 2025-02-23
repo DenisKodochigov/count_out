@@ -1,6 +1,6 @@
 package com.count_out.framework.retrofit.weather.source
 
-import com.count_out.data.entity.WeatherImpl
+import com.count_out.data.models.WeatherImpl
 import com.count_out.data.source.network.WeatherSource
 import com.count_out.data.throwable.ThrowableSD
 import com.count_out.framework.retrofit.weather.WeatherService

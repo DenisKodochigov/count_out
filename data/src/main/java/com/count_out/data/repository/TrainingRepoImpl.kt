@@ -1,6 +1,6 @@
 package com.count_out.data.repository
 
-import com.count_out.data.entity.TrainingImpl
+import com.count_out.data.models.TrainingImpl
 import com.count_out.data.source.room.RoundSource
 import com.count_out.data.source.room.TrainingSource
 import com.count_out.domain.entity.Training

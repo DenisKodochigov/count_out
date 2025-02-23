@@ -1,39 +1,39 @@
 package com.count_out.app.device.timer
 
 import android.os.SystemClock
-import com.count_out.app.entity.RunningState
+import com.count_out.domain.entity.enums.RunningState
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 
-class Delay{
-
-    suspend fun run(delay: Long, pause: MutableStateFlow<RunningState?>){
-        val startTime: Long = SystemClock.elapsedRealtime()
-        var pauseTime: Long = 0
-        val endTime: MutableStateFlow<Long> = MutableStateFlow(startTime + delay)
-        while (endTime.value > SystemClock.elapsedRealtime() ) {
-            when (pause.value){
-                RunningState.Started -> {
-                    if (pauseTime != 0L) {
-                        endTime.value = pauseTime + (SystemClock.elapsedRealtime() - pauseTime)
-                        pauseTime = 0L
-                    }
-                }
-                RunningState.Stopped -> {
-                    endTime.value = SystemClock.elapsedRealtime()
-                }
-                RunningState.Paused -> {
-                    if (pauseTime == 0L) {
-                        pauseTime = endTime.value
-                        endTime.value += 100000000000L
-                    }
-                }
-                else-> {}
-            }
-            delay(1)
-        }
-    }
-}
+//class Delay{
+//
+//    suspend fun run(delay: Long, pause: MutableStateFlow<RunningState?>){
+//        val startTime: Long = SystemClock.elapsedRealtime()
+//        var pauseTime: Long = 0
+//        val endTime: MutableStateFlow<Long> = MutableStateFlow(startTime + delay)
+//        while (endTime.value > SystemClock.elapsedRealtime() ) {
+//            when (pause.value){
+//                RunningState.Started -> {
+//                    if (pauseTime != 0L) {
+//                        endTime.value = pauseTime + (SystemClock.elapsedRealtime() - pauseTime)
+//                        pauseTime = 0L
+//                    }
+//                }
+//                RunningState.Stopped -> {
+//                    endTime.value = SystemClock.elapsedRealtime()
+//                }
+//                RunningState.Paused -> {
+//                    if (pauseTime == 0L) {
+//                        pauseTime = endTime.value
+//                        endTime.value += 100000000000L
+//                    }
+//                }
+//                else-> {}
+//            }
+//            delay(1)
+//        }
+//    }
+//}
 
 //suspend fun delayMy(delay: Long, pause: MutableStateFlow<RunningState?>){
 //    val state: MutableStateFlow <RunningState?> = pause

@@ -71,11 +71,11 @@ android {
 
 dependencies {
     implementation(project(":domain"))
+    implementation(project(":data"))
     implementation(libs.bundles.core)
     //Hilt
     implementation (libs.bundles.hilt)
     implementation(libs.androidx.lifecycle.viewmodel.ktx)
-    implementation(project(":data"))
     ksp (libs.bundles.hiltksp)
     //Location
     implementation(libs.bundles.gms)

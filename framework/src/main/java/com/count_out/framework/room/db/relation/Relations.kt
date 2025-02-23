@@ -2,13 +2,13 @@ package com.count_out.framework.room.db.relation
 
 import androidx.room.Embedded
 import androidx.room.Relation
-import com.count_out.data.entity.ExerciseImpl
-import com.count_out.data.entity.ParameterImpl
-import com.count_out.data.entity.RingImpl
-import com.count_out.data.entity.RoundImpl
-import com.count_out.data.entity.SetImpl
-import com.count_out.data.entity.SpeechKitImpl
-import com.count_out.data.entity.TrainingImpl
+import com.count_out.data.models.ExerciseImpl
+import com.count_out.data.models.ParameterImpl
+import com.count_out.data.models.RingImpl
+import com.count_out.data.models.RoundImpl
+import com.count_out.data.models.SetImpl
+import com.count_out.data.models.SpeechKitImpl
+import com.count_out.data.models.TrainingImpl
 import com.count_out.domain.entity.enums.Goal
 import com.count_out.domain.entity.enums.RoundType
 import com.count_out.domain.entity.enums.Units

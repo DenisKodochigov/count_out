@@ -1,6 +1,6 @@
 package com.count_out.data.repository
 
-import com.count_out.data.entity.SetImpl
+import com.count_out.data.models.SetImpl
 import com.count_out.data.source.room.SetSource
 import com.count_out.domain.entity.ActionWithSet
 import com.count_out.domain.entity.Set

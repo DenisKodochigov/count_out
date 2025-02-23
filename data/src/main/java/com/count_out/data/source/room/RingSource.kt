@@ -1,6 +1,6 @@
 package com.count_out.data.source.room
 
-import com.count_out.data.entity.RingImpl
+import com.count_out.data.models.RingImpl
 import com.count_out.domain.entity.Ring
 import kotlinx.coroutines.flow.Flow
 

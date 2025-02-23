@@ -1,15 +1,14 @@
 package com.count_out.framework.room.source
 
-import com.count_out.data.entity.RoundImpl
-import com.count_out.data.entity.SpeechKitImpl
-import com.count_out.data.entity.TrainingImpl
+import com.count_out.data.models.RoundImpl
+import com.count_out.data.models.SpeechKitImpl
+import com.count_out.data.models.TrainingImpl
 import com.count_out.data.source.room.TrainingSource
 import com.count_out.domain.entity.Training
 import com.count_out.domain.entity.enums.RoundType
 import com.count_out.framework.room.db.training.TrainingDao
 import com.count_out.framework.room.db.training.TrainingTable
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
@@ -24,8 +23,7 @@ class TrainingSourceImpl @Inject constructor(
     }
 
     override fun add(): Flow<List<Training>> {
-        val trainingId = ( dao.add(
-                TrainingTable( speechId = (speechKitSource.add() as StateFlow).value.idSpeechKit)))
+        val trainingId = ( dao.add( TrainingTable( speechId = speechKitSource.addL())))
         roundSource.add( newRoundImpl(trainingId = trainingId, roundType = RoundType.WorkUp))
         roundSource.add( newRoundImpl(trainingId = trainingId, roundType = RoundType.WorkOut))
         roundSource.add( newRoundImpl(trainingId = trainingId, roundType = RoundType.WorkDown))
@@ -33,7 +31,7 @@ class TrainingSourceImpl @Inject constructor(
     }
 
     override fun copy(training: TrainingImpl): Flow<List<Training>> {
-        val idSpeechKit = (speechKitSource.copy(training.speech as SpeechKitImpl) as StateFlow).value.idSpeechKit
+        val idSpeechKit = speechKitSource.copyL(training.speech as SpeechKitImpl)
         val trainingId = (dao.add(toTrainingTable(training.copy(speechId = idSpeechKit))))
         if (training.rounds.isNotEmpty()) {
             training.rounds.forEach { round->

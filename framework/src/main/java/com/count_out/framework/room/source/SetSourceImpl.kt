@@ -1,13 +1,12 @@
 package com.count_out.framework.room.source
 
-import com.count_out.data.entity.SetImpl
-import com.count_out.data.entity.SpeechKitImpl
+import com.count_out.data.models.SetImpl
+import com.count_out.data.models.SpeechKitImpl
 import com.count_out.data.source.room.SetSource
 import com.count_out.domain.entity.ActionWithSet
 import com.count_out.framework.room.db.set.SetDao
 import com.count_out.framework.room.db.set.SetTable
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
@@ -18,7 +17,7 @@ class SetSourceImpl @Inject constructor(
 
     override fun add(item: ActionWithSet): Flow<List<SetImpl>> {
          return if (item.set.exerciseId > 0L) {
-            setDao.add(SetTable(speechId = (speechKitSource.add() as StateFlow).value.idSpeechKit))
+            setDao.add(SetTable(speechId = speechKitSource.addL()))
             gets(item.set.exerciseId)
         } else flow { emit ( emptyList()) }
     }
@@ -26,7 +25,7 @@ class SetSourceImpl @Inject constructor(
         return if (item.set.exerciseId > 0L) {
             if (item.set.idSet > 0) {
                 val idSpeechKit = item.set.speech?.let {
-                    (speechKitSource.copy(it as SpeechKitImpl) as StateFlow).value.idSpeechKit } ?: 0
+                    speechKitSource.copyL(it as SpeechKitImpl) } ?: speechKitSource.addL()
                 setDao.add(toSetTable((item.set as SetImpl).copy(speechId = idSpeechKit)))
             }
             gets(item.set.exerciseId)

@@ -8,11 +8,12 @@ import android.bluetooth.le.ScanResult
 import android.bluetooth.le.ScanSettings
 import android.content.Context
 import android.os.ParcelUuid
+import com.count_out.data.models.RunningState
+import com.count_out.data.pervission.PermissionApp
+import com.count_out.data.router.models.DataFromBle
 import com.count_out.device.bluetooth.models.BleStates
 import com.count_out.device.bluetooth.models.Const
-import com.count_out.device.timer.Delay
-import com.count_out.domain.entity.enums.RunningState
-import com.count_out.domain.entity.router.models.DataFromBle
+import com.count_out.services.service_timing.Delay
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -24,7 +25,7 @@ import javax.inject.Singleton
 class BleScanner @Inject constructor(
     val context: Context,
     private val bluetoothAdapter: BluetoothAdapter,
-//    private val permissionApp: PermissionApp
+    private val permissionApp: PermissionApp
 ) {
 //    private val timer = TimerMy()
     private lateinit var scanCallback: ScanCallback
@@ -52,7 +53,10 @@ class BleScanner @Inject constructor(
                 bleScanner.startScan( scanFilters(), scanSettings(0L), scanCallback)
 //            }
             dataFromBle.scannedBle.value = true
-            Delay().run(delay = timeScanning * 1000L, bleStates.stateBleScanner)
+            Delay().run(
+                delay = timeScanning * 1000L,
+                bleStates.stateBleScanner
+            )
             bleStates.stateBleScanner.value = RunningState.Stopped
             stopScanner(dataFromBle)
 //            timer.start(

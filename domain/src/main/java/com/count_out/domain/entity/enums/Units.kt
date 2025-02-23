@@ -4,7 +4,6 @@ enum class Goal { Distance, Duration, Count, CountGroup}
 enum class Units(var id: Int) {H(0), M(0), S(0), KM(0), MT(0), KG(0), GR(0)}
 enum class Zone {Min, Low, Medium,High,Max}
 enum class RoundType {WorkUp, WorkOut, WorkDown}
-enum class RunningState { Binding, Started, Paused, Stopped }
 //interface Uni
 //fun interface GetId{ fun ex(u: Uni): Int}
 //sealed class Units {

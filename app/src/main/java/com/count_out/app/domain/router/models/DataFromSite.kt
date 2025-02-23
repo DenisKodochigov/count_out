@@ -1,8 +1,8 @@
 package com.count_out.app.domain.router.models
 
-import com.count_out.app.entity.workout.Coordinate
+import com.count_out.data.entity.Coordinate
 import kotlinx.coroutines.flow.MutableStateFlow
 
-data class DataFromSite (
-    val coordinate: MutableStateFlow<Coordinate?> = MutableStateFlow( null),
-)
+//data class DataFromSite (
+//    val coordinate: MutableStateFlow<Coordinate?> = MutableStateFlow( null),
+//)

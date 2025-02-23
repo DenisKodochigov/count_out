@@ -1,6 +1,6 @@
 package com.count_out.framework.room.source
 
-import com.count_out.data.entity.ActivityImpl
+import com.count_out.data.models.ActivityImpl
 import com.count_out.data.source.room.ActivitySource
 import com.count_out.framework.room.db.activity.ActivityDao
 import com.count_out.framework.room.db.activity.ActivityTable

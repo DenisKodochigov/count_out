@@ -2,7 +2,7 @@ package com.count_out.framework.room.db.training
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.count_out.data.entity.TrainingImpl
+import com.count_out.data.models.TrainingImpl
 
 
 @Entity(tableName = "tb_trainings")

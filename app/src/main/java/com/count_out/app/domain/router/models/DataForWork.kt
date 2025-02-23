@@ -1,101 +1,91 @@
 package com.count_out.app.domain.router.models
 
-import com.count_out.app.R
-import com.count_out.app.data.room.tables.SetDB
-import com.count_out.app.entity.DistanceE
-import com.count_out.app.entity.GoalSet
-import com.count_out.app.entity.TimeE
-import com.count_out.app.entity.workout.Exercise
-import com.count_out.app.entity.workout.StepTraining
-import com.count_out.app.entity.workout.Training
-import com.count_out.app.ui.modules.NextExercise
-import kotlinx.coroutines.flow.MutableStateFlow
-
-data class DataForWork (
-    var training: MutableStateFlow<Training?> = MutableStateFlow(null),
-    var enableSpeechDescription: MutableStateFlow<Boolean> = MutableStateFlow(true),
-    var idSetChangeInterval: MutableStateFlow<Long> = MutableStateFlow(0),
-    var interval: MutableStateFlow<Double> = MutableStateFlow(0.0),
-    var indexMap: Int = 0,
-    var indexRound: Int = 0,
-    var indexExercise: Int = 0,
-    var indexSet: Int = 0,
-    var cancelCoroutineWork: ()-> Unit = {},
-    val dataFromWork: DataFromWork? = null,
-
-    var map: MutableList<StepTraining> = mutableListOf<StepTraining>(),
-    var exerciseCount: Int = 0,
-){
-    fun empty(){
-        indexRound = 0
-        indexExercise = 0
-        indexSet = 0
-    }
-
-    fun initStepTraining(){
-        dataFromWork?.stepTraining?.value = if (map.isNotEmpty()) map[indexMap] else null
-    }
-    fun sendStepTrainingShort(){
-        dataFromWork?.stepTraining?.value = map[indexMap]
-    }
-    fun sendStepTraining(){
-        dataFromWork?.stepTraining?.value =
-            if (interval.value > 0) {
-                map[indexMap].copy(currentSet = map[indexMap].currentSet?.let { set ->
-                   (set as SetDB).copy(intervalReps = interval.value) })}
-            else map[indexMap]
-    }
-
-    fun createMapTraining(){
-        var numberExercise = 1
-        val list: MutableList<StepTraining> = mutableListOf()
-        this.training.value?.let { tr->
-            tr.rounds.forEachIndexed { indR, round-> exerciseCount += round.exercise.count() }
-            tr.rounds.forEachIndexed { indR, round->
-                round.exercise.forEachIndexed { indE,exercise ->
-                    if (list.isNotEmpty()){
-                        val nextExercise = nextExercise(exercise)
-                        for (ind in list.lastIndex downTo 0){
-                            if (list[ind].nextExercise == null){
-                                list[ind] = list[ind].copy(nextExercise = nextExercise)
-                            }
-                        }
-                    }
-                    exercise.sets.forEachIndexed { indS, set->
-                        list.add(
-                            StepTraining(
-                                round = round,
-                                exercise = exercise,
-                                numberExercise = numberExercise,
-                                quantityExercise = exerciseCount,
-                                currentSet = set,
-                                numberSet = indS + 1,
-                                quantitySet = exercise.sets.count()
-                        ))
-                    }
-                    numberExercise ++
-                }
-            }
-        }
-        this.map = list
-    }
-    fun nextExercise(exercise: Exercise): NextExercise {
-        val list: MutableList<Pair<String, Int>> = mutableListOf()
-        exercise.sets.forEachIndexed { _, set ->
-            list.add( when (set.goal) {
-                GoalSet.DURATION -> "${set.duration / (if (set.durationE == TimeE.SEC) 1 else 60)}" to set.durationE.id
-                GoalSet.DISTANCE -> "${set.distance / (if (set.distanceE == DistanceE.M) 1 else 1000)}" to set.distanceE.id
-                GoalSet.COUNT -> "${set.reps}" to R.string.rep
-                GoalSet.COUNT_GROUP -> "" to 0 }
-            )
-        }
-        return NextExercise(
-                    nextActivityName = exercise.activity.name.toString(),
-                    nextExerciseId = exercise.idExercise,
-                    nextExerciseQuantitySet = exercise.sets.count(),
-                    nextExerciseSummarizeSet = list )
-    }
-}
+//
+//data class DataForWork (
+//    var training: MutableStateFlow<Training?> = MutableStateFlow(null),
+//    var enableSpeechDescription: MutableStateFlow<Boolean> = MutableStateFlow(true),
+//    var idSetChangeInterval: MutableStateFlow<Long> = MutableStateFlow(0),
+//    var interval: MutableStateFlow<Double> = MutableStateFlow(0.0),
+//    var indexMap: Int = 0,
+//    var indexRound: Int = 0,
+//    var indexExercise: Int = 0,
+//    var indexSet: Int = 0,
+//    var cancelCoroutineWork: ()-> Unit = {},
+//    val dataFromWork: DataFromWork? = null,
+//
+//    var map: MutableList<StepTraining> = mutableListOf<StepTraining>(),
+//    var exerciseCount: Int = 0,
+//){
+//    fun empty(){
+//        indexRound = 0
+//        indexExercise = 0
+//        indexSet = 0
+//    }
+//
+//    fun initStepTraining(){
+//        dataFromWork?.stepTraining?.value = if (map.isNotEmpty()) map[indexMap] else null
+//    }
+//    fun sendStepTrainingShort(){
+//        dataFromWork?.stepTraining?.value = map[indexMap]
+//    }
+//    fun sendStepTraining(){
+////        dataFromWork?.stepTraining?.value =
+////            if (interval.value > 0) {
+////                map[indexMap].copy(currentSet = map[indexMap].currentSet?.let { set ->
+////                   (set as Set).copy(intervalReps = interval.value) })}
+////            else map[indexMap]
+//    }
+//
+//    fun createMapTraining(){
+//        var numberExercise = 1
+//        val list: MutableList<StepTraining> = mutableListOf()
+//        this.training.value?.let { tr->
+//            tr.rounds.forEachIndexed { indR, round-> exerciseCount += round.exercise.count() }
+//            tr.rounds.forEachIndexed { indR, round->
+//                round.exercise.forEachIndexed { indE,exercise ->
+//                    if (list.isNotEmpty()){
+//                        val nextExercise = nextExercise(exercise)
+//                        for (ind in list.lastIndex downTo 0){
+//                            if (list[ind].nextExercise == null){
+//                                list[ind] = list[ind].copy(nextExercise = nextExercise)
+//                            }
+//                        }
+//                    }
+//                    exercise.sets.forEachIndexed { indS, set->
+//                        list.add(
+//                            StepTraining(
+//                                round = round,
+//                                exercise = exercise,
+//                                numberExercise = numberExercise,
+//                                quantityExercise = exerciseCount,
+//                                currentSet = set,
+//                                numberSet = indS + 1,
+//                                quantitySet = exercise.sets.count()
+//                        ))
+//                    }
+//                    numberExercise ++
+//                }
+//            }
+//        }
+//        this.map = list
+//    }
+//    fun nextExercise(exercise: Exercise): NextExercise {
+//        val list: MutableList<Pair<String, Int>> = mutableListOf()
+//        exercise.sets.forEachIndexed { _, set ->
+//            list.add( when (set.goal) {
+//                Goal.Duration -> "${set.duration.value / (if (set.duration.unit == Units.S) 1 else 60)}" to set.duration.unit.id
+//                Goal.Distance -> "${set.distance.value / (if (set.distance.unit == Units.MT) 1 else 1000)}" to set.distance.unit.id
+//                Goal.Count -> "${set.reps}" to R.string.rep
+//                Goal.CountGroup -> "" to 0 }
+//            )
+//        }
+//        return NextExercise(
+//                    nextActivityName = exercise.activity.name.toString(),
+//                    nextExerciseId = exercise.idExercise,
+//                    nextExerciseQuantitySet = exercise.sets.count(),
+//                    nextExerciseSummarizeSet = list )
+//    }
+//}
 //    fun setExecuteInfoExercise(index: Int){
 //        dataFromWork?.executeInfoExercise?.value = ExecuteInfoExercise(
 //            activity = map[index].exercise?.activity,

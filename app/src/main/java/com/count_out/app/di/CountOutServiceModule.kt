@@ -1,15 +1,13 @@
 package com.count_out.app.di
 
 import android.content.Context
-import com.count_out.app.data.DataRepository
+import com.count_out.app.data.location.LocationWithOutGoogle
+import com.count_out.app.device.Site
 import com.count_out.app.device.text_to_speech.SpeechManager
-import com.count_out.app.ui.permission.PermissionApp
 import com.count_out.app.services.count_out.CountOutService
 import com.count_out.app.services.count_out.CountOutServiceBind
 import com.count_out.app.services.count_out.ServiceUtils
-import com.count_out.app.data.location.LocationWithOutGoogle
-import com.count_out.app.data.logging.Logging
-import com.count_out.app.device.Site
+import com.count_out.app.ui.permission.PermissionApp
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -41,11 +39,11 @@ class CountOutServiceModule {
         return Site(appContext, permissionApp)
     }
 
-    @Singleton
-    @Provides
-    fun provideLogging(dataRepository: DataRepository): Logging {
-        return Logging(dataRepository)
-    }
+//    @Singleton
+//    @Provides
+//    fun provideLogging(dataRepository: DataRepository): Logging {
+//        return Logging(dataRepository)
+//    }
 
     @Singleton
     @Provides

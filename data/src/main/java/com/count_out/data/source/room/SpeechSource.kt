@@ -1,6 +1,6 @@
 package com.count_out.data.source.room
 
-import com.count_out.data.entity.SpeechImpl
+import com.count_out.data.models.SpeechImpl
 import com.count_out.domain.entity.Speech
 import kotlinx.coroutines.flow.Flow
 

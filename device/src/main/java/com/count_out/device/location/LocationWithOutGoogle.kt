@@ -5,7 +5,7 @@ import android.content.Context.LOCATION_SERVICE
 import android.location.Location
 import android.location.LocationListener
 import android.location.LocationManager
-import com.count_out.domain.entity.router.models.DataFromSite
+import com.count_out.data.router.models.DataFromSite
 import javax.inject.Inject
 
 class LocationWithOutGoogle @Inject constructor(val context: Context,

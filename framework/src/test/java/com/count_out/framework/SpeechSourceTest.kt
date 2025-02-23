@@ -1,6 +1,6 @@
 package com.count_out.framework
 
-import com.count_out.data.entity.SpeechImpl
+import com.count_out.data.models.SpeechImpl
 import com.count_out.data.source.network.WeatherSource
 import com.count_out.data.source.room.SpeechSource
 import kotlinx.coroutines.ExperimentalCoroutinesApi

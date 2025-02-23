@@ -1,9 +1,9 @@
 package com.count_out.framework.room.source
 
 import android.util.Log
-import com.count_out.data.entity.ExerciseImpl
-import com.count_out.data.entity.RoundImpl
-import com.count_out.data.entity.SpeechKitImpl
+import com.count_out.data.models.ExerciseImpl
+import com.count_out.data.models.RoundImpl
+import com.count_out.data.models.SpeechKitImpl
 import com.count_out.data.source.room.RoundSource
 import com.count_out.framework.room.db.round.RoundDao
 import com.count_out.framework.room.db.round.RoundTable

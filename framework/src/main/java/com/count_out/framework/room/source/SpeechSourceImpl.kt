@@ -1,6 +1,6 @@
 package com.count_out.framework.room.source
 
-import com.count_out.data.entity.SpeechImpl
+import com.count_out.data.models.SpeechImpl
 import com.count_out.data.source.room.SpeechSource
 import com.count_out.framework.room.db.speech.SpeechDao
 import com.count_out.framework.room.db.speech.SpeechTable

@@ -1,10 +1,10 @@
 package com.count_out.framework.room.source
 
 import android.util.Log
-import com.count_out.data.entity.ActionWithSetImpl
-import com.count_out.data.entity.ExerciseImpl
-import com.count_out.data.entity.ParameterImpl
-import com.count_out.data.entity.SetImpl
+import com.count_out.data.models.ActionWithSetImpl
+import com.count_out.data.models.ExerciseImpl
+import com.count_out.data.models.ParameterImpl
+import com.count_out.data.models.SetImpl
 import com.count_out.data.source.room.ExerciseSource
 import com.count_out.domain.entity.Exercise
 import com.count_out.domain.entity.enums.Goal

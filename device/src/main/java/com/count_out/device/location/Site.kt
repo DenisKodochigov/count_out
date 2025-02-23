@@ -6,7 +6,7 @@ import android.location.Address
 import android.location.Geocoder
 import android.os.Build
 import android.os.Looper
-import com.count_out.domain.entity.router.models.DataFromSite
+import com.count_out.data.router.models.DataFromSite
 import com.google.android.gms.location.Granularity
 import com.google.android.gms.location.LocationListener
 import com.google.android.gms.location.LocationRequest

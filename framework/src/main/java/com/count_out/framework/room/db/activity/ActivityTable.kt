@@ -2,7 +2,7 @@ package com.count_out.framework.room.db.activity
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.count_out.data.entity.ActivityImpl
+import com.count_out.data.models.ActivityImpl
 
 @Entity(tableName = "tb_activity")
 data class ActivityTable(

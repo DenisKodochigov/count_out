@@ -1,6 +1,6 @@
 package com.count_out.data
 
-import com.count_out.data.entity.WeatherImpl
+import com.count_out.data.models.WeatherImpl
 import com.count_out.data.repository.TrainingRepoImpl
 import com.count_out.data.repository.WeatherRepoImpl
 import com.count_out.data.source.network.WeatherSource
