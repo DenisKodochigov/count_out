@@ -3,6 +3,9 @@ package com.count_out.framework.room.source
 import com.count_out.data.models.RoundImpl
 import com.count_out.data.models.SpeechKitImpl
 import com.count_out.data.models.TrainingImpl
+import com.count_out.data.source.room.RingSource
+import com.count_out.data.source.room.RoundSource
+import com.count_out.data.source.room.SpeechKitSource
 import com.count_out.data.source.room.TrainingSource
 import com.count_out.domain.entity.Training
 import com.count_out.domain.entity.enums.RoundType
@@ -13,9 +16,10 @@ import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 class TrainingSourceImpl @Inject constructor(
-    private val roundSource: RoundSourceImpl,
-    private val speechKitSource: SpeechKitSourceImpl,
-    private val dao: TrainingDao): TrainingSource {
+    private val dao: TrainingDao,
+    private val roundSource: RoundSource,
+    private val ringSource: RingSource,
+    private val speechKitSource: SpeechKitSource,): TrainingSource {
 
     override fun update(training: TrainingImpl): Flow<TrainingImpl> {
         dao.update(toTrainingTable(training))

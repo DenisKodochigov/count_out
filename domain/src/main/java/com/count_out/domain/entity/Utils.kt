@@ -18,6 +18,7 @@ fun Int.pad(): String = this.toString().padStart(2, '0')
 fun String.toDoubleMy(): Double = if (this.isNotEmpty()) this.toDouble() else 0.0
 fun String.toIntMy(): Int = if (this.isNotEmpty()) this.toInt() else 0
 fun Boolean.to01(): Int = if (this) 1 else 0
+fun Int.to01(): Int = if (this == 0) 1 else 0
 fun Double.minus(): Double = if (this - 0.1 < 0) 0.0 else ((this * 10).toInt() - 1).toDouble()/10
 fun Double.plus(): Double = ((this * 10).toInt() + 1).toDouble()/10
 fun <T>List<T>.addApp(device: T): List<T> = this.toMutableList().apply { this.add(device) }

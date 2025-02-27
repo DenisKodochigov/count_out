@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="next_exercise">След. упражнение</string>
+    <string name="rest">Отдых</string>
+    <plurals name="repeat">
+        <item quantity="one">%d повтор</item>
+        <item quantity="few">%d повторa</item>
+        <item quantity="many">%d повторов</item>
+        <item quantity="other">повторa</item>
+    </plurals>
+</resources>

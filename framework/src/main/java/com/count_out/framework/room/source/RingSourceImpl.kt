@@ -4,7 +4,9 @@ import android.util.Log
 import com.count_out.data.models.ExerciseImpl
 import com.count_out.data.models.RingImpl
 import com.count_out.data.models.SpeechKitImpl
+import com.count_out.data.source.room.ExerciseSource
 import com.count_out.data.source.room.RingSource
+import com.count_out.data.source.room.SpeechKitSource
 import com.count_out.framework.room.db.ring.RingDao
 import com.count_out.framework.room.db.ring.RingTable
 import kotlinx.coroutines.flow.Flow
@@ -14,9 +16,9 @@ import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 class RingSourceImpl @Inject constructor(
-    private val exerciseSource: ExerciseSourceImpl,
-    private val speechKitSource: SpeechKitSourceImpl,
-    private val dao: RingDao
+    private val dao: RingDao,
+    private val exerciseSource: ExerciseSource,
+    private val speechKitSource: SpeechKitSource,
 ): RingSource {
     override fun get(id: Long): Flow<RingImpl>  = dao.get(id).map { it.toRing() }
 

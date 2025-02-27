@@ -11,7 +11,6 @@ import android.bluetooth.BluetoothGattDescriptor.ENABLE_INDICATION_VALUE
 import android.bluetooth.BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE
 import android.content.Context
 import android.os.Build
-import com.count_out.data.pervission.PermissionApp
 import com.count_out.data.router.models.DataForBle
 import com.count_out.device.bluetooth.models.BleConnectionImpl
 import com.count_out.device.bluetooth.models.BleStates
@@ -24,7 +23,7 @@ import java.util.UUID
 
 class BleConnecting @Inject constructor(
     val context: Context,
-    private val permissionApp: PermissionApp,
+//    private val permissionApp: com.count_out.app.permission.PermissionApp,
 //    private val messengerA: MessageApp
 ) {
     private var connection = BleConnectionImpl()

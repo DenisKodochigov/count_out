@@ -3,6 +3,7 @@ package com.count_out.framework.room.source
 import com.count_out.data.models.SpeechImpl
 import com.count_out.data.models.SpeechKitImpl
 import com.count_out.data.source.room.SpeechKitSource
+import com.count_out.data.source.room.SpeechSource
 import com.count_out.framework.room.db.speech_kit.SpeechKitDao
 import com.count_out.framework.room.db.speech_kit.SpeechKitTable
 import kotlinx.coroutines.flow.Flow
@@ -10,7 +11,7 @@ import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 class SpeechKitSourceImpl @Inject constructor(
-    private val speechSource: SpeechSourceImpl,
+    private val speechSource: SpeechSource,
     private val daoSpeechKit: SpeechKitDao,
 ) : SpeechKitSource {
 
@@ -19,7 +20,7 @@ class SpeechKitSourceImpl @Inject constructor(
     override fun add(): Flow<SpeechKitImpl> {
         return get( daoSpeechKit.add( toSpeechKitTableNew()))
     }
-    fun addL(): Long = daoSpeechKit.add( toSpeechKitTableNew())
+    override fun addL(): Long = daoSpeechKit.add( toSpeechKitTableNew())
 
     override fun copy(speechKit: SpeechKitImpl): Flow<SpeechKitImpl> {
         val speechKitTable =
@@ -27,7 +28,7 @@ class SpeechKitSourceImpl @Inject constructor(
             else {toSpeechKitTableCopy(speechKit)}
         return get(daoSpeechKit.add( speechKitTable))
     }
-    fun copyL(speechKit: SpeechKitImpl): Long {
+    override fun copyL(speechKit: SpeechKitImpl): Long {
         val speechKitTable =
             if (speechKit.idSpeechKit == 0L) { toSpeechKitTableNew() }
             else {toSpeechKitTableCopy(speechKit)}

@@ -12,6 +12,8 @@ import com.count_out.framework.room.db.relation.ConverterGoalSet
 import com.count_out.framework.room.db.relation.ConverterTimeE
 import com.count_out.framework.room.db.relation.ConverterWeightE
 import com.count_out.framework.room.db.relation.ConverterZone
+import com.count_out.framework.room.db.ring.RingDao
+import com.count_out.framework.room.db.ring.RingTable
 import com.count_out.framework.room.db.round.RoundDao
 import com.count_out.framework.room.db.round.RoundTable
 import com.count_out.framework.room.db.set.SetDao
@@ -20,6 +22,7 @@ import com.count_out.framework.room.db.settings.SettingDao
 import com.count_out.framework.room.db.settings.SettingTable
 import com.count_out.framework.room.db.speech.SpeechDao
 import com.count_out.framework.room.db.speech.SpeechTable
+import com.count_out.framework.room.db.speech_kit.SpeechKitDao
 import com.count_out.framework.room.db.speech_kit.SpeechKitTable
 import com.count_out.framework.room.db.training.TrainingDao
 import com.count_out.framework.room.db.training.TrainingTable
@@ -30,6 +33,7 @@ import com.count_out.framework.room.db.traking.WorkoutTable
 @Database(entities = [
     TrainingTable::class,
     RoundTable::class,
+    RingTable::class,
     ExerciseTable::class,
     ActivityTable::class,
     SetTable::class,
@@ -47,11 +51,13 @@ import com.count_out.framework.room.db.traking.WorkoutTable
     ConverterWeightE::class)
 abstract class AppDataBase : RoomDatabase() {
     abstract fun trainingDao(): TrainingDao
+    abstract fun ringDao(): RingDao
     abstract fun roundDao(): RoundDao
     abstract fun exerciseDao(): ExerciseDao
     abstract fun activityDao(): ActivityDao
     abstract fun setDao(): SetDao
     abstract fun speechDao(): SpeechDao
+    abstract fun speechKitDao(): SpeechKitDao
     abstract fun settingDao(): SettingDao
     abstract fun trackingDao(): TrackingDao
 }

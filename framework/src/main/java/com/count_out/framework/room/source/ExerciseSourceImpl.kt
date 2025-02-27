@@ -6,6 +6,8 @@ import com.count_out.data.models.ExerciseImpl
 import com.count_out.data.models.ParameterImpl
 import com.count_out.data.models.SetImpl
 import com.count_out.data.source.room.ExerciseSource
+import com.count_out.data.source.room.SetSource
+import com.count_out.data.source.room.SpeechKitSource
 import com.count_out.domain.entity.Exercise
 import com.count_out.domain.entity.enums.Goal
 import com.count_out.domain.entity.enums.Units
@@ -19,9 +21,9 @@ import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 class ExerciseSourceImpl @Inject constructor(
-    private val setSource: SetSourceImpl,
-    private val speechKitSource: SpeechKitSourceImpl,
-    private val dao: ExerciseDao
+    private val dao: ExerciseDao,
+    private val setSource: SetSource,
+    private val speechKitSource: SpeechKitSource,
 ): ExerciseSource {
     override fun gets(): Flow<List<Exercise>> = dao.gets().map { list-> list.map { it.toExercise() } }
 

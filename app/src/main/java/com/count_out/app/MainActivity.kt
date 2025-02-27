@@ -12,9 +12,9 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.core.app.ActivityCompat
-import com.count_out.app.entity.MessageApp
-import com.count_out.app.ui.permission.RequestPermissionsAll
-import com.count_out.app.services.count_out.CountOutServiceBind
+import com.count_out.app.permission.RequestPermissionsAll
+import com.count_out.app.presentation.StartApp
+import com.count_out.service.service_count_out.models.CountOutServiceBindImpl
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -23,22 +23,21 @@ import javax.inject.Inject
 class MainActivity: ComponentActivity()
 {
     @Inject lateinit var bluetoothAdapter: BluetoothAdapter
-    @Inject lateinit var messageApp: MessageApp
-    @Inject lateinit var serviceBind: CountOutServiceBind
+    @Inject lateinit var serviceBind: CountOutServiceBindImpl
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
             RequestPermissionsAll()
-            com.count_out.presentation.StartApp()
+            StartApp()
         }
     }
     override fun onStart() {
         super.onStart()
         serviceBind.bindService()
         ignoreBatteryOptimisation()
-        if ( !checkBluetoothEnable()) messageApp.errorApi(R.string.bluetooth_not_available)
+        if ( !checkBluetoothEnable()) {} //errorApi(R.string.bluetooth_not_available)
     }
 
     override fun onDestroy() {

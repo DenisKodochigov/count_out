@@ -1,4 +1,3 @@
 package com.count_out.app.presentation.prime
 
-//interface Event {
-//}a
+interface Event {}

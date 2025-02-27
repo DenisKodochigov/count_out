@@ -4,7 +4,9 @@ import android.util.Log
 import com.count_out.data.models.ExerciseImpl
 import com.count_out.data.models.RoundImpl
 import com.count_out.data.models.SpeechKitImpl
+import com.count_out.data.source.room.ExerciseSource
 import com.count_out.data.source.room.RoundSource
+import com.count_out.data.source.room.SpeechKitSource
 import com.count_out.framework.room.db.round.RoundDao
 import com.count_out.framework.room.db.round.RoundTable
 import kotlinx.coroutines.flow.Flow
@@ -18,9 +20,9 @@ import javax.inject.Inject
  * Удаляем раунд только когда удалякм тренировочный план. Поэтому эта функция не появляется в Repo
  */
 class RoundSourceImpl @Inject constructor(
-    private val exerciseSource: ExerciseSourceImpl,
-    private val speechKitSource: SpeechKitSourceImpl,
-    private val dao: RoundDao
+    private val dao: RoundDao,
+    private val exerciseSource: ExerciseSource,
+    private val speechKitSource: SpeechKitSource,
 ): RoundSource {
     override fun gets(trainingId: Long): Flow<List<RoundImpl>> =
         dao.gets(trainingId).map { list-> list.map { it.toRound() } }

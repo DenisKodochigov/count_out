@@ -6,7 +6,7 @@ import kotlinx.coroutines.flow.Flow
 interface ActivityRepo{
     fun gets(): Flow<List<Activity>>
     fun get(id: Long): Flow<Activity>
-    fun del(id: Long)
+    fun del(activity: Activity): Flow<Boolean>
     fun copy(activity: Activity): Flow<Activity>
     fun add(activity: Activity): Flow<Activity>
     fun update(activity: Activity): Flow<Activity>

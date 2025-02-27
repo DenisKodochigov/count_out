@@ -12,8 +12,8 @@ interface ExerciseRepo {
     fun add(exercise: Exercise): Flow<List<Exercise>>
     fun copy(exercise: Exercise): Flow<List<Exercise>>
     fun update(exercise: Exercise): Flow<Exercise>
-    fun selectActivity(activity: ActionWithActivity): Flow<Exercise>
     fun changeSequenceExercise(item: DataForChangeSequence): Flow<Exercise>
+    fun selectActivity(activity: ActionWithActivity): Flow<Exercise>
 
     fun getForRound(id: Long): Flow<List<Exercise>>
     fun getForRing(id: Long): Flow<List<Exercise>>

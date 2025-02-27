@@ -21,10 +21,13 @@ android {
         versionCode = 1
         versionName = "1.0"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-        vectorDrawables {
-            useSupportLibrary = true
-        }
+        vectorDrawables { useSupportLibrary = true }
     }
+//    dynamicFeatures.add( ":domain")
+//    dynamicFeatures.add( ":data")
+////    dynamicFeatures.add( ":device")
+//    dynamicFeatures.add( ":services")
+//    dynamicFeatures.add( ":framework")
     repositories {
         google()
         mavenLocal()
@@ -35,7 +38,7 @@ android {
             // Enables code shrinking, obfuscation, and optimization for only
             // your project's release build type. Make sure to use a build
             // variant with `isDebuggable=false`.
-            isMinifyEnabled = true
+            isMinifyEnabled = false
             // Enables resource shrinking, which is performed by the
             // Android Gradle plugin.
 //            isShrinkResources = true
@@ -70,12 +73,14 @@ android {
 }
 
 dependencies {
+    implementation(project(":service"))
     implementation(project(":domain"))
     implementation(project(":data"))
+    implementation(project(":framework"))
     implementation(libs.bundles.core)
+    implementation(libs.bundles.lifecycle)
     //Hilt
     implementation (libs.bundles.hilt)
-    implementation(libs.androidx.lifecycle.viewmodel.ktx)
     ksp (libs.bundles.hiltksp)
     //Location
     implementation(libs.bundles.gms)

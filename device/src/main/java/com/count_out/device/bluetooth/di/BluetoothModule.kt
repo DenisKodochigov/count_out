@@ -3,7 +3,6 @@ package com.count_out.device.bluetooth.di
 import android.bluetooth.BluetoothAdapter
 import android.bluetooth.BluetoothManager
 import android.content.Context
-import com.count_out.data.pervission.PermissionApp
 import com.count_out.device.bluetooth.BleConnecting
 import com.count_out.device.bluetooth.BleScanner
 import com.count_out.device.bluetooth.Bluetooth
@@ -36,15 +35,15 @@ class BluetoothModule {
     fun provideBluetoothScanner(
         @ApplicationContext context: Context,
         bluetoothAdapter: BluetoothAdapter,
-        permissionApp: PermissionApp
-    ): BleScanner = BleScanner(context, bluetoothAdapter, permissionApp)
+//        permissionApp: PermissionApp
+    ): BleScanner = BleScanner(context, bluetoothAdapter) //, permissionApp)
 
     @Singleton
     @Provides
     fun provideBluetoothConnect(
         @ApplicationContext context: Context,
-        permissionApp: PermissionApp,
-    ): BleConnecting = BleConnecting(context, permissionApp,)
+//        permissionApp: PermissionApp,
+    ): BleConnecting = BleConnecting(context)//, permissionApp,)
 
     @Singleton
     @Provides

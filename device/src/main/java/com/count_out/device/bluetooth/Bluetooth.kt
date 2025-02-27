@@ -2,15 +2,15 @@ package com.count_out.device.bluetooth
 
 import android.annotation.SuppressLint
 import android.bluetooth.BluetoothAdapter
+import com.count_out.data.models.RunningState
+import com.count_out.data.router.models.DataForBle
+import com.count_out.data.router.models.DataFromBle
 import com.count_out.device.bluetooth.models.BleConnectionImpl
 import com.count_out.device.bluetooth.models.BleDeviceImpl
 import com.count_out.device.bluetooth.models.BleStates
 import com.count_out.domain.entity.bluetooth.ConnectState
 import com.count_out.domain.entity.bluetooth.ErrorBleService
 import com.count_out.domain.entity.bluetooth.StateBleConnecting
-import com.count_out.domain.entity.enums.RunningState
-import com.count_out.data.router.models.DataForBle
-import com.count_out.data.router.models.DataFromBle
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow

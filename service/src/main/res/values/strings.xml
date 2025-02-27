@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="next_exercise">Next the exercise</string>
+    <string name="rest">Rest</string>
+    <plurals name="repeat">
+        <item quantity="one">%d repeat</item>
+        <item quantity="two">%d repetitions</item>
+        <item quantity="few">%d repetitions</item>
+        <item quantity="many">%d repetitions</item>
+        <item quantity="other">repetitions</item>
+    </plurals>
+</resources>

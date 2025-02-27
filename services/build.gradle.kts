@@ -22,9 +22,12 @@ android {
         release {
             isMinifyEnabled = false
             proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
-            )
+                getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
+        }
+        debug {
+            isMinifyEnabled = false
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
         }
     }
     compileOptions {
@@ -37,12 +40,11 @@ android {
 }
 
 dependencies {
-    implementation(project(":app"))
+//    implementation(project(":app"))
     implementation(project(":domain"))
     implementation(project(":data"))
     implementation(project(":framework"))
     implementation(libs.core.ktx)
-    implementation(libs.material)
     //Hilt
     implementation (libs.bundles.hilt)
     ksp (libs.bundles.hiltksp)

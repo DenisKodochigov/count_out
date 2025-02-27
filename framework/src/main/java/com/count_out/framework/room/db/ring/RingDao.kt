@@ -16,11 +16,12 @@ interface RingDao {
     @Update
     fun update(item: RingTable)
 
+    @Transaction
     @Query("SELECT * FROM tb_ring WHERE idRing = :id")
     fun get(id: Long): Flow<RingRel>
 
     @Transaction
-    @Query("SELECT * FROM tb_round WHERE trainingId = :trainingID")
+    @Query("SELECT * FROM tb_ring WHERE trainingId = :trainingID")
     fun gets( trainingID: Long): Flow<List<RingRel>>
 
     @Query("DELETE FROM tb_ring WHERE idRing = :id")

@@ -29,5 +29,4 @@ interface ActivityDao {
 
     @Query("SELECT idExercise FROM tb_exercise WHERE activityId =:activityId")
     fun checkExerciseWithActivity(activityId: Long): Long?
-
 }

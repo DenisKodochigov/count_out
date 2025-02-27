@@ -9,11 +9,10 @@ import android.bluetooth.le.ScanSettings
 import android.content.Context
 import android.os.ParcelUuid
 import com.count_out.data.models.RunningState
-import com.count_out.data.pervission.PermissionApp
 import com.count_out.data.router.models.DataFromBle
 import com.count_out.device.bluetooth.models.BleStates
 import com.count_out.device.bluetooth.models.Const
-import com.count_out.services.service_timing.Delay
+import com.count_out.service.service_timing.Delay
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -25,7 +24,7 @@ import javax.inject.Singleton
 class BleScanner @Inject constructor(
     val context: Context,
     private val bluetoothAdapter: BluetoothAdapter,
-    private val permissionApp: PermissionApp
+//    private val permissionApp: PermissionApp
 ) {
 //    private val timer = TimerMy()
     private lateinit var scanCallback: ScanCallback

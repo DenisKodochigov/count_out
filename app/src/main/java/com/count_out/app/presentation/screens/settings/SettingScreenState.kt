@@ -4,11 +4,9 @@
 //import androidx.compose.runtime.Stable
 //import androidx.compose.runtime.mutableStateOf
 //import androidx.compose.ui.text.font.FontVariation.Setting
-//import com.count_out.app.data.room.tables.SettingDB
-//import com.count_out.app.entity.ConnectState
-//import com.count_out.app.entity.bluetooth.DeviceUI
 //import com.count_out.domain.entity.Activity
-//
+//import com.count_out.domain.entity.bluetooth.ConnectState
+//import com.count_out.domain.entity.bluetooth.DeviceUI
 //import kotlin.let
 //
 //data class SettingScreenState(
@@ -32,7 +30,7 @@
 //    @Stable val onDeleteActivity: (Long) ->Unit = {},
 //    @Stable val onSelectDevice: (DeviceUI) ->Unit = {},
 //
-//    @Stable val onUpdateSetting: (SettingDB) ->Unit = {},
+//    @Stable val onUpdateSetting: (Setting) ->Unit = {},
 //    @Stable val onGetSettings: () ->Unit = {},
 //    @Stable val onClearCacheBLE: () ->Unit = {},
 //    @Stable val onStartScanBLE: () ->Unit = {},
