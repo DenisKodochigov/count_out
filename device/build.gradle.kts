@@ -42,13 +42,18 @@ android {
 
 dependencies {
     implementation(project(":data"))
-    implementation(project(":service"))
     implementation(project(":domain"))
     implementation(libs.bundles.core)
+    //Hilt
     implementation (libs.bundles.hilt)
     ksp (libs.bundles.hiltksp)
     //Location
     implementation(libs.bundles.gms)
+
+    debugImplementation(libs.ui.test.manifest)
+    testImplementation (libs.bundles.testing)
+    androidTestImplementation (platform(libs.compose.bom))
+    androidTestImplementation (libs.bundles.testingAndroid)
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)

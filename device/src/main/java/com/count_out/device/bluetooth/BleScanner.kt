@@ -12,7 +12,6 @@ import com.count_out.data.models.RunningState
 import com.count_out.data.router.models.DataFromBle
 import com.count_out.device.bluetooth.models.BleStates
 import com.count_out.device.bluetooth.models.Const
-import com.count_out.service.service_timing.Delay
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -44,7 +43,7 @@ class BleScanner @Inject constructor(
         return filters
     }
 
-    @SuppressLint("MissingPermission")
+    @SuppressLint("MissingPermission", "SuspiciousIndentation")
     fun startScannerBLEDevices(dataFromBle: DataFromBle, bleStates: BleStates) {
         CoroutineScope(Dispatchers.Default).launch {
             scanCallback = objectScanCallback(bleStates, dataFromBle)
@@ -52,10 +51,10 @@ class BleScanner @Inject constructor(
                 bleScanner.startScan( scanFilters(), scanSettings(0L), scanCallback)
 //            }
             dataFromBle.scannedBle.value = true
-            Delay().run(
-                delay = timeScanning * 1000L,
-                bleStates.stateBleScanner
-            )
+//            Delay().run(
+//                delay = timeScanning * 1000L,
+//                bleStates.stateBleScanner
+//            )
             bleStates.stateBleScanner.value = RunningState.Stopped
             stopScanner(dataFromBle)
 //            timer.start(

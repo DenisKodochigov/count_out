@@ -42,4 +42,7 @@ abstract class SourceModule {
     @Binds
     abstract fun bindSpeechSource(speechSource: SpeechSourceImpl): SpeechSource
 
+//    @Binds
+//    abstract fun bindBleSource(bleSource: BleSourceImpl): BleSource
+
 }

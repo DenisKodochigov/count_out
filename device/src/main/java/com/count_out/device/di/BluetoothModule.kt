@@ -1,4 +1,4 @@
-package com.count_out.device.bluetooth.di
+package com.count_out.device.di
 
 import android.bluetooth.BluetoothAdapter
 import android.bluetooth.BluetoothManager
