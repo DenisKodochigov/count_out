@@ -75,6 +75,7 @@ android {
 dependencies {
     implementation(project(":service"))
     implementation(project(":domain"))
+    implementation(project(":device"))
     implementation(project(":data"))
     implementation(project(":framework"))
     implementation(libs.bundles.core)

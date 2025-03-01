@@ -13,7 +13,7 @@ import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationServices
 import javax.inject.Inject
 
-class Site @Inject constructor(val context: Context,
+class Site @Inject constructor( private val context: Context,
 //                               val permission: PermissionApp
 ) {
 

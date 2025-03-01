@@ -1,5 +1,6 @@
 package com.count_out.framework.di
 
+import com.count_out.data.source.framework.BleSource
 import com.count_out.data.source.room.ActivitySource
 import com.count_out.data.source.room.ExerciseSource
 import com.count_out.data.source.room.RingSource
@@ -24,7 +25,6 @@ import dagger.hilt.components.SingletonComponent
 @Module
 @InstallIn(SingletonComponent::class)
 abstract class SourceModule {
-
     @Binds
     abstract fun bindTrainingSource(trainingSource: TrainingSourceImpl): TrainingSource
     @Binds
@@ -41,8 +41,4 @@ abstract class SourceModule {
     abstract fun bindSpeechKitSource(speechKitSource: SpeechKitSourceImpl): SpeechKitSource
     @Binds
     abstract fun bindSpeechSource(speechSource: SpeechSourceImpl): SpeechSource
-
-//    @Binds
-//    abstract fun bindBleSource(bleSource: BleSourceImpl): BleSource
-
 }

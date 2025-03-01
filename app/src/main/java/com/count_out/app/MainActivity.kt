@@ -14,16 +14,14 @@ import androidx.activity.enableEdgeToEdge
 import androidx.core.app.ActivityCompat
 import com.count_out.app.permission.RequestPermissionsAll
 import com.count_out.app.presentation.StartApp
-import com.count_out.service.service_count_out.models.CountOutServiceBindImpl
+import com.count_out.service.service_count_out.models.CountOutServiceBind
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
 
 @AndroidEntryPoint
-class MainActivity: ComponentActivity()
-{
+class MainActivity: ComponentActivity() {
     @Inject lateinit var bluetoothAdapter: BluetoothAdapter
-    @Inject lateinit var serviceBind: CountOutServiceBindImpl
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,15 +33,10 @@ class MainActivity: ComponentActivity()
     }
     override fun onStart() {
         super.onStart()
-        serviceBind.bindService()
         ignoreBatteryOptimisation()
         if ( !checkBluetoothEnable()) {} //errorApi(R.string.bluetooth_not_available)
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        serviceBind.unbindService()
-    }
     private fun checkBluetoothEnable(): Boolean {
         if (ActivityCompat.checkSelfPermission(this,BLUETOOTH) == PackageManager.PERMISSION_GRANTED){
             if ( !bluetoothAdapter.isEnabled) {

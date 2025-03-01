@@ -57,6 +57,8 @@ dependencies {
     ksp (libs.moshi.kotlin.codegen)
     //DataStore
     implementation(libs.bundles.datastore)
+    //Location
+    implementation(libs.bundles.gms)
 
     debugImplementation(libs.ui.test.manifest)
     testImplementation (libs.bundles.testing)

@@ -8,7 +8,8 @@ import android.location.LocationManager
 import com.count_out.data.router.models.DataFromSite
 import javax.inject.Inject
 
-class LocationWithOutGoogle @Inject constructor(val context: Context,
+class LocationWithOutGoogle @Inject constructor(
+    private val context: Context,
 //                                                val permission: PermissionApp
 ){
 

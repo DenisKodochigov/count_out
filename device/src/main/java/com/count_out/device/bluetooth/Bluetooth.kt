@@ -23,8 +23,8 @@ class Bluetooth @Inject constructor(
     private val bleScanner: BleScanner,
     private val bleConnecting: BleConnecting,
 //    val messageApp: MessageApp,
-    val bluetoothAdapter: BluetoothAdapter) {
-    val state = BleStates()
+    private val bluetoothAdapter: BluetoothAdapter) {
+    private val state = BleStates()
 
     fun startScanning(dataFromBle: DataFromBle){
         disconnectDevice()

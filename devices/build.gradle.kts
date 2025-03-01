@@ -6,7 +6,7 @@ plugins {
 }
 
 android {
-    namespace = "com.count_out.device"
+    namespace = "com.count_out.devices"
     compileSdk = 35
 
     defaultConfig {
@@ -25,7 +25,12 @@ android {
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
         }
-     }
+        debug {
+            isMinifyEnabled = false
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
+        }
+    }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
@@ -38,17 +43,13 @@ android {
 dependencies {
     implementation(project(":data"))
     implementation(project(":domain"))
-    implementation(libs.bundles.core)
+    implementation(libs.core.ktx)
     //Hilt
     implementation (libs.bundles.hilt)
     ksp (libs.bundles.hiltksp)
     //Location
     implementation(libs.bundles.gms)
 
-    debugImplementation(libs.ui.test.manifest)
-    testImplementation (libs.bundles.testing)
-    androidTestImplementation (platform(libs.compose.bom))
-    androidTestImplementation (libs.bundles.testingAndroid)
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)

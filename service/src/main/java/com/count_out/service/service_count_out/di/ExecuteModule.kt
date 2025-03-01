@@ -2,9 +2,8 @@ package com.count_out.service.service_count_out.di
 
 import android.content.Context
 import com.count_out.framework.text_to_speech.SpeechManager
-import com.count_out.service.service_count_out.models.CountOutServiceBindImpl
+import com.count_out.service.service_count_out.models.CountOutServiceBind
 import com.count_out.service.service_count_out.models.RunWorkOut
-import com.count_out.service.service_count_out.models.ServiceUtilsImpl
 import com.count_out.service.service_count_out.models.Work
 import dagger.Module
 import dagger.Provides
@@ -38,14 +37,7 @@ class ExecuteModule {
 
     @Singleton
     @Provides
-    fun provideServiceUtils(@ApplicationContext context: Context): ServiceUtilsImpl {
-        return ServiceUtilsImpl(context)
-    }
-    @Singleton
-    @Provides
-    fun provideCountOutServiceBind(
-        @ApplicationContext context: Context, utils: ServiceUtilsImpl,
-    ): CountOutServiceBindImpl {
-        return CountOutServiceBindImpl(context, utils)
+    fun provideCountOutServiceBind(@ApplicationContext context: Context): CountOutServiceBind {
+        return CountOutServiceBind(context)
     }
 }
