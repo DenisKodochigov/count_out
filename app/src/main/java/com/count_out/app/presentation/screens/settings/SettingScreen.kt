@@ -43,8 +43,8 @@ import com.count_out.app.presentation.view_components.custom_view.Frame
 import com.count_out.app.presentation.view_components.icons.AnimateIcon
 import com.count_out.app.presentation.view_components.icons.IconSingle
 import com.count_out.app.presentation.view_components.icons.IconsCollapsing
-import com.count_out.domain.entity.bluetooth.ConnectState
-import com.count_out.domain.entity.to01
+import com.count_out.entity.enums.ConnectState
+import com.count_out.entity.to01
 
 @Composable fun SettingScreen(navigateEvent: NavigateEventImpl){
     val viewModel: SettingViewModel = hiltViewModel()

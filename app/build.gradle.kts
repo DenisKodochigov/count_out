@@ -73,11 +73,10 @@ android {
 }
 
 dependencies {
-    implementation(project(":service"))
     implementation(project(":domain"))
-    implementation(project(":device"))
-    implementation(project(":data"))
-    implementation(project(":framework"))
+    implementation(project(":entity"))
+//    implementation(project(":data"))
+//    implementation(project(":framework"))
     implementation(libs.bundles.core)
     implementation(libs.bundles.lifecycle)
     //Hilt
@@ -104,7 +103,7 @@ dependencies {
     implementation (libs.bundles.retrofit)
     //Moshi
     implementation (libs.bundles.moshi)
-    ksp (libs.moshi.kotlin.codegen)
+    ksp (libs.moshi.ksp)
     //DataStore
     implementation(libs.datastore)
     debugImplementation(libs.ui.test.manifest)

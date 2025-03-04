@@ -10,7 +10,7 @@ import kotlinx.coroutines.launch
 
 abstract class PrimeViewModel<T: Any, S: ScreenState<T>>: ViewModel() {
     abstract fun initState(): S
-    abstract fun routeEvent(action: Event)
+    abstract fun routeEvent(event: Event)
 
     private val eventFlow: MutableSharedFlow<Event> = MutableSharedFlow()
     private val _dataState: MutableStateFlow<S> by lazy { MutableStateFlow(initState()) }

@@ -2,7 +2,7 @@ package com.count_out.data.repository
 
 import com.count_out.data.models.SpeechKitImpl
 import com.count_out.data.source.room.SpeechKitSource
-import com.count_out.domain.entity.SpeechKit
+import com.count_out.entity.entity.workout.SpeechKit
 import com.count_out.domain.repository.trainings.SpeechRepo
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject

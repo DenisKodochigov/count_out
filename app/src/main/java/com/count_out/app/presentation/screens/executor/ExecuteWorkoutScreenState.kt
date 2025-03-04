@@ -3,13 +3,13 @@ package com.count_out.app.presentation.screens.executor
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.mutableStateOf
-import com.count_out.app.modeles.TickTimeImpl
-import com.count_out.data.entity.Coordinate
-import com.count_out.data.models.RunningState
-import com.count_out.domain.entity.StepTraining
-import com.count_out.domain.entity.Training
-import com.count_out.domain.entity.bluetooth.ConnectState
-import com.count_out.domain.entity.bluetooth.DeviceUI
+import com.count_out.app.presentation.models.TickTimeImpl
+import com.count_out.entity.entity.Coordinate
+import com.count_out.entity.entity.StepTraining
+import com.count_out.entity.entity.router.DeviceUI
+import com.count_out.entity.entity.workout.Training
+import com.count_out.entity.enums.ConnectState
+import com.count_out.entity.enums.RunningState
 import javax.inject.Singleton
 
 @Singleton

@@ -27,8 +27,6 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.count_out.app.R
 import com.count_out.app.modeles.TypeKeyboard
-import com.count_out.app.presentation.theme.Dimen
-import com.count_out.app.presentation.theme.mTypography
 import com.count_out.app.presentation.bottom_sheet.BottomSheetSelectActivity
 import com.count_out.app.presentation.bottom_sheet.BottomSheetSpeech
 import com.count_out.app.presentation.models.TrainingImpl
@@ -36,9 +34,11 @@ import com.count_out.app.presentation.navigation.NavigateEventImpl
 import com.count_out.app.presentation.prime.Action
 import com.count_out.app.presentation.prime.PrimeScreen
 import com.count_out.app.presentation.screens.training.round.Round
+import com.count_out.app.presentation.theme.Dimen
+import com.count_out.app.presentation.theme.mTypography
 import com.count_out.app.presentation.view_components.TextFieldApp
 import com.count_out.app.presentation.view_components.icons.IconsGroup
-import com.count_out.domain.entity.enums.RoundType
+import com.count_out.entity.enums.RoundType
 
 
 @SuppressLint("UnrememberedMutableState")

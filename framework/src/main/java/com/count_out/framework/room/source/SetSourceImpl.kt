@@ -4,7 +4,7 @@ import com.count_out.data.models.SetImpl
 import com.count_out.data.models.SpeechKitImpl
 import com.count_out.data.source.room.SetSource
 import com.count_out.data.source.room.SpeechKitSource
-import com.count_out.domain.entity.ActionWithSet
+import com.count_out.entity.entity.workout.ActionWithSet
 import com.count_out.framework.room.db.set.SetDao
 import com.count_out.framework.room.db.set.SetTable
 import kotlinx.coroutines.flow.Flow

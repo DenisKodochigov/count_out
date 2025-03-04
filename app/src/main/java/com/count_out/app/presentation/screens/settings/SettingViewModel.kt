@@ -4,9 +4,7 @@ import androidx.lifecycle.viewModelScope
 import com.count_out.app.presentation.prime.Event
 import com.count_out.app.presentation.prime.PrimeViewModel
 import com.count_out.app.presentation.prime.ScreenState
-import com.count_out.domain.entity.Activity
 import com.count_out.domain.entity.SettingRecord
-import com.count_out.domain.entity.bluetooth.DeviceUI
 import com.count_out.domain.use_case.activity.AddActivityUC
 import com.count_out.domain.use_case.activity.DeleteActivityUC
 import com.count_out.domain.use_case.activity.GetsActivityUC
@@ -19,6 +17,8 @@ import com.count_out.domain.use_case.bluetooth.StopScanBleUC
 import com.count_out.domain.use_case.settings.GetSettingUC
 import com.count_out.domain.use_case.settings.GetSettingsUC
 import com.count_out.domain.use_case.settings.UpdateSettingUC
+import com.count_out.entity.entity.router.DeviceUI
+import com.count_out.entity.entity.workout.Activity
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
@@ -199,7 +199,7 @@ class SettingViewModel @Inject constructor(
 //        }
 //    }
 //
-//    private fun receiveFormBle(dataForUI: DataForUI) { //
+//    private fun receiveFormBle(dataForUI: DataForUIImpl) { //
 //        viewModelScope.launch(Dispatchers.IO) {
 //            dataRepository.getBleDevStoreFlow().collect { device ->
 //                lg("SettingViewModel device:${device} ")

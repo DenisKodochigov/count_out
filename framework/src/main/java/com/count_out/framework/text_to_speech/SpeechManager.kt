@@ -3,9 +3,9 @@ package com.count_out.framework.text_to_speech
 import android.content.Context
 import android.speech.tts.TextToSpeech
 import android.speech.tts.UtteranceProgressListener
-import com.count_out.data.models.RunningState
 import com.count_out.data.router.models.DataFromWork
-import com.count_out.domain.entity.Speech
+import com.count_out.entity.entity.workout.Speech
+import com.count_out.entity.enums.RunningState
 import kotlinx.coroutines.delay
 import java.util.Locale
 import javax.inject.Singleton

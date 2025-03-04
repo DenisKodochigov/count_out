@@ -2,7 +2,7 @@ package com.count_out.data.repository
 
 import com.count_out.data.models.ActivityImpl
 import com.count_out.data.source.room.ActivitySource
-import com.count_out.domain.entity.Activity
+import com.count_out.entity.entity.workout.Activity
 import com.count_out.domain.repository.trainings.ActivityRepo
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow

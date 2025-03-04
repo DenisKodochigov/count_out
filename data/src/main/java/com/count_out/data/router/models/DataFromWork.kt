@@ -1,8 +1,8 @@
 package com.count_out.data.router.models
 
-import com.count_out.data.entity.TickTime
-import com.count_out.data.models.RunningState
-import com.count_out.domain.entity.StepTraining
+import com.count_out.entity.entity.StepTraining
+import com.count_out.entity.entity.TickTime
+import com.count_out.entity.enums.RunningState
 import kotlinx.coroutines.flow.MutableStateFlow
 
 data class DataFromWork (

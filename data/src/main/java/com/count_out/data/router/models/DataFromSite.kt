@@ -1,6 +1,6 @@
 package com.count_out.data.router.models
 
-import com.count_out.data.entity.Coordinate
+import com.count_out.entity.entity.Coordinate
 import kotlinx.coroutines.flow.MutableStateFlow
 
 data class DataFromSite (

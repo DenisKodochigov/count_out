@@ -1,7 +1,7 @@
 package com.count_out.data.entity
 
-import com.count_out.domain.entity.Training
-import com.count_out.domain.entity.weather.Weather
+import com.count_out.entity.entity.workout.Training
+import com.count_out.entity.entity.weather.Weather
 
 interface WorkoutRecord {
     val idWorkout: Long

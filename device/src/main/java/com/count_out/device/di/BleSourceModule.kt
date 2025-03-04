@@ -15,11 +15,3 @@ abstract class BleSourceModule {
     @Binds
     abstract fun bindBleSource(bleSource: BleSourceImpl): BleSource
 }
-
-//@Module
-//@InstallIn(SingletonComponent::class)
-//class BleModule {
-//
-//    @Provides
-//    fun provideBleSource(): BleSource = BleSourceImpl()
-//}

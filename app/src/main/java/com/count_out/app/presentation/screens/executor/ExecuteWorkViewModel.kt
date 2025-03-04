@@ -3,10 +3,10 @@ package com.count_out.app.presentation.screens.executor
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.count_out.app.modeles.TickTimeImpl
 import com.count_out.app.presentation.models.DataForServImpl
-import com.count_out.app.presentation.models.DataForUI
-import com.count_out.data.models.RunningState
+import com.count_out.entity.enums.RunningState
+import com.count_out.app.presentation.models.DataForUIImpl
+import com.count_out.app.presentation.models.TickTimeImpl
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -97,7 +97,7 @@ class ExecuteWorkViewModel @Inject constructor(
 //        dataForServ.idSetChangeInterval.value = set.idSet
 //    }
 
-    private fun receiveState(dataForUI: DataForUI){
+    private fun receiveState(dataForUI: DataForUIImpl){
         viewModelScope.launch(Dispatchers.IO) {}
 //            dataForUI.durationSpeech.collect { duration ->dataRepository.updateDuration(duration)} } //save duration set time
         viewModelScope.launch(Dispatchers.IO) {

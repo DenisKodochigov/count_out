@@ -1,7 +1,7 @@
 package com.count_out.app.old.device.bluetooth.modules
 
-//import com.count_out.domain.entity.bluetooth.ErrorBleService
-//import com.count_out.domain.entity.bluetooth.StateBleConnecting
+//import com.count_out.entity.enums.ErrorBleService
+//import com.count_out.entity.enums.StateBleConnecting
 //import com.count_out.domain.entity.enums.RunningState
 //import kotlinx.coroutines.flow.MutableStateFlow
 

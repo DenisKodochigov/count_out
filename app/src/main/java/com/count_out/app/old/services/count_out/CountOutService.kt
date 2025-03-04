@@ -17,7 +17,7 @@
 //import com.count_out.app.entity.MessageApp
 //import com.count_out.app.entity.RunningState
 //import com.count_out.presentation.models.DataForServImpl
-//import com.count_out.presentation.models.DataForUI
+//import com.count_out.presentation.models.DataForUIImpl
 //import com.count_out.app.ui.notification.NotificationHelper
 //import com.count_out.app.data.logging.Logging
 //import com.count_out.app.device.Site
@@ -72,7 +72,7 @@
 //        }
 //    }
 //
-//    fun startCountOutService(dataForServ: DataForServImpl): DataForUI {
+//    fun startCountOutService(dataForServ: DataForServImpl): DataForUIImpl {
 //        running = true
 //        router = Router(dataForServ)
 //        startForegroundService()
@@ -82,7 +82,7 @@
 //        return router.dataForUI
 //    }
 //
-//    fun startBle(dataForServ: DataForServImpl): DataForUI{
+//    fun startBle(dataForServ: DataForServImpl): DataForUIImpl{
 //        router = Router(dataForServ)
 //        router.sendBleToUi()
 //        return router.dataForUI

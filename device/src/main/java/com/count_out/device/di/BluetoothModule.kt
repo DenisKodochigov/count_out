@@ -6,6 +6,7 @@ import android.content.Context
 import com.count_out.device.bluetooth.BleConnecting
 import com.count_out.device.bluetooth.BleScanner
 import com.count_out.device.bluetooth.Bluetooth
+import com.count_out.device.permission.PermissionApp
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -47,9 +48,9 @@ class BluetoothModule {
 
     @Singleton
     @Provides
-    fun provideBluetooth(
-        bleScanner: BleScanner,
-        bleConnecting: BleConnecting,
-        bluetoothAdapter: BluetoothAdapter,
-    ): Bluetooth = Bluetooth(bleScanner, bleConnecting, bluetoothAdapter)
+    fun provideBluetooth(permissionApp: PermissionApp,
+                         bleScanner: BleScanner,
+                         bleConnecting: BleConnecting,
+                         bluetoothAdapter: BluetoothAdapter,
+    ): Bluetooth = Bluetooth(permissionApp, bleScanner, bleConnecting, bluetoothAdapter)
 }

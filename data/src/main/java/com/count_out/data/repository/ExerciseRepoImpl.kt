@@ -2,9 +2,9 @@ package com.count_out.data.repository
 
 import com.count_out.data.models.ExerciseImpl
 import com.count_out.data.source.room.ExerciseSource
-import com.count_out.domain.entity.ActionWithActivity
+import com.count_out.entity.entity.workout.ActionWithActivity
 import com.count_out.domain.entity.DataForChangeSequence
-import com.count_out.domain.entity.Exercise
+import com.count_out.entity.entity.workout.Exercise
 import com.count_out.domain.repository.trainings.ExerciseRepo
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject

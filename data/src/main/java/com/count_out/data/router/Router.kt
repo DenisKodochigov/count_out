@@ -1,6 +1,5 @@
 package com.count_out.data.router
 
-import com.count_out.data.models.RunningState
 import com.count_out.data.router.models.Buffer
 import com.count_out.data.router.models.DataForBle
 import com.count_out.data.router.models.DataForNotification
@@ -11,6 +10,7 @@ import com.count_out.data.router.models.DataFromBle
 import com.count_out.data.router.models.DataFromSite
 import com.count_out.data.router.models.DataFromWork
 import com.count_out.data.router.models.TemporaryBase
+import com.count_out.entity.enums.RunningState
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay

@@ -1,7 +1,7 @@
 //package com.count_out.app.presentation.models
 //
-//import com.count_out.domain.entity.Speech
-//import com.count_out.domain.entity.SpeechKit
+//import com.count_out.entity.entity.workout.Speech
+//import com.count_out.entity.entity.workout.SpeechKit
 //
 //data class SpeechKitImpl(
 //    override var idSpeechKit: Long,

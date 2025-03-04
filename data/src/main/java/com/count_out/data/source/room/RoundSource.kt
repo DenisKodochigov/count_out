@@ -1,7 +1,7 @@
 package com.count_out.data.source.room
 
 import com.count_out.data.models.RoundImpl
-import com.count_out.domain.entity.Round
+import com.count_out.entity.entity.workout.Round
 import kotlinx.coroutines.flow.Flow
 
 interface RoundSource {

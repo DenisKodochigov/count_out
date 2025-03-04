@@ -24,8 +24,8 @@ import com.count_out.app.presentation.view_components.TextApp
 import com.count_out.app.presentation.view_components.custom_view.Frame
 import com.count_out.app.presentation.view_components.icons.IconsCollapsing
 import com.count_out.app.presentation.view_components.icons.IconsGroup
-import com.count_out.domain.entity.Round
-import com.count_out.domain.entity.enums.RoundType
+import com.count_out.entity.entity.workout.Round
+import com.count_out.entity.enums.RoundType
 
 @Composable
 fun Round(dataState: TrainingState, action:Action, round: Round){

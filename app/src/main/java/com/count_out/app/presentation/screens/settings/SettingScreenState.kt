@@ -4,8 +4,8 @@
 //import androidx.compose.runtime.Stable
 //import androidx.compose.runtime.mutableStateOf
 //import androidx.compose.ui.text.font.FontVariation.Setting
-//import com.count_out.domain.entity.Activity
-//import com.count_out.domain.entity.bluetooth.ConnectState
+//import com.count_out.entity.entity.workout.Activity
+//import com.count_out.entity.enums.ConnectState
 //import com.count_out.domain.entity.bluetooth.DeviceUI
 //import kotlin.let
 //

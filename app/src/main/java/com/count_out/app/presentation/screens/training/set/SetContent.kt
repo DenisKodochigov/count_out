@@ -32,27 +32,27 @@ import com.count_out.app.R
 import com.count_out.app.modeles.TypeKeyboard
 import com.count_out.app.old.entity.contourAll1
 import com.count_out.app.old.entity.contourBot1
-import com.count_out.app.presentation.theme.alumBodyLarge
-import com.count_out.app.presentation.theme.alumBodyMedium
-import com.count_out.app.presentation.theme.alumBodySmall
 import com.count_out.app.presentation.models.ActionWithSetImpl
 import com.count_out.app.presentation.models.ParameterImpl
 import com.count_out.app.presentation.models.SetImpl
 import com.count_out.app.presentation.prime.Action
 import com.count_out.app.presentation.screens.training.TrainingEvent
 import com.count_out.app.presentation.screens.training.TrainingState
+import com.count_out.app.presentation.theme.alumBodyLarge
+import com.count_out.app.presentation.theme.alumBodyMedium
+import com.count_out.app.presentation.theme.alumBodySmall
 import com.count_out.app.presentation.view_components.TextApp
 import com.count_out.app.presentation.view_components.TextFieldApp
 import com.count_out.app.presentation.view_components.custom_view.Frame
 import com.count_out.app.presentation.view_components.custom_view.IconQ
 import com.count_out.app.presentation.view_components.icons.IconsCollapsing
 import com.count_out.app.presentation.view_components.icons.IconsGroup
-import com.count_out.domain.entity.Set
-import com.count_out.domain.entity.enums.Goal
-import com.count_out.domain.entity.enums.Units
-import com.count_out.domain.entity.enums.Zone
-import com.count_out.domain.entity.toDoubleMy
-import com.count_out.domain.entity.toIntMy
+import com.count_out.entity.toDoubleMy
+import com.count_out.entity.toIntMy
+import com.count_out.entity.entity.workout.Set
+import com.count_out.entity.enums.Goal
+import com.count_out.entity.enums.Units
+import com.count_out.entity.enums.Zone
 
 val interval_between_pole = 4.dp
 
@@ -461,7 +461,7 @@ val interval_between_pole = 4.dp
     }
 }
 
-fun viewDistance(set:Set):String {
+fun viewDistance(set: Set):String {
     return "${ set.distance.value / (if (set.distance.unit == Units.KM) 1000 else 1) }"
 }
 fun setCollapsing(dataState: TrainingState, set: Set) {

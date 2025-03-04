@@ -1,4 +1,4 @@
-package com.count_out.app.permission
+package com.count_out.device.permission
 
 import android.Manifest.permission.ACCESS_COARSE_LOCATION
 import android.Manifest.permission.ACCESS_FINE_LOCATION

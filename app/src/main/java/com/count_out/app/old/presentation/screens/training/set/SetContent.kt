@@ -49,7 +49,7 @@
 //import com.count_out.app.ui.view_components.custom_view.IconQ
 //import com.count_out.app.ui.view_components.icons.IconsCollapsing
 //import com.count_out.app.ui.view_components.icons.IconsGroup
-//import com.count_out.domain.entity.Set
+//import com.count_out.entity.entity.workout.Set
 //import com.count_out.domain.entity.enums.Goal
 //import com.count_out.domain.entity.enums.Units
 //import com.count_out.domain.entity.enums.Zone

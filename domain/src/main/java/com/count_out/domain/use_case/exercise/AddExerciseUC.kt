@@ -1,9 +1,8 @@
 package com.count_out.domain.use_case.exercise
 
-import com.count_out.domain.entity.Exercise
+import com.count_out.entity.entity.workout.Exercise
 import com.count_out.domain.repository.trainings.ExerciseRepo
 import com.count_out.domain.use_case.UseCase
-import com.count_out.domain.use_case.UseCase.Configuration
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject

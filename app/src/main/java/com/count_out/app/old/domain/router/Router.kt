@@ -11,7 +11,7 @@ package com.count_out.app.old.domain.router
 //    val dataForSite: DataForSite by lazy { initDataForSite() }
 //
 //    private val buffer: Buffer by lazy { bufferInit(dataFromBle, dataFromWork, dataFromSite )}
-//    val dataForUI: DataForUI by lazy { initDataForUI(buffer) }
+//    val dataForUI: DataForUIImpl by lazy { initDataForUI(buffer) }
 //    val dataForNotification: MutableStateFlow<DataForNotification?> = MutableStateFlow(null)
 //    val dataForBase: MutableStateFlow<TemporaryBase?> = MutableStateFlow(null)
 //
@@ -48,10 +48,10 @@ package com.count_out.app.old.domain.router
 //            dataFromWork = dataFromWork,
 //        )
 //    }
-//    private fun initDataForUI(buffer: Buffer): DataForUI {
+//    private fun initDataForUI(buffer: Buffer): DataForUIImpl {
 //        dataForWork.createMapTraining()
 //        dataForWork.initStepTraining()
-//        return DataForUI(
+//        return DataForUIImpl(
 //            runningState = buffer.runningState,
 //            currentCount = buffer.currentCount,
 //            currentDistance = buffer.currentDistance,

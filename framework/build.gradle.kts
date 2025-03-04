@@ -42,7 +42,7 @@ android {
 }
 dependencies {
     implementation(project(":data"))
-    implementation(project(":domain"))
+    implementation(project(":entity"))
     implementation(libs.bundles.core)
     //Hilt
     implementation (libs.bundles.hilt)
@@ -54,7 +54,7 @@ dependencies {
     implementation (libs.bundles.retrofit)
     //Moshi
     implementation (libs.bundles.moshi)
-    ksp (libs.moshi.kotlin.codegen)
+    ksp (libs.moshi.ksp)
     //DataStore
     implementation(libs.bundles.datastore)
     //Location

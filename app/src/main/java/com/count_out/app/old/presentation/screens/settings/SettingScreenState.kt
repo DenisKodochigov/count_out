@@ -7,7 +7,7 @@
 //import com.count_out.app.data.room.tables.SettingDB
 //import com.count_out.app.entity.ConnectState
 //import com.count_out.app.entity.bluetooth.DeviceUI
-//import com.count_out.domain.entity.Activity
+//import com.count_out.entity.entity.workout.Activity
 //
 //import kotlin.let
 //

@@ -1,6 +1,6 @@
 package com.count_out.data.router.models
 
-import com.count_out.data.models.RunningState
+import com.count_out.entity.enums.RunningState
 import kotlinx.coroutines.flow.MutableStateFlow
 
 data class DataForSite (

@@ -6,8 +6,8 @@
 //import com.count_out.app.device.timer.models.TickTimeImpl
 //import com.count_out.app.entity.workout.StepTraining
 //import com.count_out.data.entity.Coordinate
-//import com.count_out.domain.entity.Training
-//import com.count_out.domain.entity.bluetooth.ConnectState
+//import com.count_out.entity.entity.workout.Training
+//import com.count_out.entity.enums.ConnectState
 //import com.count_out.domain.entity.bluetooth.DeviceUI
 //import com.count_out.domain.entity.enums.RunningState
 //import javax.inject.Singleton

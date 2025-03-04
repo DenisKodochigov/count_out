@@ -7,8 +7,8 @@ import com.count_out.data.source.room.RingSource
 import com.count_out.data.source.room.RoundSource
 import com.count_out.data.source.room.SpeechKitSource
 import com.count_out.data.source.room.TrainingSource
-import com.count_out.domain.entity.Training
-import com.count_out.domain.entity.enums.RoundType
+import com.count_out.entity.entity.workout.Training
+import com.count_out.entity.enums.RoundType
 import com.count_out.framework.room.db.training.TrainingDao
 import com.count_out.framework.room.db.training.TrainingTable
 import kotlinx.coroutines.flow.Flow

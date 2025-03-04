@@ -1,10 +1,10 @@
 package com.count_out.data.models
 
-import com.count_out.domain.entity.Exercise
-import com.count_out.domain.entity.Parameter
-import com.count_out.domain.entity.Round
-import com.count_out.domain.entity.SpeechKit
-import com.count_out.domain.entity.enums.RoundType
+import com.count_out.entity.entity.workout.Exercise
+import com.count_out.entity.entity.workout.Parameter
+import com.count_out.entity.entity.workout.Round
+import com.count_out.entity.entity.workout.SpeechKit
+import com.count_out.entity.enums.RoundType
 
 data class RoundImpl(
     override val idRound: Long,

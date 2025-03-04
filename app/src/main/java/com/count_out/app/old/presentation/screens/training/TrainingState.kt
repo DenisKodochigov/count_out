@@ -4,11 +4,11 @@
 //import androidx.compose.runtime.Stable
 //import androidx.compose.runtime.mutableStateOf
 //import com.count_out.presentation.models.BottomSheetInterface
-//import com.count_out.domain.entity.Activity
-//import com.count_out.domain.entity.Exercise
-//import com.count_out.domain.entity.Set
-//import com.count_out.domain.entity.SpeechKit
-//import com.count_out.domain.entity.Training
+//import com.count_out.entity.entity.workout.Activity
+//import com.count_out.entity.entity.workout.Exercise
+//import com.count_out.entity.entity.workout.Set
+//import com.count_out.entity.entity.workout.SpeechKit
+//import com.count_out.entity.entity.workout.Training
 //
 //data class TrainingState (
 //    val training: Training,

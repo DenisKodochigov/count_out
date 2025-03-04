@@ -1,6 +1,6 @@
 package com.count_out.data.models
 
-import com.count_out.domain.entity.Exercise
+import com.count_out.entity.entity.workout.Exercise
 
 data class ExerciseImpl(
     override val idExercise: Long,

@@ -40,7 +40,7 @@ import com.count_out.app.presentation.theme.mTypography
 import com.count_out.app.presentation.view_components.TextApp
 import com.count_out.app.presentation.view_components.TextFieldApp
 import com.count_out.app.presentation.view_components.custom_view.Frame
-import com.count_out.domain.entity.Activity
+import com.count_out.entity.entity.workout.Activity
 
 @SuppressLint("UnrememberedMutableState")
 @Composable fun CardActivity(dataState: SettingsState, activity: Activity, action: Action) {

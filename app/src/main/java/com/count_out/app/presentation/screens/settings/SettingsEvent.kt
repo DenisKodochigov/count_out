@@ -1,9 +1,9 @@
 package com.count_out.app.presentation.screens.settings
 
 import com.count_out.app.presentation.prime.Event
-import com.count_out.domain.entity.Activity
 import com.count_out.domain.entity.SettingRecord
-import com.count_out.domain.entity.bluetooth.DeviceUI
+import com.count_out.entity.entity.router.DeviceUI
+import com.count_out.entity.entity.workout.Activity
 
 sealed class SettingsEvent: Event {
     data object ClearCacheBLE: SettingsEvent()

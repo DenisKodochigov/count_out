@@ -1,6 +1,6 @@
 package com.count_out.domain.use_case.other
 
-import com.count_out.domain.entity.weather.Weather
+import com.count_out.entity.entity.weather.Weather
 import com.count_out.domain.repository.WeatherRepo
 import com.count_out.domain.use_case.UseCase
 import kotlinx.coroutines.flow.Flow

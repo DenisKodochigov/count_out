@@ -14,9 +14,9 @@ import android.os.Build
 import com.count_out.data.router.models.DataForBle
 import com.count_out.device.bluetooth.models.BleConnectionImpl
 import com.count_out.device.bluetooth.models.BleStates
-import com.count_out.domain.entity.bluetooth.ErrorBleService
-import com.count_out.domain.entity.bluetooth.StateBleConnecting
-import com.count_out.domain.entity.bluetooth.UUIDBle
+import com.count_out.entity.enums.ErrorBleService
+import com.count_out.entity.enums.StateBleConnecting
+import com.count_out.entity.enums.UUIDBle
 import jakarta.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow
 import java.util.UUID

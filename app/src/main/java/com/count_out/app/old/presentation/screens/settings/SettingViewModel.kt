@@ -9,10 +9,10 @@
 //import com.count_out.app.entity.CommandService
 //import com.count_out.app.entity.MessageApp
 //import com.count_out.presentation.models.DataForServImpl
-//import com.count_out.presentation.models.DataForUI
+//import com.count_out.presentation.models.DataForUIImpl
 //import com.count_out.app.services.count_out.CountOutServiceBind
 //import com.count_out.app.ui.view_components.lg
-//import com.count_out.domain.entity.Activity
+//import com.count_out.entity.entity.workout.Activity
 //import dagger.hilt.android.lifecycle.HiltViewModel
 //import kotlinx.coroutines.Dispatchers
 //import kotlinx.coroutines.flow.MutableStateFlow
@@ -98,7 +98,7 @@
 //        }
 //    }
 //
-//    private fun receiveFormBle(dataForUI: DataForUI) { //
+//    private fun receiveFormBle(dataForUI: DataForUIImpl) { //
 //        viewModelScope.launch(Dispatchers.IO) {
 //            dataRepository.getBleDevStoreFlow().collect { device ->
 //                lg("SettingViewModel device:${device} ")

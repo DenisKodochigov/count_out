@@ -4,7 +4,7 @@
 //import androidx.lifecycle.ViewModel
 //import androidx.lifecycle.viewModelScope
 //import com.count_out.presentation.models.DataForServImpl
-//import com.count_out.presentation.models.DataForUI
+//import com.count_out.presentation.models.DataForUIImpl
 //import com.count_out.services.service_timing.models.TickTimeImpl
 //import com.example.services.service_count_out.CountOutServiceBind
 //import dagger.hilt.android.lifecycle.HiltViewModel
@@ -97,7 +97,7 @@
 ////        dataForServ.idSetChangeInterval.value = set.idSet
 ////    }
 //
-//    private fun receiveState(dataForUI: DataForUI){
+//    private fun receiveState(dataForUI: DataForUIImpl){
 //        viewModelScope.launch(Dispatchers.IO) {
 ////            dataForUI.durationSpeech.collect { duration ->dataRepository.updateDuration(duration)} } //save duration set time
 //        viewModelScope.launch(Dispatchers.IO) {

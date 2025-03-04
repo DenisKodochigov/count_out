@@ -1,8 +1,8 @@
 package com.count_out.data.models
 
 import com.count_out.data.entity.WorkoutRecord
-import com.count_out.domain.entity.Training
-import com.count_out.domain.entity.weather.Weather
+import com.count_out.entity.entity.workout.Training
+import com.count_out.entity.entity.weather.Weather
 
 data class WorkoutRecordImpl(
     override var idWorkout: Long = 0L,

@@ -36,10 +36,10 @@ import com.count_out.app.presentation.theme.mTypography
 import com.count_out.app.presentation.view_components.TextApp
 import com.count_out.app.presentation.view_components.custom_view.Frame
 import com.count_out.app.presentation.view_components.custom_view.IconQ
-import com.count_out.data.models.RunningState
-import com.count_out.domain.entity.bluetooth.ConnectState
-import com.count_out.domain.entity.enums.Goal
-import com.count_out.domain.entity.enums.Units
+import com.count_out.entity.enums.ConnectState
+import com.count_out.entity.enums.Goal
+import com.count_out.entity.enums.RunningState
+import com.count_out.entity.enums.Units
 import java.math.RoundingMode
 
 @Composable fun ExecuteWorkoutScreen(navigateEvent: NavigateEventImpl, trainingId: Long ){

@@ -1,6 +1,7 @@
 package com.count_out.domain.di
 
 import com.count_out.domain.repository.BluetoothRepo
+import com.count_out.domain.repository.CountOutServiceRepo
 import com.count_out.domain.repository.WeatherRepo
 import com.count_out.domain.repository.trainings.ActivityRepo
 import com.count_out.domain.repository.trainings.ExerciseRepo
@@ -22,6 +23,8 @@ import com.count_out.domain.use_case.exercise.AddExerciseUC
 import com.count_out.domain.use_case.exercise.ChangeSequenceExerciseUC
 import com.count_out.domain.use_case.exercise.CopyExerciseUC
 import com.count_out.domain.use_case.exercise.DeleteExerciseUC
+import com.count_out.domain.use_case.other.CountOutServiceBindUC
+import com.count_out.domain.use_case.other.CountOutServiceUnBindUC
 import com.count_out.domain.use_case.other.GetWeatherUC
 import com.count_out.domain.use_case.set.AddSetUC
 import com.count_out.domain.use_case.set.CopySetUC
@@ -78,10 +81,6 @@ class UseCaseModule {
     fun provideUpdateTrainingUseCase(
         configuration: UseCase.Configuration,
         trainingRepo: TrainingRepo): UpdateTrainingUC = UpdateTrainingUC(configuration, trainingRepo)
-    @Provides
-    fun provideGetWeatherUseCase(
-        configuration: UseCase.Configuration,
-        weatherRepo: WeatherRepo ): GetWeatherUC = GetWeatherUC(configuration, weatherRepo)
     @Provides
     fun provideAddActivityUseCase(
         configuration: UseCase.Configuration,
@@ -166,6 +165,18 @@ class UseCaseModule {
     fun provideUpdateSettingUseCase(
         configuration: UseCase.Configuration,
         repo: SettingsRepo ): UpdateSettingUC = UpdateSettingUC(configuration, repo)
-
-
+    @Provides
+    fun provideGetWeatherUseCase(
+        configuration: UseCase.Configuration,
+        repo: WeatherRepo ): GetWeatherUC = GetWeatherUC(configuration, repo)
+    @Provides
+    fun provideCountOutServiceBindUseCase(
+        configuration: UseCase.Configuration,
+        repo: CountOutServiceRepo
+    ): CountOutServiceBindUC = CountOutServiceBindUC(configuration, repo)
+    @Provides
+    fun provideCountOutServiceUnBindUseCase(
+        configuration: UseCase.Configuration,
+        repo: CountOutServiceRepo
+    ): CountOutServiceUnBindUC = CountOutServiceUnBindUC(configuration, repo)
 }

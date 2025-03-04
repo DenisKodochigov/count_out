@@ -8,10 +8,10 @@ import com.count_out.data.models.SetImpl
 import com.count_out.data.source.room.ExerciseSource
 import com.count_out.data.source.room.SetSource
 import com.count_out.data.source.room.SpeechKitSource
-import com.count_out.domain.entity.Exercise
-import com.count_out.domain.entity.enums.Goal
-import com.count_out.domain.entity.enums.Units
-import com.count_out.domain.entity.enums.Zone
+import com.count_out.entity.entity.workout.Exercise
+import com.count_out.entity.enums.Goal
+import com.count_out.entity.enums.Units
+import com.count_out.entity.enums.Zone
 import com.count_out.framework.room.db.exercise.ExerciseDao
 import com.count_out.framework.room.db.exercise.ExerciseTable
 import kotlinx.coroutines.flow.Flow

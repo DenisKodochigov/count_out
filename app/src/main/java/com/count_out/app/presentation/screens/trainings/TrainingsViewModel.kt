@@ -4,7 +4,7 @@ import androidx.lifecycle.viewModelScope
 import com.count_out.app.presentation.prime.Event
 import com.count_out.app.presentation.prime.PrimeViewModel
 import com.count_out.app.presentation.prime.ScreenState
-import com.count_out.domain.entity.Training
+import com.count_out.entity.entity.workout.Training
 import com.count_out.domain.use_case.trainings.AddTrainingUC
 import com.count_out.domain.use_case.trainings.CopyTrainingUC
 import com.count_out.domain.use_case.trainings.DeleteTrainingUC

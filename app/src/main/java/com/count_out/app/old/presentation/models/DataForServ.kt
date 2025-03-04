@@ -1,7 +1,7 @@
 //package com.count_out.app.presentation.models
 //
 //import com.count_out.app.device.bluetooth.modules.BleConnectionImpl
-//import com.count_out.domain.entity.Training
+//import com.count_out.entity.entity.workout.Training
 //import com.count_out.domain.entity.enums.RunningState
 //import kotlinx.coroutines.flow.MutableStateFlow
 //

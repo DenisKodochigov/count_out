@@ -1,7 +1,7 @@
 package com.count_out.data.source.room
 
 import com.count_out.data.models.SpeechKitImpl
-import com.count_out.domain.entity.SpeechKit
+import com.count_out.entity.entity.workout.SpeechKit
 import kotlinx.coroutines.flow.Flow
 
 interface SpeechKitSource {

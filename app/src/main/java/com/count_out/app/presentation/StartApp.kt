@@ -13,13 +13,13 @@ import androidx.compose.ui.semantics.testTagsAsResourceId
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.rememberNavController
 import com.count_out.app.R
-import com.count_out.app.presentation.theme.AppTheme
 import com.count_out.app.presentation.navigation.NavHostApp
 import com.count_out.app.presentation.navigation.backScreenDestination
 import com.count_out.app.presentation.navigation.navigateToScreen
+import com.count_out.app.presentation.theme.AppTheme
 import com.count_out.app.presentation.view_components.BottomBarApp
 import com.count_out.app.presentation.view_components.CollapsingToolbar
-import com.count_out.domain.entity.enums.Units
+import com.count_out.entity.enums.Units
 
 
 @OptIn(ExperimentalComposeUiApi::class)

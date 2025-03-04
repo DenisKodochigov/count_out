@@ -42,7 +42,7 @@ android {
 }
 
 dependencies {
-
+    implementation(project(":entity"))
     implementation(libs.core.ktx)
     //Hilt
     implementation (libs.bundles.hilt)

@@ -8,8 +8,8 @@
 //import com.count_out.app.domain.router.models.DataFromWork
 //import com.count_out.app.ui.view_components.lg
 //import com.count_out.data.entity.SpeechImpl
-//import com.count_out.domain.entity.Set
-//import com.count_out.domain.entity.SpeechKit
+//import com.count_out.entity.entity.workout.Set
+//import com.count_out.entity.entity.workout.SpeechKit
 //import com.count_out.domain.entity.enums.Goal
 //import com.count_out.domain.entity.enums.RunningState
 //import com.count_out.domain.entity.enums.Units

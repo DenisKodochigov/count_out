@@ -37,7 +37,7 @@ android {
 
 dependencies {
     implementation(project(":data"))
-    implementation(project(":domain"))
+    implementation(project(":entity"))
     implementation(libs.bundles.core)
     //Hilt
     implementation (libs.bundles.hilt)

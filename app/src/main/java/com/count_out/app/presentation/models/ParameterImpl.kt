@@ -1,12 +1,12 @@
 package com.count_out.app.presentation.models
 
-import com.count_out.domain.entity.Parameter
-import com.count_out.domain.entity.enums.Units
+import com.count_out.entity.entity.workout.Parameter
+import com.count_out.entity.enums.Units
 
 data class ParameterImpl(
     override val value: Double,
     override val unit: Units
-):Parameter {
+): Parameter {
 //    override fun valueString(stringRes: (Int)->String): String {
 //        return when(unit){
 //            Units.GR -> "${value.toInt()}/${stringRes(unit.id)}"

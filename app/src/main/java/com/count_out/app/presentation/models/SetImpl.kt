@@ -1,11 +1,11 @@
 package com.count_out.app.presentation.models
 
-import com.count_out.domain.entity.Parameter
-import com.count_out.domain.entity.Set
-import com.count_out.domain.entity.SpeechKit
-import com.count_out.domain.entity.enums.Goal
-import com.count_out.domain.entity.enums.Units
-import com.count_out.domain.entity.enums.Zone
+import com.count_out.entity.entity.workout.Parameter
+import com.count_out.entity.entity.workout.Set
+import com.count_out.entity.entity.workout.SpeechKit
+import com.count_out.entity.enums.Goal
+import com.count_out.entity.enums.Units
+import com.count_out.entity.enums.Zone
 
 data class SetImpl(
     override val idSet: Long = 0,

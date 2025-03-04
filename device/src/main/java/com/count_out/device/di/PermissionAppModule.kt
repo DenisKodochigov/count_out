@@ -1,7 +1,7 @@
 package com.count_out.device.di
 
 import android.content.Context
-import com.count_out.app.permission.PermissionApp
+import com.count_out.device.permission.PermissionApp
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -14,7 +14,7 @@ import javax.inject.Singleton
 class PermissionAppModule {
     @Singleton
     @Provides
-    fun providePermissionApp(@ApplicationContext appContext: Context): com.count_out.app.permission.PermissionApp {
+    fun providePermissionApp(@ApplicationContext appContext: Context): PermissionApp {
         return PermissionApp(appContext)
     }
 }

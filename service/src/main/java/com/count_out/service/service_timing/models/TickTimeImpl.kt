@@ -1,9 +1,9 @@
 package com.count_out.service.service_timing.models
 
-import com.count_out.data.entity.TickTime
+import com.count_out.entity.entity.TickTime
 
 data class TickTimeImpl(
-    override val hour: String="00",
-    override val min: String="00",
-    override val sec: String="00",
+    override val hour: String = "00",
+    override val min: String = "00",
+    override val sec: String = "00",
 ): TickTime

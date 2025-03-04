@@ -1,6 +1,6 @@
 package com.count_out.device.bluetooth.models
 
-import com.count_out.domain.entity.bluetooth.DeviceUI
+import com.count_out.entity.entity.router.DeviceUI
 import kotlinx.serialization.Serializable
 
 @Serializable

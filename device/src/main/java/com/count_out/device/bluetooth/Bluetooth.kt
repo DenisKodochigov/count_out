@@ -2,15 +2,16 @@ package com.count_out.device.bluetooth
 
 import android.annotation.SuppressLint
 import android.bluetooth.BluetoothAdapter
-import com.count_out.data.models.RunningState
 import com.count_out.data.router.models.DataForBle
 import com.count_out.data.router.models.DataFromBle
 import com.count_out.device.bluetooth.models.BleConnectionImpl
 import com.count_out.device.bluetooth.models.BleDeviceImpl
 import com.count_out.device.bluetooth.models.BleStates
-import com.count_out.domain.entity.bluetooth.ConnectState
-import com.count_out.domain.entity.bluetooth.ErrorBleService
-import com.count_out.domain.entity.bluetooth.StateBleConnecting
+import com.count_out.device.permission.PermissionApp
+import com.count_out.entity.enums.ConnectState
+import com.count_out.entity.enums.ErrorBleService
+import com.count_out.entity.enums.RunningState
+import com.count_out.entity.enums.StateBleConnecting
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -20,13 +21,21 @@ import javax.inject.Singleton
 
 @Singleton
 class Bluetooth @Inject constructor(
+    private val permission: PermissionApp,
     private val bleScanner: BleScanner,
     private val bleConnecting: BleConnecting,
-//    val messageApp: MessageApp,
-    private val bluetoothAdapter: BluetoothAdapter) {
+    private val bluetoothAdapter: BluetoothAdapter,) {
     private val state = BleStates()
 
+    private fun checkBluetoothEnable(): Boolean {
+        permission.checkBle { if ( !bluetoothAdapter.isEnabled) {
+            //message Bluetooth power off
+        } }
+        return bluetoothAdapter.isEnabled
+    }
+
     fun startScanning(dataFromBle: DataFromBle){
+        if (! checkBluetoothEnable()) return
         disconnectDevice()
         stopScanning(dataFromBle)
         if (state.stateBleScanner.value == RunningState.Stopped){
@@ -37,6 +46,7 @@ class Bluetooth @Inject constructor(
     }
 
     fun stopScanning(dataFromBle: DataFromBle){
+        if (! checkBluetoothEnable()) return
         if (state.stateBleScanner.value == RunningState.Started){
             state.stateBleScanner.value = RunningState.Stopped
             bleScanner.stopScannerBLEDevices(dataFromBle)
@@ -45,6 +55,7 @@ class Bluetooth @Inject constructor(
     }
 
     fun connectDevice(dataFromBle: DataFromBle, dataForBle: DataForBle){
+        if (! checkBluetoothEnable()) return
         if (state.stateBleScanner.value == RunningState.Started) stopScanning(dataFromBle)
         dataFromBle.connectingState.value = ConnectState.CONNECTING
         getRemoteDevice(bluetoothAdapter, dataForBle, dataFromBle, state)
@@ -53,6 +64,7 @@ class Bluetooth @Inject constructor(
     }
 
     private fun sendHeartRate(heartRate: MutableStateFlow<Int>, dataFromBle: DataFromBle){
+        if (! checkBluetoothEnable()) return
         CoroutineScope(Dispatchers.Default).launch {
             heartRate.collect{ hr->
                 dataFromBle.heartRate.value = hr
@@ -67,6 +79,7 @@ class Bluetooth @Inject constructor(
         dataForUi: DataFromBle,
         bleStates: BleStates,
     ): Boolean {
+        if (! checkBluetoothEnable()) return false
         if (bleStates.stateBleScanner.value == RunningState.Stopped){
             bluetoothAdapter.let { adapter ->
                 try {

@@ -7,9 +7,9 @@
 //import com.count_out.app.presentation.prime.Event
 //import com.count_out.app.presentation.prime.PrimeViewModel
 //import com.count_out.app.presentation.prime.ScreenState
-//import com.count_out.domain.entity.Activity
-//import com.count_out.domain.entity.Exercise
-//import com.count_out.domain.entity.Training
+//import com.count_out.entity.entity.workout.Activity
+//import com.count_out.entity.entity.workout.Exercise
+//import com.count_out.entity.entity.workout.Training
 //import com.count_out.domain.use_case.training.AddExerciseUC
 //import com.count_out.domain.use_case.training.AddSetUC
 //import com.count_out.domain.use_case.training.ChangeActivityUC

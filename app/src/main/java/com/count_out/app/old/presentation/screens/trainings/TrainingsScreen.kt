@@ -36,7 +36,7 @@
 //import com.count_out.app.ui.view_components.TextApp
 //import com.count_out.app.ui.view_components.custom_view.Frame
 //import com.count_out.app.ui.view_components.custom_view.IconQ
-//import com.count_out.domain.entity.Training
+//import com.count_out.entity.entity.workout.Training
 //
 //@Composable
 //fun TrainingsScreen(navigateEvent: NavigateEventImpl) {
