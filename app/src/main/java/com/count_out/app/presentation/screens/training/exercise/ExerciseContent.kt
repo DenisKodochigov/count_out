@@ -33,8 +33,8 @@ import com.count_out.app.presentation.view_components.custom_view.Frame
 import com.count_out.app.presentation.view_components.drag_drop_column.column.ColumnDragDrop
 import com.count_out.app.presentation.view_components.icons.IconsCollapsing
 import com.count_out.app.presentation.view_components.icons.IconsGroup
-import com.count_out.entity.entity.workout.Exercise
-import com.count_out.entity.entity.workout.Round
+import com.count_out.domain.entity.workout.Exercise
+import com.count_out.domain.entity.workout.Round
 
 @Composable
 fun ListExercises(

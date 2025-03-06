@@ -9,7 +9,7 @@
 //import com.count_out.app.entity.WeightE
 //import com.count_out.app.entity.Zone
 //import com.count_out.app.entity.speech.SpeechKit
-//import com.count_out.app.entity.workout.Set
+//import com.count_out.domain.entity.Set
 //
 //@Entity(tableName = "tb_set")
 //data class SetDB(

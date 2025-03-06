@@ -3,13 +3,14 @@ package com.count_out.app.presentation.screens.executor
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.mutableStateOf
+import com.count_out.app.presentation.models.SetImpl
 import com.count_out.app.presentation.models.TickTimeImpl
-import com.count_out.entity.entity.Coordinate
-import com.count_out.entity.entity.StepTraining
-import com.count_out.entity.entity.router.DeviceUI
-import com.count_out.entity.entity.workout.Training
-import com.count_out.entity.enums.ConnectState
-import com.count_out.entity.enums.RunningState
+import com.count_out.domain.entity.Coordinate
+import com.count_out.domain.entity.StepTraining
+import com.count_out.domain.entity.enums.ConnectState
+import com.count_out.domain.entity.enums.RunningState
+import com.count_out.domain.entity.router.DeviceUI
+import com.count_out.domain.entity.workout.Training
 import javax.inject.Singleton
 
 @Singleton
@@ -32,7 +33,7 @@ data class ExecuteWorkoutScreenState(
 
     val showBottomSheetSaveTraining: MutableState<Boolean> = mutableStateOf(false),
     val stateWorkOutService: RunningState = RunningState.Binding,
-//    val updateSet: (Long, SetDB)->Unit = { _, _->},
+    val updateSet: (Long, SetImpl)->Unit = { _, _->},
     val startWorkOutService: (Training)->Unit = {},
     val stopWorkOutService: ()->Unit = {},
     val pauseWorkOutService: ()->Unit = { },

@@ -14,12 +14,12 @@
 //import com.count_out.app.device.bluetooth.modules.BleDevSerializable
 //import com.count_out.app.entity.Plugins
 //import com.count_out.app.entity.speech.SpeechKit
-//import com.count_out.app.entity.workout.Activity
-//import com.count_out.app.entity.workout.Exercise
-//import com.count_out.app.entity.workout.Round
-//import com.count_out.app.entity.workout.Set
+//import com.count_out.domain.entity.Activity
+//import com.count_out.domain.entity.Exercise
+//import com.count_out.domain.entity.Round
+//import com.count_out.domain.entity.Set
 //import com.count_out.app.entity.workout.TemporaryBase
-//import com.count_out.app.entity.workout.Training
+//import com.count_out.domain.entity.Training
 //import kotlinx.coroutines.flow.StateFlow
 //import javax.inject.Inject
 //import javax.inject.Singleton

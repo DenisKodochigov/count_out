@@ -4,7 +4,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.count_out.app.presentation.models.DataForServImpl
-import com.count_out.entity.enums.RunningState
+import com.count_out.domain.entity.enums.RunningState
 import com.count_out.app.presentation.models.DataForUIImpl
 import com.count_out.app.presentation.models.TickTimeImpl
 import dagger.hilt.android.lifecycle.HiltViewModel

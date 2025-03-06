@@ -2,8 +2,8 @@ package com.count_out.app.device.timer
 
 
 
-import com.count_out.entity.enums.RunningState
-import com.count_out.entity.pad
+import com.count_out.domain.entity.enums.RunningState
+import com.count_out.domain.entity.pad
 import com.count_out.service.service_timing.models.TickTimeImpl
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -13,12 +13,14 @@ import kotlinx.coroutines.launch
 
 object Ticker {
     private val currentTickTime: MutableStateFlow<TickTimeImpl> =  MutableStateFlow(TickTimeImpl())
-    private var stateTimer: MutableStateFlow<RunningState?> =  MutableStateFlow(RunningState.Binding)
+    private var stateTimer: MutableStateFlow<com.count_out.domain.entity.enums.RunningState?> =  MutableStateFlow(
+        com.count_out.domain.entity.enums.RunningState.Binding
+    )
     private fun engineWatcher(){
         CoroutineScope(Dispatchers.Default).launch {
             var currentTime = 0L
-            while (stateTimer.value != RunningState.Stopped){
-                if (stateTimer.value == RunningState.Started){
+            while (stateTimer.value != com.count_out.domain.entity.enums.RunningState.Stopped){
+                if (stateTimer.value == com.count_out.domain.entity.enums.RunningState.Started){
                     delay(1000L)
                     currentTime += 1
                     currentTickTime.value = TickTimeImpl(
@@ -30,7 +32,7 @@ object Ticker {
             }
         }
     }
-    fun start(state: MutableStateFlow<RunningState?>){
+    fun start(state: MutableStateFlow<com.count_out.domain.entity.enums.RunningState?>){
         stateTimer = state
         currentTickTime.value = TickTimeImpl(hour = "00", min = "00", sec = "00")
         engineWatcher()

@@ -1,7 +1,7 @@
 package com.count_out.data.source.room
 
 import com.count_out.data.models.ExerciseImpl
-import com.count_out.entity.entity.workout.Exercise
+import com.count_out.domain.entity.workout.Exercise
 import kotlinx.coroutines.flow.Flow
 
 /**

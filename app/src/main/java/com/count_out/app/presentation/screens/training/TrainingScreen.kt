@@ -38,7 +38,7 @@ import com.count_out.app.presentation.theme.Dimen
 import com.count_out.app.presentation.theme.mTypography
 import com.count_out.app.presentation.view_components.TextFieldApp
 import com.count_out.app.presentation.view_components.icons.IconsGroup
-import com.count_out.entity.enums.RoundType
+import com.count_out.domain.entity.enums.RoundType
 
 
 @SuppressLint("UnrememberedMutableState")

@@ -9,10 +9,10 @@ import com.count_out.data.models.RoundImpl
 import com.count_out.data.models.SetImpl
 import com.count_out.data.models.SpeechKitImpl
 import com.count_out.data.models.TrainingImpl
-import com.count_out.entity.enums.Goal
-import com.count_out.entity.enums.RoundType
-import com.count_out.entity.enums.Units
-import com.count_out.entity.enums.Zone
+import com.count_out.domain.entity.enums.Goal
+import com.count_out.domain.entity.enums.RoundType
+import com.count_out.domain.entity.enums.Units
+import com.count_out.domain.entity.enums.Zone
 import com.count_out.framework.room.db.activity.ActivityTable
 import com.count_out.framework.room.db.exercise.ExerciseTable
 import com.count_out.framework.room.db.ring.RingTable
@@ -53,17 +53,17 @@ data class SetRel(
             idSet = setTable.idSet,
             name = setTable.name,
             speechId = setTable.speechId,
-            goal = Goal.entries[setTable.goal],
+            goal = com.count_out.domain.entity.enums.Goal.entries[setTable.goal],
             exerciseId = setTable.exerciseId,
             reps = setTable.reps,
-            duration = ParameterImpl(value = setTable.duration, Units.entries[setTable.durationU] ),
-            distance = ParameterImpl(value = setTable.distance, Units.entries[setTable.distanceU] ),
-            weight = ParameterImpl(value = setTable.weight, Units.entries[setTable.weightU] ),
+            duration = ParameterImpl(value = setTable.duration, com.count_out.domain.entity.enums.Units.entries[setTable.durationU] ),
+            distance = ParameterImpl(value = setTable.distance, com.count_out.domain.entity.enums.Units.entries[setTable.distanceU] ),
+            weight = ParameterImpl(value = setTable.weight, com.count_out.domain.entity.enums.Units.entries[setTable.weightU] ),
             intervalReps = setTable.intervalReps,
-            intensity = Zone.entries[setTable.intensity],
+            intensity = com.count_out.domain.entity.enums.Zone.entries[setTable.intensity],
             intervalDown = setTable.intervalDown,
             groupCount = setTable.groupCount,
-            rest = ParameterImpl(value = setTable.timeRest, Units.entries[setTable.timeRestU] ),
+            rest = ParameterImpl(value = setTable.timeRest, com.count_out.domain.entity.enums.Units.entries[setTable.timeRestU] ),
             speech = speechKit?.toSpeechKit(),
         )
     }
@@ -104,7 +104,7 @@ data class RoundRel(
         return RoundImpl(
             exercise = exercise?.map { it.toExercise() } ?: emptyList(),  ///.sortedBy{ it.idView }.sortedBy{ it.idView } реализовать в usecase
             idRound = round.idRound,
-            roundType = RoundType.entries[round.roundType],
+            roundType = com.count_out.domain.entity.enums.RoundType.entries[round.roundType],
             speechId = round.speechId,
             speech = speechKit?.toSpeechKit(),
             trainingId = round.trainingId,

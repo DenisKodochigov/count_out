@@ -8,10 +8,10 @@ import com.count_out.device.bluetooth.models.BleConnectionImpl
 import com.count_out.device.bluetooth.models.BleDeviceImpl
 import com.count_out.device.bluetooth.models.BleStates
 import com.count_out.device.permission.PermissionApp
-import com.count_out.entity.enums.ConnectState
-import com.count_out.entity.enums.ErrorBleService
-import com.count_out.entity.enums.RunningState
-import com.count_out.entity.enums.StateBleConnecting
+import com.count_out.domain.entity.enums.ConnectState
+import com.count_out.domain.entity.enums.ErrorBleService
+import com.count_out.domain.entity.enums.RunningState
+import com.count_out.domain.entity.enums.StateBleConnecting
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -38,17 +38,17 @@ class Bluetooth @Inject constructor(
         if (! checkBluetoothEnable()) return
         disconnectDevice()
         stopScanning(dataFromBle)
-        if (state.stateBleScanner.value == RunningState.Stopped){
+        if (state.stateBleScanner.value == com.count_out.domain.entity.enums.RunningState.Stopped){
 //            messageApp.messageApi(R.string.start_scanner)
-            state.stateBleScanner.value = RunningState.Started
+            state.stateBleScanner.value = com.count_out.domain.entity.enums.RunningState.Started
             bleScanner.startScannerBLEDevices(dataFromBle, state)
         }
     }
 
     fun stopScanning(dataFromBle: DataFromBle){
         if (! checkBluetoothEnable()) return
-        if (state.stateBleScanner.value == RunningState.Started){
-            state.stateBleScanner.value = RunningState.Stopped
+        if (state.stateBleScanner.value == com.count_out.domain.entity.enums.RunningState.Started){
+            state.stateBleScanner.value = com.count_out.domain.entity.enums.RunningState.Stopped
             bleScanner.stopScannerBLEDevices(dataFromBle)
 //            messageApp.messageApi(R.string.stop_scanner)
         }
@@ -56,8 +56,9 @@ class Bluetooth @Inject constructor(
 
     fun connectDevice(dataFromBle: DataFromBle, dataForBle: DataForBle){
         if (! checkBluetoothEnable()) return
-        if (state.stateBleScanner.value == RunningState.Started) stopScanning(dataFromBle)
-        dataFromBle.connectingState.value = ConnectState.CONNECTING
+        if (state.stateBleScanner.value == com.count_out.domain.entity.enums.RunningState.Started) stopScanning(dataFromBle)
+        dataFromBle.connectingState.value =
+            com.count_out.domain.entity.enums.ConnectState.CONNECTING
         getRemoteDevice(bluetoothAdapter, dataForBle, dataFromBle, state)
         sendHeartRate(bleConnecting.heartRate, dataFromBle)
         if ( dataForBle.currentConnection == null ) { bleConnecting.connectDevice(state, dataForBle) }
@@ -68,7 +69,8 @@ class Bluetooth @Inject constructor(
         CoroutineScope(Dispatchers.Default).launch {
             heartRate.collect{ hr->
                 dataFromBle.heartRate.value = hr
-                if ( hr > 0) dataFromBle.connectingState.value = ConnectState.CONNECTED
+                if ( hr > 0) dataFromBle.connectingState.value =
+                    com.count_out.domain.entity.enums.ConnectState.CONNECTED
             }
         }
     }
@@ -80,18 +82,20 @@ class Bluetooth @Inject constructor(
         bleStates: BleStates,
     ): Boolean {
         if (! checkBluetoothEnable()) return false
-        if (bleStates.stateBleScanner.value == RunningState.Stopped){
+        if (bleStates.stateBleScanner.value == com.count_out.domain.entity.enums.RunningState.Stopped){
             bluetoothAdapter.let { adapter ->
                 try {
                     adapter.getRemoteDevice(dataForBle.addressForSearch)?.let { dv ->
                         dataForUi.lastConnectHearthRateDevice.value = BleDeviceImpl().fromBluetoothDevice(dv)
                         dataForBle.currentConnection = BleConnectionImpl(device = dv)
-                        bleStates.stateBleConnecting = StateBleConnecting.GET_REMOTE_DEVICE
+                        bleStates.stateBleConnecting =
+                            com.count_out.domain.entity.enums.StateBleConnecting.GET_REMOTE_DEVICE
                         return true
                     }
                 } catch (exception: IllegalArgumentException) {
 //                    messageApp.errorApi("Device not found with provided address. $exception")
-                    bleStates.error = ErrorBleService.GET_REMOTE_DEVICE
+                    bleStates.error =
+                        com.count_out.domain.entity.enums.ErrorBleService.GET_REMOTE_DEVICE
                 }
             }
         } else {

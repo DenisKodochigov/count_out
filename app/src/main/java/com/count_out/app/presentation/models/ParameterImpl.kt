@@ -1,7 +1,7 @@
 package com.count_out.app.presentation.models
 
-import com.count_out.entity.entity.workout.Parameter
-import com.count_out.entity.enums.Units
+import com.count_out.domain.entity.workout.Parameter
+import com.count_out.domain.entity.enums.Units
 
 data class ParameterImpl(
     override val value: Double,

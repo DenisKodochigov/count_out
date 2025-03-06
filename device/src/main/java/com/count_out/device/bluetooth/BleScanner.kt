@@ -11,7 +11,7 @@ import android.os.ParcelUuid
 import com.count_out.data.router.models.DataFromBle
 import com.count_out.device.bluetooth.models.BleStates
 import com.count_out.device.bluetooth.models.Const
-import com.count_out.entity.enums.RunningState
+import com.count_out.domain.entity.enums.RunningState
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -55,7 +55,7 @@ class BleScanner @Inject constructor(
 //                delay = timeScanning * 1000L,
 //                bleStates.stateBleScanner
 //            )
-            bleStates.stateBleScanner.value = RunningState.Stopped
+            bleStates.stateBleScanner.value = com.count_out.domain.entity.enums.RunningState.Stopped
             stopScanner(dataFromBle)
 //            timer.start(
 //                sec = timeScanning,
@@ -104,7 +104,7 @@ class BleScanner @Inject constructor(
         override fun onScanFailed(errorCode: Int) {
 //            lg("Error scan BLE device. $errorCode")
             dataFromBle.scannedBle.value = false
-            bleStates.stateBleScanner.value = RunningState.Stopped
+            bleStates.stateBleScanner.value = com.count_out.domain.entity.enums.RunningState.Stopped
         }
     }
     private fun scanSettings(reportDelay: Long): ScanSettings {

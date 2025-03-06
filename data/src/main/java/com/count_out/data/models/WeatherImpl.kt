@@ -1,6 +1,6 @@
 package com.count_out.data.models
 
-import com.count_out.entity.entity.weather.Weather
+import com.count_out.domain.entity.weather.Weather
 
 data class WeatherImpl(
     override val time: Long = System.currentTimeMillis(),

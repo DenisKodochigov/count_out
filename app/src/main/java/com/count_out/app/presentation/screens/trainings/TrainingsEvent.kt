@@ -1,7 +1,7 @@
 package com.count_out.app.presentation.screens.trainings
 
 import com.count_out.app.presentation.prime.Event
-import com.count_out.entity.entity.workout.Training
+import com.count_out.domain.entity.workout.Training
 
 sealed class TrainingsEvent: Event{
     data object Add: TrainingsEvent()

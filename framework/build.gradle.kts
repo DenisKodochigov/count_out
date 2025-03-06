@@ -42,7 +42,7 @@ android {
 }
 dependencies {
     implementation(project(":data"))
-    implementation(project(":entity"))
+//    implementation(project(":app"))
     implementation(libs.bundles.core)
     //Hilt
     implementation (libs.bundles.hilt)

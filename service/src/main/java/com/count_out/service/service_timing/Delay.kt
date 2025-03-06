@@ -1,28 +1,28 @@
 package com.count_out.service.service_timing
 
 import android.os.SystemClock
-import com.count_out.entity.enums.RunningState
+import com.count_out.domain.entity.enums.RunningState
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 
 class Delay{
 
-    suspend fun run(delay: Long, pause: MutableStateFlow<RunningState?>){
+    suspend fun run(delay: Long, pause: MutableStateFlow<com.count_out.domain.entity.enums.RunningState?>){
         val startTime: Long = SystemClock.elapsedRealtime()
         var pauseTime: Long = 0
         val endTime: MutableStateFlow<Long> = MutableStateFlow(startTime + delay)
         while (endTime.value > SystemClock.elapsedRealtime() ) {
             when (pause.value){
-                RunningState.Started -> {
+                com.count_out.domain.entity.enums.RunningState.Started -> {
                     if (pauseTime != 0L) {
                         endTime.value = pauseTime + (SystemClock.elapsedRealtime() - pauseTime)
                         pauseTime = 0L
                     }
                 }
-                RunningState.Stopped -> {
+                com.count_out.domain.entity.enums.RunningState.Stopped -> {
                     endTime.value = SystemClock.elapsedRealtime()
                 }
-                RunningState.Paused -> {
+                com.count_out.domain.entity.enums.RunningState.Paused -> {
                     if (pauseTime == 0L) {
                         pauseTime = endTime.value
                         endTime.value += 100000000000L

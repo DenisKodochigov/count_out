@@ -1,18 +1,20 @@
 package com.count_out.data.router.models
 
-import com.count_out.entity.entity.router.Buffer
-import com.count_out.entity.entity.StepTraining
-import com.count_out.entity.enums.ConnectState
-import com.count_out.entity.entity.Coordinate
-import com.count_out.entity.enums.RunningState
-import com.count_out.entity.entity.TickTime
-import com.count_out.entity.entity.router.DeviceUI
+import com.count_out.domain.entity.Coordinate
+import com.count_out.domain.entity.StepTraining
+import com.count_out.domain.entity.TickTime
+import com.count_out.domain.entity.enums.ConnectState
+import com.count_out.domain.entity.enums.RunningState
+import com.count_out.domain.entity.router.Buffer
+import com.count_out.domain.entity.router.DeviceUI
 import kotlinx.coroutines.flow.MutableStateFlow
 
 data class Buffer (
     override val heartRate: MutableStateFlow<Int> = MutableStateFlow(0),
     override val scannedBle: MutableStateFlow<Boolean> = MutableStateFlow(false),
-    override val bleConnectState: MutableStateFlow<ConnectState> = MutableStateFlow(ConnectState.NOT_CONNECTED),
+    override val bleConnectState: MutableStateFlow<ConnectState> = MutableStateFlow(
+        ConnectState.NOT_CONNECTED
+    ),
     override val foundDevices: MutableStateFlow<List<DeviceUI>> = MutableStateFlow(emptyList()),
     override val lastConnectHearthRateDevice: MutableStateFlow<DeviceUI?> = MutableStateFlow(null),
 

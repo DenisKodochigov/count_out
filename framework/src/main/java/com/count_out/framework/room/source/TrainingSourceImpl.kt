@@ -7,8 +7,7 @@ import com.count_out.data.source.room.RingSource
 import com.count_out.data.source.room.RoundSource
 import com.count_out.data.source.room.SpeechKitSource
 import com.count_out.data.source.room.TrainingSource
-import com.count_out.entity.entity.workout.Training
-import com.count_out.entity.enums.RoundType
+import com.count_out.domain.entity.enums.RoundType
 import com.count_out.framework.room.db.training.TrainingDao
 import com.count_out.framework.room.db.training.TrainingTable
 import kotlinx.coroutines.flow.Flow
@@ -26,24 +25,24 @@ class TrainingSourceImpl @Inject constructor(
         return get(training.idTraining)
     }
 
-    override fun add(): Flow<List<Training>> {
+    override fun add(): Flow<List<com.count_out.domain.entity.workout.Training>> {
         val trainingId = ( dao.add( TrainingTable( speechId = speechKitSource.addL())))
-        roundSource.add( newRoundImpl(trainingId = trainingId, roundType = RoundType.WorkUp))
-        roundSource.add( newRoundImpl(trainingId = trainingId, roundType = RoundType.WorkOut))
-        roundSource.add( newRoundImpl(trainingId = trainingId, roundType = RoundType.WorkDown))
+        roundSource.add( newRoundImpl(trainingId = trainingId, roundType = com.count_out.domain.entity.enums.RoundType.WorkUp))
+        roundSource.add( newRoundImpl(trainingId = trainingId, roundType = com.count_out.domain.entity.enums.RoundType.WorkOut))
+        roundSource.add( newRoundImpl(trainingId = trainingId, roundType = com.count_out.domain.entity.enums.RoundType.WorkDown))
         return gets()
     }
 
-    override fun copy(training: TrainingImpl): Flow<List<Training>> {
+    override fun copy(training: TrainingImpl): Flow<List<com.count_out.domain.entity.workout.Training>> {
         val idSpeechKit = speechKitSource.copyL(training.speech as SpeechKitImpl)
         val trainingId = (dao.add(toTrainingTable(training.copy(speechId = idSpeechKit))))
         if (training.rounds.isNotEmpty()) {
             training.rounds.forEach { round->
                 roundSource.copy((round as RoundImpl).copy(trainingId = trainingId)) }
         } else {
-            roundSource.copy( newRoundImpl(trainingId = trainingId, roundType = RoundType.WorkUp))
-            roundSource.copy( newRoundImpl(trainingId = trainingId, roundType = RoundType.WorkOut))
-            roundSource.copy( newRoundImpl(trainingId = trainingId, roundType = RoundType.WorkDown))
+            roundSource.copy( newRoundImpl(trainingId = trainingId, roundType = com.count_out.domain.entity.enums.RoundType.WorkUp))
+            roundSource.copy( newRoundImpl(trainingId = trainingId, roundType = com.count_out.domain.entity.enums.RoundType.WorkOut))
+            roundSource.copy( newRoundImpl(trainingId = trainingId, roundType = com.count_out.domain.entity.enums.RoundType.WorkDown))
         }
         return gets()
     }
@@ -66,7 +65,7 @@ class TrainingSourceImpl @Inject constructor(
             speechId = training.speechId
         )
 
-    private fun newRoundImpl(trainingId: Long, roundType: RoundType) = RoundImpl(
+    private fun newRoundImpl(trainingId: Long, roundType: com.count_out.domain.entity.enums.RoundType) = RoundImpl(
         exercise = emptyList(),
         idRound = 0,
         roundType = roundType,

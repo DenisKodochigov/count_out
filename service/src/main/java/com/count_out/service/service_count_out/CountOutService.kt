@@ -10,7 +10,7 @@ import com.count_out.data.models.WorkoutRecordImpl
 import com.count_out.data.router.DataForServ
 import com.count_out.data.router.Router
 import com.count_out.data.router.models.DataForUI
-import com.count_out.entity.enums.RunningState
+import com.count_out.domain.entity.enums.RunningState
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -36,9 +36,10 @@ class CountOutService @Inject constructor(): Service() {
     override fun onBind(p0: Intent?): IBinder = DistributionServiceBinder()
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         when (intent?.getStringExtra(NOTIFICATION_EXTRA)) {
-            RunningState.Started.name -> startWork()
-            RunningState.Paused.name -> pauseWork()
-            RunningState.Stopped.name -> router.dataForUI.runningState.value = RunningState.Stopped
+            com.count_out.domain.entity.enums.RunningState.Started.name -> startWork()
+            com.count_out.domain.entity.enums.RunningState.Paused.name -> pauseWork()
+            com.count_out.domain.entity.enums.RunningState.Stopped.name -> router.dataForUI.runningState.value =
+                com.count_out.domain.entity.enums.RunningState.Stopped
         }
         return super.onStartCommand(intent, flags, startId)
     }
@@ -91,12 +92,12 @@ class CountOutService @Inject constructor(): Service() {
 
     private fun startSite(){
 //        site.start(router.dataFromSite)
-        router.dataForSite.state.value = RunningState.Started
+        router.dataForSite.state.value = com.count_out.domain.entity.enums.RunningState.Started
     }
     private fun stopSite(){
         if (running) {
 //            site.stop()
-            router.dataForSite.state.value = RunningState.Stopped
+            router.dataForSite.state.value = com.count_out.domain.entity.enums.RunningState.Stopped
             running = false
         }
     }
@@ -109,8 +110,9 @@ class CountOutService @Inject constructor(): Service() {
 
     private fun startWork(){
         when(router.dataForUI.runningState.value){
-            RunningState.Paused-> router.dataFromWork.runningState.value = RunningState.Started
-            RunningState.Stopped, null-> {
+            com.count_out.domain.entity.enums.RunningState.Paused -> router.dataFromWork.runningState.value =
+                com.count_out.domain.entity.enums.RunningState.Started
+            com.count_out.domain.entity.enums.RunningState.Stopped, null-> {
 //                router.dataForWork.training.value?.let { training->
 //                    workout = WorkoutDB(timeStart = SystemClock.elapsedRealtime(), trainingId = training.idTraining)
 //                    router.dataFromWork.runningState.value = RunningState.Started
@@ -125,11 +127,12 @@ class CountOutService @Inject constructor(): Service() {
     }
     private fun stopWork(){
 //        lg("#################### Stop Service Work #################### ")
-        workout.latitude = router.dataFromSite.coordinate.value?.latitude ?: 0.0
-        workout.longitude = router.dataFromSite.coordinate.value?.longitude ?: 0.0
+        workout.latitude = com.count_out.domain.entity.Coordinate.latitude ?: 0.0
+        workout.longitude = com.count_out.domain.entity.Coordinate.longitude ?: 0.0
 //        workout.address = site.getAddressFromLocation(workout.latitude,workout.longitude)
         workout.timeEnd = SystemClock.elapsedRealtime()
-        router.dataFromWork.runningState.value = RunningState.Stopped
+        router.dataFromWork.runningState.value =
+            com.count_out.domain.entity.enums.RunningState.Stopped
         stopWriteBase()
     }
     private fun sendDataToNotification(){
@@ -141,7 +144,8 @@ class CountOutService @Inject constructor(): Service() {
     }
     private fun pauseWork(){
 //        lg("#################### Pause Work ####################")
-        router.dataFromWork.runningState.value = RunningState.Paused
+        router.dataFromWork.runningState.value =
+            com.count_out.domain.entity.enums.RunningState.Paused
 //        notificationHelper.updateNotification(data = router.dataForNotification.value,
 //            state = router.dataFromWork.runningState.value ?: RunningState.Binding )
 //        notificationHelper.setContinueButton()

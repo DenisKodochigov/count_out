@@ -1,9 +1,9 @@
 package com.count_out.data.models
 
-import com.count_out.entity.entity.workout.Parameter
-import com.count_out.entity.entity.workout.Set
-import com.count_out.entity.enums.Goal
-import com.count_out.entity.enums.Zone
+import com.count_out.domain.entity.enums.Goal
+import com.count_out.domain.entity.enums.Zone
+import com.count_out.domain.entity.workout.Parameter
+import com.count_out.domain.entity.workout.Set
 
 data class SetImpl(
     override val idSet: Long,

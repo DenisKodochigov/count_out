@@ -2,9 +2,10 @@ package com.count_out.data.repository
 
 import com.count_out.data.models.ExerciseImpl
 import com.count_out.data.source.room.ExerciseSource
-import com.count_out.entity.entity.workout.ActionWithActivity
 import com.count_out.domain.entity.DataForChangeSequence
-import com.count_out.entity.entity.workout.Exercise
+import com.count_out.domain.entity.workout.ActionWithActivity
+import com.count_out.domain.entity.workout.Activity
+import com.count_out.domain.entity.workout.Exercise
 import com.count_out.domain.repository.trainings.ExerciseRepo
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
@@ -21,7 +22,8 @@ class ExerciseRepoImpl @Inject constructor(private val exerciseSource: ExerciseS
     override fun getFilter(list: List<Long>): Flow<List<Exercise>> = exerciseSource.getFilter(list)
     override fun selectActivity(activity: ActionWithActivity): Flow<Exercise> =
         exerciseSource.setActivityIntoExercise(
-            exerciseId = activity.exerciseId, activityId = activity.activity.idActivity)
+            exerciseId = ActionWithActivity.exerciseId, activityId = Activity.idActivity
+        )
 
     override fun changeSequenceExercise(item: DataForChangeSequence): Flow<Exercise> {
         TODO("Not yet implemented")

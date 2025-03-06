@@ -42,7 +42,7 @@ android {
 
 dependencies {
     implementation(project(":domain"))
-    implementation(project(":entity"))
+//    implementation(project(":app"))
     implementation(libs.core.ktx)
     //Hilt
     implementation (libs.bundles.hilt)

@@ -1,6 +1,6 @@
 package com.count_out.domain.repository
 
-import com.count_out.entity.entity.router.DeviceUI
+import com.count_out.domain.entity.router.DeviceUI
 import kotlinx.coroutines.flow.Flow
 
 interface BluetoothRepo {

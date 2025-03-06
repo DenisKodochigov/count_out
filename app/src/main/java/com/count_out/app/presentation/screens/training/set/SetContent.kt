@@ -47,12 +47,12 @@ import com.count_out.app.presentation.view_components.custom_view.Frame
 import com.count_out.app.presentation.view_components.custom_view.IconQ
 import com.count_out.app.presentation.view_components.icons.IconsCollapsing
 import com.count_out.app.presentation.view_components.icons.IconsGroup
-import com.count_out.entity.toDoubleMy
-import com.count_out.entity.toIntMy
-import com.count_out.entity.entity.workout.Set
-import com.count_out.entity.enums.Goal
-import com.count_out.entity.enums.Units
-import com.count_out.entity.enums.Zone
+import com.count_out.domain.entity.enums.Goal
+import com.count_out.domain.entity.enums.Units
+import com.count_out.domain.entity.enums.Zone
+import com.count_out.domain.entity.toDoubleMy
+import com.count_out.domain.entity.toIntMy
+import com.count_out.domain.entity.workout.Set
 
 val interval_between_pole = 4.dp
 
@@ -74,9 +74,10 @@ val interval_between_pole = 4.dp
         }
     }
 }
+
 @Composable fun FirstLine(dataState: TrainingState, action:Action, set: SetImpl) {
     val setInfo = when (set.goal) {
-        Goal.Distance -> viewDistance(set) + stringResource(id = set.distance.unit.id )
+        Goal.Distance -> viewDistance(set) + stringResource(id = set.distance.unit.id)
         Goal.Duration -> "${set.duration.value} ${stringResource(id = set.duration.unit.id)}"
         Goal.Count -> "${stringResource(id = R.string.counts)}: ${set.reps}"
         Goal.CountGroup -> "${set.reps} ${stringResource(id = R.string.counts)}"

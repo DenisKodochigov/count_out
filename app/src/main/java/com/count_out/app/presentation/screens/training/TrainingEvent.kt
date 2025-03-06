@@ -4,9 +4,9 @@ import com.count_out.app.presentation.prime.Event
 import com.count_out.app.presentation.models.ActionWithActivityImpl
 import com.count_out.app.presentation.models.ActionWithSetImpl
 import com.count_out.app.presentation.models.DataForChangeSequenceImpl
-import com.count_out.entity.entity.workout.Activity
-import com.count_out.entity.entity.workout.Exercise
-import com.count_out.entity.entity.workout.Training
+import com.count_out.domain.entity.workout.Activity
+import com.count_out.domain.entity.workout.Exercise
+import com.count_out.domain.entity.workout.Training
 
 sealed class TrainingEvent: Event{
     data class GetTraining(val id: Long): TrainingEvent()

@@ -13,9 +13,9 @@ import com.count_out.app.permission.RequestPermissionsAll
 import com.count_out.app.presentation.StartApp
 import dagger.hilt.android.AndroidEntryPoint
 
-
 @AndroidEntryPoint
-class MainActivity: ComponentActivity() {
+class MainActivity() : ComponentActivity(){
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

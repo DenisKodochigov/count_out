@@ -1,7 +1,6 @@
 package com.count_out.device.bluetooth
 
 import com.count_out.data.source.framework.BleSource
-import com.count_out.entity.entity.router.DeviceUI
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
@@ -14,7 +13,7 @@ class BleSourceImpl @Inject constructor(): BleSource {
         TODO("Not yet implemented")
     }
 
-    override fun connectDevice(): Flow<DeviceUI> {
+    override fun connectDevice(): Flow<com.count_out.domain.entity.router.DeviceUI> {
         TODO("Not yet implemented")
     }
 
@@ -22,7 +21,7 @@ class BleSourceImpl @Inject constructor(): BleSource {
         TODO("Not yet implemented")
     }
 
-    override fun selectDeice(device: DeviceUI): Flow<Boolean> {
+    override fun selectDeice(device: com.count_out.domain.entity.router.DeviceUI): Flow<Boolean> {
         TODO("Not yet implemented")
     }
 

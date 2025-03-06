@@ -30,10 +30,10 @@ import com.count_out.app.presentation.view_components.ButtonConfirm
 import com.count_out.app.presentation.view_components.ModalBottomSheetApp
 import com.count_out.app.presentation.view_components.TextApp
 import com.count_out.app.presentation.view_components.TextFieldApp
-import com.count_out.entity.entity.workout.Exercise
-import com.count_out.entity.entity.workout.Round
-import com.count_out.entity.entity.workout.Set
-import com.count_out.entity.entity.workout.Training
+import com.count_out.domain.entity.workout.Exercise
+import com.count_out.domain.entity.workout.Round
+import com.count_out.domain.entity.workout.Set
+import com.count_out.domain.entity.workout.Training
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable fun BottomSheetSpeech(itemSpeech: BottomSheetInterface) {

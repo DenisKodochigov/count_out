@@ -6,7 +6,7 @@ import com.count_out.data.repository.WeatherRepoImpl
 import com.count_out.data.source.network.WeatherSource
 import com.count_out.data.source.room.RoundSource
 import com.count_out.data.source.room.TrainingSource
-import com.count_out.entity.entity.weather.Weather
+import com.count_out.domain.entity.weather.Weather
 import junit.framework.TestCase.assertEquals
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flowOf

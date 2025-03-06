@@ -17,8 +17,8 @@ import com.count_out.domain.use_case.bluetooth.StopScanBleUC
 import com.count_out.domain.use_case.settings.GetSettingUC
 import com.count_out.domain.use_case.settings.GetSettingsUC
 import com.count_out.domain.use_case.settings.UpdateSettingUC
-import com.count_out.entity.entity.router.DeviceUI
-import com.count_out.entity.entity.workout.Activity
+import com.count_out.domain.entity.router.DeviceUI
+import com.count_out.domain.entity.workout.Activity
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch

@@ -1,6 +1,6 @@
 package com.count_out.domain.use_case.activity
 
-import com.count_out.entity.entity.workout.Activity
+import com.count_out.domain.entity.workout.Activity
 import com.count_out.domain.repository.trainings.ActivityRepo
 import com.count_out.domain.use_case.UseCase
 import kotlinx.coroutines.flow.Flow

@@ -4,11 +4,11 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.mutableStateOf
 import com.count_out.app.presentation.models.BottomSheetInterface
-import com.count_out.entity.entity.workout.Activity
-import com.count_out.entity.entity.workout.Exercise
-import com.count_out.entity.entity.workout.Set
-import com.count_out.entity.entity.workout.SpeechKit
-import com.count_out.entity.entity.workout.Training
+import com.count_out.domain.entity.workout.Activity
+import com.count_out.domain.entity.workout.Exercise
+import com.count_out.domain.entity.workout.Set
+import com.count_out.domain.entity.workout.SpeechKit
+import com.count_out.domain.entity.workout.Training
 
 data class TrainingState (
     val training: Training,

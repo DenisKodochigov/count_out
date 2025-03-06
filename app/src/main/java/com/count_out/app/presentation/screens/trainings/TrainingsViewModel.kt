@@ -4,12 +4,12 @@ import androidx.lifecycle.viewModelScope
 import com.count_out.app.presentation.prime.Event
 import com.count_out.app.presentation.prime.PrimeViewModel
 import com.count_out.app.presentation.prime.ScreenState
-import com.count_out.entity.entity.workout.Training
 import com.count_out.domain.use_case.trainings.AddTrainingUC
 import com.count_out.domain.use_case.trainings.CopyTrainingUC
 import com.count_out.domain.use_case.trainings.DeleteTrainingUC
 import com.count_out.domain.use_case.trainings.GetTrainingsUC
 import com.count_out.domain.use_case.trainings.SelectTrainingUC
+import com.count_out.domain.entity.workout.Training
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch

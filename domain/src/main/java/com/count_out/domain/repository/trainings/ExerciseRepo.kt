@@ -1,8 +1,8 @@
 package com.count_out.domain.repository.trainings
 
-import com.count_out.entity.entity.workout.ActionWithActivity
 import com.count_out.domain.entity.DataForChangeSequence
-import com.count_out.entity.entity.workout.Exercise
+import com.count_out.domain.entity.workout.ActionWithActivity
+import com.count_out.domain.entity.workout.Exercise
 import kotlinx.coroutines.flow.Flow
 
 interface ExerciseRepo {

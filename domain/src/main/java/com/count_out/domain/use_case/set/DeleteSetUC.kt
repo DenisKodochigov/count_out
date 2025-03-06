@@ -1,7 +1,7 @@
 package com.count_out.domain.use_case.set
 
-import com.count_out.entity.entity.workout.ActionWithSet
-import com.count_out.entity.entity.workout.Set
+import com.count_out.domain.entity.workout.ActionWithSet
+import com.count_out.domain.entity.workout.Set
 import com.count_out.domain.repository.trainings.SetRepo
 import com.count_out.domain.use_case.UseCase
 import kotlinx.coroutines.flow.Flow

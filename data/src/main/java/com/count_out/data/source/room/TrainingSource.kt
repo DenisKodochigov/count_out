@@ -1,7 +1,7 @@
 package com.count_out.data.source.room
 
 import com.count_out.data.models.TrainingImpl
-import com.count_out.entity.entity.workout.Training
+import com.count_out.domain.entity.workout.Training
 import kotlinx.coroutines.flow.Flow
 
 interface TrainingSource {

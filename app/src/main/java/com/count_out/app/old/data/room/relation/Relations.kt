@@ -10,9 +10,9 @@
 //import com.count_out.app.data.room.tables.SpeechKitDB
 //import com.count_out.app.data.room.tables.TrainingDB
 //import com.count_out.app.entity.speech.SpeechKit
-//import com.count_out.app.entity.workout.Activity
-//import com.count_out.app.entity.workout.Exercise
-//import com.count_out.app.entity.workout.Set
+//import com.count_out.domain.entity.Activity
+//import com.count_out.domain.entity.Exercise
+//import com.count_out.domain.entity.Set
 //
 //data class SpeechKitRel(
 //    @Embedded val speechKitDB: SpeechKitDB,

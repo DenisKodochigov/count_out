@@ -1,6 +1,6 @@
 package com.count_out.app.presentation.models
 
-import com.count_out.entity.entity.workout.Activity
+import com.count_out.domain.entity.workout.Activity
 
 data class ActivityImpl(
     override val idActivity: Long,

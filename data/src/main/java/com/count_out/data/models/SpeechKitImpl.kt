@@ -1,7 +1,7 @@
 package com.count_out.data.models
 
-import com.count_out.entity.entity.workout.Speech
-import com.count_out.entity.entity.workout.SpeechKit
+import com.count_out.domain.entity.workout.Speech
+import com.count_out.domain.entity.workout.SpeechKit
 
 data class SpeechKitImpl(
     override var idSpeechKit: Long,
