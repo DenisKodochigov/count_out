@@ -3,8 +3,8 @@ package com.example.count_out.data.room.tables
 import androidx.room.Entity
 import androidx.room.Ignore
 import androidx.room.PrimaryKey
-import com.example.count_out.entity.speech.Speech
-import com.example.count_out.entity.speech.SpeechKit
+import com.example.count_out.entity.workout.speech.Speech
+import com.example.count_out.entity.workout.speech.SpeechKit
 
 @Entity(tableName = "tb_speech_kit")
 data class SpeechKitDB(

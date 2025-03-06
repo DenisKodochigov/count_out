@@ -29,19 +29,20 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import com.example.count_out.R
-import com.example.count_out.data.room.tables.SetDB
-import com.example.count_out.domain.toDoubleMy
-import com.example.count_out.domain.toIntMy
+import com.example.count_out.entity.toDoubleMy
+import com.example.count_out.entity.toIntMy
 import com.example.count_out.entity.Const.contourAll1
 import com.example.count_out.entity.Const.contourBot1
-import com.example.count_out.entity.DistanceE
-import com.example.count_out.entity.GoalSet
-import com.example.count_out.entity.TimeE
-import com.example.count_out.entity.TypeKeyboard
-import com.example.count_out.entity.WeightE
-import com.example.count_out.entity.Zone
-import com.example.count_out.entity.workout.Set
-import com.example.count_out.ui.screens.training.TrainingScreenState
+import com.example.count_out.entity.enums.Goal
+import com.example.count_out.entity.enums.Units
+import com.example.count_out.entity.enums.Zone
+import com.example.count_out.ui.models.ActionWithSetImpl
+import com.example.count_out.ui.models.ParameterImpl
+import com.example.count_out.ui.models.SetImpl
+import com.example.count_out.ui.models.TypeKeyboard
+import com.example.count_out.ui.screens.prime.Action
+import com.example.count_out.ui.screens.training.TrainingEvent
+import com.example.count_out.ui.screens.training.TrainingState
 import com.example.count_out.ui.theme.alumBodyLarge
 import com.example.count_out.ui.theme.alumBodyMedium
 import com.example.count_out.ui.theme.alumBodySmall
@@ -51,37 +52,42 @@ import com.example.count_out.ui.view_components.custom_view.Frame
 import com.example.count_out.ui.view_components.custom_view.IconQ
 import com.example.count_out.ui.view_components.icons.IconsCollapsing
 import com.example.count_out.ui.view_components.icons.IconsGroup
+import com.example.count_out.entity.workout.Set
+
 
 val interval_between_pole = 4.dp
 
-@Composable fun SetContent(uiState: TrainingScreenState, set: Set, amountSet: Int, index: Int){
+@Composable fun SetContent(dataState: TrainingState, action: Action, set: SetImpl){
     AnimatedVisibility(modifier = Modifier.padding(horizontal = 4.dp, vertical = 1.dp), visible = true) {
         Frame(colorAlpha = 0.4f, contour = contourAll1) {
-            Column (horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp)) {
-                if (amountSet > 1 && uiState.listCollapsingSet.value.find { it == set.idSet } == null)
-                    FirstLine(uiState, set, index)
+            Column (horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier
+                .fillMaxWidth()
+                .padding(vertical = 4.dp)) {
+                if (set.positions.second == 1 &&
+                    dataState.listCollapsingSet.value.find { it == set.idSet } == null)
+                    FirstLine(dataState, action, set )
                 else {
-                    TaskSwitch( uiState, set, index, amountSet )
-                    BodySet( uiState, set)
-                    ZonePulseSwitch( uiState, set )
+                    TaskSwitch( dataState, action, set )
+                    BodySet( dataState, action, set )
+                    ZonePulseSwitch( dataState, action, set )
                 }
             }
         }
     }
 }
-@Composable fun FirstLine(uiState: TrainingScreenState, set: Set, index: Int) {
+@Composable fun FirstLine(dataState: TrainingState, action:Action, set: SetImpl) {
     val setInfo = when (set.goal) {
-        GoalSet.DISTANCE -> viewDistance(set) + stringResource(id = set.distanceE.id)
-        GoalSet.DURATION -> "${set.duration/60} ${stringResource(id = R.string.min)}"
-        GoalSet.COUNT -> "${stringResource(id = R.string.counts)}: ${set.reps}"
-        GoalSet.COUNT_GROUP -> "${set.reps} ${stringResource(id = R.string.counts)}"
+        Goal.Distance -> viewDistance(set) + stringResource(id = set.distance.unit.id )
+        Goal.Duration -> "${set.duration.value} ${stringResource(id = set.duration.unit.id)}"
+        Goal.Count -> "${stringResource(id = R.string.counts)}: ${set.reps}"
+        Goal.CountGroup -> "${set.reps} ${stringResource(id = R.string.counts)}"
     }
     Row (verticalAlignment = Alignment.CenterVertically){
         IconsCollapsing(
-            onClick = { setCollapsing(uiState, set) },
-            wrap = uiState.listCollapsingSet.value.find { it == set.idSet } != null )
+            onClick = { setCollapsing(dataState, set) },
+            wrap = dataState.listCollapsingSet.value.find { it == set.idSet } != null )
         TextApp(
-            text = "${(index + 1)}" ,
+            text = "${(set.positions.first + 1)}" ,
             style = typography.titleMedium,
             textAlign = TextAlign.Start,
             modifier = Modifier.padding(start = 4.dp, end =16.dp))
@@ -92,84 +98,130 @@ val interval_between_pole = 4.dp
             fontWeight = FontWeight.Light,
             textAlign = TextAlign.Start,)
         IconsGroup(
-            onClickCopy = { uiState.onCopySet(uiState.training.idTraining, set.idSet) },
-            onClickDelete = { uiState.onDeleteSet(uiState.training.idTraining, set.idSet) },
+            onClickCopy = {
+                action.ex(TrainingEvent.CopySet(ActionWithSetImpl(dataState.training.idTraining, set)))},
+            onClickDelete = {
+                action.ex(TrainingEvent.DeleteSet(ActionWithSetImpl(dataState.training.idTraining, set)))},
             onClickSpeech = {
-                uiState.set = set
-                uiState.showSpeechSet.value = true},
+                dataState.set = set
+                dataState.showSpeechSet.value = true},
         )
     }
 }
-@Composable fun BodySet( uiState: TrainingScreenState, set: Set){
-    when (set.goal){
-        GoalSet.DISTANCE -> Distance( uiState, set)
-        GoalSet.DURATION -> Duration( uiState, set)
-        GoalSet.COUNT -> Count( uiState, set)
-        else -> {}
-    }
-}
 
-@Composable fun Distance(uiState: TrainingScreenState, set: Set) {
+@Composable fun BodySet(dataState: TrainingState, action:Action, set: SetImpl){
+    when (set.goal){
+        Goal.Distance -> Distance( dataState, action, set)
+        Goal.Duration -> Duration( dataState, action, set)
+        Goal.Count -> Count( dataState, action, set)
+        Goal.CountGroup -> {}
+    }
+}
+@Composable fun Distance(dataState: TrainingState, action:Action, set: SetImpl) {
     Row( horizontalArrangement = Arrangement.Center,
         verticalAlignment = Alignment.Top,
-        modifier = Modifier.fillMaxWidth().padding(vertical = 12.dp)){
-        DistancePole(uiState, set, Modifier.weight(0.8f))
-        RestPole(uiState, set, Modifier.weight(1f))
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = 12.dp)){
+        DistancePole(dataState, action, set, Modifier.weight(0.8f))
+        RestPole(dataState, action, set, Modifier.weight(1f))
     }
 }
-@Composable fun Duration(uiState: TrainingScreenState, set: Set) {
+@Composable fun Duration(dataState: TrainingState, action:Action, set: SetImpl) {
     Row( horizontalArrangement = Arrangement.Center,
         verticalAlignment = Alignment.Top,
-        modifier = Modifier.fillMaxWidth().padding(vertical = 12.dp)){
-        DurationPole(uiState, set, Modifier.weight(1f))
-        WeightPole(uiState, set, Modifier.weight(0.9f))
-        RestPole(uiState, set, Modifier.weight(1f))
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = 12.dp)){
+        DurationPole(dataState, action, set, Modifier.weight(1f))
+        WeightPole(dataState, action, set, Modifier.weight(0.9f))
+        RestPole(dataState, action, set, Modifier.weight(1f))
     }
 }
-@Composable fun Count(uiState: TrainingScreenState, set: Set) {
+@Composable fun Count(dataState: TrainingState, action:Action, set: SetImpl) {
     Row( horizontalArrangement = Arrangement.Center, verticalAlignment = Alignment.Top,
-        modifier = Modifier.fillMaxWidth().padding(vertical = 12.dp)){
-        IntervalPole(uiState, set, Modifier.weight(1f))
-        WeightPole(uiState, set, Modifier.weight(0.8f))
-        RestPole(uiState, set, Modifier.weight(1f))
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = 12.dp)){
+        IntervalPole(dataState, action, set, Modifier.weight(1f))
+        WeightPole(dataState, action, set, Modifier.weight(0.8f))
+        RestPole(dataState, action, set, Modifier.weight(1f))
     }
     Row( horizontalArrangement = Arrangement.Center, verticalAlignment = Alignment.Top,
-        modifier = Modifier.fillMaxWidth().padding(bottom = 12.dp)){
-        CountFieldText(uiState, set)
-        CountGroupFieldText(uiState, set)
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(bottom = 12.dp)){
+        CountFieldText(dataState, action, set)
+        CountGroupFieldText(dataState, action, set)
     }
 }
-@Composable fun DistancePole(uiState: TrainingScreenState, set: Set, modifier: Modifier = Modifier,){   //B7B7B7
+@Composable fun DistancePole(dataState: TrainingState, action:Action, set: SetImpl, modifier: Modifier = Modifier,){   //B7B7B7
     PoleInputWithUnit(
         unitId1 = R.string.m,
         unitId2 = R.string.km,
         headId = R.string.distance,
-        term = set.distanceE == DistanceE.M,
-        placeholder = "${if (set.distanceE == DistanceE.M) set.distance else set.distance/1000 }",
+        term = set.distance.unit == Units.MT,
+        placeholder = "${ set.distance.value / (if (set.distance.unit == Units.MT) 1 else 1000) }",
         modifier = modifier,
         typeKey = TypeKeyboard.DIGIT,
-        onChangeValue = { uiState.onChangeSet ((set as SetDB).copy(
-            distance = (if (set.distanceE == DistanceE.M) 1 else 1000 )* it.toDoubleMy())) },
-        onChangeUnit = {uiState.onChangeSet ((set as SetDB).copy(
-            distanceE = if (set.distanceE == DistanceE.M) DistanceE.KM else DistanceE.M)) }
+        onChangeValue = { action.ex(
+            TrainingEvent.ChangeSet(
+            ActionWithSetImpl(
+                id = dataState.training.idTraining,
+                set = set.copy(
+                    distance = ParameterImpl(
+                        value = (if (set.distance.unit == Units.MT) 1.0 else 1000.0) * it.toDoubleMy(),
+                        unit = set.distance.unit
+                    )
+                ))
+            )) },
+        onChangeUnit = { action.ex(
+            TrainingEvent.ChangeSet(
+            ActionWithSetImpl(
+                id = dataState.training.idTraining,
+                set = set.copy(
+                    distance = ParameterImpl(
+                        value = (if (set.distance.unit == Units.MT) 1.0 else 1000.0) * set.distance.value,
+                        unit = if (set.distance.unit == Units.MT) Units.KM else Units.MT
+                    )
+                ))
+            )) }
     )
 }
-@Composable fun DurationPole(uiState: TrainingScreenState, set: Set, modifier: Modifier = Modifier){   //B7B7B7
+@Composable fun DurationPole(dataState: TrainingState, action:Action, set: SetImpl, modifier: Modifier = Modifier){   //B7B7B7
     PoleInputWithUnit(
         unitId1 = R.string.sec,
         unitId2 = R.string.min,
         headId = R.string.duration,
-        term = set.durationE == TimeE.SEC,
-        placeholder = "${ if (set.durationE == TimeE.MIN) set.duration/60 else set.duration}",
+        term = set.duration.unit == Units.S,
+        placeholder = "${ set.duration.value / (if (set.duration.unit == Units.M) 60 else 1)}",
         modifier = modifier,
         typeKey = TypeKeyboard.DIGIT,
-        onChangeValue = { uiState.onChangeSet ((set as SetDB).copy(
-            duration = (if (set.durationE == TimeE.MIN) 60 else 1) * it.toInt())) },
-        onChangeUnit = {uiState.onChangeSet ((set as SetDB).copy(
-            durationE = if (set.durationE == TimeE.SEC) TimeE.MIN else TimeE.SEC)) }
+        onChangeValue = { action.ex(
+            TrainingEvent.ChangeSet(
+            ActionWithSetImpl(
+                id = dataState.training.idTraining,
+                set = set.copy(
+                    distance = ParameterImpl(
+                        value = (if (set.duration.unit == Units.M) 60.0 else 1.0) * it.toDoubleMy(),
+                        unit = set.distance.unit
+                    )
+                ))
+            ))  },
+        onChangeUnit = {action.ex(
+            TrainingEvent.ChangeSet(
+            ActionWithSetImpl(
+                id = dataState.training.idTraining,
+                set = set.copy(
+                    distance = ParameterImpl(
+                        value = (if (set.duration.unit == Units.M) 60.0 else 1.0) * set.duration.value,
+                        unit = if (set.duration.unit == Units.M) Units.S else Units.M
+                    )
+                ))
+            )) }
     )
 }
-@Composable fun IntervalPole(uiState: TrainingScreenState, set: Set, modifier: Modifier = Modifier){   //B7B7B7
+@Composable fun IntervalPole(dataState: TrainingState, action:Action, set: SetImpl, modifier: Modifier = Modifier){   //B7B7B7
     PoleInputWithUnit(
         unitId1 = R.string.sec,
         headId = R.string.interval,
@@ -177,100 +229,163 @@ val interval_between_pole = 4.dp
         placeholder = "${ set.intervalReps }",
         modifier = modifier,
         typeKey = TypeKeyboard.DIGIT,
-        onChangeValue = { uiState.onChangeSet ((set as SetDB).copy(intervalReps = it.toDoubleMy() )) },
+        onChangeValue = { action.ex(
+            TrainingEvent.ChangeSet(ActionWithSetImpl(
+            id = dataState.training.idTraining, set.copy(intervalReps = it.toDoubleMy())
+        ))) },
         onChangeUnit = { }
     )
 }
-@Composable fun WeightPole(uiState: TrainingScreenState, set: Set, modifier: Modifier = Modifier){   //B7B7B7
+@Composable fun WeightPole(dataState: TrainingState, action:Action, set: SetImpl, modifier: Modifier = Modifier){   //B7B7B7
     PoleInputWithUnit(
         unitId1 = R.string.gr,
         unitId2 = R.string.kg,
         headId = R.string.weight,
-        term = set.weightE == WeightE.GR,
-        placeholder = "${ if (set.weightE == WeightE.GR) set.weight else set.weight/1000.0 }",
+        term = set.weight.unit == Units.GR,
+        placeholder = "${ set.weight.value / (if (set.weight.unit == Units.GR) 1 else 1000) }",
         modifier = modifier,
         typeKey = TypeKeyboard.DIGIT,
-        onChangeValue = { uiState.onChangeSet ((set as SetDB).copy(
-            weight = ((if (set.weightE == WeightE.GR) 1 else 1000) * it.toDoubleMy()).toInt() ))},
-        onChangeUnit = {uiState.onChangeSet ((set as SetDB).copy(
-            weightE = if (set.weightE == WeightE.GR) WeightE.KG else WeightE.GR)) }
+        onChangeValue = { action.ex(
+            TrainingEvent.ChangeSet(
+            ActionWithSetImpl(
+                id = dataState.training.idTraining,
+                set = set.copy(
+                    weight = ParameterImpl(
+                        value = (if (set.weight.unit == Units.GR) 1 else 1000) * it.toDoubleMy(),
+                        unit = set.weight.unit)
+                ))
+            ))
+        },
+        onChangeUnit = { action.ex(
+            TrainingEvent.ChangeSet(
+            ActionWithSetImpl(
+                id = dataState.training.idTraining,
+                set = set.copy(
+                    weight = ParameterImpl(
+                        value = (if (set.weight.unit == Units.GR) 1 else 1000) * set.weight.value,
+                        unit = if (set.weight.unit == Units.GR) Units.KG else Units.GR)
+                ))
+            ))
+        }
     )
-
 }
-@Composable fun RestPole(uiState: TrainingScreenState, set: Set, modifier: Modifier = Modifier){
+@Composable fun RestPole(dataState: TrainingState, action:Action, set: SetImpl, modifier: Modifier = Modifier){
     PoleInputWithUnit(
         unitId1 = R.string.sec,
         unitId2 = R.string.min,
         headId = R.string.rest_time,
-        term = set.timeRestE == TimeE.SEC,
-        placeholder =  "${ if (set.timeRestE == TimeE.SEC) set.timeRest else set.timeRest/60 }",
+        term = set.rest.unit == Units.S,
+        placeholder =  "${ set.rest.value / (if (set.rest.unit == Units.S) 1 else 60) }",
         modifier = modifier,
         typeKey = TypeKeyboard.DIGIT,
-        onChangeValue = { uiState.onChangeSet ((set as SetDB).copy(
-            timeRest = (if (set.timeRestE == TimeE.SEC) 1 else 60) * it.toIntMy() )) },
-        onChangeUnit = {uiState.onChangeSet ((set as SetDB).copy(
-            timeRestE = if (set.timeRestE == TimeE.SEC) TimeE.MIN else TimeE.SEC)) }
+        onChangeValue = { action.ex(
+            TrainingEvent.ChangeSet(
+            ActionWithSetImpl(
+                id = dataState.training.idTraining,
+                set = set.copy(
+                    rest = ParameterImpl(
+                        value = it.toDoubleMy() / (if (set.rest.unit == Units.S) 1.0 else 60.0),
+                        unit = set.rest.unit
+                    )
+                ))
+            )) },
+        onChangeUnit = { action.ex(
+            TrainingEvent.ChangeSet(
+            ActionWithSetImpl(
+                id = dataState.training.idTraining,
+                set = set.copy(
+                    rest = ParameterImpl(
+                        value = set.rest.value / (if (set.rest.unit == Units.S) 1.0 else 60.0),
+                        unit = if (set.rest.unit == Units.S) Units.M else Units.S)
+                ))
+            ))}
     )
 }
 
-@Composable fun CountFieldText(uiState: TrainingScreenState, set: Set){
+@Composable fun CountFieldText(dataState: TrainingState, action:Action, set: SetImpl){
     PoleInput(
         headId = R.string.counts, typeKey = TypeKeyboard.DIGIT, placeholder = "${ set.reps }",
         modifier = Modifier.width(IntrinsicSize.Min),
-        onChangeValue = { uiState.onChangeSet ((set as SetDB).copy(reps = it.toIntMy())) })
+        onChangeValue = { action.ex(
+            TrainingEvent.ChangeSet(
+            ActionWithSetImpl(
+                id = dataState.training.idTraining, set = set.copy(reps = it.toIntMy()))
+            ))})
 
 }
-@Composable fun CountGroupFieldText(uiState: TrainingScreenState, set: Set){
+@Composable fun CountGroupFieldText(dataState: TrainingState, action:Action, set: SetImpl){
     PoleInput(
         headId = R.string.counts_by_group_add,
         placeholder = set.groupCount,
-        onChangeValue ={ uiState.onChangeSet ((set as SetDB).copy(groupCount = it)) })
+        onChangeValue ={ action.ex(
+            TrainingEvent.ChangeSet( ActionWithSetImpl(
+            dataState.training.idTraining, set.copy(groupCount = it)))) })
 }
 
-@Composable fun TaskSwitch(uiState: TrainingScreenState, set: Set, index: Int, amountSet: Int){
+@Composable fun TaskSwitch(dataState: TrainingState, action:Action, set: SetImpl){
     Row(verticalAlignment = Alignment.CenterVertically){
-        if (amountSet > 1){
+        if (set.positions.second == 1){
             IconsCollapsing(
-                onClick = { setCollapsing(uiState, set) },
-                wrap = uiState.listCollapsingSet.value.find { it == set.idSet } != null )
+                onClick = { setCollapsing(dataState, set) },
+                wrap = dataState.listCollapsingSet.value.find { it == set.idSet } != null )
         }
         TextApp(
-            text = "${(index + 1)}" ,
+            text = "${(set.positions.first + 1)}" ,
             style = typography.displayMedium,
             textAlign = TextAlign.Start,
             modifier = Modifier.padding(start = 4.dp, end =16.dp))
         Spacer(modifier = Modifier.weight(1f))
-        IconQ.Duration(selected = set.goal == GoalSet.DURATION,
-            onClick = {uiState.onChangeSet ((set as SetDB).copy(goal = GoalSet.DURATION))},)
+        IconQ.Duration(selected = set.goal == Goal.Duration,
+            onClick = { action.ex(
+                TrainingEvent.ChangeSet( ActionWithSetImpl(
+                dataState.training.idTraining, set.copy(goal = Goal.Duration))))},)
         Spacer(modifier = Modifier.width(24.dp))
-        IconQ.Distance(selected = set.goal == GoalSet.DISTANCE,
-            onClick = {uiState.onChangeSet ((set as SetDB).copy(goal = GoalSet.DISTANCE))},)
+        IconQ.Distance(selected = set.goal == Goal.Distance,
+            onClick = { action.ex(
+                TrainingEvent.ChangeSet( ActionWithSetImpl(
+                dataState.training.idTraining, set.copy(goal = Goal.Distance)))) },)
         Spacer(modifier = Modifier.width(24.dp))
-        IconQ.Count(selected = set.goal == GoalSet.COUNT,
-            onClick = {uiState.onChangeSet ((set as SetDB).copy(goal = GoalSet.COUNT))},)
+        IconQ.Count(selected = set.goal == Goal.Count,
+            onClick = { action.ex(
+                TrainingEvent.ChangeSet( ActionWithSetImpl(
+                dataState.training.idTraining, set.copy(goal = Goal.Count)))) },)
         Spacer(modifier = Modifier.width(24.dp))
         Spacer(modifier = Modifier.weight(1f))
         IconsGroup(
-            onClickCopy = { uiState.onCopySet(uiState.training.idTraining, set.idSet) },
-            onClickDelete = { uiState.onDeleteSet(uiState.training.idTraining, set.idSet) },
+            onClickCopy = { action.ex(
+                TrainingEvent.CopySet( ActionWithSetImpl(
+                dataState.training.idTraining, set ))) },
+            onClickDelete = {  action.ex(
+                TrainingEvent.DeleteSet(ActionWithSetImpl(
+                dataState.training.idTraining, set))) },
             onClickSpeech = {
-                uiState.set = set
-                uiState.showSpeechSet.value = true},)
+                dataState.set = set
+                dataState.showSpeechSet.value = true},)
     }
 }
-@Composable fun ZonePulseSwitch(uiState: TrainingScreenState, set: Set){
+@Composable fun ZonePulseSwitch(dataState: TrainingState, action:Action, set: SetImpl){
     Row(verticalAlignment = Alignment.CenterVertically){
         Spacer(modifier = Modifier.weight(1f))
-        ButtonSwitchPulse(selected = set.intensity == Zone.EXTRA_SLOW, idString = R.string.zone1,
-            onClick = {uiState.onChangeSet ((set as SetDB).copy(intensity = Zone.EXTRA_SLOW))})
-        ButtonSwitchPulse(selected = set.intensity == Zone.SLOW, idString = R.string.zone2,
-            onClick = {uiState.onChangeSet ((set as SetDB).copy(intensity = Zone.SLOW))})
-        ButtonSwitchPulse(selected = set.intensity == Zone.MEDIUM, idString = R.string.zone3,
-            onClick = {uiState.onChangeSet ((set as SetDB).copy(intensity = Zone.MEDIUM))})
-        ButtonSwitchPulse(selected = set.intensity == Zone.HIGH, idString = R.string.zone4,
-            onClick = {uiState.onChangeSet ((set as SetDB).copy(intensity = Zone.HIGH))})
-        ButtonSwitchPulse(selected = set.intensity == Zone.MAX, idString = R.string.zone5,
-            onClick = {uiState.onChangeSet ((set as SetDB).copy(intensity = Zone.MAX))})
+        ButtonSwitchPulse(selected = set.intensity == Zone.Low, idString = R.string.zone1,
+            onClick = { action.ex(
+                TrainingEvent.ChangeSet( ActionWithSetImpl(
+                dataState.training.idTraining, set.copy(intensity = Zone.Low))))})
+        ButtonSwitchPulse(selected = set.intensity == Zone.Min, idString = R.string.zone2,
+            onClick = {action.ex(
+                TrainingEvent.ChangeSet( ActionWithSetImpl(
+                dataState.training.idTraining, set.copy(intensity = Zone.Min))))})
+        ButtonSwitchPulse(selected = set.intensity == Zone.Medium, idString = R.string.zone3,
+            onClick = {action.ex(
+                TrainingEvent.ChangeSet( ActionWithSetImpl(
+                dataState.training.idTraining, set.copy(intensity = Zone.Medium))))})
+        ButtonSwitchPulse(selected = set.intensity == Zone.High, idString = R.string.zone4,
+            onClick = {action.ex(
+                TrainingEvent.ChangeSet( ActionWithSetImpl(
+                dataState.training.idTraining, set.copy(intensity = Zone.High))))})
+        ButtonSwitchPulse(selected = set.intensity == Zone.Max, idString = R.string.zone5,
+            onClick = {action.ex(
+                TrainingEvent.ChangeSet( ActionWithSetImpl(
+                dataState.training.idTraining, set.copy(intensity = Zone.Max))))})
         Spacer(modifier = Modifier.weight(1f))
     }
 }
@@ -284,12 +399,14 @@ val interval_between_pole = 4.dp
     background: Color = colorScheme.background,
     selected: Boolean = false,
     onClick: () -> Unit = {},
-    modifier: Modifier = Modifier.width(35.dp).padding(vertical = 2.dp, horizontal = 2.dp),
+    modifier: Modifier = Modifier
+        .width(35.dp)
+        .padding(vertical = 2.dp, horizontal = 2.dp),
     idString: Int,
     style: TextStyle = typography.bodySmall)
 {
     Frame (colorBorder = color, contour = if (selected) contourAll1 else contourBot1,
-            background = background,) {
+        background = background,) {
         TextApp( modifier = modifier.clickable { onClick() },
             fontWeight =  if (selected) FontWeight.Bold else FontWeight.Normal,
             style = style,
@@ -309,7 +426,8 @@ val interval_between_pole = 4.dp
     onChangeUnit: ()-> Unit,
 ){
     Column (horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = modifier.animateContentSize()
+        modifier = modifier
+            .animateContentSize()
             .padding(start = interval_between_pole)
             .background(color = colorScheme.onSecondary, shape = shapes.small)
             .padding(top = 2.dp, bottom = 6.dp, start = 4.dp, end = 4.dp)
@@ -329,7 +447,8 @@ val interval_between_pole = 4.dp
             Text(
                 buildAnnotatedString {
                     append("(")
-                    withStyle(style = SpanStyle(fontWeight = if (term) FontWeight.ExtraBold else FontWeight.Normal))
+                    withStyle(style = SpanStyle(
+                        fontWeight = if (term) FontWeight.ExtraBold else FontWeight.Normal))
                     { append(stringResource(unitId1)) }
                     if (unitId2 != R.string.no) {
                         append("/")
@@ -338,7 +457,7 @@ val interval_between_pole = 4.dp
                         { append(stringResource(unitId2)) }
                     }
                     append(")")},
-                modifier = Modifier.padding(start = 2.dp, top = 2.dp).clickable{ onChangeUnit() },
+                modifier = Modifier.padding(start = 2.dp, top = 2.dp).clickable { onChangeUnit() },
                 style = alumBodyLarge,
                 color = colorScheme.outline
             )
@@ -354,7 +473,8 @@ val interval_between_pole = 4.dp
     onChangeValue: (String)-> Unit,
 ){
     Column (horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = modifier.animateContentSize()
+        modifier = modifier
+            .animateContentSize()
             .padding(start = interval_between_pole)
             .background(color = colorScheme.onSecondary, shape = shapes.small)
             .padding(top = 2.dp, bottom = 6.dp, start = 4.dp, end = 4.dp)
@@ -370,22 +490,25 @@ val interval_between_pole = 4.dp
                 placeholder = placeholder,
             )
         }
-        TextApp(text = stringResource(headId), textAlign = TextAlign.Center, style = alumBodySmall)
+        TextApp(
+            text = stringResource(headId), textAlign = TextAlign.Center, style = alumBodySmall,
+            modifier = TODO()
+        )
     }
 }
 
-fun viewDistance(set:Set):String {
-    return "${ if (set.distanceE == DistanceE.KM) set.distance/1000 else set.distance }"
+fun viewDistance(set: Set):String {
+    return "${ set.distance.value / (if (set.distance.unit == Units.KM) 1000 else 1) }"
 }
-fun setCollapsing(uiState: TrainingScreenState, set: Set) {
-    val listCollapsingSet = uiState.listCollapsingSet.value.toMutableList()
+fun setCollapsing(dataState: TrainingState, set: Set) {
+    val listCollapsingSet = dataState.listCollapsingSet.value.toMutableList()
     val itemList = listCollapsingSet.find { it == set.idSet }
     if ( itemList != null) {
         listCollapsingSet.remove(itemList)
-        uiState.listCollapsingSet.value = listCollapsingSet
+        dataState.listCollapsingSet.value = listCollapsingSet
     } else {
         listCollapsingSet.add(set.idSet)
-        uiState.listCollapsingSet.value = listCollapsingSet
+        dataState.listCollapsingSet.value = listCollapsingSet
     }
 }
 

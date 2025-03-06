@@ -8,7 +8,7 @@ import com.example.count_out.entity.GoalSet
 import com.example.count_out.entity.TimeE
 import com.example.count_out.entity.WeightE
 import com.example.count_out.entity.Zone
-import com.example.count_out.entity.speech.SpeechKit
+import com.example.count_out.entity.workout.speech.SpeechKit
 import com.example.count_out.entity.workout.Set
 
 @Entity(tableName = "tb_set")

@@ -16,10 +16,11 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import com.example.count_out.data.room.tables.SettingDB
+import com.example.count_out.entity.settings.SettingRecord
 import com.example.count_out.ui.theme.mTypography
 
 @Composable
-fun SwitchApp(setting: SettingDB, modifier: Modifier = Modifier, change:(Boolean)->Unit) {
+fun SwitchApp(setting: SettingRecord, modifier: Modifier = Modifier, change:(Boolean)->Unit) {
     var checked by remember { mutableStateOf( setting.value == 1) }
     Row( verticalAlignment = Alignment.CenterVertically, modifier = modifier){
         TextApp(

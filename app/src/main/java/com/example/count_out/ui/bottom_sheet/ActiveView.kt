@@ -16,7 +16,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.DeleteSweep
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.MaterialTheme.colorScheme
 import androidx.compose.material3.MaterialTheme.shapes
 import androidx.compose.runtime.Composable
@@ -31,11 +30,13 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.example.count_out.R
-import com.example.count_out.data.room.tables.ActivityDB
-import com.example.count_out.entity.TypeKeyboard
 import com.example.count_out.entity.workout.Activity
 import com.example.count_out.ui.dialog.ChangeColorSectionDialog
-import com.example.count_out.ui.screens.settings.SettingScreenState
+import com.example.count_out.ui.models.ActivityImpl
+import com.example.count_out.ui.models.TypeKeyboard
+import com.example.count_out.ui.screens.prime.Action
+import com.example.count_out.ui.screens.settings.SettingsEvent
+import com.example.count_out.ui.screens.settings.SettingsState
 import com.example.count_out.ui.theme.mTypography
 import com.example.count_out.ui.view_components.TextApp
 import com.example.count_out.ui.view_components.TextFieldApp
@@ -43,35 +44,34 @@ import com.example.count_out.ui.view_components.custom_view.Frame
 
 
 @SuppressLint("UnrememberedMutableState")
-@Composable fun CardActivity(uiState: SettingScreenState, activity: Activity) {
+@Composable fun CardActivity(dataState: SettingsState, activity: Activity, action: Action) {
     Frame {
         ActivityInfo(
-            activity = mutableStateOf(activity),
+            activity = mutableStateOf(activity as ActivityImpl),
             onSelect = {
-                uiState.activity.value = activity
-                uiState.showBottomSheetAddActivity.value = true },
-            onChangeColor = { uiState.onSetColorActivity(activity.idActivity, it ) },
-            onDeleteActivity = { uiState.onDeleteActivity( it ) },
+                dataState.activity.value = activity
+                dataState.showBottomSheetAddActivity.value = true },
+            onChange = { action.ex(SettingsEvent.SetColorActivity(activity)) },
+            onDeleteActivity = { action.ex(SettingsEvent.DeleteActivity(activity)) },
         )
     }
 }
 
 @Composable fun ActivityInfo(
     edit: Boolean = false,
-    activity: MutableState<Activity>,
+    activity: MutableState<ActivityImpl>,
     onSelect: () -> Unit = {},
-    onChange: (ActivityDB) -> Unit = {},
-    onChangeColor: (Int) -> Unit = {},
+    onChange: (ActivityImpl) -> Unit = {},
     onDeleteActivity:(Long)-> Unit = {}
 ){
     val activityChangeColor: MutableState<Activity?> = remember { mutableStateOf(null) }
     activityChangeColor.value?.let { changeColor->
         ChangeColorSectionDialog(
             colorItem = changeColor.color,
-            onDismiss = { activityChangeColor.value = null},
+            onDismiss = { activityChangeColor.value = null },
             onConfirm = {
-                onChangeColor(it)
-                activity.value = ( activity.value as ActivityDB ).copy(color = it)
+                activity.value = activity.value.copy(color = it)
+                onChange(activity.value)
                 activityChangeColor.value = null
             },
         )
@@ -92,53 +92,50 @@ import com.example.count_out.ui.view_components.custom_view.Frame
             contentAlignment = Alignment.CenterStart,
             onLossFocus = false,
             onChangeValue = {
-                activity.value = (activity.value as ActivityDB).copy(name = it)
-                onChange(activity.value as ActivityDB) }
+                activity.value = activity.value.copy(name = it)
+                onChange(activity.value) }
         )
         Spacer(modifier = Modifier
             .size(size = 32.dp)
             .clip(shape = CircleShape)
-            .border(width = 1.dp, color = MaterialTheme.colorScheme.outline, shape = CircleShape)
+            .border(width = 1.dp, color = colorScheme.outline, shape = CircleShape)
             .clickable { activityChangeColor.value = activity.value }
             .background(color = Color(activity.value.color), shape = CircleShape))
         IconButton( onClick = { onDeleteActivity(activity.value.idActivity) }) {
             Icon(imageVector = Icons.Filled.DeleteSweep, contentDescription = null,
-                tint = MaterialTheme.colorScheme.outline)
+                tint = colorScheme.outline)
         }
     }
 }
 @Composable fun ActivityInfoFull(
-    activity: MutableState<Activity>,
-    onChange: (ActivityDB) -> Unit = {},
-    onChangeColor: (Int) -> Unit = {}
+    activity: MutableState<ActivityImpl>,
+    onChange: (Activity) -> Unit = {},
 ){
     val modifier = Modifier.padding(horizontal = 6.dp, vertical = 4.dp)
     val modifier1 = Modifier.padding(horizontal = 6.dp, vertical = 0.dp)
-    Column(horizontalAlignment = Alignment.Start, modifier = Modifier.fillMaxWidth())
-    {
+    Column(horizontalAlignment = Alignment.Start, modifier = Modifier.fillMaxWidth()) {
         ActivityInfo(
             activity = activity,
             edit = true,
             onChange = onChange,
-            onChangeColor = onChangeColor
         )
         Row(verticalAlignment = Alignment.CenterVertically, modifier = modifier
             .background(color = colorScheme.onSecondary, shape = shapes.small),){
             TextApp(text = stringResource(id = R.string.audio_track) + ":", style = mTypography.bodyLarge, modifier = modifier1)
             FieldF(activity.value.audioTrack, modifier.weight(1f)) {
-                onChange((activity.value as ActivityDB).copy(audioTrack = it))}
+                onChange((activity.value ).copy(audioTrack = it))}
         }
         Row(verticalAlignment = Alignment.CenterVertically, modifier = modifier
             .background(color = colorScheme.onSecondary, shape = shapes.small), ){
             TextApp(text = stringResource(id = R.string.video_clip) + ":", style = mTypography.bodyLarge, modifier = modifier1)
             FieldF(activity.value.videoClip, modifier.weight(1f)) {
-                onChange((activity.value as ActivityDB).copy(videoClip = it))}
+                onChange(activity.value.copy(videoClip = it))}
         }
         Column( modifier = modifier.background(color = colorScheme.onSecondary, shape = shapes.small)){
             TextApp(text = stringResource(id = R.string.description) + ":", style = mTypography.bodyLarge, modifier = modifier1)
             Row(Modifier.fillMaxWidth()) {
                 FieldF(activity.value.description, Modifier.weight(1f)) {
-                    onChange((activity.value as ActivityDB).copy(description = it))}
+                    onChange(activity.value.copy(description = it))}
             }
         }
     }

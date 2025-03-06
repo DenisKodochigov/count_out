@@ -10,7 +10,7 @@ import android.content.Context
 import android.os.ParcelUuid
 import com.example.count_out.data.bluetooth.modules.BleDeviceImpl
 import com.example.count_out.data.bluetooth.modules.BleStates
-import com.example.count_out.domain.addApp
+import com.example.count_out.entity.addApp
 import com.example.count_out.domain.router.DataFromBle
 import com.example.count_out.entity.Const
 import com.example.count_out.entity.RunningState

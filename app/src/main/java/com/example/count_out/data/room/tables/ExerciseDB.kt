@@ -3,7 +3,7 @@ package com.example.count_out.data.room.tables
 import androidx.room.Entity
 import androidx.room.Ignore
 import androidx.room.PrimaryKey
-import com.example.count_out.entity.speech.SpeechKit
+import com.example.count_out.entity.workout.speech.SpeechKit
 import com.example.count_out.entity.workout.Activity
 import com.example.count_out.entity.workout.Exercise
 import com.example.count_out.entity.workout.Set

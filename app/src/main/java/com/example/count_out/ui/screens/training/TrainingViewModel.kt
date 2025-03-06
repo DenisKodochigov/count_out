@@ -1,111 +1,154 @@
 package com.example.count_out.ui.screens.training
 
-import androidx.compose.runtime.mutableStateOf
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.count_out.data.DataRepository
-import com.example.count_out.data.room.tables.SetDB
-import com.example.count_out.data.room.tables.TrainingDB
-import com.example.count_out.entity.MessageApp
-import com.example.count_out.entity.speech.SpeechKit
-import com.example.count_out.entity.workout.Set
+import com.example.count_out.domain.use_case.activity.SelectActivityUC
+import com.example.count_out.domain.use_case.activity.SetColorActivityUC
+import com.example.count_out.domain.use_case.activity.UpdateActivityUC
+import com.example.count_out.domain.use_case.exercise.AddExerciseUC
+import com.example.count_out.domain.use_case.exercise.ChangeSequenceExerciseUC
+import com.example.count_out.domain.use_case.exercise.CopyExerciseUC
+import com.example.count_out.domain.use_case.exercise.DeleteExerciseUC
+import com.example.count_out.domain.use_case.set.AddSetUC
+import com.example.count_out.domain.use_case.set.CopySetUC
+import com.example.count_out.domain.use_case.set.DeleteSetUC
+import com.example.count_out.domain.use_case.set.UpdateSetUC
+import com.example.count_out.domain.use_case.trainings.DeleteTrainingUC
+import com.example.count_out.domain.use_case.trainings.GetTrainingUC
+import com.example.count_out.domain.use_case.trainings.UpdateTrainingUC
+import com.example.count_out.entity.workout.ActionWithActivity
+import com.example.count_out.entity.workout.ActionWithSet
+import com.example.count_out.entity.workout.Activity
+import com.example.count_out.entity.workout.DataForChangeSequence
+import com.example.count_out.entity.workout.Exercise
 import com.example.count_out.entity.workout.Training
+import com.example.count_out.ui.screens.prime.Event
+import com.example.count_out.ui.screens.prime.PrimeViewModel
+import com.example.count_out.ui.screens.prime.ScreenState
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-@HiltViewModel
-class TrainingViewModel @Inject constructor(
-    private val messageApp: MessageApp,
-    private val dataRepository: DataRepository
-): ViewModel() {
-    private val _trainingScreenState = MutableStateFlow(
-        TrainingScreenState(
-            training = TrainingDB(),
-            enteredName = mutableStateOf(""),
-            changeNameTraining = { training, name -> changeNameTraining(training, name) },
-            onDeleteTraining = { trainingId -> deleteTraining(trainingId) },
-            onConfirmationSpeech = { speech, item -> setSpeech( speech, item ) },
-            onAddExercise = { roundId, set -> addExercise( roundId, set )},
-            onCopyExercise = { trainingId, exerciseId -> copyExercise(trainingId, exerciseId)},
-            onDeleteExercise = { trainingId, exerciseId -> deleteExercise(trainingId, exerciseId)},
-            changeSequenceExercise = { trainingId, roundId, from, to ->
-                    changeSequenceExercise(trainingId,roundId, from, to)},
-            onSelectActivity = {
-                    exerciseId, activityId -> setActivityToExercise(exerciseId, activityId) },
-            onSetColorActivity = {
-                    activityId, color -> onSetColorActivity(activityId = activityId, color = color) },
-            onCopySet = { trainingId, setId -> copySet(trainingId, setId)},
-            onDeleteSet = { trainingId, setId -> deleteSet(trainingId, setId)},
-            onAddUpdateSet = { idExercise, set -> addUpdateSet(idExercise, set) },
-            onChangeSet = { set -> addUpdateSet(set.exerciseId, set) },
-        )
-    )
-    val trainingScreenState: StateFlow<TrainingScreenState> = _trainingScreenState.asStateFlow()
+@HiltViewModel class TrainingViewModel @Inject constructor(
+    private val converter: TrainingConverter,
+    private val getTraining: GetTrainingUC,
+    private val delTraining: DeleteTrainingUC,
+    private val updateTraining: UpdateTrainingUC,
+    private val addExercise: AddExerciseUC,
+    private val copyExercise: CopyExerciseUC,
+    private val delExercise: DeleteExerciseUC,
+    private val changeSequenceExercise: ChangeSequenceExerciseUC,
+    private val selectActivity: SelectActivityUC,
+    private val setColorActivity: SetColorActivityUC,
+    private val updateActivity: UpdateActivityUC,
+    private val addSet: AddSetUC,
+    private val copySet: CopySetUC,
+    private val deleteSet: DeleteSetUC,
+    private val changeSet: UpdateSetUC,
+): PrimeViewModel<TrainingState, ScreenState<TrainingState>>() {
 
+    override fun initState(): ScreenState<TrainingState> = ScreenState.Loading
+
+    override fun routeEvent(event: Event) {
+        when (event) {
+            is TrainingEvent.BackScreen -> { navigate.backStack()}
+            is TrainingEvent.GetTraining -> { getTraining(event.id) }
+            is TrainingEvent.DelTraining -> { delTraining(event.training) }
+            is TrainingEvent.UpdateTraining -> { updateTraining(event.training)}
+            is TrainingEvent.AddExercise -> { addExercise(event.exercise) }
+            is TrainingEvent.CopyExercise -> { copyExercise(event.exercise) }
+            is TrainingEvent.DelExercise -> { deleteExercise(event.exercise) }
+            is TrainingEvent.ChangeSequenceExercise -> { changeSequenceExercise(event.item) }
+            is TrainingEvent.SelectActivity -> { selectActivity(event.activity) }
+            is TrainingEvent.SetColorActivity -> { setColorActivity(event.activity) }
+            is TrainingEvent.UpdateActivity -> { updateActivity(event.activity) }
+            is TrainingEvent.AddSet -> { addSet(event.item) }
+            is TrainingEvent.CopySet -> { copySet(event.item) }
+            is TrainingEvent.DeleteSet -> { deleteSet(event.item) }
+            is TrainingEvent.ChangeSet -> { changeSet(event.item) }
+        }
+    }
     fun getTraining(id: Long) {
-        viewModelScope.launch(Dispatchers.IO) {
-            kotlin.runCatching { dataRepository.getActivities() }.fold(
-                onSuccess = {
-                    _trainingScreenState.update { currentState -> currentState.copy(activities = it) } },
-                onFailure = { messageApp.errorApi(it.message ?: "") }
-            )
-        }
-        templateMy { dataRepository.getTraining(id) }
-    }
-    private fun addUpdateSet(exerciseId:Long, set: Set){
-        templateMy { dataRepository.addUpdateSet(
-            trainingScreenState.value.training.idTraining, exerciseId, set) } }
-    private fun copySet(trainingId:Long, setId: Long){
-        templateMy { dataRepository.copySet( trainingId, setId) } }
-    private fun deleteSet(trainingId:Long, setId: Long){
-        templateMy { dataRepository.deleteSet( trainingId, setId) } }
-    private fun setSpeech(speech: SpeechKit, item: Any?) {
-        templateMy { dataRepository.setSpeech(trainingScreenState.value.training.idTraining,speech, item) } }
-    private fun deleteTraining(trainingId: Long){
-        templateNothing { dataRepository.deleteTrainingNothing(trainingId) } }
-    private fun changeNameTraining(training: Training, name: String){
-        templateMy { dataRepository.changeNameTraining(training, name) } }
-    private fun copyExercise(trainingId: Long, exerciseId: Long){
-        templateMy { dataRepository.copyExercise(trainingId, exerciseId) } }
-    private fun addExercise(roundId: Long, set: SetDB){
-        templateMy { dataRepository.addExercise(trainingScreenState.value.training.idTraining, roundId ) } }
-    private fun deleteExercise(trainingId: Long, exerciseId: Long){
-        templateMy { dataRepository.deleteExercise(trainingId, exerciseId) } }
-    private fun changeSequenceExercise(trainingId: Long, roundId: Long, idViewForm:Int, idViewTo: Int){
-        templateMy { dataRepository.changeSequenceExercise(trainingId, roundId, idViewForm, idViewTo) } }
-    private fun setActivityToExercise(exerciseId: Long, activityId: Long) {
-        templateMy{dataRepository.setActivityToExercise(
-            trainingScreenState.value.training.idTraining, exerciseId, activityId)} }
-    private fun onSetColorActivity(activityId: Long, color: Int) {
-        viewModelScope.launch(Dispatchers.IO) {
-            kotlin.runCatching { dataRepository.onSetColorActivity( activityId, color) }
-                .fold( onSuccess = { }, onFailure = { messageApp.errorApi(it.message ?: "") })
+        viewModelScope.launch {
+            getTraining.execute( GetTrainingUC.Request(id))
+                .map { converter.convert(it) }.collect { submitState(it) }
         }
     }
-    private fun templateMy( funDataRepository:() -> Training){
-        viewModelScope.launch(Dispatchers.IO) {
-            kotlin.runCatching { funDataRepository() }.fold(
-                onSuccess = { _trainingScreenState.update { currentState ->
-                    currentState.copy(
-                        training = it,
-                        showBottomSheetSelectActivity = mutableStateOf(false),
-                        enteredName = mutableStateOf(it.name) ) } },
-                onFailure = { messageApp.errorApi(it.message ?: "") }
-            )
+    private fun delTraining(training: Training){
+        viewModelScope.launch {
+            delTraining.execute( DeleteTrainingUC.Request(training))
+                .map { converter.convert(it) }.collect { submitState(it) }
         }
     }
-    private fun templateNothing( funDataRepository:() -> Unit){
-        viewModelScope.launch(Dispatchers.IO) {
-            kotlin.runCatching { funDataRepository() }.fold(
-                onSuccess = {  },
-                onFailure = { messageApp.errorApi(it.message ?: "") }
-            )
+    private fun updateTraining(training: Training){
+        viewModelScope.launch {
+            updateTraining.execute( UpdateTrainingUC.Request(training))
+                .map { converter.convert(it) }.collect { submitState(it) }
+        }
+    }
+    private fun changeSequenceExercise(item: DataForChangeSequence){
+        viewModelScope.launch {
+            changeSequenceExercise.execute( ChangeSequenceExerciseUC.Request(item))
+                .map { converter.convert(it) }.collect { submitState(it) }
+        }
+    }
+    private fun addExercise(exercise: Exercise){
+        viewModelScope.launch {
+            addExercise.execute( AddExerciseUC.Request(exercise))
+                .map { converter.convert(it) }.collect { submitState(it) }
+        }
+    }
+    private fun copyExercise(exercise: Exercise){
+        viewModelScope.launch {
+            copyExercise.execute( CopyExerciseUC.Request(exercise))
+                .map { converter.convert(it) }.collect { submitState(it) }
+        }
+    }
+    private fun deleteExercise(exercise: Exercise){
+        viewModelScope.launch {
+            delExercise.execute( DeleteExerciseUC.Request(exercise))
+                .map { converter.convert(it) }.collect { submitState(it) }
+        }
+    }
+    private fun selectActivity(activity: ActionWithActivity){
+        viewModelScope.launch {
+            selectActivity.execute( SelectActivityUC.Request(activity))
+                .map { converter.convert(it) }.collect { submitState(it) }
+        }
+    }
+    private fun setColorActivity(activity: Activity){
+        viewModelScope.launch {
+            setColorActivity.execute( SetColorActivityUC.Request(activity))
+                .map { converter.convert(it) }.collect { submitState(it) }
+        }
+    }
+    private fun updateActivity(activity: Activity){
+        viewModelScope.launch {
+            updateActivity.execute( UpdateActivityUC.Request(activity))
+                .map { converter.convert(it) }.collect { submitState(it) }
+        }
+    }
+    private fun addSet(item:ActionWithSet){
+        viewModelScope.launch {
+            addSet.execute( AddSetUC.Request(item))
+                .map { converter.convert(it) }.collect { submitState(it) }
+        }
+    }
+    private fun copySet(item: ActionWithSet){
+        viewModelScope.launch {
+            copySet.execute( CopySetUC.Request(item))
+                .map { converter.convert(it) }.collect { submitState(it) }
+        }
+    }
+    private fun deleteSet(item:ActionWithSet){
+        viewModelScope.launch {
+            deleteSet.execute( DeleteSetUC.Request(item))
+                .map { converter.convert(it) }.collect { submitState(it) }
+        }
+    }
+    private fun changeSet(item:ActionWithSet){
+        viewModelScope.launch {
+            changeSet.execute( UpdateSetUC.Request(item))
+                .map { converter.convert(it) }.collect { submitState(it) }
         }
     }
 }

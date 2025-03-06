@@ -24,7 +24,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.example.count_out.R
+import com.example.count_out.ui.screens.prime.Action
 import com.example.count_out.ui.screens.settings.SettingScreenState
+import com.example.count_out.ui.screens.settings.SettingsEvent
+import com.example.count_out.ui.screens.settings.SettingsState
 import com.example.count_out.ui.theme.Dimen
 import com.example.count_out.ui.theme.Dimen.bsHeightWindowsListBle
 import com.example.count_out.ui.theme.Dimen.bsSpacerBottomHeight
@@ -35,33 +38,29 @@ import com.example.count_out.ui.view_components.TextApp
 import com.example.count_out.ui.view_components.icons.AnimateIcon
 
 @OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun BottomSheetBle(uiState: SettingScreenState) {
-
+@Composable fun BottomSheetBle(dataState: SettingsState, action: Action) {
     val sheetState = rememberModalBottomSheetState(
         skipPartiallyExpanded = true, confirmValueChange = { true },)
     ModalBottomSheetApp(
-        onDismissRequest = { uiState.onDismissBLEScan(uiState) },
+        onDismissRequest = { dataState.onDismissBLEScan(dataState) },
         modifier = Modifier.padding(horizontal = Dimen.bsPaddingHor1),
         shape = shapes.small,
         sheetState = sheetState,
-        content = { BottomSheetBleContent(uiState) }
+        content = { BottomSheetBleContent(dataState, action) }
     )
 }
-@Composable
-fun BottomSheetBleContent(uiState: SettingScreenState)
-{
+@Composable fun BottomSheetBleContent(dataState: SettingsState, action: Action) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier
             .fillMaxWidth()
             .height(bsHeightWindowsListBle)
             .padding(Dimen.bsItemPaddingHor),
-        content = { SettingsBluetooth(uiState) })
+        content = { SettingsBluetooth(dataState, action) })
     Spacer(modifier = Modifier.height(bsSpacerBottomHeight))
 }
 @SuppressLint("MissingPermission")
-@Composable fun SettingsBluetooth(uiState: SettingScreenState){
+@Composable fun SettingsBluetooth(dataState: SettingsState, action: Action){
     Row(horizontalArrangement = Arrangement.Center,
         modifier = Modifier
             .fillMaxWidth()
@@ -69,7 +68,7 @@ fun BottomSheetBleContent(uiState: SettingScreenState)
             .height(30.dp)) {
         TextApp(text = stringResource(id = R.string.section_heart_rate), style = mTypography.bodyLarge)
         Spacer(modifier = Modifier.weight(1f))
-        AnimateIcon(animate = uiState.scannedBle)
+        AnimateIcon(animate = dataState.scannedBle)
     }
     Spacer(modifier = Modifier.height(12.dp))
     LazyColumn(
@@ -79,13 +78,13 @@ fun BottomSheetBleContent(uiState: SettingScreenState)
             .padding(6.dp)
             .border(width = 1.dp, color = colorScheme.onTertiaryContainer, shape = shapes.small)
     ) {
-        items(items = uiState.devicesUI) { item ->
+        items(items = dataState.devicesUI) { item ->
             Spacer(modifier = Modifier.height(0.dp))
             Row(modifier = Modifier
                 .padding(top = 16.dp, start = 12.dp, end = 12.dp)
                 .clickable {
-                    uiState.showBottomSheetBLE.value = false
-                    uiState.onSelectDevice(item)
+                    dataState.showBottomSheetBLE.value = false
+                    action.ex(SettingsEvent.SelectDevice(item))
                 }) {
                 TextApp(text = item.address, style = mTypography.bodyMedium)
                 Spacer(modifier = Modifier.width(12.dp))

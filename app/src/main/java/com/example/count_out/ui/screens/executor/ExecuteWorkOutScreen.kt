@@ -31,8 +31,8 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.count_out.R
 import com.example.count_out.data.room.tables.SetDB
-import com.example.count_out.domain.minus
-import com.example.count_out.domain.plus
+import com.example.count_out.entity.minus
+import com.example.count_out.entity.plus
 import com.example.count_out.entity.ConnectState
 import com.example.count_out.entity.DistanceE
 import com.example.count_out.entity.GoalSet

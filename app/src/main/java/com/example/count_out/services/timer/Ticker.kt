@@ -1,6 +1,6 @@
 package com.example.count_out.services.timer
 
-import com.example.count_out.domain.pad
+import com.example.count_out.entity.pad
 import com.example.count_out.entity.RunningState
 import com.example.count_out.services.timer.models.TickTimeImpl
 import kotlinx.coroutines.CoroutineScope

@@ -1,4 +1,4 @@
-package com.example.count_out.entity.speech
+package com.example.count_out.entity.workout.speech
 
 interface Speech {
     var idSpeech: Long

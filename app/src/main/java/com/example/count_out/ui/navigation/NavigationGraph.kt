@@ -24,14 +24,14 @@ import com.example.count_out.ui.screens.settings.SettingScreen
 import com.example.count_out.ui.screens.training.TrainingScreen
 import com.example.count_out.ui.screens.trainings.TrainingsScreen
 
-fun NavGraphBuilder.trainings( navigateEvent: NavigateEventImpl,
+fun NavGraphBuilder.trainings( navigateEvent: NavigateEvent,
 ) {
     template(
         routeTo = TrainingsDestination.route,
         content = { TrainingsScreen(navigateEvent = navigateEvent) }
     )
 }
-fun NavGraphBuilder.training( navigateEvent: NavigateEventImpl) {
+fun NavGraphBuilder.training( navigateEvent: NavigateEvent) {
     template(
         routeTo = TrainingDestination.routeWithArgs,
         argument = TrainingDestination.arguments,
@@ -43,7 +43,7 @@ fun NavGraphBuilder.training( navigateEvent: NavigateEventImpl) {
         }
     )
 }
-fun NavGraphBuilder.playWorkout(navigateEvent: NavigateEventImpl) {
+fun NavGraphBuilder.playWorkout(navigateEvent: NavigateEvent) {
     template(
         routeTo = ExecuteWorkDestination.routeWithArgs,
         argument = TrainingDestination.arguments,
@@ -54,13 +54,13 @@ fun NavGraphBuilder.playWorkout(navigateEvent: NavigateEventImpl) {
         }
     )
 }
-fun NavGraphBuilder.history(navigateEvent: NavigateEventImpl) {
+fun NavGraphBuilder.history(navigateEvent: NavigateEvent) {
     template(
         routeTo = HistoryDestination.route,
         content = { HistoryScreen() }
     )
 }
-fun NavGraphBuilder.settings(navigateEvent: NavigateEventImpl) {
+fun NavGraphBuilder.settings(navigateEvent: NavigateEvent) {
     template(
         routeTo = SettingDestination.route,
         content = { SettingScreen(navigateEvent = navigateEvent) }

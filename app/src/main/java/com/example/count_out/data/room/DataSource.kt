@@ -12,7 +12,7 @@ import com.example.count_out.data.room.tables.TemporaryDB
 import com.example.count_out.data.room.tables.TrainingDB
 import com.example.count_out.data.room.tables.WorkoutDB
 import com.example.count_out.entity.RoundType
-import com.example.count_out.entity.speech.SpeechKit
+import com.example.count_out.entity.workout.speech.SpeechKit
 import com.example.count_out.entity.workout.Activity
 import com.example.count_out.entity.workout.Exercise
 import com.example.count_out.entity.workout.Round

@@ -9,7 +9,7 @@ import com.example.count_out.data.room.tables.SetDB
 import com.example.count_out.data.room.tables.SpeechDB
 import com.example.count_out.data.room.tables.SpeechKitDB
 import com.example.count_out.data.room.tables.TrainingDB
-import com.example.count_out.entity.speech.SpeechKit
+import com.example.count_out.entity.workout.speech.SpeechKit
 import com.example.count_out.entity.workout.Activity
 import com.example.count_out.entity.workout.Exercise
 import com.example.count_out.entity.workout.Set

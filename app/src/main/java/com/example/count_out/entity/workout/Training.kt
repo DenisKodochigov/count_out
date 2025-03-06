@@ -1,6 +1,6 @@
 package com.example.count_out.entity.workout
 
-import com.example.count_out.entity.speech.SpeechKit
+import com.example.count_out.entity.workout.speech.SpeechKit
 
 interface Training {
     val idTraining: Long
@@ -9,5 +9,5 @@ interface Training {
     val rounds: List<Round>
     val isSelected: Boolean
     var speechId: Long
-    var speech: SpeechKit
+    var speech: SpeechKit?
 }

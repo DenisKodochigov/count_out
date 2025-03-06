@@ -16,7 +16,7 @@ import androidx.compose.ui.zIndex
 
 @SuppressLint("UnnecessaryComposedModifier", "RememberReturnType")
 @Composable
-fun <T>ColumnDD(
+fun <T>ColumnDragDrop(
     items: List<T>,
     modifier: Modifier = Modifier,
     content:@Composable (T) -> Unit,

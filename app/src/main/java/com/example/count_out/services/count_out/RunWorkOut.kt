@@ -10,7 +10,7 @@ import com.example.count_out.entity.DistanceE
 import com.example.count_out.entity.GoalSet
 import com.example.count_out.entity.RunningState
 import com.example.count_out.entity.TimeE
-import com.example.count_out.entity.speech.SpeechKit
+import com.example.count_out.entity.workout.speech.SpeechKit
 import com.example.count_out.entity.workout.Set
 import com.example.count_out.services.timer.Delay
 import com.example.count_out.ui.view_components.lg

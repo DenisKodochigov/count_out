@@ -15,7 +15,7 @@ fun NavHostApp(
         startDestination = TrainingsDestination.route,
         modifier = modifier
     ){
-        val navEvent = NavigateEventImpl(navController)
+        val navEvent = NavigateEvent(navController)
         trainings( navigateEvent = navEvent)
         training(  navigateEvent = navEvent)
         history(navigateEvent = navEvent)
