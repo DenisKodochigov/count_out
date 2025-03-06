@@ -1,4 +1,4 @@
-package com.example.count_out.ui.modules
+package com.example.count_out.ui.models
 
 import com.example.count_out.entity.speech.SpeechKit
 

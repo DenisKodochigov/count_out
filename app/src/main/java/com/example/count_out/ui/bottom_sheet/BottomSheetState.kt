@@ -4,7 +4,7 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.mutableStateOf
 import com.example.count_out.data.room.tables.SpeechKitDB
-import com.example.count_out.ui.modules.BottomSheetInterface
+import com.example.count_out.ui.models.BottomSheetInterface
 import com.example.count_out.entity.speech.SpeechKit
 
 data class BottomSheetState(

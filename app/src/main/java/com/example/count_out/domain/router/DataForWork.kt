@@ -5,7 +5,7 @@ import com.example.count_out.data.room.tables.SetDB
 import com.example.count_out.entity.DistanceE
 import com.example.count_out.entity.GoalSet
 import com.example.count_out.entity.TimeE
-import com.example.count_out.ui.modules.NextExercise
+import com.example.count_out.ui.models.NextExercise
 import com.example.count_out.entity.workout.Exercise
 import com.example.count_out.entity.workout.StepTraining
 import com.example.count_out.entity.workout.Training

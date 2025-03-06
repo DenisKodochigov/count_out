@@ -95,7 +95,7 @@ dependencies {
     implementation (libs.bundles.retrofit)
     //Moshi
     implementation (libs.bundles.moshi)
-    ksp (libs.moshi.kotlin.codegen)
+    ksp (libs.moshi.ksp)
     //DataStore
     implementation(libs.datastore)
     debugImplementation(libs.ui.test.manifest)

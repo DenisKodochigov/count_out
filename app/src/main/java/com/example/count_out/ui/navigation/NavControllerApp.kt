@@ -6,10 +6,10 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import com.example.count_out.entity.Const.DEFAULT_SCREEN
 
 fun NavHostController.navigateToScreen(route: String) = this.navigate(route) { launchSingleTop = true }
-fun NavHostController.navigateToTraining(trainingId: Long) {
+fun NavHostController.navigateToScreenTraining(trainingId: Long) {
     this.navigateToScreen("${TrainingDestination.route}/$trainingId")
 }
-fun NavHostController.navigateToPlayWorkout( trainingId: Long) {
+fun NavHostController.navigateToScreenExecuteWorkout(trainingId: Long) {
     this.navigateToScreen("${ExecuteWorkDestination.route}/$trainingId")
 }
 @Composable

@@ -8,4 +8,3 @@ pluginManagement {
 
 rootProject.name = "count_out"
 include(":app")
-include(":bluetooth")

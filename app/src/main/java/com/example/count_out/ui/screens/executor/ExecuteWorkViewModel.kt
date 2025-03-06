@@ -12,8 +12,8 @@ import com.example.count_out.entity.MessageApp
 import com.example.count_out.entity.RunningState
 import com.example.count_out.services.count_out.CountOutServiceBind
 import com.example.count_out.services.timer.models.TickTimeImpl
-import com.example.count_out.ui.modules.DataForServ
-import com.example.count_out.ui.modules.DataForUI
+import com.example.count_out.ui.models.DataForServ
+import com.example.count_out.ui.models.DataForUI
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow

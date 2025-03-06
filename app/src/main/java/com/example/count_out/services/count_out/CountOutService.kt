@@ -17,8 +17,8 @@ import com.example.count_out.entity.Const.NOTIFICATION_EXTRA
 import com.example.count_out.entity.Const.NOTIFICATION_ID
 import com.example.count_out.entity.MessageApp
 import com.example.count_out.entity.RunningState
-import com.example.count_out.ui.modules.DataForServ
-import com.example.count_out.ui.modules.DataForUI
+import com.example.count_out.ui.models.DataForServ
+import com.example.count_out.ui.models.DataForUI
 import com.example.count_out.ui.notification.NotificationHelper
 import com.example.count_out.data.logging.Logging
 import com.example.count_out.ui.view_components.lg

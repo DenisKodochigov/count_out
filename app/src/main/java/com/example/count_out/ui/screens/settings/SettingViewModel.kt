@@ -8,8 +8,8 @@ import com.example.count_out.entity.bluetooth.DeviceUI
 import com.example.count_out.data.room.tables.SettingDB
 import com.example.count_out.entity.CommandService
 import com.example.count_out.entity.MessageApp
-import com.example.count_out.ui.modules.DataForServ
-import com.example.count_out.ui.modules.DataForUI
+import com.example.count_out.ui.models.DataForServ
+import com.example.count_out.ui.models.DataForUI
 import com.example.count_out.entity.workout.Activity
 import com.example.count_out.services.count_out.CountOutServiceBind
 import com.example.count_out.ui.view_components.lg

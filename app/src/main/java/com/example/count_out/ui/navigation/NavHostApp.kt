@@ -15,12 +15,11 @@ fun NavHostApp(
         startDestination = TrainingsDestination.route,
         modifier = modifier
     ){
-        trainings( goToScreenTraining = { navController.navigateToTraining(it) },
-            goToScreenPlayWorkOut = { navController.navigateToPlayWorkout(it) } )
-        training ( onBaskScreen = { navController.popBackStack() })
-        history()
-        playWorkout ()
-        settings()
+        val navEvent = NavigateEventImpl(navController)
+        trainings( navigateEvent = navEvent)
+        training(  navigateEvent = navEvent)
+        history(navigateEvent = navEvent)
+        playWorkout(navigateEvent = navEvent)
+        settings(navigateEvent = navEvent)
     }
 }
-
