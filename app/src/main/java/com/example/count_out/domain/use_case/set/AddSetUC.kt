@@ -2,7 +2,7 @@ package com.example.count_out.domain.use_case.set
 
 import com.example.count_out.entity.workout.ActionWithSet
 import com.example.count_out.entity.workout.Set
-import com.count_out.domain.repository.trainings.SetRepo
+import com.example.count_out.domain.repository.trainings.SetRepo
 import com.example.count_out.domain.use_case.UseCase
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map

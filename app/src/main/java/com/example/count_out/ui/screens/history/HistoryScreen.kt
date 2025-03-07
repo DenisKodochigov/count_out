@@ -20,7 +20,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.example.count_out.entity.UnitTime
+import com.example.count_out.entity.enums.UnitTime
 import com.example.count_out.ui.screens.history.day.HistoryDay
 import com.example.count_out.ui.screens.history.month.HistoryMonth
 import com.example.count_out.ui.screens.history.week.HistoryWeek

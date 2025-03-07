@@ -36,10 +36,10 @@ import com.example.count_out.entity.Const.contourBot1
 import com.example.count_out.entity.enums.Goal
 import com.example.count_out.entity.enums.Units
 import com.example.count_out.entity.enums.Zone
-import com.example.count_out.ui.models.ActionWithSetImpl
-import com.example.count_out.ui.models.ParameterImpl
-import com.example.count_out.ui.models.SetImpl
-import com.example.count_out.ui.models.TypeKeyboard
+import com.example.count_out.entity.models.ActionWithSetImpl
+import com.example.count_out.entity.models.ParameterImpl
+import com.example.count_out.entity.models.SetImpl
+import com.example.count_out.entity.models.TypeKeyboard
 import com.example.count_out.ui.screens.prime.Action
 import com.example.count_out.ui.screens.training.TrainingEvent
 import com.example.count_out.ui.screens.training.TrainingState
@@ -230,9 +230,11 @@ val interval_between_pole = 4.dp
         modifier = modifier,
         typeKey = TypeKeyboard.DIGIT,
         onChangeValue = { action.ex(
-            TrainingEvent.ChangeSet(ActionWithSetImpl(
+            TrainingEvent.ChangeSet(
+                ActionWithSetImpl(
             id = dataState.training.idTraining, set.copy(intervalReps = it.toDoubleMy())
-        ))) },
+        )
+            )) },
         onChangeUnit = { }
     )
 }
@@ -319,7 +321,8 @@ val interval_between_pole = 4.dp
         placeholder = set.groupCount,
         onChangeValue ={ action.ex(
             TrainingEvent.ChangeSet( ActionWithSetImpl(
-            dataState.training.idTraining, set.copy(groupCount = it)))) })
+            dataState.training.idTraining, set.copy(groupCount = it))
+            )) })
 }
 
 @Composable fun TaskSwitch(dataState: TrainingState, action:Action, set: SetImpl){
@@ -338,26 +341,32 @@ val interval_between_pole = 4.dp
         IconQ.Duration(selected = set.goal == Goal.Duration,
             onClick = { action.ex(
                 TrainingEvent.ChangeSet( ActionWithSetImpl(
-                dataState.training.idTraining, set.copy(goal = Goal.Duration))))},)
+                dataState.training.idTraining, set.copy(goal = Goal.Duration))
+                ))},)
         Spacer(modifier = Modifier.width(24.dp))
         IconQ.Distance(selected = set.goal == Goal.Distance,
             onClick = { action.ex(
                 TrainingEvent.ChangeSet( ActionWithSetImpl(
-                dataState.training.idTraining, set.copy(goal = Goal.Distance)))) },)
+                dataState.training.idTraining, set.copy(goal = Goal.Distance))
+                )) },)
         Spacer(modifier = Modifier.width(24.dp))
         IconQ.Count(selected = set.goal == Goal.Count,
             onClick = { action.ex(
                 TrainingEvent.ChangeSet( ActionWithSetImpl(
-                dataState.training.idTraining, set.copy(goal = Goal.Count)))) },)
+                dataState.training.idTraining, set.copy(goal = Goal.Count))
+                )) },)
         Spacer(modifier = Modifier.width(24.dp))
         Spacer(modifier = Modifier.weight(1f))
         IconsGroup(
             onClickCopy = { action.ex(
                 TrainingEvent.CopySet( ActionWithSetImpl(
-                dataState.training.idTraining, set ))) },
+                dataState.training.idTraining, set )
+                )) },
             onClickDelete = {  action.ex(
-                TrainingEvent.DeleteSet(ActionWithSetImpl(
-                dataState.training.idTraining, set))) },
+                TrainingEvent.DeleteSet(
+                    ActionWithSetImpl(
+                dataState.training.idTraining, set)
+                )) },
             onClickSpeech = {
                 dataState.set = set
                 dataState.showSpeechSet.value = true},)
@@ -369,23 +378,28 @@ val interval_between_pole = 4.dp
         ButtonSwitchPulse(selected = set.intensity == Zone.Low, idString = R.string.zone1,
             onClick = { action.ex(
                 TrainingEvent.ChangeSet( ActionWithSetImpl(
-                dataState.training.idTraining, set.copy(intensity = Zone.Low))))})
+                dataState.training.idTraining, set.copy(intensity = Zone.Low))
+                ))})
         ButtonSwitchPulse(selected = set.intensity == Zone.Min, idString = R.string.zone2,
             onClick = {action.ex(
                 TrainingEvent.ChangeSet( ActionWithSetImpl(
-                dataState.training.idTraining, set.copy(intensity = Zone.Min))))})
+                dataState.training.idTraining, set.copy(intensity = Zone.Min))
+                ))})
         ButtonSwitchPulse(selected = set.intensity == Zone.Medium, idString = R.string.zone3,
             onClick = {action.ex(
                 TrainingEvent.ChangeSet( ActionWithSetImpl(
-                dataState.training.idTraining, set.copy(intensity = Zone.Medium))))})
+                dataState.training.idTraining, set.copy(intensity = Zone.Medium))
+                ))})
         ButtonSwitchPulse(selected = set.intensity == Zone.High, idString = R.string.zone4,
             onClick = {action.ex(
                 TrainingEvent.ChangeSet( ActionWithSetImpl(
-                dataState.training.idTraining, set.copy(intensity = Zone.High))))})
+                dataState.training.idTraining, set.copy(intensity = Zone.High))
+                ))})
         ButtonSwitchPulse(selected = set.intensity == Zone.Max, idString = R.string.zone5,
             onClick = {action.ex(
                 TrainingEvent.ChangeSet( ActionWithSetImpl(
-                dataState.training.idTraining, set.copy(intensity = Zone.Max))))})
+                dataState.training.idTraining, set.copy(intensity = Zone.Max))
+                ))})
         Spacer(modifier = Modifier.weight(1f))
     }
 }

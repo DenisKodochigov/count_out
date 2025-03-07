@@ -27,10 +27,10 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.count_out.R
 import com.example.count_out.entity.enums.RoundType
-import com.example.count_out.ui.bottom_sheet.BottomSheetSelectActivity
-import com.example.count_out.ui.bottom_sheet.BottomSheetSpeech
-import com.example.count_out.ui.models.TrainingImpl
-import com.example.count_out.ui.models.TypeKeyboard
+import com.example.count_out.ui.view_components.bottom_sheet.BottomSheetSelectActivity
+import com.example.count_out.ui.view_components.bottom_sheet.BottomSheetSpeech
+import com.example.count_out.entity.models.TrainingImpl
+import com.example.count_out.entity.models.TypeKeyboard
 import com.example.count_out.ui.navigation.NavigateEvent
 import com.example.count_out.ui.screens.prime.Action
 import com.example.count_out.ui.screens.prime.PrimeScreen

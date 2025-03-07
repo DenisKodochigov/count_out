@@ -25,6 +25,7 @@ import com.example.count_out.ui.screens.prime.Event
 import com.example.count_out.ui.screens.prime.PrimeViewModel
 import com.example.count_out.ui.screens.prime.ScreenState
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 

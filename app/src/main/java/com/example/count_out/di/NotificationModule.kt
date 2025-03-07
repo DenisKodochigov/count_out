@@ -1,7 +1,7 @@
 package com.example.count_out.di
 
 import android.content.Context
-import com.example.count_out.ui.notification.NotificationHelper
+import com.example.count_out.framework.notification.NotificationHelper
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

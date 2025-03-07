@@ -3,7 +3,7 @@ package com.example.count_out.ui.screens.history
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.mutableStateOf
-import com.example.count_out.entity.UnitTime
+import com.example.count_out.entity.enums.UnitTime
 import com.example.count_out.entity.workout.Workout
 import java.time.LocalDate
 

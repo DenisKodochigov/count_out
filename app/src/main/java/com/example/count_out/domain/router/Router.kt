@@ -1,9 +1,9 @@
 package com.example.count_out.domain.router
 
-import com.example.count_out.data.room.tables.TemporaryDB
-import com.example.count_out.entity.RunningState
-import com.example.count_out.ui.models.DataForServ
-import com.example.count_out.ui.models.DataForUI
+import com.example.count_out.entity.enums.RunningState
+import com.example.count_out.entity.models.DataForServ
+import com.example.count_out.entity.models.DataForUI
+import com.example.count_out.entity.models.TemporaryBaseImpl
 import com.example.count_out.entity.workout.TemporaryBase
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -89,7 +89,7 @@ class Router(private val dataForServ: DataForServ) {
         CoroutineScope(Dispatchers.Default).launch {
             while (true){
                 if (buffer.runningState.value == RunningState.Started) {
-                    dataForBase.value = TemporaryDB(
+                    dataForBase.value = TemporaryBaseImpl(
                         latitude = buffer.coordinate.value?.latitude ?: 0.0,
                         longitude = buffer.coordinate.value?.longitude ?: 0.0,
                         altitude = buffer.coordinate.value?.altitude ?: 0.0,
@@ -99,6 +99,9 @@ class Router(private val dataForServ: DataForServ) {
                         heartRate = buffer.heartRate.value,
                         idTraining = dataForWork.training.value?.idTraining ?: 0,
                         phaseWorkout = buffer.phaseWorkout.value,
+                        distance = 0f,
+                        idSet = 0,
+                        activityId = 0,
                     )
                 }
                 delay(500L)

@@ -13,7 +13,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import com.example.count_out.ui.models.ExerciseImpl
+import com.example.count_out.entity.models.ExerciseImpl
 import com.example.count_out.R
 import com.example.count_out.entity.Const.contourHor2
 import com.example.count_out.entity.enums.RoundType

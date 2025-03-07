@@ -1,11 +1,10 @@
 package com.example.count_out.domain.router
 
 import com.example.count_out.R
-import com.example.count_out.data.room.tables.SetDB
-import com.example.count_out.entity.DistanceE
-import com.example.count_out.entity.GoalSet
-import com.example.count_out.entity.TimeE
-import com.example.count_out.ui.models.NextExercise
+import com.example.count_out.entity.enums.Goal
+import com.example.count_out.entity.enums.Units
+import com.example.count_out.entity.models.NextExercise
+import com.example.count_out.entity.models.SetImpl
 import com.example.count_out.entity.workout.Exercise
 import com.example.count_out.entity.workout.StepTraining
 import com.example.count_out.entity.workout.Training
@@ -43,7 +42,7 @@ data class DataForWork (
         dataFromWork?.stepTraining?.value =
             if (interval.value > 0) {
                 map[indexMap].copy(currentSet = map[indexMap].currentSet?.let { set ->
-                   (set as SetDB).copy(intervalReps = interval.value) })}
+                   (set as SetImpl).copy(intervalReps = interval.value) })}
             else map[indexMap]
     }
 
@@ -84,14 +83,14 @@ data class DataForWork (
         val list: MutableList<Pair<String, Int>> = mutableListOf()
         exercise.sets.forEachIndexed { _, set ->
             list.add( when (set.goal) {
-                GoalSet.DURATION -> "${set.duration / (if (set.durationE == TimeE.SEC) 1 else 60)}" to set.durationE.id
-                GoalSet.DISTANCE -> "${set.distance / (if (set.distanceE == DistanceE.M) 1 else 1000)}" to set.distanceE.id
-                GoalSet.COUNT -> "${set.reps}" to R.string.rep
-                GoalSet.COUNT_GROUP -> "" to 0 }
+                Goal.Duration -> "${set.duration.value / (if (set.duration.unit == Units.S) 1 else 60)}" to set.duration.unit.id
+                Goal.Distance -> "${set.distance.value / (if (set.distance.unit == Units.MT) 1 else 1000)}" to set.distance.unit.id
+                Goal.Count -> "${set.reps}" to R.string.rep
+                Goal.CountGroup -> "" to 0 }
             )
         }
         return NextExercise(
-                    nextActivityName = exercise.activity.name.toString(),
+                    nextActivityName = exercise.activity?.name.toString(),
                     nextExerciseId = exercise.idExercise,
                     nextExerciseQuantitySet = exercise.sets.count(),
                     nextExerciseSummarizeSet = list )

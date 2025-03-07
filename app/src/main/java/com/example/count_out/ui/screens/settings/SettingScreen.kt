@@ -31,9 +31,9 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.count_out.R
 import com.example.count_out.entity.to01
 import com.example.count_out.entity.enums.ConnectState
-import com.example.count_out.ui.bottom_sheet.BottomSheetAddActivity
-import com.example.count_out.ui.bottom_sheet.BottomSheetBle
-import com.example.count_out.ui.bottom_sheet.CardActivity
+import com.example.count_out.ui.view_components.bottom_sheet.BottomSheetAddActivity
+import com.example.count_out.ui.view_components.bottom_sheet.BottomSheetBle
+import com.example.count_out.ui.view_components.bottom_sheet.CardActivity
 import com.example.count_out.ui.navigation.NavigateEvent
 import com.example.count_out.ui.screens.prime.Action
 import com.example.count_out.ui.screens.prime.PrimeScreen

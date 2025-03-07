@@ -1,6 +1,6 @@
 package com.example.count_out.di
 
-import com.example.count_out.data.openmeteo_api.OpenMeteoAPI
+import com.example.count_out.framework.openmeteo_api.WeatherService
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -24,7 +24,7 @@ object ApiModule {
             .build()
     }
     @Provides
-    fun provideApi(retrofit: Retrofit): OpenMeteoAPI {
-        return retrofit.create(OpenMeteoAPI::class.java)
+    fun provideApi(retrofit: Retrofit): WeatherService {
+        return retrofit.create(WeatherService::class.java)
     }
 }

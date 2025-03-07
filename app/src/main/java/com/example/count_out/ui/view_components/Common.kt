@@ -40,7 +40,7 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import com.example.count_out.R
 import com.example.count_out.entity.TagsTesting.BUTTON_OK
-import com.example.count_out.entity.TypeKeyboard
+import com.example.count_out.entity.models.TypeKeyboard
 import com.example.count_out.ui.theme.Dimen
 import com.example.count_out.ui.theme.mTypography
 

@@ -1,6 +1,7 @@
 package com.example.count_out.ui.screens.trainings
 
 import androidx.lifecycle.viewModelScope
+import com.example.count_out.R
 import com.example.count_out.ui.screens.prime.Event
 import com.example.count_out.ui.screens.prime.PrimeViewModel
 import com.example.count_out.ui.screens.prime.ScreenState
@@ -11,11 +12,13 @@ import com.example.count_out.domain.use_case.trainings.GetTrainingsUC
 import com.example.count_out.domain.use_case.trainings.SelectTrainingUC
 import com.example.count_out.entity.workout.Training
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel class TrainingsViewModel @Inject constructor(
+    private val converter1: GetTrainingsConvertor,
     private val converter: TrainingsConvertor,
     private val addTraining: AddTrainingUC,
     private val copyTraining: CopyTrainingUC,
@@ -38,29 +41,29 @@ import javax.inject.Inject
     }
 
     private fun getTrainings(){
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             getTrainings.execute( GetTrainingsUC.Request)
-                .map { converter.convert(it) }.collect { submitState(it) }
+                .map { converter1.convert(it) }.collect { submitState(it) }
         } }
     private fun addTraining(){
-        viewModelScope.launch {
-            addTraining.execute(AddTrainingUC.Request)
-                .map { converter.convert(it) }.collect { submitState(it) }
+        viewModelScope.launch(Dispatchers.IO) {
+            addTraining.execute1(AddTrainingUC.Request)
+                .collect { submitState(it) }
         }}
     private fun deleteTraining(training: Training){
-        viewModelScope.launch {
-            delTraining.execute( DeleteTrainingUC.Request(training))
-                .map { converter.convert(it) }.collect { submitState(it) }
+        viewModelScope.launch(Dispatchers.IO) {
+//            delTraining.execute( DeleteTrainingUC.Request(training))
+//                .map { converter.convert(it) }.collect { submitState(it) }
         }}
     private fun copyTraining(training: Training){
-        viewModelScope.launch {
-            copyTraining.execute( CopyTrainingUC.Request(training))
-                .map { converter.convert(it) }.collect { submitState(it) }
+        viewModelScope.launch(Dispatchers.IO) {
+//            copyTraining.execute( CopyTrainingUC.Request(training))
+//                .map { converter.convert(it) }.collect { submitState(it) }
         } }
     private fun selectTraining(training: Training){
-        viewModelScope.launch {
-            selectTraining.execute( SelectTrainingUC.Request(training))
-                .map { converter.convert(it) }.collect { submitState(it) }
+        viewModelScope.launch(Dispatchers.IO) {
+//            selectTraining.execute( SelectTrainingUC.Request(training))
+//                .map { converter.convert(it) }.collect { submitState(it) }
         }}
 
 }

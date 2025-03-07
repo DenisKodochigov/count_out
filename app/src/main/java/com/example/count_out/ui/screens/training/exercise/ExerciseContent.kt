@@ -19,14 +19,14 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import com.example.count_out.ui.models.SetImpl
+import com.example.count_out.entity.models.SetImpl
 import com.example.count_out.R
 import com.example.count_out.entity.Const.contourAll1
 import com.example.count_out.entity.workout.DataForChangeSequence
 import com.example.count_out.entity.workout.Exercise
 import com.example.count_out.entity.workout.Round
-import com.example.count_out.ui.models.ActionWithSetImpl
-import com.example.count_out.ui.models.DataForChangeSequenceImpl
+import com.example.count_out.entity.models.ActionWithSetImpl
+import com.example.count_out.entity.models.DataForChangeSequenceImpl
 import com.example.count_out.ui.screens.prime.Action
 import com.example.count_out.ui.screens.training.TrainingEvent
 import com.example.count_out.ui.screens.training.TrainingState

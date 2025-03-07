@@ -30,24 +30,23 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.count_out.R
-import com.example.count_out.data.room.tables.SetDB
+import com.example.count_out.entity.enums.ConnectState
+import com.example.count_out.entity.enums.Goal
+import com.example.count_out.entity.enums.RunningState
+import com.example.count_out.entity.enums.Units
 import com.example.count_out.entity.minus
 import com.example.count_out.entity.plus
-import com.example.count_out.entity.ConnectState
-import com.example.count_out.entity.DistanceE
-import com.example.count_out.entity.GoalSet
-import com.example.count_out.entity.RunningState
-import com.example.count_out.entity.TimeE
-import com.example.count_out.entity.WeightE
-import com.example.count_out.ui.bottom_sheet.BottomSheetSaveTraining
-import com.example.count_out.ui.models.NextExercise
+import com.example.count_out.ui.view_components.bottom_sheet.BottomSheetSaveTraining
+import com.example.count_out.entity.models.NextExercise
+import com.example.count_out.entity.models.SetImpl
+import com.example.count_out.ui.navigation.NavigateEvent
 import com.example.count_out.ui.theme.mTypography
 import com.example.count_out.ui.view_components.TextApp
 import com.example.count_out.ui.view_components.custom_view.Frame
 import com.example.count_out.ui.view_components.custom_view.IconQ
 import java.math.RoundingMode
 
-@Composable fun ExecuteWorkoutScreen(trainingId: Long ){
+@Composable fun ExecuteWorkoutScreen(navigateEvent: NavigateEvent, trainingId: Long ){
     val viewModel: ExecuteWorkViewModel = hiltViewModel()
     viewModel.getTraining(trainingId)
     ExecuteWorkoutScreenCreateView( viewModel = viewModel)
@@ -107,11 +106,11 @@ import java.math.RoundingMode
             TextApp(text = text,
                 modifier = Modifier.padding(bottom = 12.dp),
                 style = mTypography.titleLarge)
-            when(uiState.stepTraining?.currentSet?.goal ?: GoalSet.COUNT){
-                GoalSet.COUNT -> LayoutCount(uiState)
-                GoalSet.DISTANCE -> LayoutDistance(uiState)
-                GoalSet.DURATION -> LayoutDuration(uiState)
-                GoalSet.COUNT_GROUP -> {}
+            when(uiState.stepTraining?.currentSet?.goal ?: Goal.Count){
+                Goal.Count -> LayoutCount(uiState)
+                Goal.Distance -> LayoutDistance(uiState)
+                Goal.Duration -> LayoutDuration(uiState)
+                Goal.CountGroup -> {}
             }
             NextExercise(uiState.stepTraining?.nextExercise)
         }
@@ -173,7 +172,7 @@ import java.math.RoundingMode
                 modifier = Modifier.width(50.dp),
                 text1 = "${uiState.stepTraining.numberSet}",
                 text2 = "${uiState.currentCount}",
-                text3 = "${set.weight / ( if (set.weightE == WeightE.KG) 1000 else 1 ) }",
+                text3 = "${set.weight.value / ( if (set.weight.unit == Units.KG) 1000 else 1 ) }",
                 text4 = "${uiState.currentRest}",
             )
             //Total target (unit)
@@ -183,9 +182,9 @@ import java.math.RoundingMode
                 modifier = Modifier.padding(start = 12.dp).width(100.dp),
                 text1 = "${uiState.stepTraining.quantitySet}",
                 text2 = "${set.reps}",
-                text3 = "(${stringResource(set.weightE.id) })",
-                text4 = "${set.timeRest/( if (set.timeRestE == TimeE.MIN) 60 else 1)}" +
-                        " (${ stringResource(set.timeRestE.id) })",
+                text3 = "(${stringResource(set.weight.unit.id) })",
+                text4 = "${set.rest.value/( if (set.rest.unit == Units.M) 60 else 1)}" +
+                        " (${ stringResource(set.rest.unit.id) })",
             )
         }
     }
@@ -213,7 +212,7 @@ import java.math.RoundingMode
                 style2 = mTypography.titleLarge,
                 modifier = Modifier.width(50.dp),
                 text1 = "${uiState.stepTraining.numberSet}",
-                text2 = "${uiState.currentDistance/( if (set.distanceE == DistanceE.KM) 1000 else 1)}",
+                text2 = "${uiState.currentDistance/( if (set.distance.unit == Units.KM) 1000 else 1)}",
                 text3 = "${uiState.currentRest}",
             )
             //Total target (unit)
@@ -222,10 +221,10 @@ import java.math.RoundingMode
                 style2 = mTypography.titleLarge,
                 modifier = Modifier.padding(start = 12.dp).width(100.dp),
                 text1 = "${uiState.stepTraining.quantitySet}",
-                text2 = "${set.distance/( if (set.distanceE == DistanceE.KM) 1000 else 1) }" +
-                        " (${stringResource(set.distanceE.id)})",
-                text3 = "${set.timeRest/( if (set.timeRestE == TimeE.MIN) 60 else 1)}" +
-                        " (${ stringResource(set.timeRestE.id) })",
+                text2 = "${set.distance.value /( if (set.distance.unit == Units.KM) 1000 else 1) }" +
+                        " (${stringResource(set.distance.unit.id)})",
+                text3 = "${set.rest.value/( if (set.rest.unit == Units.M) 60 else 1)}" +
+                        " (${ stringResource(set.rest.unit.id) })",
             )
         }
     }
@@ -249,8 +248,8 @@ import java.math.RoundingMode
                 style2 = mTypography.titleLarge,
                 modifier = Modifier.width(50.dp),
                 text1 = "${(uiState.stepTraining.numberSet)}",
-                text2 = "${uiState.currentDuration/( if (set.durationE == TimeE.MIN) 60 else 1)}",
-                text3 = "${set.weight / ( if (set.weightE == WeightE.KG) 1000 else 1 ) }",
+                text2 = "${uiState.currentDuration/( if (set.duration.unit == Units.M) 60 else 1)}",
+                text3 = "${set.weight.value / ( if (set.weight.unit == Units.KG) 1000 else 1 ) }",
                 text4 = "${uiState.currentRest}",
             )
             //Total target (unit)
@@ -259,11 +258,11 @@ import java.math.RoundingMode
                 style2 = mTypography.titleLarge,
                 modifier = Modifier.padding(start = 12.dp).width(100.dp),
                 text1 = "${uiState.stepTraining.quantitySet }",
-                text2 = "${set.duration/( if (set.durationE == TimeE.MIN) 60 else 1) }" +
-                        " (${ stringResource(set.durationE.id) })",
-                text3 = "(${stringResource(set.weightE.id) })",
-                text4 = "${set.timeRest/( if (set.timeRestE == TimeE.MIN) 60 else 1)}" +
-                        " (${ stringResource(set.timeRestE.id) })",
+                text2 = "${set.duration.value /( if (set.duration.unit == Units.M) 60 else 1) }" +
+                        " (${ stringResource(set.duration.unit.id) })",
+                text3 = "(${stringResource(set.weight.unit.id) })",
+                text4 = "${set.rest.value/( if (set.rest.unit == Units.M) 60 else 1)}" +
+                        " (${ stringResource(set.rest.unit.id) })",
             )
         }
     }
@@ -289,9 +288,9 @@ import java.math.RoundingMode
     uiState.training?.let { training ->
         uiState.stepTraining?.currentSet?.let { set ->
             downInterval = { uiState.updateSet(
-                training.idTraining, (set as SetDB).copy(intervalReps = set.intervalReps.minus())) }
+                training.idTraining, (set as SetImpl).copy(intervalReps = set.intervalReps.minus())) }
             upInterval = { uiState.updateSet(
-                training.idTraining, (set as SetDB).copy(intervalReps = set.intervalReps.plus())) }
+                training.idTraining, (set as SetImpl).copy(intervalReps = set.intervalReps.plus())) }
         }
     }
     val color = if(!uiState.enableChangeInterval) MaterialTheme.colorScheme.surfaceContainerLow
@@ -324,7 +323,3 @@ import java.math.RoundingMode
     else ""
 }
 
-@Preview
-@Composable fun PreviewExecuteWorkoutScreen(){
-    ExecuteWorkoutScreen(0)
-}

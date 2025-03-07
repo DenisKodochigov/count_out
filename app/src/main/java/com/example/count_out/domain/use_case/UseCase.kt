@@ -1,7 +1,11 @@
 package com.example.count_out.domain.use_case
 
-import com.count_out.domain.entity.throwable.ResultUC
+import com.example.count_out.entity.throwable.ResultUC
 import com.count_out.domain.entity.throwable.ThrowableUC
+import com.example.count_out.R
+import com.example.count_out.ui.screens.prime.PrimeConv
+import com.example.count_out.ui.screens.prime.PrimeConvertor
+import com.example.count_out.ui.screens.prime.ScreenState
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
@@ -16,37 +20,40 @@ import kotlinx.coroutines.flow.map
  * хранилищ, и метод execute, который возьмет данные и преобразует их в Result, обработает сценарии
  * ошибок и установит соответствующий CoroutineDispatcher.
  * */
-abstract class UseCase<I: UseCase.Request, O: UseCase.Response>(
-    private val configuration: Configuration
+abstract class UseCase< I: UseCase.Request, O: UseCase.Response>(
+    private val configuration: Configuration,
 ) {
+//    fun eeee(input: I): Flow<ScreenState<R>> = execute(input).map { convertor.convert(it) }
     fun execute(input: I): Flow<ResultUC<O>> = executeData(input)
-            .map { ResultUC.Success(it) as ResultUC<O> }
-            .flowOn(configuration.dispatcher)
-            .catch { emit(ResultUC.Error(ThrowableUC.extractThrowable(it)) as ResultUC<Nothing>) }
+        .map { ResultUC.Success(it) as ResultUC<O> }
+        .flowOn(configuration.dispatcher)
+        .catch { emit(ResultUC.Error(ThrowableUC.extractThrowable(it)) as ResultUC<Nothing>) }
+
     class Configuration(val dispatcher: CoroutineDispatcher)
     internal abstract fun executeData(input: I): Flow<O>
     interface Request
     interface Response
 }
-//
-//
-//sealed class SC(){
-//    data class DC(val data: String): SC()
-//}
-//data class DC(val data: String): SC()
-//
-//fun rrr(){
-//    val res = Result.Success("success")
-//    var rrrr = res as Result<String>
-//    val dc = DC("1")
-//    val dc1 = SC.DC("2")
-//}
-//
-//class Box< out T: Animal>(val animal: T)
-//open class Animal()
-//class Cat : Animal()
-//
-//fun main() {
-//    val a: Animal = Cat()  //так можно
-//    val b: Box<Animal> = Box<Cat>(Cat())  //а вот так не получится
-//}
+
+abstract class UseCase1<R: Any, I: UseCase.Request, O: UseCase.Response>(
+    private val configuration: Configuration,
+) {
+    abstract fun convertor(): PrimeConv<O, R>
+    //    fun eeee(input: I): Flow<ScreenState<R>> = execute(input).map { convertor.convert(it) }
+    fun execute(input: I): Flow<ResultUC<O>> = executeData(input)
+        .map { ResultUC.Success(it) as ResultUC<O> }
+        .flowOn(configuration.dispatcher)
+        .catch { emit(ResultUC.Error(ThrowableUC.extractThrowable(it)) as ResultUC<Nothing>) }
+
+    fun execute1(input: I): Flow<ScreenState<R>> = executeData(input)
+        .map { ResultUC.Success(it) as ResultUC<O> }
+        .flowOn(configuration.dispatcher)
+        .catch { emit(ResultUC.Error(ThrowableUC.extractThrowable(it)) as ResultUC<Nothing>) }
+        .map { convertor().convert(it) }
+
+
+    class Configuration(val dispatcher: CoroutineDispatcher)
+    internal abstract fun executeData(input: I): Flow<O>
+    interface Request
+    interface Response
+}

@@ -7,20 +7,20 @@ import android.os.Binder
 import android.os.Build
 import android.os.IBinder
 import android.os.SystemClock
+import com.count_out.framework.room.db.traking.WorkoutTable
 import com.example.count_out.R
-import com.example.count_out.data.bluetooth.Bluetooth
-import com.example.count_out.data.room.tables.WorkoutDB
-import com.example.count_out.data.location.Site
+import com.example.count_out.devices.bluetooth.Bluetooth
+import com.example.count_out.devices.location.Site
 import com.example.count_out.domain.router.Router
-import com.example.count_out.entity.CommandService
 import com.example.count_out.entity.Const.NOTIFICATION_EXTRA
 import com.example.count_out.entity.Const.NOTIFICATION_ID
 import com.example.count_out.entity.MessageApp
-import com.example.count_out.entity.RunningState
-import com.example.count_out.ui.models.DataForServ
-import com.example.count_out.ui.models.DataForUI
-import com.example.count_out.ui.notification.NotificationHelper
-import com.example.count_out.data.logging.Logging
+import com.example.count_out.entity.models.DataForServ
+import com.example.count_out.entity.models.DataForUI
+import com.example.count_out.framework.notification.NotificationHelper
+import com.example.count_out.services.logging.Logging
+import com.example.count_out.entity.enums.CommandService
+import com.example.count_out.entity.enums.RunningState
 import com.example.count_out.ui.view_components.lg
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
@@ -34,7 +34,7 @@ import javax.inject.Singleton
 class CountOutService @Inject constructor(): Service() {
 
     private lateinit var router: Router
-    private lateinit var workout: WorkoutDB
+    private lateinit var workout: WorkoutTable
     var running: Boolean = false
     @Inject lateinit var notificationHelper: NotificationHelper
     @Inject lateinit var messageApp: MessageApp
@@ -81,7 +81,7 @@ class CountOutService @Inject constructor(): Service() {
         return router.dataForUI
     }
 
-    fun startBle(dataForServ: DataForServ): DataForUI{
+    fun startBle(dataForServ: DataForServ): DataForUI {
         router = Router(dataForServ)
         router.sendBleToUi()
         return router.dataForUI
@@ -119,9 +119,9 @@ class CountOutService @Inject constructor(): Service() {
             RunningState.Paused-> router.dataFromWork.runningState.value = RunningState.Started
             RunningState.Stopped, null-> {
                 router.dataForWork.training.value?.let { training->
-                    workout = WorkoutDB(timeStart = SystemClock.elapsedRealtime(), trainingId = training.idTraining)
+                    workout = WorkoutTable(timeStart = SystemClock.elapsedRealtime(), trainingId = training.idTraining)
                     router.dataFromWork.runningState.value = RunningState.Started
-                    workout.formTraining(training)
+//                    workout.formTraining(training)
                     lg("#################### Start Service Work #################### ")
                     startWriteBase()
                     work.start( router.dataForWork, router.dataFromWork )

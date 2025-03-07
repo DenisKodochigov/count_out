@@ -8,7 +8,7 @@ import com.example.count_out.entity.workout.Exercise
 import com.example.count_out.entity.workout.Set
 import com.example.count_out.entity.workout.Training
 import com.example.count_out.entity.workout.speech.SpeechKit
-import com.example.count_out.ui.models.BottomSheetInterface
+import com.example.count_out.entity.models.BottomSheetInterface
 
 data class TrainingState (
     val training: Training,

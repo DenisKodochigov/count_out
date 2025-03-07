@@ -1,7 +1,7 @@
 package com.example.count_out.services.timer
 
 import android.os.SystemClock
-import com.example.count_out.entity.RunningState
+import com.example.count_out.entity.enums.RunningState
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 

@@ -4,9 +4,9 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.mutableStateOf
 import com.example.count_out.entity.bluetooth.DeviceUI
-import com.example.count_out.data.room.tables.SetDB
-import com.example.count_out.entity.ConnectState
-import com.example.count_out.entity.RunningState
+import com.example.count_out.entity.enums.ConnectState
+import com.example.count_out.entity.enums.RunningState
+import com.example.count_out.entity.models.SetImpl
 import com.example.count_out.services.timer.models.TickTimeImpl
 import com.example.count_out.entity.workout.Coordinate
 import com.example.count_out.entity.workout.StepTraining
@@ -33,7 +33,7 @@ data class ExecuteWorkoutScreenState(
 
     val showBottomSheetSaveTraining: MutableState<Boolean> = mutableStateOf(false),
     val stateWorkOutService: RunningState = RunningState.Binding,
-    val updateSet: (Long, SetDB)->Unit = { _, _->},
+    val updateSet: (Long, SetImpl)->Unit = { _, _->},
     val startWorkOutService: (Training)->Unit = {},
     val stopWorkOutService: ()->Unit = {},
     val pauseWorkOutService: ()->Unit = { },

@@ -1,7 +1,7 @@
 package com.example.count_out.entity.weather
 
 interface Weather {
-    val time: String
+    val time: Long
     val interval: Int
     val temperature2m: Double
     val relativeHumidity2m: Int

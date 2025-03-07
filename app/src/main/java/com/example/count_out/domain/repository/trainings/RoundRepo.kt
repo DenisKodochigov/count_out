@@ -1,4 +1,4 @@
-package com.count_out.domain.repository.trainings
+package com.example.count_out.domain.repository.trainings
 
 import com.example.count_out.entity.workout.Round
 import kotlinx.coroutines.flow.Flow

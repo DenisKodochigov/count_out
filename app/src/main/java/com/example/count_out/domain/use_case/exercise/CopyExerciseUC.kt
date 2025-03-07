@@ -1,7 +1,7 @@
 package com.example.count_out.domain.use_case.exercise
 
 import com.example.count_out.entity.workout.Exercise
-import com.count_out.domain.repository.trainings.ExerciseRepo
+import com.example.count_out.domain.repository.trainings.ExerciseRepo
 import com.example.count_out.domain.use_case.UseCase
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map

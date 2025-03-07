@@ -1,7 +1,7 @@
 package com.example.count_out.domain.router
 
 import com.example.count_out.entity.bluetooth.DeviceUI
-import com.example.count_out.entity.ConnectState
+import com.example.count_out.entity.enums.ConnectState
 import kotlinx.coroutines.flow.MutableStateFlow
 
 data class DataFromBle (

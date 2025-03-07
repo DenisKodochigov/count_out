@@ -15,7 +15,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import com.example.count_out.data.room.tables.SettingDB
 import com.example.count_out.entity.settings.SettingRecord
 import com.example.count_out.ui.theme.mTypography
 

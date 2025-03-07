@@ -2,7 +2,6 @@ package com.example.count_out.ui.screens.history
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.count_out.data.DataRepository
 import com.example.count_out.entity.MessageApp
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -15,7 +14,7 @@ import javax.inject.Inject
 @HiltViewModel
 class HistoryViewModel  @Inject constructor(
     private val messageApp: MessageApp,
-    private val dataRepository: DataRepository
+//    private val dataRepository: DataRepository
 ): ViewModel() {
     private val _historyScreenState = MutableStateFlow(
         HistoryScreenState(

@@ -2,6 +2,7 @@ package com.example.count_out.entity.workout
 
 import com.example.count_out.entity.enums.Goal
 import com.example.count_out.entity.enums.Zone
+import com.example.count_out.entity.workout.speech.SpeechKit
 
 interface Set {
     val idSet: Long

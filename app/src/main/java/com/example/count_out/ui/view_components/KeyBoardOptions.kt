@@ -5,7 +5,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
-import com.example.count_out.entity.TypeKeyboard
+import com.example.count_out.entity.models.TypeKeyboard
 
 @Composable fun keyBoardOpt(typeKeyboard: TypeKeyboard): KeyboardOptions {
     return when (typeKeyboard) {
