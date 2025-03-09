@@ -1,6 +1,6 @@
 package com.count_out.app.presentation.screens.settings
 
-import com.count_out.app.presentation.prime.Event
+import com.count_out.app.presentation.screens.prime.Event
 import com.count_out.domain.entity.SettingRecord
 import com.count_out.domain.entity.router.DeviceUI
 import com.count_out.domain.entity.workout.Activity

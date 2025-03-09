@@ -1,4 +1,4 @@
-package com.count_out.app.presentation.screens.history.year
+package com.example.count_out.ui.screens.history.year
 
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding

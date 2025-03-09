@@ -53,17 +53,17 @@ data class SetRel(
             idSet = setTable.idSet,
             name = setTable.name,
             speechId = setTable.speechId,
-            goal = com.count_out.domain.entity.enums.Goal.entries[setTable.goal],
+            goal = Goal.entries[setTable.goal],
             exerciseId = setTable.exerciseId,
             reps = setTable.reps,
-            duration = ParameterImpl(value = setTable.duration, com.count_out.domain.entity.enums.Units.entries[setTable.durationU] ),
-            distance = ParameterImpl(value = setTable.distance, com.count_out.domain.entity.enums.Units.entries[setTable.distanceU] ),
-            weight = ParameterImpl(value = setTable.weight, com.count_out.domain.entity.enums.Units.entries[setTable.weightU] ),
+            duration = ParameterImpl(value = setTable.duration, Units.entries[setTable.durationU] ),
+            distance = ParameterImpl(value = setTable.distance, Units.entries[setTable.distanceU] ),
+            weight = ParameterImpl(value = setTable.weight, Units.entries[setTable.weightU] ),
             intervalReps = setTable.intervalReps,
-            intensity = com.count_out.domain.entity.enums.Zone.entries[setTable.intensity],
+            intensity = Zone.entries[setTable.intensity],
             intervalDown = setTable.intervalDown,
             groupCount = setTable.groupCount,
-            rest = ParameterImpl(value = setTable.timeRest, com.count_out.domain.entity.enums.Units.entries[setTable.timeRestU] ),
+            rest = ParameterImpl(value = setTable.timeRest, Units.entries[setTable.timeRestU] ),
             speech = speechKit?.toSpeechKit(),
         )
     }
@@ -104,7 +104,7 @@ data class RoundRel(
         return RoundImpl(
             exercise = exercise?.map { it.toExercise() } ?: emptyList(),  ///.sortedBy{ it.idView }.sortedBy{ it.idView } реализовать в usecase
             idRound = round.idRound,
-            roundType = com.count_out.domain.entity.enums.RoundType.entries[round.roundType],
+            roundType = RoundType.entries[round.roundType],
             speechId = round.speechId,
             speech = speechKit?.toSpeechKit(),
             trainingId = round.trainingId,

@@ -6,11 +6,7 @@ import com.count_out.domain.entity.enums.StateBleConnecting
 import kotlinx.coroutines.flow.MutableStateFlow
 
 class BleStates {
-    var stateBleScanner: MutableStateFlow<com.count_out.domain.entity.enums.RunningState?> = MutableStateFlow(
-        com.count_out.domain.entity.enums.RunningState.Stopped
-    )
-    var stateBleConnecting: com.count_out.domain.entity.enums.StateBleConnecting =
-        com.count_out.domain.entity.enums.StateBleConnecting.NONE
-    var error: com.count_out.domain.entity.enums.ErrorBleService =
-        com.count_out.domain.entity.enums.ErrorBleService.NONE
+    var stateBleScanner: MutableStateFlow<RunningState?> = MutableStateFlow(RunningState.Stopped)
+    var stateBleConnecting: StateBleConnecting = StateBleConnecting.NONE
+    var error: ErrorBleService = ErrorBleService.NONE
 }

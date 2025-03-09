@@ -4,6 +4,7 @@ import com.count_out.data.models.SpeechImpl
 import com.count_out.data.models.SpeechKitImpl
 import com.count_out.data.source.room.SpeechKitSource
 import com.count_out.data.source.room.SpeechSource
+import com.count_out.domain.entity.workout.SpeechKit
 import com.count_out.framework.room.db.speech_kit.SpeechKitDao
 import com.count_out.framework.room.db.speech_kit.SpeechKitTable
 import kotlinx.coroutines.flow.Flow
@@ -22,19 +23,19 @@ class SpeechKitSourceImpl @Inject constructor(
     }
     override fun addL(): Long = daoSpeechKit.add( toSpeechKitTableNew())
 
-    override fun copy(speechKit: SpeechKitImpl): Flow<SpeechKitImpl> {
+    override fun copy(speechKit: SpeechKit): Flow<SpeechKitImpl> {
         val speechKitTable =
             if (speechKit.idSpeechKit == 0L) { toSpeechKitTableNew() }
             else {toSpeechKitTableCopy(speechKit)}
         return get(daoSpeechKit.add( speechKitTable))
     }
-    override fun copyL(speechKit: SpeechKitImpl): Long {
+    override fun copyL(speechKit: SpeechKit): Long {
         val speechKitTable =
             if (speechKit.idSpeechKit == 0L) { toSpeechKitTableNew() }
             else {toSpeechKitTableCopy(speechKit)}
         return daoSpeechKit.add( speechKitTable)
     }
-    override fun update(speechKit: SpeechKitImpl): Flow<SpeechKitImpl> {
+    override fun update(speechKit: SpeechKit): Flow<SpeechKitImpl> {
         speechSource.update(speechKit.beforeStart as SpeechImpl)
         speechSource.update(speechKit.afterStart as SpeechImpl)
         speechSource.update(speechKit.beforeEnd as SpeechImpl)
@@ -42,7 +43,7 @@ class SpeechKitSourceImpl @Inject constructor(
         return daoSpeechKit.get(speechKit.idSpeechKit).map { it.toSpeechKit() }
     }
 
-    override fun del(speechKit: SpeechKitImpl) {
+    override fun del(speechKit: SpeechKit) {
         speechSource.del(speechKit.idBeforeStart)
         speechSource.del(speechKit.idAfterStart)
         speechSource.del(speechKit.idBeforeEnd)
@@ -50,7 +51,7 @@ class SpeechKitSourceImpl @Inject constructor(
         daoSpeechKit.del(speechKit.idSpeechKit)
     }
 
-    private fun toSpeechKitTableCopy(speechKit: SpeechKitImpl): SpeechKitTable = SpeechKitTable(
+    private fun toSpeechKitTableCopy(speechKit: SpeechKit): SpeechKitTable = SpeechKitTable(
         idBeforeStart = speechKit.idBeforeStart,
         idAfterStart = speechKit.idAfterStart,
         idBeforeEnd = speechKit.idBeforeEnd,

@@ -1,17 +1,17 @@
-//package com.count_out.app.presentation.screens.settings
+//package com.example.count_out.ui.screens.settings
 //
 //import androidx.compose.runtime.MutableState
 //import androidx.compose.runtime.Stable
 //import androidx.compose.runtime.mutableStateOf
-//import androidx.compose.ui.text.font.FontVariation.Setting
-//import com.count_out.entity.entity.workout.Activity
-//import com.count_out.entity.enums.ConnectState
-//import com.count_out.domain.entity.bluetooth.DeviceUI
-//import kotlin.let
+//import com.example.count_out.entity.bluetooth.DeviceUI
+//import com.example.count_out.framework.room.old.tables.ActivityDB
+//import com.example.count_out.framework.room.old.tables.SettingDB
+//import com.example.count_out.entity.ConnectState
+//import com.example.count_out.entity.workout.Activity
 //
 //data class SettingScreenState(
 //    //from viewmodel
-//    val settings: List<Setting> = emptyList(),
+//    val settings: List<SettingDB> = emptyList(),
 //    val heartRate: Int = 0,
 //    val devicesUI: List<DeviceUI> = emptyList(),
 //    val lastConnectHearthRateDevice: DeviceUI? = null,
@@ -21,7 +21,7 @@
 //    //for screen
 //    val showBottomSheetAddActivity: MutableState<Boolean> = mutableStateOf(false),
 //    val showBottomSheetBLE: MutableState<Boolean> = mutableStateOf(false),
-//    val activity: MutableState<Activity?> = mutableStateOf(null),
+//    val activity: MutableState<Activity> = mutableStateOf(ActivityDB()),
 //    val collapsingActivity: MutableState<Boolean> = mutableStateOf(false),
 //
 //    @Stable val onSetColorActivity: (Long, Int) -> Unit = { _, _ ->},
@@ -30,7 +30,7 @@
 //    @Stable val onDeleteActivity: (Long) ->Unit = {},
 //    @Stable val onSelectDevice: (DeviceUI) ->Unit = {},
 //
-//    @Stable val onUpdateSetting: (Setting) ->Unit = {},
+//    @Stable val onUpdateSetting: (SettingDB) ->Unit = {},
 //    @Stable val onGetSettings: () ->Unit = {},
 //    @Stable val onClearCacheBLE: () ->Unit = {},
 //    @Stable val onStartScanBLE: () ->Unit = {},
@@ -39,7 +39,7 @@
 //    @Stable var onDismissAddActivity: (SettingScreenState) -> Unit = { uiState->
 //        uiState.showBottomSheetAddActivity.value = false },
 //    @Stable var onConfirmAddActivity: (SettingScreenState) -> Unit = { uiState ->
-//        uiState.activity.value?.let { onAddActivity(it) }
+//        onAddActivity(uiState.activity.value)
 //        uiState.showBottomSheetAddActivity.value = false },
 //    @Stable var onDismissBLEScan: (SettingScreenState) -> Unit = {uiState ->
 //        onStopScanBLE()

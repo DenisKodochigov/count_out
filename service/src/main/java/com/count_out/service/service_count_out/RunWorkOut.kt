@@ -5,8 +5,8 @@ import com.count_out.data.models.SetImpl
 import com.count_out.data.models.SpeechImpl
 import com.count_out.data.router.models.DataForWork
 import com.count_out.data.router.models.DataFromWork
-import com.count_out.domain.entity.workout.SpeechKit
 import com.count_out.domain.entity.enums.Goal
+import com.count_out.domain.entity.workout.SpeechKit
 import com.count_out.domain.entity.enums.RunningState
 import com.count_out.domain.entity.enums.Units
 import com.count_out.framework.text_to_speech.SpeechManager
@@ -31,22 +31,21 @@ class RunWorkOut @Inject constructor(
         var currentIndExercise = 0L
 
         dataForWork.training.value?.let { tr->
-            com.count_out.domain.entity.workout.Speech.addMessage =
-                com.count_out.domain.entity.workout.Training.name
-            speechStart(dataFromWork, com.count_out.domain.entity.workout.Training.speech as com.count_out.domain.entity.workout.SpeechKit)
+            tr.speech?.beforeStart?.addMessage = tr.name
+            speechStart(dataFromWork, tr.speech as SpeechKit)
             dataForWork.map.forEachIndexed { indM, item->
                 dataForWork.indexMap = indM
-                if ( currentIndRound != com.count_out.domain.entity.workout.Round.idRound) {
+                if ( currentIndRound != item.round?.idRound ) {
                     dataForWork.sendStepTrainingShort()
-                    com.count_out.domain.entity.workout.Round.speech?.let { speechStart(dataFromWork, it) }
+                    item.round?.speech?.let { speechStart(dataFromWork, it) }
                 }
-                if ( currentIndExercise != com.count_out.domain.entity.workout.Exercise.idExercise) {
+                if ( currentIndExercise != item.exercise?.idExercise ) {
                     dataForWork.sendStepTrainingShort()
-                    com.count_out.domain.entity.StepTraining.exercise?.let { exerciseLet->
-                        speechStart(dataFromWork, com.count_out.domain.entity.workout.Exercise.speech as com.count_out.domain.entity.workout.SpeechKit)
-                        val desc = if (dataForWork.enableSpeechDescription.value) com.count_out.domain.entity.workout.Activity.description else ""
+                    item.exercise?.let { exerciseLet->
+                        speechStart(dataFromWork, exerciseLet.speech as SpeechKit)
+                        val desc = if (dataForWork.enableSpeechDescription.value) exerciseLet.activity?.description else ""
                         speechManager.speech(dataFromWork, SpeechImpl(
-                            message = "${context.getString(R.string.next_exercise)} ${com.count_out.domain.entity.workout.Activity.name}. $desc",
+                            message = "${context.getString(R.string.next_exercise)} ${exerciseLet.activity?.name}. $desc",
                             idSpeech = TODO(),
                             duration = TODO(),
                             addMessage = TODO()
@@ -54,16 +53,16 @@ class RunWorkOut @Inject constructor(
                     }
 //                    dataForWork.setExecuteInfoExercise(index = indM)
                 }
-                executeSet( com.count_out.domain.entity.StepTraining.currentSet as SetImpl, dataForWork, dataFromWork )
-                if ( currentIndExercise != com.count_out.domain.entity.workout.Exercise.idExercise)
-                    com.count_out.domain.entity.workout.Exercise.speech?.let { speechEnd(dataFromWork, it)}
-                if ( currentIndRound != com.count_out.domain.entity.workout.Round.idRound)
-                    com.count_out.domain.entity.workout.Round.speech?.let { speechEnd(dataFromWork, it)}
-                currentIndExercise = com.count_out.domain.entity.workout.Exercise.idExercise ?: 0
-                currentIndRound = com.count_out.domain.entity.workout.Round.idRound ?: 0
+                executeSet( item.currentSet as SetImpl, dataForWork, dataFromWork )
+                if ( currentIndExercise != item.exercise?.idExercise )
+                    item.exercise?.speech?.let { speechEnd(dataFromWork, it)}
+                if ( currentIndRound != item.round?.idRound )
+                    item.round?.speech?.let { speechEnd(dataFromWork, it)}
+                currentIndExercise = item.exercise?.idExercise ?: 0
+                currentIndRound = item.round?.idRound ?: 0
             }
-            speechEnd(dataFromWork, com.count_out.domain.entity.workout.Training.speech as com.count_out.domain.entity.workout.SpeechKit)
-            dataFromWork.runningState.value = com.count_out.domain.entity.enums.RunningState.Stopped
+            speechEnd(dataFromWork, tr.speech as SpeechKit)
+            dataFromWork.runningState.value = RunningState.Stopped
         }
     }
 
@@ -87,14 +86,14 @@ class RunWorkOut @Inject constructor(
             duration = TODO(),
             addMessage = TODO()
         ))
-        speechStart(dataFromWork, set.speech as com.count_out.domain.entity.workout.SpeechKit)
+        speechStart(dataFromWork, set.speech as SpeechKit)
     }
     private suspend fun speakSetBody(set: SetImpl, dataForWork: DataForWork, dataFromWork: DataFromWork){
         when (set.goal){
-            com.count_out.domain.entity.enums.Goal.Distance -> speakingDISTANCE(set, dataFromWork)
-            com.count_out.domain.entity.enums.Goal.Duration -> speakingDURATION(set, dataFromWork)
-            com.count_out.domain.entity.enums.Goal.Count -> speakingCOUNT(set, dataForWork, dataFromWork)
-            com.count_out.domain.entity.enums.Goal.CountGroup -> speakingCOUNTGROUP(set, dataFromWork)
+            Goal.Distance -> speakingDISTANCE(set, dataFromWork)
+            Goal.Duration -> speakingDURATION(set, dataFromWork)
+            Goal.Count -> speakingCOUNT(set, dataForWork, dataFromWork)
+            Goal.CountGroup -> speakingCOUNTGROUP(set, dataFromWork)
         }
     }
     private suspend fun speakingCOUNT(set: SetImpl, dataForWork: DataForWork, dataFromWork: DataFromWork ){
@@ -121,19 +120,19 @@ class RunWorkOut @Inject constructor(
         }
     }
     private suspend fun speakingDURATION(set: SetImpl, dataFromWork: DataFromWork){
-        speakInterval( duration = (com.count_out.domain.entity.workout.Parameter.value / (if (com.count_out.domain.entity.workout.Parameter.unit == com.count_out.domain.entity.enums.Units.M) 60.0 else 1.0)).toInt(),
+        speakInterval( duration = (set.duration.value / (if (set.duration.unit == Units.M) 60.0 else 1.0)).toInt(),
             dataFromWork = dataFromWork)
     }
     private fun speakingDISTANCE(set: SetImpl, dataFromWork: DataFromWork ){}
 
     private suspend fun speakEnd(setCurrent: SetImpl, dataFromWork: DataFromWork){
-        speechEnd(dataFromWork, setCurrent.speech as com.count_out.domain.entity.workout.SpeechKit)
+        speechEnd(dataFromWork, setCurrent.speech as SpeechKit)
         CoroutineScope(Dispatchers.IO).launch { speakingRest(setCurrent, dataFromWork)}
         speechManager.speech(dataFromWork, SpeechImpl(
             message = getStr(R.string.rest) + "  " +
                     getPlurals(
-                        com.count_out.domain.entity.workout.Parameter.value / (if (com.count_out.domain.entity.workout.Parameter.unit == com.count_out.domain.entity.enums.Units.M) 60.0 else 1.0),
-                        com.count_out.domain.entity.workout.Parameter.unit.id),
+                        setCurrent.rest.value / (if (setCurrent.duration.unit == Units.M) 60.0 else 1.0),
+                        setCurrent.rest.unit.id),
             idSpeech = TODO(),
             duration = TODO(),
             addMessage = TODO()
@@ -141,9 +140,9 @@ class RunWorkOut @Inject constructor(
     }
     private suspend fun speakingRest(set: SetImpl, dataFromWork: DataFromWork ){
         dataFromWork.phaseWorkout.value = 0
-        if (com.count_out.domain.entity.workout.Parameter.value > 0) {
+        if (set.rest.value > 0) {
             runningCountRest.value = false
-            speakInterval(duration = com.count_out.domain.entity.workout.Parameter.value.toInt(), dataFromWork = dataFromWork)
+            speakInterval(duration = set.rest.value.toInt(), dataFromWork = dataFromWork)
             runningCountRest.value = true
 //            runningCountRest.notify()
         }
@@ -157,7 +156,7 @@ class RunWorkOut @Inject constructor(
     }
     private suspend fun countDelay(duration: Int, divider: Int, dataFromWork: DataFromWork){
         for ( count in 1..duration){
-            if (dataFromWork.runningState.value == com.count_out.domain.entity.enums.RunningState.Stopped) return
+            if (dataFromWork.runningState.value == RunningState.Stopped) return
             if ( count % divider == 0 && !speechManager.getSpeeching())
                 speechManager.speakOutFlushBusy(text = count.toString(), dataFromWork)
             dataFromWork.currentDuration.value = if (runningCountRest.value) count else 0
@@ -167,12 +166,12 @@ class RunWorkOut @Inject constructor(
     }
     private fun textBeforeSet(set: SetImpl): String{
         return when (set.goal){
-            com.count_out.domain.entity.enums.Goal.Count -> " " + getPlurals(set.reps.toDouble(), R.plurals.repeat)
-            com.count_out.domain.entity.enums.Goal.CountGroup -> " " + getPlurals(set.reps.toDouble(), R.plurals.repeat)
-            com.count_out.domain.entity.enums.Goal.Duration ->
-                getPlurals((com.count_out.domain.entity.workout.Parameter.value / (if (com.count_out.domain.entity.workout.Parameter.unit == com.count_out.domain.entity.enums.Units.M) 60.0 else 1.0)), com.count_out.domain.entity.workout.Parameter.unit.id)
-            com.count_out.domain.entity.enums.Goal.Distance ->
-                getPlurals(com.count_out.domain.entity.workout.Parameter.value / (if (com.count_out.domain.entity.workout.Parameter.unit == com.count_out.domain.entity.enums.Units.KM) 1000 else 1), com.count_out.domain.entity.workout.Parameter.unit.id)
+            Goal.Count -> " " + getPlurals(set.reps.toDouble(), R.plurals.repeat)
+            Goal.CountGroup -> " " + getPlurals(set.reps.toDouble(), R.plurals.repeat)
+            Goal.Duration ->
+                getPlurals((set.duration.value / (if (set.duration.unit == Units.M) 60.0 else 1.0)), set.duration.unit.id)
+            Goal.Distance ->
+                getPlurals(set.duration.value / (if (set.distance.unit == Units.KM) 1000 else 1), set.distance.unit.id)
         }
     }
     private fun getPlurals(count: Double, id: Int): String {
@@ -181,13 +180,13 @@ class RunWorkOut @Inject constructor(
     }
     private fun getStr(id: Int) = context.getString(id)
     fun trap(){}
-    private suspend fun speechStart(dataFromWork: DataFromWork, speech: com.count_out.domain.entity.workout.SpeechKit){
-        com.count_out.domain.entity.workout.SpeechKit.beforeStart?.let { speechManager.speech(dataFromWork, it)}
-        com.count_out.domain.entity.workout.SpeechKit.afterStart?.let { speechManager.speech(dataFromWork, it)}
+    private suspend fun speechStart(dataFromWork: DataFromWork, speech: SpeechKit){
+        speech.beforeStart?.let { speechManager.speech(dataFromWork, it)}
+        speech.afterStart?.let { speechManager.speech(dataFromWork, it)}
     }
-    private suspend fun speechEnd(dataFromWork: DataFromWork, speech: com.count_out.domain.entity.workout.SpeechKit){
-        com.count_out.domain.entity.workout.SpeechKit.beforeEnd?.let { speechManager.speech(dataFromWork, it)}
-        com.count_out.domain.entity.workout.SpeechKit.afterEnd?.let { speechManager.speech(dataFromWork, it)}
+    private suspend fun speechEnd(dataFromWork: DataFromWork, speech: SpeechKit){
+        speech.beforeEnd?.let { speechManager.speech(dataFromWork, it)}
+        speech.afterEnd?.let { speechManager.speech(dataFromWork, it)}
     }
 }
 

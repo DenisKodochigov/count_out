@@ -4,9 +4,9 @@
 //import androidx.room.Ignore
 //import androidx.room.PrimaryKey
 //import com.count_out.app.entity.speech.SpeechKit
-//import com.count_out.domain.entity.Activity
-//import com.count_out.domain.entity.Exercise
-//import com.count_out.domain.entity.Set
+//import com.count_out.app.entity.workout.Activity
+//import com.count_out.app.entity.workout.Exercise
+//import com.count_out.app.entity.workout.Set
 //
 //@Entity(tableName = "tb_exercise")
 //data class ExerciseDB(

@@ -12,7 +12,7 @@
 //import com.count_out.app.data.room.tables.SpeechKitDB
 //import com.count_out.app.data.room.tables.TrainingDB
 //import com.count_out.app.data.room.tables.WorkoutDB
-//import com.count_out.domain.entity.Training
+//import com.count_out.app.entity.workout.Training
 //
 //object Plugins
 //{

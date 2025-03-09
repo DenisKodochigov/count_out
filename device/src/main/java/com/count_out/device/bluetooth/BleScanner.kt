@@ -55,7 +55,7 @@ class BleScanner @Inject constructor(
 //                delay = timeScanning * 1000L,
 //                bleStates.stateBleScanner
 //            )
-            bleStates.stateBleScanner.value = com.count_out.domain.entity.enums.RunningState.Stopped
+            bleStates.stateBleScanner.value = RunningState.Stopped
             stopScanner(dataFromBle)
 //            timer.start(
 //                sec = timeScanning,
@@ -104,7 +104,7 @@ class BleScanner @Inject constructor(
         override fun onScanFailed(errorCode: Int) {
 //            lg("Error scan BLE device. $errorCode")
             dataFromBle.scannedBle.value = false
-            bleStates.stateBleScanner.value = com.count_out.domain.entity.enums.RunningState.Stopped
+            bleStates.stateBleScanner.value = RunningState.Stopped
         }
     }
     private fun scanSettings(reportDelay: Long): ScanSettings {

@@ -1,7 +1,7 @@
 package com.count_out.app.presentation.models
 
-import com.count_out.domain.entity.router.DataForServ
 import com.count_out.domain.entity.bluetooth.BleConnection
+import com.count_out.domain.entity.router.DataForServ
 import com.count_out.domain.entity.workout.Training
 import com.count_out.domain.entity.enums.RunningState
 import kotlinx.coroutines.flow.MutableStateFlow

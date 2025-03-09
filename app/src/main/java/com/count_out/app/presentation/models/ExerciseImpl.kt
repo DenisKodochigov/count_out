@@ -2,8 +2,9 @@ package com.count_out.app.presentation.models
 
 import com.count_out.domain.entity.workout.Activity
 import com.count_out.domain.entity.workout.Exercise
-import com.count_out.domain.entity.workout.Set
 import com.count_out.domain.entity.workout.SpeechKit
+import com.count_out.domain.entity.workout.Set
+
 
 data class ExerciseImpl (
     override val idExercise: Long = 0,

@@ -13,7 +13,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -27,19 +26,19 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.count_out.app.R
 import com.count_out.app.old.entity.contourAll2
 import com.count_out.app.old.entity.contourHor2
+import com.count_out.app.presentation.navigation.NavigateEvent
 import com.count_out.app.presentation.theme.Dimen
 import com.count_out.app.presentation.theme.mTypography
-import com.count_out.app.presentation.navigation.NavigateEventImpl
-import com.count_out.app.presentation.prime.Action
-import com.count_out.app.presentation.prime.PrimeScreen
-import com.count_out.app.presentation.view_components.ItemSwipe
 import com.count_out.app.presentation.view_components.TextApp
 import com.count_out.app.presentation.view_components.custom_view.Frame
 import com.count_out.app.presentation.view_components.custom_view.IconQ
 import com.count_out.domain.entity.workout.Training
+import com.count_out.app.presentation.screens.prime.Action
+import com.count_out.app.presentation.screens.prime.PrimeScreen
+
 
 @Composable
-fun TrainingsScreen(navigateEvent: NavigateEventImpl) {
+fun TrainingsScreen(navigateEvent: NavigateEvent) {
     val vm: TrainingsViewModel = hiltViewModel()
     vm.initNavigate(navigateEvent)
     LaunchedEffect(Unit) { vm.submitEvent(TrainingsEvent.Gets) }
@@ -62,7 +61,7 @@ fun TrainingsScreenCreateView(viewModel: TrainingsViewModel) {
 }
 
 @Composable
-fun TrainingsScreenLayout(dataState: TrainingsState, action:Action) {
+fun TrainingsScreenLayout(dataState: TrainingsState, action: Action) {
     Column(modifier = Modifier.fillMaxSize()) {
         Frame(contour = contourHor2, modifier = Modifier.weight(1f)) {
             TrainingList(dataState, action, modifier = Modifier.weight(1f)) }
@@ -82,19 +81,20 @@ fun TrainingList(
         contentPadding = PaddingValues(horizontal = Dimen.paddingAppHor),
         modifier = modifier.testTag("1").animateContentSize()
     ) {
-        items(dataState.trainings) { item ->
-            Spacer(modifier = Modifier.height(Dimen.width4))
-            ItemSwipe(
-                frontView = {
-                    TrainingCard(
-                        item, dataState = dataState, action = action,
-                        modifier = Modifier.animateItem()
-                    )
-                },
-                actionDragLeft = { action.ex(TrainingsEvent.Del(item)) },
-                actionDragRight = { action.ex(TrainingsEvent.Edit(item.idTraining)) },
-            )
-        }
+
+//        items(dataState.trainings) { item ->
+//            Spacer(modifier = Modifier.height(Dimen.width4))
+//            ItemSwipe(
+//                frontView = {
+//                    TrainingCard(
+//                        item, dataState = dataState, action = action,
+//                        modifier = Modifier.animateItem()
+//                    )
+//                },
+//                actionDragLeft = { action.ex(TrainingsEvent.Del(item)) },
+//                actionDragRight = { action.ex(TrainingsEvent.Edit(item.idTraining)) },
+//            )
+//        }
     }
 }
 
@@ -134,14 +134,14 @@ fun IconSelected(training: Training, dataState: TrainingsState) {
     } ?: IconQ.HorLine(onClick = { dataState.selectedId.value = training.idTraining })
 }
 
-@Composable fun IconCopy(item: Training, action:Action) {
+@Composable fun IconCopy(item: Training, action: Action) {
     IconQ.Copy(onClick = { action.ex(TrainingsEvent.Copy(item)) })
 }
 
 @Composable
 fun TrainingInformation(
     item: Training,
-    action:Action,
+    action: Action,
     modifier: Modifier = Modifier
 ) {
     Column(modifier = modifier.clickable { action.ex(TrainingsEvent.Select(item))}) {
@@ -165,75 +165,3 @@ fun DownPlace(dataState: TrainingsState, action: Action) {
         IconQ.Add(onClick = { action.ex(TrainingsEvent.Add ) })
     }
 }
-
-//@Composable fun TrainingsScreenLayout( uiState: TrainingsScreenState){
-//    Column( modifier = Modifier.fillMaxSize()) {
-//        Frame( contour= contourHor2, modifier = Modifier.weight(1f)){
-//            TrainingList(uiState, modifier = Modifier.weight(1f)) }
-//        Spacer(modifier = Modifier.height(18.dp))
-//        DownPlace(uiState)
-//    }
-//}
-//@Composable fun TrainingList(uiState: TrainingsScreenState, modifier: Modifier = Modifier) {
-//    LazyColumn(
-//        state = rememberLazyListState(),
-//        contentPadding = PaddingValues(horizontal = Dimen.paddingAppHor),
-//        modifier = modifier.testTag("1").animateContentSize()
-//    ){
-//        items( items = uiState.trainings, key = { it.idTraining }) { item ->
-//            Spacer(modifier = Modifier.height(Dimen.width4))
-//            ItemSwipe(
-//                frontView = { TrainingCard( item, uiState, modifier = Modifier.animateItem()) },
-//                actionDragLeft = { uiState.onDeleteTraining( item.idTraining )},
-//                actionDragRight = { uiState.editTraining(item) },
-//            )
-//        }
-//    }
-//}
-//@Composable fun TrainingCard(item: Training, uiState: TrainingsScreenState, modifier: Modifier) {
-//    Frame( contour = contourAll2){
-//        Row(
-//            horizontalArrangement = Arrangement.Start,
-//            verticalAlignment = Alignment.CenterVertically,
-//            modifier = modifier.fillMaxWidth().padding(vertical = 6.dp)
-//        ){
-//            Spacer(modifier = Modifier.width(12.dp))
-//            IconSelected(training = item, uiState = uiState)
-//            Spacer(modifier = Modifier.width(16.dp))
-//            TrainingInformation(item = item, uiState = uiState, modifier = Modifier.weight(1f))
-//            Spacer(modifier = Modifier.width(Dimen.width6))
-//            IconCopy(item = item, uiState = uiState)
-//            Spacer(modifier = Modifier.width(Dimen.width6))
-//        }
-//    }
-//}
-//@Composable fun IconSelected(training: Training, uiState: TrainingsScreenState){
-//    uiState.selectedId.value?.let { selectedId->
-//        if (training.idTraining == selectedId) IconQ.Mark(onClick = { uiState.selectedId.value = null})
-//        else IconQ.HorLine(onClick = { uiState.selectedId.value = training.idTraining })
-//    } ?: IconQ.HorLine(onClick = { uiState.selectedId.value = training.idTraining })
-//}
-//@Composable fun IconCopy(item: Training, uiState: TrainingsScreenState){
-//    IconQ.Copy(onClick = { uiState.onCopyTraining(item.idTraining) })
-//}
-//@Composable fun TrainingInformation(item: Training, uiState: TrainingsScreenState, modifier: Modifier = Modifier) {
-//    Column (modifier = modifier.clickable { uiState.onSelectItem(item.idTraining) }){
-//        TextApp( text = item.name, style = mTypography.titleLarge)
-//        Spacer(modifier = Modifier.height(Dimen.height4))
-//        TextApp( text = stringResource(id = R.string.exercise)+ ": " + item.amountActivity,
-//            style = mTypography.bodyLarge )
-//    }
-//}
-//##################################################################################################
-//@Composable
-//fun DownPlace(uiState: TrainingsScreenState) {
-//    Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
-//        IconQ.Play(
-//            onClick = {
-//                if (uiState.selectedId.value == null) uiState.onStartWorkout(1)
-//                else uiState.selectedId.value?.let { id -> uiState.onStartWorkout(id) }
-//            })
-//        Spacer(modifier = Modifier.width(32.dp))
-//        IconQ.Add(onClick = { uiState.onAddTraining() })
-//    }
-//}

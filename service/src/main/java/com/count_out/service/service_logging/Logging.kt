@@ -13,16 +13,14 @@ import kotlinx.coroutines.launch
 @Singleton
 class Logging @Inject constructor() {
 //    val dataRepository: DataRepository? = null
-    val fff = com.count_out.domain.entity.enums.RunningState.Stopped
-    private val stateDouble: MutableStateFlow<com.count_out.domain.entity.enums.RunningState> = MutableStateFlow(
-        com.count_out.domain.entity.enums.RunningState.Stopped
-    )
+    val fff = RunningState.Stopped
+    private val stateDouble: MutableStateFlow<RunningState> = MutableStateFlow(RunningState.Stopped)
     val latitude: Float = 0f
     val longitude: Float = 0f
-    fun runLogging(dataForBase: MutableStateFlow<TemporaryBase?>, state: MutableStateFlow<com.count_out.domain.entity.enums.RunningState?>){
-        stateDouble.value = com.count_out.domain.entity.enums.RunningState.Started
+    fun runLogging(dataForBase: MutableStateFlow<TemporaryBase?>, state: MutableStateFlow<RunningState?>){
+        stateDouble.value = RunningState.Started
         CoroutineScope(Dispatchers.Default).launch {
-            while (state.value != com.count_out.domain.entity.enums.RunningState.Stopped && state.value != com.count_out.domain.entity.enums.RunningState.Stopped){
+            while (state.value != RunningState.Stopped && state.value != RunningState.Stopped){
                 dataForBase.collect{ data ->
 //                    lg("write $data")
                     data?.let {
@@ -30,8 +28,7 @@ class Logging @Inject constructor() {
                     } } }
         }
     }
-    fun stop(){ stateDouble.value = com.count_out.domain.entity.enums.RunningState.Stopped
-    }
+    fun stop(){ stateDouble.value = RunningState.Stopped}
 
     fun saveTraining(workout: WorkoutRecord){
         CoroutineScope(Dispatchers.Default).launch {

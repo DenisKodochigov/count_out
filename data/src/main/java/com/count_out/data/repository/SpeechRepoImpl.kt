@@ -8,6 +8,17 @@ import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 class SpeechRepoImpl @Inject constructor(private val speechKitSource: SpeechKitSource): SpeechRepo {
+    override fun get(id: Long): Flow<SpeechKit> {
+        TODO("Not yet implemented")
+    }
+
+    override fun del(speechKit: SpeechKit) {
+        TODO("Not yet implemented")
+    }
+
+    override fun add(speechKit: SpeechKit?): Flow<SpeechKit> {
+        TODO("Not yet implemented")
+    }
 //    override fun get(id: Long): Flow<SpeechKit> = speechKitSource.get(id)
 //
 //    override fun del(speechKit: SpeechKit) { speechKitSource.del(speechKit) }

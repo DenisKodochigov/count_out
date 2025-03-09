@@ -1,6 +1,6 @@
 //package com.count_out.app.data.openmeteo_api.dto
 //
-//import com.count_out.domain.entity.WeatherUnits
+//import com.count_out.app.entity.weather.WeatherUnits
 //import com.squareup.moshi.Json
 //import com.squareup.moshi.JsonClass
 //

@@ -32,9 +32,9 @@ import com.count_out.app.R
 import com.count_out.app.presentation.bottom_sheet.BottomSheetAddActivity
 import com.count_out.app.presentation.bottom_sheet.BottomSheetBle
 import com.count_out.app.presentation.bottom_sheet.CardActivity
-import com.count_out.app.presentation.navigation.NavigateEventImpl
-import com.count_out.app.presentation.prime.Action
-import com.count_out.app.presentation.prime.PrimeScreen
+import com.count_out.app.presentation.navigation.NavigateEvent
+import com.count_out.app.presentation.screens.prime.Action
+import com.count_out.app.presentation.screens.prime.PrimeScreen
 import com.count_out.app.presentation.theme.alumBodySmall
 import com.count_out.app.presentation.theme.mTypography
 import com.count_out.app.presentation.view_components.SwitchApp
@@ -43,10 +43,10 @@ import com.count_out.app.presentation.view_components.custom_view.Frame
 import com.count_out.app.presentation.view_components.icons.AnimateIcon
 import com.count_out.app.presentation.view_components.icons.IconSingle
 import com.count_out.app.presentation.view_components.icons.IconsCollapsing
-import com.count_out.domain.entity.enums.ConnectState
 import com.count_out.domain.entity.to01
+import com.count_out.domain.entity.enums.ConnectState
 
-@Composable fun SettingScreen(navigateEvent: NavigateEventImpl){
+@Composable fun SettingScreen(navigateEvent: NavigateEvent){
     val viewModel: SettingViewModel = hiltViewModel()
     viewModel.initNavigate(navigateEvent)
     LaunchedEffect(Unit) { viewModel.submitEvent(SettingsEvent.Init) }
@@ -83,13 +83,13 @@ import com.count_out.domain.entity.to01
 }
 
 @Composable fun ActivitySection(dataState: SettingsState, action: Action) {
-        Frame {
-            Column( modifier = Modifier.padding(start = 6.dp, top = 6.dp, bottom = 6.dp))
-            {
-                ActivitySectionTitle(dataState = dataState)
-                ActivitySectionBody(dataState = dataState, action)
-            }
+    Frame {
+        Column( modifier = Modifier.padding(start = 6.dp, top = 6.dp, bottom = 6.dp))
+        {
+            ActivitySectionTitle(dataState = dataState)
+            ActivitySectionBody(dataState = dataState, action)
         }
+    }
 }
 @Composable fun ActivitySectionTitle(dataState: SettingsState){
     Row(
@@ -139,7 +139,7 @@ import com.count_out.domain.entity.to01
                 modifier = Modifier.padding(horizontal = 8.dp, vertical = 3.dp),
                 change = { checked->
                     setting.value = setting.value.to01()
-                    action.ex(SettingsEvent.UpdateSetting( setting ))
+                    action.ex(SettingsEvent.UpdateSetting(setting))
                 }
             )
         }
@@ -205,7 +205,4 @@ import com.count_out.domain.entity.to01
     }
     TextApp(text = heartRate, style = mTypography.displayMedium, modifier = Modifier.padding(start = 12.dp, end = 12.dp))
 }
-
-
-
 

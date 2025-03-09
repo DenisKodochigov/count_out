@@ -1,9 +1,9 @@
 package com.count_out.app.presentation.models
 
-import com.count_out.domain.entity.workout.Parameter
-import com.count_out.domain.entity.workout.Set
-import com.count_out.domain.entity.workout.SpeechKit
 import com.count_out.domain.entity.enums.Goal
+import com.count_out.domain.entity.workout.Parameter
+import com.count_out.domain.entity.workout.SpeechKit
+import com.count_out.domain.entity.workout.Set
 import com.count_out.domain.entity.enums.Units
 import com.count_out.domain.entity.enums.Zone
 

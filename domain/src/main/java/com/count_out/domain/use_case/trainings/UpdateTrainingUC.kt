@@ -13,5 +13,5 @@ class UpdateTrainingUC @Inject constructor(
     override fun executeData(input: Request): Flow<Response> =
         repo.update(input.training).map { Response(it) }
     data class Request(val training: Training): UseCase.Request
-    data class Response(val training: Training): UseCase.Response
+    data class Response(val trainings: Training): UseCase.Response
 }

@@ -4,8 +4,8 @@
 //import androidx.room.Ignore
 //import androidx.room.PrimaryKey
 //import com.count_out.app.entity.speech.SpeechKit
-//import com.count_out.domain.entity.Round
-//import com.count_out.domain.entity.Training
+//import com.count_out.app.entity.workout.Round
+//import com.count_out.app.entity.workout.Training
 //
 //@Entity(tableName = "tb_trainings")
 //data class TrainingDB(

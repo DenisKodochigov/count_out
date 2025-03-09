@@ -10,6 +10,7 @@ import com.count_out.data.source.room.SpeechKitSource
 import com.count_out.framework.room.db.round.RoundDao
 import com.count_out.framework.room.db.round.RoundTable
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
@@ -32,7 +33,7 @@ class RoundSourceImpl @Inject constructor(
         //Создавть раунд имеет смысл только в связке с какимнибудь тренировочным планом.
         return if (round.trainingId > 0){
             val roundId = dao.add(
-                RoundTable(speechId = com.count_out.domain.entity.workout.SpeechKit.idSpeechKit))
+                RoundTable(speechId = (speechKitSource.add() as StateFlow).value.idSpeechKit))
             exerciseSource.add(roundId = roundId)
             gets(round.trainingId)
         } else {
@@ -44,7 +45,7 @@ class RoundSourceImpl @Inject constructor(
         //Создавть раунд имеет смысл только в связке с какимнибудь тренировочным планом.
         if (round.trainingId > 0){
             val idSpeechKit =
-                com.count_out.domain.entity.workout.SpeechKit.idSpeechKit
+                (speechKitSource.copy(round.speech as SpeechKitImpl) as StateFlow).value.idSpeechKit
             val roundId = dao.add(toRoundTable(round).copy(speechId = idSpeechKit))
             if (round.exercise.isNotEmpty()) {
                 round.exercise.forEach { exercise->

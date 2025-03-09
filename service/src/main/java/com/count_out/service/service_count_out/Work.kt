@@ -1,6 +1,6 @@
 package com.count_out.service.service_count_out
 
-import com.count_out.app.device.timer.Ticker
+import com.count_out.service.service_timing.Ticker
 import com.count_out.data.router.models.DataForWork
 import com.count_out.data.router.models.DataFromWork
 import com.count_out.domain.entity.enums.RunningState
@@ -30,7 +30,7 @@ class Work @Inject constructor(
     private fun speaking(dataForWork: DataForWork, dataFromWork: DataFromWork) {
         CoroutineScope(Dispatchers.Default).launch {
             dataFromWork.trap = {
-                if (dataFromWork.runningState.value == com.count_out.domain.entity.enums.RunningState.Stopped) {
+                if (dataFromWork.runningState.value == RunningState.Stopped) {
                     dataFromWork.empty()
                     dataForWork.empty()
                     stop()

@@ -28,8 +28,8 @@ class BleConnecting @Inject constructor(
 ) {
     private var connection = BleConnectionImpl()
     val heartRate: MutableStateFlow<Int> = MutableStateFlow(0)
-    private val uuidHeartRateMeasurement = UUID.fromString(com.count_out.domain.entity.enums.UUIDBle.HEART_RATE_MEASUREMENT)
-    private val uuidClientCharacteristicConfig = UUID.fromString(com.count_out.domain.entity.enums.UUIDBle.CLIENT_CHARACTERISTIC_CONFIG)
+    private val uuidHeartRateMeasurement = UUID.fromString(UUIDBle.HEART_RATE_MEASUREMENT)
+    private val uuidClientCharacteristicConfig = UUID.fromString(UUIDBle.CLIENT_CHARACTERISTIC_CONFIG)
 
     fun connectDevice(bleStates: BleStates, dataForBle: DataForBle){
 //        dataForBle.currentConnection?.let {
@@ -40,15 +40,13 @@ class BleConnecting @Inject constructor(
     }
     @SuppressLint("MissingPermission")
     fun connectingGatt(bleStates: BleStates){
-        if (bleStates.stateBleConnecting == com.count_out.domain.entity.enums.StateBleConnecting.GET_REMOTE_DEVICE) {
+        if (bleStates.stateBleConnecting == StateBleConnecting.GET_REMOTE_DEVICE) {
             connection.device?.let { dev->
                 if ( dev.connectGatt(context, true, bluetoothGattCallback, TRANSPORT_LE) != null) {
-                    bleStates.stateBleConnecting =
-                        com.count_out.domain.entity.enums.StateBleConnecting.CONNECT_GAT
+                    bleStates.stateBleConnecting = StateBleConnecting.CONNECT_GAT
 //                    messengerA.messageApi("CONNECT_GAT")
                 } else {
-                    bleStates.error =
-                        com.count_out.domain.entity.enums.ErrorBleService.NOT_CONNECT_GATT
+                    bleStates.error = ErrorBleService.NOT_CONNECT_GATT
 //                    messengerA.errorApi(R.string.gatt_connect_error)
                 }
             }
@@ -126,8 +124,7 @@ class BleConnecting @Inject constructor(
 //            messengerA.messageApi("Set characteristic notification")
         } else {
 //            messengerA.errorApi(R.string.ble_discovery_failed)
-            connection.error.value =
-                com.count_out.domain.entity.enums.ErrorBleService.DISCOVER_SERVICE
+            connection.error.value = ErrorBleService.DISCOVER_SERVICE
             if (status == GATT_FAILURE) disconnectDevice(gatt)
         }
     }

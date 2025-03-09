@@ -20,7 +20,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.count_out.app.presentation.models.ActionWithActivityImpl
 import com.count_out.app.presentation.models.ActivityImpl
-import com.count_out.app.presentation.prime.Action
+import com.count_out.app.presentation.screens.prime.Action
 import com.count_out.app.presentation.screens.training.TrainingEvent
 import com.count_out.app.presentation.screens.training.TrainingState
 import com.count_out.app.presentation.theme.Dimen

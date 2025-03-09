@@ -32,8 +32,8 @@ import com.count_out.app.presentation.view_components.TextApp
 import com.count_out.app.presentation.view_components.TextFieldApp
 import com.count_out.domain.entity.workout.Exercise
 import com.count_out.domain.entity.workout.Round
-import com.count_out.domain.entity.workout.Set
 import com.count_out.domain.entity.workout.Training
+import com.count_out.domain.entity.workout.Set
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable fun BottomSheetSpeech(itemSpeech: BottomSheetInterface) {

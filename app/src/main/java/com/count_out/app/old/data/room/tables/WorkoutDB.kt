@@ -3,8 +3,8 @@
 //import androidx.room.Entity
 //import androidx.room.Ignore
 //import androidx.room.PrimaryKey
-//import com.count_out.domain.entity.Weather
-//import com.count_out.domain.entity.Training
+//import com.count_out.app.entity.weather.Weather
+//import com.count_out.app.entity.workout.Training
 //import com.count_out.app.entity.workout.Workout
 //
 //@Entity(tableName = "tb_workout")

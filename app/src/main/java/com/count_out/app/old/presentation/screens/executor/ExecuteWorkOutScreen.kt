@@ -38,7 +38,7 @@
 //import com.count_out.app.ui.view_components.TextApp
 //import com.count_out.app.ui.view_components.custom_view.Frame
 //import com.count_out.app.ui.view_components.custom_view.IconQ
-//import com.count_out.entity.enums.ConnectState
+//import com.count_out.domain.entity.enums.ConnectState
 //import com.count_out.domain.entity.enums.Goal
 //import com.count_out.domain.entity.enums.RunningState
 //import com.count_out.domain.entity.enums.Units

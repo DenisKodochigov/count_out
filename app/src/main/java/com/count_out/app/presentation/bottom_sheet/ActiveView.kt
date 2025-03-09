@@ -33,7 +33,7 @@ import com.count_out.app.R
 import com.count_out.app.modeles.TypeKeyboard
 import com.count_out.app.presentation.dialog.ChangeColorSectionDialog
 import com.count_out.app.presentation.models.ActivityImpl
-import com.count_out.app.presentation.prime.Action
+import com.count_out.app.presentation.screens.prime.Action
 import com.count_out.app.presentation.screens.settings.SettingsEvent
 import com.count_out.app.presentation.screens.settings.SettingsState
 import com.count_out.app.presentation.theme.mTypography

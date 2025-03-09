@@ -5,8 +5,8 @@
 //import androidx.room.PrimaryKey
 //import com.count_out.app.entity.RoundType
 //import com.count_out.app.entity.speech.SpeechKit
-//import com.count_out.domain.entity.Exercise
-//import com.count_out.domain.entity.Round
+//import com.count_out.app.entity.workout.Exercise
+//import com.count_out.app.entity.workout.Round
 //
 //@Entity(tableName = "tb_round")
 //data class RoundDB(

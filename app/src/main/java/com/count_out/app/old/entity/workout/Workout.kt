@@ -1,6 +1,6 @@
 //package com.count_out.app.entity.workout
 //
-//import com.count_out.domain.entity.Weather
+//import com.count_out.app.entity.weather.Weather
 //
 //interface Workout {
 //    val idWorkout: Long

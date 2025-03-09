@@ -1,9 +1,9 @@
 package com.count_out.app.presentation.screens.trainings
 
-import com.count_out.app.presentation.prime.Event
 import com.count_out.domain.entity.workout.Training
+import com.count_out.app.presentation.screens.prime.Event
 
-sealed class TrainingsEvent: Event{
+sealed class TrainingsEvent: Event {
     data object Add: TrainingsEvent()
     data object Gets: TrainingsEvent()
     data class Run(val id: Long): TrainingsEvent()

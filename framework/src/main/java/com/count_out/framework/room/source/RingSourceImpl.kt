@@ -10,6 +10,7 @@ import com.count_out.data.source.room.SpeechKitSource
 import com.count_out.framework.room.db.ring.RingDao
 import com.count_out.framework.room.db.ring.RingTable
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
@@ -33,7 +34,7 @@ class RingSourceImpl @Inject constructor(
     override fun add(trainingId: Long): Flow<List<RingImpl>> {
         val result = if (trainingId > 0) {
             val ringId = dao.add(
-                RingTable(speechId = com.count_out.domain.entity.workout.SpeechKit.idSpeechKit))
+                RingTable(speechId = (speechKitSource.add() as StateFlow).value.idSpeechKit))
             exerciseSource.add(ringId = ringId)
             gets(trainingId)
         } else {
@@ -46,7 +47,7 @@ class RingSourceImpl @Inject constructor(
     override fun copy(ring: RingImpl): Flow<List<RingImpl>> {
         val result = if (ring.trainingId > 0) {
             val idSpeechKit =
-                com.count_out.domain.entity.workout.SpeechKit.idSpeechKit
+                (speechKitSource.copy(ring.speech as SpeechKitImpl) as StateFlow).value.idSpeechKit
             val ringId = dao.add(toRingTable(ring).copy(speechId = idSpeechKit))
             if (ring.exercise.isNotEmpty()) {
                 ring.exercise.forEach { exercise ->

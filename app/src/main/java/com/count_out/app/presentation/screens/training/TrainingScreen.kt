@@ -30,19 +30,18 @@ import com.count_out.app.modeles.TypeKeyboard
 import com.count_out.app.presentation.bottom_sheet.BottomSheetSelectActivity
 import com.count_out.app.presentation.bottom_sheet.BottomSheetSpeech
 import com.count_out.app.presentation.models.TrainingImpl
-import com.count_out.app.presentation.navigation.NavigateEventImpl
-import com.count_out.app.presentation.prime.Action
-import com.count_out.app.presentation.prime.PrimeScreen
-import com.count_out.app.presentation.screens.training.round.Round
+import com.count_out.app.presentation.navigation.NavigateEvent
+import com.count_out.app.presentation.screens.prime.Action
+import com.count_out.app.presentation.screens.prime.PrimeScreen
 import com.count_out.app.presentation.theme.Dimen
 import com.count_out.app.presentation.theme.mTypography
 import com.count_out.app.presentation.view_components.TextFieldApp
 import com.count_out.app.presentation.view_components.icons.IconsGroup
 import com.count_out.domain.entity.enums.RoundType
-
+import com.count_out.app.presentation.screens.training.round.Round
 
 @SuppressLint("UnrememberedMutableState")
-@Composable fun TrainingScreen(navigateEvent: NavigateEventImpl, trainingId: Long){
+@Composable fun TrainingScreen(navigateEvent: NavigateEvent, trainingId: Long){
     val viewModel: TrainingViewModel = hiltViewModel()
     viewModel.initNavigate(navigateEvent)
     LaunchedEffect(Unit) { viewModel.submitEvent(TrainingEvent.GetTraining(trainingId)) }
@@ -62,7 +61,7 @@ import com.count_out.domain.entity.enums.RoundType
         }
     }
 }
-@Composable fun EditSpeech(dataState: TrainingState, action:Action) {
+@Composable fun EditSpeech(dataState: TrainingState, action: Action) {
     if (dataState.showSpeechTraining.value) {
         dataState.nameSection = stringResource(id = R.string.training)
         dataState.item = dataState.training
@@ -103,7 +102,7 @@ import com.count_out.domain.entity.enums.RoundType
 }
 @SuppressLint("UnrememberedMutableState")
 @Composable
-fun TrainingScreenLayout( dataState: TrainingState, action:Action){
+fun TrainingScreenLayout(dataState: TrainingState, action: Action){
     val focusManager = LocalFocusManager.current
     val interactionSource = remember { MutableInteractionSource() }
     Column(
@@ -123,7 +122,7 @@ fun TrainingScreenLayout( dataState: TrainingState, action:Action){
     }
 }
 @Composable
-fun NameTraining( dataState: TrainingState, action:Action ) {
+fun NameTraining(dataState: TrainingState, action: Action) {
     if (dataState.training.idTraining == 0L) return
     Row( verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier.fillMaxWidth().padding(bottom = 6.dp))
@@ -151,4 +150,3 @@ fun NameTraining( dataState: TrainingState, action:Action ) {
         Spacer(modifier = Modifier.width(7.dp))
     }
 }
-

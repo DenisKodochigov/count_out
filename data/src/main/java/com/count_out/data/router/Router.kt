@@ -1,6 +1,6 @@
 package com.count_out.data.router
 
-import com.count_out.data.router.models.Buffer
+import com.count_out.data.router.models.BufferImpl
 import com.count_out.data.router.models.DataForBle
 import com.count_out.data.router.models.DataForNotification
 import com.count_out.data.router.models.DataForSite
@@ -10,10 +10,9 @@ import com.count_out.data.router.models.DataFromBle
 import com.count_out.data.router.models.DataFromSite
 import com.count_out.data.router.models.DataFromWork
 import com.count_out.data.router.models.TemporaryBase
-import com.count_out.domain.entity.Coordinate
-import com.count_out.domain.entity.TickTime
+import com.count_out.domain.entity.router.Buffer
 import com.count_out.domain.entity.enums.RunningState
-import com.count_out.domain.entity.workout.Training
+import com.count_out.domain.entity.router.DataForServ
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -36,7 +35,7 @@ class Router(private val dataForServ: DataForServ) {
     val dataForBase: MutableStateFlow<TemporaryBase?> = MutableStateFlow(null)
 
     private fun bufferInit(dataFromBle: DataFromBle, dataFromWork: DataFromWork, dataFromSite: DataFromSite): Buffer {
-        return Buffer(
+        return BufferImpl(
             heartRate = dataFromBle.heartRate,
             scannedBle = dataFromBle.scannedBle,
             foundDevices = dataFromBle.foundDevices,
@@ -99,14 +98,14 @@ class Router(private val dataForServ: DataForServ) {
             while (true){
                 if (buffer.runningState.value == RunningState.Started) {
                     dataForBase.value = TemporaryBase(
-                        latitude = Coordinate.latitude ?: 0.0,
-                        longitude = Coordinate.longitude ?: 0.0,
-                        altitude = Coordinate.altitude ?: 0.0,
-                        timeLocation = Coordinate.timeLocation ?: 0,
-                        accuracy = Coordinate.accuracy ?: 0f,
-                        speed = Coordinate.speed ?: 0f,
+                        latitude = buffer.coordinate.value?.latitude ?: 0.0,
+                        longitude = buffer.coordinate.value?.longitude ?: 0.0,
+                        altitude = buffer.coordinate.value?.altitude ?: 0.0,
+                        timeLocation = buffer.coordinate.value?.timeLocation ?: 0,
+                        accuracy = buffer.coordinate.value?.accuracy ?: 0f,
+                        speed = buffer.coordinate.value?.speed ?: 0f,
                         heartRate = buffer.heartRate.value,
-                        idTraining = Training.idTraining ?: 0,
+                        idTraining = dataForWork.training.value?.idTraining ?: 0,
                         phaseWorkout = buffer.phaseWorkout.value,
                         distance = TODO(),
                         idSet = TODO(),
@@ -139,11 +138,11 @@ class Router(private val dataForServ: DataForServ) {
             while (true){
                 if (buffer.runningState.value == RunningState.Started) {
                     dataForNotification.value = DataForNotification(
-                        hours = TickTime.hour ?: "00",
-                        minutes = TickTime.min ?: "00",
-                        seconds = TickTime.sec ?: "00",
+                        hours = buffer.flowTime.value?.hour ?: "00",
+                        minutes = buffer.flowTime.value?.min ?: "00",
+                        seconds = buffer.flowTime.value?.sec ?: "00",
                         heartRate = buffer.heartRate.value,
-                        enableLocation = (Coordinate.longitude ?: 0.0) > 0.0
+                        enableLocation = (buffer.coordinate.value?.longitude ?: 0.0) > 0.0
                     )
                 }
                 delay(1000L)

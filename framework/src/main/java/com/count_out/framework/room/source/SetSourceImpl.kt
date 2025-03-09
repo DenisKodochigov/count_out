@@ -16,20 +16,20 @@ class SetSourceImpl @Inject constructor(
     private val speechKitSource: SpeechKitSource,
     private val setDao: SetDao): SetSource {
 
-    override fun add(item: com.count_out.domain.entity.workout.ActionWithSet): Flow<List<SetImpl>> {
-         return if (com.count_out.domain.entity.workout.Set.exerciseId > 0L) {
+    override fun add(item: ActionWithSet): Flow<List<SetImpl>> {
+         return if (item.set.exerciseId > 0L) {
             setDao.add(SetTable(speechId = speechKitSource.addL()))
-            gets(com.count_out.domain.entity.workout.Set.exerciseId)
+            gets(item.set.exerciseId)
         } else flow { emit ( emptyList()) }
     }
-    override fun copy(item: com.count_out.domain.entity.workout.ActionWithSet): Flow<List<SetImpl>> {
-        return if (com.count_out.domain.entity.workout.Set.exerciseId > 0L) {
-            if (com.count_out.domain.entity.workout.Set.idSet > 0) {
-                val idSpeechKit = com.count_out.domain.entity.workout.Set.speech?.let {
+    override fun copy(item: ActionWithSet): Flow<List<SetImpl>> {
+        return if (item.set.exerciseId > 0L) {
+            if (item.set.idSet > 0) {
+                val idSpeechKit = item.set.speech?.let {
                     speechKitSource.copyL(it as SpeechKitImpl) } ?: speechKitSource.addL()
-                setDao.add(toSetTable((com.count_out.domain.entity.workout.ActionWithSet.set as SetImpl).copy(speechId = idSpeechKit)))
+                setDao.add(toSetTable((item.set as SetImpl).copy(speechId = idSpeechKit)))
             }
-            gets(com.count_out.domain.entity.workout.Set.exerciseId)
+            gets(item.set.exerciseId)
         } else flow { emit( emptyList()) }
     }
     override fun gets(exerciseId: Long): Flow<List<SetImpl>> {
@@ -37,15 +37,15 @@ class SetSourceImpl @Inject constructor(
 
     override fun get(id: Long): Flow<SetImpl> = setDao.getRel(id).map { it.toSet() }
 
-    override fun del(item: com.count_out.domain.entity.workout.ActionWithSet): Flow<List<SetImpl>> {
-        com.count_out.domain.entity.workout.Set.speech?.let { speechKitSource.del(it as SpeechKitImpl) }
-        setDao.del(com.count_out.domain.entity.workout.Set.idSet)
-        return gets(com.count_out.domain.entity.workout.Set.exerciseId)
+    override fun del(item: ActionWithSet): Flow<List<SetImpl>> {
+        item.set.speech?.let { speechKitSource.del(it as SpeechKitImpl) }
+        setDao.del(item.set.idSet)
+        return gets(item.set.exerciseId)
     }
 
-    override fun update(item: com.count_out.domain.entity.workout.ActionWithSet): Flow<SetImpl> {
-        setDao.update(toSetTable(com.count_out.domain.entity.workout.ActionWithSet.set as SetImpl).copy(idSet = com.count_out.domain.entity.workout.Set.idSet))
-        return get(com.count_out.domain.entity.workout.Set.idSet)
+    override fun update(item: ActionWithSet): Flow<SetImpl> {
+        setDao.update(toSetTable(item.set as SetImpl).copy(idSet = item.set.idSet))
+        return get(item.set.idSet)
     }
 
     private fun toSetTable(set: SetImpl) = SetTable(
@@ -54,17 +54,17 @@ class SetSourceImpl @Inject constructor(
         goal = set.goal.ordinal,
         exerciseId = set.exerciseId,
         reps = set.reps,
-        duration = com.count_out.domain.entity.workout.Parameter.value,
-        durationU = com.count_out.domain.entity.workout.Parameter.unit.ordinal,
-        distance = com.count_out.domain.entity.workout.Parameter.value,
-        distanceU = com.count_out.domain.entity.workout.Parameter.unit.ordinal,
-        weight = com.count_out.domain.entity.workout.Parameter.value,
-        weightU = com.count_out.domain.entity.workout.Parameter.unit.ordinal,
+        duration = set.duration.value,
+        durationU = set.duration.unit.ordinal,
+        distance = set.distance.value,
+        distanceU = set.distance.unit.ordinal,
+        weight = set.weight.value,
+        weightU = set.weight.unit.ordinal,
         intervalReps = set.intervalReps,
         intensity = set.intensity.ordinal,
         intervalDown = set.intervalDown,
         groupCount = set.groupCount,
-        timeRest = com.count_out.domain.entity.workout.Parameter.value,
-        timeRestU = com.count_out.domain.entity.workout.Parameter.unit.ordinal
+        timeRest = set.rest.value,
+        timeRestU = set.rest.unit.ordinal
     )
 }

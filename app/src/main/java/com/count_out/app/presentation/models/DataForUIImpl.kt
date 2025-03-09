@@ -1,14 +1,14 @@
 package com.count_out.app.presentation.models
 
 import android.util.Pair
-import com.count_out.domain.entity.StepTraining
-import com.count_out.domain.entity.enums.RunningState
 import com.count_out.domain.entity.Coordinate
+import com.count_out.domain.entity.StepTraining
 import com.count_out.domain.entity.TickTime
-import com.count_out.domain.entity.enums.ConnectState
 import com.count_out.domain.entity.router.Buffer
 import com.count_out.domain.entity.router.DataForUI
 import com.count_out.domain.entity.router.DeviceUI
+import com.count_out.domain.entity.enums.ConnectState
+import com.count_out.domain.entity.enums.RunningState
 import java.util.Collections.emptyList
 import kotlinx.coroutines.flow.MutableStateFlow
 

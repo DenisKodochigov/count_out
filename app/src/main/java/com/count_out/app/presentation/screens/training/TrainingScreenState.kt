@@ -1,5 +1,18 @@
-package com.count_out.app.presentation.screens.training
-
+//package com.example.count_out.ui.screens.training
+//
+//import androidx.compose.runtime.MutableState
+//import androidx.compose.runtime.Stable
+//import androidx.compose.runtime.mutableStateOf
+//import com.example.count_out.framework.room.old.tables.ExerciseDB
+//import com.example.count_out.framework.room.old.tables.SetDB
+//import com.example.count_out.framework.room.old.tables.TrainingDB
+//import com.example.count_out.entity.workout.speech.SpeechKit
+//import com.example.count_out.entity.models.BottomSheetInterface
+//import com.example.count_out.entity.workout.Activity
+//import com.example.count_out.entity.workout.Exercise
+//import com.example.count_out.entity.workout.Set
+//import com.example.count_out.entity.workout.Training
+//
 //data class TrainingScreenState(
 //    val training: Training = TrainingDB(),
 //    val enteredName: MutableState<String> = mutableStateOf(""),
@@ -22,7 +35,7 @@ package com.count_out.app.presentation.screens.training
 //
 //    @Stable var changeNameTraining: (Training, String) -> Unit = { _, _ ->},
 //    @Stable var onDeleteTraining: (Long) -> Unit = {},
-//    @Stable var onAddExercise: (Long, SetDB) -> Unit = {_,_ ->},
+//    @Stable var onAddExercise: (Long, SetDB) -> Unit = { _, _ ->},
 //    @Stable var onCopyExercise: (Long, Long) -> Unit = {_,_ ->},
 //    @Stable var onDeleteExercise: (Long, Long) -> Unit = {_,_ ->},
 ////    @Stable var changeSequenceExercise: (Long, Long, Pair<Long,Int>, Pair<Long, Int>) -> Unit = {_,_,_,_ ->},

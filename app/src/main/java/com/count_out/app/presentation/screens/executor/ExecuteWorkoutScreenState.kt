@@ -7,17 +7,18 @@ import com.count_out.app.presentation.models.SetImpl
 import com.count_out.app.presentation.models.TickTimeImpl
 import com.count_out.domain.entity.Coordinate
 import com.count_out.domain.entity.StepTraining
-import com.count_out.domain.entity.enums.ConnectState
-import com.count_out.domain.entity.enums.RunningState
+import com.count_out.domain.entity.TickTime
 import com.count_out.domain.entity.router.DeviceUI
 import com.count_out.domain.entity.workout.Training
+import com.count_out.domain.entity.enums.ConnectState
+import com.count_out.domain.entity.enums.RunningState
 import javax.inject.Singleton
 
 @Singleton
 data class ExecuteWorkoutScreenState(
     val training: Training? = null,
 
-    val flowTime: TickTimeImpl = TickTimeImpl(hour = "00", min="00", sec= "00"),
+    val flowTime: TickTime = TickTimeImpl(hour = "00", min="00", sec= "00"),
     val currentRest: Int = 0,
     val currentCount: Int = 0,
     val currentDuration: Int = 0,

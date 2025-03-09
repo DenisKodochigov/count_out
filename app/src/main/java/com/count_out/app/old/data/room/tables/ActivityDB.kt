@@ -3,7 +3,7 @@
 //import androidx.room.Entity
 //import androidx.room.PrimaryKey
 //import com.count_out.app.R
-//import com.count_out.domain.entity.Activity
+//import com.count_out.app.entity.workout.Activity
 //
 //@Entity(tableName = "tb_activity")
 //data class ActivityDB(

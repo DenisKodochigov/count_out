@@ -41,7 +41,8 @@ fun CardMonth(uiState: HistoryScreenState, month: Int) {
                     if (day <= countDay) {
                         CalendarDay(uiState, day.toString())
                         day++
-                    } else { CalendarDay(uiState, "")}
+                    } else { CalendarDay(uiState, "")
+                    }
                 }
             }
         }

@@ -3,9 +3,10 @@ package com.count_out.data.router.models
 import com.count_out.domain.entity.Coordinate
 import com.count_out.domain.entity.StepTraining
 import com.count_out.domain.entity.TickTime
+import com.count_out.domain.entity.router.Buffer
+import com.count_out.domain.entity.router.DeviceUI
 import com.count_out.domain.entity.enums.ConnectState
 import com.count_out.domain.entity.enums.RunningState
-import com.count_out.domain.entity.router.DeviceUI
 import kotlinx.coroutines.flow.MutableStateFlow
 
 data class DataForUI (
@@ -22,9 +23,7 @@ data class DataForUI (
 
     val heartRate: MutableStateFlow<Int> = MutableStateFlow(0),
     val scannedBle: MutableStateFlow<Boolean> = MutableStateFlow(false),
-    val bleConnectState: MutableStateFlow<ConnectState> = MutableStateFlow(
-        ConnectState.NOT_CONNECTED
-    ),
+    val bleConnectState: MutableStateFlow<ConnectState> = MutableStateFlow(ConnectState.NOT_CONNECTED),
     val foundDevices: MutableStateFlow<List<DeviceUI>> = MutableStateFlow(emptyList()),
     val coordinate: MutableStateFlow<Coordinate?> = MutableStateFlow( null),
     var cancelCoroutineWork: ()-> Unit = {}

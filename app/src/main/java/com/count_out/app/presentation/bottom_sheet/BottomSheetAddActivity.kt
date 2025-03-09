@@ -14,7 +14,7 @@ import androidx.compose.ui.Modifier
 import com.count_out.app.presentation.theme.Dimen
 import com.count_out.app.presentation.theme.shapes
 import com.count_out.app.presentation.models.ActivityImpl
-import com.count_out.app.presentation.prime.Action
+import com.count_out.app.presentation.screens.prime.Action
 import com.count_out.app.presentation.screens.settings.SettingsEvent
 import com.count_out.app.presentation.screens.settings.SettingsState
 import com.count_out.app.presentation.view_components.ButtonConfirm

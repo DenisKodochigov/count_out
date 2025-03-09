@@ -1,7 +1,7 @@
 //package com.count_out.app.services.count_out
 //
 //import com.count_out.app.device.text_to_speech.SpeechManager
-//import com.count_out.app.device.timer.Ticker
+//import com.count_out.service.service_timing.Ticker
 //import com.count_out.app.domain.router.models.DataForWork
 //import com.count_out.app.domain.router.models.DataFromWork
 //import com.count_out.domain.entity.enums.RunningState

@@ -2,7 +2,7 @@
 //
 //import androidx.compose.runtime.MutableState
 //import com.count_out.entity.entity.workout.Training
-////import com.count_out.domain.entity.Training
+////import com.count_out.app.entity.workout.Training
 //
 //data class TrainingsState(
 //    val trainings: List<Training>,

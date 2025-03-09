@@ -1,11 +1,12 @@
 package com.count_out.app.presentation.screens.training
 
-import com.count_out.app.presentation.prime.PrimeConvertor
 import com.count_out.domain.use_case.UseCase
+import com.count_out.app.presentation.screens.prime.PrimeConvertor
+import com.count_out.app.presentation.screens.training.TrainingState
 import javax.inject.Inject
 
 class TrainingConverter @Inject constructor():
-    PrimeConvertor< UseCase.Response, TrainingState>() {
+    PrimeConvertor<UseCase.Response, TrainingState>() {
 
     override fun convertSuccess(data: UseCase.Response): TrainingState {
         return TrainingState(

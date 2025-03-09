@@ -27,7 +27,7 @@ data class SettingsState(
     @Stable var onConfirmAddActivity: (SettingsState) -> Unit = { uiState ->
 //        uiState.activity.value?.let { onAddActivity(it) }
         uiState.showBottomSheetAddActivity.value = false },
-    @Stable var onDismissBLEScan: (SettingsState) -> Unit = {uiState ->
+    @Stable var onDismissBLEScan: (SettingsState) -> Unit = { uiState ->
 //        onStopScanBLE()
         uiState.showBottomSheetBLE.value = false },
 )

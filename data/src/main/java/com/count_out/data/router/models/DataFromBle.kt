@@ -1,15 +1,13 @@
 package com.count_out.data.router.models
 
-import com.count_out.domain.entity.enums.ConnectState
 import com.count_out.domain.entity.router.DeviceUI
+import com.count_out.domain.entity.enums.ConnectState
 import kotlinx.coroutines.flow.MutableStateFlow
 
 data class DataFromBle (
     val heartRate: MutableStateFlow<Int> = MutableStateFlow(0),
     var scannedBle: MutableStateFlow<Boolean> = MutableStateFlow(false),
-    val connectingState: MutableStateFlow<ConnectState> = MutableStateFlow(
-        ConnectState.NOT_CONNECTED
-    ),
+    val connectingState: MutableStateFlow<ConnectState> = MutableStateFlow(ConnectState.NOT_CONNECTED),
     var foundDevices: MutableStateFlow<List<DeviceUI>> = MutableStateFlow(emptyList()),
     var lastConnectHearthRateDevice: MutableStateFlow<DeviceUI?> = MutableStateFlow(null),
 ){

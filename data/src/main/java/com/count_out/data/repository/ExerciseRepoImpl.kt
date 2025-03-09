@@ -4,13 +4,14 @@ import com.count_out.data.models.ExerciseImpl
 import com.count_out.data.source.room.ExerciseSource
 import com.count_out.domain.entity.DataForChangeSequence
 import com.count_out.domain.entity.workout.ActionWithActivity
-import com.count_out.domain.entity.workout.Activity
 import com.count_out.domain.entity.workout.Exercise
 import com.count_out.domain.repository.trainings.ExerciseRepo
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
-class ExerciseRepoImpl @Inject constructor(private val exerciseSource: ExerciseSource): ExerciseRepo {
+
+class ExerciseRepoImpl @Inject constructor(private val exerciseSource: ExerciseSource):
+    ExerciseRepo {
     override fun get(id: Long): Flow<Exercise> = exerciseSource.get(id)
     override fun gets(): Flow<List<Exercise>> = exerciseSource.gets()
     override fun del(exercise: Exercise): Flow<List<Exercise>> = exerciseSource.del(exercise as ExerciseImpl)
@@ -22,8 +23,7 @@ class ExerciseRepoImpl @Inject constructor(private val exerciseSource: ExerciseS
     override fun getFilter(list: List<Long>): Flow<List<Exercise>> = exerciseSource.getFilter(list)
     override fun selectActivity(activity: ActionWithActivity): Flow<Exercise> =
         exerciseSource.setActivityIntoExercise(
-            exerciseId = ActionWithActivity.exerciseId, activityId = Activity.idActivity
-        )
+            exerciseId = activity.exerciseId, activityId = activity.activity.idActivity)
 
     override fun changeSequenceExercise(item: DataForChangeSequence): Flow<Exercise> {
         TODO("Not yet implemented")

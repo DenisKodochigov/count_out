@@ -11,5 +11,5 @@ class DeleteTrainingUC @Inject constructor(configuration: Configuration, private
 ): UseCase<DeleteTrainingUC.Request, DeleteTrainingUC.Response>(configuration)  {
     override fun executeData(input: Request): Flow<Response> = repo.del(input.training).map { Response(it) }
     data class Request(val training: Training) : UseCase.Request
-    data class Response(val training: List<Training>) : UseCase.Response
+    data class Response(val trainings: List<Training>) : UseCase.Response
 }

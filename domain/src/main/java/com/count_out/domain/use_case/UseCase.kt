@@ -16,37 +16,16 @@ import kotlinx.coroutines.flow.map
  * хранилищ, и метод execute, который возьмет данные и преобразует их в Result, обработает сценарии
  * ошибок и установит соответствующий CoroutineDispatcher.
  * */
-abstract class UseCase<I: UseCase.Request, O: UseCase.Response>(
-    private val configuration: Configuration
+abstract class UseCase< I: UseCase.Request, O: UseCase.Response>(
+    private val configuration: Configuration,
 ) {
     fun execute(input: I): Flow<ResultUC<O>> = executeData(input)
-            .map { ResultUC.Success(it) as ResultUC<O> }
-            .flowOn(configuration.dispatcher)
-            .catch { emit(ResultUC.Error(ThrowableUC.extractThrowable(it)) as ResultUC<Nothing>) }
+        .map { ResultUC.Success(it) as ResultUC<O> }
+        .flowOn(configuration.dispatcher)
+        .catch { emit(ResultUC.Error(ThrowableUC.extractThrowable(it)) as ResultUC<Nothing>) }
+
     class Configuration(val dispatcher: CoroutineDispatcher)
     internal abstract fun executeData(input: I): Flow<O>
     interface Request
     interface Response
 }
-//
-//
-//sealed class SC(){
-//    data class DC(val data: String): SC()
-//}
-//data class DC(val data: String): SC()
-//
-//fun rrr(){
-//    val res = Result.Success("success")
-//    var rrrr = res as Result<String>
-//    val dc = DC("1")
-//    val dc1 = SC.DC("2")
-//}
-//
-//class Box< out T: Animal>(val animal: T)
-//open class Animal()
-//class Cat : Animal()
-//
-//fun main() {
-//    val a: Animal = Cat()  //так можно
-//    val b: Box<Animal> = Box<Cat>(Cat())  //а вот так не получится
-//}

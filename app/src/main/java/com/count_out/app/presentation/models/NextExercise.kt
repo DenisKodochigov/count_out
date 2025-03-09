@@ -1,8 +1,10 @@
 package com.count_out.app.presentation.models
 
-data class NextExercise(
-    val nextActivityName: String = "",
-    val nextExerciseId: Long = 0,
-    val nextExerciseQuantitySet: Int = 0,
-    val nextExerciseSummarizeSet: List<Pair<String, Int>> = emptyList(),
-)
+import com.count_out.domain.entity.NextExercise
+
+data class NextExerciseImpl(
+    override val nextActivityName: String = "",
+    override val nextExerciseId: Long = 0,
+    override val nextExerciseQuantitySet: Int = 0,
+    override val nextExerciseSummarizeSet: List<Pair<String, Int>> = emptyList(),
+): NextExercise

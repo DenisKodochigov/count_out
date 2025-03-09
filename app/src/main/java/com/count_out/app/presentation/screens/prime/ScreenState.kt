@@ -1,4 +1,4 @@
-package com.count_out.app.presentation.prime
+package com.count_out.app.presentation.screens.prime
 
 sealed class ScreenState<out T: Any> {
     data object Loading: ScreenState<Nothing>()

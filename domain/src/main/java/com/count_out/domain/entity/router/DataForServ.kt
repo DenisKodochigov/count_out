@@ -1,8 +1,8 @@
 package com.count_out.domain.entity.router
 
 import com.count_out.domain.entity.bluetooth.BleConnection
-import com.count_out.domain.entity.enums.RunningState
 import com.count_out.domain.entity.workout.Training
+import com.count_out.domain.entity.enums.RunningState
 import kotlinx.coroutines.flow.MutableStateFlow
 
 interface DataForServ {

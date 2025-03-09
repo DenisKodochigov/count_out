@@ -37,7 +37,7 @@ android {
 }
 
 dependencies {
-//    implementation(project(":app"))
+    implementation(project(":domain"))
     implementation(project(":data"))
     implementation(project(":framework"))
     implementation(libs.core.ktx)

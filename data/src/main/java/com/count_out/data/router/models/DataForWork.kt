@@ -4,13 +4,9 @@ import com.count_out.data.models.SetImpl
 import com.count_out.domain.entity.NextExercise
 import com.count_out.domain.entity.StepTraining
 import com.count_out.domain.entity.enums.Goal
-import com.count_out.domain.entity.enums.Units
-import com.count_out.domain.entity.workout.Activity
 import com.count_out.domain.entity.workout.Exercise
-import com.count_out.domain.entity.workout.Parameter
-import com.count_out.domain.entity.workout.Round
-import com.count_out.domain.entity.workout.Set
 import com.count_out.domain.entity.workout.Training
+import com.count_out.domain.entity.enums.Units
 import kotlinx.coroutines.flow.MutableStateFlow
 
 data class DataForWork (
@@ -43,7 +39,7 @@ data class DataForWork (
     fun sendStepTraining(){
         dataFromWork?.stepTraining?.value =
             if (interval.value > 0) {
-                (map[indexMap] as StepTrainingImpl).copy(currentSet = StepTraining.currentSet?.let { set ->
+                (map[indexMap] as StepTrainingImpl).copy(currentSet = map[indexMap].currentSet?.let { set ->
                    (set as SetImpl).copy(intervalReps = interval.value) })}
             else map[indexMap]
     }
@@ -52,18 +48,18 @@ data class DataForWork (
         var numberExercise = 1
         val list: MutableList<StepTraining> = mutableListOf()
         this.training.value?.let { tr->
-            Training.rounds.forEachIndexed { indR, round-> exerciseCount += Round.exercise.count() }
-            Training.rounds.forEachIndexed { indR, round->
-                Round.exercise.forEachIndexed { indE, exercise ->
+            tr.rounds.forEachIndexed { indR, round-> exerciseCount += round.exercise.count() }
+            tr.rounds.forEachIndexed { indR, round->
+                round.exercise.forEachIndexed { indE, exercise ->
                     if (list.isNotEmpty()){
                         val nextExercise = nextExercise(exercise)
                         for (ind in list.lastIndex downTo 0){
-                            if (StepTraining.nextExercise == null){
+                            if (list[ind].nextExercise == null){
                                 list[ind] = (list[ind] as StepTrainingImpl).copy(nextExercise = nextExercise)
                             }
                         }
                     }
-                    Exercise.sets.forEachIndexed { indS, set->
+                    exercise.sets.forEachIndexed { indS, set->
                         list.add(
                             StepTrainingImpl(
                                 round = round,
@@ -72,7 +68,7 @@ data class DataForWork (
                                 quantityExercise = exerciseCount,
                                 currentSet = set,
                                 numberSet = indS + 1,
-                                quantitySet = Exercise.sets.count(),
+                                quantitySet = exercise.sets.count(),
                                 nextExercise = TODO()
                             ))
                     }
@@ -84,18 +80,18 @@ data class DataForWork (
     }
     fun nextExercise(exercise: Exercise): NextExercise {
         val list: MutableList<Pair<String, Int>> = mutableListOf()
-        Exercise.sets.forEachIndexed { _, set ->
-            list.add( when (Set.goal) {
-                Goal.Duration -> "${Parameter.value / (if (Parameter.unit == Units.S) 1 else 60)}" to Parameter.unit.id
-                Goal.Distance -> "${Parameter.value / (if (Parameter.unit == Units.MT) 1 else 1000)}" to Parameter.unit.id
-                Goal.Count -> "${Set.reps}" to 0
+        exercise.sets.forEachIndexed { _, set ->
+            list.add( when (set.goal) {
+                Goal.Duration -> "${set.duration.value / (if (set.duration.unit == Units.S) 1 else 60)}" to set.duration.unit.id
+                Goal.Distance -> "${set.distance.value / (if (set.distance.unit == Units.MT) 1 else 1000)}" to set.distance.unit.id
+                Goal.Count -> "${set.reps}" to 0
                 Goal.CountGroup -> "" to 0 }
             )
         }
         return NextExerciseImpl(
-                    nextActivityName = Activity.name.toString(),
-                    nextExerciseId = Exercise.idExercise,
-                    nextExerciseQuantitySet = Exercise.sets.count(),
+                    nextActivityName = exercise.activity?.name.toString(),
+                    nextExerciseId = exercise.idExercise,
+                    nextExerciseQuantitySet = exercise.sets.count(),
                     nextExerciseSummarizeSet = list )
     }
 }

@@ -24,7 +24,7 @@ import com.count_out.app.old.entity.contourAll1
 import com.count_out.app.presentation.models.ActionWithSetImpl
 import com.count_out.app.presentation.models.DataForChangeSequenceImpl
 import com.count_out.app.presentation.models.SetImpl
-import com.count_out.app.presentation.prime.Action
+import com.count_out.app.presentation.screens.prime.Action
 import com.count_out.app.presentation.screens.training.TrainingEvent
 import com.count_out.app.presentation.screens.training.TrainingState
 import com.count_out.app.presentation.screens.training.set.SetContent
@@ -39,7 +39,7 @@ import com.count_out.domain.entity.workout.Round
 @Composable
 fun ListExercises(
     dataState: TrainingState,
-    action:Action,
+    action: Action,
     round: Round,
     modifier: Modifier = Modifier,
     showExercises: Boolean)
@@ -51,18 +51,20 @@ fun ListExercises(
         showList = showExercises,
         content = { item -> ElementColum( item, dataState = dataState, action = action) },
         onMoveItem = { from, to->
-            action.ex(TrainingEvent.ChangeSequenceExercise(
+            action.ex(
+                TrainingEvent.ChangeSequenceExercise(
                 item = DataForChangeSequenceImpl(
-                trainingId = dataState.training.idTraining,
-                roundId = round.idRound,
-                ringId = 0,
-                from = from,
-                to = to )))
+                    trainingId = dataState.training.idTraining,
+                    roundId = round.idRound,
+                    ringId = 0,
+                    from = from,
+                    to = to )
+                ))
         },)
     if (showExercises) Spacer(modifier = Modifier.height(4.dp))
 }
 
-@Composable fun <T>ElementColum (item:T, dataState: TrainingState, action:Action,){
+@Composable fun <T>ElementColum (item:T, dataState: TrainingState, action: Action,){
     Spacer(modifier = Modifier.padding(top = 1.dp))
     dataState.exercise = item as Exercise
     Frame(contour = contourAll1) {
@@ -74,11 +76,11 @@ fun ListExercises(
         }
     }
 }
-@Composable fun SelectActivity(dataState: TrainingState, exercise: Exercise, action:Action) {
+@Composable fun SelectActivity(dataState: TrainingState, exercise: Exercise, action: Action) {
     Row( verticalAlignment = Alignment.CenterVertically){
         val nameNewSet = stringResource(id = R.string.set) + " ${exercise.sets.size + 1}"
         IconsCollapsing(
-            onClick = {exerciseCollapsing(dataState, exercise) },
+            onClick = { exerciseCollapsing(dataState, exercise) },
             wrap = dataState.listCollapsingExercise.value.find { it == exercise.idExercise } != null )
         Spacer(modifier = Modifier.width(2.dp))
         Column {
@@ -103,18 +105,21 @@ fun ListExercises(
                 dataState.exercise = exercise
                 dataState.showSpeechExercise.value = true },
             onClickAddSet = {
-                action.ex(TrainingEvent.AddSet(ActionWithSetImpl(
+                action.ex(
+                    TrainingEvent.AddSet(
+                        ActionWithSetImpl(
                     id = dataState.training.idTraining,
                     set = SetImpl(name = nameNewSet, exerciseId = exercise.idExercise)
-                )))},
+                )
+                    ))},
         )
     }
 }
-@Composable fun BodyExercise(dataState: TrainingState, exercise: Exercise, action:Action){
+@Composable fun BodyExercise(dataState: TrainingState, exercise: Exercise, action: Action){
     val visibleLazy = dataState.listCollapsingExercise.value.find { it == exercise.idExercise } != null
     AnimatedVisibility( visible = visibleLazy){ ListSets(dataState, exercise, action) }
 }
-@Composable fun ListSets(dataState: TrainingState, exercise: Exercise, action:Action) {
+@Composable fun ListSets(dataState: TrainingState, exercise: Exercise, action: Action) {
     Column {
         exercise.sets.forEachIndexed { ind, set ->
             Box (modifier = Modifier
@@ -143,30 +148,16 @@ fun exerciseCollapsing(dataState: TrainingState, exercise: Exercise): Boolean {
         true
     }
 }
-//fun amountSets( exercise: Exercise) = exercise.sets.count()
-//fun durationExercise( exercise: Exercise): Int{
-//    var durationExercise = (exercise.speech.afterStart.duration + exercise.speech.afterEnd.duration +
-//            exercise.speech.beforeStart.duration + exercise.speech.beforeEnd.duration).toDouble()
-//    exercise.sets.forEach { set->
-//        durationExercise += when (set.goal){
-//            GoalSet.DURATION-> set.duration
-//            GoalSet.COUNT-> set.reps * set.intervalReps
-//            GoalSet.COUNT_GROUP -> set.reps * set.intervalReps
-//            GoalSet.DISTANCE -> set.distance * 100
-//        }.toDouble() + set.timeRest
-//    }
-//    return ( durationExercise/60).roundToInt()
-//}
 //@Composable
-//fun RowAddSet(dataState: TrainingScreenState, exercise: Exercise)
+//fun RowAddSet(uiState: TrainingScreenState, exercise: Exercise)
 //{
 //    Row (horizontalArrangement = Arrangement.End, modifier = Modifier.fillMaxWidth()){
 //        val nameNewSet = stringResource(id = R.string.set) + " ${exercise.sets.size + 1}"
 //        IconAddItem(
 //            textId = R.string.add_set,
 //            onAdd = {
-//                dataState.onAddUpdateSet( exercise.idExercise,
-//                SetImpl(name = nameNewSet, exerciseId = exercise.idExercise))
+//                uiState.onAddUpdateSet( exercise.idExercise,
+//                SetDB(name = nameNewSet, exerciseId = exercise.idExercise))
 //            }
 //        )
 //    }

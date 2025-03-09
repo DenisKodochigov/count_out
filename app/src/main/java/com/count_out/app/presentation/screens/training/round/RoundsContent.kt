@@ -16,19 +16,19 @@ import androidx.compose.ui.unit.dp
 import com.count_out.app.R
 import com.count_out.app.old.entity.contourHor2
 import com.count_out.app.presentation.models.ExerciseImpl
-import com.count_out.app.presentation.prime.Action
+import com.count_out.app.presentation.screens.prime.Action
 import com.count_out.app.presentation.screens.training.TrainingEvent
 import com.count_out.app.presentation.screens.training.TrainingState
-import com.count_out.app.presentation.screens.training.exercise.ListExercises
 import com.count_out.app.presentation.view_components.TextApp
 import com.count_out.app.presentation.view_components.custom_view.Frame
 import com.count_out.app.presentation.view_components.icons.IconsCollapsing
 import com.count_out.app.presentation.view_components.icons.IconsGroup
-import com.count_out.domain.entity.workout.Round
 import com.count_out.domain.entity.enums.RoundType
+import com.count_out.domain.entity.workout.Round
+import com.count_out.app.presentation.screens.training.exercise.ListExercises
 
 @Composable
-fun Round(dataState: TrainingState, action:Action, round: Round){
+fun Round(dataState: TrainingState, action: Action, round: Round){
     Frame(colorAlpha = 0.8f, contour = contourHor2){
         Column( modifier = Modifier.padding(start = 6.dp, bottom = 4.dp, top = 4.dp)){
             TitleRound(dataState = dataState, action = action, round = round)
@@ -36,7 +36,7 @@ fun Round(dataState: TrainingState, action:Action, round: Round){
         }
     }
 }
-@Composable fun TitleRound(dataState: TrainingState, action:Action, round: Round){
+@Composable fun TitleRound(dataState: TrainingState, action: Action, round: Round){
     Row( verticalAlignment = Alignment.CenterVertically ){
         IconsCollapsing(
             onClick = { setCollapsing(dataState, round) },
@@ -50,15 +50,15 @@ fun Round(dataState: TrainingState, action:Action, round: Round){
         Column {
             TextApp( style = MaterialTheme.typography.bodySmall, fontWeight = FontWeight.Light,
                 text = "${ stringResource(id = R.string.exercises) }: ${round.amount}" +
-                         " / ${round.duration} ${ stringResource(id = R.string.min)}",) }
+                        " / ${round.duration} ${ stringResource(id = R.string.min)}",) }
         IconsGroup(
-            onClickSpeech = {showSpeechRound(dataState, round)},
+            onClickSpeech = { showSpeechRound(dataState, round) },
             onClickAddExercise = {
                 action.ex(TrainingEvent.AddExercise(exercise = ExerciseImpl(roundId = round.idRound)))})
         Spacer(modifier = Modifier.width(6.dp))
     }
 }
-@Composable fun ListExercise(dataState: TrainingState, action:Action, round: Round){
+@Composable fun ListExercise(dataState: TrainingState, action: Action, round: Round){
     ListExercises(
         dataState = dataState,
         action = action,
@@ -98,22 +98,3 @@ fun nameRound(round: Round): Int {
         RoundType.WorkDown -> R.string.work_down
     }
 }
-//fun amountExercise(dataState: TrainingState, roundType: MutableState<RoundType>) =
-//    dataState.training.rounds.find{ it.roundType == roundType.value }?.exercise?.size ?: 0
-//
-//fun durationRound(dataState: TrainingState, roundType: MutableState<RoundType>): Int{
-//    var durationRound = 0.0
-//    dataState.training.rounds.find{ it.roundType == roundType.value }?.exercise?.forEach { exercise ->
-//        exercise.sets.forEach { set->
-//            durationRound += when (set.goal){
-//                GoalSet.DURATION-> set.duration
-//                GoalSet.COUNT-> (set.reps * set.intervalReps).roundToInt()
-//                GoalSet.COUNT_GROUP -> (set.reps * set.intervalReps).roundToInt()
-//                GoalSet.DISTANCE -> (set.distance * 6).roundToInt()
-//            } + set.timeRest
-//        }
-//    } ?: 0
-//    return ( durationRound / 60).roundToInt()
-//}
-//fun getIdRound(dataState: TrainingState, roundType: MutableState<RoundType>) =
-//    dataState.training.rounds.find { it.roundType == roundType.value }?.idRound ?: 0

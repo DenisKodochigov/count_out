@@ -24,12 +24,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.count_out.app.R
+import com.count_out.app.presentation.screens.prime.Action
 import com.count_out.app.presentation.theme.Dimen
 import com.count_out.app.presentation.theme.Dimen.bsHeightWindowsListBle
 import com.count_out.app.presentation.theme.Dimen.bsSpacerBottomHeight
 import com.count_out.app.presentation.theme.mTypography
 import com.count_out.app.presentation.theme.shapes
-import com.count_out.app.presentation.prime.Action
 import com.count_out.app.presentation.screens.settings.SettingsEvent
 import com.count_out.app.presentation.screens.settings.SettingsState
 import com.count_out.app.presentation.view_components.ModalBottomSheetApp

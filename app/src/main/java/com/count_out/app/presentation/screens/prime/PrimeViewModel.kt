@@ -1,4 +1,4 @@
-package com.count_out.app.presentation.prime
+package com.count_out.app.presentation.screens.prime
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

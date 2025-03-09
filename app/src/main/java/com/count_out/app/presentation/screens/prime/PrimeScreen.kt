@@ -1,4 +1,4 @@
-package com.count_out.app.presentation.prime
+package com.count_out.app.presentation.screens.prime
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -9,7 +9,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import com.count_out.app.presentation.prime.ScreenState
 
 @Composable fun <T : Any> PrimeScreen(loader: ScreenState<T>, onSuccess: @Composable (T) -> Unit) {
     when (loader) {

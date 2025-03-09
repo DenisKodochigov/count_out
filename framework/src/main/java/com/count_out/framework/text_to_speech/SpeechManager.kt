@@ -4,6 +4,7 @@ import android.content.Context
 import android.speech.tts.TextToSpeech
 import android.speech.tts.UtteranceProgressListener
 import com.count_out.data.router.models.DataFromWork
+import com.count_out.domain.entity.workout.Speech
 import com.count_out.domain.entity.enums.RunningState
 import kotlinx.coroutines.delay
 import java.util.Locale
@@ -54,15 +55,15 @@ class SpeechManager(val context: Context) {
         }
     }
 
-    suspend fun speech(dataFromWork: DataFromWork, speech: com.count_out.domain.entity.workout.Speech): Long {
+    suspend fun speech(dataFromWork: DataFromWork, speech: Speech): Long {
         dataFromWork.trap()
-        val speechText = com.count_out.domain.entity.workout.Speech.message + " " + com.count_out.domain.entity.workout.Speech.addMessage
+        val speechText = speech.message + " " + speech.addMessage
         if ((speechText).length > 1) {
             speakOutAdd(speechText, dataFromWork)
-            while (tts?.isSpeaking == true || dataFromWork.runningState.value == com.count_out.domain.entity.enums.RunningState.Paused)
+            while (tts?.isSpeaking == true || dataFromWork.runningState.value == RunningState.Paused)
             { delay(500L) }
-            if( com.count_out.domain.entity.workout.Speech.duration == 0L && com.count_out.domain.entity.workout.Speech.idSpeech > 0 && duration > 0 ){
-                dataFromWork.durationSpeech.value = com.count_out.domain.entity.workout.Speech.idSpeech to duration
+            if( speech.duration == 0L && speech.idSpeech > 0 && duration > 0 ){
+                dataFromWork.durationSpeech.value = speech.idSpeech to duration
             }
         }
         return durationEnd

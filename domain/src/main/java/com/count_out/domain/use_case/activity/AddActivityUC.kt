@@ -10,8 +10,9 @@ import javax.inject.Inject
 class AddActivityUC @Inject constructor(
     configuration: Configuration, private val repo: ActivityRepo
 ): UseCase<AddActivityUC.Request, AddActivityUC.Response>(configuration)  {
-    override fun executeData(input: Request): Flow<Response> =
-        repo.add(input.activity).map { Response(it) }
     data class Request(val activity: Activity): UseCase.Request
     data class Response(val activity: Activity): UseCase.Response
+
+    override fun executeData(input: Request): Flow<Response> =
+        repo.add(input.activity).map { Response(it) }
 }

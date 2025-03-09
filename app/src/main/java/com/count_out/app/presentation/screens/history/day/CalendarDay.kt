@@ -16,7 +16,6 @@ import com.count_out.app.presentation.theme.mTypography
 import com.count_out.app.presentation.theme.shapes
 import com.count_out.app.presentation.view_components.TextApp
 
-
 @Composable
 fun CalendarDay(uiState: HistoryScreenState, day: String = "1") {
     Card(
