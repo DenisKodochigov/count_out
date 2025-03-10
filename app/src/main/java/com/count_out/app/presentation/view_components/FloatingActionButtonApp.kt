@@ -9,7 +9,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
-import com.count_out.app.presentation.theme.alumBodyMedium
+import com.count_out.presentation.view_element.TextApp
 
 @Composable fun ExtendedFAB(
     modifier: Modifier = Modifier,
@@ -21,7 +21,7 @@ import com.count_out.app.presentation.theme.alumBodyMedium
         onClick = onClick,
         modifier = modifier,
         icon = { IconFab(icon = icon) },
-        text = { TextApp(text = stringResource(id = textId), style = alumBodyMedium) },
+        text = { TextApp(text = stringResource(id = textId), style = MaterialTheme.typography.labelSmall) }, //alumBodyMedium
     )
 }
 @Composable fun IconFab(icon: ImageVector){

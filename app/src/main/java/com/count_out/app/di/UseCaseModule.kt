@@ -1,7 +1,7 @@
 package com.count_out.app.di
 
 import android.content.Context
-import com.count_out.app.presentation.models.Internet
+import com.count_out.presentation.modeles.Internet
 import com.count_out.domain.repository.BluetoothRepo
 import com.count_out.domain.repository.CountOutServiceRepo
 import com.count_out.domain.repository.WeatherRepo

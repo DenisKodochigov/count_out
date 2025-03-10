@@ -1,0 +1,286 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">count_out</string>
+    <string name="exercises">Activities</string>
+    <string name="exercise1">Activity</string>
+    <string name="exercise">Activity</string>
+    <string name="exercise2">activity</string>
+    <string name="add_activity">Add activity</string>
+    <string name="list_activity">ACTIVITIES</string>
+    <string name="add_set">Add set</string>
+    <string name="add_training">Add training</string>
+    <string name="change_name_workout">Change name workout</string>
+    <string name="distance">Distance</string>
+    <string name="duration">Duration</string>
+    <string name="duration_of_the_approach">Duration of the approach</string>
+    <string name="error_1">Error 1.</string>
+    <string name="error_2">Error 2.</string>
+    <string name="History">History</string>
+    <string name="intensity">Intencity</string>
+    <string name="Interval_between_counts">Interval between reports</string>
+    <string name="message_after_end">Message after the end</string>
+    <string name="message_after_start">Message after the start</string>
+    <string name="message_before_end">Message before the end</string>
+    <string name="message_before_start">Message before the start</string>
+    <string name="min">min</string>
+    <string name="new_workout">New workout</string>
+    <string name="number_of_counts">Number of counts</string>
+    <string name="ok">OK</string>
+    <string name="plan_workout">Plan workout</string>
+    <string name="plans_workout">Plans workout</string>
+    <string name="ratio">ratio</string>
+    <string name="save">Save</string>
+    <string name="sets">Sets</string>
+    <string name="set">Set</string>
+    <string name="setting">Setting</string>
+    <string name="slowing_down_the_counts">Slowing down the counts</string>
+    <string name="time_to_rest">Time to rest</string>
+    <string name="timing">Timing</string>
+    <string name="training">Training</string>
+    <string name="training_text_fab">Training</string>
+    <string name="trainings">trainings</string>
+    <string name="trainings_">Trainings</string>
+    <string name="weight">Weight</string>
+    <string name="rest">Rest</string>
+    <string name="work_down">Work-down</string>
+    <string name="work_down1">work-down</string>
+    <string name="work_out">Work out</string>
+    <string name="work_out1">work out</string>
+    <string name="work_up">Work-up</string>
+    <string name="work_up1">work-up</string>
+    <string name="Workout">Workout</string>
+    <string name="workout">Workout</string>
+    <string name="workout_text_fab">Workout</string>
+    <string name="part_work">Part training</string>
+    <string name="message">"Message "</string>
+    <string name="time">Time</string>
+
+    <string name="hour">hour</string>
+    <string name="sec">sec</string>
+    <string name="h">h</string>
+    <string name="s">s</string>
+    <string name="km">km</string>
+    <string name="m">m</string>
+    <string name="kg">kg</string>
+
+    <string name="duration_set">Duration set</string>
+    <string name="task_in_approach">The task is in the approach</string>
+    <string name="zone">zone</string>
+    <string name="quantity_reps">Repetitions. Number of counts</string>
+    <string name="quantity_group_reps">Repetitions. Group of counts</string>
+    <string name="time_between_counts">The interval between counts</string>
+    <string name="slowing_down_counts">Slowing down the counts</string>
+    <string name="counts_by_group_add"> Enter a group of counts (each word corresponds to one count)</string>
+    <string name="screen_execute_work">Execute WorkOut</string>
+    <string name="channel_name">count_out_notification</string>
+    <string name="audio_track">Audio track</string>
+    <string name="video_clip">Video clip</string>
+    <string name="description">Description</string>
+    <string name="null_s">""</string>
+    <string name="speech_description">Speech description</string>
+    <string name="create_ring">Create ring</string>
+    <string name="add_ring">Add ring</string>
+    <string name="counts">Counts</string>
+    <string name="count">Count</string>
+    <string name="next_exercise">Next the exercise</string>
+    <string name="rest_time">Rest time.</string>
+    <string name="section_heart_rate">Section select device heart rate</string>
+    <string name="heart_rate_device">Heart rate monitor</string>
+    <string name="not_select_device">There are no selected devices</string>
+
+
+    <string name="ble_playground">BLE Playground</string>
+    <string name="location_permission_required">Location Permission Required</string>
+    <string name="location_permission_rationale">Starting from Android 6, the system requires apps to be granted location access in order to scan for BLE devices.\n\nYour location is never used aside from enabling the app to perform BLE scans.</string>
+    <string name="bluetooth_permission_required">Nearby Devices Permission Required</string>
+    <string name="bluetooth_permission_rationale">Starting from Android 12, the system requires apps to be granted Nearby Devices access in order to scan for and connect to BLE devices.</string>
+    <string name="please_grant_relevant_permissions">Please grant required permissions</string>
+    <string name="app_settings_rationale">Prior requests for required permissions have been repeatedly or permanently denied. You\'ll need to manually grant the app these permissions from the app\'s Settings screen.</string>
+    <string name="cannot_launch_app_settings">Unable to launch app settings, please navigate to app settings manually</string>
+    <string name="app_settings">App Settings</string>
+    <string name="quit">Quit</string>
+    <string name="disconnected">Disconnected</string>
+    <string name="disconnected_or_unable_to_connect_to_device">Disconnected or unable to connect to %1$s.</string>
+    <string name="list_trainings">Список тренировок</string>
+    <string name="show_Action">Показать действия</string>
+    <string name="title_setting_screen">Настройки приложения</string>
+    <string name="not_connected">не подключен</string>
+    <string name="connected">подключен</string>
+    <string name="connecting">подключение</string>
+    <string name="runs_treining">Выполняется тренировка</string>
+    <string name="from">form</string>
+    <string name="setFrom">Подходов</string>
+    <string name="slower">Медленее</string>
+    <string name="faster">Быстрее</string>
+    <string name="no_name">нет имени.</string>
+    <string name="stop_scanner">Stop scanner.</string>
+    <string name="start_scanner">Start scanner</string>
+    <string name="gatt_disconnected">Connection state Bluetooth Gatt STATE_DISCONNECTED</string>
+    <string name="ble_discovery_failed">BLE Service discovery failed</string>
+    <string name="read_characteristic_error">Read failed for characteristic</string>
+    <string name="error_refresh">Could not invoke refresh method</string>
+    <string name="gatt_connect_ok">Connection state Bluetooth Gatt GATT_SUCCESS</string>
+    <string name="gatt_connect_error">Error connecting GATT</string>
+    <string name="start_service">Start foreground service</string>
+    <string name="init_service">Initialization foreground service</string>
+    <string name="stop_distribution_service">Stop Distribution Service</string>
+    <string name="speech_manager_error">SpeechManager</string>
+    <string name="bluetooth_not_available">Bluetooth not available.</string>
+    <string name="heart_rate">Heart rate:</string>
+    <string name="history">History</string>
+    <string name="history_">History</string>
+
+    <plurals name="set_1">
+        <item quantity="zero">%1$d = zero</item>
+        <item quantity="one">%1$d =</item>
+        <item quantity="two">%1$d = sets</item>
+        <item quantity="few">%1$d = sets</item>
+        <item quantity="many">%1$d = sets</item>
+        <item quantity="other">%1$d = set</item>
+    </plurals>
+    <plurals name="set_2">
+        <item quantity="one">%d set</item>
+        <item quantity="few">%d set</item>
+        <item quantity="many">%d = set</item>
+        <item quantity="other">sets</item>
+    </plurals>
+    <plurals name="repeat">
+        <item quantity="one">%d repeat</item>
+        <item quantity="two">%d repetitions</item>
+        <item quantity="few">%d repetitions</item>
+        <item quantity="many">%d repetitions</item>
+        <item quantity="other">repetitions</item>
+    </plurals>
+    <plurals name="repeat1">
+        <item quantity="one">%d repeat</item>
+        <item quantity="few">%d repetitions</item>
+        <item quantity="many">%d repetitions</item>
+        <item quantity="other">repetitions</item>
+    </plurals>
+    <plurals name="hour">
+        <item quantity="one">%d hour</item>
+        <item quantity="few">%d hour</item>
+        <item quantity="many">%d hours</item>
+        <item quantity="other">hours</item>
+    </plurals>
+    <plurals name="min">
+        <item quantity="one">%d minute</item>
+        <item quantity="two">%d minutes</item>
+        <item quantity="few">%d minutes</item>
+        <item quantity="many">%d minutes</item>
+        <item quantity="other">minutes</item>
+    </plurals>
+    <plurals name="sec">
+        <item quantity="one">%d second</item>
+        <item quantity="two">%d seconds</item>
+        <item quantity="few">%d seconds</item>
+        <item quantity="many">%d seconds</item>
+        <item quantity="other">seconds</item>
+    </plurals>
+    <plurals name="km">
+        <item quantity="one">%d kilometer</item>
+        <item quantity="two">%d kilometers</item>
+        <item quantity="few">%d kilometers</item>
+        <item quantity="many">%d kilometers</item>
+        <item quantity="other">kilometers</item>
+    </plurals>
+    <plurals name="m">
+        <item quantity="one">%d meter</item>
+        <item quantity="two">%d meters</item>
+        <item quantity="few">%d meters</item>
+        <item quantity="many">%d meters</item>
+        <item quantity="other">meters</item>
+    </plurals>
+    <plurals name="kg">
+        <item quantity="one">%d kilogram</item>
+        <item quantity="few">%d kilograms</item>
+        <item quantity="many">%d kilograms</item>
+        <item quantity="other">kilograms</item>
+    </plurals>
+    <plurals name="gr">
+        <item quantity="one">%d gram</item>
+        <item quantity="few">%d grams</item>
+        <item quantity="many">%d grams</item>
+        <item quantity="other">grams</item>
+    </plurals>
+
+    <string name="select_position">Select position.</string>
+    <string name="not_text" />
+    <string name="weather3">Weather</string>
+    <string name="clear_sky">Clear sky</string>
+    <string name="mainly_clear">Mainly clear</string>
+    <string name="partly_cloudy">partly cloudy</string>
+    <string name="overcast">overcast</string>
+    <string name="fog">Fog </string>
+    <string name="depositing_rime_fog">depositing rime fog</string>
+    <string name="drizzle_light">Drizzle: Light</string>
+    <string name="drizzle_moderate">Drizzle moderate.</string>
+    <string name="drizzle_dense">Drizzle dense intensity.</string>
+    <string name="freezing_drizzle_light">Freezing drizzle light</string>
+    <string name="freezing_drizzle_dense">Freezing drizzle dense intensity</string>
+    <string name="rain_slight">Rain slight</string>
+    <string name="rain_moderate">Rain moderate </string>
+    <string name="rain_heavy">Rain heavy intensity</string>
+    <string name="freezing_rain_light">Freezing rain light.</string>
+    <string name="freezing_rain_heavy">Freezing rain heavy intensity</string>
+    <string name="snow_fall_slight">Snow fall slight</string>
+    <string name="snow_fall_moderate">Snow fall moderate</string>
+    <string name="snow_fall_heavy">Snow fall heavy intensity</string>
+    <string name="snow_grains">Snow grains</string>
+    <string name="rain_showers_slight">Rain showers slight</string>
+    <string name="rain_showers_moderate">Rain showers moderate</string>
+    <string name="rain_showers_violent">Rain showers violent</string>
+    <string name="snow_showers_slight">Snow showers slight</string>
+    <string name="snow_showers_heavy">Snow showers heavy</string>
+    <string name="thunderstorm">Thunderstorm slight or moderate</string>
+    <string name="thunderstorm_with_slight_hail">Thunderstorm with slight hail</string>
+    <string name="thunderstorm_with_heavy_hail">Thunderstorm with heavy hail</string>
+    <string name="feels_like">It feels like</string>
+    <string name="button_today">Today</string>
+    <string name="button_tomorrow">Tomorrow</string>
+    <string name="button_tenday">Ten day</string>
+    <string name="now">Now</string>
+    <string name="monday">Monday</string>
+    <string name="tuesday">Tuesday</string>
+    <string name="wednesday">Wednesday</string>
+    <string name="thursday">Thursday</string>
+    <string name="friday">Friday</string>
+    <string name="saturday">Saturday</string>
+    <string name="sunday">Sunday</string>
+    <string name="precipitation">Probability of precipitation</string>
+
+    <string name="january">january</string>
+    <string name="february">february</string>
+    <string name="march">march</string>
+    <string name="april">april</string>
+    <string name="may">may</string>
+    <string name="june">june</string>
+    <string name="july">july</string>
+    <string name="august">v</string>
+    <string name="september">september</string>
+    <string name="october">october</string>
+    <string name="november">v</string>
+    <string name="december">december</string>
+    <string name="title_request_permission">Permission is required</string>
+    <string name="text_request_permission">For the application to work, permission to use the location is required. Please install it manually or enter the name of the locality.</string>
+    <string name="title_request_internet">The Internet is needed.</string>
+    <string name="text_request_internet">The Internet is required for the application to work. Please connect.</string>
+    <string name="today">Now</string>
+    <string name="title_precipitation">Probability of precipitation.</string>
+    <string name="title_temp">Temperature.</string>
+    <string name="save_traning">Save training?</string>
+    <string name="no">NO</string>
+    <string name="yes">YES</string>
+    <string name="no_plan_training">Run work ot without plan.</string>
+    <string name="zone1">ZONE I</string>
+    <string name="zone2">ZONE II</string>
+    <string name="zone3">ZONE III</string>
+    <string name="zone4">ZONE IV</string>
+    <string name="zone5">ZONE V</string>
+    <string name="gr">gr</string>
+    <string name="interval">Интервал</string>
+    <string name="reps">Reps</string>
+    <string name="rep">r.</string>
+    <string name="repeat_time">repeat</string>
+    <string name="set2">set</string>
+</resources>

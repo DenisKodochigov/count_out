@@ -1,5 +1,6 @@
 package com.count_out.framework.room.source
 
+import com.count_out.data.models.ParameterImpl
 import com.count_out.data.models.RoundImpl
 import com.count_out.data.models.SpeechKitImpl
 import com.count_out.data.models.TrainingImpl
@@ -9,6 +10,7 @@ import com.count_out.data.source.room.SpeechKitSource
 import com.count_out.data.source.room.TrainingSource
 import com.count_out.domain.entity.workout.Training
 import com.count_out.domain.entity.enums.RoundType
+import com.count_out.domain.entity.enums.Units
 import com.count_out.framework.room.db.training.TrainingDao
 import com.count_out.framework.room.db.training.TrainingTable
 import kotlinx.coroutines.flow.Flow
@@ -73,7 +75,7 @@ class TrainingSourceImpl @Inject constructor(
         speechId = 0,
         speech = null,
         trainingId = trainingId,
-        amount = TODO(),
-        duration = TODO(),
+        amount = 0,
+        duration = ParameterImpl(0.0, Units.M),
     )
 }

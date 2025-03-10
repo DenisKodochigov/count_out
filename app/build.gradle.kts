@@ -73,6 +73,7 @@ dependencies {
     implementation(project(":domain"))
     implementation(project(":service"))
     implementation(project(":framework"))
+    implementation(project(":presentation"))
     implementation(libs.bundles.core)
     implementation(libs.bundles.lifecycle)
     //Hilt
