@@ -35,6 +35,7 @@ interface ScreenDestination {
     var textFABId: Int
     var onClickFAB: () -> Unit
     @Composable fun Show (vm: ViewModel, arg: List<String>)
+
 }
 /*** App app navigation destinations*/
 object TrainingsDestination : ScreenDestination {
