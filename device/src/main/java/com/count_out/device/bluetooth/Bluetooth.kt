@@ -8,10 +8,10 @@ import com.count_out.device.bluetooth.models.BleConnectionImpl
 import com.count_out.device.bluetooth.models.BleDeviceImpl
 import com.count_out.device.bluetooth.models.BleStates
 import com.count_out.device.permission.PermissionApp
-import com.count_out.entity.enums.ConnectState
-import com.count_out.entity.enums.ErrorBleService
-import com.count_out.entity.enums.RunningState
-import com.count_out.entity.enums.StateBleConnecting
+import com.count_out.domain.entity.enums.ConnectState
+import com.count_out.domain.entity.enums.ErrorBleService
+import com.count_out.domain.entity.enums.RunningState
+import com.count_out.domain.entity.enums.StateBleConnecting
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow

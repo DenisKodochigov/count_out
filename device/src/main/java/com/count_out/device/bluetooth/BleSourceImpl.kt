@@ -1,7 +1,7 @@
 package com.count_out.device.bluetooth
 
 import com.count_out.data.source.framework.BleSource
-import com.count_out.entity.entity.router.DeviceUI
+import com.count_out.domain.entity.router.DeviceUI
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 

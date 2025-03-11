@@ -5,13 +5,14 @@ import com.count_out.data.models.ActionWithSetImpl
 import com.count_out.data.models.ExerciseImpl
 import com.count_out.data.models.ParameterImpl
 import com.count_out.data.models.SetImpl
+import com.count_out.data.models.SpeechKitImpl
 import com.count_out.data.source.room.ExerciseSource
 import com.count_out.data.source.room.SetSource
 import com.count_out.data.source.room.SpeechKitSource
-import com.count_out.entity.entity.workout.Exercise
-import com.count_out.entity.enums.Goal
-import com.count_out.entity.enums.Units
-import com.count_out.entity.enums.Zone
+import com.count_out.domain.entity.enums.Goal
+import com.count_out.domain.entity.workout.Exercise
+import com.count_out.domain.entity.enums.Units
+import com.count_out.domain.entity.enums.Zone
 import com.count_out.framework.room.db.exercise.ExerciseDao
 import com.count_out.framework.room.db.exercise.ExerciseTable
 import kotlinx.coroutines.flow.Flow
@@ -41,11 +42,11 @@ class ExerciseSourceImpl @Inject constructor(
     override fun copy(exercise: ExerciseImpl): Flow<List<ExerciseImpl>> {
         val result  = if (exercise.roundId > 0L || exercise.ringId > 0L) {
             val idSpeechKit = exercise.speech?.let {
-                (speechKitSource.copy(it) as StateFlow ).value.idSpeechKit } ?: 0
+                (speechKitSource.copy(it as SpeechKitImpl) as StateFlow ).value.idSpeechKit } ?: 0
             val idExercise = dao.add(toExerciseTable(exercise.copy(speechId = idSpeechKit)))
             if (exercise.sets.isNotEmpty()){
                 exercise.sets.forEach { set-> setSource.copy(
-                    ActionWithSetImpl(idExercise, set.copy(exerciseId = idExercise))) }
+                    ActionWithSetImpl(idExercise, (set as SetImpl).copy(exerciseId = idExercise))) }
             } else {
                 setSource.copy( ActionWithSetImpl(idExercise, newSetImpl(exerciseId = idExercise)) )
             }
@@ -80,7 +81,7 @@ class ExerciseSourceImpl @Inject constructor(
     }
 
     override fun del(exercise: ExerciseImpl): Flow<List<ExerciseImpl>> {
-        exercise.speech?.let { speechKitSource.del(it) }
+        exercise.speech?.let { speechKitSource.del(it as SpeechKitImpl) }
         dao.del(exercise.idExercise)
         return if (exercise.roundId > 0) getForRound(exercise.roundId) else getForRing(exercise.ringId)
     }

@@ -19,7 +19,7 @@ import com.count_out.app.presentation.navigation.navigateToScreen
 import com.count_out.app.presentation.theme.AppTheme
 import com.count_out.app.presentation.view_components.BottomBarApp
 import com.count_out.app.presentation.view_components.CollapsingToolbar
-import com.count_out.entity.enums.Units
+import com.count_out.domain.entity.enums.Units
 
 
 @OptIn(ExperimentalComposeUiApi::class)

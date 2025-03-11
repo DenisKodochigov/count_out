@@ -1,11 +1,12 @@
 package com.count_out.data.router.models
 
-import com.count_out.entity.entity.Coordinate
-import com.count_out.entity.entity.StepTraining
-import com.count_out.entity.entity.TickTime
-import com.count_out.entity.entity.router.DeviceUI
-import com.count_out.entity.enums.ConnectState
-import com.count_out.entity.enums.RunningState
+import com.count_out.domain.entity.Coordinate
+import com.count_out.domain.entity.StepTraining
+import com.count_out.domain.entity.TickTime
+import com.count_out.domain.entity.router.Buffer
+import com.count_out.domain.entity.router.DeviceUI
+import com.count_out.domain.entity.enums.ConnectState
+import com.count_out.domain.entity.enums.RunningState
 import kotlinx.coroutines.flow.MutableStateFlow
 
 data class DataForUI (

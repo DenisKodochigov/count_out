@@ -12,23 +12,28 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.runtime.Composable
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NamedNavArgument
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
-import com.count_out.app.old.entity.DELAY_SCREEN
-import com.count_out.app.old.entity.DURATION_SCREEN
-import com.count_out.app.presentation.screens.executor.ExecuteWorkoutScreen
-import com.count_out.app.presentation.screens.history.HistoryScreen
-import com.count_out.app.presentation.screens.settings.SettingScreen
-import com.count_out.app.presentation.screens.training.TrainingScreen
-import com.count_out.app.presentation.screens.trainings.TrainingsScreen
+import com.count_out.app.presentation.Const.DELAY_SCREEN
+import com.count_out.app.presentation.Const.DURATION_SCREEN
+import com.count_out.presentation.screens.settings.SettingViewModel
+import com.count_out.presentation.screens.history.HistoryViewModel
+import com.count_out.presentation.screens.training.TrainingViewModel
+import com.count_out.presentation.screens.trainings.TrainingsViewModel
 
 fun NavGraphBuilder.trainings( navigateEvent: NavigateEventImpl,
 ) {
     template(
         routeTo = TrainingsDestination.route,
-        content = { TrainingsScreen(navigateEvent = navigateEvent) }
+        content = {
+            val vm: TrainingsViewModel = hiltViewModel()
+            vm.initNavigate(navigateEvent)
+            TrainingsDestination.Show(vm, emptyList())
+//            TrainingsScreen(navigateEvent = navigateEvent)
+        }
     )
 }
 fun NavGraphBuilder.training( navigateEvent: NavigateEventImpl) {
@@ -36,34 +41,48 @@ fun NavGraphBuilder.training( navigateEvent: NavigateEventImpl) {
         routeTo = TrainingDestination.routeWithArgs,
         argument = TrainingDestination.arguments,
         content = { navBackStackEntry ->
-            TrainingScreen(
-                navigateEvent = navigateEvent,
-                trainingId = navBackStackEntry.arguments?.getLong(TrainingDestination.ARG) ?: 0,
-            )
+            val vm: TrainingViewModel = hiltViewModel()
+            vm.initNavigate(navigateEvent)
+            val arg = listOf((navBackStackEntry.arguments?.getLong(TrainingDestination.ARG) ?: 0).toString())
+            TrainingDestination.Show(vm, arg)
+//            TrainingScreen(
+//                navigateEvent = navigateEvent,
+//                trainingId = navBackStackEntry.arguments?.getLong(TrainingDestination.ARG) ?: 0,
+//            )
         }
     )
 }
-fun NavGraphBuilder.playWorkout(navigateEvent: NavigateEventImpl) {
+fun NavGraphBuilder.executeWorkout(navigateEvent: NavigateEventImpl) {
     template(
         routeTo = ExecuteWorkDestination.routeWithArgs,
         argument = TrainingDestination.arguments,
         content = { navBackStackEntry ->
-            ExecuteWorkoutScreen(
-                navigateEvent = navigateEvent,
-                trainingId = navBackStackEntry.arguments?.getLong(TrainingDestination.ARG) ?: 0)
+            val vm: HistoryViewModel = hiltViewModel()
+//            vm.initNavigate(navigateEvent)
+            val arg = listOf((navBackStackEntry.arguments?.getLong(TrainingDestination.ARG) ?: 0).toString())
+            ExecuteWorkDestination.Show(vm, arg)
+//            ExecuteWorkoutScreen(
+//                navigateEvent = navigateEvent,
+//                trainingId = navBackStackEntry.arguments?.getLong(TrainingDestination.ARG) ?: 0)
         }
     )
 }
 fun NavGraphBuilder.history(navigateEvent: NavigateEventImpl) {
     template(
         routeTo = HistoryDestination.route,
-        content = { HistoryScreen() }
+        content = {
+            val vm: HistoryViewModel = hiltViewModel()
+//            vm.initNavigate(navigateEvent)
+            HistoryDestination.Show(vm, emptyList()) }
     )
 }
 fun NavGraphBuilder.settings(navigateEvent: NavigateEventImpl) {
     template(
         routeTo = SettingDestination.route,
-        content = { SettingScreen(navigateEvent = navigateEvent) }
+        content = {
+            val vm: SettingViewModel = hiltViewModel()
+            vm.initNavigate(navigateEvent)
+            SettingDestination.Show(vm, emptyList())}
     )
 }
 
@@ -100,7 +119,6 @@ val popEnterTransition: AnimatedContentTransitionScope<NavBackStackEntry>.() -> 
     val direction: Double = if (targetScreen == TrainingsDestination.route) (1/3.0) else (1/3.0)
     slideInHorizontally(initialOffsetX = { (it * direction).toInt() }, animationSpec = tweenM())
 }
-
 val popExitTransition: AnimatedContentTransitionScope<NavBackStackEntry>.() -> ExitTransition = {
     val targetScreen = targetState.destination.route ?: TrainingsDestination.route
     val direction: Double = if (targetScreen == TrainingsDestination.route) (1/3.0) else (1/3.0)

@@ -19,7 +19,7 @@ fun NavHostApp(
         trainings( navigateEvent = navEvent)
         training(  navigateEvent = navEvent)
         history(navigateEvent = navEvent)
-        playWorkout(navigateEvent = navEvent)
+        executeWorkout(navigateEvent = navEvent)
         settings(navigateEvent = navEvent)
     }
 }

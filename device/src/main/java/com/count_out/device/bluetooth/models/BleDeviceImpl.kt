@@ -2,7 +2,7 @@ package com.count_out.device.bluetooth.models
 
 import android.annotation.SuppressLint
 import android.bluetooth.BluetoothDevice
-import com.count_out.entity.entity.router.DeviceUI
+import com.count_out.domain.entity.router.DeviceUI
 
 open class BleDeviceImpl(
     override var name: String = "",

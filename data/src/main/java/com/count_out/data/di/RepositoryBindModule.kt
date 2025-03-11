@@ -13,7 +13,7 @@ import com.count_out.data.repository.SettingsRepoImpl
 import com.count_out.data.repository.SpeechRepoImpl
 import com.count_out.data.repository.TrainingRepoImpl
 import com.count_out.data.repository.WeatherRepoImpl
-import com.count_out.entity.entity.workout.Activity
+import com.count_out.domain.entity.workout.Activity
 import com.count_out.domain.repository.BluetoothRepo
 import com.count_out.domain.repository.CountOutServiceRepo
 import com.count_out.domain.repository.LocationRepo

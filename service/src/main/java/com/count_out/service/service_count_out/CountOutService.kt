@@ -7,10 +7,10 @@ import android.os.IBinder
 import android.os.SystemClock
 import com.count_out.data.models.CommandService
 import com.count_out.data.models.WorkoutRecordImpl
-import com.count_out.data.router.DataForServ
 import com.count_out.data.router.Router
 import com.count_out.data.router.models.DataForUI
-import com.count_out.entity.enums.RunningState
+import com.count_out.domain.entity.enums.RunningState
+import com.count_out.domain.entity.router.DataForServ
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers

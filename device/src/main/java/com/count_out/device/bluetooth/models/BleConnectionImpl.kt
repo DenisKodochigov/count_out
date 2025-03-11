@@ -2,8 +2,8 @@ package com.count_out.device.bluetooth.models
 
 import android.bluetooth.BluetoothDevice
 import android.bluetooth.BluetoothGatt
-import com.count_out.entity.entity.bluetooth.BleConnection
-import com.count_out.entity.enums.ErrorBleService
+import com.count_out.domain.entity.bluetooth.BleConnection
+import com.count_out.domain.entity.enums.ErrorBleService
 import kotlinx.coroutines.flow.MutableStateFlow
 
 class BleConnectionImpl (

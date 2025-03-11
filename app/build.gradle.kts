@@ -23,11 +23,6 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables { useSupportLibrary = true }
     }
-//    dynamicFeatures.add( ":domain")
-//    dynamicFeatures.add( ":data")
-////    dynamicFeatures.add( ":device")
-//    dynamicFeatures.add( ":services")
-//    dynamicFeatures.add( ":framework")
     repositories {
         google()
         mavenLocal()
@@ -73,10 +68,12 @@ android {
 }
 
 dependencies {
+    implementation(project(":data"))
+    implementation(project(":device"))
     implementation(project(":domain"))
-    implementation(project(":entity"))
-//    implementation(project(":data"))
-//    implementation(project(":framework"))
+    implementation(project(":service"))
+    implementation(project(":framework"))
+    implementation(project(":presentation"))
     implementation(libs.bundles.core)
     implementation(libs.bundles.lifecycle)
     //Hilt

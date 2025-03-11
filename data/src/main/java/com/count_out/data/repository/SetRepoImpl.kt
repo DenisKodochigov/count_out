@@ -2,8 +2,8 @@ package com.count_out.data.repository
 
 import com.count_out.data.models.SetImpl
 import com.count_out.data.source.room.SetSource
-import com.count_out.entity.entity.workout.ActionWithSet
-import com.count_out.entity.entity.workout.Set
+import com.count_out.domain.entity.workout.ActionWithSet
+import com.count_out.domain.entity.workout.Set
 import com.count_out.domain.repository.trainings.SetRepo
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject

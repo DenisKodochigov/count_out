@@ -3,7 +3,6 @@ package com.count_out.app.presentation.navigation
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
-import com.count_out.app.old.entity.DEFAULT_SCREEN
 
 fun NavHostController.navigateToScreen(route: String) = this.navigate(route) { launchSingleTop = true }
 fun NavHostController.navigateToScreenTraining(trainingId: Long) {
@@ -15,7 +14,7 @@ fun NavHostController.navigateToScreenExecuteWorkout(trainingId: Long) {
 @Composable
 fun NavHostController.backScreenDestination(): ScreenDestination{
     return listScreens.find{
-        it.routeWithArgs == this.currentBackStackEntryAsState().value?.destination?.route } ?: DEFAULT_SCREEN
+        it.routeWithArgs == this.currentBackStackEntryAsState().value?.destination?.route } ?: TrainingsDestination
 }
 
 

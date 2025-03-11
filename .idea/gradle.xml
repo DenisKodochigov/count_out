@@ -14,12 +14,11 @@
             <option value="$PROJECT_DIR$/data" />
             <option value="$PROJECT_DIR$/device" />
             <option value="$PROJECT_DIR$/domain" />
-            <option value="$PROJECT_DIR$/entity" />
             <option value="$PROJECT_DIR$/framework" />
+            <option value="$PROJECT_DIR$/presentation" />
             <option value="$PROJECT_DIR$/service" />
           </set>
         </option>
-        <option name="resolveExternalAnnotations" value="false" />
       </GradleProjectSettings>
     </option>
   </component>

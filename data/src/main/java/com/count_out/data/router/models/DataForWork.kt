@@ -1,13 +1,12 @@
 package com.count_out.data.router.models
 
 import com.count_out.data.models.SetImpl
-import com.count_out.domain.R
-import com.count_out.entity.entity.workout.Exercise
-import com.count_out.entity.entity.NextExercise
-import com.count_out.entity.entity.StepTraining
-import com.count_out.entity.entity.workout.Training
-import com.count_out.entity.enums.Goal
-import com.count_out.entity.enums.Units
+import com.count_out.domain.entity.NextExercise
+import com.count_out.domain.entity.StepTraining
+import com.count_out.domain.entity.enums.Goal
+import com.count_out.domain.entity.workout.Exercise
+import com.count_out.domain.entity.workout.Training
+import com.count_out.domain.entity.enums.Units
 import kotlinx.coroutines.flow.MutableStateFlow
 
 data class DataForWork (

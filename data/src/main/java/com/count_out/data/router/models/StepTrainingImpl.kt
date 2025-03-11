@@ -1,10 +1,10 @@
 package com.count_out.data.router.models
 
-import com.count_out.entity.entity.workout.Exercise
-import com.count_out.entity.entity.NextExercise
-import com.count_out.entity.entity.workout.Round
-import com.count_out.entity.entity.workout.Set
-import com.count_out.entity.entity.StepTraining
+import com.count_out.domain.entity.NextExercise
+import com.count_out.domain.entity.StepTraining
+import com.count_out.domain.entity.workout.Exercise
+import com.count_out.domain.entity.workout.Round
+import com.count_out.domain.entity.workout.Set
 
 data class StepTrainingImpl(
     override val round: Round?,

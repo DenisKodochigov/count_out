@@ -9,24 +9,24 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.sp
 import com.count_out.app.R
 
-val interBold = TextStyle(fontFamily = FontFamily(Font(R.font.inter_bold)))
-val interBold16 = interBold.copy(fontSize = 16.sp)
+//val interBold = TextStyle(fontFamily = FontFamily(Font(R.font.inter_bold)))
+//val interBold16 = interBold.copy(fontSize = 16.sp)
+//
+//val interLight = TextStyle(fontFamily = FontFamily(Font(R.font.inter_light)))
+//val interLight12 = interLight.copy(fontSize = 12.sp)
+//val interLight14Start = interLight.copy(fontSize = 14.sp, textAlign = TextAlign.Start, textDecoration = TextDecoration.None)
+//
+//val interThin = TextStyle(fontFamily = FontFamily(Font(R.font.inter_thin)))
+//val interThin12Start = interThin.copy(fontSize = 12.sp, textAlign = TextAlign.Start)
+//
+//val interReg = TextStyle(fontFamily = FontFamily(Font(R.font.inter_regular)))
+//val interReg12 = interReg.copy(fontSize = 12.sp)
+//val interReg14 = interReg.copy(fontSize = 14.sp)
+//
+//val alumBodySmall = Typography().bodySmall.copy(fontFamily = FontFamily(Font(R.font.alumnisans_regular)))
+//val alumBodyMedium = Typography().bodyMedium.copy(fontFamily = FontFamily(Font(R.font.alumnisans_regular)))
+//val alumBodyLarge = Typography().bodyLarge.copy(fontFamily = FontFamily(Font(R.font.alumnisans_regular)))
 
-val interLight = TextStyle(fontFamily = FontFamily(Font(R.font.inter_light)))
-val interLight12 = interLight.copy(fontSize = 12.sp)
-val interLight14Start = interLight.copy(fontSize = 14.sp, textAlign = TextAlign.Start, textDecoration = TextDecoration.None)
-
-val interThin = TextStyle(fontFamily = FontFamily(Font(R.font.inter_thin)))
-val interThin12Start = interThin.copy(fontSize = 12.sp, textAlign = TextAlign.Start)
-
-val interReg = TextStyle(fontFamily = FontFamily(Font(R.font.inter_regular)))
-val interReg12 = interReg.copy(fontSize = 12.sp)
-val interReg14 = interReg.copy(fontSize = 14.sp)
-
-val mTypography = Typography()
-val alumBodySmall = mTypography.bodySmall.copy(fontFamily = FontFamily(Font(R.font.alumnisans_regular)))
-val alumBodyMedium = mTypography.bodyMedium.copy(fontFamily = FontFamily(Font(R.font.alumnisans_regular)))
-val alumBodyLarge = mTypography.bodyLarge.copy(fontFamily = FontFamily(Font(R.font.alumnisans_regular)))
 
 //    headlineLarge = TextStyle(
 //        fontWeight = FontWeight.SemiBold,

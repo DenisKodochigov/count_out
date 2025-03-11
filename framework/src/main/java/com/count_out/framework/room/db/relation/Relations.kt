@@ -9,10 +9,10 @@ import com.count_out.data.models.RoundImpl
 import com.count_out.data.models.SetImpl
 import com.count_out.data.models.SpeechKitImpl
 import com.count_out.data.models.TrainingImpl
-import com.count_out.entity.enums.Goal
-import com.count_out.entity.enums.RoundType
-import com.count_out.entity.enums.Units
-import com.count_out.entity.enums.Zone
+import com.count_out.domain.entity.enums.Goal
+import com.count_out.domain.entity.enums.RoundType
+import com.count_out.domain.entity.enums.Units
+import com.count_out.domain.entity.enums.Zone
 import com.count_out.framework.room.db.activity.ActivityTable
 import com.count_out.framework.room.db.exercise.ExerciseTable
 import com.count_out.framework.room.db.ring.RingTable

@@ -1,6 +1,8 @@
 package com.count_out.data.models
 
-import com.count_out.entity.entity.workout.Exercise
+import com.count_out.domain.entity.workout.Exercise
+import com.count_out.domain.entity.workout.SpeechKit
+import com.count_out.domain.entity.workout.Set
 
 data class ExerciseImpl(
     override val idExercise: Long,
@@ -10,8 +12,8 @@ data class ExerciseImpl(
     override val activity: ActivityImpl?,
     override val activityId: Long,
     override val speechId: Long,
-    override val speech: SpeechKitImpl?,
-    override val sets: List<SetImpl>,
+    override val speech: SpeechKit?,
+    override val sets: List<Set>,
     override val amountSet: Int,
     override val duration: Int
 ): Exercise

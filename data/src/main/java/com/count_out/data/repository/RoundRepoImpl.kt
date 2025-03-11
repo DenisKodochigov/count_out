@@ -1,7 +1,7 @@
 package com.count_out.data.repository
 
 import com.count_out.data.source.room.RoundSource
-import com.count_out.entity.entity.workout.Round
+import com.count_out.domain.entity.workout.Round
 import com.count_out.domain.repository.trainings.RoundRepo
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject

@@ -2,12 +2,23 @@ package com.count_out.data.repository
 
 import com.count_out.data.models.SpeechKitImpl
 import com.count_out.data.source.room.SpeechKitSource
-import com.count_out.entity.entity.workout.SpeechKit
+import com.count_out.domain.entity.workout.SpeechKit
 import com.count_out.domain.repository.trainings.SpeechRepo
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 class SpeechRepoImpl @Inject constructor(private val speechKitSource: SpeechKitSource): SpeechRepo {
+    override fun get(id: Long): Flow<SpeechKit> {
+        TODO("Not yet implemented")
+    }
+
+    override fun del(speechKit: SpeechKit) {
+        TODO("Not yet implemented")
+    }
+
+    override fun add(speechKit: SpeechKit?): Flow<SpeechKit> {
+        TODO("Not yet implemented")
+    }
 //    override fun get(id: Long): Flow<SpeechKit> = speechKitSource.get(id)
 //
 //    override fun del(speechKit: SpeechKit) { speechKitSource.del(speechKit) }

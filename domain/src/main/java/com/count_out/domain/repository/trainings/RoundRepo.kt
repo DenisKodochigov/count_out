@@ -1,6 +1,6 @@
 package com.count_out.domain.repository.trainings
 
-import com.count_out.entity.entity.workout.Round
+import com.count_out.domain.entity.workout.Round
 import kotlinx.coroutines.flow.Flow
 
 interface RoundRepo {

@@ -1,7 +1,7 @@
 package com.count_out.data.source.room
 
 import com.count_out.data.models.RingImpl
-import com.count_out.entity.entity.workout.Ring
+import com.count_out.domain.entity.workout.Ring
 import kotlinx.coroutines.flow.Flow
 
 interface RingSource {

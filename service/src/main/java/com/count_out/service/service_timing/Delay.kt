@@ -1,7 +1,7 @@
 package com.count_out.service.service_timing
 
 import android.os.SystemClock
-import com.count_out.entity.enums.RunningState
+import com.count_out.domain.entity.enums.RunningState
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 

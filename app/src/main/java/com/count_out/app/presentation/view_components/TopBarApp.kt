@@ -10,12 +10,13 @@ import androidx.compose.material.icons.filled.MoreHoriz
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.MaterialTheme.typography
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.count_out.app.presentation.theme.mTypography
+import com.count_out.presentation.view_element.TextAppEllipsis
 
 @Composable
 fun CollapsingToolbar(
@@ -35,7 +36,7 @@ fun CollapsingToolbar(
         }
         TextAppEllipsis(
             text = text,
-            style = mTypography.headlineMedium,
+            style = typography.headlineMedium,
             modifier = Modifier.weight(1f).fillMaxWidth()
         )
         IconButton( onClick = moreHoriz) {

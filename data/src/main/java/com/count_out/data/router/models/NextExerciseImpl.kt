@@ -1,6 +1,7 @@
 package com.count_out.data.router.models
 
-import com.count_out.entity.entity.NextExercise
+import com.count_out.domain.entity.NextExercise
+
 
 data class NextExerciseImpl(
     override val nextActivityName: String,

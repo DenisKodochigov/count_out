@@ -1,6 +1,6 @@
 package com.count_out.data.router
 
-import com.count_out.data.router.models.Buffer
+import com.count_out.data.router.models.BufferImpl
 import com.count_out.data.router.models.DataForBle
 import com.count_out.data.router.models.DataForNotification
 import com.count_out.data.router.models.DataForSite
@@ -10,7 +10,9 @@ import com.count_out.data.router.models.DataFromBle
 import com.count_out.data.router.models.DataFromSite
 import com.count_out.data.router.models.DataFromWork
 import com.count_out.data.router.models.TemporaryBase
-import com.count_out.entity.enums.RunningState
+import com.count_out.domain.entity.router.Buffer
+import com.count_out.domain.entity.enums.RunningState
+import com.count_out.domain.entity.router.DataForServ
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -33,7 +35,7 @@ class Router(private val dataForServ: DataForServ) {
     val dataForBase: MutableStateFlow<TemporaryBase?> = MutableStateFlow(null)
 
     private fun bufferInit(dataFromBle: DataFromBle, dataFromWork: DataFromWork, dataFromSite: DataFromSite): Buffer {
-        return Buffer(
+        return BufferImpl(
             heartRate = dataFromBle.heartRate,
             scannedBle = dataFromBle.scannedBle,
             foundDevices = dataFromBle.foundDevices,

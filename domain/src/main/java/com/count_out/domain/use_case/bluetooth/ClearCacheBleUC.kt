@@ -2,7 +2,6 @@ package com.count_out.domain.use_case.bluetooth
 
 import com.count_out.domain.repository.BluetoothRepo
 import com.count_out.domain.use_case.UseCase
-import com.count_out.domain.use_case.UseCase.Configuration
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject

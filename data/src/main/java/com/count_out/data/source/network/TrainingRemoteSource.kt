@@ -1,7 +1,8 @@
 package com.count_out.data.source.network
 
-import com.count_out.entity.entity.workout.Training
+import com.count_out.domain.entity.workout.Training
 import kotlinx.coroutines.flow.Flow
+
 
 interface TrainingRemoteSource {
     fun getTraining(id: Long): Flow<Training>

@@ -1,9 +1,10 @@
 package com.count_out.data.models
 
-import com.count_out.entity.entity.workout.Exercise
-import com.count_out.entity.entity.workout.Parameter
-import com.count_out.entity.entity.workout.Ring
-import com.count_out.entity.entity.workout.SpeechKit
+import com.count_out.domain.entity.workout.Exercise
+import com.count_out.domain.entity.workout.Parameter
+import com.count_out.domain.entity.workout.Ring
+import com.count_out.domain.entity.workout.SpeechKit
+
 
 data class RingImpl(
     override val idRing: Long,

@@ -6,6 +6,7 @@ import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.ColorScheme
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Typography
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.dynamicDarkColorScheme
 import androidx.compose.material3.dynamicLightColorScheme
@@ -26,18 +27,7 @@ import com.count_out.app.presentation.navigation.ScreenDestination
         dynamicColorVersion && !darkTheme -> dynamicLightColorScheme(LocalContext.current)
         else -> selectSchemeForContrast(darkTheme)
     }
-//    WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS
-//    val view = LocalView.current
-//    if (!view.isInEditMode) {
-//        if (Build.VERSION.SDK_INT < 35){
-////            SideEffect {
-////                val window = (view.context as Activity).window
-////                window.statusBarColor = colorScheme.primary.toArgb()
-////                WindowCompat.getInsetsController(window, view).isAppearanceLightStatusBars = darkTheme
-////            }
-//        }
-//    }
-    MaterialTheme(colorScheme = colorScheme, content = content, shapes = shapes, typography = mTypography)
+    MaterialTheme(colorScheme = colorScheme, content = content, shapes = shapes)
 }
 
 @Composable

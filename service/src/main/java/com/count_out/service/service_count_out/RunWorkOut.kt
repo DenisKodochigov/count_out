@@ -5,10 +5,10 @@ import com.count_out.data.models.SetImpl
 import com.count_out.data.models.SpeechImpl
 import com.count_out.data.router.models.DataForWork
 import com.count_out.data.router.models.DataFromWork
-import com.count_out.entity.entity.workout.SpeechKit
-import com.count_out.entity.enums.Goal
-import com.count_out.entity.enums.RunningState
-import com.count_out.entity.enums.Units
+import com.count_out.domain.entity.enums.Goal
+import com.count_out.domain.entity.workout.SpeechKit
+import com.count_out.domain.entity.enums.RunningState
+import com.count_out.domain.entity.enums.Units
 import com.count_out.framework.text_to_speech.SpeechManager
 import com.count_out.service.service_timing.Delay
 import kotlinx.coroutines.CoroutineScope

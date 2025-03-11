@@ -1,8 +1,8 @@
 package com.count_out.data.source.room
 
 import com.count_out.data.models.SetImpl
-import com.count_out.entity.entity.workout.ActionWithSet
-import com.count_out.entity.entity.workout.Set
+import com.count_out.domain.entity.workout.ActionWithSet
+import com.count_out.domain.entity.workout.Set
 import kotlinx.coroutines.flow.Flow
 
 interface SetSource {
