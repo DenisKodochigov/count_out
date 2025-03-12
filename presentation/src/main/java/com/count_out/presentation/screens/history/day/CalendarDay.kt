@@ -11,7 +11,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import com.count_out.presentation.modeles.elevationNull
+import com.count_out.presentation.models.elevationNull
 import com.count_out.presentation.screens.history.HistoryScreenState
 import com.count_out.presentation.view_element.TextApp
 

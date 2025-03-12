@@ -14,5 +14,5 @@ class AddActivityUC @Inject constructor(
     data class Response(val activity: Activity): UseCase.Response
 
     override fun executeData(input: Request): Flow<Response> =
-        repo.add(input.activity).map { Response(it) }
+        repo.copy(input.activity).map { Response(it) }
 }

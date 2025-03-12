@@ -14,5 +14,5 @@ class ChangeSequenceExerciseUC @Inject constructor(
     override fun executeData(input: Request): Flow<Response> =
         repo.changeSequenceExercise(input.item).map { Response(it) }
     data class Request(val item: DataForChangeSequence): UseCase.Request
-    data class Response(val exercise: Exercise): UseCase.Response
+    data class Response(val exercise: List<Exercise>): UseCase.Response
 }

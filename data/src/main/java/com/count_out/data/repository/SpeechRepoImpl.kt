@@ -9,22 +9,16 @@ import javax.inject.Inject
 
 class SpeechRepoImpl @Inject constructor(private val speechKitSource: SpeechKitSource): SpeechRepo {
     override fun get(id: Long): Flow<SpeechKit> {
-        TODO("Not yet implemented")
+        return speechKitSource.get(id)
     }
 
     override fun del(speechKit: SpeechKit) {
-        TODO("Not yet implemented")
+        speechKitSource.del(speechKit)
     }
 
     override fun add(speechKit: SpeechKit?): Flow<SpeechKit> {
-        TODO("Not yet implemented")
+        return get(speechKitSource.copy(speechKit ?: SpeechKitImpl()))
     }
-//    override fun get(id: Long): Flow<SpeechKit> = speechKitSource.get(id)
-//
-//    override fun del(speechKit: SpeechKit) { speechKitSource.del(speechKit) }
-//
-//    override fun add(speechKit: SpeechKit?): Flow<SpeechKit> = speechKitSource.add(speechKit)
-
     override fun update(speechKit: SpeechKit): Flow<SpeechKit> =
-        speechKitSource.update(speechKit as SpeechKitImpl)
+        get(speechKit.idSpeechKit)
 }

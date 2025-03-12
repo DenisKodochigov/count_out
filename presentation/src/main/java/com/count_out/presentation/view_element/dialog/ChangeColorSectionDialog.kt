@@ -38,8 +38,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.count_out.presentation.R
-import com.count_out.presentation.modeles.Dimen
-import com.count_out.presentation.modeles.UPDOWN
+import com.count_out.presentation.models.Dimen
+import com.count_out.presentation.models.UPDOWN
 import com.count_out.presentation.view_element.TextApp
 import com.count_out.presentation.view_element.TextButtonOK
 import com.count_out.presentation.view_element.custom_view.IconQ

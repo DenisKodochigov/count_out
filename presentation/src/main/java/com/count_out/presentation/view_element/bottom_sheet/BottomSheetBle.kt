@@ -26,8 +26,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.count_out.presentation.R
-import com.count_out.presentation.modeles.Dimen.bsHeightWindowsListBle
-import com.count_out.presentation.modeles.Dimen.bsSpacerBottomHeight
+import com.count_out.presentation.models.Dimen.bsHeightWindowsListBle
+import com.count_out.presentation.models.Dimen.bsSpacerBottomHeight
 import com.count_out.presentation.screens.prime.Action
 import com.count_out.presentation.screens.settings.SettingsEvent
 import com.count_out.presentation.screens.settings.SettingsState

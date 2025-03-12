@@ -12,7 +12,7 @@ class AddTrainingUC @Inject constructor(
     private val repo: TrainingRepo,
 ): UseCase<AddTrainingUC.Request, AddTrainingUC.Response>(configuration)  {
 
-    override fun executeData(input: Request): Flow<Response> = repo.add().map{ Response(it) }
-    data object Request: UseCase.Request
+    override fun executeData(input: Request): Flow<Response> = repo.copy(input.training).map{ Response(it) }
+    data class Request(val training: Training): UseCase.Request
     data class Response(val trainings: List<Training>): UseCase.Response
 }

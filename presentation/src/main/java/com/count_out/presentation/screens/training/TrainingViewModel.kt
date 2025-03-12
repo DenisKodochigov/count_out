@@ -1,7 +1,11 @@
 package com.count_out.presentation.screens.training
 
 import androidx.lifecycle.viewModelScope
-import com.count_out.domain.use_case.activity.SelectActivityUC
+import com.count_out.domain.entity.DataForChangeSequence
+import com.count_out.domain.entity.workout.Activity
+import com.count_out.domain.entity.workout.Exercise
+import com.count_out.domain.entity.workout.Set
+import com.count_out.domain.entity.workout.Training
 import com.count_out.domain.use_case.activity.SetColorActivityUC
 import com.count_out.domain.use_case.activity.UpdateActivityUC
 import com.count_out.domain.use_case.exercise.AddExerciseUC
@@ -15,18 +19,10 @@ import com.count_out.domain.use_case.set.UpdateSetUC
 import com.count_out.domain.use_case.trainings.DeleteTrainingUC
 import com.count_out.domain.use_case.trainings.GetTrainingUC
 import com.count_out.domain.use_case.trainings.UpdateTrainingUC
+import com.count_out.presentation.models.TrainingImpl
 import com.count_out.presentation.screens.prime.Event
 import com.count_out.presentation.screens.prime.PrimeViewModel
 import com.count_out.presentation.screens.prime.ScreenState
-import com.count_out.domain.entity.DataForChangeSequence
-import com.count_out.domain.entity.workout.ActionWithActivity
-import com.count_out.domain.entity.workout.ActionWithSet
-import com.count_out.domain.entity.workout.Activity
-import com.count_out.domain.entity.workout.Exercise
-import com.count_out.domain.entity.workout.Training
-import com.count_out.presentation.screens.training.TrainingConverter
-import com.count_out.presentation.screens.training.TrainingEvent
-import com.count_out.presentation.screens.training.TrainingState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
@@ -41,7 +37,6 @@ import javax.inject.Inject
     private val copyExercise: CopyExerciseUC,
     private val delExercise: DeleteExerciseUC,
     private val changeSequenceExercise: ChangeSequenceExerciseUC,
-    private val selectActivity: SelectActivityUC,
     private val setColorActivity: SetColorActivityUC,
     private val updateActivity: UpdateActivityUC,
     private val addSet: AddSetUC,
@@ -62,7 +57,7 @@ import javax.inject.Inject
             is TrainingEvent.CopyExercise -> { copyExercise(event.exercise) }
             is TrainingEvent.DelExercise -> { deleteExercise(event.exercise) }
             is TrainingEvent.ChangeSequenceExercise -> { changeSequenceExercise(event.item) }
-            is TrainingEvent.SelectActivity -> { selectActivity(event.activity) }
+//            is TrainingEvent.SelectActivity -> { selectActivity(event.activity) }
             is TrainingEvent.SetColorActivity -> { setColorActivity(event.activity) }
             is TrainingEvent.UpdateActivity -> { updateActivity(event.activity) }
             is TrainingEvent.AddSet -> { addSet(event.item) }
@@ -73,7 +68,7 @@ import javax.inject.Inject
     }
     fun getTraining(id: Long) {
         viewModelScope.launch {
-            getTraining.execute( GetTrainingUC.Request(id))
+            getTraining.execute( GetTrainingUC.Request(TrainingImpl(idTraining = id)))
                 .map { converter.convert(it) }.collect { submitState(it) }
         }
     }
@@ -113,12 +108,12 @@ import javax.inject.Inject
                 .map { converter.convert(it) }.collect { submitState(it) }
         }
     }
-    private fun selectActivity(activity: ActionWithActivity){
-        viewModelScope.launch {
-            selectActivity.execute( SelectActivityUC.Request(activity))
-                .map { converter.convert(it) }.collect { submitState(it) }
-        }
-    }
+//    private fun selectActivity(activity: ActionWithActivity){
+//        viewModelScope.launch {
+//            selectActivity.execute( SelectActivityUC.Request(activity))
+//                .map { converter.convert(it) }.collect { submitState(it) }
+//        }
+//    }
     private fun setColorActivity(activity: Activity){
         viewModelScope.launch {
             setColorActivity.execute( SetColorActivityUC.Request(activity))
@@ -131,25 +126,25 @@ import javax.inject.Inject
                 .map { converter.convert(it) }.collect { submitState(it) }
         }
     }
-    private fun addSet(item: ActionWithSet){
+    private fun addSet(item: Set){
         viewModelScope.launch {
             addSet.execute( AddSetUC.Request(item))
                 .map { converter.convert(it) }.collect { submitState(it) }
         }
     }
-    private fun copySet(item: ActionWithSet){
+    private fun copySet(item: Set){
         viewModelScope.launch {
             copySet.execute( CopySetUC.Request(item))
                 .map { converter.convert(it) }.collect { submitState(it) }
         }
     }
-    private fun deleteSet(item: ActionWithSet){
+    private fun deleteSet(item: Set){
         viewModelScope.launch {
             deleteSet.execute( DeleteSetUC.Request(item))
                 .map { converter.convert(it) }.collect { submitState(it) }
         }
     }
-    private fun changeSet(item: ActionWithSet){
+    private fun changeSet(item: Set){
         viewModelScope.launch {
             changeSet.execute( UpdateSetUC.Request(item))
                 .map { converter.convert(it) }.collect { submitState(it) }

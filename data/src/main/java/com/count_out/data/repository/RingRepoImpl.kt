@@ -8,14 +8,22 @@ import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 class RingRepoImpl @Inject constructor(private val ringSource: RingSource): RingRepo {
-    override fun get(id: Long): Flow<Ring> = ringSource.get(id)
+    override fun get(ring: Ring): Flow<Ring> = ringSource.get(ring)
 
     override fun gets(trainingId: Long): Flow<List<Ring>> = ringSource.gets(trainingId)
 
-    override fun del(ring: Ring) = ringSource.del(ring as RingImpl)
+    override fun del(ring: Ring): Flow<List<Ring>> {
+        ringSource.del(ring as RingImpl)
+        return ringSource.gets(ring.trainingId)
+    }
 
-    override fun add(trainingId: Long): Flow<List<Ring>> = ringSource.add(trainingId)
-    override fun copy(ring: Ring): Flow<List<Ring>> = ringSource.copy(ring as RingImpl)
+    override fun copy(ring: Ring): Flow<List<Ring>> {
+        ringSource.copy(ring as RingImpl)
+        return ringSource.gets(ring.trainingId)
+    }
 
-    override fun update(ring: Ring): Flow<Ring> = ringSource.update(ring as RingImpl)
+    override fun update(ring: Ring): Flow<List<Ring>> {
+        ringSource.update(ring as RingImpl)
+        return ringSource.gets(ring.trainingId)
+    }
 }

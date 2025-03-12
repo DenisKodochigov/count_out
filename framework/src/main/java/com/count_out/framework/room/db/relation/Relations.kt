@@ -85,8 +85,8 @@ data class ExerciseRel(
             speech = speechKit?.toSpeechKit(),
             speechId = exerciseTable.speechId,
             sets = sets?.map { it.toSet() } ?: emptyList(),
-            amountSet = TODO(),
-            duration = TODO()
+            amountSet = 0,
+            duration = 0
         )
     }
 }
@@ -108,8 +108,8 @@ data class RoundRel(
             speechId = round.speechId,
             speech = speechKit?.toSpeechKit(),
             trainingId = round.trainingId,
-            amount = TODO(),
-            duration = TODO(),
+            amount = 0,
+            duration = ParameterImpl(0.0, Units.M),
         )
     }
 }
@@ -127,14 +127,15 @@ data class RingRel(
             speechId = ring.speechId,
             speech = speechKit?.toSpeechKit(),
             exercise = exercise?.map { it.toExercise() } ?: emptyList(),
-            amount = TODO(),
-            duration = TODO(),  ///.sortedBy{ it.idView }.sortedBy{ it.idView } реализовать в usecase
+            amount = 0,
+            duration = ParameterImpl(0.0, Units.M),  ///.sortedBy{ it.idView }.sortedBy{ it.idView } реализовать в usecase
         )
     }
 }
 data class TrainingRel(
     @Embedded val training: TrainingTable,
     @Relation(parentColumn = "idTraining", entityColumn = "trainingId", entity = RoundTable::class) val rounds: List<RoundRel>?,
+    @Relation(parentColumn = "idTraining", entityColumn = "trainingId", entity = RingTable::class) val rings: List<RingRel>?,
     @Relation(parentColumn = "speechId", entityColumn = "idSpeechKit", entity = SpeechKitTable::class) val speechKit: SpeechKitRel?,
 ){
     fun toTraining(): TrainingImpl {
@@ -147,7 +148,8 @@ data class TrainingRel(
             name = training.name,
             rounds = rounds?.map { it.toRound() } ?: emptyList(),
             speech = speechKit?.toSpeechKit(),
-            speechId = training.speechId
+            speechId = training.speechId,
+            rings = rings?.map { it.toRing() } ?: emptyList()
         )
     }
 }

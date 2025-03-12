@@ -15,7 +15,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import com.count_out.presentation.screens.executor.ExecuteWorkoutScreenState
 import com.count_out.presentation.R
-import com.count_out.presentation.modeles.Dimen
+import com.count_out.presentation.models.Dimen
 import com.count_out.presentation.view_element.ButtonsOkCancel
 import com.count_out.presentation.view_element.ModalBottomSheetApp
 import com.count_out.presentation.view_element.TextApp

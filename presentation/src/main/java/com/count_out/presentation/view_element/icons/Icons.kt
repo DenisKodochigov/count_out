@@ -29,7 +29,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.MaterialTheme.shapes
-import androidx.compose.material3.MaterialTheme.typography
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -49,12 +48,12 @@ import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
-import com.count_out.presentation.modeles.Dimen
-import com.count_out.presentation.modeles.Dimen.TAB_FADE_IN_ANIMATION_DELAY
-import com.count_out.presentation.modeles.Dimen.TAB_FADE_IN_ANIMATION_DURATION
-import com.count_out.presentation.modeles.Dimen.TAB_FADE_OUT_ANIMATION_DURATION
-import com.count_out.presentation.modeles.Dimen.sizeBetweenIcon
-import com.count_out.presentation.modeles.Dimen.sizeIcon
+import com.count_out.presentation.models.Dimen
+import com.count_out.presentation.models.Dimen.TAB_FADE_IN_ANIMATION_DELAY
+import com.count_out.presentation.models.Dimen.TAB_FADE_IN_ANIMATION_DURATION
+import com.count_out.presentation.models.Dimen.TAB_FADE_OUT_ANIMATION_DURATION
+import com.count_out.presentation.models.Dimen.sizeBetweenIcon
+import com.count_out.presentation.models.Dimen.sizeIcon
 import com.count_out.presentation.view_element.TextApp
 import com.count_out.presentation.view_element.custom_view.IconQ
 

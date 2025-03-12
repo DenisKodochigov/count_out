@@ -1,11 +1,8 @@
 package com.count_out.data
 
 import com.count_out.data.models.WeatherImpl
-import com.count_out.data.repository.TrainingRepoImpl
 import com.count_out.data.repository.WeatherRepoImpl
 import com.count_out.data.source.network.WeatherSource
-import com.count_out.data.source.room.RoundSource
-import com.count_out.data.source.room.TrainingSource
 import com.count_out.domain.entity.weather.Weather
 import junit.framework.TestCase.assertEquals
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -19,9 +16,6 @@ import java.util.TimeZone
 
 class WeatherRepoImplTest {
     private val weatherSource = mock<WeatherSource>()
-    private val trainingSource = mock<TrainingSource>()
-    private val roundSource = mock<RoundSource>()
-    private val trainingRepoImpl = TrainingRepoImpl(trainingSource, roundSource)
     private val weatherRepoImpl = WeatherRepoImpl(weatherSource)
 
     val target1Weather = WeatherImpl(time=0, interval = 0, temperature2m = 0.0, relativeHumidity2m = 0,

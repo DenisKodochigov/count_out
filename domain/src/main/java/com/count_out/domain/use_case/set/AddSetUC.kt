@@ -1,6 +1,5 @@
 package com.count_out.domain.use_case.set
 
-import com.count_out.domain.entity.workout.ActionWithSet
 import com.count_out.domain.entity.workout.Set
 import com.count_out.domain.repository.trainings.SetRepo
 import com.count_out.domain.use_case.UseCase
@@ -11,7 +10,7 @@ import javax.inject.Inject
 class AddSetUC @Inject constructor(
     configuration: Configuration, private val repo: SetRepo
 ): UseCase<AddSetUC.Request, AddSetUC.Response>(configuration)  {
-    override fun executeData(input: Request): Flow<Response> = repo.add(input.item).map { Response(it) }
-    data class Request(val item: ActionWithSet): UseCase.Request
+    override fun executeData(input: Request): Flow<Response> = repo.copy(input.item).map { Response(it) }
+    data class Request(val item: Set): UseCase.Request
     data class Response(val sets: List<Set>): UseCase.Response
 }

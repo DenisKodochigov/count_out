@@ -42,7 +42,7 @@ import com.count_out.presentation.view_element.custom_view.Frame
 import com.count_out.presentation.view_element.icons.AnimateIcon
 import com.count_out.presentation.view_element.icons.IconSingle
 import com.count_out.presentation.view_element.icons.IconsCollapsing
-import com.count_out.presentation.modeles.alumBodySmall
+import com.count_out.presentation.models.alumBodySmall
 
 @Composable fun SettingScreen(viewModel: SettingViewModel){
 //    val viewModel: SettingViewModel = hiltViewModel()

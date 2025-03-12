@@ -19,9 +19,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.count_out.presentation.modeles.ActionWithActivityImpl
-import com.count_out.presentation.modeles.ActivityImpl
-import com.count_out.presentation.modeles.Dimen
+import com.count_out.presentation.models.ActionWithActivityImpl
+import com.count_out.presentation.models.ActivityImpl
+import com.count_out.presentation.models.Dimen
 import com.count_out.presentation.screens.prime.Action
 import com.count_out.presentation.screens.training.TrainingEvent
 import com.count_out.presentation.screens.training.TrainingState

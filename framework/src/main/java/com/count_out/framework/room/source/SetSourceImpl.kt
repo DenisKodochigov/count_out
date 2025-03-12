@@ -4,11 +4,9 @@ import com.count_out.data.models.SetImpl
 import com.count_out.data.models.SpeechKitImpl
 import com.count_out.data.source.room.SetSource
 import com.count_out.data.source.room.SpeechKitSource
-import com.count_out.domain.entity.workout.ActionWithSet
 import com.count_out.framework.room.db.set.SetDao
 import com.count_out.framework.room.db.set.SetTable
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
@@ -16,39 +14,27 @@ class SetSourceImpl @Inject constructor(
     private val speechKitSource: SpeechKitSource,
     private val setDao: SetDao): SetSource {
 
-    override fun add(item: ActionWithSet): Flow<List<SetImpl>> {
-         return if (item.set.exerciseId > 0L) {
-            setDao.add(SetTable(speechId = speechKitSource.addL()))
-            gets(item.set.exerciseId)
-        } else flow { emit ( emptyList()) }
-    }
-    override fun copy(item: ActionWithSet): Flow<List<SetImpl>> {
-        return if (item.set.exerciseId > 0L) {
-            if (item.set.idSet > 0) {
-                val idSpeechKit = item.set.speech?.let {
-                    speechKitSource.copyL(it as SpeechKitImpl) } ?: speechKitSource.addL()
-                setDao.add(toSetTable((item.set as SetImpl).copy(speechId = idSpeechKit)))
-            }
-            gets(item.set.exerciseId)
-        } else flow { emit( emptyList()) }
-    }
+    override fun get(item: SetImpl): Flow<SetImpl> = setDao.get(item.idSet).map { it.toSet() }
+
     override fun gets(exerciseId: Long): Flow<List<SetImpl>> {
         return setDao.gets(exerciseId).map { list-> list.map{ it.toSet()} } }
 
-    override fun get(id: Long): Flow<SetImpl> = setDao.getRel(id).map { it.toSet() }
+    override fun copy(item: SetImpl): Long {
+        val speechId = speechKitSource.copy(item.speech?.let{ it as SpeechKitImpl } ?: SpeechKitImpl() )
+        return setDao.add(toSetTable(item).copy(speechId = speechId)) }
 
-    override fun del(item: ActionWithSet): Flow<List<SetImpl>> {
-        item.set.speech?.let { speechKitSource.del(it as SpeechKitImpl) }
-        setDao.del(item.set.idSet)
-        return gets(item.set.exerciseId)
+    override fun del(item: SetImpl) {
+        item.speech?.let { speechKitSource.del(it) }
+        setDao.del(item.idSet)
     }
 
-    override fun update(item: ActionWithSet): Flow<SetImpl> {
-        setDao.update(toSetTable(item.set as SetImpl).copy(idSet = item.set.idSet))
-        return get(item.set.idSet)
+    override fun update(item: SetImpl) {
+        item.speech?.let { speechKitSource.update(it) }
+        setDao.update(toSetTable(item))
     }
 
     private fun toSetTable(set: SetImpl) = SetTable(
+        idSet = set.idSet,
         name = set.name,
         speechId = set.speechId,
         goal = set.goal.ordinal,

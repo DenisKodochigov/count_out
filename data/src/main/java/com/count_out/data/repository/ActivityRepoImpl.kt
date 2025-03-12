@@ -15,7 +15,11 @@ class ActivityRepoImpl @Inject constructor(private val activitySource: ActivityS
         activitySource.del(activity.idActivity)
         return flow { emit(true) }
     }
-    override fun copy(activity: Activity): Flow<Activity> = activitySource.copy(activity as ActivityImpl)
-    override fun add(activity: Activity): Flow<Activity> = activitySource.add(activity as ActivityImpl)
-    override fun update(activity: Activity): Flow<Activity>  = activitySource.update(activity as ActivityImpl)
+    override fun copy(activity: Activity): Flow<Activity> {
+        return get(activitySource.copy(activity as ActivityImpl) )
+    }
+    override fun update(activity: Activity): Flow<Activity> {
+        activitySource.update(activity as ActivityImpl)
+        return get(activity.idActivity)
+    }
 }

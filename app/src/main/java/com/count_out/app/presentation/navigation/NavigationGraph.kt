@@ -19,8 +19,9 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import com.count_out.app.presentation.Const.DELAY_SCREEN
 import com.count_out.app.presentation.Const.DURATION_SCREEN
-import com.count_out.presentation.screens.settings.SettingViewModel
+import com.count_out.presentation.screens.executor.ExecuteWorkViewModel
 import com.count_out.presentation.screens.history.HistoryViewModel
+import com.count_out.presentation.screens.settings.SettingViewModel
 import com.count_out.presentation.screens.training.TrainingViewModel
 import com.count_out.presentation.screens.trainings.TrainingsViewModel
 
@@ -32,7 +33,6 @@ fun NavGraphBuilder.trainings( navigateEvent: NavigateEventImpl,
             val vm: TrainingsViewModel = hiltViewModel()
             vm.initNavigate(navigateEvent)
             TrainingsDestination.Show(vm, emptyList())
-//            TrainingsScreen(navigateEvent = navigateEvent)
         }
     )
 }
@@ -57,7 +57,7 @@ fun NavGraphBuilder.executeWorkout(navigateEvent: NavigateEventImpl) {
         routeTo = ExecuteWorkDestination.routeWithArgs,
         argument = TrainingDestination.arguments,
         content = { navBackStackEntry ->
-            val vm: HistoryViewModel = hiltViewModel()
+            val vm: ExecuteWorkViewModel = hiltViewModel()
 //            vm.initNavigate(navigateEvent)
             val arg = listOf((navBackStackEntry.arguments?.getLong(TrainingDestination.ARG) ?: 0).toString())
             ExecuteWorkDestination.Show(vm, arg)

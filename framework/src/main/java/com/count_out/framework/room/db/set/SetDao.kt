@@ -28,5 +28,5 @@ interface SetDao {
 
     @Transaction
     @Query("SELECT * FROM tb_set WHERE idSet = :id")
-    fun getRel(id: Long): Flow<SetRel>
+    fun get(id: Long): Flow<SetRel>
 }

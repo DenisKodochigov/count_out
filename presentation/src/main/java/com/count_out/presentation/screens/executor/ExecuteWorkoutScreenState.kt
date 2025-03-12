@@ -10,8 +10,8 @@ import com.count_out.domain.entity.router.DeviceUI
 import com.count_out.domain.entity.workout.Training
 import com.count_out.domain.entity.enums.ConnectState
 import com.count_out.domain.entity.enums.RunningState
-import com.count_out.presentation.modeles.SetImpl
-import com.count_out.presentation.modeles.TickTimeImpl
+import com.count_out.presentation.models.SetImpl
+import com.count_out.presentation.models.TickTimeImpl
 import javax.inject.Singleton
 
 @Singleton

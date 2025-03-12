@@ -18,29 +18,13 @@ class SpeechKitSourceImpl @Inject constructor(
 
     override fun get(id: Long): Flow<SpeechKitImpl> = daoSpeechKit.get(id).map { it.toSpeechKit() }
 
-    override fun add(): Flow<SpeechKitImpl> {
-        return get( daoSpeechKit.add( toSpeechKitTableNew()))
-    }
-    override fun addL(): Long = daoSpeechKit.add( toSpeechKitTableNew())
+    override fun copy(speechKit: SpeechKit): Long = daoSpeechKit.add( toSpeechKitTable(speechKit) )
 
-    override fun copy(speechKit: SpeechKit): Flow<SpeechKitImpl> {
-        val speechKitTable =
-            if (speechKit.idSpeechKit == 0L) { toSpeechKitTableNew() }
-            else {toSpeechKitTableCopy(speechKit)}
-        return get(daoSpeechKit.add( speechKitTable))
-    }
-    override fun copyL(speechKit: SpeechKit): Long {
-        val speechKitTable =
-            if (speechKit.idSpeechKit == 0L) { toSpeechKitTableNew() }
-            else {toSpeechKitTableCopy(speechKit)}
-        return daoSpeechKit.add( speechKitTable)
-    }
-    override fun update(speechKit: SpeechKit): Flow<SpeechKitImpl> {
+    override fun update(speechKit: SpeechKit) {
         speechSource.update(speechKit.beforeStart as SpeechImpl)
         speechSource.update(speechKit.afterStart as SpeechImpl)
         speechSource.update(speechKit.beforeEnd as SpeechImpl)
         speechSource.update(speechKit.afterEnd as SpeechImpl)
-        return daoSpeechKit.get(speechKit.idSpeechKit).map { it.toSpeechKit() }
     }
 
     override fun del(speechKit: SpeechKit) {
@@ -51,14 +35,11 @@ class SpeechKitSourceImpl @Inject constructor(
         daoSpeechKit.del(speechKit.idSpeechKit)
     }
 
-    private fun toSpeechKitTableCopy(speechKit: SpeechKit): SpeechKitTable = SpeechKitTable(
+    private fun toSpeechKitTable(speechKit: SpeechKit): SpeechKitTable = SpeechKitTable(
+        idSpeechKit = speechKit.idSpeechKit,
         idBeforeStart = speechKit.idBeforeStart,
         idAfterStart = speechKit.idAfterStart,
         idBeforeEnd = speechKit.idBeforeEnd,
         idAfterEnd = speechKit.idBeforeEnd,
     )
-
-    private fun toSpeechKitTableNew(): SpeechKitTable {
-        return SpeechKitTable(idBeforeStart = 0, idAfterStart = 0, idBeforeEnd = 0, idAfterEnd = 0,)
-    }
 }

@@ -38,8 +38,8 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import com.count_out.presentation.R
-import com.count_out.presentation.modeles.Dimen
-import com.count_out.presentation.modeles.TypeKeyboard
+import com.count_out.presentation.models.Dimen
+import com.count_out.presentation.models.TypeKeyboard
 
 
 @Composable fun ButtonApp(

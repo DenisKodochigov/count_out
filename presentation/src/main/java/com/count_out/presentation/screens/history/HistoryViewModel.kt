@@ -2,7 +2,7 @@ package com.count_out.presentation.screens.history
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.count_out.presentation.modeles.MessageApp
+import com.count_out.presentation.models.MessageApp
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow

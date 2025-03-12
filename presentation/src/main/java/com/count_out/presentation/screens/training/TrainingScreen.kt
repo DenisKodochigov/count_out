@@ -14,7 +14,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.MaterialTheme.typography
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -29,9 +28,9 @@ import com.count_out.presentation.screens.prime.Action
 import com.count_out.presentation.screens.prime.PrimeScreen
 import com.count_out.domain.entity.enums.RoundType
 import com.count_out.presentation.R
-import com.count_out.presentation.modeles.Dimen
-import com.count_out.presentation.modeles.TrainingImpl
-import com.count_out.presentation.modeles.TypeKeyboard
+import com.count_out.presentation.models.Dimen
+import com.count_out.presentation.models.TrainingImpl
+import com.count_out.presentation.models.TypeKeyboard
 import com.count_out.presentation.screens.training.round.Round
 import com.count_out.presentation.view_element.TextFieldApp
 import com.count_out.presentation.view_element.bottom_sheet.BottomSheetSelectActivity

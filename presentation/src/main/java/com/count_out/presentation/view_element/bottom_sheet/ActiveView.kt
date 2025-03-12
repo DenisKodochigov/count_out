@@ -31,7 +31,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.count_out.presentation.R
-import com.count_out.presentation.modeles.TypeKeyboard
+import com.count_out.presentation.models.TypeKeyboard
 import com.count_out.presentation.view_element.dialog.ChangeColorSectionDialog
 import com.count_out.presentation.screens.prime.Action
 import com.count_out.presentation.screens.settings.SettingsEvent
@@ -40,7 +40,7 @@ import com.count_out.presentation.view_element.TextApp
 import com.count_out.presentation.view_element.TextFieldApp
 import com.count_out.presentation.view_element.custom_view.Frame
 import com.count_out.domain.entity.workout.Activity
-import com.count_out.presentation.modeles.ActivityImpl
+import com.count_out.presentation.models.ActivityImpl
 
 @SuppressLint("UnrememberedMutableState")
 @Composable fun CardActivity(dataState: SettingsState, activity: Activity, action: Action) {

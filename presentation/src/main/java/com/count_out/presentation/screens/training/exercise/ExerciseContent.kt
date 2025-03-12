@@ -19,17 +19,16 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import com.count_out.domain.entity.workout.Exercise
+import com.count_out.domain.entity.workout.Round
+import com.count_out.presentation.R
+import com.count_out.presentation.models.DataForChangeSequenceImpl
+import com.count_out.presentation.models.Dimen.contourAll1
+import com.count_out.presentation.models.SetImpl
 import com.count_out.presentation.screens.prime.Action
 import com.count_out.presentation.screens.training.TrainingEvent
 import com.count_out.presentation.screens.training.TrainingState
 import com.count_out.presentation.screens.training.set.SetContent
-import com.count_out.domain.entity.workout.Exercise
-import com.count_out.domain.entity.workout.Round
-import com.count_out.presentation.R
-import com.count_out.presentation.modeles.ActionWithSetImpl
-import com.count_out.presentation.modeles.DataForChangeSequenceImpl
-import com.count_out.presentation.modeles.Dimen.contourAll1
-import com.count_out.presentation.modeles.SetImpl
 import com.count_out.presentation.view_element.TextApp
 import com.count_out.presentation.view_element.custom_view.Frame
 import com.count_out.presentation.view_element.drag_drop_column.column.ColumnDragDrop
@@ -104,14 +103,8 @@ fun ListExercises(
             onClickSpeech = {
                 dataState.exercise = exercise
                 dataState.showSpeechExercise.value = true },
-            onClickAddSet = {
-                action.ex(
-                    TrainingEvent.AddSet(
-                        ActionWithSetImpl(
-                    id = dataState.training.idTraining,
-                    set = SetImpl(name = nameNewSet, exerciseId = exercise.idExercise)
-                )
-                    ))},
+            onClickAddSet = { action.ex( TrainingEvent.AddSet(
+                    SetImpl(name = nameNewSet, exerciseId = exercise.idExercise)))},
         )
     }
 }

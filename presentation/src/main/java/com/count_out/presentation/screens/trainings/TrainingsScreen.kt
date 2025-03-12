@@ -26,9 +26,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.count_out.domain.entity.workout.Training
 import com.count_out.presentation.R
-import com.count_out.presentation.modeles.Dimen
-import com.count_out.presentation.modeles.Dimen.contourAll2
-import com.count_out.presentation.modeles.Dimen.contourHor2
+import com.count_out.presentation.models.Dimen
+import com.count_out.presentation.models.Dimen.contourAll2
+import com.count_out.presentation.models.Dimen.contourHor2
 import com.count_out.presentation.screens.prime.Action
 import com.count_out.presentation.screens.prime.PrimeScreen
 import com.count_out.presentation.view_element.ItemSwipe
@@ -74,6 +74,7 @@ fun TrainingList(
     action: Action,
     modifier: Modifier = Modifier
 ) {
+    Spacer(modifier = Modifier.fillMaxWidth())
     LazyColumn(
         state = rememberLazyListState(),
         contentPadding = PaddingValues(horizontal = Dimen.paddingAppHor),

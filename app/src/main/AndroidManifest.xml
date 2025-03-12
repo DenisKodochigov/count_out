@@ -59,7 +59,7 @@
         </activity>
         <provider
             android:name="androidx.core.content.FileProvider"
-            android:authorities="com.example.count_out.entity.fileprovider"
+            android:authorities="com.count_out.entity.fileprovider"
             android:exported="false"
             android:grantUriPermissions="true">
             <meta-data

@@ -1,7 +1,6 @@
 package com.count_out.app.di
 
 import android.content.Context
-import com.count_out.presentation.modeles.Internet
 import com.count_out.domain.repository.BluetoothRepo
 import com.count_out.domain.repository.CountOutServiceRepo
 import com.count_out.domain.repository.WeatherRepo
@@ -14,7 +13,6 @@ import com.count_out.domain.use_case.UseCase
 import com.count_out.domain.use_case.activity.AddActivityUC
 import com.count_out.domain.use_case.activity.DeleteActivityUC
 import com.count_out.domain.use_case.activity.GetsActivityUC
-import com.count_out.domain.use_case.activity.SelectActivityUC
 import com.count_out.domain.use_case.activity.SetColorActivityUC
 import com.count_out.domain.use_case.activity.UpdateActivityUC
 import com.count_out.domain.use_case.bluetooth.ClearCacheBleUC
@@ -42,6 +40,7 @@ import com.count_out.domain.use_case.trainings.GetTrainingUC
 import com.count_out.domain.use_case.trainings.GetTrainingsUC
 import com.count_out.domain.use_case.trainings.SelectTrainingUC
 import com.count_out.domain.use_case.trainings.UpdateTrainingUC
+import com.count_out.presentation.models.Internet
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -141,10 +140,10 @@ class UseCaseModule {
     fun provideDeleteExerciseUseCase(
         configuration: UseCase.Configuration,
         repo: ExerciseRepo ): DeleteExerciseUC = DeleteExerciseUC(configuration, repo)
-    @Provides
-    fun provideSelectActivityUseCase(
-        configuration: UseCase.Configuration,
-        repo: ExerciseRepo ): SelectActivityUC = SelectActivityUC(configuration, repo)
+//    @Provides
+//    fun provideSelectActivityUseCase(
+//        configuration: UseCase.Configuration,
+//        repo: ExerciseRepo ): SelectActivityUC = SelectActivityUC(configuration, repo)
     @Provides
     fun provideAddSetUseCase(
         configuration: UseCase.Configuration,

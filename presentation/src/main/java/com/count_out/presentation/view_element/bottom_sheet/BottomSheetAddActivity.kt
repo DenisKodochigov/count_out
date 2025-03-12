@@ -13,7 +13,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.count_out.presentation.modeles.ActivityImpl
+import com.count_out.presentation.models.ActivityImpl
 import com.count_out.presentation.screens.prime.Action
 import com.count_out.presentation.screens.settings.SettingsEvent
 import com.count_out.presentation.screens.settings.SettingsState

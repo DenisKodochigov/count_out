@@ -7,7 +7,7 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.MaterialTheme.shapes
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import com.count_out.presentation.modeles.elevationCalendar
+import com.count_out.presentation.models.elevationCalendar
 import com.count_out.presentation.screens.history.HistoryScreenState
 import com.count_out.presentation.screens.history.day.CalendarDay
 import java.time.LocalDate

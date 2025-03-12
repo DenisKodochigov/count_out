@@ -21,16 +21,11 @@ import kotlinx.coroutines.flow.Flow
  *  setActivityIntoExercise - меняет ID Activity в Exercise
  */
 interface ExerciseSource {
-    fun gets(): Flow<List<Exercise>>
-    fun get(id: Long): Flow<Exercise>
+    fun get(exercise: ExerciseImpl): Flow<Exercise>
     fun getForRound(id: Long): Flow<List<Exercise>>
     fun getForRing(id: Long): Flow<List<Exercise>>
     fun getFilter(list: List<Long>): Flow<List<Exercise>>
-    fun add(roundId: Long = 0, ringId: Long = 0): Flow<List<Exercise>>
-    fun copy(exercise: ExerciseImpl): Flow<List<Exercise>>
-    fun del(exercise: ExerciseImpl): Flow<List<Exercise>>
-//    fun delRound(idRound: Long)
-//    fun delRing(idRing: Long)
-    fun update(exercise: ExerciseImpl): Flow<Exercise>
-    fun setActivityIntoExercise(exerciseId: Long, activityId: Long): Flow<Exercise>
+    fun copy(exercise: ExerciseImpl): Long
+    fun del(exercise: ExerciseImpl)
+    fun update(exercise: ExerciseImpl)
 }

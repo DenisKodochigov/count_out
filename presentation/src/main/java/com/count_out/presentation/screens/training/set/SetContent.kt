@@ -28,25 +28,24 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
-import com.count_out.presentation.screens.prime.Action
-import com.count_out.presentation.screens.training.TrainingEvent
-import com.count_out.presentation.screens.training.TrainingState
 import com.count_out.domain.entity.enums.Goal
+import com.count_out.domain.entity.enums.Units
+import com.count_out.domain.entity.enums.Zone
 import com.count_out.domain.entity.toDoubleMy
 import com.count_out.domain.entity.toIntMy
 import com.count_out.domain.entity.workout.Set
-import com.count_out.domain.entity.enums.Units
-import com.count_out.domain.entity.enums.Zone
 import com.count_out.presentation.R
-import com.count_out.presentation.modeles.ActionWithSetImpl
-import com.count_out.presentation.modeles.Dimen.contourAll1
-import com.count_out.presentation.modeles.Dimen.contourBot1
-import com.count_out.presentation.modeles.ParameterImpl
-import com.count_out.presentation.modeles.SetImpl
-import com.count_out.presentation.modeles.TypeKeyboard
-import com.count_out.presentation.modeles.alumBodyLarge
-import com.count_out.presentation.modeles.alumBodyMedium
-import com.count_out.presentation.modeles.alumBodySmall
+import com.count_out.presentation.models.Dimen.contourAll1
+import com.count_out.presentation.models.Dimen.contourBot1
+import com.count_out.presentation.models.ParameterImpl
+import com.count_out.presentation.models.SetImpl
+import com.count_out.presentation.models.TypeKeyboard
+import com.count_out.presentation.models.alumBodyLarge
+import com.count_out.presentation.models.alumBodyMedium
+import com.count_out.presentation.models.alumBodySmall
+import com.count_out.presentation.screens.prime.Action
+import com.count_out.presentation.screens.training.TrainingEvent
+import com.count_out.presentation.screens.training.TrainingState
 import com.count_out.presentation.view_element.TextApp
 import com.count_out.presentation.view_element.TextFieldApp
 import com.count_out.presentation.view_element.custom_view.Frame
@@ -99,9 +98,9 @@ val interval_between_pole = 4.dp
             textAlign = TextAlign.Start,)
         IconsGroup(
             onClickCopy = {
-                action.ex(TrainingEvent.CopySet(ActionWithSetImpl(dataState.training.idTraining, set)))},
+                action.ex(TrainingEvent.CopySet(set))},
             onClickDelete = {
-                action.ex(TrainingEvent.DeleteSet(ActionWithSetImpl(dataState.training.idTraining, set)))},
+                action.ex(TrainingEvent.DeleteSet(set))},
             onClickSpeech = {
                 dataState.set = set
                 dataState.showSpeechSet.value = true},
@@ -165,27 +164,21 @@ val interval_between_pole = 4.dp
         modifier = modifier,
         typeKey = TypeKeyboard.DIGIT,
         onChangeValue = { action.ex(
-            TrainingEvent.ChangeSet(
-            ActionWithSetImpl(
-                id = dataState.training.idTraining,
-                set = set.copy(
+            TrainingEvent.ChangeSet( set.copy(
                     distance = ParameterImpl(
                         value = (if (set.distance.unit == Units.MT) 1.0 else 1000.0) * it.toDoubleMy(),
                         unit = set.distance.unit
                     )
                 ))
-            )) },
+            ) },
         onChangeUnit = { action.ex(
-            TrainingEvent.ChangeSet(
-            ActionWithSetImpl(
-                id = dataState.training.idTraining,
-                set = set.copy(
+            TrainingEvent.ChangeSet( set.copy(
                     distance = ParameterImpl(
                         value = (if (set.distance.unit == Units.MT) 1.0 else 1000.0) * set.distance.value,
                         unit = if (set.distance.unit == Units.MT) Units.KM else Units.MT
                     )
                 ))
-            )) }
+            ) }
     )
 }
 @Composable fun DurationPole(dataState: TrainingState, action: Action, set: SetImpl, modifier: Modifier = Modifier){   //B7B7B7
@@ -198,27 +191,21 @@ val interval_between_pole = 4.dp
         modifier = modifier,
         typeKey = TypeKeyboard.DIGIT,
         onChangeValue = { action.ex(
-            TrainingEvent.ChangeSet(
-            ActionWithSetImpl(
-                id = dataState.training.idTraining,
-                set = set.copy(
+            TrainingEvent.ChangeSet( set.copy(
                     distance = ParameterImpl(
                         value = (if (set.duration.unit == Units.M) 60.0 else 1.0) * it.toDoubleMy(),
                         unit = set.distance.unit
                     )
                 ))
-            ))  },
+            )  },
         onChangeUnit = {action.ex(
-            TrainingEvent.ChangeSet(
-            ActionWithSetImpl(
-                id = dataState.training.idTraining,
-                set = set.copy(
+            TrainingEvent.ChangeSet( set.copy(
                     distance = ParameterImpl(
                         value = (if (set.duration.unit == Units.M) 60.0 else 1.0) * set.duration.value,
                         unit = if (set.duration.unit == Units.M) Units.S else Units.M
                     )
                 ))
-            )) }
+            ) }
     )
 }
 @Composable fun IntervalPole(dataState: TrainingState, action: Action, set: SetImpl, modifier: Modifier = Modifier){   //B7B7B7
@@ -229,12 +216,7 @@ val interval_between_pole = 4.dp
         placeholder = "${ set.intervalReps }",
         modifier = modifier,
         typeKey = TypeKeyboard.DIGIT,
-        onChangeValue = { action.ex(
-            TrainingEvent.ChangeSet(
-                ActionWithSetImpl(
-            id = dataState.training.idTraining, set.copy(intervalReps = it.toDoubleMy())
-        )
-            )) },
+        onChangeValue = { action.ex(TrainingEvent.ChangeSet( set.copy(intervalReps = it.toDoubleMy()))) },
         onChangeUnit = { }
     )
 }
@@ -248,26 +230,17 @@ val interval_between_pole = 4.dp
         modifier = modifier,
         typeKey = TypeKeyboard.DIGIT,
         onChangeValue = { action.ex(
-            TrainingEvent.ChangeSet(
-            ActionWithSetImpl(
-                id = dataState.training.idTraining,
-                set = set.copy(
+            TrainingEvent.ChangeSet(set.copy(
                     weight = ParameterImpl(
                         value = (if (set.weight.unit == Units.GR) 1 else 1000) * it.toDoubleMy(),
-                        unit = set.weight.unit)
-                ))
-            ))
+                        unit = set.weight.unit))))
         },
         onChangeUnit = { action.ex(
-            TrainingEvent.ChangeSet(
-            ActionWithSetImpl(
-                id = dataState.training.idTraining,
-                set = set.copy(
+            TrainingEvent.ChangeSet( set.copy(
                     weight = ParameterImpl(
                         value = (if (set.weight.unit == Units.GR) 1 else 1000) * set.weight.value,
                         unit = if (set.weight.unit == Units.GR) Units.KG else Units.GR)
-                ))
-            ))
+            )))
         }
     )
 }
@@ -281,26 +254,17 @@ val interval_between_pole = 4.dp
         modifier = modifier,
         typeKey = TypeKeyboard.DIGIT,
         onChangeValue = { action.ex(
-            TrainingEvent.ChangeSet(
-            ActionWithSetImpl(
-                id = dataState.training.idTraining,
-                set = set.copy(
+            TrainingEvent.ChangeSet( set.copy(
                     rest = ParameterImpl(
                         value = it.toDoubleMy() / (if (set.rest.unit == Units.S) 1.0 else 60.0),
-                        unit = set.rest.unit
-                    )
-                ))
-            )) },
+                        unit = set.rest.unit)
+            ))) },
         onChangeUnit = { action.ex(
-            TrainingEvent.ChangeSet(
-            ActionWithSetImpl(
-                id = dataState.training.idTraining,
-                set = set.copy(
+            TrainingEvent.ChangeSet( set.copy(
                     rest = ParameterImpl(
                         value = set.rest.value / (if (set.rest.unit == Units.S) 1.0 else 60.0),
                         unit = if (set.rest.unit == Units.S) Units.M else Units.S)
-                ))
-            ))}
+            )))}
     )
 }
 
@@ -308,21 +272,14 @@ val interval_between_pole = 4.dp
     PoleInput(
         headId = R.string.counts, typeKey = TypeKeyboard.DIGIT, placeholder = "${ set.reps }",
         modifier = Modifier.width(IntrinsicSize.Min),
-        onChangeValue = { action.ex(
-            TrainingEvent.ChangeSet(
-            ActionWithSetImpl(
-                id = dataState.training.idTraining, set = set.copy(reps = it.toIntMy()))
-            ))})
+        onChangeValue = { action.ex(TrainingEvent.ChangeSet( set.copy(reps = it.toIntMy())))})
 
 }
 @Composable fun CountGroupFieldText(dataState: TrainingState, action: Action, set: SetImpl){
     PoleInput(
         headId = R.string.counts_by_group_add,
         placeholder = set.groupCount,
-        onChangeValue ={ action.ex(
-            TrainingEvent.ChangeSet( ActionWithSetImpl(
-            dataState.training.idTraining, set.copy(groupCount = it))
-            )) })
+        onChangeValue ={ action.ex(TrainingEvent.ChangeSet( set.copy(groupCount = it))) })
 }
 
 @Composable fun TaskSwitch(dataState: TrainingState, action: Action, set: SetImpl){
@@ -339,34 +296,19 @@ val interval_between_pole = 4.dp
             modifier = Modifier.padding(start = 4.dp, end =16.dp))
         Spacer(modifier = Modifier.weight(1f))
         IconQ.Duration(selected = set.goal == Goal.Duration,
-            onClick = { action.ex(
-                TrainingEvent.ChangeSet( ActionWithSetImpl(
-                dataState.training.idTraining, set.copy(goal = Goal.Duration))
-                ))},)
+            onClick = { action.ex(TrainingEvent.ChangeSet( set.copy(goal = Goal.Duration)))},)
         Spacer(modifier = Modifier.width(24.dp))
         IconQ.Distance(selected = set.goal == Goal.Distance,
-            onClick = { action.ex(
-                TrainingEvent.ChangeSet( ActionWithSetImpl(
-                dataState.training.idTraining, set.copy(goal = Goal.Distance))
-                )) },)
+            onClick = { action.ex(TrainingEvent.ChangeSet( set.copy(goal = Goal.Distance))) },)
         Spacer(modifier = Modifier.width(24.dp))
         IconQ.Count(selected = set.goal == Goal.Count,
-            onClick = { action.ex(
-                TrainingEvent.ChangeSet( ActionWithSetImpl(
-                dataState.training.idTraining, set.copy(goal = Goal.Count))
-                )) },)
+            onClick = { action.ex(TrainingEvent.ChangeSet( set.copy(goal = Goal.Count))) },)
         Spacer(modifier = Modifier.width(24.dp))
         Spacer(modifier = Modifier.weight(1f))
         IconsGroup(
-            onClickCopy = { action.ex(
-                TrainingEvent.CopySet( ActionWithSetImpl(
-                dataState.training.idTraining, set )
-                )) },
+            onClickCopy = { action.ex(TrainingEvent.CopySet( set )) },
             onClickDelete = {  action.ex(
-                TrainingEvent.DeleteSet(
-                    ActionWithSetImpl(
-                dataState.training.idTraining, set)
-                )) },
+                TrainingEvent.DeleteSet(set)) },
             onClickSpeech = {
                 dataState.set = set
                 dataState.showSpeechSet.value = true},)
@@ -376,30 +318,15 @@ val interval_between_pole = 4.dp
     Row(verticalAlignment = Alignment.CenterVertically){
         Spacer(modifier = Modifier.weight(1f))
         ButtonSwitchPulse(selected = set.intensity == Zone.Low, idString = R.string.zone1,
-            onClick = { action.ex(
-                TrainingEvent.ChangeSet( ActionWithSetImpl(
-                dataState.training.idTraining, set.copy(intensity = Zone.Low))
-                ))})
+            onClick = { action.ex(TrainingEvent.ChangeSet(set.copy(intensity = Zone.Low)))})
         ButtonSwitchPulse(selected = set.intensity == Zone.Min, idString = R.string.zone2,
-            onClick = {action.ex(
-                TrainingEvent.ChangeSet( ActionWithSetImpl(
-                dataState.training.idTraining, set.copy(intensity = Zone.Min))
-                ))})
+            onClick = {action.ex(TrainingEvent.ChangeSet( set.copy(intensity = Zone.Min)))})
         ButtonSwitchPulse(selected = set.intensity == Zone.Medium, idString = R.string.zone3,
-            onClick = {action.ex(
-                TrainingEvent.ChangeSet( ActionWithSetImpl(
-                dataState.training.idTraining, set.copy(intensity = Zone.Medium))
-                ))})
+            onClick = {action.ex(TrainingEvent.ChangeSet(set.copy(intensity = Zone.Medium)))})
         ButtonSwitchPulse(selected = set.intensity == Zone.High, idString = R.string.zone4,
-            onClick = {action.ex(
-                TrainingEvent.ChangeSet( ActionWithSetImpl(
-                dataState.training.idTraining, set.copy(intensity = Zone.High))
-                ))})
+            onClick = {action.ex(TrainingEvent.ChangeSet( set.copy(intensity = Zone.High)))})
         ButtonSwitchPulse(selected = set.intensity == Zone.Max, idString = R.string.zone5,
-            onClick = {action.ex(
-                TrainingEvent.ChangeSet( ActionWithSetImpl(
-                dataState.training.idTraining, set.copy(intensity = Zone.Max))
-                ))})
+            onClick = {action.ex(TrainingEvent.ChangeSet( set.copy(intensity = Zone.Max)))})
         Spacer(modifier = Modifier.weight(1f))
     }
 }

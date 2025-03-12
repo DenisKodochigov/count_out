@@ -1,7 +1,6 @@
 package com.count_out.framework
 
 import com.count_out.data.models.SpeechImpl
-import com.count_out.data.source.network.WeatherSource
 import com.count_out.data.source.room.SpeechSource
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flowOf
@@ -17,15 +16,14 @@ import org.mockito.kotlin.whenever
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class SpeechSourceTest {
-    private val weatherSource = mock<WeatherSource>()
     private val speechSource = mock<SpeechSource>()
 
     @Test
     fun addSpeech(){
         val speech = expectedSpeech
-        speechSource.add(speech)
+        speechSource.copy(speech)
         val captor = argumentCaptor<SpeechImpl>()
-        verify(speechSource).add(captor.capture())
+        verify(speechSource).copy(captor.capture())
         Assert.assertEquals(speech.message, captor.firstValue.message)
     }
     @Test

@@ -4,7 +4,7 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.mutableStateOf
 import com.count_out.domain.entity.workout.SpeechKit
-import com.count_out.presentation.modeles.BottomSheetInterface
+import com.count_out.presentation.models.BottomSheetInterface
 
 data class BottomSheetState(
     val elementSpeech: MutableState<String> = mutableStateOf(""),

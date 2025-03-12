@@ -19,8 +19,8 @@ import com.count_out.presentation.screens.training.TrainingState
 import com.count_out.domain.entity.enums.RoundType
 import com.count_out.domain.entity.workout.Round
 import com.count_out.presentation.R
-import com.count_out.presentation.modeles.Dimen.contourHor2
-import com.count_out.presentation.modeles.ExerciseImpl
+import com.count_out.presentation.models.Dimen.contourHor2
+import com.count_out.presentation.models.ExerciseImpl
 import com.count_out.presentation.screens.training.exercise.ListExercises
 import com.count_out.presentation.view_element.TextApp
 import com.count_out.presentation.view_element.custom_view.Frame

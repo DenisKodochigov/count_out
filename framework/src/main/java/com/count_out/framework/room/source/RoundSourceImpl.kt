@@ -7,11 +7,10 @@ import com.count_out.data.models.SpeechKitImpl
 import com.count_out.data.source.room.ExerciseSource
 import com.count_out.data.source.room.RoundSource
 import com.count_out.data.source.room.SpeechKitSource
+import com.count_out.domain.entity.workout.Round
 import com.count_out.framework.room.db.round.RoundDao
 import com.count_out.framework.room.db.round.RoundTable
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
@@ -27,46 +26,35 @@ class RoundSourceImpl @Inject constructor(
     override fun gets(trainingId: Long): Flow<List<RoundImpl>> =
         dao.gets(trainingId).map { list-> list.map { it.toRound() } }
 
-    override fun get(id: Long): Flow<RoundImpl> = dao.get(id).map { it.toRound() }
+    override fun get(round: Round): Flow<Round> = dao.get(round.idRound).map { it.toRound() }
 
-    override fun add(round: RoundImpl): Flow<List<RoundImpl>> {
+    override fun copy(round: Round): Long {
         //Создавть раунд имеет смысл только в связке с какимнибудь тренировочным планом.
-        return if (round.trainingId > 0){
-            val roundId = dao.add(
-                RoundTable(speechId = (speechKitSource.add() as StateFlow).value.idSpeechKit))
-            exerciseSource.add(roundId = roundId)
-            gets(round.trainingId)
-        } else {
-            Log.d("KDS", "The value is not defined: TRAININGID ")
-            flow { emit(emptyList()) }
-        }
-    }
-    override fun copy(round: RoundImpl): Flow<List<RoundImpl>> {
-        //Создавть раунд имеет смысл только в связке с какимнибудь тренировочным планом.
+        var roundId = 0L
         if (round.trainingId > 0){
-            val idSpeechKit =
-                (speechKitSource.copy(round.speech as SpeechKitImpl) as StateFlow).value.idSpeechKit
-            val roundId = dao.add(toRoundTable(round).copy(speechId = idSpeechKit))
+            val speechId = speechKitSource.copy(round.speech?.let{ it as SpeechKitImpl } ?: SpeechKitImpl() )
+            roundId = dao.add(toRoundTable(round as RoundImpl).copy(speechId = speechId))
             if (round.exercise.isNotEmpty()) {
                 round.exercise.forEach { exercise->
                     exerciseSource.copy((exercise as ExerciseImpl).copy(roundId = roundId)) }
-            }
-            else { exerciseSource.add(roundId = roundId) }
+            } else { exerciseSource.copy(ExerciseImpl().copy(roundId = roundId)) }
         } else { Log.d("KDS", "The value is not defined: TRAININGID ")}
-        return gets(round.trainingId)
+        return roundId
     }
-    override fun del(round: RoundImpl) {
+    override fun del(round: Round) {
         round.exercise.forEach { exerciseSource.del(it as ExerciseImpl) }
         round.speech?.let { speechKitSource.del(it as SpeechKitImpl) }
         dao.del(round.idRound)
     }
 
-    override fun update(round: RoundImpl): Flow<RoundImpl> {
-        dao.update(toRoundTable(round).copy(idRound = round.idRound))
-        return get(round.idRound)
+    override fun update(round: Round) {
+        round.exercise.forEach { exerciseSource.update(it as ExerciseImpl) }
+        round.speech?.let { speechKitSource.update(it as SpeechKitImpl) }
+        dao.update(toRoundTable(round as RoundImpl))
     }
 
     private fun toRoundTable(round: RoundImpl) = RoundTable(
+        idRound = round.idRound,
         trainingId = round.trainingId,
         speechId = round.speechId,
         roundType = round.roundType.ordinal

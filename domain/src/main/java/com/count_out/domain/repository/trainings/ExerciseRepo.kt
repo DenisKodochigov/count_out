@@ -1,19 +1,15 @@
 package com.count_out.domain.repository.trainings
 
 import com.count_out.domain.entity.DataForChangeSequence
-import com.count_out.domain.entity.workout.ActionWithActivity
 import com.count_out.domain.entity.workout.Exercise
 import kotlinx.coroutines.flow.Flow
 
 interface ExerciseRepo {
-    fun get(id: Long): Flow<Exercise>
-    fun gets(): Flow<List<Exercise>>
+    fun get(exercise: Exercise): Flow<Exercise>
     fun del(exercise: Exercise): Flow<List<Exercise>>
-    fun add(exercise: Exercise): Flow<List<Exercise>>
     fun copy(exercise: Exercise): Flow<List<Exercise>>
     fun update(exercise: Exercise): Flow<Exercise>
-    fun changeSequenceExercise(item: DataForChangeSequence): Flow<Exercise>
-    fun selectActivity(activity: ActionWithActivity): Flow<Exercise>
+    fun changeSequenceExercise(item: DataForChangeSequence): Flow<List<Exercise>>
 
     fun getForRound(id: Long): Flow<List<Exercise>>
     fun getForRing(id: Long): Flow<List<Exercise>>

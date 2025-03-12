@@ -1,18 +1,16 @@
 package com.count_out.presentation.screens.trainings
 
 import androidx.lifecycle.viewModelScope
-import com.count_out.presentation.screens.prime.ScreenState
-import com.count_out.presentation.screens.prime.PrimeViewModel
 import com.count_out.domain.entity.workout.Training
 import com.count_out.domain.use_case.trainings.AddTrainingUC
 import com.count_out.domain.use_case.trainings.CopyTrainingUC
 import com.count_out.domain.use_case.trainings.DeleteTrainingUC
 import com.count_out.domain.use_case.trainings.GetTrainingsUC
 import com.count_out.domain.use_case.trainings.SelectTrainingUC
+import com.count_out.presentation.models.TrainingImpl
 import com.count_out.presentation.screens.prime.Event
-import com.count_out.presentation.screens.trainings.TrainingsConvertor
-import com.count_out.presentation.screens.trainings.TrainingsEvent
-import com.count_out.presentation.screens.trainings.TrainingsState
+import com.count_out.presentation.screens.prime.PrimeViewModel
+import com.count_out.presentation.screens.prime.ScreenState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.map
@@ -49,7 +47,7 @@ import javax.inject.Inject
         } }
     private fun addTraining(){
         viewModelScope.launch(Dispatchers.IO) {
-            addTraining.execute(AddTrainingUC.Request)
+            addTraining.execute(AddTrainingUC.Request(TrainingImpl()))
                 .map { converter.convert(it) }.collect { submitState(it) }
         }}
     private fun deleteTraining(training: Training){

@@ -2,21 +2,29 @@ package com.count_out.data.repository
 
 import com.count_out.data.models.SetImpl
 import com.count_out.data.source.room.SetSource
-import com.count_out.domain.entity.workout.ActionWithSet
 import com.count_out.domain.entity.workout.Set
 import com.count_out.domain.repository.trainings.SetRepo
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 class SetRepoImpl @Inject constructor(private val setSource: SetSource): SetRepo {
-    override fun add( item: ActionWithSet): Flow<List<SetImpl>> = setSource.add(item)
-    override fun copy( item: ActionWithSet): Flow<List<SetImpl>> = setSource.copy(item)
 
     override fun gets(exerciseId: Long): Flow<List<Set>> = setSource.gets(exerciseId = exerciseId)
 
-    override fun get(id: Long): Flow<Set> = setSource.get(id)
+    override fun get(set: Set): Flow<Set> = setSource.get(set as SetImpl)
 
-    override fun del( item: ActionWithSet) = setSource.del(item)
+    override fun copy(set: Set): Flow<List<SetImpl>> {
+        setSource.copy(set as SetImpl)
+        return setSource.gets(set.exerciseId)
+    }
 
-    override fun update( item: ActionWithSet): Flow<Set> = setSource.update(item)
+    override fun del(set: Set): Flow<List<SetImpl>> {
+        setSource.del(set as SetImpl)
+        return setSource.gets(set.exerciseId)
+    }
+
+    override fun update(set: Set): Flow<Set> {
+        setSource.update(set as SetImpl)
+        return setSource.get(set)
+    }
 }

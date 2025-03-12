@@ -8,7 +8,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
-abstract class PrimeViewModel<T: Any, S: ScreenState<T>>: ViewModel() {
+abstract class PrimeViewModel<T: Any, S: ScreenState<T>>: ViewModel(){
     abstract fun initState(): S
     abstract fun routeEvent(event: Event)
 

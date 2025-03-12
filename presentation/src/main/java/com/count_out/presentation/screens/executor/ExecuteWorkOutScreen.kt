@@ -36,7 +36,7 @@ import com.count_out.domain.entity.NextExercise
 import com.count_out.domain.entity.minus
 import com.count_out.domain.entity.plus
 import com.count_out.presentation.R
-import com.count_out.presentation.modeles.SetImpl
+import com.count_out.presentation.models.SetImpl
 import com.count_out.presentation.view_element.TextApp
 import com.count_out.presentation.view_element.bottom_sheet.BottomSheetSaveTraining
 import com.count_out.presentation.view_element.custom_view.Frame

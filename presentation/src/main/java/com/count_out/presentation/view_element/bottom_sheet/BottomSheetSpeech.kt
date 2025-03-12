@@ -29,11 +29,11 @@ import com.count_out.domain.entity.workout.Round
 import com.count_out.domain.entity.workout.Training
 import com.count_out.domain.entity.workout.Set
 import com.count_out.presentation.R
-import com.count_out.presentation.modeles.BottomSheetInterface
-import com.count_out.presentation.modeles.Dimen
-import com.count_out.presentation.modeles.SpeechImpl
-import com.count_out.presentation.modeles.SpeechKitImpl
-import com.count_out.presentation.modeles.TypeKeyboard
+import com.count_out.presentation.models.BottomSheetInterface
+import com.count_out.presentation.models.Dimen
+import com.count_out.presentation.models.SpeechImpl
+import com.count_out.presentation.models.SpeechKitImpl
+import com.count_out.presentation.models.TypeKeyboard
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable fun BottomSheetSpeech(itemSpeech: BottomSheetInterface) {

@@ -10,7 +10,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.count_out.presentation.modeles.elevationCalendar
+import com.count_out.presentation.models.elevationCalendar
 import com.count_out.presentation.screens.history.HistoryScreenState
 import com.count_out.presentation.screens.history.month.CardMonth
 import com.count_out.presentation.view_element.TextApp
