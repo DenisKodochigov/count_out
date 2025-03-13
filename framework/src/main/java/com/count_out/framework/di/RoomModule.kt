@@ -22,12 +22,15 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
+import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
 class RoomModule {
     lateinit var database: AppDataBase
     private var mode: Int = 1
+
+    @Singleton
     @Provides
     fun provideAppDataBase(@ApplicationContext appContext: Context): AppDataBase {
         when (mode) {
@@ -66,24 +69,34 @@ class RoomModule {
         }
         return database
     }
+    @Singleton
     @Provides
     fun provideTrainingDao(appDatabase: AppDataBase): TrainingDao = appDatabase.trainingDao()
+    @Singleton
     @Provides
     fun provideRoundDao(appDatabase: AppDataBase): RoundDao = appDatabase.roundDao()
+    @Singleton
     @Provides
     fun provideRingDao(appDatabase: AppDataBase): RingDao = appDatabase.ringDao()
+    @Singleton
     @Provides
     fun provideExerciseDao(appDatabase: AppDataBase): ExerciseDao = appDatabase.exerciseDao()
+    @Singleton
     @Provides
     fun provideActivityDao(appDatabase: AppDataBase): ActivityDao = appDatabase.activityDao()
+    @Singleton
     @Provides
     fun provideSetDao(appDatabase: AppDataBase): SetDao = appDatabase.setDao()
+    @Singleton
     @Provides
     fun provideSpeechDao(appDatabase: AppDataBase): SpeechDao = appDatabase.speechDao()
+    @Singleton
     @Provides
     fun provideSpeechKitDao(appDatabase: AppDataBase): SpeechKitDao = appDatabase.speechKitDao()
+    @Singleton
     @Provides
     fun provideSettingDao(appDatabase: AppDataBase): SettingDao = appDatabase.settingDao()
+    @Singleton
     @Provides
     fun provideTrackingDao(appDatabase: AppDataBase): TrackingDao = appDatabase.trackingDao()
 

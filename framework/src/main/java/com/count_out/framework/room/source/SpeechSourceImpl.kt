@@ -21,10 +21,8 @@ class SpeechSourceImpl @Inject constructor(private val dao: SpeechDao): SpeechSo
 //        dao.updateDuration(speech.duration, speech.idSpeech)
 //        return get(speech.idSpeech)
 //    }
-
-
     private fun toSpeechTable(speech: SpeechImpl) = SpeechTable(
-        idSpeech = speech.idSpeech,
+        idSpeech = 0,
         message = speech.message,
         duration = speech.duration,
         addMessage = speech.addMessage

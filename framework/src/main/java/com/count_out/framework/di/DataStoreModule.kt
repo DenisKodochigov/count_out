@@ -13,6 +13,7 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
+import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
@@ -21,12 +22,14 @@ class DataStoreModule {
     private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "count_out")
     private val keySpeechDescr = booleanPreferencesKey("speech_description")
 
+    @Singleton
     @Provides
     fun provideSettingsSourceImpl(@ApplicationContext context: Context) =
         SettingsSourceImpl(context.dataStore, keySpeechDescr)
 
     private val bleAddrKey = stringPreferencesKey("address_ble_device")
     private val bleNameKey = stringPreferencesKey("name_ble_device")
+    @Singleton
     @Provides
     fun provideBleDeviceStoredSourceImpl(@ApplicationContext context: Context) =
         BleDeviceStoredSourceImpl(context.dataStore, bleAddrKey, bleNameKey)

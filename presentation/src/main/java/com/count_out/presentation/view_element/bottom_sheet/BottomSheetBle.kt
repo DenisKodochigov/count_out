@@ -74,7 +74,7 @@ import com.count_out.presentation.view_element.icons.AnimateIcon
         modifier = Modifier
             .fillMaxSize()
             .padding(6.dp)
-            .border(width = 1.dp, color = colorScheme.onTertiaryContainer, shape = MaterialTheme.shapes.small)
+            .border(width = 1.dp, color = colorScheme.onTertiaryContainer, shape = shapes.small)
     ) {
         items(items = dataState.devicesUI) { item ->
             Spacer(modifier = Modifier.height(0.dp))

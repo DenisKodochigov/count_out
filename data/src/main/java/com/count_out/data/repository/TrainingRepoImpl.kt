@@ -1,6 +1,5 @@
 package com.count_out.data.repository
 
-import com.count_out.data.models.TrainingImpl
 import com.count_out.data.source.room.TrainingSource
 import com.count_out.domain.entity.workout.Training
 import com.count_out.domain.repository.trainings.TrainingRepo
@@ -9,7 +8,7 @@ import javax.inject.Inject
 
 class TrainingRepoImpl @Inject constructor(private val trainingSource: TrainingSource): TrainingRepo {
 
-    override fun get(training: Training): Flow<Training> = trainingSource.get(training as TrainingImpl)
+    override fun get(training: Training): Flow<Training> = trainingSource.get(training)
 
     override fun gets(): Flow<List<Training>> = trainingSource.gets()
 

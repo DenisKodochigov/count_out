@@ -54,7 +54,7 @@ class RoundSourceImpl @Inject constructor(
     }
 
     private fun toRoundTable(round: RoundImpl) = RoundTable(
-        idRound = round.idRound,
+//        idRound = round.idRound,
         trainingId = round.trainingId,
         speechId = round.speechId,
         roundType = round.roundType.ordinal

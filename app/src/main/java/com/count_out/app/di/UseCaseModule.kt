@@ -57,85 +57,106 @@ class UseCaseModule {
     fun provideInternet(@ApplicationContext appContext: Context): Internet {
         return Internet(appContext)
     }
+    @Singleton
     @Provides
     fun provideUseCaseConfiguration(): UseCase.Configuration = UseCase.Configuration(Dispatchers.IO)
 
+    @Singleton
     @Provides
     fun provideAddTrainingUseCase(
         configuration: UseCase.Configuration,
         trainingRepo: TrainingRepo): AddTrainingUC = AddTrainingUC(configuration, trainingRepo)
+    @Singleton
     @Provides
     fun provideCopyTrainingUseCase(
         configuration: UseCase.Configuration,
         trainingRepo: TrainingRepo): CopyTrainingUC = CopyTrainingUC(configuration, trainingRepo)
+    @Singleton
     @Provides
     fun provideDelTrainingUCUseCase(
         configuration: UseCase.Configuration,
         trainingRepo: TrainingRepo): DeleteTrainingUC = DeleteTrainingUC(configuration, trainingRepo)
+    @Singleton
     @Provides
     fun provideGetTrainingsUseCase(
         configuration: UseCase.Configuration,
         trainingRepo: TrainingRepo): GetTrainingsUC = GetTrainingsUC(configuration, trainingRepo)
+    @Singleton
     @Provides
     fun provideGetTrainingUseCase(
         configuration: UseCase.Configuration,
         trainingRepo: TrainingRepo): GetTrainingUC = GetTrainingUC(configuration, trainingRepo)
+    @Singleton
     @Provides
     fun provideSelectTrainingUseCase(
         configuration: UseCase.Configuration,
         trainingRepo: TrainingRepo): SelectTrainingUC = SelectTrainingUC(configuration, trainingRepo)
+    @Singleton
     @Provides
     fun provideUpdateTrainingUseCase(
         configuration: UseCase.Configuration,
         trainingRepo: TrainingRepo): UpdateTrainingUC = UpdateTrainingUC(configuration, trainingRepo)
+    @Singleton
     @Provides
     fun provideAddActivityUseCase(
         configuration: UseCase.Configuration,
         activityRepo: ActivityRepo ): AddActivityUC = AddActivityUC(configuration, activityRepo)
+    @Singleton
     @Provides
     fun provideDelActivityUseCase(
         configuration: UseCase.Configuration,
         activityRepo: ActivityRepo ): DeleteActivityUC = DeleteActivityUC(configuration, activityRepo)
+    @Singleton
     @Provides
     fun provideGetsActivityUseCase(
         configuration: UseCase.Configuration,
         activityRepo: ActivityRepo ): GetsActivityUC = GetsActivityUC(configuration, activityRepo)
+    @Singleton
     @Provides
     fun provideSetColorActivityUseCase(
         configuration: UseCase.Configuration,
         activityRepo: ActivityRepo ): SetColorActivityUC = SetColorActivityUC(configuration, activityRepo)
+    @Singleton
     @Provides
     fun provideUpdateActivityUseCase(
         configuration: UseCase.Configuration,
         activityRepo: ActivityRepo ): UpdateActivityUC = UpdateActivityUC(configuration, activityRepo)
+    @Singleton
     @Provides
     fun provideClearCacheBleUseCase(
         configuration: UseCase.Configuration,
         repo: BluetoothRepo ): ClearCacheBleUC = ClearCacheBleUC(configuration, repo)
+    @Singleton
     @Provides
     fun provideSelectDeviceBleUseCase(
         configuration: UseCase.Configuration,
         repo: BluetoothRepo ): SelectDeviceBleUC = SelectDeviceBleUC(configuration, repo)
+    @Singleton
     @Provides
     fun provideStartScanBleUseCase(
         configuration: UseCase.Configuration,
         repo: BluetoothRepo ): StartScanBleUC = StartScanBleUC(configuration, repo)
+    @Singleton
     @Provides
     fun provideStopScanBleUseCase(
         configuration: UseCase.Configuration,
         repo: BluetoothRepo ): StopScanBleUC = StopScanBleUC(configuration, repo)
+    @Singleton
     @Provides
     fun provideAddExerciseUseCase(
         configuration: UseCase.Configuration,
         repo: ExerciseRepo ): AddExerciseUC = AddExerciseUC(configuration, repo)
+    @Singleton
     @Provides
     fun provideChangeSequenceExerciseUseCase(
         configuration: UseCase.Configuration,
         repo: ExerciseRepo ): ChangeSequenceExerciseUC = ChangeSequenceExerciseUC(configuration, repo)
+    @Singleton
     @Provides
     fun provideCopyExerciseUseCase(
         configuration: UseCase.Configuration,
         repo: ExerciseRepo ): CopyExerciseUC = CopyExerciseUC(configuration, repo)
+    @Singleton
     @Provides
     fun provideDeleteExerciseUseCase(
         configuration: UseCase.Configuration,
@@ -144,43 +165,53 @@ class UseCaseModule {
 //    fun provideSelectActivityUseCase(
 //        configuration: UseCase.Configuration,
 //        repo: ExerciseRepo ): SelectActivityUC = SelectActivityUC(configuration, repo)
+@Singleton
     @Provides
     fun provideAddSetUseCase(
         configuration: UseCase.Configuration,
         repo: SetRepo ): AddSetUC = AddSetUC(configuration, repo)
+    @Singleton
     @Provides
     fun provideCopySetUseCase(
         configuration: UseCase.Configuration,
         repo: SetRepo ): CopySetUC = CopySetUC(configuration, repo)
+    @Singleton
     @Provides
     fun provideDeleteSetUseCase(
         configuration: UseCase.Configuration,
         repo: SetRepo ): DeleteSetUC = DeleteSetUC(configuration, repo)
+    @Singleton
     @Provides
     fun provideUpdateSetUseCase(
         configuration: UseCase.Configuration,
         repo: SetRepo ): UpdateSetUC = UpdateSetUC(configuration, repo)
+    @Singleton
     @Provides
     fun provideGetSettingsUseCase(
         configuration: UseCase.Configuration,
         repo: SettingsRepo ): GetSettingsUC = GetSettingsUC(configuration, repo)
+    @Singleton
     @Provides
     fun provideGetSettingUseCase(
         configuration: UseCase.Configuration,
         repo: SettingsRepo ): GetSettingUC = GetSettingUC(configuration, repo)
+    @Singleton
     @Provides
     fun provideUpdateSettingUseCase(
         configuration: UseCase.Configuration,
         repo: SettingsRepo ): UpdateSettingUC = UpdateSettingUC(configuration, repo)
+    @Singleton
     @Provides
     fun provideGetWeatherUseCase(
         configuration: UseCase.Configuration,
         repo: WeatherRepo ): GetWeatherUC = GetWeatherUC(configuration, repo)
+    @Singleton
     @Provides
     fun provideCountOutServiceBindUseCase(
         configuration: UseCase.Configuration,
         repo: CountOutServiceRepo
     ): CountOutServiceBindUC = CountOutServiceBindUC(configuration, repo)
+    @Singleton
     @Provides
     fun provideCountOutServiceUnBindUseCase(
         configuration: UseCase.Configuration,

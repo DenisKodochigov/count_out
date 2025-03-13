@@ -76,12 +76,12 @@ object Dimen {
     val FireBrick = Color(0xFFB22222)
     val DarkRed = Color(0xFF8B0000)
     // Розовые тона:
-    val Pink = Color(0xFFFFC0CB)
-    val LightPink = Color(0xFFFFB6C1)
-    val HotPink = Color(0xFFFF69B4)
-    val DeepPink = Color(0xFFFF1493)
-    val MediumVioletRed = Color(0xFFC71585)
-    val PaleVioletRed = Color(0xFFDB7093)
+//    val Pink = Color(0xFFFFC0CB)
+//    val LightPink = Color(0xFFFFB6C1)
+//    val HotPink = Color(0xFFFF69B4)
+//    val DeepPink = Color(0xFFFF1493)
+//    val MediumVioletRed = Color(0xFFC71585)
+//    val PaleVioletRed = Color(0xFFDB7093)
     // Оранжевые тона:
     val LightSalmon = Color(0xFFFFA07A)
     val Coral = Color(0xFFFF7F50)

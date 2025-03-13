@@ -159,5 +159,5 @@ class ExecuteWorkViewModel @Inject constructor(
             dataForUI.heartRate.collect { hr ->
                 _executeWorkoutScreenState.update { state -> state.copy(heartRate = hr) } } } //heartRate
     }
-    fun availableInternet() = internet.isOnline()
+//    fun availableInternet() = internet.isOnline()
 }

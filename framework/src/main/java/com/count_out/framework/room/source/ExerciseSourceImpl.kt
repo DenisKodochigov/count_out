@@ -59,7 +59,7 @@ class ExerciseSourceImpl @Inject constructor(
     }
 
     private fun toExerciseTable(exercise: ExerciseImpl) = ExerciseTable(
-        idExercise = exercise.idExercise,
+//        idExercise = exercise.idExercise,
         roundId = exercise.roundId,
         ringId = exercise.ringId,
         activityId = exercise.activityId,

@@ -1,6 +1,7 @@
 package com.count_out.domain.use_case.set
 
 import com.count_out.domain.entity.workout.Set
+import com.count_out.domain.entity.workout.Training
 import com.count_out.domain.repository.trainings.SetRepo
 import com.count_out.domain.use_case.UseCase
 import kotlinx.coroutines.flow.Flow
@@ -13,5 +14,5 @@ class DeleteSetUC @Inject constructor(
     override fun executeData(input: Request): Flow<Response> =
         repo.del(input.item).map { Response(it) }
     data class Request(val item: Set): UseCase.Request
-    data class Response(val set: List<Set>): UseCase.Response
+    data class Response(val training: Training): UseCase.Response
 }

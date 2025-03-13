@@ -2,17 +2,12 @@ package com.count_out.presentation.screens.training
 
 import androidx.lifecycle.viewModelScope
 import com.count_out.domain.entity.DataForChangeSequence
-import com.count_out.domain.entity.workout.Activity
 import com.count_out.domain.entity.workout.Exercise
 import com.count_out.domain.entity.workout.Set
 import com.count_out.domain.entity.workout.Training
-import com.count_out.domain.use_case.activity.SetColorActivityUC
-import com.count_out.domain.use_case.activity.UpdateActivityUC
-import com.count_out.domain.use_case.exercise.AddExerciseUC
 import com.count_out.domain.use_case.exercise.ChangeSequenceExerciseUC
 import com.count_out.domain.use_case.exercise.CopyExerciseUC
 import com.count_out.domain.use_case.exercise.DeleteExerciseUC
-import com.count_out.domain.use_case.set.AddSetUC
 import com.count_out.domain.use_case.set.CopySetUC
 import com.count_out.domain.use_case.set.DeleteSetUC
 import com.count_out.domain.use_case.set.UpdateSetUC
@@ -33,13 +28,9 @@ import javax.inject.Inject
     private val getTraining: GetTrainingUC,
     private val delTraining: DeleteTrainingUC,
     private val updateTraining: UpdateTrainingUC,
-    private val addExercise: AddExerciseUC,
     private val copyExercise: CopyExerciseUC,
     private val delExercise: DeleteExerciseUC,
     private val changeSequenceExercise: ChangeSequenceExerciseUC,
-    private val setColorActivity: SetColorActivityUC,
-    private val updateActivity: UpdateActivityUC,
-    private val addSet: AddSetUC,
     private val copySet: CopySetUC,
     private val deleteSet: DeleteSetUC,
     private val changeSet: UpdateSetUC,
@@ -51,16 +42,10 @@ import javax.inject.Inject
         when (event) {
             is TrainingEvent.BackScreen -> { navigate.backStack()}
             is TrainingEvent.GetTraining -> { getTraining(event.id) }
-            is TrainingEvent.DelTraining -> { delTraining(event.training) }
             is TrainingEvent.UpdateTraining -> { updateTraining(event.training)}
-            is TrainingEvent.AddExercise -> { addExercise(event.exercise) }
             is TrainingEvent.CopyExercise -> { copyExercise(event.exercise) }
             is TrainingEvent.DelExercise -> { deleteExercise(event.exercise) }
             is TrainingEvent.ChangeSequenceExercise -> { changeSequenceExercise(event.item) }
-//            is TrainingEvent.SelectActivity -> { selectActivity(event.activity) }
-            is TrainingEvent.SetColorActivity -> { setColorActivity(event.activity) }
-            is TrainingEvent.UpdateActivity -> { updateActivity(event.activity) }
-            is TrainingEvent.AddSet -> { addSet(event.item) }
             is TrainingEvent.CopySet -> { copySet(event.item) }
             is TrainingEvent.DeleteSet -> { deleteSet(event.item) }
             is TrainingEvent.ChangeSet -> { changeSet(event.item) }
@@ -90,12 +75,6 @@ import javax.inject.Inject
                 .map { converter.convert(it) }.collect { submitState(it) }
         }
     }
-    private fun addExercise(exercise: Exercise){
-        viewModelScope.launch {
-            addExercise.execute( AddExerciseUC.Request(exercise))
-                .map { converter.convert(it) }.collect { submitState(it) }
-        }
-    }
     private fun copyExercise(exercise: Exercise){
         viewModelScope.launch {
             copyExercise.execute( CopyExerciseUC.Request(exercise))
@@ -105,30 +84,6 @@ import javax.inject.Inject
     private fun deleteExercise(exercise: Exercise){
         viewModelScope.launch {
             delExercise.execute( DeleteExerciseUC.Request(exercise))
-                .map { converter.convert(it) }.collect { submitState(it) }
-        }
-    }
-//    private fun selectActivity(activity: ActionWithActivity){
-//        viewModelScope.launch {
-//            selectActivity.execute( SelectActivityUC.Request(activity))
-//                .map { converter.convert(it) }.collect { submitState(it) }
-//        }
-//    }
-    private fun setColorActivity(activity: Activity){
-        viewModelScope.launch {
-            setColorActivity.execute( SetColorActivityUC.Request(activity))
-                .map { converter.convert(it) }.collect { submitState(it) }
-        }
-    }
-    private fun updateActivity(activity: Activity){
-        viewModelScope.launch {
-            updateActivity.execute( UpdateActivityUC.Request(activity))
-                .map { converter.convert(it) }.collect { submitState(it) }
-        }
-    }
-    private fun addSet(item: Set){
-        viewModelScope.launch {
-            addSet.execute( AddSetUC.Request(item))
                 .map { converter.convert(it) }.collect { submitState(it) }
         }
     }

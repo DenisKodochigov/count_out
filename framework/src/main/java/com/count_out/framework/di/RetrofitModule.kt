@@ -11,10 +11,12 @@ import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 import java.util.concurrent.TimeUnit
+import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
 class RetrofitModule {
+    @Singleton
     @Provides
     fun provideOkHttpClient(): OkHttpClient = OkHttpClient
         .Builder()
@@ -22,9 +24,11 @@ class RetrofitModule {
         .connectTimeout(15, TimeUnit.SECONDS)
         .build()
 
+    @Singleton
     @Provides
     fun provideMoshi(): Moshi = Moshi.Builder().add(KotlinJsonAdapterFactory()).build()
 
+    @Singleton
     @Provides
     fun provideRetrofit(okHttpClient: OkHttpClient, moshi: Moshi): Retrofit = Retrofit.Builder()
         .baseUrl("https://api.open-meteo.com/v1/")
@@ -32,6 +36,7 @@ class RetrofitModule {
         .addConverterFactory(MoshiConverterFactory.create(moshi))
         .build()
 
+    @Singleton
     @Provides
     fun provideUserService(retrofit: Retrofit): WeatherService =
         retrofit.create(WeatherService::class.java)

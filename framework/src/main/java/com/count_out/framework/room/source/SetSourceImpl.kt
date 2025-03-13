@@ -34,7 +34,7 @@ class SetSourceImpl @Inject constructor(
     }
 
     private fun toSetTable(set: SetImpl) = SetTable(
-        idSet = set.idSet,
+//        idSet = set.idSet,
         name = set.name,
         speechId = set.speechId,
         goal = set.goal.ordinal,

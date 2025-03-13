@@ -114,16 +114,16 @@ val exitTransition: AnimatedContentTransitionScope<NavBackStackEntry>.() -> Exit
     slideOutHorizontally(animationSpec = tweenM(), targetOffsetX = { (it * direction).toInt() }) +
     fadeOut(animationSpec = tweenM())
 }
-val popEnterTransition: AnimatedContentTransitionScope<NavBackStackEntry>.() -> EnterTransition = {
-    val targetScreen = targetState.destination.route ?: TrainingsDestination.route
-    val direction: Double = if (targetScreen == TrainingsDestination.route) (1/3.0) else (1/3.0)
-    slideInHorizontally(initialOffsetX = { (it * direction).toInt() }, animationSpec = tweenM())
-}
-val popExitTransition: AnimatedContentTransitionScope<NavBackStackEntry>.() -> ExitTransition = {
-    val targetScreen = targetState.destination.route ?: TrainingsDestination.route
-    val direction: Double = if (targetScreen == TrainingsDestination.route) (1/3.0) else (1/3.0)
-    slideOutHorizontally(targetOffsetX = { (it * direction).toInt() }, animationSpec = tweenM())
-}
+//val popEnterTransition: AnimatedContentTransitionScope<NavBackStackEntry>.() -> EnterTransition = {
+//    val targetScreen = targetState.destination.route ?: TrainingsDestination.route
+//    val direction: Double = if (targetScreen == TrainingsDestination.route) (1/3.0) else (1/3.0)
+//    slideInHorizontally(initialOffsetX = { (it * direction).toInt() }, animationSpec = tweenM())
+//}
+//val popExitTransition: AnimatedContentTransitionScope<NavBackStackEntry>.() -> ExitTransition = {
+//    val targetScreen = targetState.destination.route ?: TrainingsDestination.route
+//    val direction: Double = if (targetScreen == TrainingsDestination.route) (1/3.0) else (1/3.0)
+//    slideOutHorizontally(targetOffsetX = { (it * direction).toInt() }, animationSpec = tweenM())
+//}
 fun <T>tweenM(): TweenSpec<T> =
     tween( durationMillis = DURATION_SCREEN, delayMillis = DELAY_SCREEN, easing = LinearOutSlowInEasing)
 

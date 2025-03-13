@@ -80,7 +80,6 @@ fun TrainingList(
         contentPadding = PaddingValues(horizontal = Dimen.paddingAppHor),
         modifier = modifier.testTag("1").animateContentSize()
     ) {
-
         items(dataState.trainings) { item ->
             Spacer(modifier = Modifier.height(Dimen.width4))
             ItemSwipe(
@@ -126,15 +125,13 @@ fun TrainingCard(
 @Composable
 fun IconSelected(training: Training, dataState: TrainingsState) {
     dataState.selectedId.value?.let { selectedId ->
-        if (training.idTraining == selectedId) IconQ.Mark(onClick = {
-            dataState.selectedId.value = null
-        })
+        if (training.idTraining == selectedId) IconQ.Mark(onClick = { dataState.selectedId.value = null })
         else IconQ.HorLine(onClick = { dataState.selectedId.value = training.idTraining })
     } ?: IconQ.HorLine(onClick = { dataState.selectedId.value = training.idTraining })
 }
 
 @Composable fun IconCopy(item: Training, action: Action) {
-    IconQ.Copy(onClick = { action.ex(TrainingsEvent.Copy(item)) })
+    IconQ.Copy(onClick = { action.ex(TrainingsEvent.Copy(item )) })
 }
 
 @Composable
@@ -143,7 +140,7 @@ fun TrainingInformation(
     action: Action,
     modifier: Modifier = Modifier
 ) {
-    Column(modifier = modifier.clickable { action.ex(TrainingsEvent.Select(item))}) {
+    Column(modifier = modifier.clickable { action.ex(TrainingsEvent.Edit(item.idTraining))}) {
         TextApp(text = item.name, style = MaterialTheme.typography.titleLarge)
         Spacer(modifier = Modifier.height(Dimen.height4))
         TextApp(

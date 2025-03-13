@@ -1,6 +1,7 @@
 package com.count_out.domain.use_case.exercise
 
 import com.count_out.domain.entity.workout.Exercise
+import com.count_out.domain.entity.workout.Training
 import com.count_out.domain.repository.trainings.ExerciseRepo
 import com.count_out.domain.use_case.UseCase
 import kotlinx.coroutines.flow.Flow
@@ -13,5 +14,5 @@ class DeleteExerciseUC @Inject constructor(
     override fun executeData(input: Request): Flow<Response> =
         repo.del(input.exercise).map { Response(it) }
     data class Request(val exercise: Exercise): UseCase.Request
-    data class Response(val exercise: List<Exercise>): UseCase.Response
+    data class Response(val training: Training): UseCase.Response
 }

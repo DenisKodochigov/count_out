@@ -36,7 +36,7 @@ class SpeechKitSourceImpl @Inject constructor(
     }
 
     private fun toSpeechKitTable(speechKit: SpeechKit): SpeechKitTable = SpeechKitTable(
-        idSpeechKit = speechKit.idSpeechKit,
+        idSpeechKit = 0,
         idBeforeStart = speechKit.idBeforeStart,
         idAfterStart = speechKit.idAfterStart,
         idBeforeEnd = speechKit.idBeforeEnd,

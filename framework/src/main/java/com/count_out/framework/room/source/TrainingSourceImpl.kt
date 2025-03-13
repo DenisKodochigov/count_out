@@ -33,7 +33,7 @@ class TrainingSourceImpl @Inject constructor(
             training.speech?.let{ it as SpeechKitImpl} ?: SpeechKitImpl())
         val trainingId = ( dao.add(
             TrainingTable(
-                idTraining = training.idTraining,
+//                idTraining = 0,
                 name = training.name,
                 speechId = speechId
             )))
@@ -63,7 +63,7 @@ class TrainingSourceImpl @Inject constructor(
 
     private fun toTrainingTable(training: Training) =
         TrainingTable(
-            idTraining = training.idTraining,
+//            idTraining = training.idTraining,
             name = training.name,
             speechId = training.speechId
         )
