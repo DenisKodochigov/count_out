@@ -35,7 +35,7 @@ fun BottomSheetSelectActivity(dataState: TrainingState, action: Action)
         skipPartiallyExpanded = true, confirmValueChange = { true },)
 
     ModalBottomSheetApp(
-        onDismissRequest = {dataState.onDismissSelectActivity.invoke()},
+        onDismissRequest = { dataState.onDismissSelectActivity.invoke()},
         modifier = Modifier.padding(horizontal = Dimen.bsPaddingHor1),
         shape = MaterialTheme.shapes.small,
         sheetState = sheetState,

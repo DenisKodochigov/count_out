@@ -54,7 +54,7 @@ fun Round(dataState: TrainingState, action: Action, round: Round){
         IconsGroup(
             onClickSpeech = { showSpeechRound(dataState, round) },
             onClickAddExercise = {
-                action.ex(TrainingEvent.AddExercise(exercise = ExerciseImpl(roundId = round.idRound)))})
+                action.ex(TrainingEvent.CopyExercise(exercise = ExerciseImpl(roundId = round.idRound)))})
         Spacer(modifier = Modifier.width(6.dp))
     }
 }

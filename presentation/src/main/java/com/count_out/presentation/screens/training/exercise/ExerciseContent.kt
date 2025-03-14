@@ -99,11 +99,11 @@ fun ListExercises(
             onClickDelete = { action.ex(TrainingEvent.DelExercise(exercise)) },
             onClickEdit = {
                 dataState.exercise = exercise
-                dataState.showBottomSheetSelectActivity.value = true },
+                dataState.showSelectActivity.value = true },
             onClickSpeech = {
                 dataState.exercise = exercise
                 dataState.showSpeechExercise.value = true },
-            onClickAddSet = { action.ex( TrainingEvent.AddSet(
+            onClickAddSet = { action.ex( TrainingEvent.CopySet(
                     SetImpl(name = nameNewSet, exerciseId = exercise.idExercise)))},
         )
     }

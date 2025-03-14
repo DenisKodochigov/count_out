@@ -20,27 +20,27 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.count_out.presentation.view_element.ButtonConfirm
-import com.count_out.presentation.view_element.ModalBottomSheetApp
-import com.count_out.presentation.view_element.TextApp
-import com.count_out.presentation.view_element.TextFieldApp
 import com.count_out.domain.entity.workout.Exercise
 import com.count_out.domain.entity.workout.Round
-import com.count_out.domain.entity.workout.Training
 import com.count_out.domain.entity.workout.Set
+import com.count_out.domain.entity.workout.Training
 import com.count_out.presentation.R
 import com.count_out.presentation.models.BottomSheetInterface
 import com.count_out.presentation.models.Dimen
 import com.count_out.presentation.models.SpeechImpl
 import com.count_out.presentation.models.SpeechKitImpl
 import com.count_out.presentation.models.TypeKeyboard
+import com.count_out.presentation.view_element.ButtonConfirm
+import com.count_out.presentation.view_element.ModalBottomSheetApp
+import com.count_out.presentation.view_element.TextApp
+import com.count_out.presentation.view_element.TextFieldApp
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable fun BottomSheetSpeech(itemSpeech: BottomSheetInterface) {
     val uiState by remember{ mutableStateOf( bottomSheetStateNew(itemSpeech)) }
     val sheetState = rememberModalBottomSheetState( skipPartiallyExpanded = true )
     ModalBottomSheetApp(
-        onDismissRequest = {uiState.onDismissSpeech.invoke()},
+        onDismissRequest = { uiState.onDismissSpeech.invoke()},
         modifier = Modifier.padding(horizontal = Dimen.bsPaddingHor1),
         shape = shapes.small,
         sheetState = sheetState,
@@ -66,9 +66,10 @@ fun bottomSheetStateNew(itemSpeech: BottomSheetInterface): BottomSheetState {
         nameSection = itemSpeech.nameSection,
         item = itemSpeech.item,
         onConfirmationSpeech = itemSpeech.onConfirmationSpeech,
-        onDismissSpeech = itemSpeech.onDismissSpeech,
+//        onDismissSpeech = itemSpeech.onDismissSpeech,
     )
 }
+
 @Composable fun BottomSheetSpeechContent(uiState: BottomSheetState) {
     Column( horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier.padding(Dimen.bsItemPaddingHor)

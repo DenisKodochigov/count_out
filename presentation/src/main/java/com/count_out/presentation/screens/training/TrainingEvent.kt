@@ -10,14 +10,29 @@ sealed class TrainingEvent: Event {
     data class GetTraining(val id: Long): TrainingEvent()
     data class DelTraining(val training: Training) : TrainingEvent()
     data class UpdateTraining(val training: Training) : TrainingEvent()
-    data class AddExercise(val exercise: Exercise): TrainingEvent()
     data class CopyExercise(val exercise: Exercise): TrainingEvent()
     data class DelExercise(val exercise: Exercise): TrainingEvent()
     data class ChangeSequenceExercise(val item: DataForChangeSequence): TrainingEvent()
 
-    data class AddSet(val item: Set): TrainingEvent()
     data class CopySet(val item: Set): TrainingEvent()
     data class DeleteSet(val item: Set): TrainingEvent()
-    data class ChangeSet(val item: Set): TrainingEvent()
+    data class UpdateSet(val item: Set): TrainingEvent()
+
+    data class ShowBSSpeechTraining(val item: Boolean): TrainingEvent()
+    data class ShowBSSpeechWorkUp(val item: Boolean): TrainingEvent()
+    data class ShowBSSpeechWorkOut(val item: Boolean): TrainingEvent()
+    data class ShowBSSpeechWorkDown(val item: Boolean): TrainingEvent()
+    data class ShowBSSpeechExercise(val item: Boolean): TrainingEvent()
+    data class ShowBSSpeechSet(val item: Boolean): TrainingEvent()
+    data class ShowBSSelectActivity(val item: Boolean): TrainingEvent()
+
+    data class ShowBSSpeechSet(val item: Boolean): TrainingEvent()
+    data class ShowBSSpeechSet(val item: Boolean): TrainingEvent()
+    data class ShowBSSpeechSet(val item: Boolean): TrainingEvent()
+    data class ShowBSSpeechSet(val item: Boolean): TrainingEvent()
+    data class ShowBSSpeechSet(val item: Boolean): TrainingEvent()
+
+
+
     data object BackScreen : TrainingEvent()
 }

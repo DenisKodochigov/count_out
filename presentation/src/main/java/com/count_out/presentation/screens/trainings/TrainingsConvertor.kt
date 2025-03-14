@@ -1,6 +1,5 @@
 package com.count_out.presentation.screens.trainings
 
-import androidx.compose.runtime.mutableStateOf
 import com.count_out.domain.use_case.UseCase
 import com.count_out.domain.use_case.trainings.AddTrainingUC
 import com.count_out.domain.use_case.trainings.CopyTrainingUC
@@ -11,6 +10,8 @@ import com.count_out.presentation.screens.prime.PrimeConvertor
 import javax.inject.Inject
 
 class TrainingsConvertor @Inject constructor(): PrimeConvertor<UseCase.Response, TrainingsState>() {
+
+    val state = TrainingsState()
     override fun convertSuccess(data: UseCase.Response): TrainingsState {
         return when(data){
             is GetTrainingsUC.Response-> converterGetTrainings(data)
@@ -23,29 +24,25 @@ class TrainingsConvertor @Inject constructor(): PrimeConvertor<UseCase.Response,
         }
     }
     private fun converterGetTrainings(data: GetTrainingsUC.Response): TrainingsState {
-        return TrainingsState(
-            trainings = data .trainings, selectedId = mutableStateOf(0),)
+        return state.copy(trainings = emptyList())
     }
     private fun converterAddTraining(data: AddTrainingUC.Response): TrainingsState {
-        return TrainingsState(
-            trainings = data.trainings, selectedId = mutableStateOf(0),)
+        return state.copy(trainings = emptyList())
     }
     private fun converterCopyTraining(data: CopyTrainingUC.Response): TrainingsState {
-        return TrainingsState(
-            trainings = data .trainings, selectedId = mutableStateOf(0),)
+        return state.copy(trainings = emptyList())
     }
     private fun converterDeleteTraining(data: DeleteTrainingUC.Response): TrainingsState {
-        return TrainingsState(
-            trainings = data .trainings, selectedId = mutableStateOf(0),)
+        return state.copy(trainings = emptyList())
     }
 //    private fun converterUpdateTraining(data: UpdateTrainingUC.Response): TrainingsState {
 //        return TrainingsState(
 //            trainings = data.trainings, selectedId = mutableStateOf(0),)
 //    }
     private fun converterSelectTraining(data: SelectTrainingUC.Response): TrainingsState {
-        return TrainingsState(
-            trainings = data .trainings, selectedId = mutableStateOf(0),)
-    }
+        return state.copy(trainings = emptyList())
+}
     private fun converterOther(): TrainingsState {
-        return TrainingsState(trainings = emptyList(), selectedId = mutableStateOf(0),) }
+        return state.copy(trainings = emptyList())
+    }
 }

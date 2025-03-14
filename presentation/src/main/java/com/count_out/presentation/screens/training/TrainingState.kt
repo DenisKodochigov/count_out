@@ -1,8 +1,6 @@
 package com.count_out.presentation.screens.training
 
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.Stable
-import androidx.compose.runtime.mutableStateOf
 import com.count_out.domain.entity.workout.Activity
 import com.count_out.domain.entity.workout.Exercise
 import com.count_out.domain.entity.workout.Set
@@ -11,17 +9,15 @@ import com.count_out.domain.entity.workout.Training
 import com.count_out.presentation.models.BottomSheetInterface
 
 data class TrainingState (
-    val training: Training,
-    val enteredName: String = "",
+    val training: Training? = null,
+//    val enteredName: String = "",
     val showSpeechTraining: Boolean = false,
     val showSpeechWorkUp: Boolean = false,
     val showSpeechWorkOut: Boolean = false,
     val showSpeechWorkDown: Boolean = false,
     val showSpeechExercise: Boolean = false,
     val showSpeechSet: Boolean = false,
-    val workUpCollapsing: Boolean = true,
-    val workOutCollapsing: Boolean = true,
-    val workDownCollapsing: Boolean = true,
+    val showSelectActivity: Boolean = false,
 
     val nameTraining: String = "",
     val roundId: Long = 0,
@@ -29,11 +25,12 @@ data class TrainingState (
     @Stable var set: Set? = null,
     val activities: List<Activity> = emptyList(),
 
-    @Stable val listCollapsingSet: MutableState<List<Long>> = mutableStateOf(emptyList()),
-    @Stable val listCollapsingExercise: MutableState<List<Long>> = mutableStateOf(emptyList()),
-    @Stable val showBottomSheetSpeech: MutableState<Boolean> = mutableStateOf(false),
-    @Stable val showBottomSheetSelectActivity: MutableState<Boolean> = mutableStateOf(false),
-    @Stable var onDismissSelectActivity: () -> Unit = {},
+    val workUpCollapsing: Boolean = true,
+    val workOutCollapsing: Boolean = true,
+    val workDownCollapsing: Boolean = true,
+    val listCollapsingSet: List<Long> = emptyList(),
+    val listCollapsingExercise: List<Long> = emptyList(),
+//    @Stable var onDismissSelectActivity: () -> Unit = {},
 
     @Stable var onBaskScreen: () ->Unit = {},
     @Stable var screenTextHeader: String = "",
