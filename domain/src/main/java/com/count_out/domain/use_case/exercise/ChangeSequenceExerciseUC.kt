@@ -1,6 +1,7 @@
 package com.count_out.domain.use_case.exercise
 
 import com.count_out.domain.entity.DataForChangeSequence
+import com.count_out.domain.entity.workout.Exercise
 import com.count_out.domain.entity.workout.Training
 import com.count_out.domain.repository.trainings.ExerciseRepo
 import com.count_out.domain.use_case.UseCase
@@ -14,5 +15,5 @@ class ChangeSequenceExerciseUC @Inject constructor(
     override fun executeData(input: Request): Flow<Response> =
         repo.changeSequenceExercise(input.item).map { Response(it) }
     data class Request(val item: DataForChangeSequence): UseCase.Request
-    data class Response(val training: Training): UseCase.Response
+    data class Response(val training: List<Exercise>): UseCase.Response
 }

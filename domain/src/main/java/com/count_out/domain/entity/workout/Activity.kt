@@ -1,6 +1,6 @@
 package com.count_out.domain.entity.workout
 
-interface Activity {
+interface Activity: Element {
     val idActivity: Long
     val name: String
     val description: String

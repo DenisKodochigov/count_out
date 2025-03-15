@@ -14,5 +14,5 @@ class CopyExerciseUC @Inject constructor(
     override fun executeData(input: Request): Flow<Response> =
         repo.copy(input.exercise).map { Response(it) }
     data class Request(val exercise: Exercise): UseCase.Request
-    data class Response(val training: Training): UseCase.Response
+    data class Response(val training: List<Exercise>): UseCase.Response
 }

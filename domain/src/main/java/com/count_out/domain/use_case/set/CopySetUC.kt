@@ -14,5 +14,5 @@ class CopySetUC @Inject constructor(
     override fun executeData(input: Request): Flow<Response> =
         repo.copy(input.item).map { Response(it) }
     data class Request(val item: Set): UseCase.Request
-    data class Response(val training: Training): UseCase.Response
+    data class Response(val training: List<Set>): UseCase.Response
 }

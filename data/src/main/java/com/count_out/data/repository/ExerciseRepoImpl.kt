@@ -10,8 +10,7 @@ import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 
 
-class ExerciseRepoImpl @Inject constructor(private val exerciseSource: ExerciseSource):
-    ExerciseRepo {
+class ExerciseRepoImpl @Inject constructor(private val exerciseSource: ExerciseSource): ExerciseRepo {
     override fun get(exercise: Exercise): Flow<Exercise> = exerciseSource.get(exercise as ExerciseImpl)
     override fun del(exercise: Exercise): Flow<List<Exercise>> {
         exerciseSource.del(exercise as ExerciseImpl)

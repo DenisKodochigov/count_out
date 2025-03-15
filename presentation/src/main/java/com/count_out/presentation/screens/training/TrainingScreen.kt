@@ -33,12 +33,7 @@ import com.count_out.presentation.models.TrainingImpl
 import com.count_out.presentation.models.TypeKeyboard
 import com.count_out.presentation.screens.prime.Action
 import com.count_out.presentation.screens.prime.PrimeScreen
-import com.count_out.presentation.screens.training.TrainingEvent.ShowBSSpeechExercise
-import com.count_out.presentation.screens.training.TrainingEvent.ShowBSSpeechSet
-import com.count_out.presentation.screens.training.TrainingEvent.ShowBSSpeechTraining
-import com.count_out.presentation.screens.training.TrainingEvent.ShowBSSpeechWorkDown
-import com.count_out.presentation.screens.training.TrainingEvent.ShowBSSpeechWorkOut
-import com.count_out.presentation.screens.training.TrainingEvent.ShowBSSpeechWorkUp
+import com.count_out.presentation.screens.training.TrainingEvent.ShowBS
 import com.count_out.presentation.screens.training.round.Round
 import com.count_out.presentation.view_element.TextFieldApp
 import com.count_out.presentation.view_element.bottom_sheet.BottomSheetSelectActivity
@@ -65,49 +60,13 @@ import com.count_out.presentation.view_element.icons.IconsGroup
     }
 }
 @Composable fun EditSpeech(dataState: TrainingState, action: Action) {
-    if (dataState.showSpeechTraining) {
+    if (dataState.showBS.training) {
         dataState.nameSection = stringResource(id = R.string.training)
         dataState.item = dataState.training
-        dataState.onDismissSpeech = { action.ex(ShowBSSpeechTraining(dataState.showSpeechTraining))}
-//            dataState.showSpeechTraining = false}
+        dataState.onDismissSpeech =
+            { action.ex(ShowBS(dataState.showBS.copy(element = dataState.training))) }
         BottomSheetSpeech(dataState)
     }
-    if (dataState.showSpeechWorkUp) {
-        dataState.nameSection = stringResource(id = R.string.work_up1)
-        dataState.item = dataState.training?.rounds?.find { it.roundType == RoundType.WorkUp } ?: false
-        dataState.onDismissSpeech = { action.ex(ShowBSSpeechWorkUp(dataState.showSpeechWorkUp))}
-//            dataState.showSpeechWorkUp = false }
-        BottomSheetSpeech(dataState)
-    }
-    if (dataState.showSpeechWorkOut) {
-        dataState.nameSection = stringResource(id = R.string.work_out1)
-        dataState.item = dataState.training?.rounds?.find { it.roundType == RoundType.WorkOut } ?: false
-        dataState.onDismissSpeech = { action.ex(ShowBSSpeechWorkOut(dataState.showSpeechWorkOut))}
-//            dataState.showSpeechWorkOut = false }
-        BottomSheetSpeech(dataState)
-    }
-    if (dataState.showSpeechWorkDown) {
-        dataState.nameSection = stringResource(id = R.string.work_down1)
-        dataState.item = dataState.training?.rounds?.find { it.roundType == RoundType.WorkDown } ?: false
-        dataState.onDismissSpeech = {action.ex(ShowBSSpeechWorkDown(dataState.showSpeechWorkDown))}
-//            dataState.showSpeechWorkDown = false}
-        BottomSheetSpeech(dataState)
-    }
-    if (dataState.showSpeechExercise) {
-        dataState.nameSection = stringResource(id = R.string.exercise2)
-        dataState.item = dataState.exercise
-        dataState.onDismissSpeech = { action.ex(ShowBSSpeechExercise(dataState.showSpeechExercise))}
-//            dataState.showSpeechExercise = false}
-        BottomSheetSpeech(dataState)
-    }
-    if (dataState.showSpeechSet) {
-        dataState.nameSection = stringResource(id = R.string.set2)
-        dataState.item = dataState.set
-        dataState.onDismissSpeech = { action.ex(ShowBSSpeechSet(dataState.showSpeechSet))}
-//            dataState.showSpeechSet = false}
-        BottomSheetSpeech(dataState)
-    }
-    if (dataState.showSelectActivity) BottomSheetSelectActivity(dataState, action)
 }
 @SuppressLint("UnrememberedMutableState")
 @Composable
@@ -152,7 +111,8 @@ fun NameTraining(dataState: TrainingState, action: Action) {
         )
         Spacer(modifier = Modifier.weight(1f))
         IconsGroup(
-            onClickSpeech = { action.ex(ShowBSSpeechTraining(dataState.showSpeechTraining)) },
+            onClickSpeech = {
+                action.ex(ShowBS(dataState.showBS.copy(element = dataState.training))) },
             onClickDelete = {
                 dataState.training?.let { action.ex(TrainingEvent.DelTraining(dataState.training))}
                 dataState.onBaskScreen.invoke()

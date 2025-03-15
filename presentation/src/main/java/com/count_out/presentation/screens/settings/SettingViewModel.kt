@@ -6,7 +6,6 @@ import com.count_out.presentation.screens.prime.ScreenState
 import com.count_out.domain.use_case.activity.AddActivityUC
 import com.count_out.domain.use_case.activity.DeleteActivityUC
 import com.count_out.domain.use_case.activity.GetsActivityUC
-import com.count_out.domain.use_case.activity.SetColorActivityUC
 import com.count_out.domain.use_case.activity.UpdateActivityUC
 import com.count_out.domain.use_case.bluetooth.ClearCacheBleUC
 import com.count_out.domain.use_case.bluetooth.SelectDeviceBleUC
@@ -31,7 +30,6 @@ class SettingViewModel @Inject constructor(
     private val delActivity: DeleteActivityUC,
     private val getsActivity: GetsActivityUC,
     private val updateActivity: UpdateActivityUC,
-    private val setColorActivity: SetColorActivityUC,
     private val clearCacheBle: ClearCacheBleUC,
     private val startScanBle: StartScanBleUC,
     private val stopScanBle: StopScanBleUC,
@@ -45,57 +43,18 @@ class SettingViewModel @Inject constructor(
     override fun initState(): ScreenState<SettingsState> = ScreenState.Loading
     override fun routeEvent(event: Event) {
         when (event) {
-            is SettingsEvent.BackScreen -> {
-                navigate.backStack()
-            }
-
-            is SettingsEvent.AddActivity -> {
-                addActivity(event.activity)
-            }
-
-            is SettingsEvent.DeleteActivity -> {
-                delActivity(event.activity)
-            }
-
-            is SettingsEvent.UpdateActivity -> {
-                updateActivity(event.activity)
-            }
-
-            is SettingsEvent.SetColorActivity -> {
-                setColorActivity(event.activity)
-            }
-
-            is SettingsEvent.UpdateSetting -> {
-                updateSetting(event.setting)
-            }
-
-            is SettingsEvent.GetSetting -> {
-                getSetting(event.setting)
-            }
-
-            is SettingsEvent.GetSettings -> {
-                getSettings()
-            }
-
-            is SettingsEvent.StartScanBLE -> {
-                startScanBle()
-            }
-
-            is SettingsEvent.StopScanBLE -> {
-                stopScanBle()
-            }
-
-            is SettingsEvent.SelectDevice -> {
-                selectDeviceBle(event.device)
-            }
-
-            is SettingsEvent.ClearCacheBLE -> {
-                clearCacheBle()
-            }
-
-            is SettingsEvent.Init -> {
-                init()
-            }
+            is SettingsEvent.BackScreen -> { navigate.backStack() }
+            is SettingsEvent.AddActivity -> { addActivity(event.activity) }
+            is SettingsEvent.DeleteActivity -> { delActivity(event.activity) }
+            is SettingsEvent.UpdateActivity -> { updateActivity(event.activity) }
+            is SettingsEvent.UpdateSetting -> { updateSetting(event.setting) }
+            is SettingsEvent.GetSetting -> { getSetting(event.setting) }
+            is SettingsEvent.GetSettings -> { getSettings() }
+            is SettingsEvent.StartScanBLE -> { startScanBle() }
+            is SettingsEvent.StopScanBLE -> { stopScanBle() }
+            is SettingsEvent.SelectDevice -> { selectDeviceBle(event.device) }
+            is SettingsEvent.ClearCacheBLE -> { clearCacheBle() }
+            is SettingsEvent.Init -> { init() }
         }
     }
 
@@ -123,13 +82,6 @@ class SettingViewModel @Inject constructor(
     private fun updateActivity(activity: Activity) {
         viewModelScope.launch {
             updateActivity.execute(UpdateActivityUC.Request(activity))
-                .map { converter.convert(it) }.collect { submitState(it) }
-        }
-    }
-
-    private fun setColorActivity(activity: Activity) {
-        viewModelScope.launch {
-            setColorActivity.execute(SetColorActivityUC.Request(activity))
                 .map { converter.convert(it) }.collect { submitState(it) }
         }
     }

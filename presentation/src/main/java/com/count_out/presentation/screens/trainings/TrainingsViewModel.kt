@@ -2,7 +2,6 @@ package com.count_out.presentation.screens.trainings
 
 import androidx.lifecycle.viewModelScope
 import com.count_out.domain.entity.workout.Training
-import com.count_out.domain.use_case.trainings.AddTrainingUC
 import com.count_out.domain.use_case.trainings.CopyTrainingUC
 import com.count_out.domain.use_case.trainings.DeleteTrainingUC
 import com.count_out.domain.use_case.trainings.GetTrainingsUC
@@ -19,7 +18,6 @@ import javax.inject.Inject
 
 @HiltViewModel class TrainingsViewModel @Inject constructor(
     private val converter: TrainingsConvertor,
-    private val addTraining: AddTrainingUC,
     private val copyTraining: CopyTrainingUC,
     private val delTraining: DeleteTrainingUC,
     private val getTrainings: GetTrainingsUC,
@@ -33,7 +31,6 @@ import javax.inject.Inject
             is TrainingsEvent.Run -> { navigate.goToScreenExecuteWorkout(event.id)}
             is TrainingsEvent.Edit -> { navigate.goToScreenTraining(event.id) }
             is TrainingsEvent.Gets -> { getTrainings() }
-            is TrainingsEvent.Add -> { addTraining() }
             is TrainingsEvent.Copy -> { copyTraining(event.training) }
             is TrainingsEvent.Del -> { deleteTraining(event.training) }
             is TrainingsEvent.Select -> { selectTraining(event.training) }
@@ -45,11 +42,6 @@ import javax.inject.Inject
             getTrainings.execute( GetTrainingsUC.Request)
                 .map { converter.convert(it) }.collect { submitState(it) }
         } }
-    private fun addTraining(){
-        viewModelScope.launch(Dispatchers.IO) {
-            addTraining.execute(AddTrainingUC.Request(TrainingImpl()))
-                .map { converter.convert(it) }.collect { submitState(it) }
-        }}
     private fun deleteTraining(training: Training){
         viewModelScope.launch(Dispatchers.IO) {
             delTraining.execute( DeleteTrainingUC.Request(training))

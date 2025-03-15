@@ -4,7 +4,6 @@ import com.count_out.domain.entity.workout.Training
 import com.count_out.presentation.screens.prime.Event
 
 sealed class TrainingsEvent: Event {
-    data object Add: TrainingsEvent()
     data object Gets: TrainingsEvent()
     data class Run(val id: Long): TrainingsEvent()
     data class Edit(val id: Long): TrainingsEvent()

@@ -2,7 +2,7 @@ package com.count_out.domain.entity.workout
 
 import com.count_out.domain.entity.enums.RoundType
 
-interface Round {
+interface Round: Element {
     val idRound: Long
     val trainingId: Long
     val speechId: Long

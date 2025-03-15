@@ -20,7 +20,8 @@ class TrainingSourceImpl @Inject constructor(
     private val dao: TrainingDao,
     private val roundSource: RoundSource,
     private val ringSource: RingSource,
-    private val speechKitSource: SpeechKitSource,): TrainingSource {
+    private val speechKitSource: SpeechKitSource,
+): TrainingSource {
 
     override fun update(training: Training){
         training.speech?.let { speechKitSource.update(it) }

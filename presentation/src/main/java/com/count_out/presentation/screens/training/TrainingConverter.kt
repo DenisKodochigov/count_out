@@ -4,13 +4,15 @@ import com.count_out.domain.use_case.UseCase
 import com.count_out.domain.use_case.exercise.ChangeSequenceExerciseUC
 import com.count_out.domain.use_case.exercise.CopyExerciseUC
 import com.count_out.domain.use_case.exercise.DeleteExerciseUC
-import com.count_out.domain.use_case.other.ShowBSSelectActivityUC
-import com.count_out.domain.use_case.other.ShowBSSpeechExerciseUC
-import com.count_out.domain.use_case.other.ShowBSSpeechSetUC
-import com.count_out.domain.use_case.other.ShowBSSpeechTrainingUC
-import com.count_out.domain.use_case.other.ShowBSSpeechWorkDownUC
-import com.count_out.domain.use_case.other.ShowBSSpeechWorkOutUC
-import com.count_out.domain.use_case.other.ShowBSSpeechWorkUpUC
+import com.count_out.domain.use_case.other.CollapsingUC
+import com.count_out.domain.use_case.other.ShowBottomSheetUC
+import com.count_out.domain.use_case.other.archiv.ShowBSSelectActivityUC
+import com.count_out.domain.use_case.other.archiv.ShowBSSpeechExerciseUC
+import com.count_out.domain.use_case.other.archiv.ShowBSSpeechSetUC
+import com.count_out.domain.use_case.other.archiv.ShowBSSpeechTrainingUC
+import com.count_out.domain.use_case.other.archiv.ShowBSSpeechWorkDownUC
+import com.count_out.domain.use_case.other.archiv.ShowBSSpeechWorkOutUC
+import com.count_out.domain.use_case.other.archiv.ShowBSSpeechWorkUpUC
 import com.count_out.domain.use_case.set.CopySetUC
 import com.count_out.domain.use_case.set.DeleteSetUC
 import com.count_out.domain.use_case.set.UpdateSetUC
@@ -33,14 +35,8 @@ class TrainingConverter @Inject constructor(): PrimeConvertor<UseCase.Response, 
             is CopySetUC.Response-> converterLocal(data)
             is DeleteSetUC.Response-> converterLocal(data)
             is UpdateSetUC.Response-> converterLocal(data)
-            is ShowBSSpeechTrainingUC.Response-> converterLocal(data)
-            is ShowBSSpeechWorkUpUC.Response-> converterLocal(data)
-            is ShowBSSpeechWorkOutUC.Response-> converterLocal(data)
-            is ShowBSSpeechWorkDownUC.Response-> converterLocal(data)
-            is ShowBSSpeechExerciseUC.Response-> converterLocal(data)
-            is ShowBSSpeechSetUC.Response-> converterLocal(data)
-            is ShowBSSelectActivityUC.Response-> converterLocal(data)
-
+            is ShowBottomSheetUC.Response-> converterLocal(data)
+            is CollapsingUC.Response-> converterLocal(data)
             else -> converterOther()
         }
     }
@@ -51,44 +47,51 @@ class TrainingConverter @Inject constructor(): PrimeConvertor<UseCase.Response, 
         return state.copy(training = data.trainings,)
     }
     private fun converterLocal(data: CopyExerciseUC.Response): TrainingState {
-        return state.copy(training = data.training,)
+        return state
     }
     private fun converterLocal(data: DeleteExerciseUC.Response): TrainingState {
-        return state.copy(training = data.training,)
+        return state
     }
     private fun converterLocal(data: ChangeSequenceExerciseUC.Response): TrainingState {
-        return state.copy(training = data.training,)
+        return state
     }
     private fun converterLocal(data: CopySetUC.Response): TrainingState {
-        return state.copy(training = data.training,)
+        return state
     }
     private fun converterLocal(data: DeleteSetUC.Response): TrainingState {
-        return state.copy(training = data.training,)
+        return state
     }
     private fun converterLocal(data: UpdateSetUC.Response): TrainingState {
-        return state.copy(training = data.training,)
+        return state
     }
-    private fun converterLocal(data: ShowBSSpeechTrainingUC.Response): TrainingState {
-        return state.copy(showSpeechTraining = data.result,)
+    private fun converterLocal(data: ShowBottomSheetUC.Response): TrainingState {
+        return state.copy(showBS = data.result,)
     }
-    private fun converterLocal(data: ShowBSSpeechWorkUpUC.Response): TrainingState {
-        return state.copy(showSpeechWorkUp = data.result,)
+    private fun converterLocal(data: CollapsingUC.Response): TrainingState {
+        return state.copy(collapsing = data.result,)
     }
-    private fun converterLocal(data: ShowBSSpeechWorkOutUC.Response): TrainingState {
-        return state.copy(showSpeechWorkOut = data.result,)
-    }
-    private fun converterLocal(data: ShowBSSpeechWorkDownUC.Response): TrainingState {
-        return state.copy(showSpeechWorkDown = data.result,)
-    }
-    private fun converterLocal(data: ShowBSSpeechExerciseUC.Response): TrainingState {
-        return state.copy(showSpeechExercise = data.result,)
-    }
-    private fun converterLocal(data: ShowBSSpeechSetUC.Response): TrainingState {
-        return state.copy(showSpeechSet = data.result,)
-    }
-    private fun converterLocal(data: ShowBSSelectActivityUC.Response): TrainingState {
-        return state.copy(showSelectActivity = data.result,)
-    }
+
+//    private fun converterLocal(data: ShowBSSpeechTrainingUC.Response): TrainingState {
+//        return state.copy(showSpeechTraining = data.result,)
+//    }
+//    private fun converterLocal(data: ShowBSSpeechWorkUpUC.Response): TrainingState {
+//        return state.copy(showSpeechWorkUp = data.result,)
+//    }
+//    private fun converterLocal(data: ShowBSSpeechWorkOutUC.Response): TrainingState {
+//        return state.copy(showSpeechWorkOut = data.result,)
+//    }
+//    private fun converterLocal(data: ShowBSSpeechWorkDownUC.Response): TrainingState {
+//        return state.copy(showSpeechWorkDown = data.result,)
+//    }
+//    private fun converterLocal(data: ShowBSSpeechExerciseUC.Response): TrainingState {
+//        return state.copy(showSpeechExercise = data.result,)
+//    }
+//    private fun converterLocal(data: ShowBSSpeechSetUC.Response): TrainingState {
+//        return state.copy(showSpeechSet = data.result,)
+//    }
+//    private fun converterLocal(data: ShowBSSelectActivityUC.Response): TrainingState {
+//        return state.copy(showSelectActivity = data.result,)
+//    }
     private fun converterOther(): TrainingState {
         return state.copy(training = TrainingImpl()) }
 }

@@ -13,27 +13,26 @@ import com.count_out.domain.use_case.UseCase
 import com.count_out.domain.use_case.activity.AddActivityUC
 import com.count_out.domain.use_case.activity.DeleteActivityUC
 import com.count_out.domain.use_case.activity.GetsActivityUC
-import com.count_out.domain.use_case.activity.SetColorActivityUC
 import com.count_out.domain.use_case.activity.UpdateActivityUC
 import com.count_out.domain.use_case.bluetooth.ClearCacheBleUC
 import com.count_out.domain.use_case.bluetooth.SelectDeviceBleUC
 import com.count_out.domain.use_case.bluetooth.StartScanBleUC
 import com.count_out.domain.use_case.bluetooth.StopScanBleUC
-import com.count_out.domain.use_case.exercise.AddExerciseUC
 import com.count_out.domain.use_case.exercise.ChangeSequenceExerciseUC
 import com.count_out.domain.use_case.exercise.CopyExerciseUC
 import com.count_out.domain.use_case.exercise.DeleteExerciseUC
+import com.count_out.domain.use_case.exercise.UpdateExerciseUC
+import com.count_out.domain.use_case.other.CollapsingUC
 import com.count_out.domain.use_case.other.CountOutServiceBindUC
 import com.count_out.domain.use_case.other.CountOutServiceUnBindUC
 import com.count_out.domain.use_case.other.GetWeatherUC
-import com.count_out.domain.use_case.set.AddSetUC
+import com.count_out.domain.use_case.other.ShowBottomSheetUC
 import com.count_out.domain.use_case.set.CopySetUC
 import com.count_out.domain.use_case.set.DeleteSetUC
 import com.count_out.domain.use_case.set.UpdateSetUC
 import com.count_out.domain.use_case.settings.GetSettingUC
 import com.count_out.domain.use_case.settings.GetSettingsUC
 import com.count_out.domain.use_case.settings.UpdateSettingUC
-import com.count_out.domain.use_case.trainings.AddTrainingUC
 import com.count_out.domain.use_case.trainings.CopyTrainingUC
 import com.count_out.domain.use_case.trainings.DeleteTrainingUC
 import com.count_out.domain.use_case.trainings.GetTrainingUC
@@ -61,11 +60,6 @@ class UseCaseModule {
     @Provides
     fun provideUseCaseConfiguration(): UseCase.Configuration = UseCase.Configuration(Dispatchers.IO)
 
-    @Singleton
-    @Provides
-    fun provideAddTrainingUseCase(
-        configuration: UseCase.Configuration,
-        trainingRepo: TrainingRepo): AddTrainingUC = AddTrainingUC(configuration, trainingRepo)
     @Singleton
     @Provides
     fun provideCopyTrainingUseCase(
@@ -113,11 +107,6 @@ class UseCaseModule {
         activityRepo: ActivityRepo ): GetsActivityUC = GetsActivityUC(configuration, activityRepo)
     @Singleton
     @Provides
-    fun provideSetColorActivityUseCase(
-        configuration: UseCase.Configuration,
-        activityRepo: ActivityRepo ): SetColorActivityUC = SetColorActivityUC(configuration, activityRepo)
-    @Singleton
-    @Provides
     fun provideUpdateActivityUseCase(
         configuration: UseCase.Configuration,
         activityRepo: ActivityRepo ): UpdateActivityUC = UpdateActivityUC(configuration, activityRepo)
@@ -143,11 +132,6 @@ class UseCaseModule {
         repo: BluetoothRepo ): StopScanBleUC = StopScanBleUC(configuration, repo)
     @Singleton
     @Provides
-    fun provideAddExerciseUseCase(
-        configuration: UseCase.Configuration,
-        repo: ExerciseRepo ): AddExerciseUC = AddExerciseUC(configuration, repo)
-    @Singleton
-    @Provides
     fun provideChangeSequenceExerciseUseCase(
         configuration: UseCase.Configuration,
         repo: ExerciseRepo ): ChangeSequenceExerciseUC = ChangeSequenceExerciseUC(configuration, repo)
@@ -161,15 +145,15 @@ class UseCaseModule {
     fun provideDeleteExerciseUseCase(
         configuration: UseCase.Configuration,
         repo: ExerciseRepo ): DeleteExerciseUC = DeleteExerciseUC(configuration, repo)
+    @Singleton
+    @Provides
+    fun provideUpdateExerciseUseCase(
+        configuration: UseCase.Configuration,
+        repo: ExerciseRepo ): UpdateExerciseUC = UpdateExerciseUC(configuration, repo)
 //    @Provides
 //    fun provideSelectActivityUseCase(
 //        configuration: UseCase.Configuration,
 //        repo: ExerciseRepo ): SelectActivityUC = SelectActivityUC(configuration, repo)
-@Singleton
-    @Provides
-    fun provideAddSetUseCase(
-        configuration: UseCase.Configuration,
-        repo: SetRepo ): AddSetUC = AddSetUC(configuration, repo)
     @Singleton
     @Provides
     fun provideCopySetUseCase(
@@ -217,5 +201,13 @@ class UseCaseModule {
         configuration: UseCase.Configuration,
         repo: CountOutServiceRepo
     ): CountOutServiceUnBindUC = CountOutServiceUnBindUC(configuration, repo)
+    @Singleton
+    @Provides
+    fun provideCollapsingUseCase(configuration: UseCase.Configuration, ): CollapsingUC =
+        CollapsingUC(configuration)
+    @Singleton
+    @Provides
+    fun provideShowBottomSheetUseCase(configuration: UseCase.Configuration): ShowBottomSheetUC =
+        ShowBottomSheetUC(configuration)
 
 }

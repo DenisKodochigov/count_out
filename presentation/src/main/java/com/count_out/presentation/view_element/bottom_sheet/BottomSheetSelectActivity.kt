@@ -22,8 +22,10 @@ import androidx.compose.ui.unit.dp
 import com.count_out.presentation.models.ActionWithActivityImpl
 import com.count_out.presentation.models.ActivityImpl
 import com.count_out.presentation.models.Dimen
+import com.count_out.presentation.models.ExerciseImpl
 import com.count_out.presentation.screens.prime.Action
 import com.count_out.presentation.screens.training.TrainingEvent
+import com.count_out.presentation.screens.training.TrainingEvent.ShowBS
 import com.count_out.presentation.screens.training.TrainingState
 import com.count_out.presentation.view_element.ModalBottomSheetApp
 
@@ -35,7 +37,7 @@ fun BottomSheetSelectActivity(dataState: TrainingState, action: Action)
         skipPartiallyExpanded = true, confirmValueChange = { true },)
 
     ModalBottomSheetApp(
-        onDismissRequest = { dataState.onDismissSelectActivity.invoke()},
+        onDismissRequest = { action.ex(ShowBS(dataState.showBS.copy(element = dataState.item)))},
         modifier = Modifier.padding(horizontal = Dimen.bsPaddingHor1),
         shape = MaterialTheme.shapes.small,
         sheetState = sheetState,
@@ -64,11 +66,9 @@ fun BottomSheetSelectActivity(dataState: TrainingState, action: Action)
         items(items = dataState.activities) {item ->
             ActivityInfo(
                 activity = mutableStateOf(item as ActivityImpl),
-                onSelect = { action.ex( TrainingEvent.SelectActivity( ActionWithActivityImpl(
-                        exerciseId = dataState.exercise.idExercise, activity = item)
-                )) },
-//                onChangeColor = {
-//                    action.ex(TrainingEvent.SetColorActivity( item.copy(color = it)))}
+                onSelect = {
+                    action.ex( TrainingEvent.UpdateExercise((dataState.exercise as ExerciseImpl)
+                        .copy( activity = item, activityId = item.idActivity))) },
             )
         }
     }

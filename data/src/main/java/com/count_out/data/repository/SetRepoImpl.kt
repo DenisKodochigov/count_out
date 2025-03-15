@@ -18,9 +18,9 @@ class SetRepoImpl @Inject constructor(private val setSource: SetSource): SetRepo
         return setSource.gets(set.exerciseId)
     }
 
-    override fun del(set: Set): Flow<List<SetImpl>> {
+    override fun del(set: Set): Flow<Set> {
         setSource.del(set as SetImpl)
-        return setSource.gets(set.exerciseId)
+        return setSource.get(set)
     }
 
     override fun update(set: Set): Flow<Set> {

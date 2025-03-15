@@ -14,5 +14,5 @@ class DeleteSetUC @Inject constructor(
     override fun executeData(input: Request): Flow<Response> =
         repo.del(input.item).map { Response(it) }
     data class Request(val item: Set): UseCase.Request
-    data class Response(val training: Training): UseCase.Response
+    data class Response(val training: Set): UseCase.Response
 }
