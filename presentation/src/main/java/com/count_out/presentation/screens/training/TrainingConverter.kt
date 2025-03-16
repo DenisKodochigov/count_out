@@ -1,25 +1,19 @@
 package com.count_out.presentation.screens.training
 
+import com.count_out.domain.entity.workout.Training
 import com.count_out.domain.use_case.UseCase
 import com.count_out.domain.use_case.exercise.ChangeSequenceExerciseUC
 import com.count_out.domain.use_case.exercise.CopyExerciseUC
 import com.count_out.domain.use_case.exercise.DeleteExerciseUC
 import com.count_out.domain.use_case.other.CollapsingUC
 import com.count_out.domain.use_case.other.ShowBottomSheetUC
-import com.count_out.domain.use_case.other.archiv.ShowBSSelectActivityUC
-import com.count_out.domain.use_case.other.archiv.ShowBSSpeechExerciseUC
-import com.count_out.domain.use_case.other.archiv.ShowBSSpeechSetUC
-import com.count_out.domain.use_case.other.archiv.ShowBSSpeechTrainingUC
-import com.count_out.domain.use_case.other.archiv.ShowBSSpeechWorkDownUC
-import com.count_out.domain.use_case.other.archiv.ShowBSSpeechWorkOutUC
-import com.count_out.domain.use_case.other.archiv.ShowBSSpeechWorkUpUC
 import com.count_out.domain.use_case.set.CopySetUC
 import com.count_out.domain.use_case.set.DeleteSetUC
 import com.count_out.domain.use_case.set.UpdateSetUC
 import com.count_out.domain.use_case.trainings.GetTrainingUC
 import com.count_out.domain.use_case.trainings.UpdateTrainingUC
-import com.count_out.presentation.models.TrainingImpl
 import com.count_out.presentation.screens.prime.PrimeConvertor
+import com.count_out.presentation.view_element.lg
 import javax.inject.Inject
 
 class TrainingConverter @Inject constructor(): PrimeConvertor<UseCase.Response, TrainingState>() {
@@ -68,6 +62,7 @@ class TrainingConverter @Inject constructor(): PrimeConvertor<UseCase.Response, 
         return state.copy(showBS = data.result,)
     }
     private fun converterLocal(data: CollapsingUC.Response): TrainingState {
+        lg("${data.result}")
         return state.copy(collapsing = data.result,)
     }
 
@@ -93,5 +88,5 @@ class TrainingConverter @Inject constructor(): PrimeConvertor<UseCase.Response, 
 //        return state.copy(showSelectActivity = data.result,)
 //    }
     private fun converterOther(): TrainingState {
-        return state.copy(training = TrainingImpl()) }
+        return state.copy(training = Training()) }
 }

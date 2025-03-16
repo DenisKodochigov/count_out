@@ -69,6 +69,7 @@ class RoomModule {
         }
         return database
     }
+
     @Singleton
     @Provides
     fun provideTrainingDao(appDatabase: AppDataBase): TrainingDao = appDatabase.trainingDao()
@@ -99,27 +100,4 @@ class RoomModule {
     @Singleton
     @Provides
     fun provideTrackingDao(appDatabase: AppDataBase): TrackingDao = appDatabase.trackingDao()
-
-//    @Provides
-//    fun provideSpeechSource(speechDao:SpeechDao): SpeechSource = SpeechSourceImpl(speechDao)
-//    @Provides
-//    fun provideSpeechKitSource(dao:SpeechKitDao, speechSource: SpeechSource): SpeechKitSource =
-//        SpeechKitSourceImpl(speechSource, dao)
-//    @Provides
-//    fun provideSetSource(dao: SetDao, speechKit: SpeechKitSource): SetSource = SetSourceImpl(speechKit, dao)
-//    @Provides
-//    fun provideActivitySource(dao:ActivityDao, speechKit: SpeechKitSource): ActivitySource =
-//        ActivitySourceImpl(speechKit, dao)
-//    @Provides
-//    fun provideExerciseSource(dao: ExerciseDao, setSource: SetSource, speechKit: SpeechKitSource): ExerciseSource =
-//        ExerciseSourceImpl(dao, setSource, speechKit)
-//    @Provides
-//    fun provideRoundSource(dao: RoundDao, exerciseSource: ExerciseSource, speechKit: SpeechKitSource): RoundSource =
-//        RoundSourceImpl(dao, exerciseSource, speechKit)
-//    @Provides
-//    fun provideRingSource(dao: RingDao, exerciseSource: ExerciseSource, speechKit: SpeechKitSource): RingSource =
-//        RingSourceImpl(dao, exerciseSource, speechKit)
-//    @Provides
-//    fun provideTrainingSource(dao: TrainingDao, roundSource: RoundSource, ringSource: RingSource, speechKit: SpeechKitSource): TrainingSource =
-//        TrainingSourceImpl(dao, roundSource, ringSource, speechKit)
 }

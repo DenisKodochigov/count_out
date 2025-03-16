@@ -15,14 +15,13 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import com.count_out.domain.entity.SettingRecord
 
 @Composable
-fun SwitchApp(setting: SettingRecord, modifier: Modifier = Modifier, change:(Boolean)->Unit) {
-    var checked by remember { mutableStateOf( setting.value == 1) }
+fun SwitchApp(setting: Boolean, description: Int, modifier: Modifier = Modifier, change:(Boolean)->Unit) {
+    var checked by remember { mutableStateOf( setting ) }
     Row( verticalAlignment = Alignment.CenterVertically, modifier = modifier){
         TextApp(
-            text = stringResource( setting.parameter),
+            text = stringResource(description),
             textAlign = TextAlign.Start,
             maxLines = 2,
             modifier = Modifier.weight(1f),

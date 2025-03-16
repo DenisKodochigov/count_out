@@ -28,8 +28,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.count_out.domain.entity.Setting
 import com.count_out.presentation.screens.prime.PrimeScreen
-import com.count_out.domain.entity.to01
 import com.count_out.domain.entity.enums.ConnectState
 import com.count_out.presentation.R
 import com.count_out.presentation.screens.prime.Action
@@ -43,6 +43,7 @@ import com.count_out.presentation.view_element.icons.AnimateIcon
 import com.count_out.presentation.view_element.icons.IconSingle
 import com.count_out.presentation.view_element.icons.IconsCollapsing
 import com.count_out.presentation.models.alumBodySmall
+import com.count_out.presentation.view_element.EnumsTo
 
 @Composable fun SettingScreen(viewModel: SettingViewModel){
 //    val viewModel: SettingViewModel = hiltViewModel()
@@ -134,10 +135,10 @@ import com.count_out.presentation.models.alumBodySmall
         dataState.settings?.speechDescription?.let { setting->
             SwitchApp(
                 setting = setting,
+                description = R.string.speech_description,
                 modifier = Modifier.padding(horizontal = 8.dp, vertical = 3.dp),
                 change = { checked->
-                    setting.value = setting.value.to01()
-                    action.ex(SettingsEvent.UpdateSetting(setting))
+                    action.ex(SettingsEvent.UpdateSetting(Setting.SpeechDescription(!setting)))
                 }
             )
         }
@@ -199,7 +200,7 @@ import com.count_out.presentation.models.alumBodySmall
     val heartRate = if (dataState.heartRate > 0) dataState.heartRate.toString() else ""
     Column (modifier = modifier.padding(start = 12.dp, end = 12.dp).fillMaxWidth()) {
         TextApp(text = nameDevice, textAlign = TextAlign.Start, style = style)
-        TextApp(text = stringResource(id = dataState.connectingState.strId), style = alumBodySmall)
+        TextApp(text = stringResource(id = EnumsTo(dataState.connectingState).string()), style = alumBodySmall)
     }
     TextApp(text = heartRate, style = MaterialTheme.typography.displayMedium, modifier = Modifier.padding(start = 12.dp, end = 12.dp))
 }

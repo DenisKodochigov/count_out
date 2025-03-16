@@ -1,6 +1,5 @@
 package com.count_out.data.repository
 
-import com.count_out.data.models.ExerciseImpl
 import com.count_out.data.source.room.ExerciseSource
 import com.count_out.domain.entity.DataForChangeSequence
 import com.count_out.domain.entity.workout.Exercise
@@ -11,18 +10,18 @@ import javax.inject.Inject
 
 
 class ExerciseRepoImpl @Inject constructor(private val exerciseSource: ExerciseSource): ExerciseRepo {
-    override fun get(exercise: Exercise): Flow<Exercise> = exerciseSource.get(exercise as ExerciseImpl)
+    override fun get(exercise: Exercise): Flow<Exercise> = exerciseSource.get(exercise)
     override fun del(exercise: Exercise): Flow<List<Exercise>> {
-        exerciseSource.del(exercise as ExerciseImpl)
+        exerciseSource.del(exercise)
         return getExercise(exercise)
     }
 
     override fun copy(exercise: Exercise): Flow<List<Exercise>> {
-        exerciseSource.copy(exercise as ExerciseImpl)
+        exerciseSource.copy(exercise)
         return getExercise(exercise)
     }
     override fun update(exercise: Exercise): Flow<Exercise> {
-        exerciseSource.update(exercise as ExerciseImpl)
+        exerciseSource.update(exercise)
         return get(exercise)
     }
     override fun getForRound(id: Long): Flow<List<Exercise>> = exerciseSource.getForRound(id)

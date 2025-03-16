@@ -17,17 +17,19 @@ import com.count_out.presentation.screens.prime.Action
 import com.count_out.presentation.screens.training.TrainingEvent
 import com.count_out.presentation.screens.training.TrainingState
 import com.count_out.domain.entity.enums.RoundType
+import com.count_out.domain.entity.workout.Exercise
 import com.count_out.domain.entity.workout.Round
 import com.count_out.presentation.R
 import com.count_out.presentation.models.Dimen.contourHor2
-import com.count_out.presentation.models.ExerciseImpl
 import com.count_out.presentation.screens.training.TrainingEvent.ShowBS
 import com.count_out.presentation.screens.training.exercise.ListExercises
+import com.count_out.presentation.view_element.EnumsTo
 import com.count_out.presentation.view_element.TextApp
 import com.count_out.presentation.view_element.bottom_sheet.BottomSheetSpeech
 import com.count_out.presentation.view_element.custom_view.Frame
 import com.count_out.presentation.view_element.icons.IconsCollapsing
 import com.count_out.presentation.view_element.icons.IconsGroup
+import com.count_out.presentation.view_element.lg
 
 @Composable
 fun Round(dataState: TrainingState, action: Action, round: Round){
@@ -67,19 +69,18 @@ fun Round(dataState: TrainingState, action: Action, round: Round){
             onClick = { setCollapsing(dataState, action, round) },
             wrap = getCollapsing(dataState, round) )
         Spacer(modifier = Modifier.width(2.dp))
-        TextApp(
-            text = stringResource(id = nameRound(round)),
-            textAlign = TextAlign.Start,
-            style = MaterialTheme.typography.headlineSmall,
-            modifier = Modifier.weight(1f))
-        Column {
+        Column(modifier = Modifier.weight(1f)) {
+            TextApp(
+                text = stringResource(id = EnumsTo(round.roundType).string()),
+                textAlign = TextAlign.Start,
+                style = MaterialTheme.typography.headlineSmall,)
             TextApp( style = MaterialTheme.typography.bodySmall, fontWeight = FontWeight.Light,
                 text = "${ stringResource(id = R.string.exercises) }: ${round.amount}" +
-                        " / ${round.duration} ${ stringResource(id = R.string.min)}",) }
+                        " / ${round.duration.value} ${ stringResource(id = R.string.min)}",) }
         IconsGroup(
             onClickSpeech = { showSpeechRound(dataState, action, round) },
             onClickAddExercise = {
-                action.ex(TrainingEvent.CopyExercise(exercise = ExerciseImpl(roundId = round.idRound)))})
+                action.ex(TrainingEvent.CopyExercise(exercise = Exercise(roundId = round.idRound)))})
         Spacer(modifier = Modifier.width(6.dp))
     }
 }
@@ -93,7 +94,7 @@ fun Round(dataState: TrainingState, action: Action, round: Round){
 }
 //
 fun showSpeechRound(dataState: TrainingState, action: Action, round: Round){
-    action.ex(TrainingEvent.ShowBS(dataState.showBS.copy(element = round)))
+    action.ex(ShowBS(dataState.showBS.copy(element = round)))
 }
 
 fun setCollapsing(dataState: TrainingState, action: Action, round: Round) {
@@ -102,12 +103,5 @@ fun setCollapsing(dataState: TrainingState, action: Action, round: Round) {
     }
 }
 fun getCollapsing(dataState: TrainingState, round: Round): Boolean {
-    return dataState.collapsing.rounds.find { it == round.idRound } == null
-}
-fun nameRound(round: Round): Int {
-    return when(round.roundType){
-        RoundType.WorkUp -> R.string.work_up
-        RoundType.WorkOut -> R.string.work_out
-        RoundType.WorkDown -> R.string.work_down
-    }
+    return dataState.collapsing.rounds.find { it == round.idRound } != null
 }

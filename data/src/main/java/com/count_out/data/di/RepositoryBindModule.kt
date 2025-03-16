@@ -48,8 +48,6 @@ abstract class RepositoryBindModule {
     abstract fun bindExerciseRepo(exerciseRepoImpl: ExerciseRepoImpl): ExerciseRepo
     @Binds
     abstract fun bindSetRepo(setRepoImpl: SetRepoImpl): SetRepo
-
-
     @Binds
     abstract fun bindRingRepo( ringRepoImpl: RingRepoImpl): RingRepo
     @Binds

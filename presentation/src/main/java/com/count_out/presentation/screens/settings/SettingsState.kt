@@ -3,10 +3,10 @@ package com.count_out.presentation.screens.settings
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.mutableStateOf
-import com.count_out.domain.entity.Settings
 import com.count_out.domain.entity.router.DeviceUI
 import com.count_out.domain.entity.workout.Activity
 import com.count_out.domain.entity.enums.ConnectState
+import com.count_out.domain.entity.Settings
 
 data class SettingsState(
     val settings: Settings? = null,

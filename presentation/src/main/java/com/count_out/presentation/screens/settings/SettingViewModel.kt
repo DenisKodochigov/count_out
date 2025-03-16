@@ -1,6 +1,7 @@
 package com.count_out.presentation.screens.settings
 
 import androidx.lifecycle.viewModelScope
+import com.count_out.domain.entity.Setting
 import com.count_out.presentation.screens.prime.PrimeViewModel
 import com.count_out.presentation.screens.prime.ScreenState
 import com.count_out.domain.use_case.activity.AddActivityUC
@@ -11,11 +12,9 @@ import com.count_out.domain.use_case.bluetooth.ClearCacheBleUC
 import com.count_out.domain.use_case.bluetooth.SelectDeviceBleUC
 import com.count_out.domain.use_case.bluetooth.StartScanBleUC
 import com.count_out.domain.use_case.bluetooth.StopScanBleUC
-import com.count_out.domain.use_case.settings.GetSettingUC
 import com.count_out.domain.use_case.settings.GetSettingsUC
 import com.count_out.domain.use_case.settings.UpdateSettingUC
 import com.count_out.presentation.screens.prime.Event
-import com.count_out.domain.entity.SettingRecord
 import com.count_out.domain.entity.router.DeviceUI
 import com.count_out.domain.entity.workout.Activity
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -34,12 +33,12 @@ class SettingViewModel @Inject constructor(
     private val startScanBle: StartScanBleUC,
     private val stopScanBle: StopScanBleUC,
     private val selectDeviceBle: SelectDeviceBleUC,
-    private val getSetting: GetSettingUC,
     private val getSettings: GetSettingsUC,
     private val updateSetting: UpdateSettingUC,
 //    private val serviceBind: CountOutServiceBind,
 //    private val dataRepository: DataRepository
 ): PrimeViewModel<SettingsState, ScreenState<SettingsState>>() {
+
     override fun initState(): ScreenState<SettingsState> = ScreenState.Loading
     override fun routeEvent(event: Event) {
         when (event) {
@@ -48,7 +47,7 @@ class SettingViewModel @Inject constructor(
             is SettingsEvent.DeleteActivity -> { delActivity(event.activity) }
             is SettingsEvent.UpdateActivity -> { updateActivity(event.activity) }
             is SettingsEvent.UpdateSetting -> { updateSetting(event.setting) }
-            is SettingsEvent.GetSetting -> { getSetting(event.setting) }
+//            is SettingsEvent.GetSetting -> { getSetting(event.setting) }
             is SettingsEvent.GetSettings -> { getSettings() }
             is SettingsEvent.StartScanBLE -> { startScanBle() }
             is SettingsEvent.StopScanBLE -> { stopScanBle() }
@@ -86,20 +85,6 @@ class SettingViewModel @Inject constructor(
         }
     }
 
-    private fun updateSetting(setting: SettingRecord) {
-        viewModelScope.launch {
-            updateSetting.execute(UpdateSettingUC.Request(setting))
-                .map { converter.convert(it) }.collect { submitState(it) }
-        }
-    }
-
-    private fun getSetting(setting: SettingRecord) {
-        viewModelScope.launch {
-            getSetting.execute(GetSettingUC.Request(setting))
-                .map { converter.convert(it) }.collect { submitState(it) }
-        }
-    }
-
     private fun getSettings() {
         viewModelScope.launch {
             getSettings.execute(GetSettingsUC.Request)
@@ -107,6 +92,12 @@ class SettingViewModel @Inject constructor(
         }
     }
 
+    private fun updateSetting(setting: Setting) {
+        viewModelScope.launch {
+            updateSetting.execute(UpdateSettingUC.Request(setting))
+                .map { converter.convert(it) }.collect { submitState(it) }
+        }
+    }
     private fun startScanBle() {
         viewModelScope.launch {
             startScanBle.execute(StartScanBleUC.Request)

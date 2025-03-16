@@ -1,5 +1,6 @@
 package com.count_out.presentation.screens.training
 
+import android.R.attr.action
 import android.annotation.SuppressLint
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -26,21 +27,19 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import com.count_out.domain.entity.enums.RoundType
+import com.count_out.domain.entity.workout.Training
 import com.count_out.presentation.R
 import com.count_out.presentation.models.Dimen
-import com.count_out.presentation.models.TrainingImpl
 import com.count_out.presentation.models.TypeKeyboard
 import com.count_out.presentation.screens.prime.Action
 import com.count_out.presentation.screens.prime.PrimeScreen
 import com.count_out.presentation.screens.training.TrainingEvent.ShowBS
 import com.count_out.presentation.screens.training.round.Round
 import com.count_out.presentation.view_element.TextFieldApp
-import com.count_out.presentation.view_element.bottom_sheet.BottomSheetSelectActivity
 import com.count_out.presentation.view_element.bottom_sheet.BottomSheetSpeech
 import com.count_out.presentation.view_element.icons.IconsGroup
+import com.count_out.presentation.view_element.lg
 
-@SuppressLint("UnrememberedMutableState")
 @Composable fun TrainingScreen(viewModel: TrainingViewModel, trainingId: Long){
     LaunchedEffect(Unit) { viewModel.submitEvent(TrainingEvent.GetTraining(trainingId)) }
     TrainingScreenCreateView( viewModel = viewModel )
@@ -48,12 +47,9 @@ import com.count_out.presentation.view_element.icons.IconsGroup
 
 @SuppressLint("StateFlowValueCalledInComposition")
 @Composable fun TrainingScreenCreateView( viewModel: TrainingViewModel){
-
     val action = Action {viewModel.submitEvent(it) }
     viewModel.dataState.collectAsState().value.let { screenState ->
         PrimeScreen(loader = screenState) { dataState ->
-//            dataState.onDismissSelectActivity =
-//                { dataState.showBottomSheetSelectActivity = false}
             EditSpeech(dataState = dataState, action = action)
             TrainingScreenLayout(dataState, action = action)
         }
@@ -68,9 +64,8 @@ import com.count_out.presentation.view_element.icons.IconsGroup
         BottomSheetSpeech(dataState)
     }
 }
-@SuppressLint("UnrememberedMutableState")
-@Composable
-fun TrainingScreenLayout(dataState: TrainingState, action: Action){
+
+@Composable fun TrainingScreenLayout(dataState: TrainingState, action: Action){
     val focusManager = LocalFocusManager.current
     val interactionSource = remember { MutableInteractionSource() }
     Column(
@@ -78,8 +73,9 @@ fun TrainingScreenLayout(dataState: TrainingState, action: Action){
             .fillMaxHeight()
             .verticalScroll(rememberScrollState())
             .padding(horizontal = Dimen.paddingAppHor)
-            .clickable(interactionSource = interactionSource, indication = null){
-                focusManager.clearFocus(true)},
+            .clickable(interactionSource = interactionSource, indication = null) {
+                focusManager.clearFocus(true)
+            },
     ){
         Spacer(modifier = Modifier.height(Dimen.width8))
         NameTraining(dataState = dataState, action = action)
@@ -89,13 +85,15 @@ fun TrainingScreenLayout(dataState: TrainingState, action: Action){
         }
     }
 }
-@Composable
-fun NameTraining(dataState: TrainingState, action: Action) {
-    val enteredName: MutableState<String> = remember { mutableStateOf("") }
+@Composable fun NameTraining(dataState: TrainingState, action: Action) {
+
+    val enteredName: MutableState<String> = remember { mutableStateOf(dataState.training?.name ?: "") }
 
     if (dataState.training?.idTraining == 0L) return
     Row( verticalAlignment = Alignment.CenterVertically,
-        modifier = Modifier.fillMaxWidth().padding(bottom = 6.dp))
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(bottom = 6.dp))
     {
         TextFieldApp(
             placeholder = enteredName.value,
@@ -105,8 +103,8 @@ fun NameTraining(dataState: TrainingState, action: Action) {
             colorLine = MaterialTheme.colorScheme.outline,
             onChangeValue = {
                 enteredName.value = it
-                action.ex( TrainingEvent.UpdateTraining(
-                    (dataState.training as TrainingImpl).copy(name = enteredName.value)))
+                val tr = (dataState.training as Training).copy(name = enteredName.value)
+                action.ex( TrainingEvent.UpdateTraining(tr as Training))
             }
         )
         Spacer(modifier = Modifier.weight(1f))

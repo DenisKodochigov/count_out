@@ -117,7 +117,7 @@ val interval_between_pole = 4.dp
                 action.ex(TrainingEvent.DeleteSet(set))},
             onClickSpeech = {
                 dataState.set = set
-                action.ex(TrainingEvent.ShowBS(dataState.showBS.copy(element = set)))      },
+                action.ex(ShowBS(dataState.showBS.copy(element = set)))      },
         )
     }
 }

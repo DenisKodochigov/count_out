@@ -31,20 +31,3 @@ data class TrainingState (
     @Stable override var item: Element? = null,
     @Stable override var onDismissSpeech: () -> Unit = {},
 ): BottomSheetInterface
-
-
-
-
-//    val showSpeechTraining: Boolean = false,
-//    val showSpeechWorkUp: Boolean = false,
-//    val showSpeechWorkOut: Boolean = false,
-//    val showSpeechWorkDown: Boolean = false,
-//    val showSpeechExercise: Boolean = false,
-//    val showSpeechSet: Boolean = false,
-//    val showSelectActivity: Boolean = false,
-//    val workUpCollapsing: Boolean = true,
-//    val workOutCollapsing: Boolean = true,
-//    val workDownCollapsing: Boolean = true,
-//    val listCollapsingSet: List<Long> = emptyList(),
-//    val listCollapsingExercise: List<Long> = emptyList(),
-//    @Stable var onDismissSelectActivity: () -> Unit = {},

@@ -2,7 +2,7 @@ package com.count_out.framework.room.db.training
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.count_out.data.models.TrainingImpl
+import com.count_out.domain.entity.workout.Training
 
 
 @Entity(tableName = "tb_trainings")
@@ -15,7 +15,7 @@ data class TrainingTable(
 //    @Ignore  var speech: SpeechKit = SpeechKitTable(),
 //    @Ignore  var rounds: List<Round> = emptyList(),
 ){
-    fun fromTrainingSource(training: TrainingImpl) = TrainingTable(
+    fun fromTrainingSource(training: Training) = TrainingTable(
         name = training.name,
         isSelected = training.isSelected,
         speechId = training.speechId

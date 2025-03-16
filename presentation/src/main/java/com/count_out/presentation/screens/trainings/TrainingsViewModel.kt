@@ -6,7 +6,6 @@ import com.count_out.domain.use_case.trainings.CopyTrainingUC
 import com.count_out.domain.use_case.trainings.DeleteTrainingUC
 import com.count_out.domain.use_case.trainings.GetTrainingsUC
 import com.count_out.domain.use_case.trainings.SelectTrainingUC
-import com.count_out.presentation.models.TrainingImpl
 import com.count_out.presentation.screens.prime.Event
 import com.count_out.presentation.screens.prime.PrimeViewModel
 import com.count_out.presentation.screens.prime.ScreenState

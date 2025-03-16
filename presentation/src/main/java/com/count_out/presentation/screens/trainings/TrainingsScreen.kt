@@ -29,13 +29,13 @@ import com.count_out.presentation.R
 import com.count_out.presentation.models.Dimen
 import com.count_out.presentation.models.Dimen.contourAll2
 import com.count_out.presentation.models.Dimen.contourHor2
-import com.count_out.presentation.models.TrainingImpl
 import com.count_out.presentation.screens.prime.Action
 import com.count_out.presentation.screens.prime.PrimeScreen
 import com.count_out.presentation.view_element.ItemSwipe
 import com.count_out.presentation.view_element.TextApp
 import com.count_out.presentation.view_element.custom_view.Frame
 import com.count_out.presentation.view_element.custom_view.IconQ
+import com.count_out.presentation.view_element.lg
 
 
 @Composable
@@ -159,6 +159,6 @@ fun DownPlace(dataState: TrainingsState, action: Action) {
                 else dataState.selectedId.value?.let { id -> action.ex(TrainingsEvent.Run(id))}
             })
         Spacer(modifier = Modifier.width(32.dp))
-        IconQ.Add(onClick = { action.ex(TrainingsEvent.Copy(TrainingImpl()) ) })
+        IconQ.Add(onClick = { action.ex(TrainingsEvent.Copy(Training()) ) })
     }
 }

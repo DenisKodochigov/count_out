@@ -1,9 +1,9 @@
 package com.count_out.framework.room.source
 
+import android.util.Log
 import com.count_out.data.models.RingImpl
 import com.count_out.data.models.RoundImpl
 import com.count_out.data.models.SpeechKitImpl
-import com.count_out.data.models.TrainingImpl
 import com.count_out.data.source.room.RingSource
 import com.count_out.data.source.room.RoundSource
 import com.count_out.data.source.room.SpeechKitSource
@@ -13,6 +13,7 @@ import com.count_out.domain.entity.workout.Training
 import com.count_out.framework.room.db.training.TrainingDao
 import com.count_out.framework.room.db.training.TrainingTable
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
@@ -26,7 +27,7 @@ class TrainingSourceImpl @Inject constructor(
     override fun update(training: Training){
         training.speech?.let { speechKitSource.update(it) }
         training.rounds.forEach { round-> roundSource.update(round) }
-        dao.update(toTrainingTable(training as TrainingImpl))
+        dao.update(toTrainingTable(training))
     }
 
     override fun copy(training: Training): Long {
@@ -49,11 +50,12 @@ class TrainingSourceImpl @Inject constructor(
         return trainingId
     }
 
-    override fun gets(): Flow<List<TrainingImpl>> =
-        dao.getTrainingsRel().map { list-> list.map { item -> item.toTraining() } }
+    override fun gets(): Flow<List<Training>> {
+        return dao.getTrainingsRel().map { list -> list.map { item -> item.toTraining() } }
+    }
 
-    override fun get(training: Training): Flow<TrainingImpl> =
-        dao.getTrainingRel(training.idTraining).map { it.toTraining() }
+    override fun get(training: Training): Flow<Training> {
+        return dao.getTrainingRel(training.idTraining).map { it.toTraining() } }
 
     override fun del(training: Training) {
         training.rounds.forEach { roundSource.del(it as RoundImpl) }

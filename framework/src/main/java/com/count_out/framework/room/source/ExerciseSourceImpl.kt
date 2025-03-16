@@ -1,6 +1,5 @@
 package com.count_out.framework.room.source
 
-import com.count_out.data.models.ExerciseImpl
 import com.count_out.data.models.ParameterImpl
 import com.count_out.data.models.SetImpl
 import com.count_out.data.models.SpeechKitImpl
@@ -10,6 +9,7 @@ import com.count_out.data.source.room.SpeechKitSource
 import com.count_out.domain.entity.enums.Goal
 import com.count_out.domain.entity.enums.Units
 import com.count_out.domain.entity.enums.Zone
+import com.count_out.domain.entity.workout.Exercise
 import com.count_out.framework.room.db.exercise.ExerciseDao
 import com.count_out.framework.room.db.exercise.ExerciseTable
 import kotlinx.coroutines.flow.Flow
@@ -22,19 +22,19 @@ class ExerciseSourceImpl @Inject constructor(
     private val speechKitSource: SpeechKitSource,
 ): ExerciseSource {
 
-    override fun get(exercise: ExerciseImpl): Flow<ExerciseImpl> =
+    override fun get(exercise: Exercise): Flow<Exercise> =
         dao.get(exercise.idExercise).map { it.toExercise() }
 
-    override fun getForRound(id: Long): Flow<List<ExerciseImpl>> =
+    override fun getForRound(id: Long): Flow<List<Exercise>> =
         dao.getForRound(id).map { list-> list.map { it.toExercise() }}
 
-    override fun getForRing(id: Long): Flow<List<ExerciseImpl>> =
+    override fun getForRing(id: Long): Flow<List<Exercise>> =
         dao.getForRing(id).map { list-> list.map { it.toExercise() }}
 
-    override fun getFilter(list: List<Long>): Flow<List<ExerciseImpl>> =
+    override fun getFilter(list: List<Long>): Flow<List<Exercise>> =
         dao.getFilter(list).map { lst-> lst.map { it.toExercise() }}
 
-    override fun copy(exercise: ExerciseImpl): Long {
+    override fun copy(exercise: Exercise): Long {
         val speechId = speechKitSource.copy(exercise.speech?.let{ it as SpeechKitImpl } ?: SpeechKitImpl() )
         val id = dao.add(toExerciseTable(exercise.copy(speechId = speechId)))
         if (exercise.sets.isNotEmpty()){
@@ -43,7 +43,7 @@ class ExerciseSourceImpl @Inject constructor(
         return id
     }
 
-    override fun update(exercise: ExerciseImpl) {
+    override fun update(exercise: Exercise) {
         exercise.speech?.let {  speechKitSource.update(it) }
         if (exercise.sets.isNotEmpty()){
             exercise.sets.forEach { set-> setSource.update((set as SetImpl)) }
@@ -51,14 +51,14 @@ class ExerciseSourceImpl @Inject constructor(
         dao.update(toExerciseTable(exercise).copy(idExercise = exercise.idExercise))
     }
 
-    override fun del(exercise: ExerciseImpl) {
+    override fun del(exercise: Exercise) {
         exercise.speech?.let { speechKitSource.del(it as SpeechKitImpl) }
         if (exercise.sets.isNotEmpty()){
             exercise.sets.forEach { set-> setSource.del(set as SetImpl) } }
         dao.del(exercise.idExercise)
     }
 
-    private fun toExerciseTable(exercise: ExerciseImpl) = ExerciseTable(
+    private fun toExerciseTable(exercise: Exercise) = ExerciseTable(
 //        idExercise = exercise.idExercise,
         roundId = exercise.roundId,
         ringId = exercise.ringId,

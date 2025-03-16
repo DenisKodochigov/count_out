@@ -1,11 +1,10 @@
 package com.count_out.data.source.room
 
-import com.count_out.data.models.ExerciseImpl
 import com.count_out.domain.entity.workout.Exercise
 import kotlinx.coroutines.flow.Flow
 
 /**
- * get плучаем конкретную реализацию ExerciseImpl
+ * get плучаем конкретную реализацию Exercise
  * gets - Список SET приписанных к Exercise
  * getForRound получаем список упражнений для указанного ROUND
  * getForRing получаем список упражнений для указанного RING
@@ -21,11 +20,11 @@ import kotlinx.coroutines.flow.Flow
  *  setActivityIntoExercise - меняет ID Activity в Exercise
  */
 interface ExerciseSource {
-    fun get(exercise: ExerciseImpl): Flow<Exercise>
+    fun get(exercise: Exercise): Flow<Exercise>
     fun getForRound(id: Long): Flow<List<Exercise>>
     fun getForRing(id: Long): Flow<List<Exercise>>
     fun getFilter(list: List<Long>): Flow<List<Exercise>>
-    fun copy(exercise: ExerciseImpl): Long
-    fun del(exercise: ExerciseImpl)
-    fun update(exercise: ExerciseImpl)
+    fun copy(exercise: Exercise): Long
+    fun del(exercise: Exercise)
+    fun update(exercise: Exercise)
 }

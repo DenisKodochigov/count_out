@@ -1,22 +1,20 @@
 package com.count_out.data.repository
 
-import com.count_out.data.source.room.SetSource
-import com.count_out.domain.entity.SettingRecord
+import com.count_out.data.source.local.SettingsSource
+import com.count_out.domain.entity.Setting
 import com.count_out.domain.entity.Settings
 import com.count_out.domain.repository.trainings.SettingsRepo
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
-class SettingsRepoImpl@Inject constructor(private val setSource: SetSource): SettingsRepo {
-    override fun getSettings(): Flow<Settings> {
-        TODO("Not yet implemented")
-    }
+class SettingsRepoImpl @Inject constructor(private val settingsSource: SettingsSource): SettingsRepo {
 
-    override fun getSetting(setting: SettingRecord): Flow<SettingRecord> {
-        TODO("Not yet implemented")
-    }
-
-    override fun updateSetting(setting: SettingRecord): Flow<SettingRecord> {
-        TODO("Not yet implemented")
+    override fun getSettings(): Flow<Settings> = settingsSource.getSettings()
+    override fun saveSetting(setting: Setting) {
+        when(setting){
+            is Setting.BleName -> { settingsSource.saveBleName(setting.value)}
+            is Setting.BleAddress -> { settingsSource.saveBleAddress(setting.value)}
+            is Setting.SpeechDescription -> { settingsSource.saveSettingSpeechDescr(setting.value)}
+        }
     }
 }

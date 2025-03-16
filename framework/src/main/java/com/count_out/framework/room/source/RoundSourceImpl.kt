@@ -1,12 +1,12 @@
 package com.count_out.framework.room.source
 
 import android.util.Log
-import com.count_out.data.models.ExerciseImpl
 import com.count_out.data.models.RoundImpl
 import com.count_out.data.models.SpeechKitImpl
 import com.count_out.data.source.room.ExerciseSource
 import com.count_out.data.source.room.RoundSource
 import com.count_out.data.source.room.SpeechKitSource
+import com.count_out.domain.entity.workout.Exercise
 import com.count_out.domain.entity.workout.Round
 import com.count_out.framework.room.db.round.RoundDao
 import com.count_out.framework.room.db.round.RoundTable
@@ -36,19 +36,19 @@ class RoundSourceImpl @Inject constructor(
             roundId = dao.add(toRoundTable(round as RoundImpl).copy(speechId = speechId))
             if (round.exercise.isNotEmpty()) {
                 round.exercise.forEach { exercise->
-                    exerciseSource.copy((exercise as ExerciseImpl).copy(roundId = roundId)) }
-            } else { exerciseSource.copy(ExerciseImpl().copy(roundId = roundId)) }
+                    exerciseSource.copy(exercise.copy(roundId = roundId)) }
+            } else { exerciseSource.copy(Exercise().copy(roundId = roundId)) }
         } else { Log.d("KDS", "The value is not defined: TRAININGID ")}
         return roundId
     }
     override fun del(round: Round) {
-        round.exercise.forEach { exerciseSource.del(it as ExerciseImpl) }
+        round.exercise.forEach { exerciseSource.del(it) }
         round.speech?.let { speechKitSource.del(it as SpeechKitImpl) }
         dao.del(round.idRound)
     }
 
     override fun update(round: Round) {
-        round.exercise.forEach { exerciseSource.update(it as ExerciseImpl) }
+        round.exercise.forEach { exerciseSource.update(it) }
         round.speech?.let { speechKitSource.update(it as SpeechKitImpl) }
         dao.update(toRoundTable(round as RoundImpl))
     }
@@ -59,7 +59,7 @@ class RoundSourceImpl @Inject constructor(
         speechId = round.speechId,
         roundType = round.roundType.ordinal
     )
-//    private fun createExerciseImpl(roundId: Long) = ExerciseImpl(
+//    private fun createExerciseImpl(roundId: Long) = Exercise(
 //        idExercise = 0,
 //        roundId = roundId,
 //        ringId = 0,

@@ -1,18 +1,19 @@
 package com.count_out.framework.room.db.relation
 
+import android.R.attr.duration
 import androidx.room.Embedded
 import androidx.room.Relation
-import com.count_out.data.models.ExerciseImpl
 import com.count_out.data.models.ParameterImpl
 import com.count_out.data.models.RingImpl
 import com.count_out.data.models.RoundImpl
 import com.count_out.data.models.SetImpl
 import com.count_out.data.models.SpeechKitImpl
-import com.count_out.data.models.TrainingImpl
 import com.count_out.domain.entity.enums.Goal
 import com.count_out.domain.entity.enums.RoundType
 import com.count_out.domain.entity.enums.Units
 import com.count_out.domain.entity.enums.Zone
+import com.count_out.domain.entity.workout.Exercise
+import com.count_out.domain.entity.workout.Training
 import com.count_out.framework.room.db.activity.ActivityTable
 import com.count_out.framework.room.db.exercise.ExerciseTable
 import com.count_out.framework.room.db.ring.RingTable
@@ -74,8 +75,8 @@ data class ExerciseRel(
     @Relation(parentColumn = "idExercise", entityColumn = "exerciseId", entity = SetTable::class) val sets: List<SetRel>?,
     @Relation(parentColumn = "speechId", entityColumn = "idSpeechKit", entity = SpeechKitTable::class) val speechKit: SpeechKitRel?
 ){
-    fun toExercise(): ExerciseImpl {
-        return ExerciseImpl(
+    fun toExercise(): Exercise {
+        return Exercise(
             idExercise = exerciseTable.idExercise,
             roundId = exerciseTable.roundId,
             ringId = exerciseTable.ringId,
@@ -85,9 +86,22 @@ data class ExerciseRel(
             speech = speechKit?.toSpeechKit(),
             speechId = exerciseTable.speechId,
             sets = sets?.map { it.toSet() } ?: emptyList(),
-            amountSet = 0,
-            duration = 0
+            amountSet = sets?.count() ?: 0,
+            duration = sumSets(sets)
         )
+    }
+    fun sumSets(sets: List<SetRel>?): Int {
+        var summ = 0
+        sets?.let { item->
+            item.forEach { set->
+                summ = set.setTable.duration.toInt() * if (set.setTable.durationU == Units.H.ordinal) 3600
+                else if (set.setTable.durationU == Units.M.ordinal) 60 else 1
+                summ = set.setTable.timeRest.toInt() * if (set.setTable.timeRestU == Units.H.ordinal) 3600
+                else if (set.setTable.timeRestU == Units.M.ordinal) 60 else 1
+                summ += set.setTable.intervalReps.toInt() * set.setTable.reps
+            }
+        }
+        return summ
     }
 }
 
@@ -108,9 +122,24 @@ data class RoundRel(
             speechId = round.speechId,
             speech = speechKit?.toSpeechKit(),
             trainingId = round.trainingId,
-            amount = 0,
-            duration = ParameterImpl(0.0, Units.M),
+            amount = exercise?.count() ?: 0,
+            duration = ParameterImpl(sumExercise(exercise), Units.M),
         )
+    }
+    fun sumExercise(exercises: List<ExerciseRel>?): Double {
+        var summ = 0
+        exercises?.let { items->
+            items.forEach { exercise->
+                exercise.sets?.forEach { set->
+                    summ = set.setTable.duration.toInt() * if (set.setTable.durationU == Units.H.ordinal) 3600
+                    else if (set.setTable.durationU == Units.M.ordinal) 60 else 1
+                    summ = set.setTable.timeRest.toInt() * if (set.setTable.timeRestU == Units.H.ordinal) 3600
+                    else if (set.setTable.timeRestU == Units.M.ordinal) 60 else 1
+                    summ += set.setTable.intervalReps.toInt() * set.setTable.reps
+                } ?: 0.0
+            }
+        }
+        return summ/60.0
     }
 }
 data class RingRel(
@@ -127,9 +156,24 @@ data class RingRel(
             speechId = ring.speechId,
             speech = speechKit?.toSpeechKit(),
             exercise = exercise?.map { it.toExercise() } ?: emptyList(),
-            amount = 0,
-            duration = ParameterImpl(0.0, Units.M),  ///.sortedBy{ it.idView }.sortedBy{ it.idView } реализовать в usecase
+            amount = exercise?.count() ?: 0,
+            duration = ParameterImpl(sumExercise(exercise), Units.M),  ///.sortedBy{ it.idView }.sortedBy{ it.idView } реализовать в usecase
         )
+    }
+    fun sumExercise(exercises: List<ExerciseRel>?): Double {
+        var summ = 0
+        exercises?.let { items->
+            items.forEach { exercise->
+                exercise.sets?.forEach { set->
+                    summ = set.setTable.duration.toInt() * if (set.setTable.durationU == Units.H.ordinal) 3600
+                    else if (set.setTable.durationU == Units.M.ordinal) 60 else 1
+                    summ = set.setTable.timeRest.toInt() * if (set.setTable.timeRestU == Units.H.ordinal) 3600
+                    else if (set.setTable.timeRestU == Units.M.ordinal) 60 else 1
+                    summ += set.setTable.intervalReps.toInt() * set.setTable.reps
+                } ?: 0.0
+            }
+        }
+        return summ/60.0
     }
 }
 data class TrainingRel(
@@ -138,10 +182,10 @@ data class TrainingRel(
     @Relation(parentColumn = "idTraining", entityColumn = "trainingId", entity = RingTable::class) val rings: List<RingRel>?,
     @Relation(parentColumn = "speechId", entityColumn = "idSpeechKit", entity = SpeechKitTable::class) val speechKit: SpeechKitRel?,
 ){
-    fun toTraining(): TrainingImpl {
+    fun toTraining(): Training {
         var amountActivity = 0
         this.rounds?.forEach { round-> amountActivity += round.exercise?.count() ?:0 }
-        return TrainingImpl(
+        return Training(
             idTraining = training.idTraining,
             isSelected = training.isSelected,
             amountActivity = amountActivity,

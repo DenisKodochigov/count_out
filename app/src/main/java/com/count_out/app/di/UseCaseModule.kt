@@ -30,7 +30,6 @@ import com.count_out.domain.use_case.other.ShowBottomSheetUC
 import com.count_out.domain.use_case.set.CopySetUC
 import com.count_out.domain.use_case.set.DeleteSetUC
 import com.count_out.domain.use_case.set.UpdateSetUC
-import com.count_out.domain.use_case.settings.GetSettingUC
 import com.count_out.domain.use_case.settings.GetSettingsUC
 import com.count_out.domain.use_case.settings.UpdateSettingUC
 import com.count_out.domain.use_case.trainings.CopyTrainingUC
@@ -174,11 +173,6 @@ class UseCaseModule {
     fun provideGetSettingsUseCase(
         configuration: UseCase.Configuration,
         repo: SettingsRepo ): GetSettingsUC = GetSettingsUC(configuration, repo)
-    @Singleton
-    @Provides
-    fun provideGetSettingUseCase(
-        configuration: UseCase.Configuration,
-        repo: SettingsRepo ): GetSettingUC = GetSettingUC(configuration, repo)
     @Singleton
     @Provides
     fun provideUpdateSettingUseCase(

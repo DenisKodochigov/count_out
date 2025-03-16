@@ -1,8 +1,6 @@
 package com.count_out.domain.repository.trainings
 
-import com.count_out.domain.entity.workout.Exercise
 import com.count_out.domain.entity.workout.Set
-import com.count_out.domain.entity.workout.Training
 import kotlinx.coroutines.flow.Flow
 
 interface SetRepo {
