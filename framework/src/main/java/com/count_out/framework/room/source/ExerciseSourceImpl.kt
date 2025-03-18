@@ -1,7 +1,8 @@
 package com.count_out.framework.room.source
 
+import com.count_out.data.models.ExerciseImplD
 import com.count_out.data.models.ParameterImpl
-import com.count_out.data.models.SetImpl
+import com.count_out.data.models.SetImplD
 import com.count_out.data.models.SpeechKitImpl
 import com.count_out.data.source.room.ExerciseSource
 import com.count_out.data.source.room.SetSource
@@ -36,9 +37,9 @@ class ExerciseSourceImpl @Inject constructor(
 
     override fun copy(exercise: Exercise): Long {
         val speechId = speechKitSource.copy(exercise.speech?.let{ it as SpeechKitImpl } ?: SpeechKitImpl() )
-        val id = dao.add(toExerciseTable(exercise.copy(speechId = speechId)))
+        val id = dao.add(toExerciseTable((exercise as ExerciseImplD).copy(speechId = speechId)))
         if (exercise.sets.isNotEmpty()){
-            exercise.sets.forEach { set-> setSource.copy((set as SetImpl).copy(exerciseId = id)) }
+            exercise.sets.forEach { set-> setSource.copy((set as SetImplD).copy(exerciseId = id)) }
         } else { setSource.copy( newSetImpl(exerciseId = id) ) }
         return id
     }
@@ -46,7 +47,7 @@ class ExerciseSourceImpl @Inject constructor(
     override fun update(exercise: Exercise) {
         exercise.speech?.let {  speechKitSource.update(it) }
         if (exercise.sets.isNotEmpty()){
-            exercise.sets.forEach { set-> setSource.update((set as SetImpl)) }
+            exercise.sets.forEach { set-> setSource.update((set as SetImplD)) }
         }
         dao.update(toExerciseTable(exercise).copy(idExercise = exercise.idExercise))
     }
@@ -54,7 +55,7 @@ class ExerciseSourceImpl @Inject constructor(
     override fun del(exercise: Exercise) {
         exercise.speech?.let { speechKitSource.del(it as SpeechKitImpl) }
         if (exercise.sets.isNotEmpty()){
-            exercise.sets.forEach { set-> setSource.del(set as SetImpl) } }
+            exercise.sets.forEach { set-> setSource.del(set as SetImplD) } }
         dao.del(exercise.idExercise)
     }
 
@@ -66,7 +67,7 @@ class ExerciseSourceImpl @Inject constructor(
         idView = exercise.idView,
         speechId = exercise.speechId,
     )
-    private fun newSetImpl(exerciseId: Long) = SetImpl(
+    private fun newSetImpl(exerciseId: Long) = SetImplD(
         idSet = 0,
         exerciseId = exerciseId,
         name = "Set 1",

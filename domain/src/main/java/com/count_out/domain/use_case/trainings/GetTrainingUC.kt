@@ -1,6 +1,5 @@
 package com.count_out.domain.use_case.trainings
 
-import android.util.Log
 import com.count_out.domain.entity.workout.Training
 import com.count_out.domain.repository.trainings.TrainingRepo
 import com.count_out.domain.use_case.UseCase

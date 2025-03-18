@@ -53,7 +53,7 @@ import com.count_out.presentation.view_element.EnumsTo
 }
 @Composable fun SettingScreenCreateView( viewModel: SettingViewModel){
     val action = Action {viewModel.submitEvent(it) }
-    viewModel.dataState.collectAsStateWithLifecycle().value.let { screenState ->
+    viewModel.screenState.collectAsStateWithLifecycle().value.let { screenState ->
         PrimeScreen(loader = screenState) { dataState ->
 
             if (dataState.showBottomSheetAddActivity.value) BottomSheetAddActivity(dataState, action)

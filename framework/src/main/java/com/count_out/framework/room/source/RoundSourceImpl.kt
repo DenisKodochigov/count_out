@@ -1,12 +1,12 @@
 package com.count_out.framework.room.source
 
 import android.util.Log
+import com.count_out.data.models.ExerciseImplD
 import com.count_out.data.models.RoundImpl
 import com.count_out.data.models.SpeechKitImpl
 import com.count_out.data.source.room.ExerciseSource
 import com.count_out.data.source.room.RoundSource
 import com.count_out.data.source.room.SpeechKitSource
-import com.count_out.domain.entity.workout.Exercise
 import com.count_out.domain.entity.workout.Round
 import com.count_out.framework.room.db.round.RoundDao
 import com.count_out.framework.room.db.round.RoundTable
@@ -36,8 +36,8 @@ class RoundSourceImpl @Inject constructor(
             roundId = dao.add(toRoundTable(round as RoundImpl).copy(speechId = speechId))
             if (round.exercise.isNotEmpty()) {
                 round.exercise.forEach { exercise->
-                    exerciseSource.copy(exercise.copy(roundId = roundId)) }
-            } else { exerciseSource.copy(Exercise().copy(roundId = roundId)) }
+                    exerciseSource.copy((exercise as ExerciseImplD ).copy(roundId = roundId)) }
+            } else { exerciseSource.copy(ExerciseImplD().copy(roundId = roundId)) }
         } else { Log.d("KDS", "The value is not defined: TRAININGID ")}
         return roundId
     }

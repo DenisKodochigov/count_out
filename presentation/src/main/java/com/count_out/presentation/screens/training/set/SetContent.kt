@@ -38,7 +38,7 @@ import com.count_out.presentation.R
 import com.count_out.presentation.models.Dimen.contourAll1
 import com.count_out.presentation.models.Dimen.contourBot1
 import com.count_out.presentation.models.ParameterImpl
-import com.count_out.presentation.models.SetImpl
+import com.count_out.presentation.models.SetImplP
 import com.count_out.presentation.models.TypeKeyboard
 import com.count_out.presentation.models.alumBodyLarge
 import com.count_out.presentation.models.alumBodyMedium
@@ -58,7 +58,7 @@ import com.count_out.presentation.view_element.icons.IconsGroup
 
 val interval_between_pole = 4.dp
 
-@Composable fun SetContent(dataState: TrainingState, action: Action, set: SetImpl){
+@Composable fun SetContent(dataState: TrainingState, action: Action, set: SetImplP){
 
     if (dataState.showBS.set) {
         dataState.nameSection = stringResource(id = R.string.set2)
@@ -85,7 +85,7 @@ val interval_between_pole = 4.dp
         }
     }
 }
-@Composable fun FirstLine(dataState: TrainingState, action: Action, set: SetImpl) {
+@Composable fun FirstLine(dataState: TrainingState, action: Action, set: SetImplP) {
     val setInfo = when (set.goal) {
         Goal.Distance -> viewDistance(set) + stringResource(id = set.distance.unit.id )
         Goal.Duration -> "${set.duration.value} ${stringResource(id = set.duration.unit.id)}"
@@ -122,7 +122,7 @@ val interval_between_pole = 4.dp
     }
 }
 
-@Composable fun BodySet(dataState: TrainingState, action: Action, set: SetImpl){
+@Composable fun BodySet(dataState: TrainingState, action: Action, set: SetImplP){
     when (set.goal){
         Goal.Distance -> Distance( dataState, action, set)
         Goal.Duration -> Duration( dataState, action, set)
@@ -130,7 +130,7 @@ val interval_between_pole = 4.dp
         Goal.CountGroup -> {}
     }
 }
-@Composable fun Distance(dataState: TrainingState, action: Action, set: SetImpl) {
+@Composable fun Distance(dataState: TrainingState, action: Action, set: SetImplP) {
     Row( horizontalArrangement = Arrangement.Center,
         verticalAlignment = Alignment.Top,
         modifier = Modifier
@@ -140,7 +140,7 @@ val interval_between_pole = 4.dp
         RestPole(dataState, action, set, Modifier.weight(1f))
     }
 }
-@Composable fun Duration(dataState: TrainingState, action: Action, set: SetImpl) {
+@Composable fun Duration(dataState: TrainingState, action: Action, set: SetImplP) {
     Row( horizontalArrangement = Arrangement.Center,
         verticalAlignment = Alignment.Top,
         modifier = Modifier
@@ -151,7 +151,7 @@ val interval_between_pole = 4.dp
         RestPole(dataState, action, set, Modifier.weight(1f))
     }
 }
-@Composable fun Count(dataState: TrainingState, action: Action, set: SetImpl) {
+@Composable fun Count(dataState: TrainingState, action: Action, set: SetImplP) {
     Row( horizontalArrangement = Arrangement.Center, verticalAlignment = Alignment.Top,
         modifier = Modifier
             .fillMaxWidth()
@@ -168,7 +168,7 @@ val interval_between_pole = 4.dp
         CountGroupFieldText(dataState, action, set)
     }
 }
-@Composable fun DistancePole(dataState: TrainingState, action: Action, set: SetImpl, modifier: Modifier = Modifier,){   //B7B7B7
+@Composable fun DistancePole(dataState: TrainingState, action: Action, set: SetImplP, modifier: Modifier = Modifier,){   //B7B7B7
     PoleInputWithUnit(
         unitId1 = R.string.m,
         unitId2 = R.string.km,
@@ -195,7 +195,7 @@ val interval_between_pole = 4.dp
             ) }
     )
 }
-@Composable fun DurationPole(dataState: TrainingState, action: Action, set: SetImpl, modifier: Modifier = Modifier){   //B7B7B7
+@Composable fun DurationPole(dataState: TrainingState, action: Action, set: SetImplP, modifier: Modifier = Modifier){   //B7B7B7
     PoleInputWithUnit(
         unitId1 = R.string.sec,
         unitId2 = R.string.min,
@@ -222,7 +222,7 @@ val interval_between_pole = 4.dp
             ) }
     )
 }
-@Composable fun IntervalPole(dataState: TrainingState, action: Action, set: SetImpl, modifier: Modifier = Modifier){   //B7B7B7
+@Composable fun IntervalPole(dataState: TrainingState, action: Action, set: SetImplP, modifier: Modifier = Modifier){   //B7B7B7
     PoleInputWithUnit(
         unitId1 = R.string.sec,
         headId = R.string.interval,
@@ -234,7 +234,7 @@ val interval_between_pole = 4.dp
         onChangeUnit = { }
     )
 }
-@Composable fun WeightPole(dataState: TrainingState, action: Action, set: SetImpl, modifier: Modifier = Modifier){   //B7B7B7
+@Composable fun WeightPole(dataState: TrainingState, action: Action, set: SetImplP, modifier: Modifier = Modifier){   //B7B7B7
     PoleInputWithUnit(
         unitId1 = R.string.gr,
         unitId2 = R.string.kg,
@@ -258,7 +258,7 @@ val interval_between_pole = 4.dp
         }
     )
 }
-@Composable fun RestPole(dataState: TrainingState, action: Action, set: SetImpl, modifier: Modifier = Modifier){
+@Composable fun RestPole(dataState: TrainingState, action: Action, set: SetImplP, modifier: Modifier = Modifier){
     PoleInputWithUnit(
         unitId1 = R.string.sec,
         unitId2 = R.string.min,
@@ -282,21 +282,21 @@ val interval_between_pole = 4.dp
     )
 }
 
-@Composable fun CountFieldText(dataState: TrainingState, action: Action, set: SetImpl){
+@Composable fun CountFieldText(dataState: TrainingState, action: Action, set: SetImplP){
     PoleInput(
         headId = R.string.counts, typeKey = TypeKeyboard.DIGIT, placeholder = "${ set.reps }",
         modifier = Modifier.width(IntrinsicSize.Min),
         onChangeValue = { action.ex(TrainingEvent.UpdateSet( set.copy(reps = it.toIntMy())))})
 
 }
-@Composable fun CountGroupFieldText(dataState: TrainingState, action: Action, set: SetImpl){
+@Composable fun CountGroupFieldText(dataState: TrainingState, action: Action, set: SetImplP){
     PoleInput(
         headId = R.string.counts_by_group_add,
         placeholder = set.groupCount,
         onChangeValue ={ action.ex(TrainingEvent.UpdateSet( set.copy(groupCount = it))) })
 }
 
-@Composable fun TaskSwitch(dataState: TrainingState, action: Action, set: SetImpl){
+@Composable fun TaskSwitch(dataState: TrainingState, action: Action, set: SetImplP){
     Row(verticalAlignment = Alignment.CenterVertically){
         if (set.positions.second == 1){
             IconsCollapsing(
@@ -328,7 +328,7 @@ val interval_between_pole = 4.dp
                 action.ex(TrainingEvent.ShowBS(dataState.showBS.copy(element = set)))   },)
     }
 }
-@Composable fun ZonePulseSwitch(dataState: TrainingState, action: Action, set: SetImpl){
+@Composable fun ZonePulseSwitch(dataState: TrainingState, action: Action, set: SetImplP){
     Row(verticalAlignment = Alignment.CenterVertically){
         Spacer(modifier = Modifier.weight(1f))
         ButtonSwitchPulse(selected = set.intensity == Zone.Low, idString = R.string.zone1,

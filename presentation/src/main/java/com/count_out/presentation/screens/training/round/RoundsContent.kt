@@ -13,15 +13,15 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import com.count_out.presentation.screens.prime.Action
-import com.count_out.presentation.screens.training.TrainingEvent
-import com.count_out.presentation.screens.training.TrainingState
 import com.count_out.domain.entity.enums.RoundType
-import com.count_out.domain.entity.workout.Exercise
 import com.count_out.domain.entity.workout.Round
 import com.count_out.presentation.R
 import com.count_out.presentation.models.Dimen.contourHor2
+import com.count_out.presentation.models.ExerciseImplP
+import com.count_out.presentation.screens.prime.Action
+import com.count_out.presentation.screens.training.TrainingEvent
 import com.count_out.presentation.screens.training.TrainingEvent.ShowBS
+import com.count_out.presentation.screens.training.TrainingState
 import com.count_out.presentation.screens.training.exercise.ListExercises
 import com.count_out.presentation.view_element.EnumsTo
 import com.count_out.presentation.view_element.TextApp
@@ -29,10 +29,8 @@ import com.count_out.presentation.view_element.bottom_sheet.BottomSheetSpeech
 import com.count_out.presentation.view_element.custom_view.Frame
 import com.count_out.presentation.view_element.icons.IconsCollapsing
 import com.count_out.presentation.view_element.icons.IconsGroup
-import com.count_out.presentation.view_element.lg
 
-@Composable
-fun Round(dataState: TrainingState, action: Action, round: Round){
+@Composable fun Round(dataState: TrainingState, action: Action, round: Round){
 
     if (dataState.showBS.workUp) {
         dataState.nameSection = stringResource(id = R.string.work_up1)
@@ -80,7 +78,7 @@ fun Round(dataState: TrainingState, action: Action, round: Round){
         IconsGroup(
             onClickSpeech = { showSpeechRound(dataState, action, round) },
             onClickAddExercise = {
-                action.ex(TrainingEvent.CopyExercise(exercise = Exercise(roundId = round.idRound)))})
+                action.ex(TrainingEvent.CopyExercise(exercise = ExerciseImplP(roundId = round.idRound)))})
         Spacer(modifier = Modifier.width(6.dp))
     }
 }

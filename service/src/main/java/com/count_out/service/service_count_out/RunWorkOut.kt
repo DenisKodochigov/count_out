@@ -1,7 +1,7 @@
 package com.count_out.service.service_count_out
 
 import android.content.Context
-import com.count_out.data.models.SetImpl
+import com.count_out.data.models.SetImplD
 import com.count_out.data.models.SpeechImpl
 import com.count_out.data.router.models.DataForWork
 import com.count_out.data.router.models.DataFromWork
@@ -53,7 +53,7 @@ class RunWorkOut @Inject constructor(
                     }
 //                    dataForWork.setExecuteInfoExercise(index = indM)
                 }
-                executeSet( item.currentSet as SetImpl, dataForWork, dataFromWork )
+                executeSet( item.currentSet as SetImplD, dataForWork, dataFromWork )
                 if ( currentIndExercise != item.exercise?.idExercise )
                     item.exercise?.speech?.let { speechEnd(dataFromWork, it)}
                 if ( currentIndRound != item.round?.idRound )
@@ -66,7 +66,7 @@ class RunWorkOut @Inject constructor(
         }
     }
 
-    private suspend fun executeSet(set: SetImpl?, dataForWork: DataForWork, dataFromWork: DataFromWork){
+    private suspend fun executeSet(set: SetImplD?, dataForWork: DataForWork, dataFromWork: DataFromWork){
         dataForWork.sendStepTraining()
         dataFromWork.trap()
         while (!runningCountRest.value) { delay(100L) }
@@ -79,7 +79,7 @@ class RunWorkOut @Inject constructor(
             speakEnd(currentSet, dataFromWork)
         }
     }
-    private suspend fun speakSetBegin(set: SetImpl, dataFromWork: DataFromWork){
+    private suspend fun speakSetBegin(set: SetImplD, dataFromWork: DataFromWork){
         speechManager.speech(dataFromWork, SpeechImpl(
             message = textBeforeSet(set),
             idSpeech = TODO(),
@@ -88,7 +88,7 @@ class RunWorkOut @Inject constructor(
         ))
         speechStart(dataFromWork, set.speech as SpeechKit)
     }
-    private suspend fun speakSetBody(set: SetImpl, dataForWork: DataForWork, dataFromWork: DataFromWork){
+    private suspend fun speakSetBody(set: SetImplD, dataForWork: DataForWork, dataFromWork: DataFromWork){
         when (set.goal){
             Goal.Distance -> speakingDISTANCE(set, dataFromWork)
             Goal.Duration -> speakingDURATION(set, dataFromWork)
@@ -96,7 +96,7 @@ class RunWorkOut @Inject constructor(
             Goal.CountGroup -> speakingCOUNTGROUP(set, dataFromWork)
         }
     }
-    private suspend fun speakingCOUNT(set: SetImpl, dataForWork: DataForWork, dataFromWork: DataFromWork ){
+    private suspend fun speakingCOUNT(set: SetImplD, dataForWork: DataForWork, dataFromWork: DataFromWork ){
         dataFromWork.enableChangeInterval.value = true
         for (count in 1..set.reps){
             dataFromWork.currentCount.value = count
@@ -110,7 +110,7 @@ class RunWorkOut @Inject constructor(
         }
         dataFromWork.enableChangeInterval.value = false
     }
-    private suspend fun speakingCOUNTGROUP(set: SetImpl, dataFromWork: DataFromWork){
+    private suspend fun speakingCOUNTGROUP(set: SetImplD, dataFromWork: DataFromWork){
         val listWordCount = set.groupCount.split(",")
         if ( listWordCount.isNotEmpty()){
             for (count in 0..< set.reps){
@@ -119,13 +119,13 @@ class RunWorkOut @Inject constructor(
             }
         }
     }
-    private suspend fun speakingDURATION(set: SetImpl, dataFromWork: DataFromWork){
+    private suspend fun speakingDURATION(set: SetImplD, dataFromWork: DataFromWork){
         speakInterval( duration = (set.duration.value / (if (set.duration.unit == Units.M) 60.0 else 1.0)).toInt(),
             dataFromWork = dataFromWork)
     }
-    private fun speakingDISTANCE(set: SetImpl, dataFromWork: DataFromWork ){}
+    private fun speakingDISTANCE(set: SetImplD, dataFromWork: DataFromWork ){}
 
-    private suspend fun speakEnd(setCurrent: SetImpl, dataFromWork: DataFromWork){
+    private suspend fun speakEnd(setCurrent: SetImplD, dataFromWork: DataFromWork){
         speechEnd(dataFromWork, setCurrent.speech as SpeechKit)
         CoroutineScope(Dispatchers.IO).launch { speakingRest(setCurrent, dataFromWork)}
         speechManager.speech(dataFromWork, SpeechImpl(
@@ -138,7 +138,7 @@ class RunWorkOut @Inject constructor(
             addMessage = TODO()
         ))
     }
-    private suspend fun speakingRest(set: SetImpl, dataFromWork: DataFromWork ){
+    private suspend fun speakingRest(set: SetImplD, dataFromWork: DataFromWork ){
         dataFromWork.phaseWorkout.value = 0
         if (set.rest.value > 0) {
             runningCountRest.value = false
@@ -164,7 +164,7 @@ class RunWorkOut @Inject constructor(
             Delay().run(1000L, dataFromWork.runningState)
         }
     }
-    private fun textBeforeSet(set: SetImpl): String{
+    private fun textBeforeSet(set: SetImplD): String{
         return when (set.goal){
             Goal.Count -> " " + getPlurals(set.reps.toDouble(), R.plurals.repeat)
             Goal.CountGroup -> " " + getPlurals(set.reps.toDouble(), R.plurals.repeat)

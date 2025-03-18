@@ -1,6 +1,5 @@
 package com.count_out.presentation.screens.training
 
-import android.R.attr.action
 import android.annotation.SuppressLint
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -27,9 +26,9 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import com.count_out.domain.entity.workout.Training
 import com.count_out.presentation.R
 import com.count_out.presentation.models.Dimen
+import com.count_out.presentation.models.TrainingImplP
 import com.count_out.presentation.models.TypeKeyboard
 import com.count_out.presentation.screens.prime.Action
 import com.count_out.presentation.screens.prime.PrimeScreen
@@ -38,7 +37,6 @@ import com.count_out.presentation.screens.training.round.Round
 import com.count_out.presentation.view_element.TextFieldApp
 import com.count_out.presentation.view_element.bottom_sheet.BottomSheetSpeech
 import com.count_out.presentation.view_element.icons.IconsGroup
-import com.count_out.presentation.view_element.lg
 
 @Composable fun TrainingScreen(viewModel: TrainingViewModel, trainingId: Long){
     LaunchedEffect(Unit) { viewModel.submitEvent(TrainingEvent.GetTraining(trainingId)) }
@@ -48,7 +46,7 @@ import com.count_out.presentation.view_element.lg
 @SuppressLint("StateFlowValueCalledInComposition")
 @Composable fun TrainingScreenCreateView( viewModel: TrainingViewModel){
     val action = Action {viewModel.submitEvent(it) }
-    viewModel.dataState.collectAsState().value.let { screenState ->
+    viewModel.screenState.collectAsState().value.let { screenState ->
         PrimeScreen(loader = screenState) { dataState ->
             EditSpeech(dataState = dataState, action = action)
             TrainingScreenLayout(dataState, action = action)
@@ -103,8 +101,8 @@ import com.count_out.presentation.view_element.lg
             colorLine = MaterialTheme.colorScheme.outline,
             onChangeValue = {
                 enteredName.value = it
-                val tr = (dataState.training as Training).copy(name = enteredName.value)
-                action.ex( TrainingEvent.UpdateTraining(tr as Training))
+                dataState.training?.let {
+                    action.ex( TrainingEvent.UpdateTraining(TrainingImplP(it, enteredName.value))) }
             }
         )
         Spacer(modifier = Modifier.weight(1f))

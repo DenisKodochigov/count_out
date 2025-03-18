@@ -1,16 +1,16 @@
 package com.count_out.data.repository
 
-import android.util.Log
 import com.count_out.data.source.room.TrainingSource
 import com.count_out.domain.entity.workout.Training
 import com.count_out.domain.repository.trainings.TrainingRepo
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 class TrainingRepoImpl @Inject constructor(private val trainingSource: TrainingSource): TrainingRepo {
 
     override fun get(training: Training): Flow<Training> {
-        return trainingSource.get(training) }
+        return trainingSource.get(training).map { it } }
 
     override fun gets(): Flow<List<Training>> {
         return trainingSource.gets() }

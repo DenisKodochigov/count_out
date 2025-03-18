@@ -10,7 +10,7 @@ import com.count_out.domain.entity.router.DeviceUI
 import com.count_out.domain.entity.workout.Training
 import com.count_out.domain.entity.enums.ConnectState
 import com.count_out.domain.entity.enums.RunningState
-import com.count_out.presentation.models.SetImpl
+import com.count_out.presentation.models.SetImplP
 import com.count_out.presentation.models.TickTimeImpl
 import javax.inject.Singleton
 
@@ -34,7 +34,7 @@ data class ExecuteWorkoutScreenState(
 
     val showBottomSheetSaveTraining: MutableState<Boolean> = mutableStateOf(false),
     val stateWorkOutService: RunningState = RunningState.Binding,
-    val updateSet: (Long, SetImpl)->Unit = { _, _->},
+    val updateSet: (Long, SetImplP)->Unit = { _, _->},
     val startWorkOutService: (Training)->Unit = {},
     val stopWorkOutService: ()->Unit = {},
     val pauseWorkOutService: ()->Unit = { },

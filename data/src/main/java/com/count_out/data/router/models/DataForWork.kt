@@ -1,6 +1,6 @@
 package com.count_out.data.router.models
 
-import com.count_out.data.models.SetImpl
+import com.count_out.data.models.SetImplD
 import com.count_out.domain.entity.NextExercise
 import com.count_out.domain.entity.StepTraining
 import com.count_out.domain.entity.enums.Goal
@@ -40,7 +40,7 @@ data class DataForWork (
         dataFromWork?.stepTraining?.value =
             if (interval.value > 0) {
                 (map[indexMap] as StepTrainingImpl).copy(currentSet = map[indexMap].currentSet?.let { set ->
-                   (set as SetImpl).copy(intervalReps = interval.value) })}
+                   (set as SetImplD).copy(intervalReps = interval.value) })}
             else map[indexMap]
     }
 

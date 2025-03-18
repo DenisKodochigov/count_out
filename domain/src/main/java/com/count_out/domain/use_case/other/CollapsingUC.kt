@@ -12,19 +12,20 @@ import javax.inject.Inject
 
 class CollapsingUC @Inject constructor(configuration: Configuration
 ): UseCase<CollapsingUC.Request, CollapsingUC.Response>(configuration)  {
-    override fun executeData(input: Request): Flow<Response> =
-        flow { emit( Response(executeCollapsing(input.request)) ) }
+    override fun executeData(input: Request): Flow<Response> {
+        return flow { emit( Response(executeCollapsing(input.request)) ) }
+    }
     data class Request(val request: Collapsing) : UseCase.Request
     data class Response(val result: Collapsing) : UseCase.Response
 
     fun executeCollapsing(item: Collapsing): Collapsing{
-        when(item.item){
+        return when(item.item){
             is Set -> {item.copy(sets = editList(item.sets, (item.item as Set).idSet))}
             is Ring-> {item.copy(rings = editList(item.rings, (item.item as Ring).idRing))}
             is Round-> {item.copy(rounds = editList(item.rounds, (item.item as Round).idRound))}
             is Exercise-> {item.copy(exercises = editList(item.exercises, (item.item as Exercise).idExercise))}
+            else -> {item}
         }
-        return item
     }
     fun editList( listCollapsing: List<Long>, id: Long): List<Long>{
         val list = listCollapsing.toMutableList()

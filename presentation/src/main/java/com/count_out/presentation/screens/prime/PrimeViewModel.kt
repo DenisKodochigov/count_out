@@ -9,12 +9,14 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
 abstract class PrimeViewModel<T: Any, S: ScreenState<T>>: ViewModel(){
-    abstract fun initState(): S
+    abstract fun initScreenState(): S
+    abstract fun initDataState(): T
     abstract fun routeEvent(event: Event)
 
     private val eventFlow: MutableSharedFlow<Event> = MutableSharedFlow()
-    private val _dataState: MutableStateFlow<S> by lazy { MutableStateFlow(initState()) }
-    val dataState: StateFlow<S> = _dataState
+    private val _screenState: MutableStateFlow<S> by lazy { MutableStateFlow(initScreenState()) }
+    val screenState: StateFlow<S> = _screenState
+    val dataState: MutableStateFlow<T> =  MutableStateFlow(initDataState())
 
     lateinit var navigate: NavigateEvent
 
@@ -22,5 +24,5 @@ abstract class PrimeViewModel<T: Any, S: ScreenState<T>>: ViewModel(){
 
     fun initNavigate(navigateEvent: NavigateEvent) { navigate = navigateEvent}
     fun submitEvent(event: Event) { viewModelScope.launch { eventFlow.emit(event) } }
-    fun submitState(state: S) { viewModelScope.launch { _dataState.value = state } }
+    fun submitState(state: S) { viewModelScope.launch { _screenState.value = state } }
 }

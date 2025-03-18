@@ -36,7 +36,7 @@ import com.count_out.domain.entity.NextExercise
 import com.count_out.domain.entity.minus
 import com.count_out.domain.entity.plus
 import com.count_out.presentation.R
-import com.count_out.presentation.models.SetImpl
+import com.count_out.presentation.models.SetImplP
 import com.count_out.presentation.view_element.TextApp
 import com.count_out.presentation.view_element.bottom_sheet.BottomSheetSaveTraining
 import com.count_out.presentation.view_element.custom_view.Frame
@@ -285,9 +285,9 @@ import com.count_out.presentation.view_element.custom_view.IconQ
     uiState.training?.let { training ->
         uiState.stepTraining?.currentSet?.let { set ->
             downInterval = { uiState.updateSet(
-                training.idTraining, (set as SetImpl).copy(intervalReps = set.intervalReps.minus())) }
+                training.idTraining, (set as SetImplP).copy(intervalReps = set.intervalReps.minus())) }
             upInterval = { uiState.updateSet(
-                training.idTraining, (set as SetImpl).copy(intervalReps = set.intervalReps.plus())) }
+                training.idTraining, (set as SetImplP).copy(intervalReps = set.intervalReps.plus())) }
         }
     }
     val color = if(!uiState.enableChangeInterval) MaterialTheme.colorScheme.surfaceContainerLow

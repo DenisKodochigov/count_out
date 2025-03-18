@@ -4,27 +4,27 @@ import com.count_out.domain.use_case.UseCase
 import com.count_out.domain.use_case.settings.GetSettingsUC
 import com.count_out.domain.use_case.settings.UpdateSettingUC
 import com.count_out.presentation.screens.prime.PrimeConvertor
+import kotlinx.coroutines.flow.MutableStateFlow
 import javax.inject.Inject
 
 class SettingsConvertor @Inject constructor():
     PrimeConvertor<UseCase.Response, SettingsState>() {
 
-    val state = SettingsState()
-    override fun convertSuccess(data: UseCase.Response): SettingsState {
+    override fun convertSuccess(data: UseCase.Response, state: MutableStateFlow<SettingsState>): SettingsState {
         return when(data){
-            is GetSettingsUC.Response-> converterLocal(data)
-            is UpdateSettingUC.Response-> converterLocal(data)
-            else -> converterOther()
+            is GetSettingsUC.Response-> converterLocal(data, state)
+            is UpdateSettingUC.Response-> converterLocal(data, state)
+            else -> converterOther(state)
         }
     }
 
-    private fun converterLocal(data: GetSettingsUC.Response): SettingsState{
-        return state.copy(settings = data.setting)
+    private fun converterLocal(data: GetSettingsUC.Response, state: MutableStateFlow<SettingsState>): SettingsState{
+        return state.value.copy(settings = data.setting)
     }
-    private fun converterLocal(data: UpdateSettingUC.Response): SettingsState{
-        return state.copy(settings = data.setting)
+    private fun converterLocal(data: UpdateSettingUC.Response, state: MutableStateFlow<SettingsState>): SettingsState{
+        return state.value.copy(settings = data.setting)
     }
-    private fun converterOther(): SettingsState {
-        return state
+    private fun converterOther(state: MutableStateFlow<SettingsState>): SettingsState {
+        return state.value
     }
 }

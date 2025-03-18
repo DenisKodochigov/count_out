@@ -1,13 +1,14 @@
 package com.count_out.framework.room.db.relation
 
-import android.R.attr.duration
 import androidx.room.Embedded
 import androidx.room.Relation
+import com.count_out.data.models.ExerciseImplD
 import com.count_out.data.models.ParameterImpl
 import com.count_out.data.models.RingImpl
 import com.count_out.data.models.RoundImpl
-import com.count_out.data.models.SetImpl
+import com.count_out.data.models.SetImplD
 import com.count_out.data.models.SpeechKitImpl
+import com.count_out.data.models.TrainingImplD
 import com.count_out.domain.entity.enums.Goal
 import com.count_out.domain.entity.enums.RoundType
 import com.count_out.domain.entity.enums.Units
@@ -49,8 +50,8 @@ data class SetRel(
     @Embedded val setTable: SetTable,
     @Relation(parentColumn = "speechId", entityColumn = "idSpeechKit", entity = SpeechKitTable::class) val speechKit: SpeechKitRel?
 ){
-    fun toSet(): SetImpl {
-        return SetImpl(
+    fun toSet(): SetImplD {
+        return SetImplD(
             idSet = setTable.idSet,
             name = setTable.name,
             speechId = setTable.speechId,
@@ -76,7 +77,7 @@ data class ExerciseRel(
     @Relation(parentColumn = "speechId", entityColumn = "idSpeechKit", entity = SpeechKitTable::class) val speechKit: SpeechKitRel?
 ){
     fun toExercise(): Exercise {
-        return Exercise(
+        return ExerciseImplD(
             idExercise = exerciseTable.idExercise,
             roundId = exerciseTable.roundId,
             ringId = exerciseTable.ringId,
@@ -185,7 +186,7 @@ data class TrainingRel(
     fun toTraining(): Training {
         var amountActivity = 0
         this.rounds?.forEach { round-> amountActivity += round.exercise?.count() ?:0 }
-        return Training(
+        return TrainingImplD(
             idTraining = training.idTraining,
             isSelected = training.isSelected,
             amountActivity = amountActivity,

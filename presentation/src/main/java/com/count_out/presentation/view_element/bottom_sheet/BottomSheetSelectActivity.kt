@@ -19,9 +19,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.count_out.domain.entity.workout.Exercise
 import com.count_out.presentation.models.ActivityImpl
 import com.count_out.presentation.models.Dimen
+import com.count_out.presentation.models.ExerciseImplP
 import com.count_out.presentation.screens.prime.Action
 import com.count_out.presentation.screens.training.TrainingEvent
 import com.count_out.presentation.screens.training.TrainingEvent.ShowBS
@@ -66,8 +66,8 @@ fun BottomSheetSelectActivity(dataState: TrainingState, action: Action)
             ActivityInfo(
                 activity = mutableStateOf(item as ActivityImpl),
                 onSelect = {
-                    dataState.exercise?.let { action.ex( TrainingEvent.UpdateExercise(
-                        it.copy( activity = item, activityId = item.idActivity))) } },
+                    dataState.exercise?.let {
+                        action.ex(TrainingEvent.UpdateExercise(ExerciseImplP(it, item))) } },
             )
         }
     }

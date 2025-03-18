@@ -24,7 +24,7 @@ import com.count_out.domain.entity.workout.Round
 import com.count_out.presentation.R
 import com.count_out.presentation.models.DataForChangeSequenceImpl
 import com.count_out.presentation.models.Dimen.contourAll1
-import com.count_out.presentation.models.SetImpl
+import com.count_out.presentation.models.SetImplP
 import com.count_out.presentation.screens.prime.Action
 import com.count_out.presentation.screens.training.TrainingEvent
 import com.count_out.presentation.screens.training.TrainingEvent.ShowBS
@@ -121,7 +121,7 @@ fun ListExercises(
                 dataState.exercise = exercise
                 action.ex(ShowBS(dataState.showBS.copy(element = exercise))) },
             onClickAddSet = { action.ex( TrainingEvent.CopySet(
-                    SetImpl(name = nameNewSet, exerciseId = exercise.idExercise)))},
+                    SetImplP(name = nameNewSet, exerciseId = exercise.idExercise)))},
         )
     }
 }
@@ -133,14 +133,14 @@ fun ListExercises(
 @Composable fun ListSets(dataState: TrainingState, exercise: Exercise, action: Action) {
     Column {
         exercise.sets.forEachIndexed { ind, set ->
-            Box (modifier = Modifier
+            Box (modifier = Modifier.fillMaxWidth()
                 .border(
                     width = 1.dp,
                     color = MaterialTheme.colorScheme.surface,
                     shape = MaterialTheme.shapes.extraSmall
-                ).fillMaxWidth(),
+                ),
                 content = { SetContent(dataState, action,
-                    (set as SetImpl).copy(positions = Pair(ind, exercise.sets.count()))) }
+                    SetImplP(set, Pair(ind, exercise.sets.count())) )}
             )
             Spacer(modifier = Modifier.height(1.dp))
         }

@@ -22,8 +22,8 @@ import javax.inject.Inject
     private val getTrainings: GetTrainingsUC,
     private val selectTraining: SelectTrainingUC,
 ): PrimeViewModel<TrainingsState, ScreenState<TrainingsState>>() {
-    override fun initState(): ScreenState<TrainingsState> = ScreenState.Loading
-
+    override fun initScreenState(): ScreenState<TrainingsState> = ScreenState.Loading
+    override fun initDataState(): TrainingsState = TrainingsState()
     override fun routeEvent(event: Event) {
         when (event) {
             is TrainingsEvent.BackScreen -> { navigate.backStack()}
@@ -39,22 +39,22 @@ import javax.inject.Inject
     private fun getTrainings(){
         viewModelScope.launch(Dispatchers.IO) {
             getTrainings.execute( GetTrainingsUC.Request)
-                .map { converter.convert(it) }.collect { submitState(it) }
+                .map { converter.convert(it, dataState) }.collect { submitState(it) }
         } }
     private fun deleteTraining(training: Training){
         viewModelScope.launch(Dispatchers.IO) {
             delTraining.execute( DeleteTrainingUC.Request(training))
-                .map { converter.convert(it) }.collect { submitState(it) }
+                .map { converter.convert(it, dataState) }.collect { submitState(it) }
         }}
     private fun copyTraining(training: Training){
         viewModelScope.launch(Dispatchers.IO) {
             copyTraining.execute( CopyTrainingUC.Request(training))
-                .map { converter.convert(it) }.collect { submitState(it) }
+                .map { converter.convert(it, dataState) }.collect { submitState(it) }
         } }
     private fun selectTraining(training: Training){
         viewModelScope.launch(Dispatchers.IO) {
             selectTraining.execute( SelectTrainingUC.Request(training))
-                .map { converter.convert(it) }.collect { submitState(it) }
+                .map { converter.convert(it, dataState) }.collect { submitState(it) }
         }}
 
 }
