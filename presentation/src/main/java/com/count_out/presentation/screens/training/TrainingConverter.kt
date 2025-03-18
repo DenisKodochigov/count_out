@@ -13,6 +13,7 @@ import com.count_out.domain.use_case.trainings.GetTrainingUC
 import com.count_out.domain.use_case.trainings.UpdateTrainingUC
 import com.count_out.presentation.models.TrainingImplP
 import com.count_out.presentation.screens.prime.PrimeConvertor
+import com.count_out.presentation.view_element.lg
 import kotlinx.coroutines.flow.MutableStateFlow
 import javax.inject.Inject
 
@@ -34,11 +35,11 @@ class TrainingConverter @Inject constructor(): PrimeConvertor<UseCase.Response, 
         }
     }
     private fun converterLocal(data: GetTrainingUC.Response, state: MutableStateFlow<TrainingState>): TrainingState {
-        state.value = state.value.copy(training = data.training,)
+        state.value = state.value.copy(training = data.training)
         return state.value
     }
     private fun converterLocal(data: UpdateTrainingUC.Response, state: MutableStateFlow<TrainingState>): TrainingState {
-        state.value = state.value.copy(training = data.trainings,)
+        state.value = state.value.copy(training = data.trainings)
         return state.value
     }
     private fun converterLocal(data: CopyExerciseUC.Response, state: MutableStateFlow<TrainingState>): TrainingState {

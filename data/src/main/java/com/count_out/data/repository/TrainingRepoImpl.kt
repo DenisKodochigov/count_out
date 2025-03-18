@@ -10,7 +10,7 @@ import javax.inject.Inject
 class TrainingRepoImpl @Inject constructor(private val trainingSource: TrainingSource): TrainingRepo {
 
     override fun get(training: Training): Flow<Training> {
-        return trainingSource.get(training).map { it } }
+        return trainingSource.get(training) }
 
     override fun gets(): Flow<List<Training>> {
         return trainingSource.gets() }

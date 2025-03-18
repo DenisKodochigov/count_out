@@ -37,6 +37,7 @@ import com.count_out.presentation.view_element.custom_view.Frame
 import com.count_out.presentation.view_element.drag_drop_column.column.ColumnDragDrop
 import com.count_out.presentation.view_element.icons.IconsCollapsing
 import com.count_out.presentation.view_element.icons.IconsGroup
+import com.count_out.presentation.view_element.lg
 
 @Composable
 fun ListExercises(
@@ -54,8 +55,7 @@ fun ListExercises(
         BottomSheetSpeech(dataState)
     }
     if (dataState.showBS.selectActivity){ BottomSheetSelectActivity(dataState, action) }
-
-    val listExercise = remember { round.exercise }
+    val listExercise = round.exercise
     ColumnDragDrop(
         items = listExercise,
         modifier = modifier,
@@ -92,12 +92,8 @@ fun ListExercises(
         val nameNewSet = stringResource(id = R.string.set) + " ${exercise.sets.size + 1}"
         IconsCollapsing(
             onClick = {
-                action.ex(TrainingEvent.SetCollapsing(dataState.collapsing.copy(item = exercise)))
-//                exerciseCollapsing(dataState, exercise)
-                      },
-            wrap = dataState.collapsing.exercises.find { it == exercise.idExercise } != null
-//            wrap = dataState.listCollapsingExercise.value.find { it == exercise.idExercise } != null
-        )
+                action.ex(TrainingEvent.SetCollapsing(dataState.collapsing.copy(item = exercise))) },
+            wrap = dataState.collapsing.exercises.find { it == exercise.idExercise } != null)
         Spacer(modifier = Modifier.width(2.dp))
         Column {
             TextApp(
@@ -126,7 +122,6 @@ fun ListExercises(
     }
 }
 @Composable fun BodyExercise(dataState: TrainingState, exercise: Exercise, action: Action){
-//    val visibleLazy = dataState.listCollapsingExercise.value.find { it == exercise.idExercise } != null
     val visibleLazy = dataState.collapsing.exercises.find { it ==exercise.idExercise } != null
     AnimatedVisibility( visible = visibleLazy){ ListSets(dataState, exercise, action) }
 }

@@ -1,6 +1,12 @@
 package com.count_out.framework.room.entity
 
+import com.count_out.data.models.ExerciseImplD
+import com.count_out.data.models.RoundImpl
+import com.count_out.data.models.SpeechImpl
+import com.count_out.data.models.SpeechKitImpl
+import com.count_out.data.models.TrainingImplD
 import com.count_out.domain.entity.enums.Units
+import com.count_out.domain.entity.workout.Speech
 import com.count_out.framework.R
 import com.count_out.framework.room.AppDataBase
 import com.count_out.framework.room.db.activity.ActivityTable
@@ -8,6 +14,8 @@ import com.count_out.framework.room.db.exercise.ExerciseTable
 import com.count_out.framework.room.db.round.RoundTable
 import com.count_out.framework.room.db.set.SetTable
 import com.count_out.framework.room.db.settings.SettingTable
+import com.count_out.framework.room.db.speech.SpeechTable
+import com.count_out.framework.room.db.speech_kit.SpeechKitTable
 import com.count_out.framework.room.db.training.TrainingTable
 
 object Plugins
@@ -101,22 +109,44 @@ private fun createSetting( db: AppDataBase){
 }
 
 private fun createTrainingId0( db: AppDataBase) {
+//    val training = TrainingImplD(
+//        idTraining = 0,
+//        name = "",
+//        amountActivity = 0,
+//        rings = TODO(),
+//        isSelected = TODO(),
+//        speechId = TODO(),
+//        speech = SpeechKitImpl(beforeStart = SpeechImpl(message = "Начало тренировки"), afterStart = SpeechImpl(), beforeEnd = SpeechImpl(), afterEnd = SpeechImpl(message = "Тренировка окончена"),),
+//        rounds = listOf(
+//            RoundImpl(
+//                roundType = com.count_out.domain.entity.enums.RoundType.WorkUp,
+//                speech = SpeechKitImpl(beforeStart = SpeechImpl(), afterStart = SpeechImpl(), beforeEnd = SpeechImpl(), afterEnd = SpeechImpl(),),
+//                exercise = listOf(
+//                    ExerciseImplD(
+//                        activityId = 1
+//                    )
+//                ),
+//            )
+//        )
+//    )
+
+
     val idTraining = db.trainingDao().add(TrainingTable(name = "", idTraining = 0,
-        speechId = addSpeechKit(db, bs = "Начало тренировки", ast = "", be = "", ae = "Тренировка окончена",)))
+        speechId = addSpeechKit(db, bs = "Начало тренировки", ae = "Тренировка окончена",)))
 //Разминка
     db.roundDao().add(RoundTable(trainingId = idTraining, roundType = RoundType.UP.ordinal,
-        speechId = addSpeechKit(db, bs = "", ast = "", be = "", ae = "",)))
+        speechId = addSpeechKit(db)))
 //Основная
     val idRound = db.roundDao().add(RoundTable(trainingId = idTraining, roundType = RoundType.OUT.ordinal,
-        speechId = addSpeechKit(db, bs = "", ast = "", be = "", ae = "",)))
+        speechId = addSpeechKit(db)))
     val idExercise = db.exerciseDao().add(ExerciseTable(roundId = idRound, activityId = 1,  idView = 1,
-        speechId = addSpeechKit(db, bs = "", ast = "", be = "", ae = "",)))
+        speechId = addSpeechKit(db)))
     db.setDao().add(
         SetTable(exerciseId = idExercise, name = "", goal = GoalSet.DURATION.ordinal, duration = 1440.0,
-            speechId = addSpeechKit(db, bs = "", ast = "", be = "", ae = "",)))
+            speechId = addSpeechKit(db)))
 //Заминка
     db.roundDao().add(RoundTable(trainingId = idTraining, roundType = RoundType.DOWN.ordinal, 
-        speechId = addSpeechKit(db, bs = "", ast = "", be = "", ae = "",)))
+        speechId = addSpeechKit(db)))
     addRecordWorkout(db)
     addRecordCount(db)
 }
@@ -125,88 +155,98 @@ private fun createTrainingPlansTesting( db: AppDataBase) {
     val rest = 10.0
     val reps = 3
     val idTraining = db.trainingDao().add(TrainingTable(name = "Тестовая",
-        speechId = addSpeechKit(db, bs = "Начало тренировки", ast = "", be = "", ae = "Тренировка окончена",)))
+        speechId = addSpeechKit(db, bs = "Начало тренировки", ae = "Тренировка окончена",)))
 //Разминка
     var idRound = db.roundDao().add(RoundTable(trainingId = idTraining, roundType = RoundType.UP.ordinal,
-        speechId = addSpeechKit(db, bs = "Разминка", ast = "", be = "", ae = "",)))
+        speechId = addSpeechKit(db, bs = "Разминка", ae = "",)))
     //Упражнение 1
     var idExercise = db.exerciseDao().add(ExerciseTable(roundId = idRound,
         activityId = 4, idView = 0,  //"Растереть уши"
-        speechId = addSpeechKit(db, bs = "", ast = "", be = "", ae = "",)))
+        speechId = addSpeechKit(db, )))
     db.setDao().add(
         SetTable(exerciseId = idExercise, name = "Set 2", reps = reps, distance = 10.0,
             distanceU = Units.KM.ordinal, timeRest = rest, goal = GoalSet.DISTANCE.ordinal,
-            speechId = addSpeechKit(db, bs = "Старт", ast = "", be = "", ae = "Конец",)))
+            speechId = addSpeechKit(db, bs = "Старт", ae = "Конец",)))
     db.setDao().add(
         SetTable(exerciseId = idExercise, name = "Set 1", reps = reps, duration = 15.0,
             durationU = Units.S.ordinal, timeRest = rest, goal = GoalSet.DURATION.ordinal,
-        speechId = addSpeechKit(db, bs = "Старт", ast = "", be = "", ae = "Конец",)))
+        speechId = addSpeechKit(db, bs = "Старт", ae = "Конец",)))
     //Упражнение 2
     idExercise = db.exerciseDao().add(ExerciseTable(roundId = idRound, activityId = 5, idView = 1,  //"Растереть макушку"
-        speechId = addSpeechKit(db, bs = "", ast = "", be = "", ae = "",)))
+        speechId = addSpeechKit(db, )))
     db.setDao().add(
         SetTable(exerciseId = idExercise, name = "Set 2", reps = reps, distance = 10.0,
             distanceU = Units.KM.ordinal, timeRest = rest, goal = GoalSet.DISTANCE.ordinal,
-        speechId = addSpeechKit(db, bs = "Старт", ast = "", be = "", ae = "Конец",)))
+        speechId = addSpeechKit(db, bs = "Старт", ae = "Конец",)))
     //Упражнение 3
     idExercise = db.exerciseDao().add(ExerciseTable(roundId = idRound, activityId = 6, idView = 2,  //"Растереть макушку"
-        speechId = addSpeechKit(db, bs = "", ast = "", be = "", ae = "",)))
+        speechId = addSpeechKit(db, )))
     db.setDao().add(
         SetTable(exerciseId = idExercise, name = "Set 3", reps = reps, intervalReps = 1.0,
             timeRest = rest, goal = GoalSet.COUNT.ordinal,
-            speechId = addSpeechKit(db, bs = "Старт", ast = "", be = "", ae = "Конец",)))
+            speechId = addSpeechKit(db, bs = "Старт", ae = "Конец",)))
     //Упражнение 4
     idExercise = db.exerciseDao().add(
         ExerciseTable(roundId = idRound, activityId = 7, idView = 3,  //"Растереть макушку"
-        speechId = addSpeechKit(db, bs = "", ast = "", be = "", ae = "",))
+        speechId = addSpeechKit(db, ))
     )
     db.setDao().add(
         SetTable(exerciseId = idExercise, name = "Set 4", reps = reps, intervalReps = 1.0,
             timeRest = rest, goal = GoalSet.COUNT.ordinal,
-            speechId = addSpeechKit(db, bs = "Старт", ast = "", be = "", ae = "Конец",)))
+            speechId = addSpeechKit(db, bs = "Старт", ae = "Конец",)))
 
 //Основная
     idRound = db.roundDao().add(RoundTable(trainingId = idTraining, roundType = RoundType.OUT.ordinal,
-        speechId = addSpeechKit(db, bs = "Основная", ast = "", be = "", ae = "",)))
+        speechId = addSpeechKit(db, bs = "Основная", ae = "",)))
     //Упражнение 1
     idExercise = db.exerciseDao().add(ExerciseTable(roundId = idRound, activityId = 6, idView = 0,  //"Растереть виски"
-        speechId = addSpeechKit(db, bs = "", ast = "", be = "", ae = "",)))
+        speechId = addSpeechKit(db, )))
     db.setDao().add(
         SetTable(exerciseId = idExercise, name = "Set 3", reps = reps, intervalReps = 1.0,
             timeRest = rest, goal = GoalSet.COUNT.ordinal,
-            speechId = addSpeechKit(db, bs = "Старт", ast = "", be = "", ae = "Конец",)))
+            speechId = addSpeechKit(db, bs = "Старт", ae = "Конец",)))
 //Заминка
     idRound = db.roundDao().add(RoundTable(trainingId = idTraining, roundType = RoundType.DOWN.ordinal,
-        speechId = addSpeechKit(db, bs = "Заминка", ast = "", be = "", ae = "",)))
+        speechId = addSpeechKit(db, bs = "Заминка", ae = "",)))
     //Упражнение 1
     idExercise = db.exerciseDao().add(ExerciseTable(roundId = idRound, activityId = 7,
         idView = 0,  //"Растереть заднюю часть шеи"
-        speechId = addSpeechKit(db, bs = "", ast = "", be = "", ae = "",)))
+        speechId = addSpeechKit(db, )))
     db.setDao().add(
         SetTable(exerciseId = idExercise, name = "Set 4", reps = reps, intervalReps = 1.0,
             timeRest = rest, goal = GoalSet.COUNT.ordinal,
-            speechId = addSpeechKit(db, bs = "Старт", ast = "", be = "", ae = "Конец",)))
+            speechId = addSpeechKit(db, bs = "Старт", ae = "Конец",)))
     addRecordWorkout(db)
     addRecordCount(db)
+}
+private fun addSpeechKit(db: AppDataBase, bs: String = "", ast: String = "", be: String = "", ae: String = ""): Long{
+    return db.speechKitDao().add(
+        SpeechKitTable(
+            idBeforeStart = db.speechDao().add( SpeechTable(message = bs)),
+            idAfterStart = db.speechDao().add( SpeechTable( message = ast)),
+            idBeforeEnd = db.speechDao().add( SpeechTable( message = be)),
+            idAfterEnd = db.speechDao().add( SpeechTable( message = ae))
+        )
+    )
 }
 private fun createTrainingPlansReal( db: AppDataBase) {
 //    createTrainingId0( db )
 //    val idTraining = db.dataDao().addTraining(TrainingTable(name = "Зарядка",
-//        speechId = addSpeechKit(db, bs = "Начинаем", ast = "", be = "", ae = "Тренировка закончена.",)))
+//        speechId = addSpeechKit(db, bs = "Начинаем", ae = "Тренировка закончена.",)))
 //    workUp( db, idTraining)
 //    workOut( db, idTraining)
 //    workDown( db, idTraining)
 }
 private fun createTrainingPlansArm( db: AppDataBase) {
 //    val idTraining = db.dataDao().addTraining(TrainingTable(name = "Зарядка. Руки",
-//        speechId = addSpeechKit(db, bs = "Начинаем", ast = "", be = "", ae = "Тренировка закончена.",)))
+//        speechId = addSpeechKit(db, bs = "Начинаем", ae = "Тренировка закончена.",)))
 //    workUp( db, idTraining)
 //    workOutArm( db, idTraining)
 //    workDown( db, idTraining)
 }
 private fun createTrainingPlansLeg( db: AppDataBase){
 //    val idTraining = db.dataDao().addTraining(TrainingTable(name = "Зарядка. Ноги",
-//        speechId = addSpeechKit(db, bs = "Начинаем ", ast = "", be = "", ae = "Тренировка закончена.",)))
+//        speechId = addSpeechKit(db, bs = "Начинаем ", ae = "Тренировка закончена.",)))
 //    workUp( db, idTraining)
 //    workOutLeg( db, idTraining)
 //    workDown( db, idTraining)
@@ -214,59 +254,59 @@ private fun createTrainingPlansLeg( db: AppDataBase){
 private fun workUp(db: AppDataBase, idTraining: Long){
 //    //Разминка
 //    val idRound = db.roundDao().add(RoundTable(trainingId = idTraining, roundType = RoundType.UP, countRing = 1,
-//        speechId = addSpeechKit(db, bs = "Подготовьтесь к разминке", ast = "", be = "", ae = "Разминка закончена",)))
+//        speechId = addSpeechKit(db, bs = "Подготовьтесь к разминке", ae = "Разминка закончена",)))
 //    //Упражнение 1
 //    var idExercise = db.exerciseDao().add(ExerciseTable(roundId = idRound, activityId = 3, idView = 0,
-//        speechId = addSpeechKit(db, bs = "", ast = "", be = "", ae  = "",)))
+//        speechId = addSpeechKit(db, bs = "", ae  = "",)))
 //    db.setDao().add(
 //        SetTable(exerciseId = idExercise, name = "Set 1", duration = 15, goal = GoalSet.DURATION,
 //            speechId = addSpeechKit(db, bs = "", ast = "Старт", be = "", ae = "",))
 //    )
 //    //Упражнение 2
 //    idExercise = db.exerciseDao().add(ExerciseTable(roundId = idRound, activityId = 4,  idView = 1,
-//        speechId = addSpeechKit(db, bs = "", ast = "", be = "", ae  = "",)))
+//        speechId = addSpeechKit(db, bs = "", ae  = "",)))
 //    db.setDao().add(
 //        SetTable(exerciseId = idExercise, name = "Set 2", duration = 15, goal = GoalSet.DURATION,
 //            speechId = addSpeechKit(db, bs = "", ast = "Старт", be = "", ae = "",))
 //    )
 //    //Упражнение 3
 //    idExercise = db.exerciseDao().add(ExerciseTable(roundId = idRound, activityId = 5,  idView = 2,
-//        speechId = addSpeechKit(db, bs = "", ast = "", be = "", ae  = "",)))
+//        speechId = addSpeechKit(db, bs = "", ae  = "",)))
 //    db.setDao().add(
 //        SetTable(exerciseId = idExercise, name = "Set 3", duration = 15, goal = GoalSet.DURATION,
 //            speechId = addSpeechKit(db, bs = "", ast = "Старт", be = "", ae = "",))
 //    )
 //    //Упражнение 4
 //    idExercise = db.exerciseDao().add(ExerciseTable(roundId = idRound, activityId = 6, idView = 3,
-//        speechId = addSpeechKit(db, bs = "", ast = "", be = "", ae  = "",)))
+//        speechId = addSpeechKit(db, bs = "", ae  = "",)))
 //    db.setDao().add(
 //        SetTable(exerciseId = idExercise, name = "Set 4", duration = 15, goal = GoalSet.DURATION,
 //            speechId = addSpeechKit(db, bs = "", ast = "Старт", be = "", ae = "",))
 //    )
 //    //Упражнение 5
 //    idExercise = db.exerciseDao().add(ExerciseTable(roundId = idRound, activityId = 7, idView = 4,
-//        speechId = addSpeechKit(db, bs = "", ast = "", be = "", ae  = "",)))
+//        speechId = addSpeechKit(db, bs = "", ae  = "",)))
 //    db.setDao().add(
 //        SetTable(exerciseId = idExercise, name = "Set 5", duration = 15, goal = GoalSet.DURATION,
 //            speechId = addSpeechKit(db, bs = "", ast = "Старт", be = "", ae = "",))
 //    )
 //    //Упражнение 6
 //    idExercise = db.exerciseDao().add(ExerciseTable(roundId = idRound, activityId = 8, idView = 5,
-//        speechId = addSpeechKit(db, bs = "", ast = "", be = "", ae  = "",)))
+//        speechId = addSpeechKit(db, bs = "", ae  = "",)))
 //    db.setDao().add(
 //        SetTable(exerciseId = idExercise, name = "Set 1", reps = 30, intervalReps = 1.1, timeRest = 0, goal = GoalSet.COUNT,
 //            speechId = addSpeechKit(db, bs = "", ast = "Старт", be = "", ae = "",))
 //    )
 //    //Упражнение 7
 //    idExercise = db.exerciseDao().add(ExerciseTable(roundId = idRound, activityId = 9, idView = 6,
-//        speechId = addSpeechKit(db, bs = "", ast = "", be = "", ae  = "",)))
+//        speechId = addSpeechKit(db, bs = "", ae  = "",)))
 //    db.setDao().add(
 //        SetTable(exerciseId = idExercise, name = "Set 2", reps = 30, intervalReps = 1.1, timeRest = 0, goal = GoalSet.COUNT,
 //            speechId = addSpeechKit(db, bs = "", ast = "Старт", be = "", ae = "",))
 //    )
 //    //Упражнение 8
 //    idExercise = db.exerciseDao().add(ExerciseTable(roundId = idRound, activityId = 10, idView = 7,
-//        speechId = addSpeechKit(db, bs = "", ast = "", be = "", ae  = "",)))
+//        speechId = addSpeechKit(db, bs = "", ae  = "",)))
 //    db.setDao().add(
 //        SetTable(exerciseId = idExercise, name = "Set 3", reps = 30, intervalReps = 1.1, timeRest = 10, goal = GoalSet.COUNT,
 //            speechId = addSpeechKit(db, bs = "", ast = "Старт", be = "", ae = "",))
@@ -275,101 +315,101 @@ private fun workUp(db: AppDataBase, idTraining: Long){
 private fun workOut(db: AppDataBase, idTraining: Long){
 ////Основная часть
 //    val idRound = db.roundDao().add(RoundTable(trainingId = idTraining, roundType = RoundType.OUT, countRing = 1,
-//        speechId = addSpeechKit(db, bs = "Подготовьтесь к основной части тренировки", ast = "", be = "", ae = "Основная часть закончена",)))
+//        speechId = addSpeechKit(db, bs = "Подготовьтесь к основной части тренировки", ae = "Основная часть закончена",)))
 //    //Упражнение 1
 //    var idExercise = db.exerciseDao().add(ExerciseTable(roundId = idRound, activityId = 20,  idView = 0,
-//        speechId = addSpeechKit(db, bs = "", ast = "", be = "", ae  = "",)))
+//        speechId = addSpeechKit(db, bs = "", ae  = "",)))
 //    db.setDao().add(
 //        SetTable(exerciseId = idExercise, name = "Set 1", reps = 15, intervalReps = 4.0, timeRest = 5, goal = GoalSet.COUNT,
 //            speechId = addSpeechKit(db, bs = "", ast = "Старт", be = "", ae = "",))
 //    )
 //    //Упражнение 2
 //    idExercise = db.exerciseDao().add(ExerciseTable(roundId = idRound, activityId = 21, idView = 1,
-//        speechId = addSpeechKit(db, bs = "", ast = "", be = "", ae  = "",)))
+//        speechId = addSpeechKit(db, bs = "", ae  = "",)))
 //    db.setDao().add(
 //        SetTable(exerciseId = idExercise, name = "Set 2", reps = 15, intervalReps = 4.0, timeRest = 20, goal = GoalSet.COUNT,
 //            speechId = addSpeechKit(db, bs = "", ast = "Старт", be = "", ae = "",))
 //    )
 //    //Упражнение 3
 //    idExercise = db.exerciseDao().add(ExerciseTable(roundId = idRound, activityId = 24, idView = 2,
-//        speechId = addSpeechKit(db, bs = "", ast = "", be = "", ae  = "",)))
+//        speechId = addSpeechKit(db, bs = "", ae  = "",)))
 //    db.setDao().add(
 //        SetTable(exerciseId = idExercise, name = "Set 2", reps = 20, intervalReps = 2.5, timeRest = 20, goal = GoalSet.COUNT,
 //            speechId = addSpeechKit(db, bs = "", ast = "Старт", be = "", ae = "",))
 //    )
 //    //Упражнение 4
 //    idExercise = db.exerciseDao().add(ExerciseTable(roundId = idRound, activityId = 11, idView = 31,
-//        speechId = addSpeechKit(db, bs = "", ast = "", be = "", ae  = "",)))
+//        speechId = addSpeechKit(db, bs = "", ae  = "",)))
 //    db.setDao().add(
 //        SetTable(exerciseId = idExercise, name = "Set 1", reps = 30, intervalReps = 2.0, timeRest = 0, goal = GoalSet.COUNT,
 //            speechId = addSpeechKit(db, bs = "", ast = "Старт", be = "", ae = "",))
 //    )
 //    //Упражнение 5
 //    idExercise = db.exerciseDao().add(ExerciseTable(roundId = idRound, activityId = 19, idView = 4,
-//        speechId = addSpeechKit(db, bs = "", ast = "", be = "", ae  = "",)))
+//        speechId = addSpeechKit(db, bs = "", ae  = "",)))
 //    db.setDao().add(
 //        SetTable(exerciseId = idExercise, name = "Set 1", duration = 30, timeRest = 0, goal = GoalSet.DURATION,
 //            speechId = addSpeechKit(db, bs = "", ast = "Старт", be = "", ae = "",))
 //    )
 //    //Упражнение 6
 //    idExercise = db.exerciseDao().add(ExerciseTable(roundId = idRound, activityId = 11, idView = 5,
-//        speechId = addSpeechKit(db, bs = "", ast = "", be = "", ae = "Упражнение закончено. Востановите дыхание.",)))
+//        speechId = addSpeechKit(db, bs = "", ae = "Упражнение закончено. Востановите дыхание.",)))
 //    db.setDao().add(
 //        SetTable(exerciseId = idExercise, name = "Set 1", reps = 30, intervalReps = 2.0, timeRest = 60, goal = GoalSet.COUNT,
 //            speechId = addSpeechKit(db, bs = "", ast = "Старт", be = "", ae = "",))
 //    )
 //    //Упражнение 7
 //    idExercise = db.exerciseDao().add(ExerciseTable(roundId = idRound, activityId = 22, idView = 6,
-//        speechId = addSpeechKit(db, bs = "", ast = "", be = "", ae = "Упражнение закончено.",)))
+//        speechId = addSpeechKit(db, bs = "", ae = "Упражнение закончено.",)))
 //    db.setDao().add(
 //        SetTable(exerciseId = idExercise, name = "Set 1", reps = 20, intervalReps = 2.5, timeRest = 5, goal = GoalSet.COUNT,
 //            speechId = addSpeechKit(db, bs = "", ast = "Старт", be = "", ae = "",))
 //    )
 //    //Упражнение 8
 //    idExercise = db.exerciseDao().add(ExerciseTable(roundId = idRound, activityId = 23, idView = 7,
-//        speechId = addSpeechKit(db, bs = "", ast = "", be = "", ae = "Упражнение закончено.",)))
+//        speechId = addSpeechKit(db, bs = "", ae = "Упражнение закончено.",)))
 //    db.setDao().add(
 //        SetTable(exerciseId = idExercise, name = "Set 1", reps = 20, intervalReps = 2.5, timeRest = 5, goal = GoalSet.COUNT,
 //            speechId = addSpeechKit(db, bs = "", ast = "Старт", be = "", ae = "",))
 //    )
 //    //Упражнение 9
 //    idExercise = db.exerciseDao().add(ExerciseTable(roundId = idRound, activityId = 14, idView = 8,
-//        speechId = addSpeechKit(db, bs = "", ast = "", be = "", ae  = "",)))
+//        speechId = addSpeechKit(db, bs = "", ae  = "",)))
 //    db.setDao().add(
 //        SetTable(exerciseId = idExercise, name = "Set 1", reps = 17, intervalReps = 1.6, timeRest = 0, goal = GoalSet.COUNT,
 //            speechId = addSpeechKit(db, bs = "", ast = "Старт", be = "", ae = "",))
 //    )
 //    //Упражнение 10
 //    idExercise = db.exerciseDao().add(ExerciseTable(roundId = idRound, activityId = 12, idView = 9,
-//        speechId = addSpeechKit(db, bs = "", ast = "", be = "", ae  = "",)))
+//        speechId = addSpeechKit(db, bs = "", ae  = "",)))
 //    db.setDao().add(
 //        SetTable(exerciseId = idExercise, name = "Set 1", duration = 30, timeRest = 0, goal = GoalSet.DURATION,
 //            speechId = addSpeechKit(db, bs = "", ast = "Старт", be = "", ae = "",))
 //    )
 //    //Упражнение 11
 //    idExercise = db.exerciseDao().add(ExerciseTable(roundId = idRound, activityId = 14, idView = 101,
-//        speechId = addSpeechKit(db, bs = "", ast = "", be = "", ae  = "",)))
+//        speechId = addSpeechKit(db, bs = "", ae  = "",)))
 //    db.setDao().add(
 //        SetTable(exerciseId = idExercise, name = "Set 1", reps = 17, intervalReps = 1.6, timeRest = 10, goal = GoalSet.COUNT,
 //            speechId = addSpeechKit(db, bs = "", ast = "Старт", be = "", ae = "",))
 //    )
 //    //Упражнение 12
 //    idExercise = db.exerciseDao().add(ExerciseTable(roundId = idRound, activityId = 13, idView = 11,
-//        speechId = addSpeechKit(db, bs = "", ast = "", be = "", ae  = "",)))
+//        speechId = addSpeechKit(db, bs = "", ae  = "",)))
 //    db.setDao().add(
 //        SetTable(exerciseId = idExercise, name = "Set 1", duration = 30, timeRest = 10, goal = GoalSet.DURATION,
 //            speechId = addSpeechKit(db, bs = "", ast = "Старт", be = "", ae = "",))
 //    )
 //    //Упражнение 10
 //    idExercise = db.exerciseDao().add(ExerciseTable(roundId = idRound, activityId = 16, idView = 12,
-//        speechId = addSpeechKit(db, bs = "", ast = "", be = "", ae = "Упражнение закончено. Востановите дыхание.",)))
+//        speechId = addSpeechKit(db, bs = "", ae = "Упражнение закончено. Востановите дыхание.",)))
 //    db.setDao().add(
 //        SetTable(exerciseId = idExercise, name = "Set 1", reps = 20, intervalReps = 1.7, timeRest = 60, goal = GoalSet.COUNT,
 //            speechId = addSpeechKit(db, bs = "", ast = "Старт", be = "", ae = "",))
 //    )
 //    //Упражнение 10
 //    idExercise = db.exerciseDao().add(ExerciseTable(roundId = idRound, activityId = 16,  idView = 13,
-//        speechId = addSpeechKit(db, bs = "", ast = "", be = "", ae = "Упражнение закончено. Востановите дыхание.",)))
+//        speechId = addSpeechKit(db, bs = "", ae = "Упражнение закончено. Востановите дыхание.",)))
 //    db.setDao().add(
 //        SetTable(exerciseId = idExercise, name = "Set 1", reps = 20, intervalReps = 1.7, timeRest = 0, goal = GoalSet.COUNT,
 //            speechId = addSpeechKit(db, bs = "", ast = "Старт", be = "", ae = "",))
@@ -377,15 +417,15 @@ private fun workOut(db: AppDataBase, idTraining: Long){
 }
 private fun workDown(db: AppDataBase, idTraining: Long){
 //    val idRound = db.roundDao().add(RoundTable(trainingId = idTraining, roundType = RoundType.DOWN, countRing = 1,
-//        speechId = addSpeechKit(db, bs = "Подготовьтесь к заминке", ast = "", be = "", ae = "Зазминка закончена",)))
+//        speechId = addSpeechKit(db, bs = "Подготовьтесь к заминке", ae = "Зазминка закончена",)))
 //    var idExercise = db.exerciseDao().add(ExerciseTable(roundId = idRound, activityId = 17, idView = 1,
-//        speechId = addSpeechKit(db, bs = "", ast = "", be = "", ae  = "",)))
+//        speechId = addSpeechKit(db, bs = "", ae  = "",)))
 //    db.setDao().add(
 //        SetTable(exerciseId = idExercise, name = "Set 1", duration = 30, timeRest = 0, goal = GoalSet.DURATION,
 //            speechId = addSpeechKit(db, bs = "", ast = "Старт", be = "", ae = "",))
 //    )
 //    idExercise = db.exerciseDao().add(ExerciseTable(roundId = idRound, activityId = 18, idView = 2,
-//        speechId = addSpeechKit(db, bs = "", ast = "", be = "", ae  = "",)))
+//        speechId = addSpeechKit(db, bs = "", ae  = "",)))
 //    db.setDao().add(
 //        SetTable(exerciseId = idExercise, name = "Set 1", duration = 30, timeRest = 0, goal = GoalSet.DURATION,
 //            speechId = addSpeechKit(db, bs = "", ast = "Старт", be = "", ae = "",))
@@ -394,39 +434,39 @@ private fun workDown(db: AppDataBase, idTraining: Long){
 private fun workOutArm(db: AppDataBase, idTraining: Long){
 ////Основная часть
 //    val idRound = db.roundDao().add(RoundTable(trainingId = idTraining, roundType = RoundType.OUT, countRing = 1,
-//        speechId = addSpeechKit(db, bs = "Подготовьтесь к основной части тренировки", ast = "", be = "", ae = "Основная часть закончена",)))
+//        speechId = addSpeechKit(db, bs = "Подготовьтесь к основной части тренировки", ae = "Основная часть закончена",)))
 //    //Упражнение 1 Гантели. Плечи
 //    var idExercise = db.exerciseDao().add(ExerciseTable(roundId = idRound, activityId = 20, idView = 0,
-//        speechId = addSpeechKit(db, bs = "", ast = "", be = "", ae  = "",)))
+//        speechId = addSpeechKit(db, bs = "", ae  = "",)))
 //    db.setDao().add(
 //        SetTable(exerciseId = idExercise, name = "Set 1", reps = 10, intervalReps = 4.0, timeRest = 5, goal = GoalSet.COUNT,
-//            speechId = addSpeechKit(db, bs = "Прямой ход", ast = "", be = "", ae = "",)))
+//            speechId = addSpeechKit(db, bs = "Прямой ход", ae = "",)))
 //    db.setDao().add(
 //        SetTable(exerciseId = idExercise, name = "Set 2", reps = 10, intervalReps = 4.0, timeRest = 60, goal = GoalSet.COUNT,
-//            speechId = addSpeechKit(db, bs = "Обратный ход", ast = "", be = "", ae = "",)))
+//            speechId = addSpeechKit(db, bs = "Обратный ход", ae = "",)))
 //    db.setDao().add(
 //        SetTable(exerciseId = idExercise, name = "Set 3", reps = 15, intervalReps = 4.0, timeRest = 5, goal = GoalSet.COUNT,
-//            speechId = addSpeechKit(db, bs = "Прямой ход", ast = "", be = "", ae = "",)))
+//            speechId = addSpeechKit(db, bs = "Прямой ход", ae = "",)))
 //    db.setDao().add(
 //        SetTable(exerciseId = idExercise, name = "Set 4", reps = 15, intervalReps = 4.0, timeRest = 60, goal = GoalSet.COUNT,
-//            speechId = addSpeechKit(db, bs = "Обратный ход", ast = "", be = "", ae = "",)))
+//            speechId = addSpeechKit(db, bs = "Обратный ход", ae = "",)))
 //    db.setDao().add(
 //        SetTable(exerciseId = idExercise, name = "Set 5", reps = 13, intervalReps = 4.0, timeRest = 5, goal = GoalSet.COUNT,
-//            speechId = addSpeechKit(db, bs = "Прямой ход", ast = "", be = "", ae = "",)))
+//            speechId = addSpeechKit(db, bs = "Прямой ход", ae = "",)))
 //    db.setDao().add(
 //        SetTable(exerciseId = idExercise, name = "Set 6", reps = 13, intervalReps = 4.0, timeRest = 60, goal = GoalSet.COUNT,
-//            speechId = addSpeechKit(db, bs = "Обратный ход", ast = "", be = "", ae = "",)))
+//            speechId = addSpeechKit(db, bs = "Обратный ход", ae = "",)))
 //
 //    //Упражнение 2 Приседания с выходом на носки
 //    idExercise = db.exerciseDao().add(ExerciseTable(roundId = idRound, activityId = 11, idView = 1,
-//        speechId = addSpeechKit(db, bs = "", ast = "", be = "", ae  = "",)))
+//        speechId = addSpeechKit(db, bs = "", ae  = "",)))
 //    db.setDao().add(
 //        SetTable(exerciseId = idExercise, name = "Set 1", reps = 30, intervalReps = 2.0, timeRest = 20, goal = GoalSet.COUNT,
-//            speechId = addSpeechKit(db, bs = "", ast = "", be = "", ae = "",)))
+//            speechId = addSpeechKit(db, )))
 //
 //    //Упражнение 3  Гантели. Бицепс.
 //    idExercise = db.exerciseDao().add(ExerciseTable(roundId = idRound, activityId = 24,  idView = 2,
-//        speechId = addSpeechKit(db, bs = "", ast = "", be = "", ae  = "",)))
+//        speechId = addSpeechKit(db, bs = "", ae  = "",)))
 //    db.setDao().add(
 //        SetTable(exerciseId = idExercise, name = "Set 2", reps = 10, intervalReps = 2.5, timeRest = 30, goal = GoalSet.COUNT,
 //            speechId = addSpeechKit(db, bs = "", ast = "Старт", be = "", ae = "",)))
@@ -439,7 +479,7 @@ private fun workOutArm(db: AppDataBase, idTraining: Long){
 //
 //    //Упражнение 4 Кисти рук
 //    idExercise = db.exerciseDao().add(ExerciseTable(roundId = idRound, activityId = 19,  idView = 3,
-//        speechId = addSpeechKit(db, bs = "", ast = "", be = "", ae  = "",)))
+//        speechId = addSpeechKit(db, bs = "", ae  = "",)))
 //    db.setDao().add(
 //        SetTable(exerciseId = idExercise, name = "Set 1", duration = 30, timeRest = 0, goal = GoalSet.DURATION,
 //            speechId = addSpeechKit(db, bs = "", ast = "Старт", be = "", ae = "",))
@@ -447,7 +487,7 @@ private fun workOutArm(db: AppDataBase, idTraining: Long){
 //
 //    //Упражнение 5 Отжимания
 //    idExercise = db.exerciseDao().add(ExerciseTable(roundId = idRound, activityId = 14, idView = 4,
-//        speechId = addSpeechKit(db, bs = "", ast = "", be = "", ae  = "",)))
+//        speechId = addSpeechKit(db, bs = "", ae  = "",)))
 //    db.setDao().add(
 //        SetTable(exerciseId = idExercise, name = "Set 1", reps = 13, intervalReps = 1.6, timeRest = 30, goal = GoalSet.COUNT,
 //            speechId = addSpeechKit(db, bs = "", ast = "Старт", be = "", ae = "",)))
@@ -460,14 +500,14 @@ private fun workOutArm(db: AppDataBase, idTraining: Long){
 //
 //    //Упражнение 6 Сейдза
 //    idExercise = db.exerciseDao().add(ExerciseTable(roundId = idRound, activityId = 12, idView = 5,
-//        speechId = addSpeechKit(db, bs = "", ast = "", be = "", ae  = "",)))
+//        speechId = addSpeechKit(db, bs = "", ae  = "",)))
 //    db.setDao().add(
 //        SetTable(exerciseId = idExercise, name = "Set 1", duration = 30, timeRest = 0, goal = GoalSet.DURATION,
 //            speechId = addSpeechKit(db, bs = "", ast = "Старт", be = "", ae = "",)))
 //
 //    //Упражнение 7 Велосипед на пресс
 //    idExercise = db.exerciseDao().add(ExerciseTable(roundId = idRound, activityId = 16, idView = 6,
-//        speechId = addSpeechKit(db, bs = "", ast = "", be = "", ae = "Упражнение закончено. Востановите дыхание.",)))
+//        speechId = addSpeechKit(db, bs = "", ae = "Упражнение закончено. Востановите дыхание.",)))
 //    db.setDao().add(
 //        SetTable(exerciseId = idExercise, name = "Set 1", reps = 15, intervalReps = 1.5, timeRest = 40, goal = GoalSet.COUNT,
 //            speechId = addSpeechKit(db, bs = "", ast = "Старт", be = "", ae = "",)))
@@ -482,113 +522,102 @@ private fun workOutArm(db: AppDataBase, idTraining: Long){
 private fun workOutLeg(db: AppDataBase, idTraining: Long){
 ////Основная часть
 //    val idRound = db.roundDao().add(RoundTable(trainingId = idTraining, roundType = RoundType.OUT, countRing = 1,
-//        speechId = addSpeechKit(db, bs = "Подготовьтесь к основной части тренировки", ast = "", be = "", ae = "Основная часть закончена",)))
+//        speechId = addSpeechKit(db, bs = "Подготовьтесь к основной части тренировки", ae = "Основная часть закончена",)))
 //    //Упражнение 1 Гантели. Плечи
 //    var idExercise = db.exerciseDao().add(ExerciseTable(roundId = idRound, activityId = 20, idView = 0,
-//        speechId = addSpeechKit(db, bs = "Упражнение", ast = "", be = "", ae  = "",)))
+//        speechId = addSpeechKit(db, bs = "Упражнение", ae  = "",)))
 //    db.setDao().add(
 //        SetTable(exerciseId = idExercise, name = "Set 1", reps = 15, intervalReps = 4.0, timeRest = 5, goal = GoalSet.COUNT,
-//            speechId = addSpeechKit(db, bs = "Прямой ход", ast = "", be = "", ae = "",)))
+//            speechId = addSpeechKit(db, bs = "Прямой ход", ae = "",)))
 //    db.setDao().add(
 //        SetTable(exerciseId = idExercise, name = "Set 2", reps = 15, intervalReps = 4.0, timeRest = 5, goal = GoalSet.COUNT,
-//            speechId = addSpeechKit(db, bs = "Обратный ход", ast = "", be = "", ae = "",)))
+//            speechId = addSpeechKit(db, bs = "Обратный ход", ae = "",)))
 //
 //    //Упражнение 2 Приседания с выходом на носки
 //    idExercise = db.exerciseDao().add(ExerciseTable(roundId = idRound, activityId = 11, idView = 1,
-//        speechId = addSpeechKit(db, bs = "Упражнение", ast = "", be = "", ae  = "",)))
+//        speechId = addSpeechKit(db, bs = "Упражнение", ae  = "",)))
 //    db.setDao().add(
 //        SetTable(exerciseId = idExercise, name = "Set 1", reps = 30, intervalReps = 2.0, timeRest = 60, goal = GoalSet.COUNT,
-//            speechId = addSpeechKit(db, bs = "", ast = "", be = "", ae = "",)))
+//            speechId = addSpeechKit(db, )))
 //    db.setDao().add(
 //        SetTable(exerciseId = idExercise, name = "Set 2", reps = 30, intervalReps = 2.0, timeRest = 60, goal = GoalSet.COUNT,
-//            speechId = addSpeechKit(db, bs = "", ast = "", be = "", ae = "",)))
+//            speechId = addSpeechKit(db, )))
 //    db.setDao().add(
 //        SetTable(exerciseId = idExercise, name = "Set 3", reps = 30, intervalReps = 2.0, timeRest = 60, goal = GoalSet.COUNT,
-//            speechId = addSpeechKit(db, bs = "", ast = "", be = "", ae = "",)))
+//            speechId = addSpeechKit(db, )))
 //
 //    //Упражнение 3 Сейдза
 //    idExercise = db.exerciseDao().add(ExerciseTable(roundId = idRound, activityId = 12, idView = 2,
-//        speechId = addSpeechKit(db, bs = "Упражнение", ast = "", be = "", ae  = "",)))
+//        speechId = addSpeechKit(db, bs = "Упражнение", ae  = "",)))
 //    db.setDao().add(
 //        SetTable(exerciseId = idExercise, name = "Set 1", duration = 60, timeRest = 0, goal = GoalSet.DURATION,
-//            speechId = addSpeechKit(db, bs = "", ast = "", be = "", ae = "",)))
+//            speechId = addSpeechKit(db, )))
 //
 //    //Упражнение 4 Гантели. Бедра. Прямые приседания
 //    idExercise = db.exerciseDao().add(ExerciseTable(roundId = idRound, activityId = 22, idView = 3,
-//        speechId = addSpeechKit(db, bs = "Упражнение", ast = "", be = "", ae  = "",)))
+//        speechId = addSpeechKit(db, bs = "Упражнение", ae  = "",)))
 //    db.setDao().add(
 //        SetTable(exerciseId = idExercise, name = "Set 1", reps = 15, intervalReps = 2.5, timeRest = 0, goal = GoalSet.COUNT,
-//            speechId = addSpeechKit(db, bs = "Левая в переди", ast = "", be = "", ae = "",)))
+//            speechId = addSpeechKit(db, bs = "Левая в переди", ae = "",)))
 //    db.setDao().add(
 //        SetTable(exerciseId = idExercise, name = "Set 2", reps = 15, intervalReps = 2.5, timeRest = 20, goal = GoalSet.COUNT,
-//            speechId = addSpeechKit(db, bs = "Правая в переди", ast = "", be = "", ae = "",)))
+//            speechId = addSpeechKit(db, bs = "Правая в переди", ae = "",)))
 //    db.setDao().add(
 //        SetTable(exerciseId = idExercise, name = "Set 3", reps = 20, intervalReps = 2.5, timeRest = 0, goal = GoalSet.COUNT,
-//            speechId = addSpeechKit(db, bs = "Левая в переди", ast = "", be = "", ae = "",)))
+//            speechId = addSpeechKit(db, bs = "Левая в переди", ae = "",)))
 //    db.setDao().add(
 //        SetTable(exerciseId = idExercise, name = "Set 4", reps = 20, intervalReps = 2.5, timeRest = 20, goal = GoalSet.COUNT,
-//            speechId = addSpeechKit(db, bs = "Правая в переди", ast = "", be = "", ae = "",)))
+//            speechId = addSpeechKit(db, bs = "Правая в переди", ae = "",)))
 //    db.setDao().add(
 //        SetTable(exerciseId = idExercise, name = "Set 5", reps = 18, intervalReps = 2.5, timeRest = 0, goal = GoalSet.COUNT,
-//            speechId = addSpeechKit(db, bs = "Левая в переди", ast = "", be = "", ae = "",)))
+//            speechId = addSpeechKit(db, bs = "Левая в переди", ae = "",)))
 //    db.setDao().add(
 //        SetTable(exerciseId = idExercise, name = "Set 6", reps = 18, intervalReps = 2.5, timeRest = 20, goal = GoalSet.COUNT,
-//            speechId = addSpeechKit(db, bs = "Правая в переди", ast = "", be = "", ae = "",)))
+//            speechId = addSpeechKit(db, bs = "Правая в переди", ae = "",)))
 //
 //    //Упражнение 5 Кидза
 //    idExercise = db.exerciseDao().add(ExerciseTable(roundId = idRound, activityId = 13, idView = 4,
-//        speechId = addSpeechKit(db, bs = "Упражнение", ast = "", be = "", ae  = "",)))
+//        speechId = addSpeechKit(db, bs = "Упражнение", ae  = "",)))
 //    db.setDao().add(
 //        SetTable(exerciseId = idExercise, name = "Set 1", duration = 30, timeRest = 0, goal = GoalSet.DURATION,
-//            speechId = addSpeechKit(db, bs = "", ast = "", be = "", ae = "",)))
+//            speechId = addSpeechKit(db, )))
 //
 //    //Упражнение 4 Гантели. Бедра. Прямые приседания
 //    idExercise = db.exerciseDao().add(ExerciseTable(roundId = idRound, activityId = 23, idView = 5,
-//        speechId = addSpeechKit(db, bs = "Упражнение", ast = "", be = "", ae  = "",)))
+//        speechId = addSpeechKit(db, bs = "Упражнение", ae  = "",)))
 //    db.setDao().add(
 //        SetTable(exerciseId = idExercise, name = "Set 1", reps = 15, intervalReps = 2.5, timeRest = 0, goal = GoalSet.COUNT,
-//            speechId = addSpeechKit(db, bs = "Приседание на левую.", ast = "", be = "", ae = "",)))
+//            speechId = addSpeechKit(db, bs = "Приседание на левую.", ae = "",)))
 //    db.setDao().add(
 //        SetTable(exerciseId = idExercise, name = "Set 2", reps = 15, intervalReps = 2.5, timeRest = 20, goal = GoalSet.COUNT,
-//            speechId = addSpeechKit(db, bs = "Приседание на правую.", ast = "", be = "", ae = "",)))
+//            speechId = addSpeechKit(db, bs = "Приседание на правую.", ae = "",)))
 //    db.setDao().add(
 //        SetTable(exerciseId = idExercise, name = "Set 3", reps = 20, intervalReps = 2.5, timeRest = 0, goal = GoalSet.COUNT,
-//            speechId = addSpeechKit(db, bs = "Приседание на левую.", ast = "", be = "", ae = "",)))
+//            speechId = addSpeechKit(db, bs = "Приседание на левую.", ae = "",)))
 //    db.setDao().add(
 //        SetTable(exerciseId = idExercise, name = "Set 4", reps = 20, intervalReps = 2.5, timeRest = 20, goal = GoalSet.COUNT,
-//            speechId = addSpeechKit(db, bs = "Приседание на правую.", ast = "", be = "", ae = "",)))
+//            speechId = addSpeechKit(db, bs = "Приседание на правую.", ae = "",)))
 //    db.setDao().add(
 //        SetTable(exerciseId = idExercise, name = "Set 5", reps = 18, intervalReps = 2.5, timeRest = 0, goal = GoalSet.COUNT,
-//            speechId = addSpeechKit(db, bs = "Приседание на левую.", ast = "", be = "", ae = "",)))
+//            speechId = addSpeechKit(db, bs = "Приседание на левую.", ae = "",)))
 //    db.setDao().add(
 //        SetTable(exerciseId = idExercise, name = "Set 6", reps = 18, intervalReps = 2.5, timeRest = 20, goal = GoalSet.COUNT,
-//            speechId = addSpeechKit(db, bs = "Приседание на правую.", ast = "", be = "", ae = "",)))
+//            speechId = addSpeechKit(db, bs = "Приседание на правую.", ae = "",)))
 //
 //    //Упражнение 5 Отжимания
 //    idExercise = db.exerciseDao().add(ExerciseTable(roundId = idRound, activityId = 14, idView = 6,
-//        speechId = addSpeechKit(db, bs = "Упражнение", ast = "", be = "", ae  = "",)))
+//        speechId = addSpeechKit(db, bs = "Упражнение", ae  = "",)))
 //    db.setDao().add(
 //        SetTable(exerciseId = idExercise, name = "Set 1", reps = 18, intervalReps = 1.6, timeRest = 0, goal = GoalSet.COUNT,
-//            speechId = addSpeechKit(db, bs = "", ast = "", be = "", ae = "",)))
+//            speechId = addSpeechKit(db, )))
 //
 //    //Упражнение 6 Велосипед на пресс
 //    idExercise = db.exerciseDao().add(ExerciseTable(roundId = idRound, activityId = 16,  idView = 7,
-//        speechId = addSpeechKit(db, bs = "Упражнение", ast = "", be = "", ae = "Упражнение закончено. Востановите дыхание.",)))
+//        speechId = addSpeechKit(db, bs = "Упражнение", ae = "Упражнение закончено. Востановите дыхание.",)))
 //    db.setDao().add(
 //        SetTable(exerciseId = idExercise, name = "Set 1", reps = 20, intervalReps = 1.7, timeRest = 60, goal = GoalSet.COUNT,
-//            speechId = addSpeechKit(db, bs = "", ast = "", be = "", ae = "",)))
+//            speechId = addSpeechKit(db, )))
 
-}
-private fun addSpeechKit(db: AppDataBase, bs: String, ast: String, be: String, ae: String): Long{
-    return 0L
-//    db.dataDao().addSpeechKit(
-//        SpeechKitTable(
-//            idBeforeStart = db.dataDao().addSpeech( SpeechTable(message = bs)),
-//            idAfterStart = db.dataDao().addSpeech( SpeechTable( message = ast)),
-//            idBeforeEnd = db.dataDao().addSpeech( SpeechTable( message = be)),
-//            idAfterEnd = db.dataDao().addSpeech( SpeechTable( message = ae))
-//        )
-//    )
 }
 
 private fun addRecordWorkout(db: AppDataBase){

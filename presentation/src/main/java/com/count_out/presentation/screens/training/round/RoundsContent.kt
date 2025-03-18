@@ -29,6 +29,7 @@ import com.count_out.presentation.view_element.bottom_sheet.BottomSheetSpeech
 import com.count_out.presentation.view_element.custom_view.Frame
 import com.count_out.presentation.view_element.icons.IconsCollapsing
 import com.count_out.presentation.view_element.icons.IconsGroup
+import com.count_out.presentation.view_element.lg
 
 @Composable fun Round(dataState: TrainingState, action: Action, round: Round){
 

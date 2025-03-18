@@ -55,7 +55,6 @@ import com.count_out.presentation.view_element.custom_view.IconQ
 import com.count_out.presentation.view_element.icons.IconsCollapsing
 import com.count_out.presentation.view_element.icons.IconsGroup
 
-
 val interval_between_pole = 4.dp
 
 @Composable fun SetContent(dataState: TrainingState, action: Action, set: SetImplP){
@@ -72,9 +71,7 @@ val interval_between_pole = 4.dp
             Column (horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier
                 .fillMaxWidth()
                 .padding(vertical = 4.dp)) {
-                if (set.positions.second == 1 &&
-                    dataState.collapsing.sets.find { it == set.idSet } == null)
-//                    dataState.listCollapsingSet.value.find { it == set.idSet } == null)
+                if (set.positions.second == 1 && dataState.collapsing.sets.find { it == set.idSet } == null)
                     FirstLine(dataState, action, set )
                 else {
                     TaskSwitch( dataState, action, set )
@@ -447,7 +444,7 @@ val interval_between_pole = 4.dp
         }
         TextApp(
             text = stringResource(headId), textAlign = TextAlign.Center, style = alumBodySmall,
-            modifier = TODO()
+            modifier = Modifier
         )
     }
 }

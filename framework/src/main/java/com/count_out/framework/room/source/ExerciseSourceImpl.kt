@@ -37,7 +37,7 @@ class ExerciseSourceImpl @Inject constructor(
 
     override fun copy(exercise: Exercise): Long {
         val speechId = speechKitSource.copy(exercise.speech?.let{ it as SpeechKitImpl } ?: SpeechKitImpl() )
-        val id = dao.add(toExerciseTable((exercise as ExerciseImplD).copy(speechId = speechId)))
+        val id = dao.add(toExerciseTable(exercise, speechId))
         if (exercise.sets.isNotEmpty()){
             exercise.sets.forEach { set-> setSource.copy((set as SetImplD).copy(exerciseId = id)) }
         } else { setSource.copy( newSetImpl(exerciseId = id) ) }
@@ -49,7 +49,7 @@ class ExerciseSourceImpl @Inject constructor(
         if (exercise.sets.isNotEmpty()){
             exercise.sets.forEach { set-> setSource.update((set as SetImplD)) }
         }
-        dao.update(toExerciseTable(exercise).copy(idExercise = exercise.idExercise))
+        dao.update(toExerciseTable(exercise, exercise.speechId, exercise.idExercise))
     }
 
     override fun del(exercise: Exercise) {
@@ -59,14 +59,15 @@ class ExerciseSourceImpl @Inject constructor(
         dao.del(exercise.idExercise)
     }
 
-    private fun toExerciseTable(exercise: Exercise) = ExerciseTable(
-//        idExercise = exercise.idExercise,
-        roundId = exercise.roundId,
-        ringId = exercise.ringId,
-        activityId = exercise.activityId,
-        idView = exercise.idView,
-        speechId = exercise.speechId,
-    )
+    private fun toExerciseTable(exercise: Exercise, speechId: Long = 0L, idExercise: Long = 0L) =
+        ExerciseTable(
+            idExercise = idExercise,
+            roundId = exercise.roundId,
+            ringId = exercise.ringId,
+            activityId = exercise.activityId,
+            idView = exercise.idView,
+            speechId = speechId,
+        )
     private fun newSetImpl(exerciseId: Long) = SetImplD(
         idSet = 0,
         exerciseId = exerciseId,

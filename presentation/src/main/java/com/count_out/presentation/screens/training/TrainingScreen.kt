@@ -37,6 +37,7 @@ import com.count_out.presentation.screens.training.round.Round
 import com.count_out.presentation.view_element.TextFieldApp
 import com.count_out.presentation.view_element.bottom_sheet.BottomSheetSpeech
 import com.count_out.presentation.view_element.icons.IconsGroup
+import com.count_out.presentation.view_element.lg
 
 @Composable fun TrainingScreen(viewModel: TrainingViewModel, trainingId: Long){
     LaunchedEffect(Unit) { viewModel.submitEvent(TrainingEvent.GetTraining(trainingId)) }

@@ -85,10 +85,8 @@ fun TrainingList(
             Spacer(modifier = Modifier.height(Dimen.width4))
             ItemSwipe(
                 frontView = {
-                    TrainingCard(
-                        item, dataState = dataState, action = action,
-                        modifier = Modifier.animateItem()
-                    )
+                    TrainingCard(modifier = Modifier.animateItem(),
+                        item = item, dataState = dataState, action = action,)
                 },
                 actionDragLeft = { action.ex(TrainingsEvent.Del(item)) },
                 actionDragRight = { action.ex(TrainingsEvent.Edit(item.idTraining)) },

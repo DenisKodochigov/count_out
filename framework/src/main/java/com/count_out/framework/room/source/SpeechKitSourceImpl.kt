@@ -35,11 +35,13 @@ class SpeechKitSourceImpl @Inject constructor(
         daoSpeechKit.del(speechKit.idSpeechKit)
     }
 
-    private fun toSpeechKitTable(speechKit: SpeechKit): SpeechKitTable = SpeechKitTable(
-        idSpeechKit = 0,
-        idBeforeStart = speechKit.idBeforeStart,
-        idAfterStart = speechKit.idAfterStart,
-        idBeforeEnd = speechKit.idBeforeEnd,
-        idAfterEnd = speechKit.idBeforeEnd,
-    )
+    private fun toSpeechKitTable(speechKit: SpeechKit): SpeechKitTable {
+        return SpeechKitTable(
+            idSpeechKit = 0,
+            idBeforeStart = speechSource.copy(speechKit.beforeStart?.let { it as SpeechImpl} ?: SpeechImpl()),
+            idAfterStart = speechSource.copy(speechKit.afterStart?.let { it as SpeechImpl} ?: SpeechImpl()),
+            idBeforeEnd = speechSource.copy(speechKit.beforeEnd?.let { it as SpeechImpl} ?: SpeechImpl()),
+            idAfterEnd = speechSource.copy(speechKit.afterEnd?.let { it as SpeechImpl} ?: SpeechImpl()),
+        )
+    }
 }

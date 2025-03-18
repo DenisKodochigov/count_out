@@ -33,12 +33,7 @@ class TrainingSourceImpl @Inject constructor(
     override fun copy(training: Training): Long {
         val speechId = speechKitSource.copy(
             training.speech?.let{ it as SpeechKitImpl} ?: SpeechKitImpl())
-        val trainingId = ( dao.add(
-            TrainingTable(
-//                idTraining = 0,
-                name = training.name,
-                speechId = speechId
-            )))
+        val trainingId = ( dao.add(TrainingTable(name = training.name, speechId = speechId)))
         if (training.rounds.isNotEmpty()) {
             training.rounds.forEach { round->
                 roundSource.copy((round as RoundImpl).copy(trainingId = trainingId)) }
