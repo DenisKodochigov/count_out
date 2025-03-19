@@ -9,7 +9,7 @@ import com.count_out.presentation.R
 import com.count_out.presentation.models.DataForServImpl
 import com.count_out.presentation.models.Internet
 import com.count_out.presentation.models.MessageApp
-import com.count_out.presentation.models.TickTimeImpl
+import com.count_out.presentation.models.TickTimeImplP
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -122,7 +122,7 @@ class ExecuteWorkViewModel @Inject constructor(
                         _executeWorkoutScreenState.update { state ->
                             state.copy(
                                 startTime = 0L,
-                                flowTime = TickTimeImpl(hour = "00", min = "00", sec = "00"),
+                                flowTime = TickTimeImplP(hour = "00", min = "00", sec = "00"),
                                 showBottomSheetSaveTraining = mutableStateOf(true)
                             )
                         }
@@ -134,7 +134,7 @@ class ExecuteWorkViewModel @Inject constructor(
             dataForUI.flowTime.collect { tick ->
                 _executeWorkoutScreenState.update { state ->
                     state.copy(
-                    flowTime = tick ?: TickTimeImpl("00","00","00"),
+                    flowTime = tick ?: TickTimeImplP("00","00","00"),
                     currentRest = dataForUI.countRest.value,
                     enableChangeInterval = dataForUI.enableChangeInterval.value,
                 )}

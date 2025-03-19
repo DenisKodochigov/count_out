@@ -11,14 +11,14 @@ import com.count_out.domain.entity.workout.Training
 import com.count_out.domain.entity.enums.ConnectState
 import com.count_out.domain.entity.enums.RunningState
 import com.count_out.presentation.models.SetImplP
-import com.count_out.presentation.models.TickTimeImpl
+import com.count_out.presentation.models.TickTimeImplP
 import javax.inject.Singleton
 
 @Singleton
 data class ExecuteWorkoutScreenState(
     val training: Training? = null,
 
-    val flowTime: TickTime = TickTimeImpl(hour = "00", min="00", sec= "00"),
+    val flowTime: TickTime = TickTimeImplP(hour = "00", min="00", sec= "00"),
     val currentRest: Int = 0,
     val currentCount: Int = 0,
     val currentDuration: Int = 0,

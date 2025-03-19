@@ -1,7 +1,7 @@
 package com.count_out.framework.room.source
 
 import com.count_out.data.models.SetImplD
-import com.count_out.data.models.SpeechKitImpl
+import com.count_out.data.models.SpeechKitImplD
 import com.count_out.data.source.room.SetSource
 import com.count_out.data.source.room.SpeechKitSource
 import com.count_out.framework.room.db.set.SetDao
@@ -20,7 +20,7 @@ class SetSourceImpl @Inject constructor(
         return setDao.gets(exerciseId).map { list-> list.map{ it.toSet()} } }
 
     override fun copy(item: SetImplD): Long {
-        val speechId = speechKitSource.copy(item.speech?.let{ it as SpeechKitImpl } ?: SpeechKitImpl() )
+        val speechId = speechKitSource.copy(item.speech?.let{ it as SpeechKitImplD } ?: SpeechKitImplD() )
         return setDao.add(toSetTable(item).copy(speechId = speechId)) }
 
     override fun del(item: SetImplD) {
@@ -30,11 +30,11 @@ class SetSourceImpl @Inject constructor(
 
     override fun update(item: SetImplD) {
         item.speech?.let { speechKitSource.update(it) }
-        setDao.update(toSetTable(item))
+        setDao.update(toSetTable(item, item.idSet))
     }
 
-    private fun toSetTable(set: SetImplD) = SetTable(
-//        idSet = set.idSet,
+    private fun toSetTable(set: SetImplD, idSet: Long = 0) = SetTable(
+        idSet = idSet,
         name = set.name,
         speechId = set.speechId,
         goal = set.goal.ordinal,

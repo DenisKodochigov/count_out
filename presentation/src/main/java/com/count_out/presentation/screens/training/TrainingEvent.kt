@@ -5,6 +5,7 @@ import com.count_out.domain.entity.workout.Collapsing
 import com.count_out.domain.entity.workout.Exercise
 import com.count_out.domain.entity.workout.Set
 import com.count_out.domain.entity.workout.ShowBottomSheet
+import com.count_out.domain.entity.workout.SpeechKit
 import com.count_out.domain.entity.workout.Training
 import com.count_out.presentation.screens.prime.Event
 
@@ -24,6 +25,8 @@ sealed class TrainingEvent: Event {
 
     data class ShowBS(val item: ShowBottomSheet): TrainingEvent()
     data class SetCollapsing(val item: Collapsing): TrainingEvent()
+
+    data class UpdateSpeech(val item: SpeechKit): TrainingEvent()
     data object BackScreen : TrainingEvent()
 }
 

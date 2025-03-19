@@ -3,7 +3,7 @@ package com.count_out.framework.room.source
 import android.util.Log
 import com.count_out.data.models.ExerciseImplD
 import com.count_out.data.models.RoundImpl
-import com.count_out.data.models.SpeechKitImpl
+import com.count_out.data.models.SpeechKitImplD
 import com.count_out.data.source.room.ExerciseSource
 import com.count_out.data.source.room.RoundSource
 import com.count_out.data.source.room.SpeechKitSource
@@ -32,7 +32,7 @@ class RoundSourceImpl @Inject constructor(
         //Создавть раунд имеет смысл только в связке с какимнибудь тренировочным планом.
         var roundId = 0L
         if (round.trainingId > 0){
-            val speechId = speechKitSource.copy(round.speech?.let{ it as SpeechKitImpl } ?: SpeechKitImpl() )
+            val speechId = speechKitSource.copy(round.speech?.let{ it as SpeechKitImplD } ?: SpeechKitImplD() )
             roundId = dao.add(toRoundTable(round as RoundImpl).copy(speechId = speechId))
             if (round.exercise.isNotEmpty()) {
                 round.exercise.forEach { exercise->
@@ -43,13 +43,13 @@ class RoundSourceImpl @Inject constructor(
     }
     override fun del(round: Round) {
         round.exercise.forEach { exerciseSource.del(it) }
-        round.speech?.let { speechKitSource.del(it as SpeechKitImpl) }
+        round.speech?.let { speechKitSource.del(it as SpeechKitImplD) }
         dao.del(round.idRound)
     }
 
     override fun update(round: Round) {
         round.exercise.forEach { exerciseSource.update(it) }
-        round.speech?.let { speechKitSource.update(it as SpeechKitImpl) }
+        round.speech?.let { speechKitSource.update(it as SpeechKitImplD) }
         dao.update(toRoundTable(round as RoundImpl))
     }
 

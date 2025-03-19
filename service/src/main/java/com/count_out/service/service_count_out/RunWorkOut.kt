@@ -2,7 +2,7 @@ package com.count_out.service.service_count_out
 
 import android.content.Context
 import com.count_out.data.models.SetImplD
-import com.count_out.data.models.SpeechImpl
+import com.count_out.data.models.SpeechImplD
 import com.count_out.data.router.models.DataForWork
 import com.count_out.data.router.models.DataFromWork
 import com.count_out.domain.entity.enums.Goal
@@ -44,7 +44,7 @@ class RunWorkOut @Inject constructor(
                     item.exercise?.let { exerciseLet->
                         speechStart(dataFromWork, exerciseLet.speech as SpeechKit)
                         val desc = if (dataForWork.enableSpeechDescription.value) exerciseLet.activity?.description else ""
-                        speechManager.speech(dataFromWork, SpeechImpl(
+                        speechManager.speech(dataFromWork, SpeechImplD(
                             message = "${context.getString(R.string.next_exercise)} ${exerciseLet.activity?.name}. $desc",
                             idSpeech = TODO(),
                             duration = TODO(),
@@ -80,7 +80,7 @@ class RunWorkOut @Inject constructor(
         }
     }
     private suspend fun speakSetBegin(set: SetImplD, dataFromWork: DataFromWork){
-        speechManager.speech(dataFromWork, SpeechImpl(
+        speechManager.speech(dataFromWork, SpeechImplD(
             message = textBeforeSet(set),
             idSpeech = TODO(),
             duration = TODO(),
@@ -128,7 +128,7 @@ class RunWorkOut @Inject constructor(
     private suspend fun speakEnd(setCurrent: SetImplD, dataFromWork: DataFromWork){
         speechEnd(dataFromWork, setCurrent.speech as SpeechKit)
         CoroutineScope(Dispatchers.IO).launch { speakingRest(setCurrent, dataFromWork)}
-        speechManager.speech(dataFromWork, SpeechImpl(
+        speechManager.speech(dataFromWork, SpeechImplD(
             message = getStr(R.string.rest) + "  " +
                     getPlurals(
                         setCurrent.rest.value / (if (setCurrent.duration.unit == Units.M) 60.0 else 1.0),

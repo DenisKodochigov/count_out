@@ -3,7 +3,7 @@ package com.count_out.framework.room.source
 import android.util.Log
 import com.count_out.data.models.ExerciseImplD
 import com.count_out.data.models.RingImpl
-import com.count_out.data.models.SpeechKitImpl
+import com.count_out.data.models.SpeechKitImplD
 import com.count_out.data.source.room.ExerciseSource
 import com.count_out.data.source.room.RingSource
 import com.count_out.data.source.room.SpeechKitSource
@@ -27,7 +27,7 @@ class RingSourceImpl @Inject constructor(
     override fun copy(ring: Ring): Long {
         var ringId = 0L
         if (ring.trainingId > 0) {
-            val speechId = speechKitSource.copy(ring.speech?.let{ it as SpeechKitImpl } ?: SpeechKitImpl() )
+            val speechId = speechKitSource.copy(ring.speech?.let{ it as SpeechKitImplD } ?: SpeechKitImplD() )
             ringId = dao.add(toRingTable(ring as RingImpl).copy(speechId = speechId))
             if (ring.exercise.isNotEmpty()) {
                 ring.exercise.forEach { exercise ->
@@ -39,12 +39,12 @@ class RingSourceImpl @Inject constructor(
     }
     override fun del(ring: Ring) {
         ring.exercise.forEach { exerciseSource.del(it) }
-        ring.speech?.let { speechKitSource.del(it as SpeechKitImpl) }
+        ring.speech?.let { speechKitSource.del(it as SpeechKitImplD) }
         dao.del(ring.idRing)
     }
     override fun update(ring: Ring) {
         ring.exercise.forEach { exerciseSource.update(it) }
-        ring.speech?.let { speechKitSource.update(it as SpeechKitImpl) }
+        ring.speech?.let { speechKitSource.update(it as SpeechKitImplD) }
         dao.update(toRingTable(ring as RingImpl))
     }
 

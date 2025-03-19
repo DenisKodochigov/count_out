@@ -18,13 +18,11 @@ import com.count_out.presentation.screens.prime.Event
 import com.count_out.presentation.screens.prime.PrimeViewModel
 import com.count_out.presentation.screens.prime.ScreenState
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class SettingViewModel @Inject constructor(
-    private val converter: SettingsConvertor,
     private val addActivity: AddActivityUC,
     private val delActivity: DeleteActivityUC,
     private val getsActivity: GetsActivityUC,
@@ -37,11 +35,11 @@ class SettingViewModel @Inject constructor(
     private val updateSetting: UpdateSettingUC,
 //    private val serviceBind: CountOutServiceBind,
 //    private val dataRepository: DataRepository
-): PrimeViewModel<SettingsState, ScreenState<SettingsState>>() {
+): PrimeViewModel<SettingsState, SettingsConvertor>() {
 
     override fun initScreenState(): ScreenState<SettingsState> = ScreenState.Loading
     override fun initDataState(): SettingsState = SettingsState()
-
+    override fun initConvertor(): SettingsConvertor = SettingsConvertor()
     override fun routeEvent(event: Event) {
         when (event) {
             is SettingsEvent.BackScreen -> { navigate.backStack() }
@@ -61,70 +59,60 @@ class SettingViewModel @Inject constructor(
 
     private fun addActivity(activity: Activity) {
         viewModelScope.launch {
-            addActivity.execute(AddActivityUC.Request(activity))
-                .map { converter.convert(it, dataState) }.collect { submitState(it) }
+            addActivity.execute(AddActivityUC.Request(activity)).collect { submitState( it ) }
         }
     }
 
     private fun getsActivity() {
         viewModelScope.launch {
-            getsActivity.execute(GetsActivityUC.Request)
-                .map { converter.convert(it, dataState) }.collect { submitState(it) }
+            getsActivity.execute(GetsActivityUC.Request).collect { submitState( it ) }
         }
     }
 
     private fun delActivity(activity: Activity) {
         viewModelScope.launch {
-            delActivity.execute(DeleteActivityUC.Request(activity))
-                .map { converter.convert(it, dataState) }.collect { submitState(it) }
+            delActivity.execute(DeleteActivityUC.Request(activity)).collect { submitState( it ) }
         }
     }
 
     private fun updateActivity(activity: Activity) {
         viewModelScope.launch {
-            updateActivity.execute(UpdateActivityUC.Request(activity))
-                .map { converter.convert(it, dataState) }.collect { submitState(it) }
+            updateActivity.execute(UpdateActivityUC.Request(activity)).collect { submitState( it ) }
         }
     }
 
     private fun getSettings() {
         viewModelScope.launch {
-            getSettings.execute(GetSettingsUC.Request)
-                .map { converter.convert(it, dataState) }.collect { submitState(it) }
+            getSettings.execute(GetSettingsUC.Request).collect { submitState( it ) }
         }
     }
 
     private fun updateSetting(setting: Setting) {
         viewModelScope.launch {
-            updateSetting.execute(UpdateSettingUC.Request(setting))
-                .map { converter.convert(it, dataState) }.collect { submitState(it) }
+            updateSetting.execute(UpdateSettingUC.Request(setting)).collect { submitState( it ) }
         }
     }
     private fun startScanBle() {
         viewModelScope.launch {
-            startScanBle.execute(StartScanBleUC.Request)
-                .map { converter.convert(it, dataState) }.collect { submitState(it) }
+            startScanBle.execute(StartScanBleUC.Request).collect { submitState( it ) }
         }
     }
 
     private fun stopScanBle() {
         viewModelScope.launch {
-            stopScanBle.execute(StopScanBleUC.Request)
-                .map { converter.convert(it, dataState) }.collect { submitState(it) }
+            stopScanBle.execute(StopScanBleUC.Request).collect { submitState( it ) }
         }
     }
 
     private fun clearCacheBle() {
         viewModelScope.launch {
-            clearCacheBle.execute(ClearCacheBleUC.Request)
-                .map { converter.convert(it, dataState) }.collect { submitState(it) }
+            clearCacheBle.execute(ClearCacheBleUC.Request).collect { submitState( it ) }
         }
     }
 
     private fun selectDeviceBle(device: DeviceUI) {
         viewModelScope.launch {
-            selectDeviceBle.execute(SelectDeviceBleUC.Request(device))
-                .map { converter.convert(it, dataState) }.collect { submitState(it) }
+            selectDeviceBle.execute(SelectDeviceBleUC.Request(device)).collect { submitState( it ) }
         }
     }
 

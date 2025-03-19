@@ -13,7 +13,6 @@ import com.count_out.domain.use_case.trainings.GetTrainingUC
 import com.count_out.domain.use_case.trainings.UpdateTrainingUC
 import com.count_out.presentation.models.TrainingImplP
 import com.count_out.presentation.screens.prime.PrimeConvertor
-import com.count_out.presentation.view_element.lg
 import kotlinx.coroutines.flow.MutableStateFlow
 import javax.inject.Inject
 

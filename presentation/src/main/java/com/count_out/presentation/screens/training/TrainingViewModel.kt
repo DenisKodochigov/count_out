@@ -6,6 +6,7 @@ import com.count_out.domain.entity.workout.Collapsing
 import com.count_out.domain.entity.workout.Exercise
 import com.count_out.domain.entity.workout.Set
 import com.count_out.domain.entity.workout.ShowBottomSheet
+import com.count_out.domain.entity.workout.SpeechKit
 import com.count_out.domain.entity.workout.Training
 import com.count_out.domain.use_case.exercise.ChangeSequenceExerciseUC
 import com.count_out.domain.use_case.exercise.CopyExerciseUC
@@ -16,20 +17,20 @@ import com.count_out.domain.use_case.other.ShowBottomSheetUC
 import com.count_out.domain.use_case.set.CopySetUC
 import com.count_out.domain.use_case.set.DeleteSetUC
 import com.count_out.domain.use_case.set.UpdateSetUC
+import com.count_out.domain.use_case.speech.UpdateSpeechKitUC
 import com.count_out.domain.use_case.trainings.GetTrainingUC
 import com.count_out.domain.use_case.trainings.UpdateTrainingUC
 import com.count_out.presentation.models.TrainingImplP
 import com.count_out.presentation.screens.prime.Event
 import com.count_out.presentation.screens.prime.PrimeViewModel
 import com.count_out.presentation.screens.prime.ScreenState
+import com.count_out.presentation.view_element.lg
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel class TrainingViewModel @Inject constructor(
-    private val converter: TrainingConverter,
     private val getTrainingUC: GetTrainingUC,
     private val updateTrainingUC: UpdateTrainingUC,
     private val copyExerciseUC: CopyExerciseUC,
@@ -41,10 +42,12 @@ import javax.inject.Inject
     private val changeSetUC: UpdateSetUC,
     private val showBottomSheetUC: ShowBottomSheetUC,
     private val collapsingSetUC: CollapsingUC,
-): PrimeViewModel<TrainingState, ScreenState<TrainingState>>() {
+    private val updateSpeechKitUC: UpdateSpeechKitUC,
+): PrimeViewModel<TrainingState, TrainingConverter>() {
 
     override fun initScreenState(): ScreenState<TrainingState> = ScreenState.Loading
     override fun initDataState(): TrainingState = TrainingState()
+    override fun initConvertor(): TrainingConverter = TrainingConverter()
 
     override fun routeEvent(event: Event) {
         when (event) {
@@ -60,6 +63,7 @@ import javax.inject.Inject
             is TrainingEvent.UpdateSet -> { changeSet(event.item) }
             is TrainingEvent.ShowBS -> { showBottomSheet(event.item) }
             is TrainingEvent.SetCollapsing -> { collapsingSet(event.item) }
+            is TrainingEvent.UpdateSpeech -> { updateSpeech(event.item) }
         }
     }
     var idTraining: Long = 0
@@ -67,155 +71,77 @@ import javax.inject.Inject
     fun getTraining(id: Long) {
         idTraining = id
         viewModelScope.launch(Dispatchers.IO) {
-            getTrainingUC.execute( GetTrainingUC.Request(TrainingImplP(idTraining = id)))
-                .map { converter.convert(it, dataState) }.collect { submitState(it) }
+            getTrainingUC.execute( GetTrainingUC.Request(TrainingImplP(idTraining = id))).collect { submitState( it ) }
         }
     }
-
+    private fun getTraining() {
+        viewModelScope.launch(Dispatchers.IO) {
+            getTrainingUC.execute( GetTrainingUC.Request(TrainingImplP(idTraining = idTraining)))
+                .collect { submitState( it ) }
+        }
+    }
     private fun updateTraining(training: Training){
         viewModelScope.launch(Dispatchers.IO) {
-            updateTrainingUC.execute( UpdateTrainingUC.Request(training))
-                .map { converter.convert(it, dataState) }.collect { submitState(it) }
+            updateTrainingUC.execute( UpdateTrainingUC.Request(training)).collect { submitState( it ) }
         }
     }
     private fun changeSequenceExercise(item: DataForChangeSequence){
         viewModelScope.launch(Dispatchers.IO) {
-            changeSequenceExerciseUC.execute( ChangeSequenceExerciseUC.Request(item))
-                .map { converter.convert(it, dataState) }
-            getTrainingUC.execute( GetTrainingUC.Request(TrainingImplP(idTraining = idTraining)))
-                .map { converter.convert(it, dataState) }.collect { submitState(it) }
+            changeSequenceExerciseUC.execute( ChangeSequenceExerciseUC.Request(item)).collect { submitState( it ) }
+            getTraining()
         }
     }
     private fun copyExercise(exercise: Exercise){
         viewModelScope.launch(Dispatchers.IO) {
-            copyExerciseUC.execute( CopyExerciseUC.Request(exercise)).map {
-                converter.convert(it, dataState) }.collect { submitState(it) }
-            getTrainingUC.execute( GetTrainingUC.Request(TrainingImplP(idTraining = idTraining)))
-                .map { converter.convert(it, dataState) }.collect { submitState(it) }
+            copyExerciseUC.execute( CopyExerciseUC.Request(exercise)).collect { submitState( it ) }
+            getTraining()
         }
     }
     private fun deleteExercise(exercise: Exercise){
         viewModelScope.launch(Dispatchers.IO) {
-            delExerciseUC.execute( DeleteExerciseUC.Request(exercise)).map {
-                converter.convert(it, dataState) }.collect { submitState(it) }
-            getTrainingUC.execute( GetTrainingUC.Request(TrainingImplP(idTraining = idTraining)))
-                .map { converter.convert(it, dataState) }.collect { submitState(it) }
+            delExerciseUC.execute( DeleteExerciseUC.Request(exercise)).collect { submitState( it ) }
+            getTraining()
         }
     }
     private fun updateExercise(exercise: Exercise){
         viewModelScope.launch(Dispatchers.IO) {
-            updateExerciseUC.execute( UpdateExerciseUC.Request(exercise)).map {
-                converter.convert(it, dataState) }.collect { submitState(it) }
-            getTrainingUC.execute( GetTrainingUC.Request(TrainingImplP(idTraining = idTraining)))
-                .map { converter.convert(it, dataState) }.collect { submitState(it) }
+            updateExerciseUC.execute( UpdateExerciseUC.Request(exercise)).collect { submitState( it ) }
+            getTraining()
         }
     }
     private fun copySet(item: Set){
         viewModelScope.launch(Dispatchers.IO) {
-            copySetUC.execute( CopySetUC.Request(item)).map {
-                converter.convert(it, dataState) }.collect { submitState(it) }
-            getTrainingUC.execute( GetTrainingUC.Request(TrainingImplP(idTraining = idTraining)))
-                .map { converter.convert(it, dataState) }.collect { submitState(it) }
+            copySetUC.execute( CopySetUC.Request(item)).collect { submitState( it ) }
+            getTraining()
         }
     }
     private fun deleteSet(item: Set){
         viewModelScope.launch(Dispatchers.IO) {
-            deleteSetUC.execute( DeleteSetUC.Request(item)).map {
-                converter.convert(it, dataState) }.collect { submitState(it) }
-            getTrainingUC.execute( GetTrainingUC.Request(TrainingImplP(idTraining = idTraining)))
-                .map { converter.convert(it, dataState) }.collect { submitState(it) }
+            deleteSetUC.execute( DeleteSetUC.Request(item)).collect { submitState( it ) }
+            getTraining()
         }
     }
     private fun changeSet(item: Set){
         viewModelScope.launch(Dispatchers.IO) {
-            changeSetUC.execute( UpdateSetUC.Request(item)).map {
-                converter.convert(it, dataState) }.collect { submitState(it) }
-            getTrainingUC.execute( GetTrainingUC.Request(TrainingImplP(idTraining = idTraining)))
-                .map { converter.convert(it, dataState) }.collect { submitState(it) }
+            changeSetUC.execute( UpdateSetUC.Request(item)).collect { submitState( it ) }
+            getTraining()
         }
     }
     private fun showBottomSheet(item: ShowBottomSheet){
         viewModelScope.launch(Dispatchers.IO) {
-            showBottomSheetUC.execute( ShowBottomSheetUC.Request(item)).map {
-                converter.convert(it, dataState) }.collect { submitState(it) }
-            getTrainingUC.execute( GetTrainingUC.Request(TrainingImplP(idTraining = idTraining)))
-                .map { converter.convert(it, dataState) }.collect { submitState(it) }
+            showBottomSheetUC.execute( ShowBottomSheetUC.Request(item)).collect { submitState( it ) }
         }
     }
     private fun collapsingSet(item: Collapsing){
         viewModelScope.launch(Dispatchers.IO) {
-            collapsingSetUC.execute( CollapsingUC.Request(item)).map {
-                converter.convert(it, dataState) }.collect { submitState(it) }
-//            getTrainingUC.execute( GetTrainingUC.Request(Training(idTraining = idTraining)))
-//                .map { converter.convert(it) }.collect { submitState(it) }
+            collapsingSetUC.execute( CollapsingUC.Request(item)).collect { submitState( it ) }
+        }
+    }
+    private fun updateSpeech(item: SpeechKit){
+        viewModelScope.launch(Dispatchers.IO) {
+            lg("veiwModel update speechKit")
+            updateSpeechKitUC.execute( UpdateSpeechKitUC.Request(item)).collect { submitState( it ) }
         }
     }
 }
-//    private fun showSpeechTraining(item: Boolean){
-//        viewModelScope.launch {
-//            showSpeechTrainingUC.execute( ShowBSSpeechTrainingUC.Request(item))
-//            getTrainingUC.execute( GetTrainingUC.Request(TrainingImpl(idTraining = idTraining)))
-//                .map { converter.convert(it) }.collect { submitState(it) }
-//        }
-//    }
-//    private fun showBSSelectActivity(item: Boolean){
-//        viewModelScope.launch {
-//            showBSSelectActivityUC.execute( ShowBSSelectActivityUC.Request(item))
-//            getTrainingUC.execute( GetTrainingUC.Request(TrainingImpl(idTraining = idTraining)))
-//                .map { converter.convert(it) }.collect { submitState(it) }
-//        }
-//    }
-//    private fun showBSSpeechExercise(item: Boolean){
-//        viewModelScope.launch {
-//            showBSSpeechExerciseUC.execute( ShowBSSpeechExerciseUC.Request(item))
-//                .map { converter.convert(it) }.collect { submitState(it) }
-//        }
-//    }
-//    private fun showBSSpeechSet(item: Boolean){
-//        viewModelScope.launch {
-//            showBSSpeechSetUC.execute( ShowBSSpeechSetUC.Request(item))
-//                .map { converter.convert(it) }.collect { submitState(it) }
-//        }
-//    }
-//    private fun showBSSpeechWorkUp(item: Boolean){
-//        viewModelScope.launch {
-//            showBSSpeechWorkUpUC.execute( ShowBSSpeechWorkUpUC.Request(item))
-//                .map { converter.convert(it) }.collect { submitState(it) }
-//        }
-//    }
-//    private fun showBSSpeechWorkOut(item: Boolean){
-//        viewModelScope.launch {
-//            showBSSpeechWorkOutUC.execute( ShowBSSpeechWorkOutUC.Request(item))
-//                .map { converter.convert(it) }.collect { submitState(it) }
-//        }
-//    }
-//    private fun showBSSpeechWorkDown(item: Boolean){
-//        viewModelScope.launch {
-//            showBSSpeechWorkDownUC.execute( ShowBSSpeechWorkDownUC.Request(item))
-//                .map { converter.convert(it) }.collect { submitState(it) }
-//        }
-//    }
-//    private fun collapsingListExercise(item: List<Long>){
-//        viewModelScope.launch {
-//            collapsingListExerciseUC.execute( CollapsingListExerciseUC.Request(item))
-//                .map { converter.convert(it) }.collect { submitState(it) }
-//        }
-//    }
-//    private fun collapsingWorkDown(item: Boolean){
-//        viewModelScope.launch {
-//            collapsingWorkDownUC.execute( CollapsingWorkDownUC.Request(item))
-//                .map { converter.convert(it) }.collect { submitState(it) }
-//        }
-//    }
-//    private fun collapsingWorkOut(item: Boolean){
-//        viewModelScope.launch {
-//            collapsingWorkOutUC.execute( CollapsingWorkOutUC.Request(item))
-//                .map { converter.convert(it) }.collect { submitState(it) }
-//        }
-//    }
-//    private fun collapsingWorkUp(item: Boolean){
-//        viewModelScope.launch {
-//            collapsingWorkUpUC.execute( CollapsingWorkUpUC.Request(item))
-//                .map { converter.convert(it) }.collect { submitState(it) }
-//        }
-//    }
+

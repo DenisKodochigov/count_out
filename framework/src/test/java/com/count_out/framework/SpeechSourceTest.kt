@@ -1,6 +1,6 @@
 package com.count_out.framework
 
-import com.count_out.data.models.SpeechImpl
+import com.count_out.data.models.SpeechImplD
 import com.count_out.data.source.room.SpeechSource
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flowOf
@@ -22,7 +22,7 @@ class SpeechSourceTest {
     fun addSpeech(){
         val speech = expectedSpeech
         speechSource.copy(speech)
-        val captor = argumentCaptor<SpeechImpl>()
+        val captor = argumentCaptor<SpeechImplD>()
         verify(speechSource).copy(captor.capture())
         Assert.assertEquals(speech.message, captor.firstValue.message)
     }
@@ -40,7 +40,7 @@ class SpeechSourceTest {
     }
 
     companion object {
-        val expectedSpeech = SpeechImpl(idSpeech = 0, message = "test add speech",0,"")
+        val expectedSpeech = SpeechImplD(idSpeech = 0, message = "test add speech",0,"")
 //        fun buildSpeech() = SpeechImpl(idSpeech = 0, message = "test add speech",0,"")
     }
 }

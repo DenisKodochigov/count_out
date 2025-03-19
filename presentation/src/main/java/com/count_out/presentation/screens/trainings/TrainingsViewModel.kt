@@ -11,19 +11,19 @@ import com.count_out.presentation.screens.prime.PrimeViewModel
 import com.count_out.presentation.screens.prime.ScreenState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel class TrainingsViewModel @Inject constructor(
-    private val converter: TrainingsConvertor,
     private val copyTraining: CopyTrainingUC,
     private val delTraining: DeleteTrainingUC,
     private val getTrainings: GetTrainingsUC,
     private val selectTraining: SelectTrainingUC,
-): PrimeViewModel<TrainingsState, ScreenState<TrainingsState>>() {
+): PrimeViewModel<TrainingsState, TrainingsConvertor>() {
     override fun initScreenState(): ScreenState<TrainingsState> = ScreenState.Loading
     override fun initDataState(): TrainingsState = TrainingsState()
+    override fun initConvertor(): TrainingsConvertor = TrainingsConvertor()
+
     override fun routeEvent(event: Event) {
         when (event) {
             is TrainingsEvent.BackScreen -> { navigate.backStack()}
@@ -38,23 +38,19 @@ import javax.inject.Inject
 
     private fun getTrainings(){
         viewModelScope.launch(Dispatchers.IO) {
-            getTrainings.execute( GetTrainingsUC.Request)
-                .map { converter.convert(it, dataState) }.collect { submitState(it) }
+            getTrainings.execute(GetTrainingsUC.Request).collect { submitState( it ) }
         } }
     private fun deleteTraining(training: Training){
         viewModelScope.launch(Dispatchers.IO) {
-            delTraining.execute( DeleteTrainingUC.Request(training))
-                .map { converter.convert(it, dataState) }.collect { submitState(it) }
+            delTraining.execute( DeleteTrainingUC.Request(training)).collect { submitState( it ) }
         }}
     private fun copyTraining(training: Training){
         viewModelScope.launch(Dispatchers.IO) {
-            copyTraining.execute( CopyTrainingUC.Request(training))
-                .map { converter.convert(it, dataState) }.collect { submitState(it) }
+            copyTraining.execute( CopyTrainingUC.Request(training)).collect { submitState( it ) }
         } }
     private fun selectTraining(training: Training){
         viewModelScope.launch(Dispatchers.IO) {
-            selectTraining.execute( SelectTrainingUC.Request(training))
-                .map { converter.convert(it, dataState) }.collect { submitState(it) }
+            selectTraining.execute( SelectTrainingUC.Request(training)).collect { submitState( it ) }
         }}
 
 }

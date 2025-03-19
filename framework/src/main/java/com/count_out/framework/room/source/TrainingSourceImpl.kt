@@ -1,9 +1,8 @@
 package com.count_out.framework.room.source
 
-import android.util.Log
 import com.count_out.data.models.RingImpl
 import com.count_out.data.models.RoundImpl
-import com.count_out.data.models.SpeechKitImpl
+import com.count_out.data.models.SpeechKitImplD
 import com.count_out.data.source.room.RingSource
 import com.count_out.data.source.room.RoundSource
 import com.count_out.data.source.room.SpeechKitSource
@@ -13,7 +12,6 @@ import com.count_out.domain.entity.workout.Training
 import com.count_out.framework.room.db.training.TrainingDao
 import com.count_out.framework.room.db.training.TrainingTable
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
@@ -32,7 +30,7 @@ class TrainingSourceImpl @Inject constructor(
 
     override fun copy(training: Training): Long {
         val speechId = speechKitSource.copy(
-            training.speech?.let{ it as SpeechKitImpl} ?: SpeechKitImpl())
+            training.speech?.let{ it as SpeechKitImplD} ?: SpeechKitImplD())
         val trainingId = ( dao.add(TrainingTable(name = training.name, speechId = speechId)))
         if (training.rounds.isNotEmpty()) {
             training.rounds.forEach { round->
@@ -55,7 +53,7 @@ class TrainingSourceImpl @Inject constructor(
     override fun del(training: Training) {
         training.rounds.forEach { roundSource.del(it as RoundImpl) }
         training.rings.forEach { ringSource.del(it as RingImpl) }
-        training.speech?.let { speechKitSource.del(it as SpeechKitImpl) }
+        training.speech?.let { speechKitSource.del(it as SpeechKitImplD) }
         dao.del(training.idTraining)
     }
 

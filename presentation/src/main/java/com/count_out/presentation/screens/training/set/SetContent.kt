@@ -64,6 +64,10 @@ val interval_between_pole = 4.dp
         dataState.item = dataState.set
         dataState.onDismissSpeech =
             { action.ex(ShowBS(dataState.showBS.copy(element = dataState.item))) }
+        dataState.onConfirmationSpeech = {speech, item->
+            action.ex(TrainingEvent.UpdateSpeech(speech))
+            action.ex(ShowBS(dataState.showBS.copy(element = dataState.item)))
+        }
         BottomSheetSpeech(dataState)
     }
     AnimatedVisibility(modifier = Modifier.padding(horizontal = 4.dp, vertical = 1.dp), visible = true) {
@@ -91,10 +95,7 @@ val interval_between_pole = 4.dp
     }
     Row (verticalAlignment = Alignment.CenterVertically){
         IconsCollapsing(
-            onClick = {
-                action.ex(TrainingEvent.SetCollapsing(dataState.collapsing.copy(item = set)))
-//                setCollapsing(dataState, set)
-                      },
+            onClick = { action.ex(TrainingEvent.SetCollapsing(dataState.collapsing.copy(item = set))) },
             wrap = dataState.collapsing.sets.find { it == set.idSet } != null )
         TextApp(
             text = "${(set.positions.first + 1)}" ,
@@ -108,10 +109,8 @@ val interval_between_pole = 4.dp
             fontWeight = FontWeight.Light,
             textAlign = TextAlign.Start,)
         IconsGroup(
-            onClickCopy = {
-                action.ex(TrainingEvent.CopySet(set))},
-            onClickDelete = {
-                action.ex(TrainingEvent.DeleteSet(set))},
+            onClickCopy = { action.ex(TrainingEvent.CopySet(set))},
+            onClickDelete = { action.ex(TrainingEvent.DeleteSet(set))},
             onClickSpeech = {
                 dataState.set = set
                 action.ex(ShowBS(dataState.showBS.copy(element = set)))      },
@@ -337,7 +336,7 @@ val interval_between_pole = 4.dp
         ButtonSwitchPulse(selected = set.intensity == Zone.High, idString = R.string.zone4,
             onClick = {action.ex(TrainingEvent.UpdateSet( set.copy(intensity = Zone.High)))})
         ButtonSwitchPulse(selected = set.intensity == Zone.Max, idString = R.string.zone5,
-            onClick = {action.ex(TrainingEvent.UpdateSet( set.copy(intensity = Zone.Max)))})
+            onClick = { action.ex(TrainingEvent.UpdateSet( set.copy(intensity = Zone.Max)))})
         Spacer(modifier = Modifier.weight(1f))
     }
 }

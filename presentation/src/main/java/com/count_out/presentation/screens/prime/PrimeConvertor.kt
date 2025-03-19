@@ -3,8 +3,8 @@ package com.count_out.presentation.screens.prime
 import com.count_out.domain.entity.throwable.ResultUC
 import kotlinx.coroutines.flow.MutableStateFlow
 
-abstract class PrimeConvertor<T : Any, R : Any> {
-    fun convert(result: ResultUC<T>, state: MutableStateFlow<R>): ScreenState<R> {
+abstract class PrimeConvertor<D : Any, T : Any> {
+    fun convert(result: ResultUC<D>, state: MutableStateFlow<T>): ScreenState<T> {
         return when (result) {
             is ResultUC.Error -> {
                 ScreenState.Error(result.throwable.localizedMessage.orEmpty())
@@ -14,5 +14,5 @@ abstract class PrimeConvertor<T : Any, R : Any> {
             }
         }
     }
-    abstract fun convertSuccess(new: T, state: MutableStateFlow<R>): R
+    abstract fun convertSuccess(new: D, state: MutableStateFlow<T>): T
 }

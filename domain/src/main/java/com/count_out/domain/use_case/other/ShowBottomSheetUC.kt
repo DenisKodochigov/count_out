@@ -18,15 +18,14 @@ class ShowBottomSheetUC @Inject constructor(configuration: Configuration
     data class Request(val request: ShowBottomSheet) : UseCase.Request
     data class Response(val result: ShowBottomSheet) : UseCase.Response
 
-
     fun calculate(item: ShowBottomSheet): ShowBottomSheet{
-        when(item.element){
+        return when(item.element){
             is Set -> {item.copy(set = !item.set)}
             is Ring-> {item.copy(ring = !item.ring)}
             is Exercise-> {item.copy(exercise = !item.exercise)}
             is Round-> {calculateRound(item) }
+            else -> {item}
         }
-        return item
     }
     fun calculateRound( item: ShowBottomSheet): ShowBottomSheet{
         when ((item.element as Round).roundType){

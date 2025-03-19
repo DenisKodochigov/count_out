@@ -3,7 +3,7 @@ package com.count_out.data.models
 import com.count_out.domain.entity.workout.Speech
 import com.count_out.domain.entity.workout.SpeechKit
 
-data class SpeechKitImpl(
+data class SpeechKitImplD(
     override var idSpeechKit: Long = 0L,
     override val idBeforeStart: Long = 0L,
     override val idAfterStart: Long = 0L,

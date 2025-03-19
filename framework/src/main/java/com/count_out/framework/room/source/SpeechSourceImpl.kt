@@ -1,6 +1,7 @@
 package com.count_out.framework.room.source
 
-import com.count_out.data.models.SpeechImpl
+import android.util.Log
+import com.count_out.data.models.SpeechImplD
 import com.count_out.data.source.room.SpeechSource
 import com.count_out.framework.room.db.speech.SpeechDao
 import com.count_out.framework.room.db.speech.SpeechTable
@@ -10,21 +11,24 @@ import javax.inject.Inject
 
 class SpeechSourceImpl @Inject constructor(private val dao: SpeechDao): SpeechSource {
 
-    override fun get(id: Long): Flow<SpeechImpl> = dao.get(id).map { it.toSpeech() }
+    override fun get(id: Long): Flow<SpeechImplD> = dao.get(id).map { it.toSpeech() }
 
-    override fun copy(speech: SpeechImpl): Long = dao.add(toSpeechTable(speech)) // idSpeech must be = 0
+    override fun copy(speech: SpeechImplD): Long = dao.add(toSpeechTable(speech)) // idSpeech must be = 0
 
-    override fun update(speech: SpeechImpl) { dao.update(toSpeechTable(speech)) }// idSpeech must be != 0
+    override fun update(speech: SpeechImplD) {
+
+        Log.d("KDS", " $speech")
+        dao.update(toSpeechTable(speech, speech.idSpeech)) }// idSpeech must be != 0
 
     override fun del(id: Long) { dao.del(id) }
 //    override fun updateDuration(speech: SpeechImpl): Flow<SpeechImpl> {
 //        dao.updateDuration(speech.duration, speech.idSpeech)
 //        return get(speech.idSpeech)
 //    }
-    private fun toSpeechTable(speech: SpeechImpl?) = SpeechTable(
-        idSpeech = 0,
-        message = speech?.message ?: "",
-        duration = speech?.duration ?: 0,
-        addMessage = speech?.addMessage ?: "",
+    private fun toSpeechTable(speech: SpeechImplD, idSpeech: Long = 0L) = SpeechTable(
+        idSpeech = idSpeech,
+        message = speech.message,
+        duration = speech.duration,
+        addMessage = speech.addMessage,
     )
 }

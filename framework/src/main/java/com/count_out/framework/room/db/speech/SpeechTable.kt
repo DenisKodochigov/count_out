@@ -3,7 +3,7 @@ package com.count_out.framework.room.db.speech
 import androidx.room.Entity
 import androidx.room.Ignore
 import androidx.room.PrimaryKey
-import com.count_out.data.models.SpeechImpl
+import com.count_out.data.models.SpeechImplD
 
 @Entity(tableName = "tb_speech")
 data class SpeechTable(
@@ -12,8 +12,8 @@ data class SpeechTable(
     var duration: Long = 0L,
     @Ignore  var addMessage: String = "",
 ){
-    fun toSpeech(): SpeechImpl {
-        return SpeechImpl(
+    fun toSpeech(): SpeechImplD {
+        return SpeechImplD(
             idSpeech = this.idSpeech,
             message = this.message,
             duration = this.duration,

@@ -1,9 +1,8 @@
 package com.count_out.framework.room.source
 
-import com.count_out.data.models.ExerciseImplD
 import com.count_out.data.models.ParameterImpl
 import com.count_out.data.models.SetImplD
-import com.count_out.data.models.SpeechKitImpl
+import com.count_out.data.models.SpeechKitImplD
 import com.count_out.data.source.room.ExerciseSource
 import com.count_out.data.source.room.SetSource
 import com.count_out.data.source.room.SpeechKitSource
@@ -36,7 +35,7 @@ class ExerciseSourceImpl @Inject constructor(
         dao.getFilter(list).map { lst-> lst.map { it.toExercise() }}
 
     override fun copy(exercise: Exercise): Long {
-        val speechId = speechKitSource.copy(exercise.speech?.let{ it as SpeechKitImpl } ?: SpeechKitImpl() )
+        val speechId = speechKitSource.copy(exercise.speech?.let{ it as SpeechKitImplD } ?: SpeechKitImplD() )
         val id = dao.add(toExerciseTable(exercise, speechId))
         if (exercise.sets.isNotEmpty()){
             exercise.sets.forEach { set-> setSource.copy((set as SetImplD).copy(exerciseId = id)) }
@@ -53,7 +52,7 @@ class ExerciseSourceImpl @Inject constructor(
     }
 
     override fun del(exercise: Exercise) {
-        exercise.speech?.let { speechKitSource.del(it as SpeechKitImpl) }
+        exercise.speech?.let { speechKitSource.del(it as SpeechKitImplD) }
         if (exercise.sets.isNotEmpty()){
             exercise.sets.forEach { set-> setSource.del(set as SetImplD) } }
         dao.del(exercise.idExercise)

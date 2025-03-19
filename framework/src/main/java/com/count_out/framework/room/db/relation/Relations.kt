@@ -7,7 +7,7 @@ import com.count_out.data.models.ParameterImpl
 import com.count_out.data.models.RingImpl
 import com.count_out.data.models.RoundImpl
 import com.count_out.data.models.SetImplD
-import com.count_out.data.models.SpeechKitImpl
+import com.count_out.data.models.SpeechKitImplD
 import com.count_out.data.models.TrainingImplD
 import com.count_out.domain.entity.enums.Goal
 import com.count_out.domain.entity.enums.RoundType
@@ -31,8 +31,8 @@ data class SpeechKitRel(
     @Relation (parentColumn = "idBeforeEnd", entityColumn = "idSpeech", entity = SpeechTable::class) val beforeEnd: SpeechTable?,
     @Relation (parentColumn = "idAfterEnd", entityColumn = "idSpeech", entity = SpeechTable::class) val afterEnd: SpeechTable?,
 ){
-    fun toSpeechKit(): SpeechKitImpl {
-        return SpeechKitImpl(
+    fun toSpeechKit(): SpeechKitImplD {
+        return SpeechKitImplD(
             idSpeechKit = speechKitTable.idSpeechKit,
             idBeforeStart = speechKitTable.idBeforeStart,
             idAfterStart = speechKitTable.idAfterStart,

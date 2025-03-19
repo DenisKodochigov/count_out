@@ -27,8 +27,8 @@ import com.count_out.domain.entity.workout.Training
 import com.count_out.presentation.R
 import com.count_out.presentation.models.BottomSheetInterface
 import com.count_out.presentation.models.Dimen
-import com.count_out.presentation.models.SpeechImpl
-import com.count_out.presentation.models.SpeechKitImpl
+import com.count_out.presentation.models.SpeechImplP
+import com.count_out.presentation.models.SpeechKitImplP
 import com.count_out.presentation.models.TypeKeyboard
 import com.count_out.presentation.view_element.ButtonConfirm
 import com.count_out.presentation.view_element.ModalBottomSheetApp
@@ -115,20 +115,20 @@ fun bottomSheetStateNew(itemSpeech: BottomSheetInterface): BottomSheetState {
 @Composable fun ButtonOK(uiState: BottomSheetState) {
     ButtonConfirm(onConfirm = {
         uiState.onConfirmationSpeech(
-            SpeechKitImpl(
+            SpeechKitImplP(
                 idSpeechKit = uiState.speechKit?.idSpeechKit ?: 0,
                 idBeforeStart = uiState.speechKit?.idBeforeStart ?: 0,
                 idAfterStart = uiState.speechKit?.idAfterStart ?: 0,
                 idBeforeEnd = uiState.speechKit?.idBeforeEnd ?: 0,
                 idAfterEnd = uiState.speechKit?.idAfterEnd ?: 0,
-                beforeStart = (uiState.speechKit?.beforeStart as SpeechImpl).copy(message = uiState.enteredBeforeStart.value),
-                afterStart = (uiState.speechKit?.afterStart as SpeechImpl).copy(message = uiState.enteredAfterStart.value),
-                beforeEnd = (uiState.speechKit?.beforeEnd as SpeechImpl).copy(message = uiState.enteredBeforeEnd.value),
-                afterEnd = (uiState.speechKit?.afterEnd as SpeechImpl).copy(message = uiState.enteredAfterEnd.value)
+                beforeStart = (uiState.speechKit?.beforeStart?.let { SpeechImplP(it) } ?: SpeechImplP()).copy(message = uiState.enteredBeforeStart.value),
+                afterStart = (uiState.speechKit?.afterStart?.let { SpeechImplP(it) } ?: SpeechImplP()).copy(message = uiState.enteredAfterStart.value),
+                beforeEnd = (uiState.speechKit?.beforeEnd?.let { SpeechImplP(it) } ?: SpeechImplP()).copy(message = uiState.enteredBeforeEnd.value),
+                afterEnd = (uiState.speechKit?.afterEnd?.let { SpeechImplP(it) } ?: SpeechImplP()).copy(message = uiState.enteredAfterEnd.value)
             ),
             uiState.item
         )
-        uiState.onDismissSpeech.invoke()
+//        uiState.onDismissSpeech.invoke()
     })
 }
 

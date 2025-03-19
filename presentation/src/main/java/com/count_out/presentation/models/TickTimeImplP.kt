@@ -2,7 +2,7 @@ package com.count_out.presentation.models
 
 import com.count_out.domain.entity.TickTime
 
-data class TickTimeImpl(
+data class TickTimeImplP(
     override val hour: String,
     override val min: String,
     override val sec: String

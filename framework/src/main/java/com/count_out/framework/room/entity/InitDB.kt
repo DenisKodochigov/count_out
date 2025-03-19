@@ -1,12 +1,6 @@
 package com.count_out.framework.room.entity
 
-import com.count_out.data.models.ExerciseImplD
-import com.count_out.data.models.RoundImpl
-import com.count_out.data.models.SpeechImpl
-import com.count_out.data.models.SpeechKitImpl
-import com.count_out.data.models.TrainingImplD
 import com.count_out.domain.entity.enums.Units
-import com.count_out.domain.entity.workout.Speech
 import com.count_out.framework.R
 import com.count_out.framework.room.AppDataBase
 import com.count_out.framework.room.db.activity.ActivityTable
