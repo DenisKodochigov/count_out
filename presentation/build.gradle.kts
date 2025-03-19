@@ -63,7 +63,10 @@ dependencies {
     implementation (libs.bundles.material3)
     //LifeCycle
     implementation (libs.bundles.lifecycle)
-
+//Testing
+    testImplementation (libs.bundles.testing)
+    androidTestImplementation (platform(libs.compose.bom))
+    androidTestImplementation (libs.bundles.testingAndroid)
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
