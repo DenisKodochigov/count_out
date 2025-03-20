@@ -1,11 +1,11 @@
-package com.count_out.presentation.state
+package com.count_out.presentation.prime
 
-import com.count_out.domain.entity.throwable.ThrowableUC.TrainingThrow
-import com.count_out.presentation.screens.prime.PrimeConvertor
 import com.count_out.domain.entity.throwable.ResultUC
+import com.count_out.domain.entity.throwable.ThrowableUC
+import com.count_out.presentation.screens.prime.PrimeConvertor
 import com.count_out.presentation.screens.prime.ScreenState
 import kotlinx.coroutines.flow.MutableStateFlow
-import org.junit.Assert.assertEquals
+import org.junit.Assert
 import org.junit.Test
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.whenever
@@ -18,18 +18,20 @@ class PrimeConverterTest {
     @Test
     fun testConvertError() {
         val errorMessage = "errorMessage"
-        val exception = mock<TrainingThrow>()
+        val state = MutableStateFlow<String>("state")
+        val exception = mock<ThrowableUC.TrainingThrow>()
         whenever(exception.localizedMessage).thenReturn(errorMessage)
         val errorResult = ResultUC.Error(exception)
-        val result = converter.convert(errorResult)
-        assertEquals(ScreenState.Error(errorMessage), result)
+        val result = converter.convert(errorResult, state)
+        Assert.assertEquals(ScreenState.Error(errorMessage), result)
     }
 
     @Test
     fun testConvertSuccess() {
         val data = "data"
+        val state = MutableStateFlow<String>("state")
         val successResult = ResultUC.Success(data)
-        val result = converter.convert(successResult)
-        assertEquals(ScreenState.Success("result${data}"), result)
+        val result = converter.convert(successResult, state)
+        Assert.assertEquals(ScreenState.Success("result${data}"), result)
     }
 }
