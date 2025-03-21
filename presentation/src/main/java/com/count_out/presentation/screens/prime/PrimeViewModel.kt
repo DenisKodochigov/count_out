@@ -16,7 +16,7 @@ abstract class PrimeViewModel<T: Any, C: PrimeConvertor<UseCase.Response,T>>: Vi
     abstract fun initConvertor(): C
     abstract fun routeEvent(event: Event)
 
-    private val eventFlow: MutableSharedFlow<Event> = MutableSharedFlow()
+    val eventFlow: MutableSharedFlow<Event> = MutableSharedFlow()
     val dataState: MutableStateFlow<T> =  MutableStateFlow(initDataState())
 
     private val _screenState: MutableStateFlow< ScreenState<T>> by lazy { MutableStateFlow(initScreenState()) }

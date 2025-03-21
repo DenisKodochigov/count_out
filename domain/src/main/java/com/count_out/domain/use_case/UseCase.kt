@@ -16,8 +16,7 @@ import kotlinx.coroutines.flow.map
  * хранилищ, и метод execute, который возьмет данные и преобразует их в Result, обработает сценарии
  * ошибок и установит соответствующий CoroutineDispatcher.
  * */
-abstract class UseCase< I: UseCase.Request, O: UseCase.Response>(
-    private val configuration: Configuration,
+abstract class UseCase< I: UseCase.Request, O: UseCase.Response>(private val configuration: Configuration,
 ) {
     fun execute(input: I): Flow<ResultUC<O>> = executeData(input)
         .map { ResultUC.Success(it) as ResultUC<O> }
