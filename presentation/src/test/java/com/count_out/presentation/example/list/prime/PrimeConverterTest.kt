@@ -1,4 +1,4 @@
-package com.count_out.presentation.prime
+package com.count_out.presentation.example.list.prime
 
 import com.count_out.domain.entity.throwable.ResultUC
 import com.count_out.domain.entity.throwable.ThrowableUC

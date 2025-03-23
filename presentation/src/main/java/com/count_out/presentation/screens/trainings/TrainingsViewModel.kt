@@ -15,10 +15,10 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel class TrainingsViewModel @Inject constructor(
-    private val copyTraining: CopyTrainingUC,
-    private val delTraining: DeleteTrainingUC,
-    private val getTrainings: GetTrainingsUC,
-    private val selectTraining: SelectTrainingUC,
+    private val copyTrainingUC: CopyTrainingUC,
+    private val delTrainingUC: DeleteTrainingUC,
+    private val getTrainingsUC: GetTrainingsUC,
+    private val selectTrainingUC: SelectTrainingUC,
 ): PrimeViewModel<TrainingsState, TrainingsConvertor>() {
     override fun initScreenState(): ScreenState<TrainingsState> = ScreenState.Loading
     override fun initDataState(): TrainingsState = TrainingsState()
@@ -38,19 +38,21 @@ import javax.inject.Inject
 
     private fun getTrainings(){
         viewModelScope.launch(Dispatchers.IO) {
-            getTrainings.execute(GetTrainingsUC.Request).collect { submitState( it ) }
+            getTrainingsUC.execute(GetTrainingsUC.Request).collect {
+                submitState( it )
+            }
         } }
     private fun deleteTraining(training: Training){
         viewModelScope.launch(Dispatchers.IO) {
-            delTraining.execute( DeleteTrainingUC.Request(training)).collect { submitState( it ) }
+            delTrainingUC.execute( DeleteTrainingUC.Request(training)).collect { submitState( it ) }
         }}
     private fun copyTraining(training: Training){
         viewModelScope.launch(Dispatchers.IO) {
-            copyTraining.execute( CopyTrainingUC.Request(training)).collect { submitState( it ) }
+            copyTrainingUC.execute( CopyTrainingUC.Request(training)).collect { submitState( it ) }
         } }
     private fun selectTraining(training: Training){
         viewModelScope.launch(Dispatchers.IO) {
-            selectTraining.execute( SelectTrainingUC.Request(training)).collect { submitState( it ) }
+            selectTrainingUC.execute( SelectTrainingUC.Request(training)).collect { submitState( it ) }
         }}
 
 }

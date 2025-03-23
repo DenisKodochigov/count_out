@@ -1,5 +1,9 @@
 package com.count_out.framework.room.entity
 
+import com.count_out.data.models.RoundImpl
+import com.count_out.data.models.SpeechImplD
+import com.count_out.data.models.SpeechKitImplD
+import com.count_out.data.models.TrainingImplD
 import com.count_out.domain.entity.enums.Units
 import com.count_out.framework.R
 import com.count_out.framework.room.AppDataBase
@@ -42,6 +46,82 @@ object Plugins
 //    }
 }
 
+
+fun createTraining(id: Long): TrainingImplD{
+    return TrainingImplD(
+        idTraining = 0,
+        name = "Test 1",
+        amountActivity = 0,
+        isSelected = false,
+        speechId = 0,
+        speech = SpeechKitImplD(beforeEnd = SpeechImplD(), beforeStart = SpeechImplD(), afterStart = SpeechImplD(), afterEnd = SpeechImplD()),
+        rings = emptyList(),
+        rounds = listOf(
+            RoundImpl(
+                idRound = 0,
+                trainingId = TODO(),
+                speechId = TODO(),
+                roundType = TODO(),
+                speech = TODO(),
+                exercise = TODO(),
+                amount = TODO(),
+                duration = TODO()
+            ),
+
+        ),
+    )
+}
+private fun createSpeechKit(id: Long = 0): SpeechKitImplD = SpeechKitImplD(
+
+)
+private fun createSpeech(id: Long = 0): SpeechImplD {
+    return SpeechImplD(
+
+    )
+}
+
+private fun createTrainingId0( db: AppDataBase) {
+//    val training = TrainingImplD(
+//        idTraining = 0,
+//        name = "",
+//        amountActivity = 0,
+//        rings = TODO(),
+//        isSelected = TODO(),
+//        speechId = TODO(),
+//        speech = SpeechKitImpl(beforeStart = SpeechImpl(message = "Начало тренировки"), afterStart = SpeechImpl(), beforeEnd = SpeechImpl(), afterEnd = SpeechImpl(message = "Тренировка окончена"),),
+//        rounds = listOf(
+//            RoundImpl(
+//                roundType = com.count_out.domain.entity.enums.RoundType.WorkUp,
+//                speech = SpeechKitImpl(beforeStart = SpeechImpl(), afterStart = SpeechImpl(), beforeEnd = SpeechImpl(), afterEnd = SpeechImpl(),),
+//                exercise = listOf(
+//                    ExerciseImplD(
+//                        activityId = 1
+//                    )
+//                ),
+//            )
+//        )
+//    )
+
+
+    val idTraining = db.trainingDao().add(TrainingTable(name = "", idTraining = 0,
+        speechId = addSpeechKit(db, bs = "Начало тренировки", ae = "Тренировка окончена",)))
+//Разминка
+    db.roundDao().add(RoundTable(trainingId = idTraining, roundType = RoundType.UP.ordinal,
+        speechId = addSpeechKit(db)))
+//Основная
+    val idRound = db.roundDao().add(RoundTable(trainingId = idTraining, roundType = RoundType.OUT.ordinal,
+        speechId = addSpeechKit(db)))
+    val idExercise = db.exerciseDao().add(ExerciseTable(roundId = idRound, activityId = 1,  idView = 1,
+        speechId = addSpeechKit(db)))
+    db.setDao().add(
+        SetTable(exerciseId = idExercise, name = "", goal = GoalSet.DURATION.ordinal, duration = 1440.0,
+            speechId = addSpeechKit(db)))
+//Заминка
+    db.roundDao().add(RoundTable(trainingId = idTraining, roundType = RoundType.DOWN.ordinal,
+        speechId = addSpeechKit(db)))
+    addRecordWorkout(db)
+    addRecordCount(db)
+}
 fun prepopulateRealDb( db: AppDataBase){
     createSetting(db)
     createActivity(db)
@@ -102,48 +182,7 @@ private fun createSetting( db: AppDataBase){
     db.settingDao().add(SettingTable(parameter = R.string.speech_description, value = 1))
 }
 
-private fun createTrainingId0( db: AppDataBase) {
-//    val training = TrainingImplD(
-//        idTraining = 0,
-//        name = "",
-//        amountActivity = 0,
-//        rings = TODO(),
-//        isSelected = TODO(),
-//        speechId = TODO(),
-//        speech = SpeechKitImpl(beforeStart = SpeechImpl(message = "Начало тренировки"), afterStart = SpeechImpl(), beforeEnd = SpeechImpl(), afterEnd = SpeechImpl(message = "Тренировка окончена"),),
-//        rounds = listOf(
-//            RoundImpl(
-//                roundType = com.count_out.domain.entity.enums.RoundType.WorkUp,
-//                speech = SpeechKitImpl(beforeStart = SpeechImpl(), afterStart = SpeechImpl(), beforeEnd = SpeechImpl(), afterEnd = SpeechImpl(),),
-//                exercise = listOf(
-//                    ExerciseImplD(
-//                        activityId = 1
-//                    )
-//                ),
-//            )
-//        )
-//    )
 
-
-    val idTraining = db.trainingDao().add(TrainingTable(name = "", idTraining = 0,
-        speechId = addSpeechKit(db, bs = "Начало тренировки", ae = "Тренировка окончена",)))
-//Разминка
-    db.roundDao().add(RoundTable(trainingId = idTraining, roundType = RoundType.UP.ordinal,
-        speechId = addSpeechKit(db)))
-//Основная
-    val idRound = db.roundDao().add(RoundTable(trainingId = idTraining, roundType = RoundType.OUT.ordinal,
-        speechId = addSpeechKit(db)))
-    val idExercise = db.exerciseDao().add(ExerciseTable(roundId = idRound, activityId = 1,  idView = 1,
-        speechId = addSpeechKit(db)))
-    db.setDao().add(
-        SetTable(exerciseId = idExercise, name = "", goal = GoalSet.DURATION.ordinal, duration = 1440.0,
-            speechId = addSpeechKit(db)))
-//Заминка
-    db.roundDao().add(RoundTable(trainingId = idTraining, roundType = RoundType.DOWN.ordinal, 
-        speechId = addSpeechKit(db)))
-    addRecordWorkout(db)
-    addRecordCount(db)
-}
 private fun createTrainingPlansTesting( db: AppDataBase) {
     createTrainingId0( db )
     val rest = 10.0

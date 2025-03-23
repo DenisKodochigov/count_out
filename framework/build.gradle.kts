@@ -20,6 +20,10 @@ android {
         mavenLocal()
         mavenCentral()
     }
+    testOptions {
+        unitTests.isReturnDefaultValues = true
+        unitTests.isIncludeAndroidResources = true
+    }
     buildTypes {
         release {
             isMinifyEnabled = false

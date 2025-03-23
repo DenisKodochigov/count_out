@@ -1,4 +1,4 @@
-package com.count_out.presentation.prime
+package com.count_out.presentation.example.list.prime
 
 import com.count_out.domain.entity.throwable.ResultUC
 import com.count_out.domain.use_case.UseCase
@@ -26,14 +26,16 @@ class PrimeViewModelTest {
     private val testDispatcher = UnconfinedTestDispatcher ()
     private lateinit var viewModel: PrimeViewModel<String, PrimeConvertor<UseCase.Response, String>>
     private lateinit var converter:  PrimeConvertor<UseCase.Response, String>
+    data class ResponseTest(val test: String): UseCase.Response
 
     @ExperimentalCoroutinesApi
     @Before
     fun setUp() = runTest {
         Dispatchers.setMain(testDispatcher)
+
         converter = object : PrimeConvertor<UseCase.Response, String>() {
             override fun convertSuccess(
-                new: UseCase.Response, state: MutableStateFlow<String>, ): String = "result${new}" }
+                resultData: UseCase.Response, state: MutableStateFlow<String>, ):String = (resultData as ResponseTest).test }
         viewModel = object : PrimeViewModel<String, PrimeConvertor<UseCase.Response, String>>() {
             override fun initScreenState(): ScreenState<String> = ScreenState.Loading
             override fun initDataState(): String  = "init"
@@ -50,7 +52,7 @@ class PrimeViewModelTest {
 
     @ExperimentalCoroutinesApi
     @Test
-    fun testSubmitAction() = runTest {
+    fun testSubmitEvent() = runTest {
         val event = mock<Event>()
         val converter = object : PrimeConvertor<UseCase.Response, String>() {
             override fun convertSuccess(
@@ -68,9 +70,8 @@ class PrimeViewModelTest {
     @ExperimentalCoroutinesApi
     @Test
     fun testSubmitState() = runTest {
-        data class Response(val test: String): UseCase.Response
-        val response = Response(test = "test")
-        val expected = ScreenState.Success(response)
+        val response = ResponseTest(test = "test11111111")
+        val expected = ScreenState.Success(response.test)
         val resultUC = ResultUC.Success(response)
         viewModel.submitState(resultUC)
         val result =  viewModel.screenState.value

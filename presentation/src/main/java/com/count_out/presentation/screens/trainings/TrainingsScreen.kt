@@ -123,10 +123,10 @@ fun TrainingCard(
 
 @Composable
 fun IconSelected(training: Training, dataState: TrainingsState) {
-    dataState.selectedId.value?.let { selectedId ->
-        if (training.idTraining == selectedId) IconQ.Mark(onClick = { dataState.selectedId.value = null })
-        else IconQ.HorLine(onClick = { dataState.selectedId.value = training.idTraining })
-    } ?: IconQ.HorLine(onClick = { dataState.selectedId.value = training.idTraining })
+    dataState.selectedId?.let { selectedId ->
+        if (training.idTraining == selectedId) IconQ.Mark(onClick = { dataState.selectedId = null })
+        else IconQ.HorLine(onClick = { dataState.selectedId = training.idTraining })
+    } ?: IconQ.HorLine(onClick = { dataState.selectedId = training.idTraining })
 }
 
 @Composable fun IconCopy(item: Training, action: Action) {
@@ -153,8 +153,8 @@ fun DownPlace(dataState: TrainingsState, action: Action) {
     Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
         IconQ.Play(
             onClick = {
-                if (dataState.selectedId.value == null) action.ex(TrainingsEvent.Run(1))
-                else dataState.selectedId.value?.let { id -> action.ex(TrainingsEvent.Run(id))}
+                if (dataState.selectedId == null) action.ex(TrainingsEvent.Run(1))
+                else dataState.selectedId?.let { id -> action.ex(TrainingsEvent.Run(id))}
             })
         Spacer(modifier = Modifier.width(32.dp))
         IconQ.Add(onClick = { action.ex(TrainingsEvent.Copy(TrainingImplP()) ) })

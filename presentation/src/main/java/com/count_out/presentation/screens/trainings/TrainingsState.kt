@@ -6,5 +6,5 @@ import com.count_out.domain.entity.workout.Training
 
 data class TrainingsState(
     val trainings: List<Training> = emptyList(),
-    val selectedId: MutableState<Long?> = mutableStateOf(0L),
+    var selectedId: Long? = null,
 )
