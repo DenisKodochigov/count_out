@@ -47,7 +47,7 @@ dependencies {
     implementation (libs.bundles.hilt)
     ksp (libs.bundles.hiltksp)
 
-    testImplementation (libs.bundles.testing)
+    testImplementation (libs.bundles.testImpl)
     androidTestImplementation (platform(libs.compose.bom))
-    androidTestImplementation (libs.bundles.testingAndroid)
+    androidTestImplementation (libs.bundles.androidTestImpl)
 }

@@ -49,6 +49,10 @@ dependencies {
     implementation (libs.bundles.hilt)
     ksp (libs.bundles.hiltksp)
     testImplementation(libs.junit)
-    androidTestImplementation(libs.ext.junit)
+    androidTestImplementation(libs.junit.ext)
     androidTestImplementation(libs.espresso.core)
+//Testing
+    testImplementation (libs.bundles.testImpl)
+    androidTestImplementation (platform(libs.compose.bom))
+    androidTestImplementation (libs.bundles.androidTestImpl)
 }

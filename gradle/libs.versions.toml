@@ -7,6 +7,7 @@ agp = "8.9.0"
 composeV = "1.7.8"
 composeBom = "2025.03.00"
 composeActivity = "1.10.1"
+legacy = "1.0.0"
 #graphics = "1.0.2"
 #graphics1 = "1.0.1"
 #fragmentKtx = "1.8.5"
@@ -39,18 +40,22 @@ moskito-inline = "5.2.0"
 moskito-kotlin = "5.4.0"
 ui-test = "1.7.8"
 robolectric = "4.2.1"
-#appcompat = "1.7.0"
-#material = "1.12.0"
 activity = "1.10.1"
 activityKtx = "1.10.1"
-appcompat = "1.7.0"
-material = "1.12.0"
 #storage = "1.5.0"
 #androidMapsUtils = "2.3.0"
 #firebase_crashlytics = "3.0.2"
 #immutable = "0.3.7"
 #mapsUtilsKtx = "3.4.0"
 #firebaseBom = "33.4.0"
+
+arch-core = "2.2.0"
+room-testing = "2.6.1"
+truth = "1.1.2"
+junit-ktx = "1.2.1"
+core-ktx-test = "1.6.1"
+runner-test = "1.6.2"
+rules-test = "1.6.1"
 
 [libraries]
 core-ktx = { module = "androidx.core:core-ktx", version.ref = "coreKtx" }
@@ -60,7 +65,8 @@ kotlin-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serializat
 kotlin-reflect = { module = "org.jetbrains.kotlin:kotlin-reflect", version.ref = "kotlin" }
 kotlin-stdlib = { module = "org.jetbrains.kotlin:kotlin-stdlib", version.ref = "kotlin" }
 kotlin-stdlib-common = { module = "org.jetbrains.kotlin:kotlin-stdlib-common", version.ref = "kotlin" }
-kotlin-coroutines = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core-jvm", version.ref = "kotlinx-coroutines" }
+kotlin-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core-jvm", version.ref = "kotlinx-coroutines" }
+kotlin-coroutines-and = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "kotlinx-coroutines" }
 #fragment-ktx = { module = "androidx.fragment:fragment-ktx", version.ref = "fragmentKtx" }
 #Navigation
 navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "navigationCompose" }
@@ -135,6 +141,8 @@ datastore-preferences = {module = "androidx.datastore:datastore-preferences", ve
 #graphics-core = { module = "androidx.graphics:graphics-core", version.ref = "graphics"}
 #graphics-path = { module = "androidx.graphics:graphics-path", version.ref = "graphics1"}
 #graphics-shapes = { module = "androidx.graphics:graphics-shapes", version.ref = "graphics1"}
+#
+
 
 
 #TEST
@@ -142,23 +150,25 @@ junit = { module = "junit:junit", version.ref = "junit" }
 moskito-core = { module = "org.mockito:mockito-core", version.ref = "moskito" }
 moskito-inline = { module = "org.mockito:mockito-inline", version.ref = "moskito-inline" }
 moskito-kotlin = { module = "org.mockito.kotlin:mockito-kotlin", version.ref = "moskito-kotlin" }
-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test" , version.ref = "coroutines-test"}
+kotlin-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test" , version.ref = "coroutines-test"}
 #kotlin-test-common = { module = "org.jetbrains.kotlin:kotlin-test-common", version.ref = "kotlin" }
 #kotlin-test-annotations-common = { module = "org.jetbrains.kotlin:kotlin-test-annotations-common", version.ref = "kotlin" }
 hilt-testing = { module = "com.google.dagger:hilt-android-testing", version.ref = "hiltAndroid" }
 espresso-core = { module = "androidx.test.espresso:espresso-core", version.ref = "espressoCore" }
-ui-test-junit4 = { module = "androidx.compose.ui:ui-test-junit4", version.ref = "ui-test" }
+junit-ui = { module = "androidx.compose.ui:ui-test-junit4", version.ref = "ui-test" }
 ui-test-manifest = { module = "androidx.compose.ui:ui-test-manifest", version.ref = "ui-test" }
-ext-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
+junit-ext = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
 robolectric = { group = "org.robolectric", name = "robolectric", version.ref = "robolectric" }
-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
-material = { group = "com.google.android.material", name = "material", version.ref = "material" }
-#appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
-#material = { group = "com.google.android.material", name = "material", version.ref = "material" }
-#androidx-lifecycle-viewmodel-ktx = { module = "androidx.lifecycle:lifecycle-viewmodel-ktx", version.ref = "lifecycleViewmodelKtx" }
-#androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
 #test-storage = { module = "androidx.test.services:storage", version.ref = "storage" }
 
+legacy-support = { module = "androidx.legacy:legacy-support-v13", version.ref = "legacy" }
+arch-core = { module = "androidx.arch.core:core-testing", version.ref = "arch-core" }
+room-testing = { module = "androidx.room:room-testing", version.ref = "room-testing" }
+truth = { module = "com.google.truth:truth", version.ref = "truth" }
+junit-ktx = { module = "androidx.test.ext:junit-ktx", version.ref = "junit-ktx" }
+core-ktx-test = { module = "androidx.test:core-ktx", version.ref = "core-ktx-test" }
+runner = { module = "androidx.test:runner", version.ref = "runner-test" }
+rules = { module = "androidx.test:rules", version.ref = "rules-test" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }
@@ -179,6 +189,11 @@ serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref 
         "kotlin-stdlib",
         "kotlin-stdlib-common",
         "kotlin-serialization-json",
+    ]
+    core-add = [
+        "kotlin-coroutines-and",
+        "kotlin-coroutines-core",
+        "legacy-support"
     ]
     compose = [
         "compose-activity",
@@ -202,5 +217,8 @@ serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref 
     hiltksp = ["hilt-compiler", "dagger-compiler"]
     gms = [ "gms"]
 
-    testing = ["junit", "hilt-testing", "moskito-core", "moskito-inline", "moskito-kotlin", "coroutines-test", "robolectric"]
-    testingAndroid = ["ext-junit", "espresso-core", "ui-test-junit4"]
+    testImpl = ["arch-core", "core-ktx-test", "junit", "junit-ext", "junit-ktx", "hilt-testing",
+        "kotlin-coroutines-test", "moskito-core", "moskito-inline", "moskito-kotlin", "robolectric",
+        "room-testing", "truth"]
+    androidTestImpl = ["arch-core", "core-ktx-test", "espresso-core", "junit-ext","junit-ktx",
+        "junit-ui", "moskito-inline", "moskito-kotlin", "robolectric", "rules","runner","truth"]

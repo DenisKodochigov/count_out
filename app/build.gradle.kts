@@ -105,7 +105,7 @@ dependencies {
     implementation(libs.datastore)
     debugImplementation(libs.ui.test.manifest)
 //Testing
-    testImplementation (libs.bundles.testing)
+    testImplementation (libs.bundles.testImpl)
     androidTestImplementation (platform(libs.compose.bom))
-    androidTestImplementation (libs.bundles.testingAndroid)
+    androidTestImplementation (libs.bundles.androidTestImpl)
 }

@@ -51,10 +51,7 @@ dependencies {
     implementation(libs.bundles.gms)
 
     debugImplementation(libs.ui.test.manifest)
-    testImplementation (libs.bundles.testing)
+    testImplementation (libs.bundles.testImpl)
     androidTestImplementation (platform(libs.compose.bom))
-    androidTestImplementation (libs.bundles.testingAndroid)
-    testImplementation(libs.junit)
-    androidTestImplementation(libs.ext.junit)
-    androidTestImplementation(libs.espresso.core)
+    androidTestImplementation (libs.bundles.androidTestImpl)
 }

@@ -40,9 +40,8 @@ android {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
     }
-    kotlinOptions {
-        jvmTarget = "17"
-    }
+    kotlinOptions { jvmTarget = "17" }
+    java{ toolchain{ languageVersion = JavaLanguageVersion.of(17) } }
 }
 dependencies {
     implementation(project(":data"))
@@ -65,7 +64,7 @@ dependencies {
     implementation(libs.bundles.gms)
 
     debugImplementation(libs.ui.test.manifest)
-    testImplementation (libs.bundles.testing)
+    testImplementation (libs.bundles.testImpl)
     androidTestImplementation (platform(libs.compose.bom))
-    androidTestImplementation (libs.bundles.testingAndroid)
+    androidTestImplementation (libs.bundles.androidTestImpl)
 }
