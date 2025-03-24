@@ -15,7 +15,8 @@ data class TrainingTable(
 //    @Ignore  var speech: SpeechKit = SpeechKitTable(),
 //    @Ignore  var rounds: List<Round> = emptyList(),
 ){
-    fun fromTrainingSource(training: Training) = TrainingTable(
+    constructor(training: Training) : this(
+        idTraining = training.idTraining,
         name = training.name,
         isSelected = training.isSelected,
         speechId = training.speechId

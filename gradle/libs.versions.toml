@@ -143,8 +143,6 @@ datastore-preferences = {module = "androidx.datastore:datastore-preferences", ve
 #graphics-shapes = { module = "androidx.graphics:graphics-shapes", version.ref = "graphics1"}
 #
 
-
-
 #TEST
 junit = { module = "junit:junit", version.ref = "junit" }
 moskito-core = { module = "org.mockito:mockito-core", version.ref = "moskito" }
