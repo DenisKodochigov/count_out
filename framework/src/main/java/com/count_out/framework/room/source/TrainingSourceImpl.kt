@@ -22,23 +22,24 @@ class TrainingSourceImpl @Inject constructor(
     private val speechKitSource: SpeechKitSource,
 ): TrainingSource {
 
-    override fun update(training: Training){
+    override fun update(training: Training) {
         training.speech?.let { speechKitSource.update(it) }
-        training.rounds.forEach { round-> roundSource.update(round) }
-        dao.update(toTrainingTable(training))
+        training.rounds.forEach { round -> roundSource.update(round) }
+        dao.update(TrainingTable(training))
     }
 
     override fun copy(training: Training): Long {
         val speechId = speechKitSource.copy(
-            training.speech?.let{ it as SpeechKitImplD} ?: SpeechKitImplD())
-        val trainingId = ( dao.add(TrainingTable(name = training.name, speechId = speechId)))
+            training.speech?.let { it as SpeechKitImplD } ?: SpeechKitImplD())
+        val trainingId = (dao.add(TrainingTable(name = training.name, speechId = speechId)))
         if (training.rounds.isNotEmpty()) {
-            training.rounds.forEach { round->
-                roundSource.copy((round as RoundImpl).copy(trainingId = trainingId)) }
+            training.rounds.forEach { round ->
+                roundSource.copy((round as RoundImpl).copy(trainingId = trainingId))
+            }
         } else {
-            roundSource.copy( RoundImpl(trainingId = trainingId, roundType = RoundType.WorkUp))
-            roundSource.copy( RoundImpl(trainingId = trainingId, roundType = RoundType.WorkOut))
-            roundSource.copy( RoundImpl(trainingId = trainingId, roundType = RoundType.WorkDown))
+            roundSource.copy(RoundImpl(trainingId = trainingId, roundType = RoundType.WorkUp))
+            roundSource.copy(RoundImpl(trainingId = trainingId, roundType = RoundType.WorkOut))
+            roundSource.copy(RoundImpl(trainingId = trainingId, roundType = RoundType.WorkDown))
         }
         return trainingId
     }
@@ -48,7 +49,8 @@ class TrainingSourceImpl @Inject constructor(
     }
 
     override fun get(training: Training): Flow<Training> {
-        return dao.getTrainingRel(training.idTraining).map { it.toTraining() } }
+        return dao.getTrainingRel(training.idTraining).map { it.toTraining() }
+    }
 
     override fun del(training: Training) {
         training.rounds.forEach { roundSource.del(it as RoundImpl) }
@@ -56,11 +58,4 @@ class TrainingSourceImpl @Inject constructor(
         training.speech?.let { speechKitSource.del(it as SpeechKitImplD) }
         dao.del(training.idTraining)
     }
-
-    private fun toTrainingTable(training: Training) =
-        TrainingTable(
-//            idTraining = training.idTraining,
-            name = training.name,
-            speechId = training.speechId
-        )
 }

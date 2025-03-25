@@ -1,7 +1,5 @@
 package com.count_out.framework
 
-import com.count_out.data.models.SpeechImplD
-import com.count_out.data.models.SpeechKitImplD
 import com.count_out.data.models.TrainingImplD
 import com.count_out.data.source.room.RingSource
 import com.count_out.data.source.room.RoundSource
@@ -29,11 +27,40 @@ class TrainingSourceTest {
 
     @ExperimentalCoroutinesApi
     @Test
-    fun testAddTrainings() = runTest {
+    fun testAddTraining() = runTest {
         val training = createTraining()
+        whenever(dao.add(TrainingTable(training))).thenReturn(1L)
         val trainingId = trainingSource.copy(training)
-        whenever(dao.add(TrainingTable(training))).thenReturn(1)
         Assert.assertEquals(1, trainingId)
+    }
+    @ExperimentalCoroutinesApi
+    @Test
+    fun testGetTraining() = runTest {
+        val training = createTraining(id = 1)
+        whenever(dao.getTrainingRel(training.idTraining)).thenReturn(
+            flowOf( TrainingRel(
+                training = TrainingTable(training),
+                rounds = emptyList(),
+                rings =  emptyList(),
+                speechKit = null
+            ))
+        )
+        val trainingId = trainingSource.get(training).first()
+        Assert.assertEquals(training, trainingId)
+    }
+    @ExperimentalCoroutinesApi
+    @Test
+    fun testGetTrainings() = runTest {
+        val list = listOf(createTraining(id = 1), createTraining(id = 2), createTraining(id = 3))
+        whenever(dao.getTrainingsRel()).thenReturn(
+            flowOf( listOf(
+                TrainingRel(training = TrainingTable(list[0]), rounds = emptyList(), rings =  emptyList(), speechKit = null),
+                TrainingRel(training = TrainingTable(list[1]), rounds = emptyList(), rings =  emptyList(), speechKit = null),
+                TrainingRel(training = TrainingTable(list[2]), rounds = emptyList(), rings =  emptyList(), speechKit = null),
+            ))
+        )
+        val result = trainingSource.gets().first()
+        Assert.assertEquals(list, result)
     }
 //    @ExperimentalCoroutinesApi
 //    @Test
@@ -66,12 +93,7 @@ class TrainingSourceTest {
             amountActivity = 0,
             isSelected = false,
             speechId = 0,
-            speech = SpeechKitImplD(
-                beforeEnd = SpeechImplD(),
-                beforeStart = SpeechImplD(),
-                afterStart = SpeechImplD(),
-                afterEnd = SpeechImplD()
-            ),
+            speech = null,
             rings = emptyList(),
             rounds = emptyList(),
         )

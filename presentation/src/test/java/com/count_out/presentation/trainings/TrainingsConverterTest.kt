@@ -1,4 +1,4 @@
-package com.count_out.presentation.trainins
+package com.count_out.presentation.trainings
 
 import com.count_out.domain.use_case.trainings.CopyTrainingUC
 import com.count_out.domain.use_case.trainings.DeleteTrainingUC

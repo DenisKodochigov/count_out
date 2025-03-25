@@ -3,7 +3,7 @@
 kotlin = "2.1.0"
 kspVersion = "2.1.0-1.0.29"
 serialization_plugin = "2.0.21"
-agp = "8.9.0"
+agp = "8.9.1"
 composeV = "1.7.8"
 composeBom = "2025.03.00"
 composeActivity = "1.10.1"
@@ -218,5 +218,4 @@ serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref 
     testImpl = ["arch-core", "core-ktx-test", "junit", "junit-ext", "junit-ktx", "hilt-testing",
         "kotlin-coroutines-test", "moskito-core", "moskito-inline", "moskito-kotlin", "robolectric",
         "room-testing", "truth"]
-    androidTestImpl = ["arch-core", "core-ktx-test", "espresso-core", "junit-ext","junit-ktx",
-        "junit-ui", "moskito-inline", "moskito-kotlin", "robolectric", "rules","runner","truth"]
+    androidTestImpl = ["espresso-core", "junit-ui", "moskito-kotlin",  "rules","runner"]

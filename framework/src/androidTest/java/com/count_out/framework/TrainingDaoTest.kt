@@ -1,8 +1,7 @@
 package com.count_out.framework
 
-import android.content.Context
 import androidx.room.Room
-import androidx.test.core.app.ApplicationProvider
+import androidx.test.platform.app.InstrumentationRegistry
 import com.count_out.data.models.SpeechImplD
 import com.count_out.data.models.SpeechKitImplD
 import com.count_out.data.models.TrainingImplD
@@ -13,14 +12,16 @@ import com.count_out.data.source.room.TrainingSource
 import com.count_out.framework.room.AppDataBase
 import com.count_out.framework.room.db.training.TrainingDao
 import com.count_out.framework.room.source.TrainingSourceImpl
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.test.runTest
 import org.junit.After
+import org.junit.Assert
 import org.junit.Before
-import org.junit.runner.RunWith
+import org.junit.Test
 import org.mockito.Mockito.mock
-import org.robolectric.RobolectricTestRunner
 import java.io.IOException
 
-@RunWith(RobolectricTestRunner::class)
 class TrainingDaoTest {
 
     private lateinit var dao: TrainingDao
@@ -33,7 +34,7 @@ class TrainingDaoTest {
     // InstrumentationRegistry.getInstrumentation().context,
     @Before
     fun createDb() {
-        val context = ApplicationProvider.getApplicationContext<Context>()
+        val context = InstrumentationRegistry.getInstrumentation().targetContext
         db = Room.inMemoryDatabaseBuilder(context, AppDataBase::class.java).build()
         dao = db.trainingDao()
         trainingSource = TrainingSourceImpl(dao, roundSource, ringSource, speechKitSource)
@@ -42,15 +43,15 @@ class TrainingDaoTest {
     @Throws(IOException::class)
     fun closeDb() { db.close() }
 
-//    @ExperimentalCoroutinesApi
-//    @Test
-//    fun testAddTrainings() = runTest {
-//        val expected = createTraining(id = 1)
-//        val training = createTraining()
-//        val trainingId = trainingSource.copy(training)
-//        val resultGet = trainingSource.get(training.copy(idTraining = trainingId)).first()
-//        Assert.assertEquals(expected, resultGet)
-//    }
+    @ExperimentalCoroutinesApi
+    @Test
+    fun testAddTrainings() = runTest {
+        val expected = createTraining(id = 1)
+        val training = createTraining()
+        val trainingId = trainingSource.copy(training)
+        val resultGet = trainingSource.get(training.copy(idTraining = trainingId)).first()
+        Assert.assertEquals(expected, resultGet)
+    }
 //    @ExperimentalCoroutinesApi
 //    @Test
 //    fun testGetTrainings() = runTest {
