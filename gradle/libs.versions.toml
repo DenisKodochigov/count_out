@@ -38,6 +38,7 @@ coroutines-test = "1.10.1"
 moskito = "5.12.0"
 moskito-inline = "5.2.0"
 moskito-kotlin = "5.4.0"
+moskito-android = "2.28.2"
 ui-test = "1.7.8"
 robolectric = "4.2.1"
 activity = "1.10.1"
@@ -148,6 +149,7 @@ junit = { module = "junit:junit", version.ref = "junit" }
 moskito-core = { module = "org.mockito:mockito-core", version.ref = "moskito" }
 moskito-inline = { module = "org.mockito:mockito-inline", version.ref = "moskito-inline" }
 moskito-kotlin = { module = "org.mockito.kotlin:mockito-kotlin", version.ref = "moskito-kotlin" }
+moskito-android = { module = "org.mockito:mockito-android", version.ref = "moskito-android" }
 kotlin-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test" , version.ref = "coroutines-test"}
 #kotlin-test-common = { module = "org.jetbrains.kotlin:kotlin-test-common", version.ref = "kotlin" }
 #kotlin-test-annotations-common = { module = "org.jetbrains.kotlin:kotlin-test-annotations-common", version.ref = "kotlin" }
@@ -216,6 +218,6 @@ serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref 
     gms = [ "gms"]
 
     testImpl = ["arch-core", "core-ktx-test", "junit", "junit-ext", "junit-ktx", "hilt-testing",
-        "kotlin-coroutines-test", "moskito-core", "moskito-inline", "moskito-kotlin", "robolectric",
+        "kotlin-coroutines-test", "moskito-core", "moskito-kotlin", "robolectric",
         "room-testing", "truth"]
-    androidTestImpl = ["espresso-core", "junit-ui", "moskito-kotlin",  "rules","runner"]
+    androidTestImpl = ["espresso-core", "junit-ui", "moskito-kotlin", "moskito-android",  "rules","runner"]

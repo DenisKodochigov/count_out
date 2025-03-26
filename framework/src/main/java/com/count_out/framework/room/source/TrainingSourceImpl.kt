@@ -48,8 +48,8 @@ class TrainingSourceImpl @Inject constructor(
         return dao.getTrainingsRel().map { list -> list.map { item -> item.toTraining() } }
     }
 
-    override fun get(training: Training): Flow<Training> {
-        return dao.getTrainingRel(training.idTraining).map { it.toTraining() }
+    override fun get(training: Training): Flow<Training?> {
+        return dao.getTrainingRel(training.idTraining).map { it?.let { it1-> it1.toTraining() } ?: null }
     }
 
     override fun del(training: Training) {

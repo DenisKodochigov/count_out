@@ -18,7 +18,9 @@ class SpeechKitSourceImpl @Inject constructor(
 
     override fun get(id: Long): Flow<SpeechKitImplD> = daoSpeechKit.get(id).map { it.toSpeechKit() }
 
-    override fun copy(speechKit: SpeechKit): Long = daoSpeechKit.add( toSpeechKitTable(speechKit) )
+    override fun copy(speechKit: SpeechKit): Long {
+        return  daoSpeechKit.add( toSpeechKitTable(speechKit) )
+    }
 
     override fun update(speechKit: SpeechKit) {
         speechSource.update(speechKit.beforeStart as SpeechImplD)

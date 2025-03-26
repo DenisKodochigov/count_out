@@ -21,7 +21,7 @@ interface TrainingDao {
 
     @Transaction
     @Query("SELECT * FROM tb_trainings WHERE idTraining = :id")
-    fun getTrainingRel(id: Long): Flow<TrainingRel>
+    fun getTrainingRel(id: Long): Flow<TrainingRel?>
 
     @Transaction
     @Query("SELECT * FROM tb_trainings WHERE idTraining != 1")

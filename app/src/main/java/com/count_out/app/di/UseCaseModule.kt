@@ -83,7 +83,7 @@ class UseCaseModule {
     @Provides
     fun provideSelectTrainingUseCase(
         configuration: UseCase.Configuration,
-        trainingRepo: TrainingRepo): SelectTrainingUC = SelectTrainingUC(configuration, trainingRepo)
+        trainingRepo: TrainingRepo): SelectTrainingUC = SelectTrainingUC(configuration)
     @Singleton
     @Provides
     fun provideUpdateTrainingUseCase(

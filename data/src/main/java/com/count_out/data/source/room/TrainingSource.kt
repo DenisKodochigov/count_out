@@ -5,7 +5,7 @@ import kotlinx.coroutines.flow.Flow
 
 interface TrainingSource {
     fun gets(): Flow<List<Training>>
-    fun get(training: Training): Flow<Training>
+    fun get(training: Training): Flow<Training?>
     fun copy(training: Training): Long
     fun update(training: Training)
     fun del(training: Training)
