@@ -16,6 +16,7 @@ import org.junit.Assert
 import org.junit.Test
 import org.mockito.Mockito.mock
 import org.mockito.kotlin.whenever
+import java.util.Collections.emptyList
 
 class TrainingSourceTest {
     private val dao = mock<TrainingDao>()
@@ -23,7 +24,6 @@ class TrainingSourceTest {
     private val ringSource = mock<RingSource>()
     private val speechKitSource = mock<SpeechKitSource>()
     private val trainingSource = TrainingSourceImpl(dao, roundSource, ringSource,speechKitSource)
-
 
     @ExperimentalCoroutinesApi
     @Test
@@ -62,30 +62,7 @@ class TrainingSourceTest {
         val result = trainingSource.gets().first()
         Assert.assertEquals(list, result)
     }
-//    @ExperimentalCoroutinesApi
-//    @Test
-//    fun testGetTrainings() = runTest {
-////        val expectedTraining = createTraining(id = 1)
-//        val training = createTraining(id = 1)
-//        whenever(dao.getTrainingRel(training.idTraining)).thenReturn(flowOf(TrainingRel(
-//            training = TrainingTable(training),
-//            rounds = emptyList(),
-//            rings = emptyList(),
-//            speechKit = null
-//        )))
-//        val resultGet = trainingSource.get(training).first()
-//        Assert.assertEquals(training, resultGet)
-//    }
 
-    //
-//    @ExperimentalCoroutinesApi
-//    @Test
-//    fun testAddUsers() = runTest {
-//        val localPosts = listOf(PostEntity(1, 1, "title", "body"))
-//        val posts = listOf(Post(1, 1, "title", "body"))
-//        postDataSource.addPosts(posts)
-//        verify(postDao).insertPosts(localPosts)
-//    }
     fun createTraining(id: Long =0): TrainingImplD {
         return TrainingImplD(
             idTraining = id,
