@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.androidLibrary)
     alias(libs.plugins.jetbrainsKotlinAndroid)
     alias(libs.plugins.serialization)
+    alias(libs.plugins.mannodermaus)
     alias(libs.plugins.hilt)
     alias(libs.plugins.ksp)
 }
@@ -36,6 +37,9 @@ android {
 //                getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
 //        }
     }
+    packaging {
+        resources.excludes.addAll(listOf("META-INF/LICENSE.md", "META-INF/LICENSE-notice.md",))
+    }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
@@ -64,6 +68,7 @@ dependencies {
 
     debugImplementation(libs.ui.test.manifest)
     testImplementation (libs.bundles.testImpl)
-    androidTestImplementation (platform(libs.compose.bom))
+//    androidTestImplementation (platform(libs.compose.bom))
     androidTestImplementation (libs.bundles.androidTestImpl)
+    testRuntimeOnly(libs.jupiter.engine)
 }

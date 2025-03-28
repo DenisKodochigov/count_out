@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.androidLibrary)
     alias(libs.plugins.jetbrainsKotlinAndroid)
+    alias(libs.plugins.mannodermaus)
     alias(libs.plugins.hilt)
     alias(libs.plugins.ksp)
 }

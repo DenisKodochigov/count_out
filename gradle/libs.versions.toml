@@ -5,7 +5,7 @@ kspVersion = "2.1.0-1.0.29"
 serialization_plugin = "2.0.21"
 agp = "8.9.1"
 composeV = "1.7.8"
-composeBom = "2025.03.00"
+composeBom = "2025.03.01"
 composeActivity = "1.10.1"
 legacy = "1.0.0"
 #graphics = "1.0.2"
@@ -23,7 +23,7 @@ moshi = "1.15.2"
 
 navigationCompose = "2.8.9"
 roomV = "2.6.1"
-datastore = "1.1.3"
+datastore = "1.1.4"
 serialization = "1.7.3"
 kotlinx-coroutines = "1.10.1"
 gmsV = "21.3.0"
@@ -32,8 +32,15 @@ okhttp3 = "4.12.0"
 paletteKtx = "1.0.0"
 
 junit = "4.13.2"
+jupiter = "5.11.1"
+junit-platform = "1.11.1"
 espressoCore = "3.6.1"
 junitVersion = "1.2.1"
+assertj = "3.11.1"
+
+mannodermaus = "1.11.0.0"
+mannodermaus-plug = "1.11.0.0"
+
 coroutines-test = "1.10.1"
 moskito = "5.12.0"
 moskito-inline = "5.2.0"
@@ -146,8 +153,24 @@ datastore-preferences = {module = "androidx.datastore:datastore-preferences", ve
 
 #TEST
 junit = { module = "junit:junit", version.ref = "junit" }
+junit-platform = { module = "org.junit.platform:junit-platform-commons", version.ref = "junit-platform" }
+junit-jupiter = { module = "org.junit.jupiter:junit-jupiter", version.ref = "jupiter" }
+jupiter-params = { module = "org.junit.jupiter:junit-jupiter-params", version.ref = "jupiter" }
+jupiter-api = { module = "org.junit.jupiter:junit-jupiter-api", version.ref = "jupiter" }
+jupiter-engine = { module = "org.junit.jupiter:junit-jupiter-engine", version.ref = "jupiter" }
+junit-ui = { module = "androidx.compose.ui:ui-test-junit4", version.ref = "ui-test" }
+    #room testing
+android-test-ext = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
+robolectric = { group = "org.robolectric", name = "robolectric", version.ref = "robolectric" }
+room-testing = { module = "androidx.room:room-testing", version.ref = "room-testing" }
+
+runner = { module = "androidx.test:runner", version.ref = "runner-test" }
+mannodermaus = { module = "de.mannodermaus.junit5:android-test-core", version.ref = "mannodermaus" }
+mannodermaus-run = { module = "de.mannodermaus.junit5:android-test-runner", version.ref = "mannodermaus" }
+mannodermaus-plug = { module = "de.mannodermaus.gradle.plugins:android-junit5", version.ref = "mannodermaus" }
+
 moskito-core = { module = "org.mockito:mockito-core", version.ref = "moskito" }
-moskito-inline = { module = "org.mockito:mockito-inline", version.ref = "moskito-inline" }
+#moskito-inline = { module = "org.mockito:mockito-inline", version.ref = "moskito-inline" }
 moskito-kotlin = { module = "org.mockito.kotlin:mockito-kotlin", version.ref = "moskito-kotlin" }
 moskito-android = { module = "org.mockito:mockito-android", version.ref = "moskito-android" }
 kotlin-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test" , version.ref = "coroutines-test"}
@@ -155,19 +178,13 @@ kotlin-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-te
 #kotlin-test-annotations-common = { module = "org.jetbrains.kotlin:kotlin-test-annotations-common", version.ref = "kotlin" }
 hilt-testing = { module = "com.google.dagger:hilt-android-testing", version.ref = "hiltAndroid" }
 espresso-core = { module = "androidx.test.espresso:espresso-core", version.ref = "espressoCore" }
-junit-ui = { module = "androidx.compose.ui:ui-test-junit4", version.ref = "ui-test" }
 ui-test-manifest = { module = "androidx.compose.ui:ui-test-manifest", version.ref = "ui-test" }
-junit-ext = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
-robolectric = { group = "org.robolectric", name = "robolectric", version.ref = "robolectric" }
 #test-storage = { module = "androidx.test.services:storage", version.ref = "storage" }
 
 legacy-support = { module = "androidx.legacy:legacy-support-v13", version.ref = "legacy" }
 arch-core = { module = "androidx.arch.core:core-testing", version.ref = "arch-core" }
-room-testing = { module = "androidx.room:room-testing", version.ref = "room-testing" }
 truth = { module = "com.google.truth:truth", version.ref = "truth" }
-junit-ktx = { module = "androidx.test.ext:junit-ktx", version.ref = "junit-ktx" }
 core-ktx-test = { module = "androidx.test:core-ktx", version.ref = "core-ktx-test" }
-runner = { module = "androidx.test:runner", version.ref = "runner-test" }
 rules = { module = "androidx.test:rules", version.ref = "rules-test" }
 
 [plugins]
@@ -179,6 +196,7 @@ ksp = { id = "com.google.devtools.ksp", version.ref = "kspVersion"}
 hilt = { id = "com.google.dagger.hilt.android", version.ref = "hiltAndroid"}
 serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "serialization_plugin"}
 #firebase = { id = "com.google.firebase.crashlytics", version.ref = "firebase_crashlytics"}
+mannodermaus = { id = "de.mannodermaus.android-junit5", version.ref = "mannodermaus-plug" }
 
 [bundles]
     core = [
@@ -217,7 +235,22 @@ serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref 
     hiltksp = ["hilt-compiler", "dagger-compiler"]
     gms = [ "gms"]
 
-    testImpl = ["arch-core", "core-ktx-test", "junit", "junit-ext", "junit-ktx", "hilt-testing",
-        "kotlin-coroutines-test", "moskito-core", "moskito-kotlin", "robolectric",
-        "room-testing", "truth"]
-    androidTestImpl = ["espresso-core", "junit-ui", "moskito-kotlin", "moskito-android",  "rules","runner"]
+    testImpl = [
+        "junit",
+        "junit-ui", #ruTest
+        "jupiter-params",
+        "jupiter-api",
+        "moskito-core",
+        "moskito-kotlin",
+        #room
+        "robolectric",
+        "android-test-ext",
+        "room-testing",
+    ]
+    androidTestImpl = [
+        "junit",
+        "junit-jupiter",
+        "junit-ui", #ruTest
+        #"jupiter-params",
+        "jupiter-api",
+    ]

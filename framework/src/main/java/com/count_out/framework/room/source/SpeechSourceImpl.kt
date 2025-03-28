@@ -1,6 +1,5 @@
 package com.count_out.framework.room.source
 
-import android.util.Log
 import com.count_out.data.models.SpeechImplD
 import com.count_out.data.source.room.SpeechSource
 import com.count_out.framework.room.db.speech.SpeechDao
@@ -16,8 +15,6 @@ class SpeechSourceImpl @Inject constructor(private val dao: SpeechDao): SpeechSo
     override fun copy(speech: SpeechImplD): Long = dao.add(toSpeechTable(speech)) // idSpeech must be = 0
 
     override fun update(speech: SpeechImplD) {
-
-        Log.d("KDS", " $speech")
         dao.update(toSpeechTable(speech, speech.idSpeech)) }// idSpeech must be != 0
 
     override fun del(id: Long) { dao.del(id) }

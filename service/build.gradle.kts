@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.androidLibrary)
     alias(libs.plugins.jetbrainsKotlinAndroid)
+    alias(libs.plugins.mannodermaus)
     alias(libs.plugins.hilt)
     alias(libs.plugins.ksp)
 }
@@ -48,11 +49,8 @@ dependencies {
     //Hilt
     implementation (libs.bundles.hilt)
     ksp (libs.bundles.hiltksp)
-    testImplementation(libs.junit)
-    androidTestImplementation(libs.junit.ext)
-    androidTestImplementation(libs.espresso.core)
 //Testing
     testImplementation (libs.bundles.testImpl)
-    androidTestImplementation (platform(libs.compose.bom))
+//    androidTestImplementation (platform(libs.compose.bom))
     androidTestImplementation (libs.bundles.androidTestImpl)
 }

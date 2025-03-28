@@ -8,8 +8,8 @@ import com.count_out.framework.retrofit.weather.entity.WeatherUnitsOpenMeteo
 import com.count_out.framework.retrofit.weather.source.WeatherSourceImpl
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
-import org.junit.Assert
-import org.junit.Test
+import org.junit.jupiter.api.Assertions
+import org.junit.jupiter.api.Test
 import org.mockito.Mockito.mock
 import org.mockito.kotlin.whenever
 
@@ -23,7 +23,7 @@ class WeatherSourceTest {
         val expectedWeather = getWeather()
         whenever(api.getWeather(0.0,0.0,"")).thenReturn(getResponseOpenMeteo())
         val result = source.get(0.0,0.0,"").first()
-        Assert.assertEquals(expectedWeather, result)
+        Assertions.assertEquals(expectedWeather, result)
     }
 
     private fun getWeather() = WeatherImpl(

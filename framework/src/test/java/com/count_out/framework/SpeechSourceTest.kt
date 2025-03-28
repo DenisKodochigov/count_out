@@ -6,8 +6,8 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.last
 import kotlinx.coroutines.test.runTest
-import org.junit.Assert
-import org.junit.Test
+import org.junit.jupiter.api.Assertions
+import org.junit.jupiter.api.Test
 import org.mockito.Mockito.mock
 import org.mockito.kotlin.any
 import org.mockito.kotlin.argumentCaptor
@@ -24,13 +24,13 @@ class SpeechSourceTest {
         speechSource.copy(speech)
         val captor = argumentCaptor<SpeechImplD>()
         verify(speechSource).copy(captor.capture())
-        Assert.assertEquals(speech.message, captor.firstValue.message)
+        Assertions.assertEquals(speech.message, captor.firstValue.message)
     }
     @Test
     fun getSpeech() = runTest{
         whenever(speechSource.get(1)).thenReturn( flowOf(expectedSpeech) )
         val speech = speechSource.get(1).last()
-        Assert.assertEquals(speech, expectedSpeech)
+        Assertions.assertEquals(speech, expectedSpeech)
     }
 
     @Test

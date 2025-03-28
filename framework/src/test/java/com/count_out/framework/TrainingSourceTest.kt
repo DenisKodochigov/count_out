@@ -12,8 +12,8 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
-import org.junit.Assert
-import org.junit.Test
+import org.junit.jupiter.api.Assertions
+import org.junit.jupiter.api.Test
 import org.mockito.Mockito.mock
 import org.mockito.kotlin.whenever
 import java.util.Collections.emptyList
@@ -31,7 +31,7 @@ class TrainingSourceTest {
         val training = createTraining()
         whenever(dao.add(TrainingTable(training))).thenReturn(1L)
         val trainingId = trainingSource.copy(training)
-        Assert.assertEquals(1, trainingId)
+        Assertions.assertEquals(1, trainingId)
     }
     @ExperimentalCoroutinesApi
     @Test
@@ -46,7 +46,7 @@ class TrainingSourceTest {
             ))
         )
         val trainingId = trainingSource.get(training).first()
-        Assert.assertEquals(training, trainingId)
+        Assertions.assertEquals(training, trainingId)
     }
     @ExperimentalCoroutinesApi
     @Test
@@ -60,7 +60,7 @@ class TrainingSourceTest {
             ))
         )
         val result = trainingSource.gets().first()
-        Assert.assertEquals(list, result)
+        Assertions.assertEquals(list, result)
     }
 
     fun createTraining(id: Long =0): TrainingImplD {
