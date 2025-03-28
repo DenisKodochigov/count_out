@@ -33,21 +33,23 @@ paletteKtx = "1.0.0"
 
 junit = "4.13.2"
 jupiter = "5.11.1"
-junit-platform = "1.11.1"
-espressoCore = "3.6.1"
-junitVersion = "1.2.1"
-assertj = "3.11.1"
+#junit-platform = "1.11.1"
+#junitVersion = "1.2.1"
 
-mannodermaus = "1.11.0.0"
+#espressoCore = "3.6.1"
+
+#mannodermaus = "1.11.0.0"
 mannodermaus-plug = "1.11.0.0"
 
-coroutines-test = "1.10.1"
+#coroutines-test = "1.10.1"
+
 moskito = "5.12.0"
-moskito-inline = "5.2.0"
 moskito-kotlin = "5.4.0"
-moskito-android = "2.28.2"
+#moskito-inline = "5.2.0"
+#moskito-android = "2.28.2"
+
 ui-test = "1.7.8"
-robolectric = "4.2.1"
+#robolectric = "4.2.1"
 activity = "1.10.1"
 activityKtx = "1.10.1"
 #storage = "1.5.0"
@@ -57,13 +59,13 @@ activityKtx = "1.10.1"
 #mapsUtilsKtx = "3.4.0"
 #firebaseBom = "33.4.0"
 
-arch-core = "2.2.0"
-room-testing = "2.6.1"
-truth = "1.1.2"
-junit-ktx = "1.2.1"
-core-ktx-test = "1.6.1"
-runner-test = "1.6.2"
-rules-test = "1.6.1"
+#arch-core = "2.2.0"
+#room-testing = "2.6.1"
+#truth = "1.1.2"
+#junit-ktx = "1.2.1"
+#core-ktx-test = "1.6.1"
+#runner-test = "1.6.2"
+#rules-test = "1.6.1"
 
 [libraries]
 core-ktx = { module = "androidx.core:core-ktx", version.ref = "coreKtx" }
@@ -75,6 +77,7 @@ kotlin-stdlib = { module = "org.jetbrains.kotlin:kotlin-stdlib", version.ref = "
 kotlin-stdlib-common = { module = "org.jetbrains.kotlin:kotlin-stdlib-common", version.ref = "kotlin" }
 kotlin-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core-jvm", version.ref = "kotlinx-coroutines" }
 kotlin-coroutines-and = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "kotlinx-coroutines" }
+legacy-support = { module = "androidx.legacy:legacy-support-v13", version.ref = "legacy" }
 #fragment-ktx = { module = "androidx.fragment:fragment-ktx", version.ref = "fragmentKtx" }
 #Navigation
 navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "navigationCompose" }
@@ -153,39 +156,42 @@ datastore-preferences = {module = "androidx.datastore:datastore-preferences", ve
 
 #TEST
 junit = { module = "junit:junit", version.ref = "junit" }
-junit-platform = { module = "org.junit.platform:junit-platform-commons", version.ref = "junit-platform" }
 junit-jupiter = { module = "org.junit.jupiter:junit-jupiter", version.ref = "jupiter" }
-jupiter-params = { module = "org.junit.jupiter:junit-jupiter-params", version.ref = "jupiter" }
 jupiter-api = { module = "org.junit.jupiter:junit-jupiter-api", version.ref = "jupiter" }
 jupiter-engine = { module = "org.junit.jupiter:junit-jupiter-engine", version.ref = "jupiter" }
 junit-ui = { module = "androidx.compose.ui:ui-test-junit4", version.ref = "ui-test" }
-    #room testing
-android-test-ext = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
-robolectric = { group = "org.robolectric", name = "robolectric", version.ref = "robolectric" }
-room-testing = { module = "androidx.room:room-testing", version.ref = "room-testing" }
+#jupiter-params = { module = "org.junit.jupiter:junit-jupiter-params", version.ref = "jupiter" }
+#junit-platform = { module = "org.junit.platform:junit-platform-commons", version.ref = "junit-platform" }
+    #room testing in unit test
+#android-test-ext = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
+#robolectric = { group = "org.robolectric", name = "robolectric", version.ref = "robolectric" }
+#room-testing = { module = "androidx.room:room-testing", version.ref = "room-testing" }
 
-runner = { module = "androidx.test:runner", version.ref = "runner-test" }
-mannodermaus = { module = "de.mannodermaus.junit5:android-test-core", version.ref = "mannodermaus" }
-mannodermaus-run = { module = "de.mannodermaus.junit5:android-test-runner", version.ref = "mannodermaus" }
-mannodermaus-plug = { module = "de.mannodermaus.gradle.plugins:android-junit5", version.ref = "mannodermaus" }
+
+#mannodermaus = { module = "de.mannodermaus.junit5:android-test-core", version.ref = "mannodermaus" }
+#mannodermaus-run = { module = "de.mannodermaus.junit5:android-test-runner", version.ref = "mannodermaus" }
+#mannodermaus-plug = { module = "de.mannodermaus.gradle.plugins:android-junit5", version.ref = "mannodermaus" }
 
 moskito-core = { module = "org.mockito:mockito-core", version.ref = "moskito" }
-#moskito-inline = { module = "org.mockito:mockito-inline", version.ref = "moskito-inline" }
 moskito-kotlin = { module = "org.mockito.kotlin:mockito-kotlin", version.ref = "moskito-kotlin" }
-moskito-android = { module = "org.mockito:mockito-android", version.ref = "moskito-android" }
-kotlin-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test" , version.ref = "coroutines-test"}
+#moskito-inline = { module = "org.mockito:mockito-inline", version.ref = "moskito-inline" }
+#moskito-android = { module = "org.mockito:mockito-android", version.ref = "moskito-android" }
+
+#kotlin-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test" , version.ref = "coroutines-test"}
 #kotlin-test-common = { module = "org.jetbrains.kotlin:kotlin-test-common", version.ref = "kotlin" }
 #kotlin-test-annotations-common = { module = "org.jetbrains.kotlin:kotlin-test-annotations-common", version.ref = "kotlin" }
-hilt-testing = { module = "com.google.dagger:hilt-android-testing", version.ref = "hiltAndroid" }
-espresso-core = { module = "androidx.test.espresso:espresso-core", version.ref = "espressoCore" }
-ui-test-manifest = { module = "androidx.compose.ui:ui-test-manifest", version.ref = "ui-test" }
+#hilt-testing = { module = "com.google.dagger:hilt-android-testing", version.ref = "hiltAndroid" }
+#espresso-core = { module = "androidx.test.espresso:espresso-core", version.ref = "espressoCore" }
 #test-storage = { module = "androidx.test.services:storage", version.ref = "storage" }
 
-legacy-support = { module = "androidx.legacy:legacy-support-v13", version.ref = "legacy" }
-arch-core = { module = "androidx.arch.core:core-testing", version.ref = "arch-core" }
-truth = { module = "com.google.truth:truth", version.ref = "truth" }
-core-ktx-test = { module = "androidx.test:core-ktx", version.ref = "core-ktx-test" }
-rules = { module = "androidx.test:rules", version.ref = "rules-test" }
+#arch-core = { module = "androidx.arch.core:core-testing", version.ref = "arch-core" }
+#truth = { module = "com.google.truth:truth", version.ref = "truth" }
+#core-ktx-test = { module = "androidx.test:core-ktx", version.ref = "core-ktx-test" }
+#rules = { module = "androidx.test:rules", version.ref = "rules-test" }
+#runner = { module = "androidx.test:runner", version.ref = "runner-test" }
+
+
+ui-test-manifest = { module = "androidx.compose.ui:ui-test-manifest", version.ref = "ui-test" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }
@@ -238,19 +244,18 @@ mannodermaus = { id = "de.mannodermaus.android-junit5", version.ref = "mannoderm
     testImpl = [
         "junit",
         "junit-ui", #ruTest
-        "jupiter-params",
         "jupiter-api",
         "moskito-core",
         "moskito-kotlin",
         #room
-        "robolectric",
-        "android-test-ext",
-        "room-testing",
+        #"robolectric",
+        #"android-test-ext",
+        #"room-testing",
     ]
     androidTestImpl = [
         "junit",
         "junit-jupiter",
         "junit-ui", #ruTest
-        #"jupiter-params",
         "jupiter-api",
     ]
+    debug = ["ui-test-manifest"]

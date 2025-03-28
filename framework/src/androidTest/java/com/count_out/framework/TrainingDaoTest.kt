@@ -251,9 +251,7 @@ class TrainingDaoTest {
         }
     }
 
-    @Test
-    @Order(1)
-    fun testTrainingsAdd() {
+    @Test @Order(1) fun testTrainingsAdd() {
         runTest {
             val trainingId = trainingSource.copy(training)
             training = training.copy(idTraining = trainingId)
@@ -261,19 +259,21 @@ class TrainingDaoTest {
             Assertions.assertEquals(expected, resultGet, "Error create training!!!")
         }
     }
-    @Test
-    @Order(2)
-    fun testTrainingsUpdate() {
-        runTest {
-        training = expected.copy(name = "Test Update")
-        trainingSource.update(training)
+    //Проверяем что все данные записаны
+    @Test @Order(2) fun testTrainingsRecord() = runTest {
         val resultGet = trainingSource.get(training).first()
+        Assertions.assertEquals(training, resultGet, "Error update training!!!")
+    }
+
+    @Test @Order(3) fun testTrainingsUpdate() {
+        runTest {
+            training = expected.copy(name = "Test Update")
+            trainingSource.update(training)
+            val resultGet = trainingSource.get(training).first()
             Assertions.assertEquals(training, resultGet, "Error update training!!!")
         }
     }
-    @Test
-    @Order(3)
-    fun testTrainingsDelete()  {
+    @Test @Order(4) fun testTrainingsDelete()  {
         runTest {
             trainingSource.del(training)
             val resultGet = trainingSource.get(training).first()

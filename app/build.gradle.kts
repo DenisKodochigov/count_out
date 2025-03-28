@@ -103,7 +103,7 @@ dependencies {
     ksp (libs.moshi.ksp)
     //DataStore
     implementation(libs.datastore)
-    debugImplementation(libs.ui.test.manifest)
+    debugImplementation(libs.bundles.debug)
 //Testing
     testImplementation (libs.bundles.testImpl)
     androidTestImplementation (platform(libs.compose.bom))
