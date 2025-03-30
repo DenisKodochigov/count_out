@@ -20,6 +20,9 @@ import com.count_out.domain.entity.enums.Goal
 import com.count_out.domain.entity.enums.RoundType
 import com.count_out.domain.entity.enums.Units
 import com.count_out.domain.entity.enums.Zone
+import com.count_out.domain.entity.workout.Ring
+import com.count_out.domain.entity.workout.Round
+import com.count_out.domain.entity.workout.Training
 import com.count_out.framework.room.AppDataBase
 import com.count_out.framework.room.db.training.TrainingDao
 import com.count_out.framework.room.source.ExerciseSourceImpl
@@ -38,7 +41,6 @@ import org.junit.jupiter.api.MethodOrderer
 import org.junit.jupiter.api.Order
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestMethodOrder
-
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation::class)
 class TrainingDaoTest {
@@ -250,22 +252,31 @@ class TrainingDaoTest {
                     afterEnd=SpeechImplD(idSpeech=4, message="", duration=0, addMessage="")))
         }
     }
-
-    @Test @Order(1) fun testTrainingsAdd() {
+    @Test @Order(1) fun testEmptyBase() {
         runTest {
-            val trainingId = trainingSource.copy(training)
-            training = training.copy(idTraining = trainingId)
-            var resultGet = trainingSource.get(training).first()
-            Assertions.assertEquals(expected, resultGet, "Error create training!!!")
+            Assertions.assertEquals(emptyList<Training>(), trainingSource.gets().first(), "Error test training!!!")
+            Assertions.assertEquals(emptyList<Round>(), roundSource.gets(1).first(), "Error test training!!!")
+            Assertions.assertEquals(emptyList<Ring>(), ringSource.gets(1).first(), "Error test training!!!")
+            Assertions.assertEquals(emptyList<ExerciseImplD>(), exerciseSource.getForRing(1).first(), "Error test exercise!!!")
+            Assertions.assertEquals(emptyList<ExerciseImplD>(), exerciseSource.getForRound(1).first(), "Error test exercise!!!")
+            Assertions.assertEquals(emptyList<SetImplD>(), setSource.gets(1).first(), "Error test set!!!")
+            Assertions.assertNull( speechSource.get(1).first(), "Error test speech!!!")
+            Assertions.assertNull( speechKitSource.get(1).first(), "Error test speechKit!!!")
         }
     }
+    @Test @Order(2) fun testTrainingsAdd() = runTest {
+        val trainingId = trainingSource.copy(training)
+        training = training.copy(idTraining = trainingId)
+        var resultGet = trainingSource.get(training).first()
+        Assertions.assertEquals(expected, resultGet, "Error create training!!!")
+    }
     //Проверяем что все данные записаны
-    @Test @Order(2) fun testTrainingsRecord() = runTest {
+    @Test @Order(3) fun testTrainingsRecord() = runTest {
         val resultGet = trainingSource.get(training).first()
-        Assertions.assertEquals(training, resultGet, "Error update training!!!")
+        Assertions.assertEquals(expected, resultGet, "Error update training!!!")
     }
 
-    @Test @Order(3) fun testTrainingsUpdate() {
+    @Test @Order(4) fun testTrainingsUpdate() {
         runTest {
             training = expected.copy(name = "Test Update")
             trainingSource.update(training)
@@ -273,11 +284,22 @@ class TrainingDaoTest {
             Assertions.assertEquals(training, resultGet, "Error update training!!!")
         }
     }
-    @Test @Order(4) fun testTrainingsDelete()  {
+    @Test @Order(5) fun testTrainingsDelete()  {
         runTest {
             trainingSource.del(training)
             val resultGet = trainingSource.get(training).first()
             Assertions.assertNull(resultGet)}
     }
-
+    @Test @Order(6) fun testEmptyDelBase() {
+        runTest {
+            Assertions.assertEquals(emptyList<Training>(), trainingSource.gets().first(), "Error test training!!!")
+            Assertions.assertEquals(emptyList<Round>(), roundSource.gets(1).first(), "Error test training!!!")
+            Assertions.assertEquals(emptyList<Ring>(), ringSource.gets(1).first(), "Error test training!!!")
+            Assertions.assertEquals(emptyList<ExerciseImplD>(), exerciseSource.getForRing(1).first(), "Error test exercise!!!")
+            Assertions.assertEquals(emptyList<ExerciseImplD>(), exerciseSource.getForRound(1).first(), "Error test exercise!!!")
+            Assertions.assertEquals(emptyList<SetImplD>(), setSource.gets(1).first(), "Error test set!!!")
+            Assertions.assertNull( speechSource.get(1).first(), "Error test speech!!!")
+            Assertions.assertNull( speechKitSource.get(1).first(), "Error test speechKit!!!")
+        }
+    }
 }

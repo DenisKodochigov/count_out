@@ -14,13 +14,13 @@ interface SetDao {
     fun add(item: SetTable): Long
 
     @Update
-    fun update(item: SetTable)
+    fun update(item: SetTable): Int?
 
     @Query("DELETE FROM tb_set WHERE idSet = :id")
-    fun del(id: Long)
+    fun del(id: Long): Int?
 
     @Query("DELETE FROM tb_set WHERE exerciseId = :id")
-    fun dels(id: Long)
+    fun dels(id: Long): Int?
 
     @Transaction
     @Query("SELECT * FROM tb_set WHERE exerciseId = :exerciseId")
@@ -28,5 +28,5 @@ interface SetDao {
 
     @Transaction
     @Query("SELECT * FROM tb_set WHERE idSet = :id")
-    fun get(id: Long): Flow<SetRel>
+    fun get(id: Long): Flow<SetRel?>
 }

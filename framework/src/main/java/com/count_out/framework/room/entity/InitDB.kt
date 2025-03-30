@@ -105,6 +105,7 @@ private fun createTrainingId0( db: AppDataBase) {
 
     val idTraining = db.trainingDao().add(TrainingTable(name = "", idTraining = 0,
         speechId = addSpeechKit(db, bs = "Начало тренировки", ae = "Тренировка окончена",)))
+    if (idTraining == null) return
 //Разминка
     db.roundDao().add(RoundTable(trainingId = idTraining, roundType = RoundType.UP.ordinal,
         speechId = addSpeechKit(db)))
@@ -189,6 +190,7 @@ private fun createTrainingPlansTesting( db: AppDataBase) {
     val reps = 3
     val idTraining = db.trainingDao().add(TrainingTable(name = "Тестовая",
         speechId = addSpeechKit(db, bs = "Начало тренировки", ae = "Тренировка окончена",)))
+    if (idTraining == null) return
 //Разминка
     var idRound = db.roundDao().add(RoundTable(trainingId = idTraining, roundType = RoundType.UP.ordinal,
         speechId = addSpeechKit(db, bs = "Разминка", ae = "",)))

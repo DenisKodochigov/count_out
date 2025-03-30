@@ -15,8 +15,8 @@ interface SpeechKitDao {
 
     @Transaction
     @Query("SELECT * FROM tb_speech_kit WHERE idSpeechKit = :id")
-    fun get(id: Long): Flow<SpeechKitRel>
+    fun get(id: Long): Flow<SpeechKitRel?>
 
     @Query("DELETE FROM tb_speech_kit WHERE idSpeechKit = :id")
-    fun del(id: Long)
+    fun del(id: Long): Int?
 }

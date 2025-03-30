@@ -14,18 +14,18 @@ interface RingDao {
     fun add(item: RingTable): Long
 
     @Update
-    fun update(item: RingTable)
+    fun update(item: RingTable): Int?
 
     @Transaction
     @Query("SELECT * FROM tb_ring WHERE idRing = :id")
-    fun get(id: Long): Flow<RingRel>
+    fun get(id: Long): Flow<RingRel?>
 
     @Transaction
     @Query("SELECT * FROM tb_ring WHERE trainingId = :trainingID")
     fun gets( trainingID: Long): Flow<List<RingRel>>
 
     @Query("DELETE FROM tb_ring WHERE idRing = :id")
-    fun del(id: Long)
+    fun del(id: Long): Int?
 
     @Query("SELECT * FROM tb_ring WHERE trainingId = :trainingID")
     fun getRingsForTraining( trainingID: Long): List<RingTable>

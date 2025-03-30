@@ -2,6 +2,8 @@ package com.count_out.framework.room.db.set
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.count_out.data.models.SetImplD
+import com.count_out.domain.entity.enums.Goal
 
 @Entity(tableName = "tb_set")
 data class SetTable (
@@ -24,6 +26,26 @@ data class SetTable (
     var timeRest: Double = 0.0,
     var timeRestU: Int = 1,
 ){
+    constructor(set: SetImplD): this(
+        idSet = set.idSet,
+        name = set.name,
+        speechId = set.speechId,
+        goal = set.goal.ordinal,
+        exerciseId = set.exerciseId,
+        reps = set.reps,
+        duration = set.duration.value,
+        durationU = set.duration.unit.ordinal,
+        distance = set.distance.value,
+        distanceU = set.distance.unit.ordinal,
+        weight = set.weight.value,
+        weightU = set.weight.unit.ordinal,
+        intervalReps = set.intervalReps,
+        intensity = set.intensity.ordinal,
+        intervalDown = set.intervalDown,
+        groupCount = set.groupCount,
+        timeRest = set.rest.value,
+        timeRestU = set.rest.unit.ordinal,
+    )
 //    fun toSetImpl() = SetImpl(
 //        idSet = this.idSet,
 //        name = this.name,

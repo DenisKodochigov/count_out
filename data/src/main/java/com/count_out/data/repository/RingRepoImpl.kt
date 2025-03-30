@@ -5,10 +5,11 @@ import com.count_out.data.source.room.RingSource
 import com.count_out.domain.entity.workout.Ring
 import com.count_out.domain.repository.trainings.RingRepo
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.filterNotNull
 import javax.inject.Inject
 
 class RingRepoImpl @Inject constructor(private val ringSource: RingSource): RingRepo {
-    override fun get(ring: Ring): Flow<Ring> = ringSource.get(ring)
+    override fun get(ring: Ring): Flow<Ring> = ringSource.get(ring as RingImpl).filterNotNull()
 
     override fun gets(trainingId: Long): Flow<List<Ring>> = ringSource.gets(trainingId)
 

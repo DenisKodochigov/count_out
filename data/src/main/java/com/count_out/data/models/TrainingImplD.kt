@@ -14,4 +14,15 @@ data class TrainingImplD(
     override val isSelected: Boolean,
     override var speechId: Long,
     override var speech: SpeechKit?
-): Training
+): Training{
+    constructor(tr: Training): this(
+        idTraining = tr.idTraining,
+        name = tr.name,
+        amountActivity = tr.amountActivity,
+        rounds= tr.rounds,
+        rings = tr.rings,
+        isSelected = tr.isSelected,
+        speechId = tr.speechId,
+        speech = tr.speech
+    )
+}

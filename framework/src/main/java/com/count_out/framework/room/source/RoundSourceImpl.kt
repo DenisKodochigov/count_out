@@ -26,31 +26,31 @@ class RoundSourceImpl @Inject constructor(
     override fun gets(trainingId: Long): Flow<List<RoundImpl>> =
         dao.gets(trainingId).map { list-> list.map { it.toRound() } }
 
-    override fun get(round: Round): Flow<Round> = dao.get(round.idRound).map { it.toRound() }
+    override fun get(round: RoundImpl): Flow<RoundImpl?> = dao.get(round.idRound).map { it?.let { it1-> it1.toRound() } ?: null }
 
-    override fun copy(round: Round): Long {
+    override fun copy(round: RoundImpl): Long {
         //Создавть раунд имеет смысл только в связке с какимнибудь тренировочным планом.
         var roundId = 0L
         if (round.trainingId > 0){
             val speechId = speechKitSource.copy(round.speech?.let{ it as SpeechKitImplD } ?: SpeechKitImplD() )
-            roundId = dao.add(toRoundTable(round as RoundImpl).copy(speechId = speechId))
+            roundId = dao.add(toRoundTable(round).copy(speechId = speechId))
             if (round.exercise.isNotEmpty()) {
                 round.exercise.forEach { exercise->
-                    exerciseSource.copy((exercise as ExerciseImplD ).copy(roundId = roundId)) }
+                    exerciseSource.copy(ExerciseImplD(exercise).copy(roundId = roundId)) }
             } else { exerciseSource.copy(ExerciseImplD().copy(roundId = roundId)) }
         } else { Log.d("KDS", "The value is not defined: TRAININGID ")}
         return roundId
     }
-    override fun del(round: Round) {
-        round.exercise.forEach { exerciseSource.del(it) }
+    override fun del(round: RoundImpl) {
+        round.exercise.forEach { exerciseSource.del(ExerciseImplD(it)) }
         round.speech?.let { speechKitSource.del(it as SpeechKitImplD) }
         dao.del(round.idRound)
     }
 
-    override fun update(round: Round) {
-        round.exercise.forEach { exerciseSource.update(it) }
+    override fun update(round: RoundImpl) {
+        round.exercise.forEach { exerciseSource.update(ExerciseImplD(it)) }
         round.speech?.let { speechKitSource.update(it as SpeechKitImplD) }
-        dao.update(toRoundTable(round as RoundImpl))
+        dao.update(toRoundTable(round))
     }
 
     private fun toRoundTable(round: RoundImpl) = RoundTable(

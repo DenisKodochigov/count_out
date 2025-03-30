@@ -5,7 +5,7 @@ import kotlinx.coroutines.flow.Flow
 
 interface SetSource {
     fun gets(exerciseId: Long): Flow<List<SetImplD>>
-    fun get( item: SetImplD): Flow<SetImplD>
+    fun get( item: SetImplD): Flow<SetImplD?>
     fun copy( item: SetImplD): Long
     fun del( item: SetImplD)
     fun update( item: SetImplD)

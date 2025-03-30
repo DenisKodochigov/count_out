@@ -17,7 +17,7 @@ interface ExerciseDao {
 
     @Transaction
     @Query("SELECT * FROM tb_exercise WHERE idExercise = :id ORDER BY idView ASC")
-    fun get(id: Long): Flow<ExerciseRel>
+    fun get(id: Long): Flow<ExerciseRel?>
 
     @Transaction
     @Query("SELECT * FROM tb_exercise WHERE roundId = :id ORDER BY idView ASC")
@@ -35,17 +35,17 @@ interface ExerciseDao {
     fun add(item: ExerciseTable): Long
 
     @Update
-    fun update( exercise: ExerciseTable)
+    fun update( exercise: ExerciseTable): Int?
 
     @Query("DELETE FROM tb_exercise WHERE idExercise = :id")
-    fun del(id: Long)
+    fun del(id: Long): Int?
 //    @Query("DELETE FROM tb_exercise WHERE roundId = :id")
 //    fun delRound(id: Long)
 //    @Query("DELETE FROM tb_exercise WHERE ringId = :id")
 //    fun delRing(id: Long)
 
     @Query("UPDATE tb_exercise SET activityId = :activityId WHERE idExercise =:exerciseId")
-    fun setActivity(exerciseId: Long, activityId: Long)
+    fun setActivity(exerciseId: Long, activityId: Long): Int?
 
 //    @Query("SELECT max( idView) FROM tb_exercise WHERE roundId = :roundId")
 //    fun getExerciseMaxSequential(roundId: Long): Flow<ExerciseRel>

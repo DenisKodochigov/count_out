@@ -11,13 +11,13 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface TrainingDao {
     @Insert
-    fun add(item: TrainingTable): Long
+    fun add(item: TrainingTable): Long?
 
     @Update
-    fun update(item: TrainingTable)
+    fun update(item: TrainingTable): Int?
 
     @Query("DELETE FROM tb_trainings WHERE idTraining = :id")
-    fun del(id: Long)
+    fun del(id: Long): Int?
 
     @Transaction
     @Query("SELECT * FROM tb_trainings WHERE idTraining = :id")
@@ -28,5 +28,5 @@ interface TrainingDao {
     fun getTrainingsRel(): Flow<List<TrainingRel>>
 
     @Query("SELECT name FROM tb_trainings WHERE idTraining = :id")
-    fun getName(id: Long): Flow<String>
+    fun getName(id: Long): Flow<String?>
 }

@@ -13,8 +13,6 @@ import com.count_out.domain.entity.enums.Goal
 import com.count_out.domain.entity.enums.RoundType
 import com.count_out.domain.entity.enums.Units
 import com.count_out.domain.entity.enums.Zone
-import com.count_out.domain.entity.workout.Exercise
-import com.count_out.domain.entity.workout.Training
 import com.count_out.framework.room.db.activity.ActivityTable
 import com.count_out.framework.room.db.exercise.ExerciseTable
 import com.count_out.framework.room.db.ring.RingTable
@@ -76,7 +74,7 @@ data class ExerciseRel(
     @Relation(parentColumn = "idExercise", entityColumn = "exerciseId", entity = SetTable::class) val sets: List<SetRel>?,
     @Relation(parentColumn = "speechId", entityColumn = "idSpeechKit", entity = SpeechKitTable::class) val speechKit: SpeechKitRel?
 ){
-    fun toExercise(): Exercise {
+    fun toExercise(): ExerciseImplD {
         return ExerciseImplD(
             idExercise = exerciseTable.idExercise,
             roundId = exerciseTable.roundId,
@@ -183,7 +181,7 @@ data class TrainingRel(
     @Relation(parentColumn = "idTraining", entityColumn = "trainingId", entity = RingTable::class) val rings: List<RingRel>?,
     @Relation(parentColumn = "speechId", entityColumn = "idSpeechKit", entity = SpeechKitTable::class) val speechKit: SpeechKitRel?,
 ){
-    fun toTraining(): Training {
+    fun toTraining(): TrainingImplD {
         var amountActivity = 0
         this.rounds?.forEach { round-> amountActivity += round.exercise?.count() ?:0 }
         return TrainingImplD(

@@ -12,14 +12,14 @@ interface SpeechDao {
     fun add(item: SpeechTable): Long
 
     @Update
-    fun update(item: SpeechTable)
+    fun update(item: SpeechTable): Int?
 
     @Query("SELECT * FROM tb_speech WHERE idSpeech = :id")
-    fun get(id: Long): Flow<SpeechTable>
+    fun get(id: Long): Flow<SpeechTable?>
 
     @Query("DELETE FROM tb_speech WHERE idSpeech = :id")
-    fun del(id: Long)
+    fun del(id: Long): Int?
 
     @Query("UPDATE tb_speech SET duration = :duration WHERE idSpeech =:id")
-    fun updateDuration(duration: Long, id: Long)
+    fun updateDuration(duration: Long, id: Long): Int?
 }

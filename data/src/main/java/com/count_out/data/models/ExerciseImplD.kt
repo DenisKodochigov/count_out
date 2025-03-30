@@ -17,4 +17,18 @@ data class ExerciseImplD (
     override val sets: List<Set> = emptyList<Set>(),
     override val amountSet: Int = 0,
     override val duration: Int = 0
-): Exercise
+): Exercise{
+    constructor(ex: Exercise): this(
+       idExercise = ex.idExercise,
+       roundId = ex.roundId,
+       ringId = ex.ringId,
+       idView = ex.idView,
+       activity = ex.activity,
+       activityId = ex.activityId,
+       speechId = ex.speechId,
+       speech = ex.speech,
+       sets = ex.sets,
+       amountSet = ex.amountSet,
+       duration = ex.duration
+    )
+}

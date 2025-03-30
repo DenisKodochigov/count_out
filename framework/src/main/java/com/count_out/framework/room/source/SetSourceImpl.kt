@@ -14,7 +14,7 @@ class SetSourceImpl @Inject constructor(
     private val speechKitSource: SpeechKitSource,
     private val setDao: SetDao): SetSource {
 
-    override fun get(item: SetImplD): Flow<SetImplD> = setDao.get(item.idSet).map { it.toSet() }
+    override fun get(item: SetImplD): Flow<SetImplD?> = setDao.get(item.idSet).map { it?.let { it1-> it1.toSet() } ?: null}
 
     override fun gets(exerciseId: Long): Flow<List<SetImplD>> {
         return setDao.gets(exerciseId).map { list-> list.map{ it.toSet()} } }
@@ -24,12 +24,12 @@ class SetSourceImpl @Inject constructor(
         return setDao.add(toSetTable(item).copy(speechId = speechId)) }
 
     override fun del(item: SetImplD) {
-        item.speech?.let { speechKitSource.del(it) }
+        item.speech?.let { speechKitSource.del(SpeechKitImplD(it)) }
         setDao.del(item.idSet)
     }
 
     override fun update(item: SetImplD) {
-        item.speech?.let { speechKitSource.update(it) }
+        item.speech?.let { speechKitSource.update(SpeechKitImplD(it)) }
         setDao.update(toSetTable(item, item.idSet))
     }
 

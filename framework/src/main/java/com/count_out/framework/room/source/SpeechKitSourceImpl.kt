@@ -16,20 +16,21 @@ class SpeechKitSourceImpl @Inject constructor(
     private val daoSpeechKit: SpeechKitDao,
 ) : SpeechKitSource {
 
-    override fun get(id: Long): Flow<SpeechKitImplD> = daoSpeechKit.get(id).map { it.toSpeechKit() }
+    override fun get(id: Long): Flow<SpeechKitImplD?> =
+        daoSpeechKit.get(id).map { it?.let { it1-> it1.toSpeechKit() } ?: null }
 
-    override fun copy(speechKit: SpeechKit): Long {
+    override fun copy(speechKit: SpeechKitImplD): Long {
         return  daoSpeechKit.add( toSpeechKitTable(speechKit) )
     }
 
-    override fun update(speechKit: SpeechKit) {
+    override fun update(speechKit: SpeechKitImplD) {
         speechSource.update(speechKit.beforeStart as SpeechImplD)
         speechSource.update(speechKit.afterStart as SpeechImplD)
         speechSource.update(speechKit.beforeEnd as SpeechImplD)
         speechSource.update(speechKit.afterEnd as SpeechImplD)
     }
 
-    override fun del(speechKit: SpeechKit) {
+    override fun del(speechKit: SpeechKitImplD) {
         speechSource.del(speechKit.idBeforeStart)
         speechSource.del(speechKit.idAfterStart)
         speechSource.del(speechKit.idBeforeEnd)
@@ -37,7 +38,7 @@ class SpeechKitSourceImpl @Inject constructor(
         daoSpeechKit.del(speechKit.idSpeechKit)
     }
 
-    private fun toSpeechKitTable(speechKit: SpeechKit): SpeechKitTable {
+    private fun toSpeechKitTable(speechKit: SpeechKitImplD): SpeechKitTable {
         return SpeechKitTable(
             idSpeechKit = 0,
             idBeforeStart = speechSource.copy(speechKit.beforeStart?.let { it as SpeechImplD} ?: SpeechImplD()),

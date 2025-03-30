@@ -10,7 +10,7 @@ import javax.inject.Inject
 
 class SpeechSourceImpl @Inject constructor(private val dao: SpeechDao): SpeechSource {
 
-    override fun get(id: Long): Flow<SpeechImplD> = dao.get(id).map { it.toSpeech() }
+    override fun get(id: Long): Flow<SpeechImplD?> = dao.get(id).map { it?.let { it1-> it1.toSpeech() } ?: null }
 
     override fun copy(speech: SpeechImplD): Long = dao.add(toSpeechTable(speech)) // idSpeech must be = 0
 

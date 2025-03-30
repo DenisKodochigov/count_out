@@ -16,4 +16,15 @@ data class RoundImpl(
     override val exercise: List<Exercise> = emptyList(),
     override val amount: Int = 0,
     override val duration: Parameter = ParameterImpl(0.0, Units.M)
-): Round
+): Round {
+    constructor(round: Round): this(
+        idRound = round.idRound,
+        trainingId = round.trainingId,
+        speechId = round.speechId,
+        roundType = round.roundType,
+        speech = round.speech,
+        exercise = round.exercise,
+        amount = round.amount,
+        duration = round.duration
+    )
+}

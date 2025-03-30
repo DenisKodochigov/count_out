@@ -19,16 +19,16 @@ class RingSourceImpl @Inject constructor(
     private val exerciseSource: ExerciseSource,
     private val speechKitSource: SpeechKitSource,
 ): RingSource {
-    override fun get(ring: Ring): Flow<Ring>  = dao.get(ring.idRing).map { it.toRing() }
+    override fun get(ring: RingImpl): Flow<RingImpl?>  = dao.get(ring.idRing).map { it?.let { it1-> it1.toRing() } ?: null }
 
-    override fun gets(trainingId: Long): Flow<List<Ring>> =
+    override fun gets(trainingId: Long): Flow<List<RingImpl>> =
         dao.gets(trainingId).map { list-> list.map { it.toRing() } }
 
-    override fun copy(ring: Ring): Long {
+    override fun copy(ring: RingImpl): Long {
         var ringId = 0L
         if (ring.trainingId > 0) {
             val speechId = speechKitSource.copy(ring.speech?.let{ it as SpeechKitImplD } ?: SpeechKitImplD() )
-            ringId = dao.add(toRingTable(ring as RingImpl).copy(speechId = speechId))
+            ringId = dao.add(toRingTable(ring).copy(speechId = speechId))
             if (ring.exercise.isNotEmpty()) {
                 ring.exercise.forEach { exercise ->
                     exerciseSource.copy((exercise as ExerciseImplD).copy(ringId = ringId))
@@ -37,15 +37,15 @@ class RingSourceImpl @Inject constructor(
         } else { Log.d("KDS", "The value is not defined TRAINING_ID") }
         return ringId
     }
-    override fun del(ring: Ring) {
-        ring.exercise.forEach { exerciseSource.del(it) }
+    override fun del(ring: RingImpl) {
+        ring.exercise.forEach { exerciseSource.del(it as ExerciseImplD) }
         ring.speech?.let { speechKitSource.del(it as SpeechKitImplD) }
         dao.del(ring.idRing)
     }
-    override fun update(ring: Ring) {
-        ring.exercise.forEach { exerciseSource.update(it) }
+    override fun update(ring: RingImpl) {
+        ring.exercise.forEach { exerciseSource.update(it as ExerciseImplD) }
         ring.speech?.let { speechKitSource.update(it as SpeechKitImplD) }
-        dao.update(toRingTable(ring as RingImpl))
+        dao.update(toRingTable(ring))
     }
 
     private fun toRingTable(ring: RingImpl) = RingTable(

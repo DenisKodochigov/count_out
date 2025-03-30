@@ -1,5 +1,6 @@
 package com.count_out.data.repository
 
+import com.count_out.data.models.TrainingImplD
 import com.count_out.data.source.room.TrainingSource
 import com.count_out.domain.entity.workout.Training
 import com.count_out.domain.repository.trainings.TrainingRepo
@@ -13,28 +14,28 @@ class TrainingRepoImpl @Inject constructor(private val trainingSource: TrainingS
 
     override fun get(training: Training): Flow<Training> {
 
-        return trainingSource.get(training).filterNotNull()
+        return trainingSource.get(TrainingImplD(training)).filterNotNull()
     }
 
     override fun gets(): Flow<List<Training>> {
         return trainingSource.gets() }
 
     override fun del(training: Training): Flow<List<Training>> {
-        trainingSource.del(training)
+        trainingSource.del(TrainingImplD(training))
         return trainingSource.gets()
     }
     override fun copy(training: Training): Flow<List<Training>> {
-        trainingSource.copy(training)
+        trainingSource.copy(TrainingImplD(training))
         return trainingSource.gets()
     }
 
     override fun select(training: Training): Flow<List<Training>> {
-        trainingSource.update(training)
+        trainingSource.update(TrainingImplD(training))
         return trainingSource.gets()
     }
 
     override fun update(training: Training): Flow<Training> {
-        trainingSource.update(training )
-        return trainingSource.get(training).filterNotNull()
+        trainingSource.update(TrainingImplD(training) )
+        return trainingSource.get(TrainingImplD(training)).filterNotNull()
     }
 }
