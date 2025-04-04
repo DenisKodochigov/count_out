@@ -35,19 +35,38 @@ class TrainingSourceTest {
     }
     @ExperimentalCoroutinesApi
     @Test
-    fun testGetTraining() = runTest {
-        val training = createTraining(id = 1)
-        whenever(dao.getTrainingRel(training.idTraining)).thenReturn(
+    fun testCopyTraining() = runTest {
+        val expected = createTraining(1).copy(name = "Test 1 copy")
+        whenever(dao.add(TrainingTable(expected))).thenReturn(2)
+        whenever(dao.getTrainingRel(expected.idTraining)).thenReturn(
             flowOf( TrainingRel(
-                training = TrainingTable(training),
+                training = TrainingTable(expected),
                 rounds = emptyList(),
                 rings =  emptyList(),
                 speechKit = null
             ))
         )
-        val trainingId = trainingSource.get(training).first()
-        Assertions.assertEquals(training, trainingId)
+        val trainingId = trainingSource.copy(expected)
+        expected.copy()
+        Assertions.assertEquals(1, trainingId)
     }
+
+    @ExperimentalCoroutinesApi
+    @Test
+    fun testGetTraining() = runTest {
+        val expected = createTraining(id = 1)
+        whenever(dao.getTrainingRel(expected.idTraining)).thenReturn(
+            flowOf( TrainingRel(
+                training = TrainingTable(expected),
+                rounds = emptyList(),
+                rings =  emptyList(),
+                speechKit = null
+            ))
+        )
+        val training = trainingSource.get(expected).first()
+        Assertions.assertEquals(expected, training)
+    }
+
     @ExperimentalCoroutinesApi
     @Test
     fun testGetTrainings() = runTest {
