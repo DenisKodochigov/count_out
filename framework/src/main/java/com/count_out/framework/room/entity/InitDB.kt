@@ -257,12 +257,12 @@ private fun createTrainingPlansTesting( db: AppDataBase) {
 private fun addSpeechKit(db: AppDataBase, bs: String = "", ast: String = "", be: String = "", ae: String = ""): Long{
     return db.speechKitDao().add(
         SpeechKitTable(
-            idBeforeStart = db.speechDao().add( SpeechTable(message = bs)),
-            idAfterStart = db.speechDao().add( SpeechTable( message = ast)),
-            idBeforeEnd = db.speechDao().add( SpeechTable( message = be)),
-            idAfterEnd = db.speechDao().add( SpeechTable( message = ae))
+            idBeforeStart = db.speechDao().add( SpeechTable(message = bs)) ?: 0L,
+            idAfterStart = db.speechDao().add( SpeechTable( message = ast)) ?: 0L,
+            idBeforeEnd = db.speechDao().add( SpeechTable( message = be)) ?: 0L,
+            idAfterEnd = db.speechDao().add( SpeechTable( message = ae)) ?: 0L,
         )
-    )
+    ) ?: 0L
 }
 private fun createTrainingPlansReal( db: AppDataBase) {
 //    createTrainingId0( db )

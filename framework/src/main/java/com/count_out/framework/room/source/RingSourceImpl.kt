@@ -17,7 +17,7 @@ import javax.inject.Inject
 class RingSourceImpl @Inject constructor(
     private val dao: RingDao,
     private val exerciseSource: ExerciseSource,
-    private val speechKitSource: SpeechKitSource,
+    private val speechKitSource: SpeechKitSourceImpl,
 ): RingSource {
     override fun get(ring: RingImpl): Flow<RingImpl?>  = dao.get(ring.idRing).map { it?.let { it1-> it1.toRing() } ?: null }
 
@@ -27,7 +27,7 @@ class RingSourceImpl @Inject constructor(
     override fun copy(ring: RingImpl): Long {
         var ringId = 0L
         if (ring.trainingId > 0) {
-            val speechId = speechKitSource.copy(ring.speech?.let{ it as SpeechKitImplD } ?: SpeechKitImplD() )
+            val speechId = speechKitSource.copyValue(ring.speech?.let{ it as SpeechKitImplD } ?: SpeechKitImplD()) ?: 0L
             ringId = dao.add(toRingTable(ring).copy(speechId = speechId))
             if (ring.exercise.isNotEmpty()) {
                 ring.exercise.forEach { exercise ->

@@ -19,7 +19,7 @@ import javax.inject.Inject
 class ExerciseSourceImpl @Inject constructor(
     private val dao: ExerciseDao,
     private val setSource: SetSource,
-    private val speechKitSource: SpeechKitSource,
+    private val speechKitSource: SpeechKitSourceImpl,
 ): ExerciseSource {
 
     override fun get(exercise: ExerciseImplD): Flow<ExerciseImplD?> =
@@ -35,7 +35,7 @@ class ExerciseSourceImpl @Inject constructor(
         dao.getFilter(list).map { lst-> lst.map { it.toExercise() }}
 
     override fun copy(exercise: ExerciseImplD): Long {
-        val speechId = speechKitSource.copy(exercise.speech?.let{ it as SpeechKitImplD } ?: SpeechKitImplD() )
+        val speechId = speechKitSource.copyValue(exercise.speech?.let{ it as SpeechKitImplD } ?: SpeechKitImplD() ) ?: 0L
         val id = dao.add(toExerciseTable(exercise, speechId))
         if (exercise.sets.isNotEmpty()){
             exercise.sets.forEach { set-> setSource.copy((set as SetImplD).copy(exerciseId = id)) }

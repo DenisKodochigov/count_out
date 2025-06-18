@@ -20,7 +20,7 @@ class TrainingSourceImpl @Inject constructor(
     private val dao: TrainingDao,
     private val roundSource: RoundSource,
     private val ringSource: RingSource,
-    private val speechKitSource: SpeechKitSource,
+    private val speechKitSource: SpeechKitSourceImpl,
 ): TrainingSource {
 
     override fun update(training: TrainingImplD) {
@@ -30,8 +30,8 @@ class TrainingSourceImpl @Inject constructor(
     }
 
     override fun copy(training: TrainingImplD): Long {
-        val speechId = speechKitSource.copy(
-            training.speech?.let { it as SpeechKitImplD } ?: SpeechKitImplD())
+        val speechId = speechKitSource.copyValue(
+            training.speech?.let { it as SpeechKitImplD } ?: SpeechKitImplD()) ?: 0L
         val trainingId = (dao.add(TrainingTable(name = training.name, speechId = speechId))) ?: 0
         if (trainingId > 0){
             if (training.rounds.isNotEmpty()) {
@@ -52,7 +52,7 @@ class TrainingSourceImpl @Inject constructor(
     }
 
     override fun get(training: TrainingImplD): Flow<TrainingImplD?> {
-        return dao.getTrainingRel(training.idTraining).map { it?.let { it1-> it1.toTraining() } ?: null }
+        return dao.getTrainingRel(training.idTraining).map { it?.toTraining() }
     }
 
     override fun del(training: TrainingImplD) {

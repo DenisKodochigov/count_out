@@ -2,8 +2,6 @@ package com.count_out.domain
 
 import com.count_out.domain.entity.throwable.ResultUC
 import com.count_out.domain.entity.throwable.ThrowableUC
-import com.count_out.domain.repository.trainings.ActivityRepo
-import com.count_out.domain.repository.trainings.TrainingRepo
 import com.count_out.domain.use_case.UseCase
 import junit.framework.TestCase.assertEquals
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -30,7 +28,7 @@ class UseCaseThrowableUCTest {
     @Before
     fun setUp() {
         useCase = object: UseCase<UseCase.Request, UseCase.Response>(configuration) {
-            override fun executeData(input: Request): Flow<Response> {
+            override fun implementation_old(input: Request): Flow<Response> {
                 assertEquals(this@UseCaseThrowableUCTest.request, input)
                 return flowOf(response)
             }
@@ -39,7 +37,7 @@ class UseCaseThrowableUCTest {
     @ExperimentalCoroutinesApi
     @Test
     fun testExecuteSuccess() = runTest {
-        val result = useCase.execute(request).first()
+        val result = useCase.exec_old(request).first()
         assertEquals(ResultUC.Success(response), result)
     }
 
@@ -47,13 +45,13 @@ class UseCaseThrowableUCTest {
     @Test
     fun testExecuteTrainingThrow() {
         useCase = object: UseCase<UseCase.Request, UseCase.Response>(configuration) {
-            override fun executeData(request: Request): Flow<Response> {
+            override fun implementation_old(request: Request): Flow<Response> {
                 Assert.assertEquals(this@UseCaseThrowableUCTest.request, request)
                 return flow { throw ThrowableUC.TrainingThrow(Throwable()) }
             }
         }
         runTest {
-            val result = useCase.execute(request).first()
+            val result = useCase.exec_old(request).first()
             Assert.assertTrue((result as ResultUC.Error).throwable is ThrowableUC.TrainingThrow)
         }
     }
@@ -62,13 +60,13 @@ class UseCaseThrowableUCTest {
     @Test
     fun testExecuteActivityThrow() {
         useCase = object: UseCase<UseCase.Request, UseCase.Response>(configuration) {
-            override fun executeData(request: Request): Flow<Response> {
+            override fun implementation_old(request: Request): Flow<Response> {
                 Assert.assertEquals(this@UseCaseThrowableUCTest.request, request)
                 return flow { throw ThrowableUC.ActivityThrow(Throwable()) }
             }
         }
         runTest {
-            val result = useCase.execute(request).first()
+            val result = useCase.exec_old(request).first()
             Assert.assertTrue((result as ResultUC.Error).throwable is ThrowableUC.ActivityThrow)
         }
     }
@@ -76,13 +74,13 @@ class UseCaseThrowableUCTest {
     @Test
     fun testExecuteWeatherTrow() {
         useCase = object: UseCase<UseCase.Request, UseCase.Response>(configuration) {
-            override fun executeData(request: Request): Flow<Response> {
+            override fun implementation_old(request: Request): Flow<Response> {
                 Assert.assertEquals(this@UseCaseThrowableUCTest.request, request)
                 return flow { throw ThrowableUC.WeatherTrow(Throwable()) }
             }
         }
         runTest {
-            val result = useCase.execute(request).first()
+            val result = useCase.exec_old(request).first()
             Assert.assertTrue((result as ResultUC.Error).throwable is ThrowableUC.WeatherTrow)
         }
     }

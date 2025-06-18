@@ -21,7 +21,7 @@ import javax.inject.Inject
 class RoundSourceImpl @Inject constructor(
     private val dao: RoundDao,
     private val exerciseSource: ExerciseSource,
-    private val speechKitSource: SpeechKitSource,
+    private val speechKitSource: SpeechKitSourceImpl,
 ): RoundSource {
     override fun gets(trainingId: Long): Flow<List<RoundImpl>> =
         dao.gets(trainingId).map { list-> list.map { it.toRound() } }
@@ -32,7 +32,7 @@ class RoundSourceImpl @Inject constructor(
         //Создавть раунд имеет смысл только в связке с какимнибудь тренировочным планом.
         var roundId = 0L
         if (round.trainingId > 0){
-            val speechId = speechKitSource.copy(round.speech?.let{ it as SpeechKitImplD } ?: SpeechKitImplD() )
+            val speechId = speechKitSource.copyValue(round.speech?.let{ it as SpeechKitImplD } ?: SpeechKitImplD() ) ?: 0L
             roundId = dao.add(toRoundTable(round).copy(speechId = speechId))
             if (round.exercise.isNotEmpty()) {
                 round.exercise.forEach { exercise->

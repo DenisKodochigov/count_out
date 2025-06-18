@@ -63,7 +63,7 @@ import javax.inject.Inject
             is TrainingEvent.UpdateSet -> { changeSet(event.item) }
             is TrainingEvent.ShowBS -> { showBottomSheet(event.item) }
             is TrainingEvent.SetCollapsing -> { collapsingSet(event.item) }
-            is TrainingEvent.UpdateSpeech -> { updateSpeech(event.item) }
+            is TrainingEvent.UpdateSpeech -> { updateSpeechKit(event.item) }
         }
     }
     var idTraining: Long = 0
@@ -137,9 +137,9 @@ import javax.inject.Inject
             collapsingSetUC.execute( CollapsingUC.Request(item)).collect { submitState( it ) }
         }
     }
-    private fun updateSpeech(item: SpeechKit){
+    private fun updateSpeechKit(item: SpeechKit){
         viewModelScope.launch(Dispatchers.IO) {
-            lg("veiwModel update speechKit")
+            lg("viewModel update speechKit")
             updateSpeechKitUC.execute( UpdateSpeechKitUC.Request(item)).collect { submitState( it ) }
         }
     }

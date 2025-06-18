@@ -10,6 +10,7 @@ import com.count_out.data.repository.RingRepoImpl
 import com.count_out.data.repository.RoundRepoImpl
 import com.count_out.data.repository.SetRepoImpl
 import com.count_out.data.repository.SettingsRepoImpl
+import com.count_out.data.repository.SpeechKitRepoImpl
 import com.count_out.data.repository.SpeechRepoImpl
 import com.count_out.data.repository.TrainingRepoImpl
 import com.count_out.data.repository.WeatherRepoImpl
@@ -24,6 +25,7 @@ import com.count_out.domain.repository.trainings.RingRepo
 import com.count_out.domain.repository.trainings.RoundRepo
 import com.count_out.domain.repository.trainings.SetRepo
 import com.count_out.domain.repository.trainings.SettingsRepo
+import com.count_out.domain.repository.trainings.SpeechKitRepo
 import com.count_out.domain.repository.trainings.SpeechRepo
 import com.count_out.domain.repository.trainings.TrainingRepo
 import dagger.Binds
@@ -52,6 +54,8 @@ abstract class RepositoryBindModule {
     abstract fun bindRingRepo( ringRepoImpl: RingRepoImpl): RingRepo
     @Binds
     abstract fun bindRoundRepo( roundRepoImpl: RoundRepoImpl): RoundRepo
+    @Binds
+    abstract fun bindSpeechKitRepo(speechKitRepoImpl: SpeechKitRepoImpl): SpeechKitRepo
     @Binds
     abstract fun bindSpeechRepo(speechRepoImpl: SpeechRepoImpl): SpeechRepo
     @Binds

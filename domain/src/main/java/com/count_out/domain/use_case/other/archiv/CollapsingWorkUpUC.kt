@@ -5,10 +5,10 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 
-class CollapsingWorkUpUC @Inject constructor(configuration: Configuration
-): UseCase<CollapsingWorkUpUC.Request, CollapsingWorkUpUC.Response>(configuration)  {
-    override fun executeData(input: Request): Flow<Response> =
-        flow { emit( Response(!input.request) ) }
-    data class Request(val request: Boolean) : UseCase.Request
-    data class Response(val result: Boolean) : UseCase.Response
-}
+//class CollapsingWorkUpUC @Inject constructor(configuration: Configuration
+//): UseCase<CollapsingWorkUpUC.Request, CollapsingWorkUpUC.Response>(configuration)  {
+//    override fun implementation(input: Request): Flow<Response> =
+//        flow { emit( Response(!input.request) ) }
+//    data class Request(val request: Boolean) : UseCase.Request
+//    data class Response(val result: Boolean) : UseCase.Response
+//}

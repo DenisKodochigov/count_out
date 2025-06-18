@@ -1,5 +1,6 @@
 package com.count_out.domain.use_case.other
 
+import com.count_out.domain.entity.throwable.ResultUC
 import com.count_out.domain.entity.workout.Collapsing
 import com.count_out.domain.entity.workout.Exercise
 import com.count_out.domain.entity.workout.Ring
@@ -12,11 +13,15 @@ import javax.inject.Inject
 
 class CollapsingUC @Inject constructor(configuration: Configuration
 ): UseCase<CollapsingUC.Request, CollapsingUC.Response>(configuration)  {
-    override fun executeData(input: Request): Flow<Response> {
-        return flow { emit( Response(executeCollapsing(input.request)) ) }
-    }
-    data class Request(val request: Collapsing) : UseCase.Request
-    data class Response(val result: Collapsing) : UseCase.Response
+//    override fun implementation_old(request: Request): Flow<Response> {
+//        return flow { emit( Response(executeCollapsing(request.collaps)) ) }
+//    }
+    override fun implementation(request: Request): Flow<ResultUC<Response>> =
+        flow { emit( ResultUC.Success(Response(executeCollapsing(request.collaps)))) }
+
+
+    data class Request(val collaps: Collapsing) : UseCase.Request
+    data class Response(val collaps: Collapsing) : UseCase.Response
 
     fun executeCollapsing(item: Collapsing): Collapsing{
         return when(item.item){

@@ -11,7 +11,7 @@ import kotlinx.coroutines.flow.Flow
 interface SpeechKitDao {
 
     @Insert
-    fun add(item: SpeechKitTable): Long
+    fun add(item: SpeechKitTable): Long?
 
     @Transaction
     @Query("SELECT * FROM tb_speech_kit WHERE idSpeechKit = :id")

@@ -2,49 +2,70 @@ package com.count_out.framework.room.source
 
 import com.count_out.data.models.SpeechImplD
 import com.count_out.data.models.SpeechKitImplD
+import com.count_out.data.models.throwable.ResultDataSource
+import com.count_out.data.source.SourceData
 import com.count_out.data.source.room.SpeechKitSource
 import com.count_out.data.source.room.SpeechSource
-import com.count_out.domain.entity.workout.SpeechKit
 import com.count_out.framework.room.db.speech_kit.SpeechKitDao
 import com.count_out.framework.room.db.speech_kit.SpeechKitTable
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.last
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 class SpeechKitSourceImpl @Inject constructor(
-    private val speechSource: SpeechSource,
-    private val daoSpeechKit: SpeechKitDao,
-) : SpeechKitSource {
+    private val speechSource: SpeechSourceImpl,
+    private val dao: SpeechKitDao,
+) : SpeechKitSource, SourceData() {
 
-    override fun get(id: Long): Flow<SpeechKitImplD?> =
-        daoSpeechKit.get(id).map { it?.let { it1-> it1.toSpeechKit() } ?: null }
+    override fun get(speechKit: SpeechKitImplD): Flow<ResultDataSource<SpeechKitImplD>> =
+        getResultFlow{ dao.get(speechKit.idSpeechKit).map { it?.toSpeechKit() }}
 
-    override fun copy(speechKit: SpeechKitImplD): Long {
-        return  daoSpeechKit.add( toSpeechKitTable(speechKit) )
+    override fun copy(speechKit: SpeechKitImplD): Flow<ResultDataSource<SpeechKitImplD>> {
+        return copyValue(speechKit)?.let {
+            getResultFlow { dao.get(speechKit.idSpeechKit).map { it?.toSpeechKit() } }
+        } ?: flow { emit (resultNullException()) }
     }
 
-    override fun update(speechKit: SpeechKitImplD) {
-        speechSource.update(speechKit.beforeStart as SpeechImplD)
-        speechSource.update(speechKit.afterStart as SpeechImplD)
-        speechSource.update(speechKit.beforeEnd as SpeechImplD)
-        speechSource.update(speechKit.afterEnd as SpeechImplD)
+    override fun update(speechKit: SpeechKitImplD): Flow<ResultDataSource<SpeechKitImplD>> {
+        speechKit.beforeStart?.let { speechSource.updateValue( it as SpeechImplD) }
+        speechKit.afterStart?.let { speechSource.updateValue( it as SpeechImplD) }
+        speechKit.beforeEnd?.let { speechSource.updateValue( it as SpeechImplD) }
+        speechKit.afterEnd?.let { speechSource.updateValue( it as SpeechImplD) }
+        return flow { emit (getResult{ speechKit })}
     }
 
-    override fun del(speechKit: SpeechKitImplD) {
-        speechSource.del(speechKit.idBeforeStart)
-        speechSource.del(speechKit.idAfterStart)
-        speechSource.del(speechKit.idBeforeEnd)
-        speechSource.del(speechKit.idAfterEnd)
-        daoSpeechKit.del(speechKit.idSpeechKit)
+    override fun del(speechKit: SpeechKitImplD): Flow<ResultDataSource<Long>> {
+        return flow { emit (
+            getResult{
+                speechKit.beforeStart?.let { speechSource.delValue( it.idSpeech )?.let{
+                    speechKit.afterStart?.let { speechSource.delValue( it.idSpeech )?.let{
+                        speechKit.beforeEnd?.let { speechSource.delValue( it.idSpeech )?.let{
+                            speechKit.afterEnd?.let { speechSource.delValue( it.idSpeech )?.let{
+                                dao.del(speechKit.idSpeechKit)?.toLong()
+                            }}
+                        }}
+                    }}
+                }}
+            }
+        )}
     }
 
-    private fun toSpeechKitTable(speechKit: SpeechKitImplD): SpeechKitTable {
-        return SpeechKitTable(
-            idSpeechKit = 0,
-            idBeforeStart = speechSource.copy(speechKit.beforeStart?.let { it as SpeechImplD} ?: SpeechImplD()),
-            idAfterStart = speechSource.copy(speechKit.afterStart?.let { it as SpeechImplD} ?: SpeechImplD()),
-            idBeforeEnd = speechSource.copy(speechKit.beforeEnd?.let { it as SpeechImplD} ?: SpeechImplD()),
-            idAfterEnd = speechSource.copy(speechKit.afterEnd?.let { it as SpeechImplD} ?: SpeechImplD()),
-        )
+    fun copyValue(speechKit: SpeechKitImplD): Long? {
+        return dao.add(
+            SpeechKitTable(
+                idBeforeStart = copySpeech(speechKit.beforeStart as SpeechImplD),
+                idAfterStart = copySpeech(speechKit.beforeEnd as SpeechImplD),
+                idBeforeEnd = copySpeech(speechKit.afterStart as SpeechImplD),
+                idAfterEnd = copySpeech(speechKit.afterEnd as SpeechImplD),
+        ))
+    }
+    fun copySpeech(speech: SpeechImplD?): Long {
+        val result = speech?.let {
+            if (it.idSpeech > 0) speechSource.copyValue(it)
+            else speechSource.copyValue(SpeechImplD())
+        } ?: speechSource.copyValue(SpeechImplD())
+        return result ?: 0L
     }
 }

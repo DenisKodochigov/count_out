@@ -1,6 +1,7 @@
 package com.count_out.domain.use_case.other
 
 import com.count_out.domain.entity.enums.RoundType
+import com.count_out.domain.entity.throwable.ResultUC
 import com.count_out.domain.entity.workout.Exercise
 import com.count_out.domain.entity.workout.Ring
 import com.count_out.domain.entity.workout.Round
@@ -13,10 +14,13 @@ import javax.inject.Inject
 
 class ShowBottomSheetUC @Inject constructor(configuration: Configuration
 ): UseCase<ShowBottomSheetUC.Request, ShowBottomSheetUC.Response>(configuration)  {
-    override fun executeData(input: Request): Flow<Response> =
-        flow { emit( Response(calculate(input.request)) ) }
-    data class Request(val request: ShowBottomSheet) : UseCase.Request
-    data class Response(val result: ShowBottomSheet) : UseCase.Response
+//    override fun implementation_old(request: Request): Flow<Response> =
+//        flow { emit( Response(calculate(request.show)) ) }
+    override fun implementation(request: Request): Flow<ResultUC<Response>> =
+        flow { emit( ResultUC.Success(Response(calculate(request.show)))) }
+
+    data class Request(val show: ShowBottomSheet) : UseCase.Request
+    data class Response(val show: ShowBottomSheet) : UseCase.Response
 
     fun calculate(item: ShowBottomSheet): ShowBottomSheet{
         return when(item.element){

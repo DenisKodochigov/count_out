@@ -1,12 +1,14 @@
 [versions]
 
-kotlin = "2.1.0"
-kspVersion = "2.1.0-1.0.29"
+kotlin = "2.1.10"
+kspVersion = "2.1.10-1.0.31"
 serialization_plugin = "2.0.21"
-agp = "8.9.1"
-composeV = "1.7.8"
-composeBom = "2025.03.01"
+agp = "8.10.1"
+composeV = "1.8.3"
+composeBom = "2025.06.01"
 composeActivity = "1.10.1"
+constraintlayout = "1.1.1"
+material-icons = "1.7.8"
 legacy = "1.0.0"
 #graphics = "1.0.2"
 #graphics1 = "1.0.1"
@@ -14,16 +16,16 @@ legacy = "1.0.0"
 hiltAndroid = "2.54"
 hiltNavigationCompose = "1.2.0"
 
-coreKtx = "1.15.0"
-lifecycle = "2.8.7"
-material3 = "1.3.1"
+coreKtx = "1.16.0"
+lifecycle = "2.9.1"
+material3 = "1.3.2"
 
 permissions = "0.37.0"
 moshi = "1.15.2"
 
-navigationCompose = "2.8.9"
-roomV = "2.6.1"
-datastore = "1.1.4"
+navigationCompose = "2.9.0"
+roomV = "2.7.2"
+datastore = "1.1.7"
 serialization = "1.7.3"
 kotlinx-coroutines = "1.10.1"
 gmsV = "21.3.0"
@@ -48,7 +50,7 @@ moskito-kotlin = "5.4.0"
 #moskito-inline = "5.2.0"
 #moskito-android = "2.28.2"
 
-ui-test = "1.7.8"
+ui-test = "1.8.3"
 #robolectric = "4.2.1"
 activity = "1.10.1"
 activityKtx = "1.10.1"
@@ -105,10 +107,10 @@ compose-ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview"
 compose-lifecycle-runtime = { module = "androidx.lifecycle:lifecycle-runtime-compose-android", version.ref = "lifecycle" }
 compose-ui-text-google-fonts = { module = "androidx.compose.ui:ui-text-google-fonts", version.ref = "composeV" }
 compose-animation = { module = "androidx.compose.animation:animation-graphics-android", version.ref = "composeV" }
-
+ccompose-constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout-compose", version.ref = "constraintlayout" }
 #Material 3
-material-icons-core = { module = "androidx.compose.material:material-icons-core", version.ref = "composeV" }
-material-icons-extended = { module = "androidx.compose.material:material-icons-extended", version.ref = "composeV" }
+material-icons-core = { module = "androidx.compose.material:material-icons-core", version.ref = "material-icons" }
+material-icons-extended = { module = "androidx.compose.material:material-icons-extended", version.ref = "material-icons" }
 material3 = { module = "androidx.compose.material3:material3", version.ref = "material3" }
 palette-ktx = { module = "androidx.palette:palette-ktx", version.ref = "paletteKtx" }
 
@@ -192,6 +194,7 @@ moskito-kotlin = { module = "org.mockito.kotlin:mockito-kotlin", version.ref = "
 
 
 ui-test-manifest = { module = "androidx.compose.ui:ui-test-manifest", version.ref = "ui-test" }
+
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }

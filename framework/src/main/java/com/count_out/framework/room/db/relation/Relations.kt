@@ -32,10 +32,10 @@ data class SpeechKitRel(
     fun toSpeechKit(): SpeechKitImplD {
         return SpeechKitImplD(
             idSpeechKit = speechKitTable.idSpeechKit,
-            idBeforeStart = speechKitTable.idBeforeStart,
-            idAfterStart = speechKitTable.idAfterStart,
-            idBeforeEnd = speechKitTable.idBeforeEnd,
-            idAfterEnd = speechKitTable.idAfterEnd,
+//            idBeforeStart = speechKitTable.idBeforeStart,
+//            idAfterStart = speechKitTable.idAfterStart,
+//            idBeforeEnd = speechKitTable.idBeforeEnd,
+//            idAfterEnd = speechKitTable.idAfterEnd,
             beforeStart = beforeStart?.toSpeech(),
             afterStart = afterStart?.toSpeech(),
             beforeEnd = beforeEnd?.toSpeech(),

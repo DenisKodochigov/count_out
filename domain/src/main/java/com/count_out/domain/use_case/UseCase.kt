@@ -18,13 +18,28 @@ import kotlinx.coroutines.flow.map
  * */
 abstract class UseCase< I: UseCase.Request, O: UseCase.Response>(private val configuration: Configuration,
 ) {
-    fun execute(input: I): Flow<ResultUC<O>> = executeData(input)
-        .map { ResultUC.Success(it) as ResultUC<O> }
-        .flowOn(configuration.dispatcher)
-        .catch { emit(ResultUC.Error(ThrowableUC.extractThrowable(it)) as ResultUC<Nothing>) }
-
     class Configuration(val dispatcher: CoroutineDispatcher)
-    internal abstract fun executeData(input: I): Flow<O>
     interface Request
     interface Response
+
+    fun execute(request: I): Flow<ResultUC<O>> = implementation(request)
+    internal abstract fun implementation(request: I): Flow<ResultUC<O>>
+    fun <T : Any>converter(result: ResultUC<T>, response:(T)->O): ResultUC<O>{
+        return when(result){
+            is ResultUC.Success-> ResultUC.Success(response(result.data))
+            is ResultUC.Error -> result as ResultUC<Nothing>
+        }
+    }
+//    fun exec_old(request: I): Flow<ResultUC<O>> = implementation_old(request)
+//        .map { ResultUC.Success(it) as ResultUC<O> }
+//        .flowOn(configuration.dispatcher)
+//        .catch { emit(ResultUC.Error(ThrowableUC.extractThrowable(it)) as ResultUC<Nothing>) }
+//
+//    internal abstract fun implementation_old(request: I): Flow<O>
+//    fun <T : Any>converter_old(result: ResultUC<T>, response:(T?)->O): Response{
+//        return when(result){
+//            is ResultUC.Success-> response(result.data)
+//            is ResultUC.Error -> response(null)
+//        }
+//    }
 }

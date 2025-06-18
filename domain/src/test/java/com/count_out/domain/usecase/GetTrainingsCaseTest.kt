@@ -25,7 +25,7 @@ class GetTrainingsCaseTest {
     fun testProcess() = runTest {
         val request = GetTrainingsUC.Request
         whenever(trainingRepo.gets()).thenReturn(flowOf(listTraining))
-        val response = useCase.executeData(request).first()
+        val response = useCase.implementation_old(request).first()
         Assert.assertEquals(GetTrainingsUC.Response(listTraining), response)
     }
 }

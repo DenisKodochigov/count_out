@@ -42,7 +42,6 @@ abstract class SourceFrameWorkModule {
     abstract fun bindSpeechKitSource(speechKitSource: SpeechKitSourceImpl): SpeechKitSource
     @Binds
     abstract fun bindSpeechSource(speechSource: SpeechSourceImpl): SpeechSource
-
     @Binds
     abstract fun bindSettingsSource(speechSource: SettingsSourceImpl): SettingsSource
 }

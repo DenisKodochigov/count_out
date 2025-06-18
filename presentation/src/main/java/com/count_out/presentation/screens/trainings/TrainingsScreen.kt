@@ -29,9 +29,11 @@ import com.count_out.presentation.R
 import com.count_out.presentation.models.Dimen
 import com.count_out.presentation.models.Dimen.contourAll2
 import com.count_out.presentation.models.Dimen.contourHor2
+import com.count_out.presentation.models.SpeechImplP
 import com.count_out.presentation.models.TrainingImplP
 import com.count_out.presentation.screens.prime.Action
 import com.count_out.presentation.screens.prime.PrimeScreen
+import com.count_out.presentation.view_element.ButtonApp
 import com.count_out.presentation.view_element.ItemSwipe
 import com.count_out.presentation.view_element.TextApp
 import com.count_out.presentation.view_element.custom_view.Frame
@@ -159,4 +161,5 @@ fun DownPlace(dataState: TrainingsState, action: Action) {
         Spacer(modifier = Modifier.width(32.dp))
         IconQ.Add(onClick = { action.ex(TrainingsEvent.Copy(TrainingImplP()) ) })
     }
+    ButtonApp(text = "Test", onClick = { action.ex(TrainingsEvent.UpdateSpeech(SpeechImplP(idSpeech = 1)))})
 }

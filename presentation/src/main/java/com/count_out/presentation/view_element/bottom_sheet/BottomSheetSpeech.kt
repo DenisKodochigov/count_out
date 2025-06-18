@@ -117,10 +117,10 @@ fun bottomSheetStateNew(itemSpeech: BottomSheetInterface): BottomSheetState {
         uiState.onConfirmationSpeech(
             SpeechKitImplP(
                 idSpeechKit = uiState.speechKit?.idSpeechKit ?: 0,
-                idBeforeStart = uiState.speechKit?.idBeforeStart ?: 0,
-                idAfterStart = uiState.speechKit?.idAfterStart ?: 0,
-                idBeforeEnd = uiState.speechKit?.idBeforeEnd ?: 0,
-                idAfterEnd = uiState.speechKit?.idAfterEnd ?: 0,
+//                idBeforeStart = uiState.speechKit?.idBeforeStart ?: 0,
+//                idAfterStart = uiState.speechKit?.idAfterStart ?: 0,
+//                idBeforeEnd = uiState.speechKit?.idBeforeEnd ?: 0,
+//                idAfterEnd = uiState.speechKit?.idAfterEnd ?: 0,
                 beforeStart = (uiState.speechKit?.beforeStart?.let { SpeechImplP(it) } ?: SpeechImplP()).copy(message = uiState.enteredBeforeStart.value),
                 afterStart = (uiState.speechKit?.afterStart?.let { SpeechImplP(it) } ?: SpeechImplP()).copy(message = uiState.enteredAfterStart.value),
                 beforeEnd = (uiState.speechKit?.beforeEnd?.let { SpeechImplP(it) } ?: SpeechImplP()).copy(message = uiState.enteredBeforeEnd.value),

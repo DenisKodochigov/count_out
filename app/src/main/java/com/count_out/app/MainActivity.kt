@@ -9,6 +9,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.core.app.ActivityCompat
+import androidx.core.net.toUri
 import com.count_out.app.permission.RequestPermissionsAll
 import com.count_out.app.presentation.StartApp
 import dagger.hilt.android.AndroidEntryPoint
@@ -31,7 +32,7 @@ class MainActivity: ComponentActivity() {
     @SuppressLint("BatteryLife")
     private fun ignoreBatteryOptimisation(){
         val intent = Intent(Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS)
-        intent.data = Uri.parse("package:" + this.packageName)
+        intent.data = "package: ${this.packageName}".toUri()
         ActivityCompat.startActivityForResult(this, intent, 1, null)
     }
 }

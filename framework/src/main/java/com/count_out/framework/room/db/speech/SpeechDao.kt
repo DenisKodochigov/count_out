@@ -9,13 +9,16 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface SpeechDao {
     @Insert
-    fun add(item: SpeechTable): Long
+    fun add(item: SpeechTable): Long?
 
     @Update
     fun update(item: SpeechTable): Int?
 
     @Query("SELECT * FROM tb_speech WHERE idSpeech = :id")
-    fun get(id: Long): Flow<SpeechTable?>
+    fun getFlow(id: Long): Flow<SpeechTable?>
+
+    @Query("SELECT * FROM tb_speech WHERE idSpeech = :id")
+    fun get(id: Long): SpeechTable?
 
     @Query("DELETE FROM tb_speech WHERE idSpeech = :id")
     fun del(id: Long): Int?

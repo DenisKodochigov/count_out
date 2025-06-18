@@ -11,7 +11,7 @@ import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 class SetSourceImpl @Inject constructor(
-    private val speechKitSource: SpeechKitSource,
+    private val speechKitSource: SpeechKitSourceImpl,
     private val setDao: SetDao): SetSource {
 
     override fun get(item: SetImplD): Flow<SetImplD?> = setDao.get(item.idSet).map { it?.let { it1-> it1.toSet() } ?: null}
@@ -20,7 +20,7 @@ class SetSourceImpl @Inject constructor(
         return setDao.gets(exerciseId).map { list-> list.map{ it.toSet()} } }
 
     override fun copy(item: SetImplD): Long {
-        val speechId = speechKitSource.copy(item.speech?.let{ it as SpeechKitImplD } ?: SpeechKitImplD() )
+        val speechId = speechKitSource.copyValue(item.speech?.let{ it as SpeechKitImplD } ?: SpeechKitImplD()) ?: 0L
         return setDao.add(toSetTable(item).copy(speechId = speechId)) }
 
     override fun del(item: SetImplD) {

@@ -5,10 +5,6 @@ import com.count_out.domain.entity.workout.SpeechKit
 
 data class SpeechKitImplD(
     override var idSpeechKit: Long = 0L,
-    override val idBeforeStart: Long = 0L,
-    override val idAfterStart: Long = 0L,
-    override val idBeforeEnd: Long = 0L,
-    override val idAfterEnd: Long = 0L,
     override val beforeStart: Speech? = null,
     override val afterStart: Speech? = null,
     override val beforeEnd: Speech? = null,
@@ -16,10 +12,6 @@ data class SpeechKitImplD(
 ): SpeechKit {
     constructor(kit: SpeechKit): this(
         idSpeechKit = kit.idSpeechKit,
-        idBeforeStart = kit.idBeforeStart,
-        idAfterStart = kit.idAfterStart,
-        idBeforeEnd = kit.idBeforeEnd,
-        idAfterEnd = kit.idAfterEnd,
         beforeStart = kit.beforeStart,
         afterStart = kit.afterStart,
         beforeEnd = kit.beforeEnd,

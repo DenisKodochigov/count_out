@@ -28,15 +28,12 @@ import com.count_out.domain.entity.enums.Units
 )
 @Composable
 fun StartApp() {
-
     AppTheme {
         val navController = rememberNavController()
         val currentScreen = navController.backScreenDestination()
         initUnits()
         Scaffold(
-            modifier = Modifier.Companion.semantics {
-                testTagsAsResourceId = true
-            },
+            modifier = Modifier.Companion.semantics { testTagsAsResourceId = true },
             topBar = {
                 CollapsingToolbar(
                     text = stringResource(currentScreen.nameScreen),

@@ -1,13 +1,13 @@
 package com.count_out.framework.datastore
 
 import androidx.datastore.core.DataStore
-import androidx.datastore.dataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import com.count_out.data.models.SettingsImpl
 import com.count_out.data.source.local.SettingsSource
+import com.count_out.domain.entity.Settings
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -15,7 +15,7 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import javax.inject.Inject
-import com.count_out.domain.entity.Settings
+
 internal val keySpeechDescr = booleanPreferencesKey("speech_description")
 internal val keyAddress = stringPreferencesKey("address_ble_device")
 internal val keyName = stringPreferencesKey("name_ble_device")

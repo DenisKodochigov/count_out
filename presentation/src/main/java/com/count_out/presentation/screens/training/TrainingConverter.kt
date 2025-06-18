@@ -60,11 +60,11 @@ class TrainingConverter @Inject constructor(): PrimeConvertor<UseCase.Response, 
         return state.value
     }
     private fun converterLocal(data: ShowBottomSheetUC.Response, state: MutableStateFlow<TrainingState>): TrainingState {
-        state.value = state.value.copy(showBS = data.result,)
+        state.value = state.value.copy(showBS = data.show,)
         return state.value
     }
     private fun converterLocal(data: CollapsingUC.Response, state: MutableStateFlow<TrainingState>): TrainingState {
-        state.value = state.value.copy(collapsing = data.result,)
+        state.value = state.value.copy(collapsing = data.collaps,)
         return state.value
     }
 

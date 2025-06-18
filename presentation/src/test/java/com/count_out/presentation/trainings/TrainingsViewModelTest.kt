@@ -50,7 +50,7 @@ class TrainingsViewModelTest {
     @ExperimentalCoroutinesApi
     @Test
     fun testCopyTrainingsSubmitEventToScreenState() = runTest {
-        whenever(copyTrainingUC.execute(CopyTrainingUC.Request(training1)))
+        whenever(copyTrainingUC.exec_old(CopyTrainingUC.Request(training1)))
             .thenReturn(flowOf(ResultUC.Success( CopyTrainingUC.Response(listTraining))))
         viewModel.submitEvent(TrainingsEvent.Copy(training1))
         listTraining.add(training1)
@@ -62,7 +62,7 @@ class TrainingsViewModelTest {
     @Test
     fun testDelTrainingsSubmitEventToScreenState() = runTest {
         listTraining.remove(training1)
-        whenever(delTrainingUC.execute(DeleteTrainingUC.Request(training1)))
+        whenever(delTrainingUC.exec_old(DeleteTrainingUC.Request(training1)))
             .thenReturn(flowOf(ResultUC.Success( DeleteTrainingUC.Response(listTraining))))
         viewModel.submitEvent(TrainingsEvent.Del(training1))
         val exceptionScreenState = ScreenState.Success(dataState = TrainingsState(trainings = listTraining))
@@ -73,7 +73,7 @@ class TrainingsViewModelTest {
     @Test
     fun testGetTrainingsSubmitEventToScreenState() = runTest {
         val exceptionScreenState = ScreenState.Success(dataState = TrainingsState(trainings = listTraining))
-        whenever(getTrainingsUC.execute(GetTrainingsUC.Request))
+        whenever(getTrainingsUC.exec_old(GetTrainingsUC.Request))
             .thenReturn(flowOf(ResultUC.Success( GetTrainingsUC.Response(listTraining))))
         viewModel.submitEvent(TrainingsEvent.Gets)
         Thread.sleep(1000)
@@ -83,7 +83,7 @@ class TrainingsViewModelTest {
     @Test
     fun testSelectedTrainingsSubmitEventToScreenState() = runTest {
         val exceptionScreenState = ScreenState.Success(dataState = TrainingsState( selectedId = 1))
-        whenever(selectTrainingUC.execute(SelectTrainingUC.Request(training1)))
+        whenever(selectTrainingUC.exec_old(SelectTrainingUC.Request(training1)))
             .thenReturn(flowOf(ResultUC.Success( SelectTrainingUC.Response(1))))
         viewModel.submitEvent(TrainingsEvent.Select(training1))
         Thread.sleep(1000)
