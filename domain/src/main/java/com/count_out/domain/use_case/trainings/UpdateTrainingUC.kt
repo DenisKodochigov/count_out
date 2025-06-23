@@ -4,7 +4,6 @@ import com.count_out.domain.entity.throwable.ResultUC
 import com.count_out.domain.entity.workout.Training
 import com.count_out.domain.repository.trainings.TrainingRepo
 import com.count_out.domain.use_case.UseCase
-import com.count_out.domain.use_case.trainings.GetTrainingUC.Response
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject

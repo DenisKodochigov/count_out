@@ -6,8 +6,6 @@ import com.count_out.data.models.RingImpl
 import com.count_out.data.models.SpeechKitImplD
 import com.count_out.data.source.room.ExerciseSource
 import com.count_out.data.source.room.RingSource
-import com.count_out.data.source.room.SpeechKitSource
-import com.count_out.domain.entity.workout.Ring
 import com.count_out.framework.room.db.ring.RingDao
 import com.count_out.framework.room.db.ring.RingTable
 import kotlinx.coroutines.flow.Flow
@@ -19,7 +17,7 @@ class RingSourceImpl @Inject constructor(
     private val exerciseSource: ExerciseSource,
     private val speechKitSource: SpeechKitSourceImpl,
 ): RingSource {
-    override fun get(ring: RingImpl): Flow<RingImpl?>  = dao.get(ring.idRing).map { it?.let { it1-> it1.toRing() } ?: null }
+    override fun get(ring: RingImpl): Flow<RingImpl?>  = dao.get(ring.idRing).map { it?.toRing() }
 
     override fun gets(trainingId: Long): Flow<List<RingImpl>> =
         dao.gets(trainingId).map { list-> list.map { it.toRing() } }

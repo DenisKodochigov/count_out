@@ -1,6 +1,7 @@
 package com.count_out.framework
 
 import com.count_out.data.models.SpeechImplD
+import com.count_out.data.models.throwable.ResultDataSource
 import com.count_out.data.source.room.SpeechSource
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flowOf
@@ -17,10 +18,11 @@ import org.mockito.kotlin.whenever
 @OptIn(ExperimentalCoroutinesApi::class)
 class SpeechSourceTest {
     private val speechSource = mock<SpeechSource>()
+    val speech = SpeechImplD(idSpeech = 1, message = "message 1", duration = 1L, addMessage = " add message 1")
 
     @Test
     fun addSpeech(){
-        val speech = expectedSpeech
+        val speech = inputData
         speechSource.copy(speech)
         val captor = argumentCaptor<SpeechImplD>()
         verify(speechSource).copy(captor.capture())
@@ -28,19 +30,20 @@ class SpeechSourceTest {
     }
     @Test
     fun getSpeech() = runTest{
-        whenever(speechSource.get(1)).thenReturn( flowOf(expectedSpeech) )
-        val speech = speechSource.get(1).last()
-        Assertions.assertEquals(speech, expectedSpeech)
+        val expected = ResultDataSource.Success(data = inputData)
+        whenever(speechSource.get(speech)).thenReturn( flowOf(expected) )
+        val speech = speechSource.get(speech).last()
+        Assertions.assertEquals(expected, speech)
     }
 
     @Test
     fun delSpeech(){
-        speechSource.del(1)
+        speechSource.del(speech)
         verify(speechSource).del(any())
     }
 
     companion object {
-        val expectedSpeech = SpeechImplD(idSpeech = 0, message = "test add speech",0,"")
+        val inputData = SpeechImplD(idSpeech = 0, message = "test add speech",0,"")
 //        fun buildSpeech() = SpeechImpl(idSpeech = 0, message = "test add speech",0,"")
     }
 }

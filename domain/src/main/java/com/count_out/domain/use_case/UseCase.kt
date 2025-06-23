@@ -1,12 +1,8 @@
 package com.count_out.domain.use_case
 
 import com.count_out.domain.entity.throwable.ResultUC
-import com.count_out.domain.entity.throwable.ThrowableUC
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.flowOn
-import kotlinx.coroutines.flow.map
 
 /**
  * В этом шаблоне мы определили абстракцию объектов передачи данных, а также класс Configuration,

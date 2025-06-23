@@ -6,8 +6,6 @@ import com.count_out.data.models.RoundImpl
 import com.count_out.data.models.SpeechKitImplD
 import com.count_out.data.source.room.ExerciseSource
 import com.count_out.data.source.room.RoundSource
-import com.count_out.data.source.room.SpeechKitSource
-import com.count_out.domain.entity.workout.Round
 import com.count_out.framework.room.db.round.RoundDao
 import com.count_out.framework.room.db.round.RoundTable
 import kotlinx.coroutines.flow.Flow
@@ -26,7 +24,7 @@ class RoundSourceImpl @Inject constructor(
     override fun gets(trainingId: Long): Flow<List<RoundImpl>> =
         dao.gets(trainingId).map { list-> list.map { it.toRound() } }
 
-    override fun get(round: RoundImpl): Flow<RoundImpl?> = dao.get(round.idRound).map { it?.let { it1-> it1.toRound() } ?: null }
+    override fun get(round: RoundImpl): Flow<RoundImpl?> = dao.get(round.idRound).map { it?.toRound() }
 
     override fun copy(round: RoundImpl): Long {
         //Создавть раунд имеет смысл только в связке с какимнибудь тренировочным планом.

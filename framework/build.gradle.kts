@@ -14,7 +14,6 @@ android {
     defaultConfig {
         minSdk = 28
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-//        consumerProguardFiles("consumer-rules.pro")
     }
     repositories {
         google()
@@ -46,6 +45,7 @@ android {
     }
     kotlinOptions { jvmTarget = "17" }
 }
+//val mockitoAgent = configurations.create("mockitoAgent")
 dependencies {
     implementation(project(":data"))
     implementation(project(":domain"))
@@ -70,5 +70,8 @@ dependencies {
     testImplementation (libs.bundles.testImpl)
 //    androidTestImplementation (platform(libs.compose.bom))
     androidTestImplementation (libs.bundles.androidTestImpl)
+//    mockitoAgent(libs.moskito.core){ isTransitive = false }
     testRuntimeOnly(libs.jupiter.engine)
 }
+
+//tasks.withType<Test>{jvmArgs("-javaagent:${mockitoAgent.asPath}")}

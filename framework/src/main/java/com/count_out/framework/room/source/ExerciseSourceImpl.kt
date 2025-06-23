@@ -6,7 +6,6 @@ import com.count_out.data.models.SetImplD
 import com.count_out.data.models.SpeechKitImplD
 import com.count_out.data.source.room.ExerciseSource
 import com.count_out.data.source.room.SetSource
-import com.count_out.data.source.room.SpeechKitSource
 import com.count_out.domain.entity.enums.Goal
 import com.count_out.domain.entity.enums.Units
 import com.count_out.domain.entity.enums.Zone
@@ -23,7 +22,7 @@ class ExerciseSourceImpl @Inject constructor(
 ): ExerciseSource {
 
     override fun get(exercise: ExerciseImplD): Flow<ExerciseImplD?> =
-        dao.get(exercise.idExercise).map { it?.let { it1-> it1.toExercise() } ?: null }
+        dao.get(exercise.idExercise).map { it?.toExercise() }
 
     override fun getForRound(id: Long): Flow<List<ExerciseImplD>> =
         dao.getForRound(id).map { list-> list.map { it.toExercise() }}

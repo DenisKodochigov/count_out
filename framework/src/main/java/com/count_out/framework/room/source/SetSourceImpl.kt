@@ -3,7 +3,6 @@ package com.count_out.framework.room.source
 import com.count_out.data.models.SetImplD
 import com.count_out.data.models.SpeechKitImplD
 import com.count_out.data.source.room.SetSource
-import com.count_out.data.source.room.SpeechKitSource
 import com.count_out.framework.room.db.set.SetDao
 import com.count_out.framework.room.db.set.SetTable
 import kotlinx.coroutines.flow.Flow
@@ -14,7 +13,7 @@ class SetSourceImpl @Inject constructor(
     private val speechKitSource: SpeechKitSourceImpl,
     private val setDao: SetDao): SetSource {
 
-    override fun get(item: SetImplD): Flow<SetImplD?> = setDao.get(item.idSet).map { it?.let { it1-> it1.toSet() } ?: null}
+    override fun get(item: SetImplD): Flow<SetImplD?> = setDao.get(item.idSet).map { it?.toSet() }
 
     override fun gets(exerciseId: Long): Flow<List<SetImplD>> {
         return setDao.gets(exerciseId).map { list-> list.map{ it.toSet()} } }

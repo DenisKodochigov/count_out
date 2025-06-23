@@ -28,7 +28,6 @@ sealed class TrainingEvent: Event {
     data class SetCollapsing(val item: Collapsing): TrainingEvent()
 
     data class UpdateSpeech(val item: SpeechKit): TrainingEvent()
-    data class UpdateSpeech1(val item: Speech): TrainingEvent()
     data object BackScreen : TrainingEvent()
 }
 
