@@ -11,8 +11,7 @@ import javax.inject.Inject
 class SelectDeviceBleUC @Inject constructor(
     configuration: Configuration, private val repo: BluetoothRepo
 ): UseCase<SelectDeviceBleUC.Request, SelectDeviceBleUC.Response>(configuration)  {
-//    override fun implementation_old(request: Request): Flow<Response> =
-//        repo.selectDeice(request.device).map { Response(it) }
+
     override fun implementation(request: Request): Flow<ResultUC<Response>> =
         repo.selectDeice(request.device).map { ResultUC.Success(Response(it)) }
 

@@ -1,5 +1,6 @@
 package com.count_out.domain.use_case.settings
 
+
 //class GetSettingUC @Inject constructor(
 //    configuration: Configuration, private val repo: SettingsRepo
 //): UseCase<GetSettingUC.Request, GetSettingUC.Response>(configuration)  {

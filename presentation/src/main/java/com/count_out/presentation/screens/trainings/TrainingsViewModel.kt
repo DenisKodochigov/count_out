@@ -2,12 +2,14 @@ package com.count_out.presentation.screens.trainings
 
 import androidx.lifecycle.viewModelScope
 import com.count_out.domain.entity.workout.Speech
+import com.count_out.domain.entity.workout.SpeechKit
 import com.count_out.domain.entity.workout.Training
 import com.count_out.domain.use_case.speech.UpdateSpeechUC
 import com.count_out.domain.use_case.trainings.CopyTrainingUC
 import com.count_out.domain.use_case.trainings.DeleteTrainingUC
 import com.count_out.domain.use_case.trainings.GetTrainingsUC
 import com.count_out.domain.use_case.trainings.SelectTrainingUC
+import com.count_out.domain.use_case.trainings.UpdateTrainingUC
 import com.count_out.presentation.screens.prime.Event
 import com.count_out.presentation.screens.prime.PrimeViewModel
 import com.count_out.presentation.screens.prime.ScreenState
@@ -21,6 +23,7 @@ import javax.inject.Inject
     private val copyTrainingUC: CopyTrainingUC,
     private val delTrainingUC: DeleteTrainingUC,
     private val getTrainingsUC: GetTrainingsUC,
+    private val updateTrainingUC: UpdateTrainingUC,
     private val selectTrainingUC: SelectTrainingUC,
     private val updateSpeechUC: UpdateSpeechUC,
 ): PrimeViewModel<TrainingsState, TrainingsConvertor>() {
@@ -36,6 +39,7 @@ import javax.inject.Inject
             is TrainingsEvent.Gets -> { getTrainings() }
             is TrainingsEvent.Copy -> { copyTraining(event.item) }
             is TrainingsEvent.Del -> { deleteTraining(event.item) }
+            is TrainingsEvent.Update -> { updateTraining(event.item) }
             is TrainingsEvent.Select -> { selectTraining(event.item) }
             is TrainingsEvent.UpdateSpeech -> { updateSpeech(event.item) }
         }
@@ -53,13 +57,16 @@ import javax.inject.Inject
         viewModelScope.launch(Dispatchers.IO) {
             copyTrainingUC.execute( CopyTrainingUC.Request(training)).collect { submitState( it ) }
         } }
+    private fun updateTraining(training: Training){
+        viewModelScope.launch(Dispatchers.IO) {
+            updateTrainingUC.execute( UpdateTrainingUC.Request(training)).collect { submitState( it ) }
+        }}
     private fun selectTraining(training: Training){
         viewModelScope.launch(Dispatchers.IO) {
             selectTrainingUC.execute( SelectTrainingUC.Request(training)).collect { submitState( it ) }
         }}
-    private fun updateSpeech(item: Speech){
+    private fun updateSpeech(item: SpeechKit){
         viewModelScope.launch(Dispatchers.IO) {
-            lg("viewModel update speech")
             updateSpeechUC.execute( UpdateSpeechUC.Request(item)).collect { submitState( it ) }
         }
     }

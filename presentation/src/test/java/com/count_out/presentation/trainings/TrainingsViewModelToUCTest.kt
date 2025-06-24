@@ -1,11 +1,15 @@
 package com.count_out.presentation.trainings
 
 import com.count_out.domain.entity.throwable.ResultUC
+import com.count_out.domain.entity.workout.SpeechKit
 import com.count_out.domain.use_case.speech.UpdateSpeechUC
 import com.count_out.domain.use_case.trainings.CopyTrainingUC
 import com.count_out.domain.use_case.trainings.DeleteTrainingUC
 import com.count_out.domain.use_case.trainings.GetTrainingsUC
 import com.count_out.domain.use_case.trainings.SelectTrainingUC
+import com.count_out.domain.use_case.trainings.UpdateTrainingUC
+import com.count_out.presentation.models.SpeechImplP
+import com.count_out.presentation.models.SpeechKitImplP
 import com.count_out.presentation.models.TrainingImplP
 import com.count_out.presentation.screens.prime.ScreenState
 import com.count_out.presentation.screens.trainings.TrainingsEvent
@@ -44,6 +48,7 @@ class TrainingsViewModelToUCTest {
         val copyTrainingUC = mock<CopyTrainingUC>()
         val delTrainingUC = mock<DeleteTrainingUC>()
         val getTrainingsUC = mock<GetTrainingsUC>()
+        val updateTrainingUC = mock<UpdateTrainingUC>()
         val selectTrainingUC = mock<SelectTrainingUC>()
         val updateSpeechUC = mock<UpdateSpeechUC>()
 
@@ -51,13 +56,25 @@ class TrainingsViewModelToUCTest {
         @BeforeAll
         fun beforeAll() {
             Dispatchers.setMain(StandardTestDispatcher())  //UnconfinedTestDispatcher  StandardTestDispatcher
-            viewModel = TrainingsViewModel(copyTrainingUC, delTrainingUC,getTrainingsUC,selectTrainingUC, updateSpeechUC)
+            viewModel = TrainingsViewModel(
+                copyTrainingUC, delTrainingUC,getTrainingsUC,updateTrainingUC, selectTrainingUC, updateSpeechUC)
         }
         @JvmStatic
         @AfterAll
         fun afterAll() { Dispatchers.resetMain() }
     }
+
     @Test @Order(1)
+    fun testGetsTrainingsSubmitEventToScreenState() = runTest {
+        val exceptionScreenState = ScreenState.Success(dataState = TrainingsState(trainings = listTraining))
+        whenever(getTrainingsUC.execute(GetTrainingsUC.Request))
+            .thenReturn(flowOf(ResultUC.Success( GetTrainingsUC.Response(listTraining))))
+        viewModel.submitEvent(TrainingsEvent.Gets)
+        var actual = viewModel.screenState.value
+        viewModel.screenState.filter{it != ScreenState.Loading}.take(1).collect { actual = it }
+        Assertions.assertEquals(exceptionScreenState, actual)
+    }
+    @Test @Order(2)
     fun testCopyTrainingsSubmitEventToScreenState() = runTest {
         whenever(copyTrainingUC.execute(CopyTrainingUC.Request(training1)))
             .thenReturn(flowOf(ResultUC.Success( CopyTrainingUC.Response(listTraining))))
@@ -69,7 +86,7 @@ class TrainingsViewModelToUCTest {
         Assertions.assertEquals(exceptionScreenState, actual)
     }
 
-    @Test @Order(2)
+    @Test @Order(3)
     fun testDelTrainingsSubmitEventToScreenState() = runTest {
         listTraining.remove(training1)
         whenever(delTrainingUC.execute(DeleteTrainingUC.Request(training1)))
@@ -80,19 +97,18 @@ class TrainingsViewModelToUCTest {
         viewModel.screenState.filter{it != ScreenState.Loading}.take(1).collect { actual = it }
         Assertions.assertEquals(exceptionScreenState, actual)
     }
-
-    @Test @Order(3)
-    fun testGetTrainingsSubmitEventToScreenState() = runTest {
-        val exceptionScreenState = ScreenState.Success(dataState = TrainingsState(trainings = listTraining))
-        whenever(getTrainingsUC.execute(GetTrainingsUC.Request))
-            .thenReturn(flowOf(ResultUC.Success( GetTrainingsUC.Response(listTraining))))
-        viewModel.submitEvent(TrainingsEvent.Gets)
+    @Test @Order(4)
+    fun testUpdateTrainingsSubmitEventToScreenState() = runTest {
+        val updatedTraining = training1.copy(name = "New")
+        val exceptionScreenState = ScreenState.Success(dataState = TrainingsState( trainings = listTraining))
+        whenever(updateTrainingUC.execute(UpdateTrainingUC.Request(training1)))
+            .thenReturn(flowOf(ResultUC.Success( UpdateTrainingUC.Response(listTraining))))
+        viewModel.submitEvent(TrainingsEvent.Update(training1))
         var actual = viewModel.screenState.value
         viewModel.screenState.filter{it != ScreenState.Loading}.take(1).collect { actual = it }
-        Assertions.assertEquals(exceptionScreenState, actual)
+        Assertions.assertEquals(exceptionScreenState, actual,)
     }
-
-    @Test @Order(4)
+    @Test @Order(5)
     fun testSelectedTrainingsSubmitEventToScreenState() = runTest {
         val exceptionScreenState = ScreenState.Success(dataState = TrainingsState( selectedId = 1))
         whenever(selectTrainingUC.execute(SelectTrainingUC.Request(training1)))
@@ -102,7 +118,23 @@ class TrainingsViewModelToUCTest {
         viewModel.screenState.filter{it != ScreenState.Loading}.take(1).collect { actual = it }
         Assertions.assertEquals(exceptionScreenState, actual,)
     }
-
+    @Test @Order(6)
+    fun testUpdateSpeechTrainingsSubmitEventToScreenState() = runTest {
+        val speechKit = SpeechKitImplP(
+            idSpeechKit = 1,
+            beforeStart = SpeechImplP(idSpeech = 1, message = "beforeStart"),
+            afterStart = SpeechImplP(idSpeech = 2, message = "beforeStart"),
+            beforeEnd = SpeechImplP(idSpeech = 3, message = "beforeStart"),
+            afterEnd = SpeechImplP(idSpeech = 4, message = "beforeStart"),
+        )
+        val exceptionScreenState = ScreenState.Success(dataState = TrainingsState( selectedId = 1))
+        whenever(updateSpeechUC.execute(UpdateSpeechUC.Request(speechKit)))
+            .thenReturn(flowOf(ResultUC.Success( UpdateSpeechUC.Response(1))))
+        viewModel.submitEvent(TrainingsEvent.UpdateSpeech(speechKit))
+        var actual = viewModel.screenState.value
+        viewModel.screenState.filter{it != ScreenState.Loading}.take(1).collect { actual = it }
+        Assertions.assertEquals(exceptionScreenState, actual,)
+    }
 }
 
 

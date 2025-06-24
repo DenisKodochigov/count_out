@@ -32,7 +32,7 @@ class TrainingsConvertor @Inject constructor(): PrimeConvertor<UseCase.Response,
         return state.value.copy(trainings = data.trainings)
     }
     private fun converterUpdateTraining(data: UpdateTrainingUC.Response, state: MutableStateFlow<TrainingsState>): TrainingsState {
-        return state.value
+        return state.value.copy(trainings = data.trainings)
     }
     private fun converterSelectTraining(data: SelectTrainingUC.Response, state: MutableStateFlow<TrainingsState>): TrainingsState {
         return state.value.copy(selectedId = data.selectedTraining)

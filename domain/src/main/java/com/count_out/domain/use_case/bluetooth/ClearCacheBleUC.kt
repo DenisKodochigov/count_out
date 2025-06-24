@@ -10,7 +10,7 @@ import javax.inject.Inject
 class ClearCacheBleUC @Inject constructor(
     configuration: Configuration, private val repo: BluetoothRepo
 ): UseCase<ClearCacheBleUC.Request, ClearCacheBleUC.Response>(configuration)  {
-//    override fun implementation_old(request: Request): Flow<Response> = repo.clearCache().map { Response(it) }
+
     override fun implementation(request: Request): Flow<ResultUC<Response>> =
         repo.clearCache().map { ResultUC.Success(Response(it)) }
 

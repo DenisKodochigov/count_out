@@ -12,8 +12,7 @@ import javax.inject.Inject
 class ChangeSequenceExerciseUC @Inject constructor(
     configuration: Configuration, private val repo: ExerciseRepo
 ): UseCase<ChangeSequenceExerciseUC.Request, ChangeSequenceExerciseUC.Response>(configuration)  {
-//    override fun implementation_old(request: Request): Flow<Response> =
-//        repo.changeSequenceExercise(request.item).map { Response(it) }
+
     override fun implementation(request: Request): Flow<ResultUC<Response>> =
         repo.changeSequenceExercise(request.item).map { ResultUC.Success(Response(it)) }
 

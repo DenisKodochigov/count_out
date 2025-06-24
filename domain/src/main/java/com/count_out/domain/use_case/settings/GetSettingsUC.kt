@@ -11,8 +11,7 @@ import javax.inject.Inject
 class GetSettingsUC @Inject constructor(
     configuration: Configuration, private val repo: SettingsRepo
 ): UseCase<GetSettingsUC.Request, GetSettingsUC.Response>(configuration)  {
-//    override fun implementation_old(input: Request): Flow<Response> =
-//        repo.getSettings().map { Response(it) }
+
     override fun implementation(request: Request): Flow<ResultUC<Response>> =
         repo.getSettings().map { ResultUC.Success(Response(it)) }
 

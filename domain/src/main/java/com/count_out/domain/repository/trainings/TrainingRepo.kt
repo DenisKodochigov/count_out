@@ -9,11 +9,5 @@ interface TrainingRepo {
     fun del(training: Training): Flow<List<Training>>
     fun copy(training: Training): Flow<List<Training>>
     fun select(training: Training): Flow<List<Training>>
-    fun update(training: Training): Flow<Training>
-//    override fun <Training> gets(): Flow<List<Training>>
-//    override fun <T> get(): Flow<T>
-//    override fun <Training> add(item: Training): Flow<Training>
-//    override fun <Training> copy(id: Long): Flow<Training>
-//    override fun <Training> update(item: Training): Flow<Training>
-//    override fun del(id: Long)
+    fun update(training: Training): Flow<List<Training>>
 }

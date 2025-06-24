@@ -10,6 +10,7 @@ import javax.inject.Inject
 class StartScanBleUC @Inject constructor(
     configuration: Configuration, private val repo: BluetoothRepo
 ): UseCase<StartScanBleUC.Request, StartScanBleUC.Response>(configuration)  {
+
     override fun implementation(request: Request): Flow<ResultUC<Response>> =
         repo.startScanning().map { ResultUC.Success(Response(it)) }
 

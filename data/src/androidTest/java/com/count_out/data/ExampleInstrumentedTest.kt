@@ -1,24 +1,40 @@
 package com.count_out.data
 
-import androidx.test.platform.app.InstrumentationRegistry
-import androidx.test.ext.junit.runners.AndroidJUnit4
+import dagger.hilt.android.testing.HiltAndroidTest
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import org.junit.jupiter.api.MethodOrderer
+import org.junit.jupiter.api.TestMethodOrder
 
-import org.junit.Test
-import org.junit.runner.RunWith
-
-import org.junit.Assert.*
-
-/**
- * Instrumented test, which will execute on an Android device.
- *
- * See [testing documentation](http://d.android.com/tools/testing).
- */
-@RunWith(AndroidJUnit4::class)
-class ExampleInstrumentedTest {
-    @Test
-    fun useAppContext() {
-        // Context of the app under test.
-        val appContext = InstrumentationRegistry.getInstrumentation().targetContext
-        assertEquals("com.count_out.data.test", appContext.packageName)
-    }
+@HiltAndroidTest
+@OptIn(ExperimentalCoroutinesApi::class)
+@TestMethodOrder(MethodOrderer.OrderAnnotation::class)
+class TrainingsViewModelToRepositoryTest {
+//
+//    @get:Rule
+//    var hiltRule = HiltAndroidRule(this)
+//
+//    private val training1 = TrainingImplD(idTraining = 1)
+//    private val training2 = TrainingImplD(idTraining = 2)
+//    val listTraining = mutableListOf(training1,training2)
+//
+//    companion object{
+//        val repo = mock<TrainingRepoImpl>()
+//
+//        @JvmStatic
+//        @BeforeAll
+//        fun beforeAll() { Dispatchers.setMain(StandardTestDispatcher()) }
+//        @JvmStatic
+//        @AfterAll
+//        fun afterAll() { Dispatchers.resetMain() }
+//    }
+//
+//    @Test
+//    @Order(1)
+//    fun testGetTrainingsSubmitEventToScreenStateRepository() = runTest {
+////        listTraining.remove(training1)
+//        val exceptionScreenState = ""
+//        whenever(repo.gets()).thenReturn(flowOf(listTraining))
+//        var actual = "viewModel.screenState.value"
+//        Assertions.assertEquals(exceptionScreenState, actual)
+//    }
 }

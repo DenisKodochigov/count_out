@@ -9,7 +9,7 @@ import javax.inject.Inject
 
 class CountOutServiceBindUC @Inject constructor(configuration: Configuration, private val repo: CountOutServiceRepo
 ): UseCase<CountOutServiceBindUC.Request, CountOutServiceBindUC.Response>(configuration)  {
-//    override fun implementation_old(request: Request): Flow<Response> = repo.bind().map { Response(it) }
+
     override fun implementation(request: Request): Flow<ResultUC<Response>> =
         repo.bind().map { ResultUC.Success(Response(it)) }
 

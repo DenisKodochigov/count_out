@@ -1,24 +1,26 @@
 package com.count_out.domain
 
 import androidx.test.platform.app.InstrumentationRegistry
-import androidx.test.ext.junit.runners.AndroidJUnit4
 
-import org.junit.Test
-import org.junit.runner.RunWith
 
-import org.junit.Assert.*
-
+import org.junit.Rule
+import org.junit.jupiter.api.AfterAll
+import org.junit.jupiter.api.Assertions
+import org.junit.jupiter.api.BeforeAll
+import org.junit.jupiter.api.MethodOrderer
+import org.junit.jupiter.api.Order
+import org.junit.jupiter.api.Test
 /**
  * Instrumented test, which will execute on an Android device.
  *
  * See [testing documentation](http://d.android.com/tools/testing).
  */
-@RunWith(AndroidJUnit4::class)
+
 class ExampleInstrumentedTest {
     @Test
     fun useAppContext() {
         // Context of the app under test.
         val appContext = InstrumentationRegistry.getInstrumentation().targetContext
-        assertEquals("com.count_out.domain.test", appContext.packageName)
+        Assertions.assertEquals("com.count_out.domain.test", appContext.packageName)
     }
 }

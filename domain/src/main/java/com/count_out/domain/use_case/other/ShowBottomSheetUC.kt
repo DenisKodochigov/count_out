@@ -14,8 +14,7 @@ import javax.inject.Inject
 
 class ShowBottomSheetUC @Inject constructor(configuration: Configuration
 ): UseCase<ShowBottomSheetUC.Request, ShowBottomSheetUC.Response>(configuration)  {
-//    override fun implementation_old(request: Request): Flow<Response> =
-//        flow { emit( Response(calculate(request.show)) ) }
+
     override fun implementation(request: Request): Flow<ResultUC<Response>> =
         flow { emit( ResultUC.Success(Response(calculate(request.show)))) }
 

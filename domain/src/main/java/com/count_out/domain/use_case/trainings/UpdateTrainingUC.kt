@@ -11,10 +11,10 @@ import javax.inject.Inject
 class UpdateTrainingUC @Inject constructor(
     configuration: Configuration, private val repo: TrainingRepo
 ): UseCase<UpdateTrainingUC.Request, UpdateTrainingUC.Response>(configuration)  {
-//    override fun implementation_old(request: Request): Flow<Response> =
-//        repo.update(request.training).map { Response(it) }
+
     override fun implementation(request: Request): Flow<ResultUC<Response>> =
         repo.update(request.training).map { ResultUC.Success(Response(it)) }
+
     data class Request(val training: Training): UseCase.Request
-    data class Response(val trainings: Training): UseCase.Response
+    data class Response(val trainings: List<Training>): UseCase.Response
 }

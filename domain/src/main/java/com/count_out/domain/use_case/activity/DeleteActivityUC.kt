@@ -11,8 +11,7 @@ import javax.inject.Inject
 class DeleteActivityUC @Inject constructor(
     configuration: Configuration, private val repo: ActivityRepo
 ): UseCase<DeleteActivityUC.Request, DeleteActivityUC.Response>(configuration)  {
-//    override fun implementation_old(request: Request): Flow<Response> =
-//        repo.del(request.activity).map { Response }
+
     override fun implementation(request: Request): Flow<ResultUC<Response>> =
         repo.del(request.activity).map { ResultUC.Success(Response) }
 

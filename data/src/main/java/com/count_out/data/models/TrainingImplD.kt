@@ -6,14 +6,14 @@ import com.count_out.domain.entity.workout.SpeechKit
 import com.count_out.domain.entity.workout.Training
 
 data class TrainingImplD(
-    override val idTraining: Long,
-    override val name: String,
-    override val amountActivity: Int,
-    override val rounds: List<Round>,
-    override val rings: List<Ring>,
-    override val isSelected: Boolean,
-    override var speechId: Long,
-    override var speech: SpeechKit?
+    override val idTraining: Long = 0L,
+    override val name: String = "",
+    override val amountActivity: Int = 0,
+    override val rounds: List<Round> = emptyList(),
+    override val rings: List<Ring> = emptyList(),
+    override val isSelected: Boolean = false,
+    override var speechId: Long = 0L,
+    override var speech: SpeechKit? = null,
 ): Training{
     constructor(tr: Training): this(
         idTraining = tr.idTraining,

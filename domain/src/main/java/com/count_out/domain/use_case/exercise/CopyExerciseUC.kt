@@ -11,8 +11,7 @@ import javax.inject.Inject
 class CopyExerciseUC @Inject constructor(
     configuration: Configuration, private val repo: ExerciseRepo
 ): UseCase<CopyExerciseUC.Request, CopyExerciseUC.Response>(configuration)  {
-//    override fun implementation_old(request: Request): Flow<Response> =
-//        repo.copy(request.exercise).map { Response(it) }
+
     override fun implementation(request: Request): Flow<ResultUC<Response>> =
         repo.copy(request.exercise).map { ResultUC.Success(Response(it)) }
 

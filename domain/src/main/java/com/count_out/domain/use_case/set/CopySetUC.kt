@@ -11,8 +11,7 @@ import javax.inject.Inject
 class CopySetUC @Inject constructor(
     configuration: Configuration, private val repo: SetRepo
 ): UseCase<CopySetUC.Request, CopySetUC.Response>(configuration)  {
-//    override fun implementation_old(request: Request): Flow<Response> =
-//        repo.copy(request.item).map { Response(it) }
+
     override fun implementation(request: Request): Flow<ResultUC<Response>> =
         repo.copy(request.item).map { ResultUC.Success(Response(it)) }
 

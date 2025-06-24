@@ -10,8 +10,7 @@ import javax.inject.Inject
 
 class GetWeatherUC @Inject constructor(configuration: Configuration, private val repo: WeatherRepo
 ): UseCase<GetWeatherUC.Request, GetWeatherUC.Response>(configuration)  {
-//    override fun implementation_old(request: Request): Flow<Response> =
-//        repo.get(request.latitude, request.longitude, request.timezone).map { Response(it) }
+
     override fun implementation(request: Request): Flow<ResultUC<Response>> =
         repo.get(request.latitude, request.longitude, request.timezone).map { ResultUC.Success(Response(it)) }
 

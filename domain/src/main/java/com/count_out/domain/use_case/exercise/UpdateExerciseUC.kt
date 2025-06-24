@@ -11,8 +11,7 @@ import javax.inject.Inject
 class UpdateExerciseUC @Inject constructor(
     configuration: Configuration, private val repo: ExerciseRepo
 ): UseCase<UpdateExerciseUC.Request, UpdateExerciseUC.Response>(configuration)  {
-//    override fun implementation_old(request: Request): Flow<Response> =
-//        repo.update(request.exercise).map { Response(it) }
+
     override fun implementation(request: Request): Flow<ResultUC<Response>> =
         repo.update(request.exercise).map { ResultUC.Success(Response(it)) }
 

@@ -13,12 +13,9 @@ import javax.inject.Inject
 
 class CollapsingUC @Inject constructor(configuration: Configuration
 ): UseCase<CollapsingUC.Request, CollapsingUC.Response>(configuration)  {
-//    override fun implementation_old(request: Request): Flow<Response> {
-//        return flow { emit( Response(executeCollapsing(request.collaps)) ) }
-//    }
+
     override fun implementation(request: Request): Flow<ResultUC<Response>> =
         flow { emit( ResultUC.Success(Response(executeCollapsing(request.collaps)))) }
-
 
     data class Request(val collaps: Collapsing) : UseCase.Request
     data class Response(val collaps: Collapsing) : UseCase.Response
