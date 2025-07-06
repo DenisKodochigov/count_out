@@ -3,7 +3,7 @@ package com.count_out.data.repository
 import com.count_out.data.source.local.SettingsSource
 import com.count_out.domain.entity.Setting
 import com.count_out.domain.entity.Settings
-import com.count_out.domain.repository.trainings.SettingsRepo
+import com.count_out.domain.repository.plans.SettingsRepo
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 

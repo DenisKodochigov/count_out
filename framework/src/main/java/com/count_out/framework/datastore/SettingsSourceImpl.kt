@@ -16,11 +16,11 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-internal val keySpeechDescr = booleanPreferencesKey("speech_description")
-internal val keyAddress = stringPreferencesKey("address_ble_device")
-internal val keyName = stringPreferencesKey("name_ble_device")
-
 class SettingsSourceImpl @Inject constructor(private val dataStore: DataStore<Preferences>): SettingsSource {
+
+    internal val keySpeechDescr = booleanPreferencesKey("speech_description")
+    internal val keyAddress = stringPreferencesKey("address_ble_device")
+    internal val keyName = stringPreferencesKey("name_ble_device")
 
     override fun getSettings(): Flow<Settings> {
         return combine(

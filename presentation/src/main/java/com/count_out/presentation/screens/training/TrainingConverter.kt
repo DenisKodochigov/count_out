@@ -9,8 +9,8 @@ import com.count_out.domain.use_case.other.ShowBottomSheetUC
 import com.count_out.domain.use_case.set.CopySetUC
 import com.count_out.domain.use_case.set.DeleteSetUC
 import com.count_out.domain.use_case.set.UpdateSetUC
-import com.count_out.domain.use_case.trainings.GetTrainingUC
-import com.count_out.domain.use_case.trainings.UpdateTrainingUC
+import com.count_out.domain.use_case.plans.GetTrainingUC
+import com.count_out.domain.use_case.plans.UpdateTrainingUC
 import com.count_out.presentation.models.TrainingImplP
 import com.count_out.presentation.screens.prime.PrimeConvertor
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -18,18 +18,18 @@ import javax.inject.Inject
 
 class TrainingConverter @Inject constructor(): PrimeConvertor<UseCase.Response, TrainingState>() {
 
-    override fun convertSuccess(data: UseCase.Response, state: MutableStateFlow<TrainingState>): TrainingState {
-        return when(data){
-            is GetTrainingUC.Response-> converterLocal(data, state)
-            is UpdateTrainingUC.Response-> converterLocal(data, state)
-            is CopyExerciseUC.Response-> converterLocal(data, state)
-            is DeleteExerciseUC.Response-> converterLocal(data, state)
-            is ChangeSequenceExerciseUC.Response-> converterLocal(data, state)
-            is CopySetUC.Response-> converterLocal(data, state)
-            is DeleteSetUC.Response-> converterLocal(data, state)
-            is UpdateSetUC.Response-> converterLocal(data, state)
-            is ShowBottomSheetUC.Response-> converterLocal(data, state)
-            is CollapsingUC.Response-> converterLocal(data, state)
+    override fun convertSuccess(resultData: UseCase.Response, state: MutableStateFlow<TrainingState>): TrainingState {
+        return when(resultData){
+            is GetTrainingUC.Response-> converterLocal(resultData, state)
+            is UpdateTrainingUC.Response-> converterLocal(resultData, state)
+            is CopyExerciseUC.Response-> converterLocal(resultData, state)
+            is DeleteExerciseUC.Response-> converterLocal(resultData, state)
+            is ChangeSequenceExerciseUC.Response-> converterLocal(resultData, state)
+            is CopySetUC.Response-> converterLocal(resultData, state)
+            is DeleteSetUC.Response-> converterLocal(resultData, state)
+            is UpdateSetUC.Response-> converterLocal(resultData, state)
+            is ShowBottomSheetUC.Response-> converterLocal(resultData, state)
+            is CollapsingUC.Response-> converterLocal(resultData, state)
             else -> converterOther(state)
         }
     }
@@ -38,7 +38,7 @@ class TrainingConverter @Inject constructor(): PrimeConvertor<UseCase.Response, 
         return state.value
     }
     private fun converterLocal(data: UpdateTrainingUC.Response, state: MutableStateFlow<TrainingState>): TrainingState {
-        state.value = state.value.copy(training = data.trainings)
+        state.value = state.value.copy(training = data.training)
         return state.value
     }
     private fun converterLocal(data: CopyExerciseUC.Response, state: MutableStateFlow<TrainingState>): TrainingState {

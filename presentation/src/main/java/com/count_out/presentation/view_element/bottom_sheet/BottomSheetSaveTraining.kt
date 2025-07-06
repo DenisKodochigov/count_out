@@ -13,7 +13,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import com.count_out.presentation.screens.executor.ExecuteWorkoutScreenState
+import com.count_out.presentation.screens.start_screen.ExecuteState
 import com.count_out.presentation.R
 import com.count_out.presentation.models.Dimen
 import com.count_out.presentation.view_element.ButtonsOkCancel
@@ -22,7 +22,7 @@ import com.count_out.presentation.view_element.TextApp
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun BottomSheetSaveTraining(uiState: ExecuteWorkoutScreenState)
+fun BottomSheetSaveTraining(uiState: ExecuteState)
 {
     val sheetState = rememberModalBottomSheetState(
         skipPartiallyExpanded = true, confirmValueChange = { true },)
@@ -35,7 +35,7 @@ fun BottomSheetSaveTraining(uiState: ExecuteWorkoutScreenState)
     )
 }
 @Composable
-fun BottomSheetSaveTrainingContent(uiState: ExecuteWorkoutScreenState)
+fun BottomSheetSaveTrainingContent(uiState: ExecuteState)
 {
     Column( horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier

@@ -18,8 +18,8 @@ import com.count_out.domain.use_case.set.CopySetUC
 import com.count_out.domain.use_case.set.DeleteSetUC
 import com.count_out.domain.use_case.set.UpdateSetUC
 import com.count_out.domain.use_case.speech.UpdateSpeechKitUC
-import com.count_out.domain.use_case.trainings.GetTrainingUC
-import com.count_out.domain.use_case.trainings.UpdateTrainingUC
+import com.count_out.domain.use_case.plans.GetTrainingUC
+import com.count_out.domain.use_case.plans.UpdateTrainingUC
 import com.count_out.presentation.models.TrainingImplP
 import com.count_out.presentation.screens.prime.Event
 import com.count_out.presentation.screens.prime.PrimeViewModel

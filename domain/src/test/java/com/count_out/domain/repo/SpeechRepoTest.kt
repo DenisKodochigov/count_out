@@ -1,32 +1,27 @@
 package com.count_out.domain.repo
 
-import androidx.lifecycle.viewmodel.compose.viewModel
-import com.count_out.domain.repository.trainings.TrainingRepo
+import com.count_out.domain.repository.plans.TrainingRepo
 import com.count_out.domain.use_case.speech.UpdateSpeechUC
-import com.count_out.domain.use_case.trainings.DeleteTrainingUC
-import com.count_out.domain.use_case.trainings.GetTrainingsUC
-import com.count_out.domain.use_case.trainings.SelectTrainingUC
+import com.count_out.domain.use_case.plans.DeleteTrainingUC
+import com.count_out.domain.use_case.plans.GetTrainingsUC
+import com.count_out.domain.use_case.plans.SelectTrainingUC
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.filter
-import kotlinx.coroutines.flow.flowOf
-import kotlinx.coroutines.flow.take
 import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
 import org.junit.Rule
 import org.junit.jupiter.api.AfterAll
-import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.MethodOrderer
 import org.junit.jupiter.api.Order
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestMethodOrder
 import org.mockito.kotlin.mock
-import org.mockito.kotlin.whenever
+
 @HiltAndroidTest
 @OptIn(ExperimentalCoroutinesApi::class)
 @TestMethodOrder(MethodOrderer.OrderAnnotation::class)

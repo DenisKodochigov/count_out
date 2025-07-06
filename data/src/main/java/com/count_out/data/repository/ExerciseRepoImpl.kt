@@ -4,7 +4,7 @@ import com.count_out.data.models.ExerciseImplD
 import com.count_out.data.source.room.ExerciseSource
 import com.count_out.domain.entity.DataForChangeSequence
 import com.count_out.domain.entity.workout.Exercise
-import com.count_out.domain.repository.trainings.ExerciseRepo
+import com.count_out.domain.repository.plans.ExerciseRepo
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.flow

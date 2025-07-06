@@ -4,6 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
+import com.count_out.app.presentation.Const.DEFAULT_SCREEN
 
 @Composable
 fun NavHostApp(
@@ -12,14 +13,14 @@ fun NavHostApp(
 ){
     NavHost(
         navController = navController,
-        startDestination = TrainingsDestination.route,
+        startDestination = DEFAULT_SCREEN.route,
         modifier = modifier
     ){
         val navEvent = NavigateEventImpl(navController)
-        trainings( navigateEvent = navEvent)
-        training(  navigateEvent = navEvent)
+        executeWorkout( navigateEvent = navEvent)
+        plans( navigateEvent = navEvent)
+        training( navigateEvent = navEvent)
         history(navigateEvent = navEvent)
-        executeWorkout(navigateEvent = navEvent)
         settings(navigateEvent = navEvent)
     }
 }

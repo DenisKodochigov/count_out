@@ -26,31 +26,32 @@ import android.Manifest.permission.VIBRATE
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.ui.unit.dp
 import com.count_out.app.R
-import com.count_out.app.presentation.navigation.TrainingsDestination
+import com.count_out.app.presentation.navigation.ExecuteDestination
 import java.util.UUID
 
 object Const {
-    const val DATA_STORE_FILE_NAME = "ble_device.json"
-    val DEFAULT_SCREEN = TrainingsDestination
-    const val MODE_DATABASE = 1
+//    const val DATA_STORE_FILE_NAME = "ble_device.json"
+//    const val MODE_DATABASE = 1
 
     const val DURATION_SCREEN = 800
     const val DELAY_SCREEN = 200
 
-    const val TAB_FADE_IN_ANIMATION_DURATION = 150
-    const val TAB_FADE_IN_ANIMATION_DELAY = 100
-    const val TAB_FADE_OUT_ANIMATION_DURATION = 100
+//    const val TAB_FADE_IN_ANIMATION_DURATION = 150
+//    const val TAB_FADE_IN_ANIMATION_DELAY = 100
+//    const val TAB_FADE_OUT_ANIMATION_DURATION = 100
 
-    const val SET_CONTENT_TITLE = "COUNT_OUT"
-    const val NOTIFICATION_ID = 999
-    const val NOTIFICATION_EXTRA = "WORKOUT_NOTIFICATION_EXTRA"
-    const val NOTIFICATION_CHANNEL_ID = "WORKOUT_NOTIFICATION_ID"
-    const val NOTIFICATION_CHANNEL_NAME = "WORKOUT_NOTIFICATION"
-    const val NOTIFICATION_CHANNEL_DESCRIPTION = "WORKOUT_CHANNEL_DESCRIPTION"
+//    const val SET_CONTENT_TITLE = "COUNT_OUT"
+//    const val NOTIFICATION_ID = 999
+//    const val NOTIFICATION_EXTRA = "WORKOUT_NOTIFICATION_EXTRA"
+//    const val NOTIFICATION_CHANNEL_ID = "WORKOUT_NOTIFICATION_ID"
+//    const val NOTIFICATION_CHANNEL_NAME = "WORKOUT_NOTIFICATION"
+//    const val NOTIFICATION_CHANNEL_DESCRIPTION = "WORKOUT_CHANNEL_DESCRIPTION"
 
-    const val START_REQUEST_CODE = 100
-    const val PAUSE_REQUEST_CODE = 101
-    const val STOP_REQUEST_CODE = 102
+//    const val START_REQUEST_CODE = 100
+//    const val PAUSE_REQUEST_CODE = 101
+//    const val STOP_REQUEST_CODE = 102
+
+    val DEFAULT_SCREEN = ExecuteDestination
 
     val permissions1 = listOf(
         ACCESS_COARSE_LOCATION,

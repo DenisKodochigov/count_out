@@ -1,5 +1,6 @@
 package com.count_out.framework.di
 
+import com.count_out.data.source.local.LastPlanSource
 import com.count_out.data.source.local.SettingsSource
 import com.count_out.data.source.room.ActivitySource
 import com.count_out.data.source.room.ExerciseSource
@@ -9,6 +10,7 @@ import com.count_out.data.source.room.SetSource
 import com.count_out.data.source.room.SpeechKitSource
 import com.count_out.data.source.room.SpeechSource
 import com.count_out.data.source.room.TrainingSource
+import com.count_out.framework.datastore.LastPlanSourceImpl
 import com.count_out.framework.datastore.SettingsSourceImpl
 import com.count_out.framework.room.source.ActivitySourceImpl
 import com.count_out.framework.room.source.ExerciseSourceImpl
@@ -44,4 +46,6 @@ abstract class SourceFrameWorkModule {
     abstract fun bindSpeechSource(speechSource: SpeechSourceImpl): SpeechSource
     @Binds
     abstract fun bindSettingsSource(speechSource: SettingsSourceImpl): SettingsSource
+    @Binds
+    abstract fun bindLastPlanSource(speechSource: LastPlanSourceImpl): LastPlanSource
 }

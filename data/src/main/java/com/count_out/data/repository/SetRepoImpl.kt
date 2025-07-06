@@ -3,7 +3,7 @@ package com.count_out.data.repository
 import com.count_out.data.models.SetImplD
 import com.count_out.data.source.room.SetSource
 import com.count_out.domain.entity.workout.Set
-import com.count_out.domain.repository.trainings.SetRepo
+import com.count_out.domain.repository.plans.SetRepo
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.filterNotNull
 import javax.inject.Inject

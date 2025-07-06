@@ -1,20 +1,19 @@
 package com.count_out.presentation.trainings
 
-import com.count_out.domain.use_case.trainings.CopyTrainingUC
-import com.count_out.domain.use_case.trainings.DeleteTrainingUC
-import com.count_out.domain.use_case.trainings.GetTrainingsUC
-import com.count_out.domain.use_case.trainings.SelectTrainingUC
-import com.count_out.domain.use_case.trainings.UpdateTrainingUC
+import com.count_out.domain.use_case.plans.CopyTrainingUC
+import com.count_out.domain.use_case.plans.DeleteTrainingUC
+import com.count_out.domain.use_case.plans.GetTrainingsUC
+import com.count_out.domain.use_case.plans.SelectTrainingUC
 import com.count_out.presentation.models.TrainingImplP
-import com.count_out.presentation.screens.trainings.TrainingsConvertor
-import com.count_out.presentation.screens.trainings.TrainingsState
+import com.count_out.presentation.screens.plans.PlansConvertor
+import com.count_out.presentation.screens.plans.PlansState
 import kotlinx.coroutines.flow.MutableStateFlow
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 
 class TrainingsConverterTest {
-    private val converter = TrainingsConvertor()
-    private val trainingState = MutableStateFlow(TrainingsState())
+    private val converter = PlansConvertor()
+    private val trainingState = MutableStateFlow(PlansState())
     private val training1 = TrainingImplP(idTraining = 1)
     private val training2 = TrainingImplP(idTraining = 2)
     private val listTraining = listOf(training1,training2)

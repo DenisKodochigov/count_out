@@ -1,8 +1,8 @@
 package com.count_out.domain.usecase
 
 import com.count_out.domain.entity.workout.Training
-import com.count_out.domain.repository.trainings.TrainingRepo
-import com.count_out.domain.use_case.trainings.GetTrainingsUC
+import com.count_out.domain.repository.plans.TrainingRepo
+import com.count_out.domain.use_case.plans.GetTrainingsUC
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOf

@@ -3,7 +3,7 @@ package com.count_out.data.repository
 import com.count_out.data.models.RingImpl
 import com.count_out.data.source.room.RingSource
 import com.count_out.domain.entity.workout.Ring
-import com.count_out.domain.repository.trainings.RingRepo
+import com.count_out.domain.repository.plans.RingRepo
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.filterNotNull
 import javax.inject.Inject

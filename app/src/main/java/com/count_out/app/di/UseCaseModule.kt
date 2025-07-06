@@ -3,12 +3,14 @@ package com.count_out.app.di
 import android.content.Context
 import com.count_out.domain.repository.BluetoothRepo
 import com.count_out.domain.repository.CountOutServiceRepo
+import com.count_out.domain.repository.ExecuteWorkOutRepo
+import com.count_out.domain.repository.LastPlanRepo
 import com.count_out.domain.repository.WeatherRepo
-import com.count_out.domain.repository.trainings.ActivityRepo
-import com.count_out.domain.repository.trainings.ExerciseRepo
-import com.count_out.domain.repository.trainings.SetRepo
-import com.count_out.domain.repository.trainings.SettingsRepo
-import com.count_out.domain.repository.trainings.TrainingRepo
+import com.count_out.domain.repository.plans.ActivityRepo
+import com.count_out.domain.repository.plans.ExerciseRepo
+import com.count_out.domain.repository.plans.SetRepo
+import com.count_out.domain.repository.plans.SettingsRepo
+import com.count_out.domain.repository.plans.TrainingRepo
 import com.count_out.domain.use_case.UseCase
 import com.count_out.domain.use_case.activity.AddActivityUC
 import com.count_out.domain.use_case.activity.DeleteActivityUC
@@ -18,6 +20,12 @@ import com.count_out.domain.use_case.bluetooth.ClearCacheBleUC
 import com.count_out.domain.use_case.bluetooth.SelectDeviceBleUC
 import com.count_out.domain.use_case.bluetooth.StartScanBleUC
 import com.count_out.domain.use_case.bluetooth.StopScanBleUC
+import com.count_out.domain.use_case.execute.DownIntervalUC
+import com.count_out.domain.use_case.execute.PauseWorkoutUC
+import com.count_out.domain.use_case.execute.SaveWorkoutUC
+import com.count_out.domain.use_case.execute.StartWorkoutUC
+import com.count_out.domain.use_case.execute.StopWorkoutUC
+import com.count_out.domain.use_case.execute.UpIntervalUC
 import com.count_out.domain.use_case.exercise.ChangeSequenceExerciseUC
 import com.count_out.domain.use_case.exercise.CopyExerciseUC
 import com.count_out.domain.use_case.exercise.DeleteExerciseUC
@@ -32,12 +40,14 @@ import com.count_out.domain.use_case.set.DeleteSetUC
 import com.count_out.domain.use_case.set.UpdateSetUC
 import com.count_out.domain.use_case.settings.GetSettingsUC
 import com.count_out.domain.use_case.settings.UpdateSettingUC
-import com.count_out.domain.use_case.trainings.CopyTrainingUC
-import com.count_out.domain.use_case.trainings.DeleteTrainingUC
-import com.count_out.domain.use_case.trainings.GetTrainingUC
-import com.count_out.domain.use_case.trainings.GetTrainingsUC
-import com.count_out.domain.use_case.trainings.SelectTrainingUC
-import com.count_out.domain.use_case.trainings.UpdateTrainingUC
+import com.count_out.domain.use_case.plans.CopyTrainingUC
+import com.count_out.domain.use_case.plans.DeleteTrainingUC
+import com.count_out.domain.use_case.plans.GetPlanUC
+import com.count_out.domain.use_case.plans.GetTrainingUC
+import com.count_out.domain.use_case.plans.GetTrainingsUC
+import com.count_out.domain.use_case.plans.SaveLastUsePlanUC
+import com.count_out.domain.use_case.plans.SelectTrainingUC
+import com.count_out.domain.use_case.plans.UpdateTrainingUC
 import com.count_out.presentation.models.Internet
 import dagger.Module
 import dagger.Provides
@@ -203,5 +213,37 @@ class UseCaseModule {
     @Provides
     fun provideShowBottomSheetUseCase(configuration: UseCase.Configuration): ShowBottomSheetUC =
         ShowBottomSheetUC(configuration)
+    @Singleton
+    @Provides
+    fun provideDownIntervalUseCase(configuration: UseCase.Configuration, repo: ExecuteWorkOutRepo): DownIntervalUC =
+        DownIntervalUC(configuration, repo)
+    @Singleton
+    @Provides
+    fun provideUpIntervalUseCase(configuration: UseCase.Configuration, repo: ExecuteWorkOutRepo): UpIntervalUC =
+        UpIntervalUC(configuration, repo)
+    @Singleton
+    @Provides
+    fun providePauseWorkoutUseCase(configuration: UseCase.Configuration, repo: ExecuteWorkOutRepo): PauseWorkoutUC =
+        PauseWorkoutUC(configuration, repo)
+    @Singleton
+    @Provides
+    fun provideSaveWorkoutUseCase(configuration: UseCase.Configuration, repo: ExecuteWorkOutRepo): SaveWorkoutUC =
+        SaveWorkoutUC(configuration, repo)
+    @Singleton
+    @Provides
+    fun provideStartWorkoutUseCase(configuration: UseCase.Configuration, repo: ExecuteWorkOutRepo): StartWorkoutUC =
+        StartWorkoutUC(configuration, repo)
+    @Singleton
+    @Provides
+    fun provideStopWorkoutUseCase(configuration: UseCase.Configuration, repo: ExecuteWorkOutRepo): StopWorkoutUC =
+        StopWorkoutUC(configuration, repo)
+    @Singleton
+    @Provides
+    fun provideGetPlanUseCase(configuration: UseCase.Configuration, repo: LastPlanRepo): GetPlanUC =
+        GetPlanUC(configuration, repo)
 
+    @Singleton
+    @Provides
+    fun provideSavePlanUseCase(configuration: UseCase.Configuration, repo: LastPlanRepo): SaveLastUsePlanUC =
+        SaveLastUsePlanUC(configuration, repo)
 }

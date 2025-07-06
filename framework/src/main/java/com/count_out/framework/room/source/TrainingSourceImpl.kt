@@ -1,17 +1,29 @@
 package com.count_out.framework.room.source
 
+import android.util.Log
 import com.count_out.data.models.RingImpl
 import com.count_out.data.models.RoundImpl
 import com.count_out.data.models.SpeechKitImplD
 import com.count_out.data.models.TrainingImplD
+import com.count_out.data.models.throwable.ResultDataSource
+import com.count_out.data.source.SourceData
 import com.count_out.data.source.room.RingSource
 import com.count_out.data.source.room.RoundSource
 import com.count_out.data.source.room.TrainingSource
 import com.count_out.domain.entity.enums.RoundType
 import com.count_out.framework.room.db.training.TrainingDao
 import com.count_out.framework.room.db.training.TrainingTable
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.filterNotNull
+import kotlinx.coroutines.flow.last
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.take
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class TrainingSourceImpl @Inject constructor(
@@ -19,7 +31,7 @@ class TrainingSourceImpl @Inject constructor(
     private val roundSource: RoundSource,
     private val ringSource: RingSource,
     private val speechKitSource: SpeechKitSourceImpl,
-): TrainingSource {
+): TrainingSource, SourceData() {
 
     override fun update(training: TrainingImplD) {
         training.speech?.let { speechKitSource.update(SpeechKitImplD(it)) }
@@ -46,13 +58,17 @@ class TrainingSourceImpl @Inject constructor(
     }
 
     override fun gets(): Flow<List<TrainingImplD>> {
-        return dao.getTrainingsRel().map { list -> list.map { item -> item.toTraining() } }
+        return dao.getTrainingsRel().map {
+            list -> list.map { item -> item.toTraining() } }
     }
 
     override fun get(training: TrainingImplD): Flow<TrainingImplD?> {
         return dao.getTrainingRel(training.idTraining).map { it?.toTraining() }
     }
 
+    override fun get2(id: Long): Flow<ResultDataSource<TrainingImplD>> {
+        return getResultFlow { dao.getTrainingRel(id).filterNotNull().map { it.toTraining()} }
+    }
     override fun del(training: TrainingImplD) {
         training.rounds.forEach { roundSource.del(it as RoundImpl) }
         training.rings.forEach { ringSource.del(it as RingImpl) }

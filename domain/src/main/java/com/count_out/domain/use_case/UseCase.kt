@@ -20,7 +20,7 @@ abstract class UseCase< I: UseCase.Request, O: UseCase.Response>(private val con
 
     fun execute(request: I): Flow<ResultUC<O>> = implementation(request)
     internal abstract fun implementation(request: I): Flow<ResultUC<O>>
-    fun <T : Any>converter(result: ResultUC<T>, response:(T)->O): ResultUC<O>{
+    fun <T: Any>converter(result: ResultUC<T>, response:(T)->O): ResultUC<O>{
         return when(result){
             is ResultUC.Success-> ResultUC.Success(response(result.data))
             is ResultUC.Error -> result as ResultUC<Nothing>

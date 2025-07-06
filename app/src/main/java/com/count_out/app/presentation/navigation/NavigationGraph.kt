@@ -17,22 +17,32 @@ import androidx.navigation.NamedNavArgument
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
+import com.count_out.app.presentation.Const.DEFAULT_SCREEN
 import com.count_out.app.presentation.Const.DELAY_SCREEN
 import com.count_out.app.presentation.Const.DURATION_SCREEN
-import com.count_out.presentation.screens.executor.ExecuteWorkViewModel
+import com.count_out.presentation.screens.start_screen.ExecuteViewModel
 import com.count_out.presentation.screens.history.HistoryViewModel
 import com.count_out.presentation.screens.settings.SettingViewModel
 import com.count_out.presentation.screens.training.TrainingViewModel
-import com.count_out.presentation.screens.trainings.TrainingsViewModel
+import com.count_out.presentation.screens.plans.PlansViewModel
 
-fun NavGraphBuilder.trainings( navigateEvent: NavigateEventImpl,
-) {
+fun NavGraphBuilder.executeWorkout(navigateEvent: NavigateEventImpl) {
     template(
-        routeTo = TrainingsDestination.route,
-        content = {
-            val vm: TrainingsViewModel = hiltViewModel()
+        routeTo = ExecuteDestination.route,
+        content = { navBackStackEntry ->
+            val vm: ExecuteViewModel = hiltViewModel()
             vm.initNavigate(navigateEvent)
-            TrainingsDestination.Show(vm, emptyList())
+            ExecuteDestination.Show(vm, arg = emptyList())
+        }
+    )
+}
+fun NavGraphBuilder.plans(navigateEvent: NavigateEventImpl ) {
+    template(
+        routeTo = PlansDestination.route,
+        content = {
+            val vm: PlansViewModel = hiltViewModel()
+            vm.initNavigate(navigateEvent)
+            PlansDestination.Show(vm, emptyList())
         }
     )
 }
@@ -45,25 +55,6 @@ fun NavGraphBuilder.training( navigateEvent: NavigateEventImpl) {
             vm.initNavigate(navigateEvent)
             val arg = listOf((navBackStackEntry.arguments?.getLong(TrainingDestination.ARG) ?: 0).toString())
             TrainingDestination.Show(vm, arg)
-//            TrainingScreen(
-//                navigateEvent = navigateEvent,
-//                trainingId = navBackStackEntry.arguments?.getLong(TrainingDestination.ARG) ?: 0,
-//            )
-        }
-    )
-}
-fun NavGraphBuilder.executeWorkout(navigateEvent: NavigateEventImpl) {
-    template(
-        routeTo = ExecuteWorkDestination.routeWithArgs,
-        argument = TrainingDestination.arguments,
-        content = { navBackStackEntry ->
-            val vm: ExecuteWorkViewModel = hiltViewModel()
-//            vm.initNavigate(navigateEvent)
-            val arg = listOf((navBackStackEntry.arguments?.getLong(TrainingDestination.ARG) ?: 0).toString())
-            ExecuteWorkDestination.Show(vm, arg)
-//            ExecuteWorkoutScreen(
-//                navigateEvent = navigateEvent,
-//                trainingId = navBackStackEntry.arguments?.getLong(TrainingDestination.ARG) ?: 0)
         }
     )
 }
@@ -103,25 +94,25 @@ fun NavGraphBuilder.template(
 }
 
 val enterTransition: AnimatedContentTransitionScope<NavBackStackEntry>.() -> EnterTransition = {
-    val targetScreen = targetState.destination.route ?: TrainingsDestination.route
-    val direction: Double = if (targetScreen == TrainingsDestination.route) -1.0 else 1.0
+    val targetScreen = targetState.destination.route ?: DEFAULT_SCREEN.route
+    val direction: Double = if (targetScreen == DEFAULT_SCREEN.route) -1.0 else 1.0
     slideInHorizontally(animationSpec =tweenM(), initialOffsetX = { (it * direction).toInt() }) +
         fadeIn( animationSpec = tweenM() )
 }
 val exitTransition: AnimatedContentTransitionScope<NavBackStackEntry>.() -> ExitTransition = {
-    val targetScreen = targetState.destination.route ?: TrainingsDestination.route
-    val direction: Double = if (targetScreen == TrainingsDestination.route) 1.0 else -1.0
+    val targetScreen = targetState.destination.route ?: DEFAULT_SCREEN.route
+    val direction: Double = if (targetScreen == DEFAULT_SCREEN.route) 1.0 else -1.0
     slideOutHorizontally(animationSpec = tweenM(), targetOffsetX = { (it * direction).toInt() }) +
     fadeOut(animationSpec = tweenM())
 }
 //val popEnterTransition: AnimatedContentTransitionScope<NavBackStackEntry>.() -> EnterTransition = {
-//    val targetScreen = targetState.destination.route ?: TrainingsDestination.route
-//    val direction: Double = if (targetScreen == TrainingsDestination.route) (1/3.0) else (1/3.0)
+//    val targetScreen = targetState.destination.route ?: DEFAULT_SCREEN.route
+//    val direction: Double = if (targetScreen == DEFAULT_SCREEN.route) (1/3.0) else (1/3.0)
 //    slideInHorizontally(initialOffsetX = { (it * direction).toInt() }, animationSpec = tweenM())
 //}
 //val popExitTransition: AnimatedContentTransitionScope<NavBackStackEntry>.() -> ExitTransition = {
-//    val targetScreen = targetState.destination.route ?: TrainingsDestination.route
-//    val direction: Double = if (targetScreen == TrainingsDestination.route) (1/3.0) else (1/3.0)
+//    val targetScreen = targetState.destination.route ?: DEFAULT_SCREEN.route
+//    val direction: Double = if (targetScreen == DEFAULT_SCREEN.route) (1/3.0) else (1/3.0)
 //    slideOutHorizontally(targetOffsetX = { (it * direction).toInt() }, animationSpec = tweenM())
 //}
 fun <T>tweenM(): TweenSpec<T> =
