@@ -5,6 +5,7 @@ import com.count_out.domain.entity.workout.Round
 import com.count_out.domain.entity.workout.Set
 
 interface StepTraining {
+    val idPlan: Long
     val round: Round?
     val exercise: Exercise?
     val nextExercise: NextExercise?

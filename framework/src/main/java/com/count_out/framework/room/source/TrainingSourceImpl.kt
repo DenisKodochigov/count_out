@@ -1,6 +1,5 @@
 package com.count_out.framework.room.source
 
-import android.util.Log
 import com.count_out.data.models.RingImpl
 import com.count_out.data.models.RoundImpl
 import com.count_out.data.models.SpeechKitImplD
@@ -13,17 +12,9 @@ import com.count_out.data.source.room.TrainingSource
 import com.count_out.domain.entity.enums.RoundType
 import com.count_out.framework.room.db.training.TrainingDao
 import com.count_out.framework.room.db.training.TrainingTable
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.filterNotNull
-import kotlinx.coroutines.flow.last
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.take
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class TrainingSourceImpl @Inject constructor(

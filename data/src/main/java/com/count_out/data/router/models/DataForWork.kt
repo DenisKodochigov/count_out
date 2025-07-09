@@ -21,7 +21,7 @@ data class DataForWork (
     var cancelCoroutineWork: ()-> Unit = {},
     val dataFromWork: DataFromWork? = null,
 
-    var map: MutableList<StepTraining> = mutableListOf<StepTraining>(),
+    var map: MutableList<StepTraining> = mutableListOf(),
     var exerciseCount: Int = 0,
 ){
     fun empty(){
@@ -39,8 +39,10 @@ data class DataForWork (
     fun sendStepTraining(){
         dataFromWork?.stepTraining?.value =
             if (interval.value > 0) {
-                (map[indexMap] as StepTrainingImpl).copy(currentSet = map[indexMap].currentSet?.let { set ->
-                   (set as SetImplD).copy(intervalReps = interval.value) })}
+                (map[indexMap] as StepTrainingImpl).copy(
+                    currentSet = map[indexMap].currentSet?.let { set ->
+                       (set as SetImplD).copy(intervalReps = interval.value) }
+                )}
             else map[indexMap]
     }
 
@@ -62,6 +64,7 @@ data class DataForWork (
                     exercise.sets.forEachIndexed { indS, set->
                         list.add(
                             StepTrainingImpl(
+                                idPlan = tr.idTraining,
                                 round = round,
                                 exercise = exercise,
                                 numberExercise = numberExercise,
@@ -69,7 +72,7 @@ data class DataForWork (
                                 currentSet = set,
                                 numberSet = indS + 1,
                                 quantitySet = exercise.sets.count(),
-                                nextExercise = TODO()
+                                nextExercise = null
                             ))
                     }
                     numberExercise ++

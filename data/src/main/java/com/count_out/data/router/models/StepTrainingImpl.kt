@@ -7,6 +7,7 @@ import com.count_out.domain.entity.workout.Round
 import com.count_out.domain.entity.workout.Set
 
 data class StepTrainingImpl(
+    override val idPlan: Long,
     override val round: Round?,
     override val exercise: Exercise?,
     override val nextExercise: NextExercise?,
@@ -14,5 +15,5 @@ data class StepTrainingImpl(
     override val quantityExercise: Int,
     override var currentSet: Set?,
     override val numberSet: Int,
-    override val quantitySet: Int
+    override val quantitySet: Int,
 ): StepTraining

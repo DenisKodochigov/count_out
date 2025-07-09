@@ -2,7 +2,6 @@ package com.count_out.data.source.room
 
 import com.count_out.data.models.TrainingImplD
 import com.count_out.data.models.throwable.ResultDataSource
-import com.count_out.domain.entity.workout.Training
 import kotlinx.coroutines.flow.Flow
 
 interface TrainingSource {

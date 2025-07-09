@@ -69,7 +69,7 @@ abstract class RepositoryBindModule {
     @Binds
     abstract fun bindExecuteWorkOutRepo(executeRepoImpl: ExecuteWorkOutRepoImpl): ExecuteWorkOutRepo
     @Binds
-    abstract fun bindlastPlanRepo(lastPlanRepoImpl: LastPlanRepoImpl): LastPlanRepo
+    abstract fun bindLastPlanRepo(lastPlanRepoImpl: LastPlanRepoImpl): LastPlanRepo
     @Binds
     abstract fun bindActive(activityImpl: ActivityImpl): Activity
 }

@@ -34,6 +34,7 @@ import com.count_out.domain.entity.enums.Goal
 import com.count_out.domain.entity.enums.RunningState
 import com.count_out.domain.entity.enums.Units
 import com.count_out.presentation.R
+import com.count_out.presentation.models.SetImplP
 import com.count_out.presentation.screens.prime.Action
 import com.count_out.presentation.screens.prime.Event
 import com.count_out.presentation.screens.prime.PrimeScreen
@@ -95,7 +96,7 @@ import java.math.RoundingMode
 @Composable fun AdditionalInformation(dataState: ExecuteState, action: Action, modifier: Modifier = Modifier){
     Column (modifier = modifier.fillMaxWidth()) {
         TextApp(text = " ", style = MaterialTheme.typography.bodyMedium)
-        Text(text = "Screen Execute ${dataState.plan}")
+        Text(text = "Screen Execute ${dataState.stepTraining}")
     }
 }
 @Composable fun ExerciseInfo(dataState: ExecuteState, action: Action) {
@@ -321,34 +322,6 @@ import java.math.RoundingMode
         IconQ.Faster(modifier = Modifier.padding(bottom = 4.dp),
             onClick = { action.ex(ExecuteEvent.DownInterval)}, color = color)
     }
-//    var downInterval = {}
-//    var upInterval = {}
-//
-//    dataState.plan?.let { plan ->
-//        dataState.stepTraining?.currentSet?.let { set ->
-//            downInterval = { }
-////                dataState.updateSet(
-////                plan.idTraining, (set as SetImplP).copy(intervalReps = set.intervalReps.minus()))
-//            upInterval = { }
-////                dataState.updateSet(
-////                    plan.idTraining, (set as SetImplP).copy(intervalReps = set.intervalReps.plus()))
-//        }
-//    }
-//    val color = if(!dataState.enableChangeInterval) MaterialTheme.colorScheme.surfaceContainerLow
-//                else MaterialTheme.colorScheme.outline
-//
-//    Row(verticalAlignment = Alignment.Bottom,
-//        modifier = Modifier
-//            .padding(top = 4.dp, start = 12.dp, end = 2.dp)
-//            .width(148.dp))
-//    {
-//        IconQ.Slower(modifier = Modifier.padding(bottom = 4.dp),
-//            onClick = { if(dataState.enableChangeInterval) upInterval()}, color = color)
-//        TextApp(style = MaterialTheme.typography.titleLarge, modifier = Modifier.padding(horizontal = 6.dp),
-//            text = (dataState.stepTraining?.currentSet?.intervalReps?.toBigDecimal()?.setScale(1, RoundingMode.UP) ?: "  ").toString())
-//        IconQ.Faster(modifier = Modifier.padding(bottom = 4.dp),
-//            onClick = { if(dataState.enableChangeInterval) downInterval()}, color = color)
-//    }
 }
 
 @Composable fun NextExercise(nextExercise: NextExercise?){
@@ -374,3 +347,34 @@ import java.math.RoundingMode
     }
     ExecuteWorkoutScreenLayout( dataState, action )
 }
+
+//@Composable fun ButtonChangeInterval(dataState: ExecuteState, action: Action){
+//    var downInterval = {}
+//    var upInterval = {}
+//
+//    dataState.plan?.let { plan ->
+//        dataState.stepTraining?.currentSet?.let { set ->
+//            downInterval = { }
+//                dataState.updateSet(
+//                plan.idTraining, (set as SetImplP).copy(intervalReps = set.intervalReps.minus()))
+//            upInterval = { }
+//                dataState.updateSet(
+//                    plan.idTraining, (set as SetImplP).copy(intervalReps = set.intervalReps.plus()))
+//        }
+//    }
+//    val color = if(!dataState.enableChangeInterval) MaterialTheme.colorScheme.surfaceContainerLow
+//                else MaterialTheme.colorScheme.outline
+//
+//    Row(verticalAlignment = Alignment.Bottom,
+//        modifier = Modifier
+//            .padding(top = 4.dp, start = 12.dp, end = 2.dp)
+//            .width(148.dp))
+//    {
+//        IconQ.Slower(modifier = Modifier.padding(bottom = 4.dp),
+//            onClick = { if(dataState.enableChangeInterval) upInterval()}, color = color)
+//        TextApp(style = MaterialTheme.typography.titleLarge, modifier = Modifier.padding(horizontal = 6.dp),
+//            text = (dataState.stepTraining?.currentSet?.intervalReps?.toBigDecimal()?.setScale(1, RoundingMode.UP) ?: "  ").toString())
+//        IconQ.Faster(modifier = Modifier.padding(bottom = 4.dp),
+//            onClick = { if(dataState.enableChangeInterval) downInterval()}, color = color)
+//    }
+//}

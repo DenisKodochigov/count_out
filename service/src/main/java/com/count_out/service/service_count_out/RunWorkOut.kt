@@ -43,12 +43,15 @@ class RunWorkOut @Inject constructor(
                     dataForWork.sendStepTrainingShort()
                     item.exercise?.let { exerciseLet->
                         speechStart(dataFromWork, exerciseLet.speech as SpeechKit)
-                        val desc = if (dataForWork.enableSpeechDescription.value) exerciseLet.activity?.description else ""
-                        speechManager.speech(dataFromWork, SpeechImplD(
-                            message = "${context.getString(R.string.next_exercise)} ${exerciseLet.activity?.name}. $desc",
-                            idSpeech = TODO(),
-                            duration = TODO(),
-                            addMessage = TODO()
+                        val desc = if (dataForWork.enableSpeechDescription.value)
+                            exerciseLet.activity?.description else ""
+                        speechManager.speech(dataFromWork,
+                            SpeechImplD(
+                                message = "${context.getString(R.string.next_exercise)} " +
+                                        "${exerciseLet.activity?.name}. $desc",
+                                idSpeech = 0,
+                                duration = 0,
+                                addMessage = ""
                         ))
                     }
 //                    dataForWork.setExecuteInfoExercise(index = indM)
@@ -80,11 +83,12 @@ class RunWorkOut @Inject constructor(
         }
     }
     private suspend fun speakSetBegin(set: SetImplD, dataFromWork: DataFromWork){
-        speechManager.speech(dataFromWork, SpeechImplD(
-            message = textBeforeSet(set),
-            idSpeech = TODO(),
-            duration = TODO(),
-            addMessage = TODO()
+        speechManager.speech(dataFromWork,
+            SpeechImplD(
+                message = textBeforeSet(set),
+                idSpeech = 0,
+                duration = 0,
+                addMessage = ""
         ))
         speechStart(dataFromWork, set.speech as SpeechKit)
     }
@@ -133,9 +137,9 @@ class RunWorkOut @Inject constructor(
                     getPlurals(
                         setCurrent.rest.value / (if (setCurrent.duration.unit == Units.M) 60.0 else 1.0),
                         setCurrent.rest.unit.id),
-            idSpeech = TODO(),
-            duration = TODO(),
-            addMessage = TODO()
+            idSpeech = 0,
+            duration = 0,
+            addMessage = ""
         ))
     }
     private suspend fun speakingRest(set: SetImplD, dataFromWork: DataFromWork ){

@@ -1,11 +1,7 @@
 package com.count_out.presentation.screens.start_screen
 
 import android.util.Log
-import androidx.compose.runtime.mutableStateOf
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.count_out.domain.entity.router.DataForUI
-import com.count_out.domain.entity.enums.RunningState
 import com.count_out.domain.entity.workout.ShowBottomSheet
 import com.count_out.domain.use_case.execute.DownIntervalUC
 import com.count_out.domain.use_case.execute.PauseWorkoutUC
@@ -14,29 +10,15 @@ import com.count_out.domain.use_case.execute.StartWorkoutUC
 import com.count_out.domain.use_case.execute.StopWorkoutUC
 import com.count_out.domain.use_case.execute.UpIntervalUC
 import com.count_out.domain.use_case.other.ShowBottomSheetUC
-import com.count_out.domain.use_case.plans.CopyTrainingUC
 import com.count_out.domain.use_case.plans.GetPlanUC
-import com.count_out.domain.use_case.plans.GetTrainingUC
-import com.count_out.domain.use_case.plans.GetTrainingsUC
-import com.count_out.presentation.R
+import com.count_out.domain.use_case.plans.GetStepPlanUC
 import com.count_out.presentation.models.DataForServImpl
 import com.count_out.presentation.models.Internet
-import com.count_out.presentation.models.MessageApp
-import com.count_out.presentation.models.TickTimeImplP
-import com.count_out.presentation.models.TrainingImplP
-import com.count_out.presentation.screens.plans.PlansConvertor
-import com.count_out.presentation.screens.plans.PlansEvent
-import com.count_out.presentation.screens.plans.PlansState
 import com.count_out.presentation.screens.prime.Event
 import com.count_out.presentation.screens.prime.PrimeViewModel
 import com.count_out.presentation.screens.prime.ScreenState
-import com.count_out.presentation.screens.training.TrainingEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -48,6 +30,7 @@ class ExecuteViewModel @Inject constructor(
     private val saveWorkoutUC: SaveWorkoutUC,
     private val upIntervalUC: UpIntervalUC,
     private val downIntervalUC: DownIntervalUC,
+    private val getStepPlanUC: GetStepPlanUC,
     private val getPlanUC: GetPlanUC,
     private val showBottomSheetUC: ShowBottomSheetUC,
     private val internet: Internet,
@@ -76,45 +59,43 @@ class ExecuteViewModel @Inject constructor(
 
     private fun getPlan(){
         viewModelScope.launch(Dispatchers.IO) {
-            getPlanUC.execute(GetPlanUC.Request).collect {
-                Log.d("KDS", "ExecuteViewModel.getPlan 1 ${it} ")
-                submitState( it ) }
+            getPlanUC.execute(GetPlanUC.Request).collect { submitState( it ) }
+        }
+        getStepPlan()
+    }
+    private fun getStepPlan(){
+        viewModelScope.launch(Dispatchers.IO) {
+            getStepPlanUC.execute(GetStepPlanUC.Request).collect { submitState( it ) }
         }
     }
     private fun startWorkOut(){
         viewModelScope.launch(Dispatchers.IO) {
-            startWorkoutUC.execute(StartWorkoutUC.Request).collect { submitState( it ) }
-        }
+            startWorkoutUC.execute(StartWorkoutUC.Request).collect { submitState( it ) } }
     }
     private fun stopWorkOut(){
         viewModelScope.launch(Dispatchers.IO) {
-            stopWorkoutUC.execute(StopWorkoutUC.Request).collect { submitState( it ) }
-        }
+            stopWorkoutUC.execute(StopWorkoutUC.Request).collect { submitState( it ) } }
     }
     private fun pauseWorkOut(){
         viewModelScope.launch(Dispatchers.IO) {
-            pauseWorkoutUC.execute(PauseWorkoutUC.Request).collect { submitState( it ) }
-        }
+            pauseWorkoutUC.execute(PauseWorkoutUC.Request).collect { submitState( it ) } }
     }
     private fun saveWorkOut(){
         viewModelScope.launch(Dispatchers.IO) {
-            saveWorkoutUC.execute(SaveWorkoutUC.Request).collect { submitState( it ) }
-        }
+            saveWorkoutUC.execute(SaveWorkoutUC.Request).collect { submitState( it ) } }
     }
     private fun upInterval(){
         viewModelScope.launch(Dispatchers.IO) {
-            upIntervalUC.execute(UpIntervalUC.Request).collect { submitState( it ) }
-        }
+            upIntervalUC.execute(UpIntervalUC.Request).collect { submitState( it ) } }
     }
     private fun downInterval(){
         viewModelScope.launch(Dispatchers.IO) {
-            downIntervalUC.execute(DownIntervalUC.Request).collect { submitState( it ) }
-        }
+            downIntervalUC.execute(DownIntervalUC.Request).collect { submitState( it ) } }
     }
     private fun showBottomSheet(item: ShowBottomSheet){
         viewModelScope.launch(Dispatchers.IO) {
-            showBottomSheetUC.execute( ShowBottomSheetUC.Request(item)).collect { submitState( it ) }
-        }
+            showBottomSheetUC.execute( ShowBottomSheetUC.Request(item)).collect {
+                submitState( it ) } }
     }
 //
 //    fun getTraining(id: Long) {

@@ -11,7 +11,7 @@ plugins {
 
 android {
     namespace = "com.count_out.app"
-    compileSdk = 35
+    compileSdk = 36
     buildToolsVersion = "35.0.0"
 
     defaultConfig {

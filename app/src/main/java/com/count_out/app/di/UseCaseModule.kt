@@ -43,6 +43,7 @@ import com.count_out.domain.use_case.settings.UpdateSettingUC
 import com.count_out.domain.use_case.plans.CopyTrainingUC
 import com.count_out.domain.use_case.plans.DeleteTrainingUC
 import com.count_out.domain.use_case.plans.GetPlanUC
+import com.count_out.domain.use_case.plans.GetStepPlanUC
 import com.count_out.domain.use_case.plans.GetTrainingUC
 import com.count_out.domain.use_case.plans.GetTrainingsUC
 import com.count_out.domain.use_case.plans.SaveLastUsePlanUC
@@ -217,6 +218,10 @@ class UseCaseModule {
     @Provides
     fun provideDownIntervalUseCase(configuration: UseCase.Configuration, repo: ExecuteWorkOutRepo): DownIntervalUC =
         DownIntervalUC(configuration, repo)
+    @Singleton
+    @Provides
+    fun provideGetStepPlanUseCase(configuration: UseCase.Configuration, repo: ExecuteWorkOutRepo): GetStepPlanUC =
+        GetStepPlanUC(configuration, repo)
     @Singleton
     @Provides
     fun provideUpIntervalUseCase(configuration: UseCase.Configuration, repo: ExecuteWorkOutRepo): UpIntervalUC =
