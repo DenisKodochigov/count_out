@@ -13,13 +13,17 @@ import androidx.compose.ui.semantics.testTagsAsResourceId
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.rememberNavController
 import com.count_out.app.R
+import com.count_out.app.presentation.navigation.ExecuteDestination
 import com.count_out.app.presentation.navigation.NavHostApp
+import com.count_out.app.presentation.navigation.ScreenDestination
 import com.count_out.app.presentation.navigation.backScreenDestination
 import com.count_out.app.presentation.navigation.navigateToScreen
+import com.count_out.app.presentation.navigation.navigateToScreenPlans
 import com.count_out.app.presentation.theme.AppTheme
 import com.count_out.app.presentation.view_components.BottomBarApp
 import com.count_out.app.presentation.view_components.CollapsingToolbar
 import com.count_out.domain.entity.enums.Units
+import com.count_out.presentation.screens.start_screen.ExecuteWorkoutScreen
 
 @OptIn(ExperimentalComposeUiApi::class)
 @SuppressLint("RememberReturnType", "UnrememberedMutableState", "SuspiciousIndentation",
@@ -34,10 +38,18 @@ fun StartApp() {
         Scaffold(
             modifier = Modifier.Companion.semantics { testTagsAsResourceId = true },
             topBar = {
-                CollapsingToolbar(
-                    text = stringResource(currentScreen.nameScreen),
-                    moreHoriz = { println(navController.currentBackStack.value.toString()) },
-                    backScreen = { navController.popBackStack() })
+                if (currentScreen is ExecuteDestination){
+                    CollapsingToolbar(
+                        text = stringResource(currentScreen.nameScreen),
+                        selected = true,
+                        onClickText = { navController.navigateToScreenPlans() } ,
+                        backScreen = { navController.popBackStack() })
+                } else {
+                    CollapsingToolbar(
+                        text = stringResource(currentScreen.nameScreen),
+                        onClickText = { },
+                        backScreen = { navController.popBackStack() })
+                }
             },
             bottomBar = {
                 BottomBarApp(

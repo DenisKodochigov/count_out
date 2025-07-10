@@ -40,11 +40,13 @@ fun TextAppEllipsis(
     modifier: Modifier = Modifier,
     textAlign: TextAlign = TextAlign.Center,
     style: TextStyle,
-    fontWeight: FontWeight = FontWeight.Normal,
+    selected: Boolean = false,
+    fontWeight: FontWeight = FontWeight.W300,
 ) {
     Text(
         text = text,
         style = style,
+        color = if (selected) MaterialTheme.colorScheme.outline else MaterialTheme.colorScheme.onPrimary,
         maxLines = 1,
         fontWeight = fontWeight,
         overflow = TextOverflow.Ellipsis,

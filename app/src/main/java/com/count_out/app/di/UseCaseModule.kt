@@ -42,7 +42,7 @@ import com.count_out.domain.use_case.settings.GetSettingsUC
 import com.count_out.domain.use_case.settings.UpdateSettingUC
 import com.count_out.domain.use_case.plans.CopyTrainingUC
 import com.count_out.domain.use_case.plans.DeleteTrainingUC
-import com.count_out.domain.use_case.plans.GetPlanUC
+//import com.count_out.domain.use_case.plans.GetPlanUC
 import com.count_out.domain.use_case.plans.GetStepPlanUC
 import com.count_out.domain.use_case.plans.GetTrainingUC
 import com.count_out.domain.use_case.plans.GetTrainingsUC
@@ -242,10 +242,10 @@ class UseCaseModule {
     @Provides
     fun provideStopWorkoutUseCase(configuration: UseCase.Configuration, repo: ExecuteWorkOutRepo): StopWorkoutUC =
         StopWorkoutUC(configuration, repo)
-    @Singleton
-    @Provides
-    fun provideGetPlanUseCase(configuration: UseCase.Configuration, repo: LastPlanRepo): GetPlanUC =
-        GetPlanUC(configuration, repo)
+//    @Singleton
+//    @Provides
+//    fun provideGetPlanUseCase(configuration: UseCase.Configuration, repo: LastPlanRepo): GetPlanUC =
+//        GetPlanUC(configuration, repo)
 
     @Singleton
     @Provides

@@ -10,7 +10,7 @@ import com.count_out.domain.use_case.execute.StartWorkoutUC
 import com.count_out.domain.use_case.execute.StopWorkoutUC
 import com.count_out.domain.use_case.execute.UpIntervalUC
 import com.count_out.domain.use_case.other.ShowBottomSheetUC
-import com.count_out.domain.use_case.plans.GetPlanUC
+//import com.count_out.domain.use_case.plans.GetPlanUC
 import com.count_out.domain.use_case.plans.GetStepPlanUC
 import com.count_out.presentation.models.DataForServImpl
 import com.count_out.presentation.models.Internet
@@ -31,7 +31,7 @@ class ExecuteViewModel @Inject constructor(
     private val upIntervalUC: UpIntervalUC,
     private val downIntervalUC: DownIntervalUC,
     private val getStepPlanUC: GetStepPlanUC,
-    private val getPlanUC: GetPlanUC,
+//    private val getPlanUC: GetPlanUC,
     private val showBottomSheetUC: ShowBottomSheetUC,
     private val internet: Internet,
 ): PrimeViewModel<ExecuteState, ExecuteConverter>() {
@@ -50,19 +50,19 @@ class ExecuteViewModel @Inject constructor(
             is ExecuteEvent.Save -> { saveWorkOut() }
             is ExecuteEvent.UpInterval -> { upInterval() }
             is ExecuteEvent.DownInterval -> { downInterval() }
-            is ExecuteEvent.GetPlan -> { getPlan() }
+            is ExecuteEvent.GetPlan -> { getStepPlan() }
             is ExecuteEvent.ShowBS -> { showBottomSheet(event.item) }
         }
     }
 
     private val dataForServ = DataForServImpl()
 
-    private fun getPlan(){
-        viewModelScope.launch(Dispatchers.IO) {
-            getPlanUC.execute(GetPlanUC.Request).collect { submitState( it ) }
-        }
-        getStepPlan()
-    }
+//    private fun getPlan(){
+//        viewModelScope.launch(Dispatchers.IO) {
+//            getPlanUC.execute(GetPlanUC.Request).collect { submitState( it ) }
+//        }
+//        getStepPlan()
+//    }
     private fun getStepPlan(){
         viewModelScope.launch(Dispatchers.IO) {
             getStepPlanUC.execute(GetStepPlanUC.Request).collect { submitState( it ) }

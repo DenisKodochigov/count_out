@@ -96,7 +96,7 @@ import java.math.RoundingMode
 @Composable fun AdditionalInformation(dataState: ExecuteState, action: Action, modifier: Modifier = Modifier){
     Column (modifier = modifier.fillMaxWidth()) {
         TextApp(text = " ", style = MaterialTheme.typography.bodyMedium)
-        Text(text = "Screen Execute ${dataState.stepTraining}")
+//        Text(text = "Screen Execute ${dataState.stepTraining}")
     }
 }
 @Composable fun ExerciseInfo(dataState: ExecuteState, action: Action) {
@@ -330,8 +330,8 @@ import java.math.RoundingMode
             text = "${ stringResource(R.string.next_exercise)}: ${nextExercise?.nextActivityName ?: ""}")
     TextApp(style = MaterialTheme.typography.bodyLarge,modifier = Modifier.padding(start = 12.dp),
         text = "${stringResource(R.string.sets)}:" +
-                " ${ nextExercise?.nextExerciseQuantitySet?.let { if(it != 0) it else "" }}" +
-                " ${ nextExercise?.nextExerciseSummarizeSet?.let { viewNextSets(it) }} ")
+                " ${ nextExercise?.nextExerciseQuantitySet?.let { if(it != 0) it else "" } ?: ""}" +
+                " ${ nextExercise?.nextExerciseSummarizeSet?.let { viewNextSets(it) } ?: ""} ")
 }
 @Composable fun viewNextSets(list: List<Pair<String, Int>>): String{
     return if(list.isNotEmpty())

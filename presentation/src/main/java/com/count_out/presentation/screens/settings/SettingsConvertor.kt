@@ -10,10 +10,10 @@ import javax.inject.Inject
 class SettingsConvertor @Inject constructor():
     PrimeConvertor<UseCase.Response, SettingsState>() {
 
-    override fun convertSuccess(data: UseCase.Response, state: MutableStateFlow<SettingsState>): SettingsState {
-        return when(data){
-            is GetSettingsUC.Response-> converterLocal(data, state)
-            is UpdateSettingUC.Response-> converterLocal(data, state)
+    override fun convertSuccess(resultData: UseCase.Response, state: MutableStateFlow<SettingsState>): SettingsState {
+        return when(resultData){
+            is GetSettingsUC.Response-> converterLocal(resultData, state)
+            is UpdateSettingUC.Response-> converterLocal(resultData, state)
             else -> converterOther(state)
         }
     }

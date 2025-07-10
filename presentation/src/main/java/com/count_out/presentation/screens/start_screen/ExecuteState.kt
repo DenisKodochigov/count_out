@@ -17,7 +17,7 @@ import javax.inject.Singleton
 
 @Singleton
 data class ExecuteState(
-    val plan: Training? = null,
+//    val plan: Training? = null,
 
     val flowTime: TickTime = TickTimeImplP(hour = "00", min="00", sec= "00"),
     val currentRest: Int = 0,

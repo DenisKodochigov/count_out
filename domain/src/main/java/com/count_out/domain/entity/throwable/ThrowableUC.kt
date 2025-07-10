@@ -4,6 +4,7 @@ sealed class ThrowableUC (private val t: Throwable?): Throwable(t){
     class TrainingThrow(t:Throwable): ThrowableUC(t)
     class ActivityThrow(t:Throwable): ThrowableUC(t)
     class WeatherTrow(t:Throwable): ThrowableUC(t)
+    class RepoTrow(t:Throwable): ThrowableUC(t)
     class DataSourceTrow(t:Throwable): ThrowableUC(t)
     class UnknownThrow(t:Throwable): ThrowableUC(t)
     companion object {

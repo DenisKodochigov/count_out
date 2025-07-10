@@ -3,6 +3,7 @@ package com.count_out.data.repository
 import android.util.Log
 import com.count_out.data.entity.ConverterResult
 import com.count_out.data.models.throwable.ResultDataSource
+import com.count_out.data.models.throwable.ThrowableDataSource
 import com.count_out.data.router.models.NextExerciseImpl
 import com.count_out.data.router.models.StepTrainingImpl
 import com.count_out.data.source.room.TrainingSource
@@ -36,17 +37,17 @@ class ExecuteWorkOutRepoImpl @Inject constructor(
             when(plan){
                 is ResultDataSource.Error -> { ResultUC.Error(ThrowableUC.DataSourceTrow(plan.throwable)) }
                 is ResultDataSource.Success<*> -> {
-                    ResultUC.Success(createMapTraining( plan.data as Training))
+                    createMapTraining( plan.data as Training)?.let { ResultUC.Success(it) } ?:
+                    ResultUC.Error(ThrowableUC.RepoTrow(Exception("return null"))) as ResultUC<Nothing>
                 }
             }
         }
     }
 
-    fun createMapTraining(training: Training?): StepTraining{
-        Log.d("KDS", "ExecuteWorkOutRepoImpl.createMapTraining $training")
+    fun createMapTraining(training: Training?): StepTraining?{
         var numberExercise = 1
         val list: MutableList<StepTraining> = mutableListOf()
-        training?.let { tr->
+        return training?.let { tr->
             tr.rounds.forEachIndexed { indR, round-> exerciseCount += round.exercise.count() }
             tr.rounds.forEachIndexed { indR, round->
                 round.exercise.forEachIndexed { indE, exercise ->
@@ -75,9 +76,9 @@ class ExecuteWorkOutRepoImpl @Inject constructor(
                     numberExercise ++
                 }
             }
-        }
-        return list[0]
+        }.run { if (list.isEmpty()) null else list[0] }
     }
+
     fun nextExercise(exercise: Exercise): NextExercise {
         val list: MutableList<Pair<String, Int>> = mutableListOf()
         exercise.sets.forEachIndexed { _, set ->
