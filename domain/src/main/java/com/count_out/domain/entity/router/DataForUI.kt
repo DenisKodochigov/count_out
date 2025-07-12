@@ -2,7 +2,7 @@ package com.count_out.domain.entity.router
 
 import android.util.Pair
 import com.count_out.domain.entity.Coordinate
-import com.count_out.domain.entity.StepTraining
+import com.count_out.domain.entity.StepPlan
 import com.count_out.domain.entity.TickTime
 import com.count_out.domain.entity.enums.RunningState
 import com.count_out.domain.entity.enums.ConnectState
@@ -16,7 +16,7 @@ interface DataForUI {
     val currentDuration: MutableStateFlow<Int>
     val currentDistance: MutableStateFlow<Int>
     val enableChangeInterval: MutableStateFlow<Boolean>
-    val stepTraining: MutableStateFlow<StepTraining?>
+    val stepTraining: MutableStateFlow<StepPlan?>
     val durationSpeech: MutableStateFlow<Pair<Long, Long>>
 
     val heartRate: MutableStateFlow<Int>

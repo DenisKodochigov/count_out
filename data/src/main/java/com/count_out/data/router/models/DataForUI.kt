@@ -1,7 +1,7 @@
 package com.count_out.data.router.models
 
 import com.count_out.domain.entity.Coordinate
-import com.count_out.domain.entity.StepTraining
+import com.count_out.domain.entity.StepPlan
 import com.count_out.domain.entity.TickTime
 import com.count_out.domain.entity.router.Buffer
 import com.count_out.domain.entity.router.DeviceUI
@@ -18,7 +18,7 @@ data class DataForUI (
     val currentDuration: MutableStateFlow<Int> = MutableStateFlow(0),
     val currentDistance: MutableStateFlow<Int> = MutableStateFlow(0),
     val enableChangeInterval: MutableStateFlow<Boolean> = MutableStateFlow(false),
-    val stepTraining: MutableStateFlow<StepTraining?> = MutableStateFlow(null),
+    val stepTraining: MutableStateFlow<StepPlan?> = MutableStateFlow(null),
     val durationSpeech: MutableStateFlow<Pair<Long, Long>> = MutableStateFlow(Pair(0,0)),
 
     val heartRate: MutableStateFlow<Int> = MutableStateFlow(0),

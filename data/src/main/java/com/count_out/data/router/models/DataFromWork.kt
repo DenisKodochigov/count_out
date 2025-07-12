@@ -1,6 +1,6 @@
 package com.count_out.data.router.models
 
-import com.count_out.domain.entity.StepTraining
+import com.count_out.domain.entity.StepPlan
 import com.count_out.domain.entity.TickTime
 import com.count_out.domain.entity.enums.RunningState
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -15,7 +15,7 @@ data class DataFromWork (
     val currentDistance: MutableStateFlow<Int> = MutableStateFlow(0),
     val enableChangeInterval: MutableStateFlow<Boolean> = MutableStateFlow(false),
     val phaseWorkout: MutableStateFlow<Int> = MutableStateFlow(0),
-    val stepTraining: MutableStateFlow<StepTraining?> = MutableStateFlow(null),
+    val stepTraining: MutableStateFlow<StepPlan?> = MutableStateFlow(null),
     val durationSpeech: MutableStateFlow<Pair<Long, Long>> = MutableStateFlow(Pair(0, 0)),
     var trap: ()-> Unit = {},
     var trapNew: ()-> Unit = {}

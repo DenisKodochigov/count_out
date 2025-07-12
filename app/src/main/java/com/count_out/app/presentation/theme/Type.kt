@@ -3,33 +3,30 @@ package com.count_out.app.presentation.theme
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Typography
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 
-val CustomFontFamily = FontFamily(
-    Font(com.count_out.presentation.R.font.inter_medium, FontWeight.W300),
-    Font(com.count_out.presentation.R.font.alumnisans_medium, FontWeight.W300)
-)
+val fontInter = FontFamily( Font(com.count_out.presentation.R.font.inter_regular, FontWeight.W300))
+val fontAlum = FontFamily( Font(com.count_out.presentation.R.font.alumnisans_medium, FontWeight.W300))
 
 @Composable fun myTypography() = Typography(
-    displayLarge = MaterialTheme.typography.displayLarge.copy(fontFamily = CustomFontFamily),
-    displayMedium = MaterialTheme.typography.displayMedium.copy(fontFamily = CustomFontFamily),
-    displaySmall = MaterialTheme.typography.displaySmall.copy(fontFamily = CustomFontFamily),
-    headlineLarge = MaterialTheme.typography.headlineLarge.copy(fontFamily = CustomFontFamily),
-    headlineMedium = MaterialTheme.typography.headlineMedium.copy(fontFamily = CustomFontFamily),
-    headlineSmall = MaterialTheme.typography.headlineSmall.copy(fontFamily = CustomFontFamily),
-    titleLarge = MaterialTheme.typography.titleLarge.copy(fontFamily = CustomFontFamily),
-    titleMedium = MaterialTheme.typography.titleMedium.copy(fontFamily = CustomFontFamily),
-    titleSmall = MaterialTheme.typography.titleSmall.copy(fontFamily = CustomFontFamily),
-    bodyLarge = MaterialTheme.typography.bodyLarge.copy(fontFamily = CustomFontFamily),
-    bodyMedium = MaterialTheme.typography.bodyMedium.copy(fontFamily = CustomFontFamily),
-    bodySmall = MaterialTheme.typography.bodySmall.copy(fontFamily = CustomFontFamily),
-    labelLarge = MaterialTheme.typography.labelLarge.copy(fontFamily = CustomFontFamily),
-    labelMedium = MaterialTheme.typography.labelMedium.copy(fontFamily = CustomFontFamily),
-    labelSmall = MaterialTheme.typography.labelSmall.copy(fontFamily = CustomFontFamily),
-    )
+    displayLarge = MaterialTheme.typography.displayLarge.copy(fontFamily = fontAlum),
+    displayMedium = MaterialTheme.typography.displayMedium.copy(fontFamily = fontAlum),
+    displaySmall = MaterialTheme.typography.displaySmall.copy(fontFamily = fontAlum),
+    headlineLarge = MaterialTheme.typography.headlineLarge.copy(fontFamily = fontAlum),
+    headlineMedium = MaterialTheme.typography.headlineMedium.copy(fontFamily = fontAlum),
+    headlineSmall = MaterialTheme.typography.headlineSmall.copy(fontFamily = fontAlum),
+    titleLarge = MaterialTheme.typography.titleLarge.copy(fontFamily = fontAlum),
+    titleMedium = MaterialTheme.typography.titleMedium.copy(fontFamily = fontAlum),
+    titleSmall = MaterialTheme.typography.titleSmall.copy(fontFamily = fontAlum),
+    bodyLarge = MaterialTheme.typography.bodyLarge.copy(fontFamily = fontAlum),
+    bodyMedium = MaterialTheme.typography.bodyMedium.copy(fontFamily = fontAlum),
+    bodySmall = MaterialTheme.typography.bodySmall.copy(fontFamily = fontAlum),
+    labelLarge = MaterialTheme.typography.labelLarge.copy(fontFamily = fontAlum),
+    labelMedium = MaterialTheme.typography.labelMedium.copy(fontFamily = fontAlum),
+    labelSmall = MaterialTheme.typography.labelSmall.copy(fontFamily = fontAlum),
+)
 
 
 //val myTypography = Typography()

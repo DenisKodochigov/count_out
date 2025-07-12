@@ -13,7 +13,7 @@ class UpdateSpeechKitUC @Inject constructor(
 ): UseCase<UpdateSpeechKitUC.Request, UpdateSpeechKitUC.Response>(configuration)  {
 
     override fun implementation(request: Request): Flow<ResultUC<Response>> =
-        repo.update(request.speech).map { converter(it){ it1-> Response(it1) } }
+        repo.update(request.speech).map { converterR(it){ it1-> Response(it1) } }
 
     data class Request(val speech: SpeechKit): UseCase.Request
     data class Response(val speech: SpeechKit): UseCase.Response

@@ -10,7 +10,7 @@
     <string name="change_name_workout">Редактирование тренировки</string>
     <string name="History">History</string>
     <string name="Workout">Workout</string>
-    <string name="plans_workout">Список тренировок</string>
+    <string name="plans_workout">Планы тренировок</string>
     <string name="plan_workout">План тренировки</string>
     <string name="training">План тренировки</string>
     <string name="trainings">тренировки</string>
@@ -275,4 +275,5 @@
     <string name="rep">р.</string>
     <string name="repeat_time">раз</string>
     <string name="set2">подхода</string>
+    <string name="next">Далее</string>
 </resources>

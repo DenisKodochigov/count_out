@@ -2,7 +2,7 @@ package com.count_out.data.router.models
 
 import com.count_out.data.models.SetImplD
 import com.count_out.domain.entity.NextExercise
-import com.count_out.domain.entity.StepTraining
+import com.count_out.domain.entity.StepPlan
 import com.count_out.domain.entity.enums.Goal
 import com.count_out.domain.entity.workout.Exercise
 import com.count_out.domain.entity.workout.Training
@@ -21,7 +21,7 @@ data class DataForWork (
     var cancelCoroutineWork: ()-> Unit = {},
     val dataFromWork: DataFromWork? = null,
 
-    var map: MutableList<StepTraining> = mutableListOf(),
+    var map: MutableList<StepPlan> = mutableListOf(),
     var exerciseCount: Int = 0,
 ){
     fun empty(){
@@ -39,7 +39,7 @@ data class DataForWork (
     fun sendStepTraining(){
         dataFromWork?.stepTraining?.value =
             if (interval.value > 0) {
-                (map[indexMap] as StepTrainingImpl).copy(
+                (map[indexMap] as StepPlanImpl).copy(
                     currentSet = map[indexMap].currentSet?.let { set ->
                        (set as SetImplD).copy(intervalReps = interval.value) }
                 )}
@@ -48,7 +48,7 @@ data class DataForWork (
 
     fun createMapTraining(){
         var numberExercise = 1
-        val list: MutableList<StepTraining> = mutableListOf()
+        val list: MutableList<StepPlan> = mutableListOf()
         this.training.value?.let { tr->
             tr.rounds.forEachIndexed { indR, round-> exerciseCount += round.exercise.count() }
             tr.rounds.forEachIndexed { indR, round->
@@ -57,14 +57,15 @@ data class DataForWork (
                         val nextExercise = nextExercise(exercise)
                         for (ind in list.lastIndex downTo 0){
                             if (list[ind].nextExercise == null){
-                                list[ind] = (list[ind] as StepTrainingImpl).copy(nextExercise = nextExercise)
+                                list[ind] = (list[ind] as StepPlanImpl).copy(nextExercise = nextExercise)
                             }
                         }
                     }
                     exercise.sets.forEachIndexed { indS, set->
                         list.add(
-                            StepTrainingImpl(
+                            StepPlanImpl(
                                 idPlan = tr.idTraining,
+                                namePlan = tr.name,
                                 round = round,
                                 exercise = exercise,
                                 numberExercise = numberExercise,

@@ -33,8 +33,7 @@ fun BottomBarApp(
         BottomAppBar(
             contentPadding = PaddingValues(0.dp),
             tonalElevation = 6.dp,
-            modifier = modifier.padding(top = 16.dp)
-                .clip(shape = bottomBarShape),
+            modifier = modifier.padding(top = 16.dp).clip(shape = bottomBarShape),
             content = { BottomBarContent( currentScreen = currentScreen, onTabSelection = onTabSelection )}
         )
     }

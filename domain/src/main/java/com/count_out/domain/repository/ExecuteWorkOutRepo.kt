@@ -1,7 +1,7 @@
 package com.count_out.domain.repository
 
-import com.count_out.domain.entity.StepTraining
 import com.count_out.domain.entity.throwable.ResultUC
+import com.count_out.domain.entity.workout.Training
 import kotlinx.coroutines.flow.Flow
 
 interface ExecuteWorkOutRepo {
@@ -11,5 +11,5 @@ interface ExecuteWorkOutRepo {
     fun save()
     fun upInterval()
     fun downInterval()
-    fun getStepPlan(): Flow<ResultUC<StepTraining>>
+    fun getPlan(): Flow<ResultUC<Training>>
 }

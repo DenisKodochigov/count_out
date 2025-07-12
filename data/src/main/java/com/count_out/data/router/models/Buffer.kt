@@ -1,7 +1,7 @@
 package com.count_out.data.router.models
 
 import com.count_out.domain.entity.Coordinate
-import com.count_out.domain.entity.StepTraining
+import com.count_out.domain.entity.StepPlan
 import com.count_out.domain.entity.TickTime
 import com.count_out.domain.entity.router.DeviceUI
 import com.count_out.domain.entity.enums.ConnectState
@@ -23,7 +23,7 @@ data class BufferImpl (
     override val currentDistance: MutableStateFlow<Int> = MutableStateFlow(0),
     override val phaseWorkout: MutableStateFlow<Int> = MutableStateFlow(0),
     override val enableChangeInterval: MutableStateFlow<Boolean> = MutableStateFlow(false),
-    override val stepTraining: MutableStateFlow<StepTraining?> = MutableStateFlow(null),
+    override val stepTraining: MutableStateFlow<StepPlan?> = MutableStateFlow(null),
     override val runningState: MutableStateFlow<RunningState?> = MutableStateFlow(null),
     override val durationSpeech: MutableStateFlow<Pair<Long, Long>> = MutableStateFlow(Pair(0, 0)),
 

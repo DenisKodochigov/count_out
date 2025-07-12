@@ -11,7 +11,7 @@ import javax.inject.Inject
 class UpdateSpeechUC @Inject constructor(configuration: Configuration,  private val repo: SpeechRepo
 ): UseCase<UpdateSpeechUC.Request, UpdateSpeechUC.Response>(configuration)  {
     override fun implementation(request: Request): Flow<ResultUC<Response>> =
-        repo.update(request.speech).map { converter(it){ it1-> Response(it1) } }
+        repo.update(request.speech).map { converterR(it){ it1-> Response(it1) } }
     data class Request(val speech: Speech): UseCase.Request
     data class Response(val speech: Speech?): UseCase.Response
 }

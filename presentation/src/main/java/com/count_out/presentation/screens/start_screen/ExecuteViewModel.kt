@@ -43,7 +43,7 @@ class ExecuteViewModel @Inject constructor(
     override fun routeEvent(event: Event) {
         when (event) {
             is ExecuteEvent.BackScreen -> { navigate.backStack()}
-            is ExecuteEvent.SelectPlan -> { navigate.goToScreenPlans()}
+            is ExecuteEvent.ToScreenPlans -> { navigate.goToScreenPlans()}
             is ExecuteEvent.Start -> { startWorkOut() }
             is ExecuteEvent.Stop -> { stopWorkOut() }
             is ExecuteEvent.Pause -> { pauseWorkOut() }

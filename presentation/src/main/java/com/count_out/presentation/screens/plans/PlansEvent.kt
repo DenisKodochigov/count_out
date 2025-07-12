@@ -6,7 +6,7 @@ import com.count_out.presentation.screens.prime.Event
 
 sealed class PlansEvent: Event {
     data object Gets: PlansEvent()
-    data class Run(val item: Long): PlansEvent()
+    data class Run(val item: Training): PlansEvent()
     data class Edit(val item: Long): PlansEvent()
     data class Del(val item: Training) : PlansEvent()
     data class Copy(val item: Training) : PlansEvent()

@@ -29,14 +29,14 @@ import com.count_out.presentation.R
 import com.count_out.presentation.models.Dimen
 import com.count_out.presentation.models.Dimen.contourAll2
 import com.count_out.presentation.models.Dimen.contourHor2
-import com.count_out.presentation.models.TrainingImplP
 import com.count_out.presentation.screens.prime.Action
 import com.count_out.presentation.screens.prime.PrimeScreen
+import com.count_out.presentation.screens.start_screen.ExecuteEvent
 import com.count_out.presentation.view_element.ItemSwipe
 import com.count_out.presentation.view_element.TextApp
+import com.count_out.presentation.view_element.TopBarApp
 import com.count_out.presentation.view_element.custom_view.Frame
 import com.count_out.presentation.view_element.custom_view.IconQ
-
 
 @Composable
 fun PlansScreen(vm: PlansViewModel) {
@@ -49,28 +49,26 @@ fun TrainingsScreenCreateView(viewModel: PlansViewModel) {
     val action = Action {viewModel.submitEvent(it) }
     viewModel.screenState.collectAsState().value.let { screenState ->
         PrimeScreen(loader = screenState) { dataState ->
-            TrainingsScreenLayout(dataState, action = action)
-        }
+            TrainingsScreenLayout(dataState, action = action) }
     }
-//    val uiState by viewModel.trainingsScreenState.collectAsState()
-//    uiState.onClickTraining = remember {{id -> onClickTraining(id)}}
-//    uiState.onSelectItem = remember {{ onClickTraining(it) }}
-//    uiState.onStartWorkout = remember {{ onStartWorkout(it) }}
-//    TrainingsScreenLayout(uiState = uiState)
 }
 
 @Composable
 fun TrainingsScreenLayout(dataState: PlansState, action: Action) {
     Column(modifier = Modifier.fillMaxSize()) {
+        TopBar(action)
         Frame(contour = contourHor2, modifier = Modifier.weight(1f)) {
             TrainingList(dataState, action, modifier = Modifier.weight(1f)) }
-        Spacer(modifier = Modifier.height(18.dp))
-        DownPlace(dataState, action)
     }
 }
-
-@Composable
-fun TrainingList(
+@Composable fun TopBar(action: Action){
+    TopBarApp(
+        text = stringResource(R.string.plans_workout),
+        selected = false,
+        onClickText = { action.ex(ExecuteEvent.ToScreenPlans) } ,
+    )
+}
+@Composable fun TrainingList(
     dataState: PlansState,
     action: Action,
     modifier: Modifier = Modifier
@@ -85,9 +83,7 @@ fun TrainingList(
             Spacer(modifier = Modifier.height(Dimen.width4))
             ItemSwipe(
                 frontView = {
-                    TrainingCard(modifier = Modifier.animateItem(),
-                        item = item, dataState = dataState, action = action,)
-                },
+                    TrainingCard(modifier = Modifier.animateItem(), item = item, action = action)},
                 actionDragLeft = { action.ex(PlansEvent.Del(item)) },
                 actionDragRight = { action.ex(PlansEvent.Edit(item.idTraining)) },
             )
@@ -95,10 +91,8 @@ fun TrainingList(
     }
 }
 
-@Composable
-fun TrainingCard(
+@Composable fun TrainingCard(
     item: Training,
-    dataState: PlansState,
     action: Action,
     modifier: Modifier
 ) {
@@ -106,35 +100,28 @@ fun TrainingCard(
         Row(
             horizontalArrangement = Arrangement.Start,
             verticalAlignment = Alignment.CenterVertically,
-            modifier = modifier
-                .fillMaxWidth()
-                .padding(vertical = 6.dp)
+            modifier = modifier.fillMaxWidth().padding(vertical = 6.dp)
         ) {
             Spacer(modifier = Modifier.width(12.dp))
-            IconSelected(training = item, dataState = dataState)
+            IconSelected(training = item, action = action)
             Spacer(modifier = Modifier.width(16.dp))
             TrainingInformation(item = item, action = action, modifier = Modifier.weight(1f))
             Spacer(modifier = Modifier.width(Dimen.width6))
-            IconCopy(item = item, action = action)
+            IconCopy(training = item, action = action)
             Spacer(modifier = Modifier.width(Dimen.width6))
         }
     }
 }
 
-@Composable
-fun IconSelected(training: Training, dataState: PlansState) {
-    dataState.selectedId?.let { selectedId ->
-        if (training.idTraining == selectedId) IconQ.Mark(onClick = { dataState.selectedId = null })
-        else IconQ.HorLine(onClick = { dataState.selectedId = training.idTraining })
-    } ?: IconQ.HorLine(onClick = { dataState.selectedId = training.idTraining })
+@Composable fun IconSelected(training: Training, action: Action) {
+    IconQ.Play(onClick = { action.ex(PlansEvent.Run(training)) })
 }
 
-@Composable fun IconCopy(item: Training, action: Action) {
-    IconQ.Copy(onClick = { action.ex(PlansEvent.Copy(item )) })
+@Composable fun IconCopy(training: Training, action: Action) {
+    IconQ.Copy(onClick = { action.ex(PlansEvent.Copy(training )) })
 }
 
-@Composable
-fun TrainingInformation(
+@Composable fun TrainingInformation(
     item: Training,
     action: Action,
     modifier: Modifier = Modifier
@@ -147,17 +134,4 @@ fun TrainingInformation(
             style = MaterialTheme.typography.bodyLarge
         )
     }
-}
-@Composable
-fun DownPlace(dataState: PlansState, action: Action) {
-    Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
-        IconQ.Play(
-            onClick = {
-                if (dataState.selectedId == null) action.ex(PlansEvent.Run(1))
-                else dataState.selectedId?.let { id -> action.ex(PlansEvent.Run(id))}
-            })
-        Spacer(modifier = Modifier.width(32.dp))
-        IconQ.Add(onClick = { action.ex(PlansEvent.Copy(TrainingImplP()) ) })
-    }
-//    ButtonApp(text = "Test", onClick = { action.ex(TrainingsEvent.UpdateSpeech(SpeechImplP(idSpeech = 1)))})
 }

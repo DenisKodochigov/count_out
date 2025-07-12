@@ -27,7 +27,7 @@ import com.count_out.app.presentation.navigation.ScreenDestination
         dynamicColorVersion && !darkTheme -> dynamicLightColorScheme(LocalContext.current)
         else -> selectSchemeForContrast(darkTheme)
     }
-    MaterialTheme(colorScheme = colorScheme, content = content, shapes = shapes, ) //typography = myTypography()
+    MaterialTheme(colorScheme = colorScheme, content = content, shapes = shapes, typography = myTypography())
 }
 
 @Composable

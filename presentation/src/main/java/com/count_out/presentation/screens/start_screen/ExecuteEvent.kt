@@ -10,10 +10,9 @@ sealed class ExecuteEvent: Event {
     data object Save : ExecuteEvent()
 
     data object GetPlan: ExecuteEvent()
-    data object SelectPlan: ExecuteEvent()
     data object UpInterval: ExecuteEvent()
     data object DownInterval: ExecuteEvent()
     data class ShowBS(val item: ShowBottomSheet): ExecuteEvent()
-
+    data object ToScreenPlans : ExecuteEvent()
     data object BackScreen : ExecuteEvent()
 }

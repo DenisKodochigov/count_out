@@ -17,6 +17,7 @@ import androidx.compose.material.icons.outlined.LocationOn
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.MaterialTheme.typography
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -34,11 +35,11 @@ import com.count_out.domain.entity.enums.Goal
 import com.count_out.domain.entity.enums.RunningState
 import com.count_out.domain.entity.enums.Units
 import com.count_out.presentation.R
-import com.count_out.presentation.models.SetImplP
 import com.count_out.presentation.screens.prime.Action
 import com.count_out.presentation.screens.prime.Event
 import com.count_out.presentation.screens.prime.PrimeScreen
 import com.count_out.presentation.view_element.TextApp
+import com.count_out.presentation.view_element.TopBarApp
 import com.count_out.presentation.view_element.bottom_sheet.BottomSheetSaveTraining
 import com.count_out.presentation.view_element.custom_view.Frame
 import com.count_out.presentation.view_element.custom_view.IconQ
@@ -61,6 +62,7 @@ import java.math.RoundingMode
     Column(
         modifier = Modifier.fillMaxSize().padding(horizontal = 4.dp),
         content = {
+            TopBar(dataState, action)
             SensorInfo(dataState)
             AdditionalInformation(dataState, action, modifier = Modifier.weight(1f))
             ExerciseInfo(dataState, action)
@@ -68,13 +70,20 @@ import java.math.RoundingMode
         }
     )
 }
+@Composable fun TopBar(dataState: ExecuteState, action: Action){
+    TopBarApp(
+        text = "${stringResource(R.string.training_text_fab)}: ${dataState.stepTraining?.namePlan ?: ""}",
+        selected = true,
+        onClickText = { action.ex(ExecuteEvent.ToScreenPlans) } ,
+    )
+}
 @Composable fun SensorInfo(dataState: ExecuteState) {
-    val style = MaterialTheme.typography.displayLarge
+    val style = typography.displayLarge
     val sizeIcon = 32.dp
-    Row( modifier = Modifier
-        .fillMaxWidth()
-        .padding(top = 4.dp, bottom = 4.dp, start = 12.dp, end = 12.dp),
-        verticalAlignment = Alignment.CenterVertically)
+    Row( verticalAlignment = Alignment.CenterVertically,
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(start = 12.dp, end = 12.dp),)
     {   //Time
         TextApp(text = "${dataState.flowTime.hour}:${dataState.flowTime.min}:${dataState.flowTime.sec}", style = style)
         Spacer(modifier = Modifier.weight(1f))
@@ -95,8 +104,7 @@ import java.math.RoundingMode
 }
 @Composable fun AdditionalInformation(dataState: ExecuteState, action: Action, modifier: Modifier = Modifier){
     Column (modifier = modifier.fillMaxWidth()) {
-        TextApp(text = " ", style = MaterialTheme.typography.bodyMedium)
-//        Text(text = "Screen Execute ${dataState.stepTraining}")
+        Text(text = "Screen Execute ${typography.titleLarge.fontFamily}", style = typography.titleLarge)
     }
 }
 @Composable fun ExerciseInfo(dataState: ExecuteState, action: Action) {
@@ -109,7 +117,7 @@ import java.math.RoundingMode
                 " ${dataState.stepTraining.numberExercise}/${dataState.stepTraining.quantityExercise}"
             TextApp(text = text,
                 modifier = Modifier.padding(bottom = 12.dp),
-                style = MaterialTheme.typography.titleLarge)
+                style = typography.titleLarge)
             when(dataState.stepTraining?.currentSet?.goal ?: Goal.Count){
                 Goal.Count -> LayoutCount(dataState, action)
                 Goal.Distance -> LayoutDistance(dataState)
@@ -165,8 +173,8 @@ import java.math.RoundingMode
         dataState.stepTraining?.currentSet?.let { set ->
             //Description
             ColumnsA(
-                style1 = MaterialTheme.typography.bodyLarge,
-                style2 = MaterialTheme.typography.titleLarge,
+                style1 = typography.bodyLarge,
+                style2 = typography.titleLarge,
                 modifier = Modifier
                     .padding(start = 12.dp)
                     .weight(1f),
@@ -177,8 +185,8 @@ import java.math.RoundingMode
             )
             //Value
             ColumnsA(
-                style1 = MaterialTheme.typography.titleLarge,
-                style2 = MaterialTheme.typography.titleLarge,
+                style1 = typography.titleLarge,
+                style2 = typography.titleLarge,
                 modifier = Modifier.width(50.dp),
                 text1 = "${dataState.stepTraining.numberSet}",
                 text2 = "${dataState.currentCount}",
@@ -187,8 +195,8 @@ import java.math.RoundingMode
             )
             //Total target (unit)
             ColumnsA(
-                style1 = MaterialTheme.typography.bodyLarge,
-                style2 = MaterialTheme.typography.titleLarge,
+                style1 = typography.bodyLarge,
+                style2 = typography.titleLarge,
                 modifier = Modifier
                     .padding(start = 12.dp)
                     .width(100.dp),
@@ -202,7 +210,7 @@ import java.math.RoundingMode
     }
     Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End) {
         TextApp(text = stringResource(R.string.interval) + ":",
-            style = MaterialTheme.typography.bodyLarge,
+            style = typography.bodyLarge,
             modifier = Modifier.padding(top = 8.dp))
         ButtonChangeInterval(dataState, action)
     }
@@ -214,8 +222,8 @@ import java.math.RoundingMode
         dataState.stepTraining?.currentSet?.let { set ->
             //Description
             ColumnsA(
-                style1 = MaterialTheme.typography.bodyLarge,
-                style2 = MaterialTheme.typography.titleLarge,
+                style1 = typography.bodyLarge,
+                style2 = typography.titleLarge,
                 modifier = Modifier
                     .padding(start = 12.dp)
                     .weight(1f),
@@ -225,8 +233,8 @@ import java.math.RoundingMode
             )
             //Value
             ColumnsA(
-                style1 = MaterialTheme.typography.titleLarge,
-                style2 = MaterialTheme.typography.titleLarge,
+                style1 = typography.titleLarge,
+                style2 = typography.titleLarge,
                 modifier = Modifier.width(50.dp),
                 text1 = "${dataState.stepTraining.numberSet}",
                 text2 = "${dataState.currentDistance/( if (set.distance.unit == Units.KM) 1000 else 1)}",
@@ -234,8 +242,8 @@ import java.math.RoundingMode
             )
             //Total target (unit)
             ColumnsA(
-                style1 = MaterialTheme.typography.bodyLarge,
-                style2 = MaterialTheme.typography.titleLarge,
+                style1 = typography.bodyLarge,
+                style2 = typography.titleLarge,
                 modifier = Modifier
                     .padding(start = 12.dp)
                     .width(100.dp),
@@ -255,8 +263,8 @@ import java.math.RoundingMode
         dataState.stepTraining?.currentSet?.let { set->
             //Description
             ColumnsA(
-                style1 = MaterialTheme.typography.bodyLarge,
-                style2 = MaterialTheme.typography.titleLarge,
+                style1 = typography.bodyLarge,
+                style2 = typography.titleLarge,
                 modifier = Modifier
                     .padding(start = 12.dp)
                     .weight(1f),
@@ -267,8 +275,8 @@ import java.math.RoundingMode
             )
             //Value
             ColumnsA(
-                style1 = MaterialTheme.typography.titleLarge,
-                style2 = MaterialTheme.typography.titleLarge,
+                style1 = typography.titleLarge,
+                style2 = typography.titleLarge,
                 modifier = Modifier.width(50.dp),
                 text1 = "${(dataState.stepTraining.numberSet)}",
                 text2 = "${dataState.currentDuration/( if (set.duration.unit == Units.M) 60 else 1)}",
@@ -277,8 +285,8 @@ import java.math.RoundingMode
             )
             //Total target (unit)
             ColumnsA(
-                style1 = MaterialTheme.typography.bodyLarge,
-                style2 = MaterialTheme.typography.titleLarge,
+                style1 = typography.bodyLarge,
+                style2 = typography.titleLarge,
                 modifier = Modifier
                     .padding(start = 12.dp)
                     .width(100.dp),
@@ -313,11 +321,13 @@ import java.math.RoundingMode
     val color = if(!dataState.enableChangeInterval) MaterialTheme.colorScheme.surfaceContainerLow
                         else MaterialTheme.colorScheme.outline
     Row(verticalAlignment = Alignment.Bottom,
-        modifier = Modifier.padding(top = 4.dp, start = 12.dp, end = 2.dp).width(148.dp))
+        modifier = Modifier
+            .padding(top = 4.dp, start = 12.dp, end = 2.dp)
+            .width(148.dp))
     {
         IconQ.Slower(modifier = Modifier.padding(bottom = 4.dp),
             onClick = { action.ex(ExecuteEvent.UpInterval)}, color = color)
-        TextApp(style = MaterialTheme.typography.titleLarge, modifier = Modifier.padding(horizontal = 6.dp),
+        TextApp(style = typography.titleLarge, modifier = Modifier.padding(horizontal = 6.dp),
             text = (dataState.stepTraining?.currentSet?.intervalReps?.toBigDecimal()?.setScale(1, RoundingMode.UP) ?: "  ").toString())
         IconQ.Faster(modifier = Modifier.padding(bottom = 4.dp),
             onClick = { action.ex(ExecuteEvent.DownInterval)}, color = color)
@@ -325,10 +335,10 @@ import java.math.RoundingMode
 }
 
 @Composable fun NextExercise(nextExercise: NextExercise?){
-    TextApp(style = MaterialTheme.typography.bodyLarge, maxLines = 2, textAlign = TextAlign.Start,
+    TextApp(style = typography.bodyLarge, maxLines = 2, textAlign = TextAlign.Start,
             modifier = Modifier.padding(top = 18.dp),
             text = "${ stringResource(R.string.next_exercise)}: ${nextExercise?.nextActivityName ?: ""}")
-    TextApp(style = MaterialTheme.typography.bodyLarge,modifier = Modifier.padding(start = 12.dp),
+    TextApp(style = typography.bodyLarge,modifier = Modifier.padding(start = 12.dp),
         text = "${stringResource(R.string.sets)}:" +
                 " ${ nextExercise?.nextExerciseQuantitySet?.let { if(it != 0) it else "" } ?: ""}" +
                 " ${ nextExercise?.nextExerciseSummarizeSet?.let { viewNextSets(it) } ?: ""} ")
@@ -342,9 +352,7 @@ import java.math.RoundingMode
 @Preview
 @Composable fun PreviewExecuteWorkoutScreen(){
     val dataState = ExecuteState()
-    val action = object : Action {
-        override fun ex(ev: Event) {  }
-    }
+    val action = object : Action { override fun ex(ev: Event) {  } }
     ExecuteWorkoutScreenLayout( dataState, action )
 }
 

@@ -94,7 +94,7 @@ class UseCaseModule {
     @Provides
     fun provideSelectTrainingUseCase(
         configuration: UseCase.Configuration,
-        trainingRepo: TrainingRepo): SelectTrainingUC = SelectTrainingUC(configuration)
+        lastPlanRepo: LastPlanRepo): SelectTrainingUC = SelectTrainingUC(configuration, lastPlanRepo)
     @Singleton
     @Provides
     fun provideUpdateTrainingUseCase(
@@ -220,8 +220,9 @@ class UseCaseModule {
         DownIntervalUC(configuration, repo)
     @Singleton
     @Provides
-    fun provideGetStepPlanUseCase(configuration: UseCase.Configuration, repo: ExecuteWorkOutRepo): GetStepPlanUC =
-        GetStepPlanUC(configuration, repo)
+    fun provideGetStepPlanUseCase(configuration: UseCase.Configuration,
+            repo: ExecuteWorkOutRepo, repo1: LastPlanRepo): GetStepPlanUC =
+        GetStepPlanUC(configuration, repo, repo1)
     @Singleton
     @Provides
     fun provideUpIntervalUseCase(configuration: UseCase.Configuration, repo: ExecuteWorkOutRepo): UpIntervalUC =

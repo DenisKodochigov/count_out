@@ -32,9 +32,12 @@ import com.count_out.presentation.models.TrainingImplP
 import com.count_out.presentation.models.TypeKeyboard
 import com.count_out.presentation.screens.prime.Action
 import com.count_out.presentation.screens.prime.PrimeScreen
+import com.count_out.presentation.screens.start_screen.ExecuteEvent
+import com.count_out.presentation.screens.start_screen.ExecuteState
 import com.count_out.presentation.screens.training.TrainingEvent.ShowBS
 import com.count_out.presentation.screens.training.round.Round
 import com.count_out.presentation.view_element.TextFieldApp
+import com.count_out.presentation.view_element.TopBarApp
 import com.count_out.presentation.view_element.bottom_sheet.BottomSheetSpeech
 import com.count_out.presentation.view_element.icons.IconsGroup
 
@@ -83,6 +86,14 @@ import com.count_out.presentation.view_element.icons.IconsGroup
         }
     }
 }
+@Composable fun TopBar(dataState: ExecuteState, action: Action){
+    TopBarApp(
+        text = stringResource(R.string.training_text_fab) + (dataState.stepTraining?.namePlan ?: ""),
+        selected = true,
+        onClickText = { action.ex(ExecuteEvent.ToScreenPlans) } ,
+    )
+}
+
 @Composable fun NameTraining(dataState: TrainingState, action: Action) {
 
     val enteredName: MutableState<String> = remember { mutableStateOf(dataState.training?.name ?: "") }

@@ -2,7 +2,7 @@ package com.count_out.presentation.models
 
 import android.util.Pair
 import com.count_out.domain.entity.Coordinate
-import com.count_out.domain.entity.StepTraining
+import com.count_out.domain.entity.StepPlan
 import com.count_out.domain.entity.TickTime
 import com.count_out.domain.entity.router.Buffer
 import com.count_out.domain.entity.router.DataForUI
@@ -20,7 +20,7 @@ data class DataForUIImpl (
     override val currentDuration: MutableStateFlow<Int> = MutableStateFlow(0),
     override val currentDistance: MutableStateFlow<Int> = MutableStateFlow(0),
     override val enableChangeInterval: MutableStateFlow<Boolean> = MutableStateFlow(false),
-    override val stepTraining: MutableStateFlow<StepTraining?> = MutableStateFlow(null),
+    override val stepTraining: MutableStateFlow<StepPlan?> = MutableStateFlow(null),
     override val durationSpeech: MutableStateFlow<Pair<Long, Long>> = MutableStateFlow(Pair(0,0)),
 
     override val heartRate: MutableStateFlow<Int> = MutableStateFlow(0),

@@ -6,8 +6,8 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import com.count_out.app.presentation.Const.DEFAULT_SCREEN
 
 
-fun NavHostController.navigateToScreenExecuteWorkout(trainingId: Long) {
-    this.navigateToScreen("${ExecuteDestination.route}/$trainingId")
+fun NavHostController.navigateToScreenExecuteWorkout() {
+    this.navigateToScreen(ExecuteDestination.route)
 }
 fun NavHostController.navigateToScreenPlans() {
     this.navigateToScreen(PlansDestination.route)

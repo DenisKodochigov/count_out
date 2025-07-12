@@ -4,7 +4,7 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.mutableStateOf
 import com.count_out.domain.entity.Coordinate
-import com.count_out.domain.entity.StepTraining
+import com.count_out.domain.entity.StepPlan
 import com.count_out.domain.entity.TickTime
 import com.count_out.domain.entity.router.DeviceUI
 import com.count_out.domain.entity.workout.Training
@@ -17,7 +17,6 @@ import javax.inject.Singleton
 
 @Singleton
 data class ExecuteState(
-//    val plan: Training? = null,
 
     val flowTime: TickTime = TickTimeImplP(hour = "00", min="00", sec= "00"),
     val currentRest: Int = 0,
@@ -25,7 +24,7 @@ data class ExecuteState(
     val currentDuration: Int = 0,
     val currentDistance: Int = 0,
     val enableChangeInterval: Boolean = false,
-    val stepTraining: StepTraining? = null,
+    val stepTraining: StepPlan? = null,
 
     val heartRate: Int = 0,
     val lastConnectHearthRateDevice: DeviceUI? = null,

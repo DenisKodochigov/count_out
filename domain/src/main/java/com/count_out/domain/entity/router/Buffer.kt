@@ -1,7 +1,7 @@
 package com.count_out.domain.entity.router
 
 import com.count_out.domain.entity.Coordinate
-import com.count_out.domain.entity.StepTraining
+import com.count_out.domain.entity.StepPlan
 import com.count_out.domain.entity.TickTime
 import com.count_out.domain.entity.enums.ConnectState
 import com.count_out.domain.entity.enums.RunningState
@@ -41,7 +41,7 @@ interface Buffer {
     val currentDistance: MutableStateFlow<Int>
     val phaseWorkout: MutableStateFlow<Int>
     val enableChangeInterval: MutableStateFlow<Boolean>
-    val stepTraining: MutableStateFlow<StepTraining?>
+    val stepTraining: MutableStateFlow<StepPlan?>
     val runningState: MutableStateFlow<RunningState?>
     val durationSpeech: MutableStateFlow<Pair<Long, Long>>
 

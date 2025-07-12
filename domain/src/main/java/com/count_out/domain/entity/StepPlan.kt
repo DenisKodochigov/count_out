@@ -4,11 +4,12 @@ import com.count_out.domain.entity.workout.Exercise
 import com.count_out.domain.entity.workout.Round
 import com.count_out.domain.entity.workout.Set
 
-interface StepTraining {
+interface StepPlan {
     val idPlan: Long
+    val namePlan: String
     val round: Round?
     val exercise: Exercise?
-    val nextExercise: NextExercise?
+    var nextExercise: NextExercise?
     val numberExercise: Int
     val quantityExercise: Int
     var currentSet: Set?

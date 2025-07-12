@@ -1,6 +1,5 @@
 package com.count_out.presentation.screens.prime
 
-import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -22,13 +21,11 @@ import androidx.compose.ui.Modifier
 @Composable
 fun Error(errorMessage: String) {
     Column( modifier = Modifier.fillMaxSize(), verticalArrangement = Arrangement.Bottom,
-        content = {
-            Log.d("KDS", "PrimeScreen.Error errorMessage=$errorMessage")
-            Snackbar { Text(text = "CommonScreen $errorMessage") } })
+        content = { Snackbar { Text(text = "CommonScreen $errorMessage") } })
 }
 
 @Composable
 fun Loading() {
-    Column( modifier = Modifier.fillMaxSize(),content =  { CircularProgressIndicator() },
+    Column( modifier = Modifier.fillMaxSize(), content =  { CircularProgressIndicator() },
         verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.CenterHorizontally,)
 }

@@ -32,24 +32,31 @@ import javax.inject.Inject
     override fun routeEvent(event: Event) {
         when (event) {
             is PlansEvent.BackScreen -> { navigate.backStack()}
-            is PlansEvent.Run -> { navigate.goToScreenExecuteWorkout(event.item)}
+            is PlansEvent.Run -> { runTraining(event.item) }
             is PlansEvent.Edit -> { navigate.goToScreenTraining(event.item) }
             is PlansEvent.Gets -> { getTrainings() }
             is PlansEvent.Copy -> { copyTraining(event.item) }
             is PlansEvent.Del -> { deleteTraining(event.item) }
             is PlansEvent.Update -> { updateTraining(event.item) }
-            is PlansEvent.Select -> { selectTraining(event.item) }
             is PlansEvent.UpdateSpeech -> { updateSpeech(event.item) }
         }
     }
-
+    private fun runTraining(training: Training){
+        viewModelScope.launch(Dispatchers.IO) {
+            selectTrainingUC.execute(
+                SelectTrainingUC.Request(training = training)).collect {
+                    submitState( it ) }
+        }
+        navigate.goToScreenExecuteWorkout()
+    }
     private fun getTrainings(){
         viewModelScope.launch(Dispatchers.IO) {
             getTrainingsUC.execute(GetTrainingsUC.Request).collect { submitState( it ) }
         } }
     private fun deleteTraining(training: Training){
         viewModelScope.launch(Dispatchers.IO) {
-            delTrainingUC.execute( DeleteTrainingUC.Request(training)).collect { submitState( it ) }
+            delTrainingUC.execute( DeleteTrainingUC.Request(training)).collect {
+                submitState( it ) }
         }}
     private fun copyTraining(training: Training){
         viewModelScope.launch(Dispatchers.IO) {
@@ -58,10 +65,6 @@ import javax.inject.Inject
     private fun updateTraining(training: Training){
         viewModelScope.launch(Dispatchers.IO) {
             updateTrainingUC.execute( UpdateTrainingUC.Request(training)).collect { submitState( it ) }
-        }}
-    private fun selectTraining(training: Training){
-        viewModelScope.launch(Dispatchers.IO) {
-            selectTrainingUC.execute( SelectTrainingUC.Request(training)).collect { submitState( it ) }
         }}
     private fun updateSpeech(item: SpeechKit){
         viewModelScope.launch(Dispatchers.IO) {
