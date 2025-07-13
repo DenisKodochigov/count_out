@@ -82,7 +82,6 @@
     <string name="add_ring">Add ring</string>
     <string name="counts">Counts</string>
     <string name="count">Count</string>
-    <string name="next_exercise">Next the exercise</string>
     <string name="rest_time">Rest time.</string>
     <string name="section_heart_rate">Section select device heart rate</string>
     <string name="heart_rate_device">Heart rate monitor</string>
@@ -130,13 +129,19 @@
     <string name="history">History</string>
     <string name="history_">History</string>
 
+    <plurals name="exercise">
+        <item quantity="one">%d exercise</item>
+        <item quantity="few">%d exercises</item>
+        <item quantity="many">%d exercises</item>
+        <item quantity="other">exercises</item>
+    </plurals>
     <plurals name="set_1">
-        <item quantity="zero">%1$d = zero</item>
-        <item quantity="one">%1$d =</item>
-        <item quantity="two">%1$d = sets</item>
-        <item quantity="few">%1$d = sets</item>
-        <item quantity="many">%1$d = sets</item>
-        <item quantity="other">%1$d = set</item>
+        <item quantity="zero">%d zero</item>
+        <item quantity="one">%d set</item>
+        <item quantity="two">%d sets</item>
+        <item quantity="few">%d sets</item>
+        <item quantity="many">%d sets</item>
+        <item quantity="other">%d set</item>
     </plurals>
     <plurals name="set_2">
         <item quantity="one">%d set</item>

@@ -31,7 +31,6 @@ class ExecuteViewModel @Inject constructor(
     private val upIntervalUC: UpIntervalUC,
     private val downIntervalUC: DownIntervalUC,
     private val getStepPlanUC: GetStepPlanUC,
-//    private val getPlanUC: GetPlanUC,
     private val showBottomSheetUC: ShowBottomSheetUC,
     private val internet: Internet,
 ): PrimeViewModel<ExecuteState, ExecuteConverter>() {
@@ -41,11 +40,12 @@ class ExecuteViewModel @Inject constructor(
     override fun initConvertor(): ExecuteConverter = ExecuteConverter()
 
     override fun routeEvent(event: Event) {
+        Log.d("KDS","ExecuteViewModel ${dataState.value.stepTraining}")
         when (event) {
             is ExecuteEvent.BackScreen -> { navigate.backStack()}
             is ExecuteEvent.ToScreenPlans -> { navigate.goToScreenPlans()}
             is ExecuteEvent.Start -> { startWorkOut() }
-            is ExecuteEvent.Stop -> { stopWorkOut() }
+            is ExecuteEvent.Stop -> { stopWorkOut(event.item) }
             is ExecuteEvent.Pause -> { pauseWorkOut() }
             is ExecuteEvent.Save -> { saveWorkOut() }
             is ExecuteEvent.UpInterval -> { upInterval() }
@@ -57,12 +57,6 @@ class ExecuteViewModel @Inject constructor(
 
     private val dataForServ = DataForServImpl()
 
-//    private fun getPlan(){
-//        viewModelScope.launch(Dispatchers.IO) {
-//            getPlanUC.execute(GetPlanUC.Request).collect { submitState( it ) }
-//        }
-//        getStepPlan()
-//    }
     private fun getStepPlan(){
         viewModelScope.launch(Dispatchers.IO) {
             getStepPlanUC.execute(GetStepPlanUC.Request).collect { submitState( it ) }
@@ -72,9 +66,10 @@ class ExecuteViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             startWorkoutUC.execute(StartWorkoutUC.Request).collect { submitState( it ) } }
     }
-    private fun stopWorkOut(){
+    private fun stopWorkOut(item: ShowBottomSheet){
         viewModelScope.launch(Dispatchers.IO) {
             stopWorkoutUC.execute(StopWorkoutUC.Request).collect { submitState( it ) } }
+        showBottomSheet(item)
     }
     private fun pauseWorkOut(){
         viewModelScope.launch(Dispatchers.IO) {
@@ -93,7 +88,7 @@ class ExecuteViewModel @Inject constructor(
             downIntervalUC.execute(DownIntervalUC.Request).collect { submitState( it ) } }
     }
     private fun showBottomSheet(item: ShowBottomSheet){
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch(Dispatchers.Default) {
             showBottomSheetUC.execute( ShowBottomSheetUC.Request(item)).collect {
                 submitState( it ) } }
     }

@@ -13,6 +13,7 @@ import com.count_out.domain.entity.enums.RunningState
 import com.count_out.domain.entity.workout.ShowBottomSheet
 import com.count_out.presentation.models.SetImplP
 import com.count_out.presentation.models.TickTimeImplP
+import com.count_out.presentation.models.TrainingImplP
 import javax.inject.Singleton
 
 @Singleton
@@ -25,6 +26,7 @@ data class ExecuteState(
     val currentDistance: Int = 0,
     val enableChangeInterval: Boolean = false,
     val stepTraining: StepPlan? = null,
+    val stateWorkOut: RunningState = RunningState.Binding,
 
     val heartRate: Int = 0,
     val lastConnectHearthRateDevice: DeviceUI? = null,
@@ -32,10 +34,9 @@ data class ExecuteState(
 
     val coordinate: Coordinate? = null,
 
-    val showBottomSheetSaveTraining: MutableState<Boolean> = mutableStateOf(false),
-    val showBS: ShowBottomSheet = ShowBottomSheet(),
-    val stateWorkOutService: RunningState = RunningState.Binding,
-    val updateSet: (Long, SetImplP)->Unit = { _, _->},
+//    val showBottomSheetSaveTraining: MutableState<Boolean> = mutableStateOf(false),
+    val showBS: ShowBottomSheet = ShowBottomSheet(element = TrainingImplP()),
+//    val updateSet: (Long, SetImplP)->Unit = { _, _->},
     val startWorkOutService: (Training)->Unit = {},
     val stopWorkOutService: ()->Unit = {},
     val pauseWorkOutService: ()->Unit = { },
@@ -43,14 +44,14 @@ data class ExecuteState(
     val notSaveTraining: ()->Unit = { },
     @Stable var startTime: Long = 0L,
 
-    @Stable var onDismissSaveTraining: (ExecuteState) -> Unit = { uiState ->
-        uiState.showBottomSheetSaveTraining.value = false
-        notSaveTraining()
-    },
-    @Stable var onConfirmASaveTraining: (ExecuteState) -> Unit = { uiState ->
-        uiState.showBottomSheetSaveTraining.value = false
-        saveTraining()
-    },
+//    @Stable var onDismissSaveTraining: (ExecuteState) -> Unit = { uiState ->
+//        uiState.showBottomSheetSaveTraining.value = false
+//        notSaveTraining()
+//    },
+//    @Stable var onConfirmASaveTraining: (ExecuteState) -> Unit = { uiState ->
+//        uiState.showBottomSheetSaveTraining.value = false
+//        saveTraining()
+//    },
 )
 
 

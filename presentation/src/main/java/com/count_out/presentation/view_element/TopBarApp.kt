@@ -59,7 +59,7 @@ fun CollapsingToolbar(
         modifier = Modifier.padding(top = 0.dp, bottom = 0.dp).fillMaxWidth()
     ){
         TextAppEllipsis(
-            text = text,
+            text = text.replaceFirstChar { it.uppercase() },
             selected = selected,
             style = typography.headlineMedium,
             modifier = Modifier.weight(1f).fillMaxWidth().clickable(enabled = true, onClick = { onClickText()})

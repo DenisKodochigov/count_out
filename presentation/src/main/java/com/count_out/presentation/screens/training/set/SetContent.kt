@@ -39,7 +39,7 @@ import com.count_out.domain.entity.workout.Set
 import com.count_out.presentation.R
 import com.count_out.presentation.models.Dimen.contourAll1
 import com.count_out.presentation.models.Dimen.contourBot1
-import com.count_out.presentation.models.ParameterImpl
+import com.count_out.presentation.models.ParameterImplP
 import com.count_out.presentation.models.SetImplP
 import com.count_out.presentation.models.TypeKeyboard
 import com.count_out.presentation.models.alumBodyLarge
@@ -174,7 +174,7 @@ val interval_between_pole = 4.dp
         typeKey = TypeKeyboard.DIGIT,
         onChangeValue = { action.ex(
             TrainingEvent.UpdateSet( set.copy(
-                    distance = ParameterImpl(
+                    distance = ParameterImplP(
                         value = it.toDoubleMy(),
                         unit = set.distance.unit
                     )
@@ -182,7 +182,7 @@ val interval_between_pole = 4.dp
             ) },
         onChangeUnit = { action.ex(
             TrainingEvent.UpdateSet( set.copy(
-                    distance = ParameterImpl(
+                    distance = ParameterImplP(
                         value = bringingDist(set.distance),
                         unit = if (set.distance.unit == Units.MT) Units.KM else Units.MT
                     )
@@ -201,11 +201,11 @@ val interval_between_pole = 4.dp
         typeKey = TypeKeyboard.DIGIT,
         onChangeValue = { action.ex(
             TrainingEvent.UpdateSet( set.copy(
-                    distance = ParameterImpl(value = it.toDoubleMy(), unit = set.distance.unit))))
+                    distance = ParameterImplP(value = it.toDoubleMy(), unit = set.distance.unit))))
         },
         onChangeUnit = {action.ex(
             TrainingEvent.UpdateSet( set.copy(
-                    distance = ParameterImpl(value = bringingTime(set.duration),
+                    distance = ParameterImplP(value = bringingTime(set.duration),
                         unit = if (set.duration.unit == Units.M) Units.S else Units.M)
                 ))
             ) }
@@ -234,13 +234,13 @@ val interval_between_pole = 4.dp
         typeKey = TypeKeyboard.DIGIT,
         onChangeValue = { action.ex(
             TrainingEvent.UpdateSet(set.copy(
-                    weight = ParameterImpl(
+                    weight = ParameterImplP(
                         value = it.toDoubleMy(),
                         unit = set.weight.unit))))
         },
         onChangeUnit = { action.ex(
             TrainingEvent.UpdateSet( set.copy(
-                    weight = ParameterImpl(
+                    weight = ParameterImplP(
                         value = bringingWeight(set.weight),
                         unit = if (set.weight.unit == Units.GR) Units.KG else Units.GR)
             )))
@@ -258,13 +258,13 @@ val interval_between_pole = 4.dp
         typeKey = TypeKeyboard.DIGIT,
         onChangeValue = { action.ex(
             TrainingEvent.UpdateSet( set.copy(
-                    rest = ParameterImpl(
+                    rest = ParameterImplP(
                         value = it.toDoubleMy(),
                         unit = set.rest.unit)
             ))) },
         onChangeUnit = { action.ex(
             TrainingEvent.UpdateSet( set.copy(
-                    rest = ParameterImpl(
+                    rest = ParameterImplP(
                         value = bringingTime(set.rest),
                         unit = if (set.rest.unit == Units.S) Units.M else Units.S)
             )))}
@@ -376,7 +376,7 @@ val interval_between_pole = 4.dp
     ) {
         TextApp(text = stringResource(headId), textAlign = TextAlign.Center, style = alumBodySmall)
         TextFieldApp(
-            modifier = Modifier,
+            modifier = Modifier.fillMaxWidth().padding(horizontal = 4.dp),
             edit = true,
             beginValueZero = true,
             typeKeyboard = typeKey,
@@ -419,7 +419,7 @@ val interval_between_pole = 4.dp
             .background(color = colorScheme.onSecondary, shape = shapes.small)
             .padding(top = 2.dp, bottom = 6.dp, start = 4.dp, end = 4.dp)
     ) {
-        Row (verticalAlignment = Alignment.Top, modifier =Modifier) {
+        Row (verticalAlignment = Alignment.Top, modifier = Modifier.weight(1f)) {
             TextFieldApp(
                 modifier = Modifier.weight(1f),
                 edit = true,

@@ -45,6 +45,7 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.text.capitalize
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
@@ -65,6 +66,7 @@ import com.count_out.presentation.view_element.custom_view.IconQ
     onClickAddSet: (() -> Unit)? = null,
     onClickAddRing: (() -> Unit)? = null,
     onClickAddExercise: (() -> Unit)? = null,
+    onClickAddPlan: (() -> Unit)? = null,
 ){
     var expanded by remember { mutableStateOf(false) }
     Box {
@@ -83,7 +85,8 @@ import com.count_out.presentation.view_element.custom_view.IconQ
                     onClickDelete,
                     onClickAddSet,
                     onClickAddRing,
-                    onClickAddExercise
+                    onClickAddExercise,
+                    onClickAddPlan
                 ) { expanded = false }
             }
         }
@@ -125,6 +128,7 @@ import com.count_out.presentation.view_element.custom_view.IconQ
     onClickAddSet: (() -> Unit)? = null,
     onClickAddRing: (() -> Unit)? = null,
     onClickAddExercise: (() -> Unit)? = null,
+    onClickAddPlan: (() -> Unit)? = null,
     expanded: ()->Unit
 ){
     Column( verticalArrangement = Arrangement.SpaceBetween){
@@ -137,6 +141,9 @@ import com.count_out.presentation.view_element.custom_view.IconQ
             Spacer(modifier = Modifier.height(sizeBetweenIcon))}
         onClickAddExercise?.let {
             IconAddExercise(onClick = { it(); expanded()})
+            Spacer(modifier = Modifier.height(sizeBetweenIcon)) }
+        onClickAddPlan?.let {
+            IconAddPlan(onClick = { it(); expanded()})
             Spacer(modifier = Modifier.height(sizeBetweenIcon)) }
         onClickEdit?.let {
             IconSingle(image = Icons.Default.Edit, onClick = { it(); expanded()} )
@@ -177,6 +184,7 @@ import com.count_out.presentation.view_element.custom_view.IconQ
 @Composable fun IconAddSet(onClick:()->Unit) = IconAdd(onClick = onClick, text = "S+" )
 @Composable fun IconAddRing(onClick:()->Unit) = IconAdd(onClick = onClick, text = "R+" )
 @Composable fun IconAddExercise(onClick:()->Unit) = IconAdd(onClick = onClick, text = "E+" )
+@Composable fun IconAddPlan(onClick:()->Unit) = IconAdd(onClick = onClick, text = "P+" )
 //@Composable fun IconAddActivity(onClick:()->Unit) = IconAdd(onClick = onClick, text = "A+" )
 
 @Composable fun IconAdd(onClick:()->Unit, text: String = "+") {
@@ -224,6 +232,6 @@ import com.count_out.presentation.view_element.custom_view.IconQ
                 modifier = Modifier.fillMaxSize().animateContentSize()
                     .clearAndSetSemantics { contentDescription = text })
         }
-        TextApp(text = text, style = MaterialTheme.typography.labelSmall) // alumBodySmall)
+        TextApp(text = text.replaceFirstChar{it.uppercase()}, style = MaterialTheme.typography.labelSmall) // alumBodySmall)
     }
 }

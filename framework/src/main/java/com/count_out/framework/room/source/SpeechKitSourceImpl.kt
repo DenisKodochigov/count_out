@@ -53,10 +53,10 @@ class SpeechKitSourceImpl @Inject constructor(
     fun copyValue(speechKit: SpeechKitImplD): Long? {
         return dao.add(
             SpeechKitTable(
-                idBeforeStart = copySpeech(speechKit.beforeStart as SpeechImplD),
-                idAfterStart = copySpeech(speechKit.beforeEnd as SpeechImplD),
-                idBeforeEnd = copySpeech(speechKit.afterStart as SpeechImplD),
-                idAfterEnd = copySpeech(speechKit.afterEnd as SpeechImplD),
+                idBeforeStart = copySpeech(speechKit.beforeStart?.let{ it as SpeechImplD}),
+                idAfterStart = copySpeech(speechKit.afterStart?.let{ it as SpeechImplD}),
+                idBeforeEnd = copySpeech(speechKit.beforeEnd?.let{ it as SpeechImplD}),
+                idAfterEnd = copySpeech(speechKit.afterEnd?.let{ it as SpeechImplD}),
         ))
     }
     fun copySpeech(speech: SpeechImplD?): Long {

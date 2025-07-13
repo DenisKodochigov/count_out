@@ -48,56 +48,56 @@ data class DataForWork (
 
     fun createMapTraining(){
         var numberExercise = 1
-        val list: MutableList<StepPlan> = mutableListOf()
-        this.training.value?.let { tr->
-            tr.rounds.forEachIndexed { indR, round-> exerciseCount += round.exercise.count() }
-            tr.rounds.forEachIndexed { indR, round->
-                round.exercise.forEachIndexed { indE, exercise ->
-                    if (list.isNotEmpty()){
-                        val nextExercise = nextExercise(exercise)
-                        for (ind in list.lastIndex downTo 0){
-                            if (list[ind].nextExercise == null){
-                                list[ind] = (list[ind] as StepPlanImpl).copy(nextExercise = nextExercise)
-                            }
-                        }
-                    }
-                    exercise.sets.forEachIndexed { indS, set->
-                        list.add(
-                            StepPlanImpl(
-                                idPlan = tr.idTraining,
-                                namePlan = tr.name,
-                                round = round,
-                                exercise = exercise,
-                                numberExercise = numberExercise,
-                                quantityExercise = exerciseCount,
-                                currentSet = set,
-                                numberSet = indS + 1,
-                                quantitySet = exercise.sets.count(),
-                                nextExercise = null
-                            ))
-                    }
-                    numberExercise ++
-                }
-            }
-        }
-        this.map = list
+//        val list: MutableList<StepPlan> = mutableListOf()
+//        this.training.value?.let { tr->
+//            tr.rounds.forEachIndexed { indR, round-> exerciseCount += round.exercise.count() }
+//            tr.rounds.forEachIndexed { indR, round->
+//                round.exercise.forEachIndexed { indE, exercise ->
+//                    if (list.isNotEmpty()){
+////                        val nextExercise = nextExercise(exercise)
+//                        for (ind in list.lastIndex downTo 0){
+//                            if (list[ind].nextExercise == null){
+////                                list[ind] = (list[ind] as StepPlanImpl).copy(nextExercise = nextExercise)
+//                            }
+//                        }
+//                    }
+//                    exercise.sets.forEachIndexed { indS, set->
+//                        list.add(
+//                            StepPlanImpl(
+//                                idPlan = tr.idTraining,
+//                                namePlan = tr.name,
+//                                round = round,
+//                                exercise = exercise,
+//                                numberExercise = numberExercise,
+//                                quantityExercise = exerciseCount,
+//                                currentSet = set,
+//                                numberSet = indS + 1,
+//                                quantitySet = exercise.sets.count(),
+//                                nextExercise = null
+//                            ))
+//                    }
+//                    numberExercise ++
+//                }
+//            }
+//        }
+//        this.map = list
     }
-    fun nextExercise(exercise: Exercise): NextExercise {
-        val list: MutableList<Pair<String, Int>> = mutableListOf()
-        exercise.sets.forEachIndexed { _, set ->
-            list.add( when (set.goal) {
-                Goal.Duration -> "${set.duration.value / (if (set.duration.unit == Units.S) 1 else 60)}" to set.duration.unit.id
-                Goal.Distance -> "${set.distance.value / (if (set.distance.unit == Units.MT) 1 else 1000)}" to set.distance.unit.id
-                Goal.Count -> "${set.reps}" to 0
-                Goal.CountGroup -> "" to 0 }
-            )
-        }
-        return NextExerciseImpl(
-                    nextActivityName = exercise.activity?.name.toString(),
-                    nextExerciseId = exercise.idExercise,
-                    nextExerciseQuantitySet = exercise.sets.count(),
-                    nextExerciseSummarizeSet = list )
-    }
+//    fun nextExercise(exercise: Exercise): NextExercise {
+//        val list: MutableList<Pair<String, Int>> = mutableListOf()
+//        exercise.sets.forEachIndexed { _, set ->
+//            list.add( when (set.goal) {
+//                Goal.Duration -> "${set.duration.value / (if (set.duration.unit == Units.S) 1 else 60)}" to set.duration.unit.id
+//                Goal.Distance -> "${set.distance.value / (if (set.distance.unit == Units.MT) 1 else 1000)}" to set.distance.unit.id
+//                Goal.Count -> "${set.reps}" to 0
+//                Goal.CountGroup -> "" to 0 }
+//            )
+//        }
+//        return NextExerciseImpl(
+//                    nextActivityName = exercise.activity?.name.toString(),
+//                    nextExerciseId = exercise.idExercise,
+//                    nextExerciseQuantitySet = exercise.sets.count(),
+//                    nextExerciseSummarizeSet = list )
+//    }
 }
 //    fun setExecuteInfoExercise(index: Int){
 //        dataFromWork?.executeInfoExercise?.value = ExecuteInfoExercise(

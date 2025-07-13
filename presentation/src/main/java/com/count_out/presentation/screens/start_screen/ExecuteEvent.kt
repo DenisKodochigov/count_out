@@ -6,7 +6,7 @@ import com.count_out.presentation.screens.prime.Event
 sealed class ExecuteEvent: Event {
     data object Start: ExecuteEvent()
     data object Pause: ExecuteEvent()
-    data object Stop : ExecuteEvent()
+    data class Stop(val item: ShowBottomSheet) : ExecuteEvent()
     data object Save : ExecuteEvent()
 
     data object GetPlan: ExecuteEvent()

@@ -79,7 +79,6 @@
     <string name="add_ring">Добавить круг</string>
     <string name="counts">Отсчеты</string>
     <string name="count">Отсчет</string>
-    <string name="next_exercise">След. упражнение</string>
     <string name="rest_time">Время отдыха.</string>
     <string name="section_heart_rate">Доступные устройства.</string>
     <string name="heart_rate_device">Датчик пульса.</string>
@@ -107,8 +106,8 @@
 
     <string name="set">Подход</string>
     <string name="sets">Подходы</string>
+    <string name="setFrom">подходов</string>
     <string name="from">из</string>
-    <string name="setFrom">Подходов</string>
     <string name="slower">Медленее</string>
     <string name="faster">Быстрее</string>
     <string name="no_name">нет имени.</string>
@@ -130,10 +129,16 @@
     <string name="history_">History</string>
 
     <plurals name="set_1">
-        <item quantity="one">%1$d = подход</item>
-        <item quantity="few">%1$d = подхода</item>
-        <item quantity="many">%1$d = подходов</item>
+        <item quantity="one">%d подход</item>
+        <item quantity="few">%d подхода</item>
+        <item quantity="many">%d подходов</item>
         <item quantity="other">подходы</item>
+    </plurals>
+    <plurals name="exercise">
+        <item quantity="one">%d упражнение</item>
+        <item quantity="few">%d упражнения</item>
+        <item quantity="many">%d упражнений</item>
+        <item quantity="other">упражнений</item>
     </plurals>
     <plurals name="set_2">
         <item quantity="one" tools:ignore="ImpliedQuantity">подход</item>

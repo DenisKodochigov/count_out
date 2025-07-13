@@ -40,13 +40,13 @@ interface ScreenDestination {
 object ExecuteDestination : ScreenDestination {
     override val route = "executeWorkout"
     override val routeWithArgs = route
-    override val nameScreen = R.string.screen_execute_work
+    override val nameScreen = R.string.screen_execute
     override val icon = Icons.Filled.Brightness5
-    override val iconText = R.string.trainings_
+    override val iconText = R.string.screen_execute
     override val pictureDay = R.drawable.ic_launcher_background
     override val pictureNight = R.drawable.ic_launcher_background
     override val showFab: Boolean = false
-    override var textFABId = R.string.trainings
+    override var textFABId = R.string.screen_execute
     override var onClickFAB: () -> Unit = {}
 
     @Composable override fun Show(vm: ViewModel, arg: List<String>) {
@@ -57,11 +57,11 @@ object PlansDestination : ScreenDestination {
     override val routeWithArgs = route
     override val nameScreen = R.string.plans_workout
     override val icon = Icons.Filled.AccessAlarms
-    override val iconText = R.string.trainings_
+    override val iconText = R.string.plans
     override val pictureDay = 0
     override val pictureNight = 0
     override val showFab: Boolean = false
-    override var textFABId = R.string.trainings
+    override var textFABId = R.string.plans
     override var onClickFAB: () -> Unit = {}
     @Composable
     override fun Show (vm: ViewModel, arg: List<String>) { PlansScreen(vm as PlansViewModel)}
@@ -70,7 +70,7 @@ object TrainingDestination : ScreenDestination {
     override val route = "training"
     override val nameScreen = R.string.plan_workout
     override val icon = Icons.Filled.Brightness5
-    override val iconText = R.string.trainings_
+    override val iconText = R.string.training
     override val pictureDay = R.drawable.ic_launcher_background
     override val pictureNight = R.drawable.ic_launcher_background
     override val showFab: Boolean = false
@@ -89,11 +89,11 @@ object HistoryDestination : ScreenDestination {
     override val routeWithArgs = route
     override val nameScreen = R.string.history
     override val icon = Icons.Filled.CalendarMonth
-    override val iconText = R.string.history_
+    override val iconText = R.string.history
     override val pictureDay = 0
     override val pictureNight = 0
     override val showFab: Boolean = false
-    override var textFABId = R.string.history_
+    override var textFABId = R.string.history
     override var onClickFAB: () -> Unit = {}
 
     @Composable override fun Show(vm: ViewModel, arg: List<String>) {
