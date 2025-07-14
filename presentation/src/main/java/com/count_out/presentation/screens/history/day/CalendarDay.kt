@@ -12,11 +12,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.count_out.presentation.models.elevationNull
-import com.count_out.presentation.screens.history.HistoryScreenState
+import com.count_out.presentation.screens.history.HistoryState
 import com.count_out.presentation.view_element.TextApp
 
 @Composable
-fun CalendarDay(uiState: HistoryScreenState, day: String = "1") {
+fun CalendarDay(uiState: HistoryState, day: String = "1") {
     Card(
         elevation = elevationNull(),
         shape = shapes.extraSmall,

@@ -4,7 +4,6 @@ import com.count_out.domain.entity.GlobalValueApp
 import com.count_out.domain.entity.GlobalValueApp.toStepPlan
 import com.count_out.domain.entity.StepPlan
 import com.count_out.domain.entity.throwable.ResultUC
-import com.count_out.domain.entity.throwable.ThrowableUC
 import com.count_out.domain.repository.ExecuteWorkOutRepo
 import com.count_out.domain.repository.LastPlanRepo
 import com.count_out.domain.use_case.UseCase
@@ -28,7 +27,7 @@ class GetStepPlanUC @Inject constructor(
     override fun implementation(request: Request): Flow<ResultUC<Response>> {
         val result1 = GlobalValueApp.planRun.map { plan->
             toStepPlan(plan)?.let { stepPlan->
-                ResultUC.Success(data = stepPlan)} ?: errorNull }
+                ResultUC.Success(data = stepPlan)} ?: exceptionNull }
 
         return combine(result1,
             convertor3(repoLastPlan.getLastUsedPlan()){ tr-> toStepPlan(tr)},
@@ -36,9 +35,9 @@ class GetStepPlanUC @Inject constructor(
                     r1, r2, r3 ->
             val result = r1.chek() ?: r2.chek() ?: r3.chek()
             when(result){
-                is ResultUC.Error -> errorNull
+                is ResultUC.Error -> exceptionNull
                 is ResultUC.Success -> ResultUC.Success(Response(result.data))
-                null -> errorNull
+                null -> exceptionNull
             }
         }
     }

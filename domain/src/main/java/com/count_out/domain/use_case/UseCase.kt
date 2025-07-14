@@ -18,7 +18,7 @@ abstract class UseCase< I: UseCase.Request, O: UseCase.Response>(private val con
 ) {
     class Configuration(val dispatcher: CoroutineDispatcher)
 
-    val errorNull = ResultUC.Error(
+    val exceptionNull = ResultUC.Error(
         ThrowableUC.extractThrowable(Exception("return null"))) as ResultUC<Nothing>
     interface Request
     interface Response
@@ -36,8 +36,8 @@ abstract class UseCase< I: UseCase.Request, O: UseCase.Response>(private val con
     fun <T: Any, U: Any>convertor3( request: Flow<ResultUC<T>>, convertTR: (T?)-> U?): Flow<ResultUC<U>>{
         return request.map { result->
             if ( result is ResultUC.Success) {
-                convertTR(result.data)?.let { st-> ResultUC.Success(st) } ?: errorNull
-            } else errorNull
+                convertTR(result.data)?.let { st-> ResultUC.Success(st) } ?: exceptionNull
+            } else exceptionNull
         }
     }
 

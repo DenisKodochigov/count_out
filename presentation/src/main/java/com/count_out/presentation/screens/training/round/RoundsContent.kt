@@ -18,7 +18,6 @@ import com.count_out.domain.entity.workout.Round
 import com.count_out.presentation.R
 import com.count_out.presentation.models.Dimen.contourHor2
 import com.count_out.presentation.models.ExerciseImplP
-import com.count_out.presentation.screens.prime.Action
 import com.count_out.presentation.screens.training.TrainingEvent
 import com.count_out.presentation.screens.training.TrainingEvent.ShowBS
 import com.count_out.presentation.screens.training.TrainingState
@@ -29,43 +28,42 @@ import com.count_out.presentation.view_element.bottom_sheet.BottomSheetSpeech
 import com.count_out.presentation.view_element.custom_view.Frame
 import com.count_out.presentation.view_element.icons.IconsCollapsing
 import com.count_out.presentation.view_element.icons.IconsGroup
-import com.count_out.presentation.view_element.lg
 
-@Composable fun Round(dataState: TrainingState, action: Action, round: Round){
+@Composable fun Round(dataState: TrainingState, round: Round){
 
     if (dataState.showBS.workUp) {
         dataState.nameSection = stringResource(id = R.string.work_up1)
         dataState.item = dataState.training?.rounds?.find { it.roundType == RoundType.WorkUp }
         dataState.onDismissSpeech =
-            { action.ex(ShowBS(dataState.showBS.copy(element = dataState.item))) }
+            { dataState.event.run(ShowBS(dataState.showBS.copy(element = dataState.item))) }
         BottomSheetSpeech(dataState)
     }
     if (dataState.showBS.workOut) {
         dataState.nameSection = stringResource(id = R.string.work_out1)
         dataState.item = dataState.training?.rounds?.find { it.roundType == RoundType.WorkOut }
         dataState.onDismissSpeech =
-            { action.ex(ShowBS(dataState.showBS.copy(element = dataState.item))) }
+            { dataState.event.run(ShowBS(dataState.showBS.copy(element = dataState.item))) }
         BottomSheetSpeech(dataState)
     }
     if (dataState.showBS.workDown) {
         dataState.nameSection = stringResource(id = R.string.work_down1)
         dataState.item = dataState.training?.rounds?.find { it.roundType == RoundType.WorkDown }
         dataState.onDismissSpeech =
-            { action.ex(ShowBS(dataState.showBS.copy(element = dataState.item))) }
+            { dataState.event.run(ShowBS(dataState.showBS.copy(element = dataState.item))) }
         BottomSheetSpeech(dataState)
     }
 
     Frame(colorAlpha = 0.8f, contour = contourHor2){
         Column( modifier = Modifier.padding(start = 6.dp, bottom = 4.dp, top = 4.dp)){
-            TitleRound(dataState = dataState, action = action, round = round)
-            ListExercise(dataState = dataState, action = action, round = round)
+            TitleRound(dataState = dataState, round = round)
+            ListExercise(dataState = dataState, round = round)
         }
     }
 }
-@Composable fun TitleRound(dataState: TrainingState, action: Action, round: Round){
+@Composable fun TitleRound(dataState: TrainingState, round: Round){
     Row( verticalAlignment = Alignment.CenterVertically ){
         IconsCollapsing(
-            onClick = { setCollapsing(dataState, action, round) },
+            onClick = { setCollapsing(dataState, round) },
             wrap = getCollapsing(dataState, round) )
         Spacer(modifier = Modifier.width(2.dp))
         Column(modifier = Modifier.weight(1f)) {
@@ -77,28 +75,28 @@ import com.count_out.presentation.view_element.lg
                 text = "${ stringResource(id = R.string.exercises) }: ${round.amount}" +
                         " / ${round.duration.value} ${ stringResource(id = R.string.min)}",) }
         IconsGroup(
-            onClickSpeech = { showSpeechRound(dataState, action, round) },
+            onClickSpeech = { showSpeechRound(dataState, round) },
             onClickAddExercise = {
-                action.ex(TrainingEvent.CopyExercise(exercise = ExerciseImplP(roundId = round.idRound)))})
+                dataState.event.run(TrainingEvent.CopyExercise(exercise = ExerciseImplP(roundId = round.idRound)))})
         Spacer(modifier = Modifier.width(6.dp))
     }
 }
-@Composable fun ListExercise(dataState: TrainingState, action: Action, round: Round){
+@Composable fun ListExercise(dataState: TrainingState, round: Round){
     ListExercises(
         dataState = dataState,
-        action = action,
         round = round,
         modifier = Modifier.padding(end = 8.dp),
-        showExercises = getCollapsing(dataState, round) && round.amount > 0)
+        showExercises = getCollapsing(dataState, round) && round.amount > 0,
+    )
 }
 //
-fun showSpeechRound(dataState: TrainingState, action: Action, round: Round){
-    action.ex(ShowBS(dataState.showBS.copy(element = round)))
+fun showSpeechRound(dataState: TrainingState, round: Round){
+    dataState.event.run(ShowBS(dataState.showBS.copy(element = round)))
 }
 
-fun setCollapsing(dataState: TrainingState, action: Action, round: Round) {
+fun setCollapsing(dataState: TrainingState, round: Round) {
     if (round.amount > 0) {
-        action.ex(TrainingEvent.SetCollapsing(dataState.collapsing.copy(item = round)))
+        dataState.event.run(TrainingEvent.SetCollapsing(dataState.collapsing.copy(item = round)))
     }
 }
 fun getCollapsing(dataState: TrainingState, round: Round): Boolean {

@@ -1,5 +1,6 @@
 package com.count_out.presentation.screens.start_screen
 
+import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -28,7 +29,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.count_out.domain.entity.NextExercise
 import com.count_out.domain.entity.StepPlan
@@ -38,8 +38,6 @@ import com.count_out.domain.entity.enums.RunningState
 import com.count_out.domain.entity.workout.Set
 import com.count_out.presentation.R
 import com.count_out.presentation.models.ParameterImplP
-import com.count_out.presentation.screens.prime.Action
-import com.count_out.presentation.screens.prime.Event
 import com.count_out.presentation.screens.prime.PrimeScreen
 import com.count_out.presentation.view_element.TextApp
 import com.count_out.presentation.view_element.TopBarApp
@@ -48,39 +46,37 @@ import com.count_out.presentation.view_element.custom_view.Frame
 import com.count_out.presentation.view_element.custom_view.IconQ
 import java.math.RoundingMode
 
-/**
- * Проверить появление bottom sheet на запрос сохранить тренировку
- */
 @Composable fun ExecuteWorkoutScreen(viewModel: ExecuteViewModel){
     LaunchedEffect(Unit) { viewModel.submitEvent(ExecuteEvent.GetPlan) }
     ExecuteWorkoutScreenCreateView( viewModel = viewModel )
 }
 @Composable fun ExecuteWorkoutScreenCreateView(viewModel: ExecuteViewModel){
-    val action = Action {viewModel.submitEvent(it) }
     viewModel.screenState.collectAsState().value.let { screenState ->
         PrimeScreen(loader = screenState) { dataState ->
-            ExecuteWorkoutScreenLayout(dataState, action = action)
+            ExecuteWorkoutScreenLayout(dataState)
         }
     }
 }
-@Composable fun ExecuteWorkoutScreenLayout(dataState: ExecuteState, action: Action){
-    if (dataState.showBS.training) BottomSheetSaveTraining(dataState, action)
+@Composable fun ExecuteWorkoutScreenLayout(dataState: ExecuteState){
+    if (dataState.showBS.training) BottomSheetSaveTraining(dataState)
     Column(
-        modifier = Modifier.fillMaxSize().padding(horizontal = 4.dp),
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(horizontal = 4.dp),
         content = {
-            TopBar(dataState, action)
+            TopBar(dataState)
             SensorInfo(dataState)
-            AdditionalInformation(dataState, action, modifier = Modifier.weight(1f))
-            ExerciseInfo(dataState, action)
-            DownPlace(dataState, action)
+            AdditionalInformation(dataState, modifier = Modifier.weight(1f))
+            ExerciseInfo(dataState)
+            DownPlace(dataState)
         }
     )
 }
-@Composable fun TopBar(dataState: ExecuteState, action: Action){
+@Composable fun TopBar(dataState: ExecuteState){
     TopBarApp(
         text = "${stringResource(R.string.training_text_fab)}: ${dataState.stepTraining?.namePlan ?: ""}",
         selected = true,
-        onClickText = { action.ex(ExecuteEvent.ToScreenPlans) } ,
+        onClickText = { dataState.event.run(ExecuteEvent.ToScreenPlans) } ,
     )
 }
 @Composable fun SensorInfo(dataState: ExecuteState) {
@@ -108,15 +104,19 @@ import java.math.RoundingMode
     }
     HorizontalDivider(thickness = 2.dp, color = MaterialTheme.colorScheme.surfaceContainerLow)
 }
-@Composable fun AdditionalInformation(dataState: ExecuteState, action: Action, modifier: Modifier = Modifier){
+@Composable fun AdditionalInformation(dataState: ExecuteState, modifier: Modifier = Modifier){
     Column (modifier = modifier.fillMaxWidth()) {
 //        Text(text = "Screen Execute ${typography.titleLarge.fontFamily}", style = typography.titleLarge)
-        Button(onClick = {action.ex(ExecuteEvent.ShowBS(dataState.showBS))}) { Text(text = "Show")}
+        Button(onClick = {
+            Log.d("KDS","AdditionalInformation ${dataState.stepTraining}")
+            dataState.event.run(ExecuteEvent.ShowBS(dataState.showBS))}) { Text(text = "Show")}
     }
 }
-@Composable fun ExerciseInfo(dataState: ExecuteState, action: Action) {
+@Composable fun ExerciseInfo(dataState: ExecuteState) {
     Frame{
-        Column (modifier = Modifier.fillMaxWidth().padding(horizontal = 12.dp, vertical = 12.dp)){
+        Column (modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 12.dp, vertical = 12.dp)){
 
             dataState.stepTraining?.let { stepPlan ->
                 TextApp( modifier = Modifier.padding(bottom = 0.dp), style = typography.titleLarge,
@@ -124,13 +124,13 @@ import java.math.RoundingMode
                         "$it: ${stepPlan.numberExercise}/${stepPlan.quantityExercise}"} ?: "")
                 stepPlan.currentSet?.let { set->
                     when (set.goal ) {
-                        Goal.Count -> InfoSet(dataState, action, stepPlan, set,
+                        Goal.Count -> InfoSet(dataState, stepPlan, set,
                             desc = "${stringResource(R.string.reps)} (${set.reps}):" )
-                        Goal.Distance -> InfoSet(dataState, action, stepPlan, set,
+                        Goal.Distance -> InfoSet(dataState, stepPlan, set,
                             desc = "${stringResource(R.string.distance) } ${ParameterImplP(set.distance).print()}:" )
-                        Goal.Duration -> InfoSet(dataState, action, stepPlan, set,
+                        Goal.Duration -> InfoSet(dataState, stepPlan, set,
                             desc = "${stringResource(R.string.duration_set)} ${ParameterImplP(set.duration).print()}:" )
-                        Goal.CountGroup -> InfoSet(dataState, action, stepPlan, set,
+                        Goal.CountGroup -> InfoSet(dataState, stepPlan, set,
                             desc = "${stringResource(R.string.reps)} (${set.reps}):" )
                     }
                 }
@@ -139,7 +139,7 @@ import java.math.RoundingMode
         }
     }
 }
-@Composable fun DownPlace(dataState: ExecuteState, action: Action) {
+@Composable fun DownPlace(dataState: ExecuteState) {
     /**
      * Стостояния кнопок отображения:
      * 1. Play              Binding or Stoped
@@ -147,25 +147,29 @@ import java.math.RoundingMode
      * 3. Play + Stop       Pause
      */
     Row(horizontalArrangement = Arrangement.Center,
-        modifier = Modifier.fillMaxWidth().padding(bottom = 0.dp, top = 12.dp),)
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(bottom = 0.dp, top = 12.dp),)
     {
         when (dataState.stateWorkOut) {
             RunningState.Binding, RunningState.Stopped -> {
-                IconQ.Play( onClick = { action.ex(ExecuteEvent.Start)})}
+                IconQ.Play( onClick = { dataState.event.run(ExecuteEvent.Start)})}
             RunningState.Started -> {
-                IconQ.Pause(onClick = { action.ex(ExecuteEvent.Pause)})
+                IconQ.Pause(onClick = { dataState.event.run(ExecuteEvent.Pause)})
                 Spacer(modifier = Modifier.width(32.dp))
-                IconQ.Stop(onClick = { action.ex(ExecuteEvent.Stop(dataState.showBS))}) }
+                IconQ.Stop(onClick = { dataState.event.run(ExecuteEvent.Stop(dataState.showBS))}) }
             RunningState.Paused -> {
-                IconQ.Play( onClick = { action.ex(ExecuteEvent.Start) })
+                IconQ.Play( onClick = { dataState.event.run(ExecuteEvent.Start) })
                 Spacer(modifier = Modifier.width(32.dp))
-                IconQ.Stop(onClick = { action.ex(ExecuteEvent.Stop(dataState.showBS))})}
+                IconQ.Stop(onClick = { dataState.event.run(ExecuteEvent.Stop(dataState.showBS))})}
         }
     }
 }
 
-@Composable fun InfoSet(dataState: ExecuteState, action: Action, stepPlan: StepPlan, set: Set, desc: String){
-    Row(modifier = Modifier.fillMaxWidth().padding(start = 8.dp)) {
+@Composable fun InfoSet(dataState: ExecuteState, stepPlan: StepPlan, set: Set, desc: String){
+    Row(modifier = Modifier
+        .fillMaxWidth()
+        .padding(start = 8.dp)) {
         val listParam = listOf(
             listOf("${stringResource(R.string.sets)} (${stepPlan.quantitySet}):", "${stepPlan.numberSet}"),
             listOf(desc, "${dataState.currentCount}"),
@@ -176,7 +180,7 @@ import java.math.RoundingMode
         )
         ColumnsB( modifier = Modifier, listParam, 0)
         ColumnsB( modifier = Modifier.width(30.dp), listParam, 1)
-        ChangeInterval(modifier = Modifier.align(Alignment.Bottom), action, set, dataState.enableChangeInterval)
+        ChangeInterval(dataState, modifier = Modifier.align(Alignment.Bottom), set)
     }
 }
 @Composable fun ColumnsB(modifier: Modifier, listParam: List<List<String>>, order : Int){
@@ -186,17 +190,18 @@ import java.math.RoundingMode
         listParam.forEach { TextApp(text = it[order], style = style, modifier = modifierL) }
     }
 }
-@Composable fun ChangeInterval(modifier:Modifier, action: Action, set: Set, allowChange: Boolean){
-    val color = with(MaterialTheme.colorScheme){ if(allowChange) outline else surfaceContainerLow }
+@Composable fun ChangeInterval(dataState: ExecuteState, modifier:Modifier, set: Set){
+    val color = with(MaterialTheme.colorScheme){
+        if(dataState.enableChangeInterval) outline else surfaceContainerLow }
     Row(modifier = modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center,
         verticalAlignment = Alignment.CenterVertically) {
-        IconQ.Slower(
-            onClick = {if (allowChange) action.ex(ExecuteEvent.UpInterval) }, color = color)
+        IconQ.Slower(onClick = {if (dataState.enableChangeInterval)
+                dataState.event.run(ExecuteEvent.UpInterval) }, color = color)
         TextApp(
             style = typography.titleLarge, modifier = Modifier.padding(start = 12.dp, end = 12.dp),
             text = (set.intervalReps.toBigDecimal().setScale(1, RoundingMode.UP)).toString())
-        IconQ.Faster(
-            onClick = { if (allowChange) action.ex(ExecuteEvent.DownInterval) }, color = color)
+        IconQ.Faster( onClick = { if (dataState.enableChangeInterval)
+                dataState.event.run(ExecuteEvent.DownInterval) }, color = color)
     }
 }
 
@@ -208,12 +213,190 @@ import java.math.RoundingMode
                 "(${pluralStringResource(R.plurals.set_1, quantitySets,quantitySets)})")
 }
 
-@Preview
-@Composable fun PreviewExecuteWorkoutScreen(){
-    val dataState = ExecuteState()
-    val action = object : Action { override fun ex(ev: Event) {  } }
-    ExecuteWorkoutScreenLayout( dataState, action )
-}
+//@Composable fun ExecuteWorkoutScreen(viewModel: ExecuteViewModel){
+//    LaunchedEffect(Unit) { viewModel.submitEvent(ExecuteEvent.GetPlan) }
+//    ExecuteWorkoutScreenCreateView( viewModel = viewModel )
+//}
+//@Composable fun ExecuteWorkoutScreenCreateView(viewModel: ExecuteViewModel){
+////    val action = remember {
+////        Action {
+////            Log.d(
+////                "KDS",
+////                "ExecuteAction ${viewModel.dataState.value.stepTraining} ${viewModel.dataState.value.showBS.training}"
+////            )
+////            viewModel.submitEvent(it)
+////        }
+////    }
+////    val action = viewModel.action()
+//    viewModel.screenState.collectAsState().value.let { screenState ->
+//        PrimeScreen(loader = screenState) { dataState ->
+////            Log.d("KDS","ExecuteAction ${viewModel.dataState.value.stepTraining} ${viewModel.dataState.value.showBS.training}")
+//
+//            ExecuteWorkoutScreenLayout(dataState, action = action)
+//        }
+//    }
+//}
+//@Composable fun ExecuteWorkoutScreenLayout(dataState: ExecuteState, action: Action){
+//    if (dataState.showBS.training) BottomSheetSaveTraining(dataState, action)
+//    Column(
+//        modifier = Modifier
+//            .fillMaxSize()
+//            .padding(horizontal = 4.dp),
+//        content = {
+//            TopBar(dataState, action)
+//            SensorInfo(dataState)
+//            AdditionalInformation(dataState, action, modifier = Modifier.weight(1f))
+//            ExerciseInfo(dataState, action)
+//            DownPlace(dataState, action)
+//        }
+//    )
+//}
+//@Composable fun TopBar(dataState: ExecuteState, action: Action){
+//    TopBarApp(
+//        text = "${stringResource(R.string.training_text_fab)}: ${dataState.stepTraining?.namePlan ?: ""}",
+//        selected = true,
+//        onClickText = { action.ex(ExecuteEvent.ToScreenPlans) } ,
+//    )
+//}
+//@Composable fun SensorInfo(dataState: ExecuteState) {
+//    val style = typography.displayLarge
+//    val sizeIcon = 32.dp
+//    Row( verticalAlignment = Alignment.CenterVertically,
+//        modifier = Modifier
+//            .fillMaxWidth()
+//            .padding(start = 12.dp, end = 12.dp),)
+//    {   //Time
+//        TextApp(text = "${dataState.flowTime.hour}:${dataState.flowTime.min}:${dataState.flowTime.sec}", style = style)
+//        Spacer(modifier = Modifier.weight(1f))
+//        //Location
+//        Icon(contentDescription = null, modifier = Modifier.size(sizeIcon),
+//            imageVector = if(dataState.coordinate == null) Icons.Outlined.LocationOn
+//            else Icons.Filled.LocationOn,)
+//        Spacer(modifier = Modifier.weight(1f))
+//        //HearthRate
+//        Icon( modifier = Modifier.size(sizeIcon), contentDescription = null,
+//            imageVector = if(dataState.bleConnectState != ConnectState.CONNECTED) Icons.Outlined.HeartBroken
+//            else Icons.Filled.Favorite)
+//        TextApp(style = style, modifier = Modifier.padding(start=12.dp),
+//            text = if(dataState.bleConnectState != ConnectState.CONNECTED) "---"
+//            else dataState.heartRate.toString() )
+//    }
+//    HorizontalDivider(thickness = 2.dp, color = MaterialTheme.colorScheme.surfaceContainerLow)
+//}
+//@Composable fun AdditionalInformation(dataState: ExecuteState, action: Action, modifier: Modifier = Modifier){
+//    Column (modifier = modifier.fillMaxWidth()) {
+////        Text(text = "Screen Execute ${typography.titleLarge.fontFamily}", style = typography.titleLarge)
+//        Button(onClick = {
+//            Log.d("KDS","AdditionalInformation ${dataState.stepTraining}")
+//            action.ex(ExecuteEvent.ShowBS(dataState.showBS))}) { Text(text = "Show")}
+//    }
+//}
+//@Composable fun ExerciseInfo(dataState: ExecuteState, action: Action) {
+//    Frame{
+//        Column (modifier = Modifier
+//            .fillMaxWidth()
+//            .padding(horizontal = 12.dp, vertical = 12.dp)){
+//
+//            dataState.stepTraining?.let { stepPlan ->
+//                TextApp( modifier = Modifier.padding(bottom = 0.dp), style = typography.titleLarge,
+//                    text = stepPlan.exercise?.activity?.name?.let {
+//                        "$it: ${stepPlan.numberExercise}/${stepPlan.quantityExercise}"} ?: "")
+//                stepPlan.currentSet?.let { set->
+//                    when (set.goal ) {
+//                        Goal.Count -> InfoSet(dataState, action, stepPlan, set,
+//                            desc = "${stringResource(R.string.reps)} (${set.reps}):" )
+//                        Goal.Distance -> InfoSet(dataState, action, stepPlan, set,
+//                            desc = "${stringResource(R.string.distance) } ${ParameterImplP(set.distance).print()}:" )
+//                        Goal.Duration -> InfoSet(dataState, action, stepPlan, set,
+//                            desc = "${stringResource(R.string.duration_set)} ${ParameterImplP(set.duration).print()}:" )
+//                        Goal.CountGroup -> InfoSet(dataState, action, stepPlan, set,
+//                            desc = "${stringResource(R.string.reps)} (${set.reps}):" )
+//                    }
+//                }
+//                NextExercise(dataState.stepTraining.nextExercise)
+//            }
+//        }
+//    }
+//}
+//@Composable fun DownPlace(dataState: ExecuteState, action: Action) {
+//    /**
+//     * Стостояния кнопок отображения:
+//     * 1. Play              Binding or Stoped
+//     * 2. Pause + Stop      Play
+//     * 3. Play + Stop       Pause
+//     */
+//    Row(horizontalArrangement = Arrangement.Center,
+//        modifier = Modifier
+//            .fillMaxWidth()
+//            .padding(bottom = 0.dp, top = 12.dp),)
+//    {
+//        when (dataState.stateWorkOut) {
+//            RunningState.Binding, RunningState.Stopped -> {
+//                IconQ.Play( onClick = { action.ex(ExecuteEvent.Start)})}
+//            RunningState.Started -> {
+//                IconQ.Pause(onClick = { action.ex(ExecuteEvent.Pause)})
+//                Spacer(modifier = Modifier.width(32.dp))
+//                IconQ.Stop(onClick = { action.ex(ExecuteEvent.Stop(dataState.showBS))}) }
+//            RunningState.Paused -> {
+//                IconQ.Play( onClick = { action.ex(ExecuteEvent.Start) })
+//                Spacer(modifier = Modifier.width(32.dp))
+//                IconQ.Stop(onClick = { action.ex(ExecuteEvent.Stop(dataState.showBS))})}
+//        }
+//    }
+//}
+//
+//@Composable fun InfoSet(dataState: ExecuteState, action: Action, stepPlan: StepPlan, set: Set, desc: String){
+//    Row(modifier = Modifier
+//        .fillMaxWidth()
+//        .padding(start = 8.dp)) {
+//        val listParam = listOf(
+//            listOf("${stringResource(R.string.sets)} (${stepPlan.quantitySet}):", "${stepPlan.numberSet}"),
+//            listOf(desc, "${dataState.currentCount}"),
+//            listOf("${stringResource(R.string.rest)} ${ ParameterImplP(set.rest).print()}:", "${dataState.currentRest}"),
+//            listOf(stringResource(R.string.weight) + ":", ParameterImplP(set.weight).print()),
+//            listOf(stringResource(R.string.interval) + ":", "")
+////                if (set.intervalReps > 0) "${set.intervalReps.discard(2)}" else "")
+//        )
+//        ColumnsB( modifier = Modifier, listParam, 0)
+//        ColumnsB( modifier = Modifier.width(30.dp), listParam, 1)
+//        ChangeInterval(modifier = Modifier.align(Alignment.Bottom), action, set, dataState.enableChangeInterval)
+//    }
+//}
+//@Composable fun ColumnsB(modifier: Modifier, listParam: List<List<String>>, order : Int){
+//    val modifierL = Modifier.padding(top = 0.dp)
+//    val style = typography.bodyLarge
+//    Column( modifier = modifier, horizontalAlignment = Alignment.End) {
+//        listParam.forEach { TextApp(text = it[order], style = style, modifier = modifierL) }
+//    }
+//}
+//@Composable fun ChangeInterval(modifier:Modifier, action: Action, set: Set, allowChange: Boolean){
+//    val color = with(MaterialTheme.colorScheme){ if(allowChange) outline else surfaceContainerLow }
+//    Row(modifier = modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center,
+//        verticalAlignment = Alignment.CenterVertically) {
+//        IconQ.Slower(
+//            onClick = {if (allowChange) action.ex(ExecuteEvent.UpInterval) }, color = color)
+//        TextApp(
+//            style = typography.titleLarge, modifier = Modifier.padding(start = 12.dp, end = 12.dp),
+//            text = (set.intervalReps.toBigDecimal().setScale(1, RoundingMode.UP)).toString())
+//        IconQ.Faster(
+//            onClick = { if (allowChange) action.ex(ExecuteEvent.DownInterval) }, color = color)
+//    }
+//}
+//
+//@Composable fun NextExercise(nextExercise: NextExercise?){
+//    val quantitySets = nextExercise?.nextExerciseQuantitySet?.let { if(it != 0) it else 0 } ?: 0
+//    TextApp(style = typography.titleLarge, maxLines = 2, textAlign = TextAlign.Start,
+//        modifier = Modifier.padding(top = 18.dp),
+//        text = "${ stringResource(R.string.next)}: ${nextExercise?.nextActivityName ?: ""} " +
+//                "(${pluralStringResource(R.plurals.set_1, quantitySets,quantitySets)})")
+//}
+//
+//@Preview
+//@Composable fun PreviewExecuteWorkoutScreen(){
+//    val dataState = ExecuteState()
+//    val action = object : Action { override fun ex(ev: Event) {  } }
+//    ExecuteWorkoutScreenLayout( dataState, action )
+//}
 //
 //@Composable fun ExecuteWorkoutScreen(viewModel: ExecuteViewModel){
 //    LaunchedEffect(Unit) { viewModel.submitEvent(ExecuteEvent.GetPlan) }

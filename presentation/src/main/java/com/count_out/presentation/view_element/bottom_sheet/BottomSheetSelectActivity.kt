@@ -22,7 +22,6 @@ import androidx.compose.ui.unit.dp
 import com.count_out.presentation.models.ActivityImpl
 import com.count_out.presentation.models.Dimen
 import com.count_out.presentation.models.ExerciseImplP
-import com.count_out.presentation.screens.prime.Action
 import com.count_out.presentation.screens.training.TrainingEvent
 import com.count_out.presentation.screens.training.TrainingEvent.ShowBS
 import com.count_out.presentation.screens.training.TrainingState
@@ -30,32 +29,32 @@ import com.count_out.presentation.view_element.ModalBottomSheetApp
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun BottomSheetSelectActivity(dataState: TrainingState, action: Action)
+fun BottomSheetSelectActivity(dataState: TrainingState)
 {
     val sheetState = rememberModalBottomSheetState(
         skipPartiallyExpanded = true, confirmValueChange = { true },)
 
     ModalBottomSheetApp(
-        onDismissRequest = { action.ex(ShowBS(dataState.showBS.copy(element = dataState.item)))},
+        onDismissRequest = { dataState.event.run(ShowBS(dataState.showBS.copy(element = dataState.item)))},
         modifier = Modifier.padding(horizontal = Dimen.bsPaddingHor1),
         shape = MaterialTheme.shapes.small,
         sheetState = sheetState,
-        content = { BottomSheetSelectActivityContent(dataState, action) }
+        content = { BottomSheetSelectActivityContent(dataState) }
     )
 }
 
-@Composable fun BottomSheetSelectActivityContent(dataState: TrainingState, action: Action) {
+@Composable fun BottomSheetSelectActivityContent(dataState: TrainingState) {
     Column( horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier.fillMaxWidth().padding(Dimen.bsItemPaddingHor)
     ){
         Spacer(Modifier.height(Dimen.bsSpacerHeight))
-        LazyActivity(dataState, action)
+        LazyActivity(dataState)
         Spacer(Modifier.height(Dimen.bsSpacerBottomHeight))
     }
 }
 
 @SuppressLint("UnrememberedMutableState")
-@Composable fun LazyActivity(dataState: TrainingState, action: Action){
+@Composable fun LazyActivity(dataState: TrainingState){
     val listState = rememberLazyListState()
     LazyColumn(
         state = listState,
@@ -67,7 +66,7 @@ fun BottomSheetSelectActivity(dataState: TrainingState, action: Action)
                 activity = mutableStateOf(item as ActivityImpl),
                 onSelect = {
                     dataState.exercise?.let {
-                        action.ex(TrainingEvent.UpdateExercise(ExerciseImplP(it, item))) } },
+                        dataState.event.run(TrainingEvent.UpdateExercise(ExerciseImplP(it, item))) } },
             )
         }
     }

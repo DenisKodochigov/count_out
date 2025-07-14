@@ -1,7 +1,11 @@
 package com.count_out.presentation.screens.history
 
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.count_out.presentation.screens.prime.Event
+import com.count_out.presentation.screens.prime.PrimeViewModel
+import com.count_out.presentation.screens.prime.ScreenState
+import com.count_out.presentation.screens.start_screen.ExecuteConverter
+import com.count_out.presentation.screens.start_screen.ExecuteState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -11,20 +15,18 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class HistoryViewModel  @Inject constructor(
-//    private val messageApp: MessageApp,
-//    private val dataRepository: DataRepository
-): ViewModel() {
-    private val _historyScreenState = MutableStateFlow(
-        HistoryScreenState(
-            getTraining = { getTraining( )},
-            getTrainings = { getTrainings()},
+class HistoryViewModel  @Inject constructor(): PrimeViewModel<HistoryState, HistoryConvertor>() {
+    private val _historyState = MutableStateFlow(
+        HistoryState(
+            getTraining = { },
+            getTrainings = { },
+            event = event(),
         )
     )
-    val historyScreenState: StateFlow<HistoryScreenState> = _historyScreenState.asStateFlow()
+    val historyState: StateFlow<HistoryState> = _historyState.asStateFlow()
     private fun getTraining(){
         viewModelScope.launch(Dispatchers.IO) {
-            kotlin.runCatching {  }.fold(
+            runCatching {  }.fold(
                 onSuccess = { },
                 onFailure = {
 //                    messageApp.errorApi("initServiceApp ${it.message ?: ""}")
@@ -34,12 +36,22 @@ class HistoryViewModel  @Inject constructor(
     }
     private fun getTrainings(){
         viewModelScope.launch(Dispatchers.IO) {
-            kotlin.runCatching {  }.fold(
+            runCatching {  }.fold(
                 onSuccess = { },
                 onFailure = {
 //                    messageApp.errorApi("initServiceApp ${it.message ?: ""}")
                 }
             )
         }
+    }
+
+    override fun initScreenState(): ScreenState<HistoryState>  = ScreenState.Loading
+
+    override fun initDataState(): HistoryState = HistoryState(event = event())
+
+    override fun convertor() = HistoryConvertor()
+
+    override fun routeEvent(event: Event) {
+        TODO("Not yet implemented")
     }
 }

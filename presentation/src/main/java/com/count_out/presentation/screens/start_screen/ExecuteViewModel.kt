@@ -36,11 +36,11 @@ class ExecuteViewModel @Inject constructor(
 ): PrimeViewModel<ExecuteState, ExecuteConverter>() {
 
     override fun initScreenState(): ScreenState<ExecuteState> = ScreenState.Loading
-    override fun initDataState(): ExecuteState = ExecuteState()
-    override fun initConvertor(): ExecuteConverter = ExecuteConverter()
+    override fun initDataState(): ExecuteState = ExecuteState(event = event())
+    override fun convertor(): ExecuteConverter = ExecuteConverter()
 
     override fun routeEvent(event: Event) {
-        Log.d("KDS","ExecuteViewModel ${dataState.value.stepTraining}")
+        Log.d("KDS","ExecuteViewModel stepTraining=${dataState.value.stepTraining}")
         when (event) {
             is ExecuteEvent.BackScreen -> { navigate.backStack()}
             is ExecuteEvent.ToScreenPlans -> { navigate.goToScreenPlans()}

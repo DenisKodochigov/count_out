@@ -17,7 +17,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.count_out.app.presentation.screens.history.day.HistoryDay
@@ -32,11 +31,11 @@ import com.count_out.presentation.screens.history.year.HistoryYear
 }
 
 @Composable fun HistoryScreenCreateView(viewModel: HistoryViewModel){
-    val uiState by viewModel.historyScreenState.collectAsStateWithLifecycle()
+    val uiState by viewModel.historyState.collectAsStateWithLifecycle()
     HistoryScreenLayout(uiState)
 }
 
-@Composable fun HistoryScreenLayout(uiState: HistoryScreenState) {
+@Composable fun HistoryScreenLayout(uiState: HistoryState) {
     val pagerState = rememberPagerState( pageCount = { enumValues<UnitTime>().count()})
     Column(Modifier.fillMaxSize()){
         HorizontalPager(state = pagerState, modifier = Modifier.weight(1f)) { page ->
@@ -45,7 +44,7 @@ import com.count_out.presentation.screens.history.year.HistoryYear
     }
 }
 
-@Composable fun ContentUnitTime(uiState: HistoryScreenState, currentPage: Int) {
+@Composable fun ContentUnitTime(uiState: HistoryState, currentPage: Int) {
     Column ( modifier = Modifier.fillMaxSize().verticalScroll(rememberScrollState())) {
         TextApp("Content unit time ${UnitTime.entries[currentPage].name}",
             style = MaterialTheme.typography.bodyMedium)
@@ -69,9 +68,4 @@ import com.count_out.presentation.screens.history.year.HistoryYear
             )
         }
     }
-}
-@Preview
-@Composable
-fun PreviewHistoryScreen(){
-    HistoryScreenLayout(HistoryScreenState())
 }

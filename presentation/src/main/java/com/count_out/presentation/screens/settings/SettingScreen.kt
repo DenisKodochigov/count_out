@@ -29,10 +29,12 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.count_out.domain.entity.Setting
-import com.count_out.presentation.screens.prime.PrimeScreen
 import com.count_out.domain.entity.enums.ConnectState
 import com.count_out.presentation.R
+import com.count_out.presentation.models.alumBodySmall
 import com.count_out.presentation.screens.prime.Action
+import com.count_out.presentation.screens.prime.PrimeScreen
+import com.count_out.presentation.view_element.EnumsTo
 import com.count_out.presentation.view_element.SwitchApp
 import com.count_out.presentation.view_element.TextApp
 import com.count_out.presentation.view_element.bottom_sheet.BottomSheetAddActivity
@@ -42,51 +44,45 @@ import com.count_out.presentation.view_element.custom_view.Frame
 import com.count_out.presentation.view_element.icons.AnimateIcon
 import com.count_out.presentation.view_element.icons.IconSingle
 import com.count_out.presentation.view_element.icons.IconsCollapsing
-import com.count_out.presentation.models.alumBodySmall
-import com.count_out.presentation.view_element.EnumsTo
 
 @Composable fun SettingScreen(viewModel: SettingViewModel){
-//    val viewModel: SettingViewModel = hiltViewModel()
-//    viewModel.initNavigate(navigateEvent)
     LaunchedEffect(Unit) { viewModel.submitEvent(SettingsEvent.Init) }
     SettingScreenCreateView( viewModel = viewModel )
 }
 @Composable fun SettingScreenCreateView( viewModel: SettingViewModel){
-    val action = Action {viewModel.submitEvent(it) }
     viewModel.screenState.collectAsStateWithLifecycle().value.let { screenState ->
         PrimeScreen(loader = screenState) { dataState ->
-
-            if (dataState.showBottomSheetAddActivity.value) BottomSheetAddActivity(dataState, action)
+            if (dataState.showBottomSheetAddActivity.value) BottomSheetAddActivity(dataState)
             if (dataState.showBottomSheetBLE.value) {
-                BottomSheetBle(dataState, action)
-                LaunchedEffect(dataState.showBottomSheetBLE.value) { action.ex(SettingsEvent.StartScanBLE) }
+                BottomSheetBle(dataState)
+                LaunchedEffect(dataState.showBottomSheetBLE.value) { dataState.event.run(SettingsEvent.StartScanBLE) }
             }
-            SettingScreenLayout(dataState, action = action)
+            SettingScreenLayout(dataState)
         }
     }
 
 //    SettingScreenLayout( dataState = dataState)
 }
 @SuppressLint("UnrememberedMutableState")
-@Composable fun SettingScreenLayout(dataState: SettingsState, action: Action){
+@Composable fun SettingScreenLayout(dataState: SettingsState){
     Column(
         modifier = Modifier
             .verticalScroll(rememberScrollState())
             .padding(8.dp)
             .fillMaxSize(),
         content = {
-            ActivitySection(dataState = dataState, action)
-            OtherSettings(dataState = dataState, action)
+            ActivitySection(dataState = dataState)
+            OtherSettings(dataState = dataState)
         }
     )
 }
 
-@Composable fun ActivitySection(dataState: SettingsState, action: Action) {
+@Composable fun ActivitySection(dataState: SettingsState) {
     Frame {
         Column( modifier = Modifier.padding(start = 6.dp, top = 6.dp, bottom = 6.dp))
         {
             ActivitySectionTitle(dataState = dataState)
-            ActivitySectionBody(dataState = dataState, action)
+            ActivitySectionBody(dataState = dataState)
         }
     }
 }
@@ -108,28 +104,28 @@ import com.count_out.presentation.view_element.EnumsTo
         Spacer(modifier = Modifier.width(12.dp))
     }
 }
-@Composable fun ActivitySectionBody(dataState: SettingsState, action: Action){
+@Composable fun ActivitySectionBody(dataState: SettingsState){
     Column(modifier = Modifier.padding(end = 8.dp))
     {
-        ActivitySectionBodyList( dataState = dataState, action)
+        ActivitySectionBodyList( dataState = dataState)
         Spacer(modifier = Modifier.height(0.dp))
     }
 }
-@Composable fun ActivitySectionBodyList(dataState: SettingsState, action: Action) {
+@Composable fun ActivitySectionBodyList(dataState: SettingsState) {
     val showActivity = dataState.collapsingActivity.value && dataState.activities.isNotEmpty()
     dataState.activities.forEach { activity ->
         AnimatedVisibility(
             modifier = Modifier.padding(bottom = 8.dp),
             visible = showActivity,
-            content = { CardActivity(dataState, activity, action) }
+            content = { CardActivity(dataState, activity) }
         )
     }
 }
-@Composable fun OtherSettings(dataState: SettingsState, action: Action) {
-    SettingSpeechDescription(dataState, action)
-    SettingsBluetooth(dataState, action)
+@Composable fun OtherSettings(dataState: SettingsState) {
+    SettingSpeechDescription(dataState)
+    SettingsBluetooth(dataState)
 }
-@Composable fun SettingSpeechDescription(dataState: SettingsState, action: Action){
+@Composable fun SettingSpeechDescription(dataState: SettingsState){
     Spacer(modifier = Modifier.height(12.dp))
     Frame{
         dataState.settings?.speechDescription?.let { setting->
@@ -138,22 +134,22 @@ import com.count_out.presentation.view_element.EnumsTo
                 description = R.string.speech_description,
                 modifier = Modifier.padding(horizontal = 8.dp, vertical = 3.dp),
                 change = { checked->
-                    action.ex(SettingsEvent.UpdateSetting(Setting.SpeechDescription(!setting)))
+                    dataState.event.run(SettingsEvent.UpdateSetting(Setting.SpeechDescription(!setting)))
                 }
             )
         }
     }
 }
-@Composable fun SettingsBluetooth(dataState: SettingsState, action: Action){
+@Composable fun SettingsBluetooth(dataState: SettingsState){
     Spacer(modifier = Modifier.height(12.dp))
     Frame{
         Column (modifier = Modifier.padding(start = 4.dp, top = 12.dp, bottom = 12.dp).fillMaxWidth()){
-            SettingBluetoothTitle(dataState, action)
+            SettingBluetoothTitle(dataState)
             RowBleDevice(dataState)
         }
     }
 }
-@Composable fun SettingBluetoothTitle(dataState: SettingsState, action: Action){
+@Composable fun SettingBluetoothTitle(dataState: SettingsState){
     Row(
         horizontalArrangement = Arrangement.Start,
         verticalAlignment = Alignment.CenterVertically,
@@ -166,7 +162,7 @@ import com.count_out.presentation.view_element.EnumsTo
         )
         Spacer(modifier = Modifier.weight(1f))
         IconSingle(image = Icons.Rounded.CleaningServices, onClick = {
-            action.ex(SettingsEvent.ClearCacheBLE)})
+            dataState.event.run(SettingsEvent.ClearCacheBLE)})
         Spacer(modifier = Modifier.width(12.dp))
         AnimateIcon(
             icon = Icons.AutoMirrored.Rounded.BluetoothSearching,

@@ -31,7 +31,6 @@ import com.count_out.presentation.models.Dimen
 import com.count_out.presentation.models.Dimen.contourAll2
 import com.count_out.presentation.models.Dimen.contourHor2
 import com.count_out.presentation.models.TrainingImplP
-import com.count_out.presentation.screens.prime.Action
 import com.count_out.presentation.screens.prime.PrimeScreen
 import com.count_out.presentation.view_element.ItemSwipe
 import com.count_out.presentation.view_element.TextApp
@@ -47,18 +46,17 @@ fun PlansScreen(vm: PlansViewModel) {
 }
 
 @Composable fun PlansScreenCreateView(viewModel: PlansViewModel) {
-    val action = Action {viewModel.submitEvent(it) }
     viewModel.screenState.collectAsState().value.let { screenState ->
         PrimeScreen(loader = screenState) { dataState ->
-            PlansScreenLayout(dataState, action = action) }
+            PlansScreenLayout(dataState ) }
     }
 }
 
-@Composable fun PlansScreenLayout(dataState: PlansState, action: Action) {
+@Composable fun PlansScreenLayout(dataState: PlansState) {
     Column(modifier = Modifier.fillMaxSize()) {
         TopBar()
         Frame(contour = contourHor2, modifier = Modifier.weight(1f)) {
-            PlanList(dataState, action, modifier = Modifier.weight(1f)) }
+            PlanList(dataState, modifier = Modifier.weight(1f)) }
     }
 }
 
@@ -66,7 +64,7 @@ fun PlansScreen(vm: PlansViewModel) {
     TopBarApp(text = stringResource(R.string.plans_workout), selected = false, onClickText = {})
 }
 
-@Composable fun PlanList(dataState: PlansState, action: Action, modifier: Modifier = Modifier) {
+@Composable fun PlanList(dataState: PlansState, modifier: Modifier = Modifier) {
     Spacer(modifier = Modifier.fillMaxWidth())
     LazyColumn(
         state = rememberLazyListState(),
@@ -77,15 +75,15 @@ fun PlansScreen(vm: PlansViewModel) {
             Spacer(modifier = Modifier.height(Dimen.width4))
             ItemSwipe(
                 frontView = {
-                    PlanCard(modifier = Modifier.animateItem(), item = item, action = action)},
-                actionDragLeft = { action.ex(PlansEvent.Del(item)) },
-                actionDragRight = { action.ex(PlansEvent.Edit(item.idTraining)) },
+                    PlanCard(dataState, item, Modifier.animateItem())},
+                actionDragLeft = { dataState.event.run(PlansEvent.Del(item)) },
+                actionDragRight = { dataState.event.run(PlansEvent.Edit(item.idTraining)) },
             )
         }
     }
 }
 
-@Composable fun PlanCard(item: Training, action: Action, modifier: Modifier) {
+@Composable fun PlanCard(dataState: PlansState, item: Training, modifier: Modifier) {
     Frame(contour = contourAll2) {
         Row(
             horizontalArrangement = Arrangement.Start,
@@ -93,28 +91,28 @@ fun PlansScreen(vm: PlansViewModel) {
             modifier = modifier.fillMaxWidth().padding(vertical = 6.dp)
         ) {
             Spacer(modifier = Modifier.width(12.dp))
-            IconRun(training = item, action = action)
+            IconRun(dataState, training = item )
             Spacer(modifier = Modifier.width(16.dp))
-            PlanInformation(item = item, action = action, modifier = Modifier.weight(1f))
+            PlanInformation(dataState, item, Modifier.weight(1f))
             Spacer(modifier = Modifier.width(Dimen.width6))
-//            IconCopy(training = item, action = action)
+//            IconCopy(training = item )
             IconsGroup(
-                onClickCopy = {action.ex(PlansEvent.Copy(item))},
-                onClickAddPlan = {action.ex(PlansEvent.Copy(TrainingImplP()))},
-                onClickDelete = { action.ex(PlansEvent.Del(item))}
+                onClickCopy = {dataState.event.run(PlansEvent.Copy(item))},
+                onClickAddPlan = {dataState.event.run(PlansEvent.Copy(TrainingImplP()))},
+                onClickDelete = { dataState.event.run(PlansEvent.Del(item))}
             )
             Spacer(modifier = Modifier.width(Dimen.width6))
         }
     }
 }
 
-@Composable fun IconRun(training: Training, action: Action) {
-    IconQ.Play(onClick = { action.ex(PlansEvent.Run(training)) })
+@Composable fun IconRun(dataState: PlansState, training: Training) {
+    IconQ.Play(onClick = { dataState.event.run(PlansEvent.Run(training)) })
 }
 
-@Composable fun PlanInformation(item: Training, action: Action, modifier: Modifier = Modifier) {
+@Composable fun PlanInformation(dataState: PlansState, item: Training, modifier: Modifier = Modifier) {
 
-    Column(modifier = modifier.clickable { action.ex(PlansEvent.Edit(item.idTraining))}) {
+    Column(modifier = modifier.clickable { dataState.event.run(PlansEvent.Edit(item.idTraining))}) {
         TextApp(text = item.name, style = MaterialTheme.typography.titleLarge)
         Spacer(modifier = Modifier.height(Dimen.height4))
         TextApp(

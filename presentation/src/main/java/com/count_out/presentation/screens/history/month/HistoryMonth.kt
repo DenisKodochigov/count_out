@@ -8,16 +8,16 @@ import androidx.compose.material3.MaterialTheme.shapes
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.count_out.presentation.models.elevationCalendar
-import com.count_out.presentation.screens.history.HistoryScreenState
+import com.count_out.presentation.screens.history.HistoryState
 import com.count_out.presentation.screens.history.day.CalendarDay
 import java.time.LocalDate
 
 @Composable
-fun HistoryMonth(uiState: HistoryScreenState, month: Int) {
+fun HistoryMonth(uiState: HistoryState, month: Int) {
     CardMonth(uiState = uiState, month = month)
 }
 @Composable
-fun CardMonth(uiState: HistoryScreenState, month: Int) {
+fun CardMonth(uiState: HistoryState, month: Int) {
     Card(
         modifier = Modifier.fillMaxWidth(),
         shape = shapes.extraSmall,

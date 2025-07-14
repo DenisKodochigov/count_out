@@ -1,6 +1,6 @@
 package com.count_out.presentation.screens.start_screen
 
-import android.util.Log
+//import com.count_out.domain.use_case.plans.GetPlanUC
 import com.count_out.domain.use_case.UseCase
 import com.count_out.domain.use_case.execute.DownIntervalUC
 import com.count_out.domain.use_case.execute.PauseWorkoutUC
@@ -9,7 +9,6 @@ import com.count_out.domain.use_case.execute.StartWorkoutUC
 import com.count_out.domain.use_case.execute.StopWorkoutUC
 import com.count_out.domain.use_case.execute.UpIntervalUC
 import com.count_out.domain.use_case.other.ShowBottomSheetUC
-//import com.count_out.domain.use_case.plans.GetPlanUC
 import com.count_out.domain.use_case.plans.GetStepPlanUC
 import com.count_out.presentation.screens.prime.PrimeConvertor
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -17,47 +16,46 @@ import javax.inject.Inject
 
 class ExecuteConverter @Inject constructor(): PrimeConvertor<UseCase.Response, ExecuteState>() {
 
-    override fun convertSuccess(resultData: UseCase.Response, state: MutableStateFlow<ExecuteState>): ExecuteState {
+    override fun makeSuccess(
+        resultData: UseCase.Response, state: MutableStateFlow<ExecuteState>): ExecuteState {
         return when(resultData){
-            is StartWorkoutUC.Response-> converterLocal(resultData, state)
-            is StopWorkoutUC.Response-> converterLocal(resultData, state)
-            is PauseWorkoutUC.Response-> converterLocal(resultData, state)
-            is SaveWorkoutUC.Response-> converterLocal(resultData, state)
-            is UpIntervalUC.Response-> converterLocal(resultData, state)
-            is DownIntervalUC.Response-> converterLocal(resultData, state)
-            is GetStepPlanUC.Response-> converterLocal(resultData, state)
-            is ShowBottomSheetUC.Response-> converterLocal(resultData, state)
-//            is GetPlanUC.Response-> converterLocal(resultData, state)ShowBottomSheetUC
+            is StartWorkoutUC.Response-> makeLocal(resultData, state)
+            is StopWorkoutUC.Response-> makeLocal(resultData, state)
+            is PauseWorkoutUC.Response-> makeLocal(resultData, state)
+            is SaveWorkoutUC.Response-> makeLocal(resultData, state)
+            is UpIntervalUC.Response-> makeLocal(resultData, state)
+            is DownIntervalUC.Response-> makeLocal(resultData, state)
+            is GetStepPlanUC.Response-> makeLocal(resultData, state)
+            is ShowBottomSheetUC.Response-> makeLocal(resultData, state)
             else -> converterOther(state)
         }
     }
-    private fun converterLocal(data: StartWorkoutUC.Response, state: MutableStateFlow<ExecuteState>): ExecuteState {
+    private fun makeLocal(data: StartWorkoutUC.Response, state: MutableStateFlow<ExecuteState>): ExecuteState {
         return state.value
     }
-    private fun converterLocal(data: StopWorkoutUC.Response, state: MutableStateFlow<ExecuteState>): ExecuteState {
+    private fun makeLocal(data: StopWorkoutUC.Response, state: MutableStateFlow<ExecuteState>): ExecuteState {
         return state.value
     }
-    private fun converterLocal(data: PauseWorkoutUC.Response, state: MutableStateFlow<ExecuteState>): ExecuteState {
+    private fun makeLocal(data: PauseWorkoutUC.Response, state: MutableStateFlow<ExecuteState>): ExecuteState {
         return state.value
     }
-    private fun converterLocal(data: SaveWorkoutUC.Response, state: MutableStateFlow<ExecuteState>): ExecuteState {
+    private fun makeLocal(data: SaveWorkoutUC.Response, state: MutableStateFlow<ExecuteState>): ExecuteState {
         return state.value
     }
-    private fun converterLocal(data: UpIntervalUC.Response, state: MutableStateFlow<ExecuteState>): ExecuteState {
+    private fun makeLocal(data: UpIntervalUC.Response, state: MutableStateFlow<ExecuteState>): ExecuteState {
         return state.value
     }
-    private fun converterLocal(data: DownIntervalUC.Response, state: MutableStateFlow<ExecuteState>): ExecuteState {
+    private fun makeLocal(data: DownIntervalUC.Response, state: MutableStateFlow<ExecuteState>): ExecuteState {
         return state.value
     }
-    private fun converterLocal(data: GetStepPlanUC.Response, state: MutableStateFlow<ExecuteState>): ExecuteState {
-        return state.value.copy( stepTraining = data.step)
+    private fun makeLocal(data: GetStepPlanUC.Response, state: MutableStateFlow<ExecuteState>): ExecuteState {
+        state.value = state.value.copy( stepTraining = data.step)
+        return state.value
     }
-    private fun converterLocal(data: ShowBottomSheetUC.Response, state: MutableStateFlow<ExecuteState>): ExecuteState {
-        return state.value.copy( showBS = data.show)
+    private fun makeLocal(data: ShowBottomSheetUC.Response, state: MutableStateFlow<ExecuteState>): ExecuteState {
+        state.value = state.value.copy( showBS = data.show)
+        return state.value
     }
-//    private fun converterLocal(data: GetPlanUC.Response, state: MutableStateFlow<ExecuteState>): ExecuteState {
-//        return state.value.copy(plan = data.training)
-//    }
     private fun converterOther( state: MutableStateFlow<ExecuteState>): ExecuteState {
         return state.value}
 }

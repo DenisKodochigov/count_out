@@ -48,25 +48,24 @@ import com.count_out.presentation.view_element.icons.IconsGroup
 
 @SuppressLint("StateFlowValueCalledInComposition")
 @Composable fun TrainingScreenCreateView( viewModel: TrainingViewModel){
-    val action = Action {viewModel.submitEvent(it) }
     viewModel.screenState.collectAsState().value.let { screenState ->
         PrimeScreen(loader = screenState) { dataState ->
-            EditSpeech(dataState = dataState, action = action)
-            TrainingScreenLayout(dataState, action = action)
+            EditSpeech(dataState = dataState)
+            TrainingScreenLayout(dataState)
         }
     }
 }
-@Composable fun EditSpeech(dataState: TrainingState, action: Action) {
+@Composable fun EditSpeech(dataState: TrainingState) {
     if (dataState.showBS.training) {
         dataState.nameSection = stringResource(id = R.string.training)
         dataState.item = dataState.training
         dataState.onDismissSpeech =
-            { action.ex(ShowBS(dataState.showBS.copy(element = dataState.training))) }
+            { dataState.event.run(ShowBS(dataState.showBS.copy(element = dataState.training))) }
         BottomSheetSpeech(dataState)
     }
 }
 
-@Composable fun TrainingScreenLayout(dataState: TrainingState, action: Action){
+@Composable fun TrainingScreenLayout(dataState: TrainingState){
     val focusManager = LocalFocusManager.current
     val interactionSource = remember { MutableInteractionSource() }
     Column(
@@ -79,22 +78,22 @@ import com.count_out.presentation.view_element.icons.IconsGroup
             },
     ){
         Spacer(modifier = Modifier.height(Dimen.width8))
-        NameTraining(dataState = dataState, action = action)
+        NameTraining(dataState = dataState)
         dataState.training?.rounds?.forEach { round ->
             Spacer(modifier = Modifier.height(Dimen.width8))
-            Round(dataState = dataState, action = action, round = round)
+            Round(dataState = dataState, round = round)
         }
     }
 }
-@Composable fun TopBar(dataState: ExecuteState, action: Action){
+@Composable fun TopBar(dataState: ExecuteState){
     TopBarApp(
         text = stringResource(R.string.training_text_fab) + (dataState.stepTraining?.namePlan ?: ""),
         selected = true,
-        onClickText = { action.ex(ExecuteEvent.ToScreenPlans) } ,
+        onClickText = { dataState.event.run(ExecuteEvent.ToScreenPlans) } ,
     )
 }
 
-@Composable fun NameTraining(dataState: TrainingState, action: Action) {
+@Composable fun NameTraining(dataState: TrainingState) {
 
     val enteredName: MutableState<String> = remember { mutableStateOf(dataState.training?.name ?: "") }
 
@@ -113,15 +112,15 @@ import com.count_out.presentation.view_element.icons.IconsGroup
             onChangeValue = {
                 enteredName.value = it
                 dataState.training?.let {
-                    action.ex( TrainingEvent.UpdateTraining(TrainingImplP(it, enteredName.value))) }
+                    dataState.event.run( TrainingEvent.UpdateTraining(TrainingImplP(it, enteredName.value))) }
             }
         )
         Spacer(modifier = Modifier.weight(1f))
         IconsGroup(
             onClickSpeech = {
-                action.ex(ShowBS(dataState.showBS.copy(element = dataState.training))) },
+                dataState.event.run(ShowBS(dataState.showBS.copy(element = dataState.training))) },
             onClickDelete = {
-                dataState.training?.let { action.ex(TrainingEvent.DelTraining(dataState.training))}
+                dataState.training?.let { dataState.event.run(TrainingEvent.DelTraining(dataState.training))}
                 dataState.onBaskScreen.invoke()
             }
         )

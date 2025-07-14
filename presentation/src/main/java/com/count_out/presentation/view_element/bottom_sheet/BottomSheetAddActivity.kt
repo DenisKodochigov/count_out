@@ -14,14 +14,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.count_out.presentation.models.ActivityImpl
-import com.count_out.presentation.screens.prime.Action
 import com.count_out.presentation.screens.settings.SettingsEvent
 import com.count_out.presentation.screens.settings.SettingsState
 import com.count_out.presentation.view_element.ButtonConfirm
 import com.count_out.presentation.view_element.ModalBottomSheetApp
 
 @OptIn(ExperimentalMaterial3Api::class)
-@Composable fun BottomSheetAddActivity(dataState: SettingsState, action: Action) {
+@Composable fun BottomSheetAddActivity(dataState: SettingsState) {
     val sheetState = rememberModalBottomSheetState(
         skipPartiallyExpanded = true, confirmValueChange = { true },)
     ModalBottomSheetApp(
@@ -29,23 +28,22 @@ import com.count_out.presentation.view_element.ModalBottomSheetApp
         modifier = Modifier.padding(horizontal = 12.dp),
         shape = MaterialTheme.shapes.small,
         sheetState = sheetState,
-        content = { BottomSheetAddActivityContent(dataState, action) }
+        content = { BottomSheetAddActivityContent(dataState) }
     )
 }
-@Composable fun BottomSheetAddActivityContent(uiState: SettingsState, action: Action) {
+@Composable fun BottomSheetAddActivityContent(dataState: SettingsState) {
     Column( horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier.fillMaxWidth().padding(12.dp))
     {
         Spacer(Modifier.height(12.dp))
-        uiState.activity.value?.let { act->
+        dataState.activity.value?.let { act->
             ActivityInfoFull(
                 activity = mutableStateOf(act as ActivityImpl),
-                onChange = { action.ex(SettingsEvent.UpdateActivity(it)) },
+                onChange = { dataState.event.run(SettingsEvent.UpdateActivity(it)) },
             )
         }
-
         Spacer(Modifier.height(12.dp))
-        ButtonConfirm( onConfirm = { uiState.onConfirmAddActivity(uiState) } )
+        ButtonConfirm( onConfirm = { dataState.onConfirmAddActivity(dataState) } )
         Spacer(Modifier.height(12.dp))
     }
 }

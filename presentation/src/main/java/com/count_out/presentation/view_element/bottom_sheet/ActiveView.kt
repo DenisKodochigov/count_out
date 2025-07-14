@@ -30,28 +30,27 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.count_out.domain.entity.workout.Activity
 import com.count_out.presentation.R
+import com.count_out.presentation.models.ActivityImpl
 import com.count_out.presentation.models.TypeKeyboard
-import com.count_out.presentation.view_element.dialog.ChangeColorSectionDialog
-import com.count_out.presentation.screens.prime.Action
 import com.count_out.presentation.screens.settings.SettingsEvent
 import com.count_out.presentation.screens.settings.SettingsState
 import com.count_out.presentation.view_element.TextApp
 import com.count_out.presentation.view_element.TextFieldApp
 import com.count_out.presentation.view_element.custom_view.Frame
-import com.count_out.domain.entity.workout.Activity
-import com.count_out.presentation.models.ActivityImpl
+import com.count_out.presentation.view_element.dialog.ChangeColorSectionDialog
 
 @SuppressLint("UnrememberedMutableState")
-@Composable fun CardActivity(dataState: SettingsState, activity: Activity, action: Action) {
+@Composable fun CardActivity(dataState: SettingsState, activity: Activity) {
     Frame {
         ActivityInfo(
             activity = mutableStateOf(activity as ActivityImpl),
             onSelect = {
                 dataState.activity.value = activity
                 dataState.showBottomSheetAddActivity.value = true },
-            onChange = { action.ex(SettingsEvent.SetColorActivity(activity)) },
-            onDeleteActivity = { action.ex(SettingsEvent.DeleteActivity(activity)) },
+            onChange = { dataState.event.run(SettingsEvent.SetColorActivity(activity)) },
+            onDeleteActivity = { dataState.event.run(SettingsEvent.DeleteActivity(activity)) },
         )
     }
 }

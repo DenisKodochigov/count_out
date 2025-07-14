@@ -12,7 +12,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -25,7 +24,6 @@ import com.count_out.presentation.R
 import com.count_out.presentation.models.DataForChangeSequenceImpl
 import com.count_out.presentation.models.Dimen.contourAll1
 import com.count_out.presentation.models.SetImplP
-import com.count_out.presentation.screens.prime.Action
 import com.count_out.presentation.screens.training.TrainingEvent
 import com.count_out.presentation.screens.training.TrainingEvent.ShowBS
 import com.count_out.presentation.screens.training.TrainingState
@@ -37,12 +35,10 @@ import com.count_out.presentation.view_element.custom_view.Frame
 import com.count_out.presentation.view_element.drag_drop_column.column.ColumnDragDrop
 import com.count_out.presentation.view_element.icons.IconsCollapsing
 import com.count_out.presentation.view_element.icons.IconsGroup
-import com.count_out.presentation.view_element.lg
 
 @Composable
 fun ListExercises(
     dataState: TrainingState,
-    action: Action,
     round: Round,
     modifier: Modifier = Modifier,
     showExercises: Boolean)
@@ -51,18 +47,18 @@ fun ListExercises(
         dataState.nameSection = stringResource(id = R.string.exercise2)
         dataState.item = dataState.exercise
         dataState.onDismissSpeech =
-            { action.ex(ShowBS(dataState.showBS.copy(element = dataState.exercise))) }
+            { dataState.event.run(ShowBS(dataState.showBS.copy(element = dataState.exercise))) }
         BottomSheetSpeech(dataState)
     }
-    if (dataState.showBS.selectActivity){ BottomSheetSelectActivity(dataState, action) }
+    if (dataState.showBS.selectActivity){ BottomSheetSelectActivity(dataState) }
     val listExercise = round.exercise
     ColumnDragDrop(
         items = listExercise,
         modifier = modifier,
         showList = showExercises,
-        content = { item -> ElementColum( item, dataState = dataState, action = action) },
+        content = { item -> ElementColum( item, dataState = dataState) },
         onMoveItem = { from, to->
-            action.ex(
+            dataState.event.run(
                 TrainingEvent.ChangeSequenceExercise(
                 item = DataForChangeSequenceImpl(
                     trainingId = dataState.training?.idTraining ?: 0,
@@ -75,24 +71,24 @@ fun ListExercises(
     if (showExercises) Spacer(modifier = Modifier.height(4.dp))
 }
 
-@Composable fun <T>ElementColum (item:T, dataState: TrainingState, action: Action,){
+@Composable fun <T>ElementColum (item:T, dataState: TrainingState,){
     Spacer(modifier = Modifier.padding(top = 1.dp))
     dataState.exercise = item as Exercise
     Frame(contour = contourAll1) {
         Column (modifier = Modifier
             .fillMaxWidth()
             .padding(vertical = 4.dp),) {
-            SelectActivity(dataState, item as Exercise, action = action)
-            BodyExercise(dataState, item as Exercise, action = action)
+            SelectActivity(dataState, item as Exercise)
+            BodyExercise(dataState, item as Exercise)
         }
     }
 }
-@Composable fun SelectActivity(dataState: TrainingState, exercise: Exercise, action: Action) {
+@Composable fun SelectActivity(dataState: TrainingState, exercise: Exercise) {
     Row( verticalAlignment = Alignment.CenterVertically){
         val nameNewSet = stringResource(id = R.string.set) + " ${exercise.sets.size + 1}"
         IconsCollapsing(
             onClick = {
-                action.ex(TrainingEvent.SetCollapsing(dataState.collapsing.copy(item = exercise))) },
+                dataState.event.run(TrainingEvent.SetCollapsing(dataState.collapsing.copy(item = exercise))) },
             wrap = dataState.collapsing.exercises.find { it == exercise.idExercise } != null)
         Spacer(modifier = Modifier.width(2.dp))
         Column {
@@ -108,24 +104,24 @@ fun ListExercises(
             ) }
         Spacer(modifier = Modifier.weight(1f))
         IconsGroup(
-            onClickCopy = { action.ex(TrainingEvent.CopyExercise(exercise))},
-            onClickDelete = { action.ex(TrainingEvent.DelExercise(exercise)) },
+            onClickCopy = { dataState.event.run(TrainingEvent.CopyExercise(exercise))},
+            onClickDelete = { dataState.event.run(TrainingEvent.DelExercise(exercise)) },
             onClickEdit = {
                 dataState.exercise = exercise
-                action.ex(ShowBS(dataState.showBS.copy(element = exercise.activity)))},
+                dataState.event.run(ShowBS(dataState.showBS.copy(element = exercise.activity)))},
             onClickSpeech = {
                 dataState.exercise = exercise
-                action.ex(ShowBS(dataState.showBS.copy(element = exercise))) },
-            onClickAddSet = { action.ex( TrainingEvent.CopySet(
+                dataState.event.run(ShowBS(dataState.showBS.copy(element = exercise))) },
+            onClickAddSet = { dataState.event.run( TrainingEvent.CopySet(
                     SetImplP(name = nameNewSet, exerciseId = exercise.idExercise)))},
         )
     }
 }
-@Composable fun BodyExercise(dataState: TrainingState, exercise: Exercise, action: Action){
+@Composable fun BodyExercise(dataState: TrainingState, exercise: Exercise){
     val visibleLazy = dataState.collapsing.exercises.find { it ==exercise.idExercise } != null
-    AnimatedVisibility( visible = visibleLazy){ ListSets(dataState, exercise, action) }
+    AnimatedVisibility( visible = visibleLazy){ ListSets(dataState, exercise) }
 }
-@Composable fun ListSets(dataState: TrainingState, exercise: Exercise, action: Action) {
+@Composable fun ListSets(dataState: TrainingState, exercise: Exercise) {
     Column {
         exercise.sets.forEachIndexed { ind, set ->
             Box (modifier = Modifier.fillMaxWidth()
@@ -134,7 +130,7 @@ fun ListExercises(
                     color = MaterialTheme.colorScheme.surface,
                     shape = MaterialTheme.shapes.extraSmall
                 ),
-                content = { SetContent(dataState, action,
+                content = { SetContent(dataState,
                     SetImplP(set, Pair(ind, exercise.sets.count())) )}
             )
             Spacer(modifier = Modifier.height(1.dp))

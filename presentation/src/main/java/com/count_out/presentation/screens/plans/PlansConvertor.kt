@@ -12,7 +12,7 @@ import javax.inject.Inject
 
 class PlansConvertor @Inject constructor(): PrimeConvertor<UseCase.Response, PlansState>() {
 
-    override fun convertSuccess(resultData: UseCase.Response, state: MutableStateFlow<PlansState>): PlansState {
+    override fun makeSuccess(resultData: UseCase.Response, state: MutableStateFlow<PlansState>): PlansState {
         return when(resultData){
             is GetTrainingsUC.Response-> converterGetTrainings(resultData, state)
             is CopyTrainingUC.Response-> converterCopyTraining(resultData, state)

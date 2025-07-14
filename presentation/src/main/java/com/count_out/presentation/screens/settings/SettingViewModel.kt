@@ -38,8 +38,8 @@ class SettingViewModel @Inject constructor(
 ): PrimeViewModel<SettingsState, SettingsConvertor>() {
 
     override fun initScreenState(): ScreenState<SettingsState> = ScreenState.Loading
-    override fun initDataState(): SettingsState = SettingsState()
-    override fun initConvertor(): SettingsConvertor = SettingsConvertor()
+    override fun initDataState(): SettingsState = SettingsState(event = event())
+    override fun convertor(): SettingsConvertor = SettingsConvertor()
     override fun routeEvent(event: Event) {
         when (event) {
             is SettingsEvent.BackScreen -> { navigate.backStack() }

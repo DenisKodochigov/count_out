@@ -12,7 +12,7 @@ import org.mockito.kotlin.whenever
 
 class PrimeConverterTest {
     private val converter = object : PrimeConvertor<String, String>() {
-        override fun convertSuccess(data: String, state: MutableStateFlow<String>): String ="result${data}"
+        override fun makeSuccess(data: String, state: MutableStateFlow<String>): String ="result${data}"
     }
 
     @Test
@@ -22,7 +22,7 @@ class PrimeConverterTest {
         val exception = mock<ThrowableUC.TrainingThrow>()
         whenever(exception.localizedMessage).thenReturn(errorMessage)
         val errorResult = ResultUC.Error(exception)
-        val result = converter.convert(errorResult, state)
+        val result = converter.make(errorResult, state)
         Assert.assertEquals(ScreenState.Error(errorMessage), result)
     }
 
@@ -31,7 +31,7 @@ class PrimeConverterTest {
         val data = "data"
         val state = MutableStateFlow<String>("state")
         val successResult = ResultUC.Success(data)
-        val result = converter.convert(successResult, state)
+        val result = converter.make(successResult, state)
         Assert.assertEquals(ScreenState.Success("result${data}"), result)
     }
 }

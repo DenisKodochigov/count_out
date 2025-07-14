@@ -34,12 +34,12 @@ class PrimeViewModelTest {
         Dispatchers.setMain(testDispatcher)
 
         converter = object : PrimeConvertor<UseCase.Response, String>() {
-            override fun convertSuccess(
+            override fun makeSuccess(
                 resultData: UseCase.Response, state: MutableStateFlow<String>, ):String = (resultData as ResponseTest).test }
         viewModel = object : PrimeViewModel<String, PrimeConvertor<UseCase.Response, String>>() {
             override fun initScreenState(): ScreenState<String> = ScreenState.Loading
             override fun initDataState(): String  = "init"
-            override fun initConvertor(): PrimeConvertor<UseCase.Response, String> = converter
+            override fun convertor(): PrimeConvertor<UseCase.Response, String> = converter
             override fun routeEvent(event: Event) {}
         }
     }
@@ -55,13 +55,13 @@ class PrimeViewModelTest {
     fun testSubmitEvent() = runTest {
         val event = mock<Event>()
         val converter = object : PrimeConvertor<UseCase.Response, String>() {
-            override fun convertSuccess(
+            override fun makeSuccess(
                 new: UseCase.Response, state: MutableStateFlow<String>, ): String = "$new" }
 
         viewModel = object : PrimeViewModel<String, PrimeConvertor<UseCase.Response, String>>()  {
             override fun initScreenState(): ScreenState<String> = ScreenState.Loading
             override fun initDataState(): String  = "init"
-            override fun initConvertor(): PrimeConvertor<UseCase.Response, String> = converter
+            override fun convertor(): PrimeConvertor<UseCase.Response, String> = converter
             override fun routeEvent(action: Event) { assertEquals(event, action) }
         }
         viewModel.submitEvent(event)

@@ -26,8 +26,8 @@ import javax.inject.Inject
     private val updateSpeechKitUC: UpdateSpeechKitUC,
 ): PrimeViewModel<PlansState, PlansConvertor>() {
     override fun initScreenState(): ScreenState<PlansState> = ScreenState.Loading
-    override fun initDataState(): PlansState = PlansState()
-    override fun initConvertor(): PlansConvertor = PlansConvertor()
+    override fun initDataState(): PlansState = PlansState(event = event())
+    override fun convertor(): PlansConvertor = PlansConvertor()
 
     override fun routeEvent(event: Event) {
         when (event) {

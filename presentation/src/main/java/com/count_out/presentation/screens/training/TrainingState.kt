@@ -10,6 +10,8 @@ import com.count_out.domain.entity.workout.ShowBottomSheet
 import com.count_out.domain.entity.workout.SpeechKit
 import com.count_out.domain.entity.workout.Training
 import com.count_out.presentation.models.BottomSheetInterface
+import com.count_out.presentation.screens.prime.Action
+import com.count_out.presentation.screens.prime.DataState
 
 data class TrainingState (
     val training: Training? = null,
@@ -30,4 +32,5 @@ data class TrainingState (
     @Stable override var onConfirmationSpeech: (SpeechKit, Any?) -> Unit = { _, _ ->},
     @Stable override var item: Element? = null,
     @Stable override var onDismissSpeech: () -> Unit = {},
-): BottomSheetInterface
+    override val event: Action,
+): BottomSheetInterface, DataState

@@ -24,7 +24,6 @@ import com.count_out.presentation.models.TrainingImplP
 import com.count_out.presentation.screens.prime.Event
 import com.count_out.presentation.screens.prime.PrimeViewModel
 import com.count_out.presentation.screens.prime.ScreenState
-import com.count_out.presentation.view_element.lg
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -46,8 +45,8 @@ import javax.inject.Inject
 ): PrimeViewModel<TrainingState, TrainingConverter>() {
 
     override fun initScreenState(): ScreenState<TrainingState> = ScreenState.Loading
-    override fun initDataState(): TrainingState = TrainingState()
-    override fun initConvertor(): TrainingConverter = TrainingConverter()
+    override fun initDataState(): TrainingState = TrainingState(event = event())
+    override fun convertor(): TrainingConverter = TrainingConverter()
 
     override fun routeEvent(event: Event) {
         when (event) {
@@ -82,7 +81,8 @@ import javax.inject.Inject
     }
     private fun updateTraining(training: Training){
         viewModelScope.launch(Dispatchers.IO) {
-            updateTrainingUC.execute( UpdateTrainingUC.Request(training)).collect { submitState( it ) }
+            updateTrainingUC.execute( UpdateTrainingUC.Request(training)).collect {
+                submitState( it ) }
         }
     }
     private fun changeSequenceExercise(item: DataForChangeSequence){
@@ -139,7 +139,6 @@ import javax.inject.Inject
     }
     private fun updateSpeechKit(item: SpeechKit){
         viewModelScope.launch(Dispatchers.IO) {
-            lg("viewModel update speechKit")
             updateSpeechKitUC.execute( UpdateSpeechKitUC.Request(item)).collect { submitState( it ) }
         }
     }

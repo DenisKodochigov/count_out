@@ -36,7 +36,7 @@ import com.count_out.presentation.view_element.TextApp
 import com.count_out.presentation.view_element.icons.AnimateIcon
 
 @OptIn(ExperimentalMaterial3Api::class)
-@Composable fun BottomSheetBle(dataState: SettingsState, action: Action) {
+@Composable fun BottomSheetBle(dataState: SettingsState) {
     val sheetState = rememberModalBottomSheetState(
         skipPartiallyExpanded = true, confirmValueChange = { true },)
     ModalBottomSheetApp(
@@ -44,21 +44,21 @@ import com.count_out.presentation.view_element.icons.AnimateIcon
         modifier = Modifier.padding(horizontal = 12.dp),
         shape = shapes.small,
         sheetState = sheetState,
-        content = { BottomSheetBleContent(dataState, action) }
+        content = { BottomSheetBleContent(dataState) }
     )
 }
-@Composable fun BottomSheetBleContent(dataState: SettingsState, action: Action) {
+@Composable fun BottomSheetBleContent(dataState: SettingsState) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier
             .fillMaxWidth()
             .height(bsHeightWindowsListBle)
             .padding(4.dp),
-        content = { SettingsBluetooth(dataState, action) })
+        content = { SettingsBluetooth(dataState) })
     Spacer(modifier = Modifier.height(bsSpacerBottomHeight))
 }
 @SuppressLint("MissingPermission")
-@Composable fun SettingsBluetooth(dataState: SettingsState, action: Action){
+@Composable fun SettingsBluetooth(dataState: SettingsState){
     Row(horizontalArrangement = Arrangement.Center,
         modifier = Modifier
             .fillMaxWidth()
@@ -82,7 +82,7 @@ import com.count_out.presentation.view_element.icons.AnimateIcon
                 .padding(top = 16.dp, start = 12.dp, end = 12.dp)
                 .clickable {
                     dataState.showBottomSheetBLE.value = false
-                    action.ex(SettingsEvent.SelectDevice(item))
+                    dataState.event.run(SettingsEvent.SelectDevice(item))
                 }) {
                 TextApp(text = item.address, style = MaterialTheme.typography.bodyMedium)
                 Spacer(modifier = Modifier.width(12.dp))

@@ -1,0 +1,28 @@
+package com.count_out.presentation.screens.history
+
+import com.count_out.domain.use_case.UseCase
+import com.count_out.domain.use_case.plans.CopyTrainingUC
+import com.count_out.domain.use_case.plans.DeleteTrainingUC
+import com.count_out.domain.use_case.plans.GetTrainingsUC
+import com.count_out.domain.use_case.plans.SelectTrainingUC
+import com.count_out.domain.use_case.plans.UpdatesTrainingUC
+import com.count_out.presentation.screens.plans.PlansState
+import com.count_out.presentation.screens.prime.PrimeConvertor
+import kotlinx.coroutines.flow.MutableStateFlow
+import javax.inject.Inject
+
+class HistoryConvertor @Inject constructor(): PrimeConvertor<UseCase.Response, HistoryState>() {
+
+    override fun makeSuccess(resultData: UseCase.Response, state: MutableStateFlow<HistoryState>): HistoryState {
+        return when(resultData){
+            else -> converterOther(state)
+        }
+    }
+
+    private fun converterSelectTraining(data: SelectTrainingUC.Response, state: MutableStateFlow<PlansState>): PlansState {
+        return state.value
+}
+    private fun converterOther(state: MutableStateFlow<HistoryState>): HistoryState {
+        return state.value
+    }
+}

@@ -21,7 +21,7 @@ class TrainingsConverterTest {
     @Test
     fun testGetTrainingsConvert() {
         val response = GetTrainingsUC.Response(trainings = listTraining)
-        val result = converter.convertSuccess(response, trainingState)
+        val result = converter.makeSuccess(response, trainingState)
         val exception = trainingState.value.copy(trainings = listTraining)
         Assertions.assertEquals(exception, result)
     }
@@ -29,7 +29,7 @@ class TrainingsConverterTest {
     fun testCopyTrainingsConvert() {
         val listTraining = listOf(TrainingImplP())
         val response = CopyTrainingUC.Response(trainings = listTraining)
-        val result = converter.convertSuccess(response, trainingState)
+        val result = converter.makeSuccess(response, trainingState)
         val exception = trainingState.value.copy(trainings = listTraining)
         Assertions.assertEquals(exception, result)
     }
@@ -37,7 +37,7 @@ class TrainingsConverterTest {
     fun testDeleteTrainingsConvert() {
         val listTraining = listOf(TrainingImplP())
         val response = DeleteTrainingUC.Response(trainings = listTraining)
-        val result = converter.convertSuccess(response, trainingState)
+        val result = converter.makeSuccess(response, trainingState)
         val exception = trainingState.value.copy(trainings = listTraining)
         Assertions.assertEquals(exception, result)
     }
@@ -52,7 +52,7 @@ class TrainingsConverterTest {
     @Test
     fun testSelectTrainingsConvert() {
         val response = SelectTrainingUC.Response(selectedTraining = 1)
-        val result = converter.convertSuccess(response, trainingState)
+        val result = converter.makeSuccess(response, trainingState)
         val exception = trainingState.value.copy(selectedId = 1)
         Assertions.assertEquals(exception, result)
     }

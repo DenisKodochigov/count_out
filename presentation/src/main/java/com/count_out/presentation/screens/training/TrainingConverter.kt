@@ -17,8 +17,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import javax.inject.Inject
 
 class TrainingConverter @Inject constructor(): PrimeConvertor<UseCase.Response, TrainingState>() {
-
-    override fun convertSuccess(resultData: UseCase.Response, state: MutableStateFlow<TrainingState>): TrainingState {
+    override fun makeSuccess(resultData: UseCase.Response, state: MutableStateFlow<TrainingState>): TrainingState {
         return when(resultData){
             is GetTrainingUC.Response-> converterLocal(resultData, state)
             is UpdateTrainingUC.Response-> converterLocal(resultData, state)
@@ -67,6 +66,10 @@ class TrainingConverter @Inject constructor(): PrimeConvertor<UseCase.Response, 
         state.value = state.value.copy(collapsing = data.collaps,)
         return state.value
     }
+    private fun converterOther( state: MutableStateFlow<TrainingState>): TrainingState {
+        state.value = state.value.copy(training = TrainingImplP())
+        return state.value}
+}
 
 //    private fun converterLocal(data: ShowBSSpeechTrainingUC.Response): TrainingState {
 //        return state.copy(showSpeechTraining = data.result,)
@@ -89,6 +92,3 @@ class TrainingConverter @Inject constructor(): PrimeConvertor<UseCase.Response, 
 //    private fun converterLocal(data: ShowBSSelectActivityUC.Response): TrainingState {
 //        return state.copy(showSelectActivity = data.result,)
 //    }
-    private fun converterOther( state: MutableStateFlow<TrainingState>): TrainingState {
-        return state.value.copy(training = TrainingImplP()) }
-}
