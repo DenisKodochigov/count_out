@@ -49,8 +49,8 @@ import com.count_out.presentation.view_element.dialog.ChangeColorSectionDialog
             onSelect = {
                 dataState.activity.value = activity
                 dataState.showBottomSheetAddActivity.value = true },
-            onChange = { dataState.event.run(SettingsEvent.SetColorActivity(activity)) },
-            onDeleteActivity = { dataState.event.run(SettingsEvent.DeleteActivity(activity)) },
+            onChange = { dataState.event(SettingsEvent.SetColorActivity(activity)) },
+            onDeleteActivity = { dataState.event(SettingsEvent.DeleteActivity(activity)) },
         )
     }
 }

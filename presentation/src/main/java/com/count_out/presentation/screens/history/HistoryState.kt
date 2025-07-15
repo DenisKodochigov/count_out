@@ -5,8 +5,8 @@ import androidx.compose.runtime.Stable
 import androidx.compose.runtime.mutableStateOf
 import com.count_out.domain.entity.enums.UnitTime
 import com.count_out.domain.entity.logger.Workout
-import com.count_out.presentation.screens.prime.Action
 import com.count_out.presentation.screens.prime.DataState
+import com.count_out.presentation.screens.prime.Event
 import java.time.LocalDate
 
 data class HistoryState (
@@ -19,5 +19,5 @@ data class HistoryState (
     @Stable val getTraining: (String) ->Unit = {},
     @Stable val getTrainings: (String) ->Unit = {},
     @Stable val onClickDay: (String) ->Unit = {},
-    override val event: Action,
+    override val event: (Event) -> Unit,
 ): DataState

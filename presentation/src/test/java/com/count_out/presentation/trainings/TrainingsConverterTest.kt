@@ -7,13 +7,18 @@ import com.count_out.domain.use_case.plans.SelectTrainingUC
 import com.count_out.presentation.models.TrainingImplP
 import com.count_out.presentation.screens.plans.PlansConvertor
 import com.count_out.presentation.screens.plans.PlansState
+import com.count_out.presentation.screens.prime.Event
 import kotlinx.coroutines.flow.MutableStateFlow
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 
 class TrainingsConverterTest {
     private val converter = PlansConvertor()
-    private val trainingState = MutableStateFlow(PlansState())
+    private val trainingState = MutableStateFlow(PlansState(
+        trainings = emptyList(),
+        selectedId =0,
+        event = { fun run(ev: Event) {} }
+    ))
     private val training1 = TrainingImplP(idTraining = 1)
     private val training2 = TrainingImplP(idTraining = 2)
     private val listTraining = listOf(training1,training2)

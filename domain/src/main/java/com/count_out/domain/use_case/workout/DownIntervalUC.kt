@@ -1,4 +1,4 @@
-package com.count_out.domain.use_case.execute
+package com.count_out.domain.use_case.workout
 
 import com.count_out.domain.entity.throwable.ResultUC
 import com.count_out.domain.repository.ExecuteWorkOutRepo

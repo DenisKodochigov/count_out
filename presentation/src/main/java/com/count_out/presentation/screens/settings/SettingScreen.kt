@@ -32,7 +32,6 @@ import com.count_out.domain.entity.Setting
 import com.count_out.domain.entity.enums.ConnectState
 import com.count_out.presentation.R
 import com.count_out.presentation.models.alumBodySmall
-import com.count_out.presentation.screens.prime.Action
 import com.count_out.presentation.screens.prime.PrimeScreen
 import com.count_out.presentation.view_element.EnumsTo
 import com.count_out.presentation.view_element.SwitchApp
@@ -55,7 +54,7 @@ import com.count_out.presentation.view_element.icons.IconsCollapsing
             if (dataState.showBottomSheetAddActivity.value) BottomSheetAddActivity(dataState)
             if (dataState.showBottomSheetBLE.value) {
                 BottomSheetBle(dataState)
-                LaunchedEffect(dataState.showBottomSheetBLE.value) { dataState.event.run(SettingsEvent.StartScanBLE) }
+                LaunchedEffect(dataState.showBottomSheetBLE.value) { dataState.event(SettingsEvent.StartScanBLE) }
             }
             SettingScreenLayout(dataState)
         }
@@ -134,7 +133,7 @@ import com.count_out.presentation.view_element.icons.IconsCollapsing
                 description = R.string.speech_description,
                 modifier = Modifier.padding(horizontal = 8.dp, vertical = 3.dp),
                 change = { checked->
-                    dataState.event.run(SettingsEvent.UpdateSetting(Setting.SpeechDescription(!setting)))
+                    dataState.event(SettingsEvent.UpdateSetting(Setting.SpeechDescription(!setting)))
                 }
             )
         }
@@ -162,7 +161,7 @@ import com.count_out.presentation.view_element.icons.IconsCollapsing
         )
         Spacer(modifier = Modifier.weight(1f))
         IconSingle(image = Icons.Rounded.CleaningServices, onClick = {
-            dataState.event.run(SettingsEvent.ClearCacheBLE)})
+            dataState.event(SettingsEvent.ClearCacheBLE)})
         Spacer(modifier = Modifier.width(12.dp))
         AnimateIcon(
             icon = Icons.AutoMirrored.Rounded.BluetoothSearching,

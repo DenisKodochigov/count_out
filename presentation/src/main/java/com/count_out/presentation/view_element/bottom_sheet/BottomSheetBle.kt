@@ -28,7 +28,6 @@ import androidx.compose.ui.unit.dp
 import com.count_out.presentation.R
 import com.count_out.presentation.models.Dimen.bsHeightWindowsListBle
 import com.count_out.presentation.models.Dimen.bsSpacerBottomHeight
-import com.count_out.presentation.screens.prime.Action
 import com.count_out.presentation.screens.settings.SettingsEvent
 import com.count_out.presentation.screens.settings.SettingsState
 import com.count_out.presentation.view_element.ModalBottomSheetApp
@@ -82,7 +81,7 @@ import com.count_out.presentation.view_element.icons.AnimateIcon
                 .padding(top = 16.dp, start = 12.dp, end = 12.dp)
                 .clickable {
                     dataState.showBottomSheetBLE.value = false
-                    dataState.event.run(SettingsEvent.SelectDevice(item))
+                    dataState.event(SettingsEvent.SelectDevice(item))
                 }) {
                 TextApp(text = item.address, style = MaterialTheme.typography.bodyMedium)
                 Spacer(modifier = Modifier.width(12.dp))

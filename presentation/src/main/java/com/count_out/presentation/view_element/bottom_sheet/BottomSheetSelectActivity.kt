@@ -35,7 +35,7 @@ fun BottomSheetSelectActivity(dataState: TrainingState)
         skipPartiallyExpanded = true, confirmValueChange = { true },)
 
     ModalBottomSheetApp(
-        onDismissRequest = { dataState.event.run(ShowBS(dataState.showBS.copy(element = dataState.item)))},
+        onDismissRequest = { dataState.event(ShowBS(dataState.showBS.copy(element = dataState.item)))},
         modifier = Modifier.padding(horizontal = Dimen.bsPaddingHor1),
         shape = MaterialTheme.shapes.small,
         sheetState = sheetState,
@@ -66,7 +66,7 @@ fun BottomSheetSelectActivity(dataState: TrainingState)
                 activity = mutableStateOf(item as ActivityImpl),
                 onSelect = {
                     dataState.exercise?.let {
-                        dataState.event.run(TrainingEvent.UpdateExercise(ExerciseImplP(it, item))) } },
+                        dataState.event(TrainingEvent.UpdateExercise(ExerciseImplP(it, item))) } },
             )
         }
     }

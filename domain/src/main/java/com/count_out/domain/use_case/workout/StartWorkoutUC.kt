@@ -1,4 +1,4 @@
-package com.count_out.domain.use_case.execute
+package com.count_out.domain.use_case.workout
 
 import com.count_out.domain.entity.throwable.ResultUC
 import com.count_out.domain.repository.ExecuteWorkOutRepo
@@ -7,11 +7,11 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 
-class PauseWorkoutUC @Inject constructor(configuration: Configuration, private val repo: ExecuteWorkOutRepo
-): UseCase<PauseWorkoutUC.Request, PauseWorkoutUC.Response>(configuration)  {
-
+class StartWorkoutUC @Inject constructor(configuration: Configuration, private val repo: ExecuteWorkOutRepo
+): UseCase<StartWorkoutUC.Request, StartWorkoutUC.Response>(configuration)  {
+//    override fun implementation_old(request: Request): Flow<Response> = repo.copy(request.training).map { Response(it) }
     override fun implementation(request: Request): Flow<ResultUC<Response>> {
-        repo.pause()
+        repo.start()
         return flow { emit(ResultUC.Success(Response)) }
     }
 

@@ -1,4 +1,4 @@
-package com.count_out.domain.use_case.activity
+package com.count_out.domain.use_case.plans.activity
 
 import com.count_out.domain.entity.throwable.ResultUC
 import com.count_out.domain.entity.workout.Activity
@@ -8,13 +8,13 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
-class UpdateActivityUC @Inject constructor(
+class DeleteActivityUC @Inject constructor(
     configuration: Configuration, private val repo: ActivityRepo
-): UseCase<UpdateActivityUC.Request, UpdateActivityUC.Response>(configuration)  {
+): UseCase<DeleteActivityUC.Request, DeleteActivityUC.Response>(configuration)  {
 
     override fun implementation(request: Request): Flow<ResultUC<Response>> =
-        repo.update(request.activity).map { ResultUC.Success(Response(it)) }
+        repo.del(request.activity).map { ResultUC.Success(Response) }
 
     data class Request(val activity: Activity): UseCase.Request
-    data class Response(val activity: Activity): UseCase.Response
+    data object Response: UseCase.Response
 }

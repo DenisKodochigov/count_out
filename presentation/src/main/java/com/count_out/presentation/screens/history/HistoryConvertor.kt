@@ -1,11 +1,7 @@
 package com.count_out.presentation.screens.history
 
 import com.count_out.domain.use_case.UseCase
-import com.count_out.domain.use_case.plans.CopyTrainingUC
-import com.count_out.domain.use_case.plans.DeleteTrainingUC
-import com.count_out.domain.use_case.plans.GetTrainingsUC
 import com.count_out.domain.use_case.plans.SelectTrainingUC
-import com.count_out.domain.use_case.plans.UpdatesTrainingUC
 import com.count_out.presentation.screens.plans.PlansState
 import com.count_out.presentation.screens.prime.PrimeConvertor
 import kotlinx.coroutines.flow.MutableStateFlow

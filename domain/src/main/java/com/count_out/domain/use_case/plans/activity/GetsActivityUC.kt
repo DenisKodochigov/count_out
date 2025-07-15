@@ -1,4 +1,4 @@
-package com.count_out.domain.use_case.activity
+package com.count_out.domain.use_case.plans.activity
 
 import com.count_out.domain.entity.throwable.ResultUC
 import com.count_out.domain.entity.workout.Activity

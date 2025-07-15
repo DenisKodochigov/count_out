@@ -35,21 +35,21 @@ import com.count_out.presentation.view_element.icons.IconsGroup
         dataState.nameSection = stringResource(id = R.string.work_up1)
         dataState.item = dataState.training?.rounds?.find { it.roundType == RoundType.WorkUp }
         dataState.onDismissSpeech =
-            { dataState.event.run(ShowBS(dataState.showBS.copy(element = dataState.item))) }
+            { dataState.event(ShowBS(dataState.showBS.copy(element = dataState.item))) }
         BottomSheetSpeech(dataState)
     }
     if (dataState.showBS.workOut) {
         dataState.nameSection = stringResource(id = R.string.work_out1)
         dataState.item = dataState.training?.rounds?.find { it.roundType == RoundType.WorkOut }
         dataState.onDismissSpeech =
-            { dataState.event.run(ShowBS(dataState.showBS.copy(element = dataState.item))) }
+            { dataState.event(ShowBS(dataState.showBS.copy(element = dataState.item))) }
         BottomSheetSpeech(dataState)
     }
     if (dataState.showBS.workDown) {
         dataState.nameSection = stringResource(id = R.string.work_down1)
         dataState.item = dataState.training?.rounds?.find { it.roundType == RoundType.WorkDown }
         dataState.onDismissSpeech =
-            { dataState.event.run(ShowBS(dataState.showBS.copy(element = dataState.item))) }
+            { dataState.event(ShowBS(dataState.showBS.copy(element = dataState.item))) }
         BottomSheetSpeech(dataState)
     }
 
@@ -77,7 +77,7 @@ import com.count_out.presentation.view_element.icons.IconsGroup
         IconsGroup(
             onClickSpeech = { showSpeechRound(dataState, round) },
             onClickAddExercise = {
-                dataState.event.run(TrainingEvent.CopyExercise(exercise = ExerciseImplP(roundId = round.idRound)))})
+                dataState.event(TrainingEvent.CopyExercise(exercise = ExerciseImplP(roundId = round.idRound)))})
         Spacer(modifier = Modifier.width(6.dp))
     }
 }
@@ -91,12 +91,12 @@ import com.count_out.presentation.view_element.icons.IconsGroup
 }
 //
 fun showSpeechRound(dataState: TrainingState, round: Round){
-    dataState.event.run(ShowBS(dataState.showBS.copy(element = round)))
+    dataState.event(ShowBS(dataState.showBS.copy(element = round)))
 }
 
 fun setCollapsing(dataState: TrainingState, round: Round) {
     if (round.amount > 0) {
-        dataState.event.run(TrainingEvent.SetCollapsing(dataState.collapsing.copy(item = round)))
+        dataState.event(TrainingEvent.SetCollapsing(dataState.collapsing.copy(item = round)))
     }
 }
 fun getCollapsing(dataState: TrainingState, round: Round): Boolean {

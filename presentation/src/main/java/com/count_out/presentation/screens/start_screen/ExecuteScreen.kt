@@ -76,7 +76,7 @@ import java.math.RoundingMode
     TopBarApp(
         text = "${stringResource(R.string.training_text_fab)}: ${dataState.stepTraining?.namePlan ?: ""}",
         selected = true,
-        onClickText = { dataState.event.run(ExecuteEvent.ToScreenPlans) } ,
+        onClickText = { dataState.event(ExecuteEvent.ToScreenPlans) } ,
     )
 }
 @Composable fun SensorInfo(dataState: ExecuteState) {
@@ -109,7 +109,7 @@ import java.math.RoundingMode
 //        Text(text = "Screen Execute ${typography.titleLarge.fontFamily}", style = typography.titleLarge)
         Button(onClick = {
             Log.d("KDS","AdditionalInformation ${dataState.stepTraining}")
-            dataState.event.run(ExecuteEvent.ShowBS(dataState.showBS))}) { Text(text = "Show")}
+            dataState.event(ExecuteEvent.ShowBS(dataState.showBS))}) { Text(text = "Show")}
     }
 }
 @Composable fun ExerciseInfo(dataState: ExecuteState) {
@@ -151,17 +151,18 @@ import java.math.RoundingMode
             .fillMaxWidth()
             .padding(bottom = 0.dp, top = 12.dp),)
     {
+        dataState.event(ExecuteEvent.Start)
         when (dataState.stateWorkOut) {
             RunningState.Binding, RunningState.Stopped -> {
-                IconQ.Play( onClick = { dataState.event.run(ExecuteEvent.Start)})}
+                IconQ.Play( onClick = { dataState.event(ExecuteEvent.Start)})}
             RunningState.Started -> {
-                IconQ.Pause(onClick = { dataState.event.run(ExecuteEvent.Pause)})
+                IconQ.Pause(onClick = { dataState.event(ExecuteEvent.Pause)})
                 Spacer(modifier = Modifier.width(32.dp))
-                IconQ.Stop(onClick = { dataState.event.run(ExecuteEvent.Stop(dataState.showBS))}) }
+                IconQ.Stop(onClick = { dataState.event(ExecuteEvent.Stop(dataState.showBS))}) }
             RunningState.Paused -> {
-                IconQ.Play( onClick = { dataState.event.run(ExecuteEvent.Start) })
+                IconQ.Play( onClick = { dataState.event(ExecuteEvent.Start) })
                 Spacer(modifier = Modifier.width(32.dp))
-                IconQ.Stop(onClick = { dataState.event.run(ExecuteEvent.Stop(dataState.showBS))})}
+                IconQ.Stop(onClick = { dataState.event(ExecuteEvent.Stop(dataState.showBS))})}
         }
     }
 }
@@ -196,12 +197,12 @@ import java.math.RoundingMode
     Row(modifier = modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center,
         verticalAlignment = Alignment.CenterVertically) {
         IconQ.Slower(onClick = {if (dataState.enableChangeInterval)
-                dataState.event.run(ExecuteEvent.UpInterval) }, color = color)
+                dataState.event(ExecuteEvent.UpInterval) }, color = color)
         TextApp(
             style = typography.titleLarge, modifier = Modifier.padding(start = 12.dp, end = 12.dp),
             text = (set.intervalReps.toBigDecimal().setScale(1, RoundingMode.UP)).toString())
         IconQ.Faster( onClick = { if (dataState.enableChangeInterval)
-                dataState.event.run(ExecuteEvent.DownInterval) }, color = color)
+                dataState.event(ExecuteEvent.DownInterval) }, color = color)
     }
 }
 

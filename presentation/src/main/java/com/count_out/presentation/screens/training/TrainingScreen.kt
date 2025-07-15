@@ -30,7 +30,6 @@ import com.count_out.presentation.R
 import com.count_out.presentation.models.Dimen
 import com.count_out.presentation.models.TrainingImplP
 import com.count_out.presentation.models.TypeKeyboard
-import com.count_out.presentation.screens.prime.Action
 import com.count_out.presentation.screens.prime.PrimeScreen
 import com.count_out.presentation.screens.start_screen.ExecuteEvent
 import com.count_out.presentation.screens.start_screen.ExecuteState
@@ -60,7 +59,7 @@ import com.count_out.presentation.view_element.icons.IconsGroup
         dataState.nameSection = stringResource(id = R.string.training)
         dataState.item = dataState.training
         dataState.onDismissSpeech =
-            { dataState.event.run(ShowBS(dataState.showBS.copy(element = dataState.training))) }
+            { dataState.event(ShowBS(dataState.showBS.copy(element = dataState.training))) }
         BottomSheetSpeech(dataState)
     }
 }
@@ -89,7 +88,7 @@ import com.count_out.presentation.view_element.icons.IconsGroup
     TopBarApp(
         text = stringResource(R.string.training_text_fab) + (dataState.stepTraining?.namePlan ?: ""),
         selected = true,
-        onClickText = { dataState.event.run(ExecuteEvent.ToScreenPlans) } ,
+        onClickText = { dataState.event(ExecuteEvent.ToScreenPlans) } ,
     )
 }
 
@@ -112,15 +111,15 @@ import com.count_out.presentation.view_element.icons.IconsGroup
             onChangeValue = {
                 enteredName.value = it
                 dataState.training?.let {
-                    dataState.event.run( TrainingEvent.UpdateTraining(TrainingImplP(it, enteredName.value))) }
+                    dataState.event( TrainingEvent.UpdateTraining(TrainingImplP(it, enteredName.value))) }
             }
         )
         Spacer(modifier = Modifier.weight(1f))
         IconsGroup(
             onClickSpeech = {
-                dataState.event.run(ShowBS(dataState.showBS.copy(element = dataState.training))) },
+                dataState.event(ShowBS(dataState.showBS.copy(element = dataState.training))) },
             onClickDelete = {
-                dataState.training?.let { dataState.event.run(TrainingEvent.DelTraining(dataState.training))}
+                dataState.training?.let { dataState.event(TrainingEvent.DelTraining(dataState.training))}
                 dataState.onBaskScreen.invoke()
             }
         )

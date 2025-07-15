@@ -3,12 +3,12 @@ package com.count_out.presentation.screens.start_screen
 import android.util.Log
 import androidx.lifecycle.viewModelScope
 import com.count_out.domain.entity.workout.ShowBottomSheet
-import com.count_out.domain.use_case.execute.DownIntervalUC
-import com.count_out.domain.use_case.execute.PauseWorkoutUC
-import com.count_out.domain.use_case.execute.SaveWorkoutUC
-import com.count_out.domain.use_case.execute.StartWorkoutUC
-import com.count_out.domain.use_case.execute.StopWorkoutUC
-import com.count_out.domain.use_case.execute.UpIntervalUC
+import com.count_out.domain.use_case.workout.DownIntervalUC
+import com.count_out.domain.use_case.workout.PauseWorkoutUC
+import com.count_out.domain.use_case.workout.SaveWorkoutUC
+import com.count_out.domain.use_case.workout.StartWorkoutUC
+import com.count_out.domain.use_case.workout.StopWorkoutUC
+import com.count_out.domain.use_case.workout.UpIntervalUC
 import com.count_out.domain.use_case.other.ShowBottomSheetUC
 //import com.count_out.domain.use_case.plans.GetPlanUC
 import com.count_out.domain.use_case.plans.GetStepPlanUC
@@ -36,7 +36,7 @@ class ExecuteViewModel @Inject constructor(
 ): PrimeViewModel<ExecuteState, ExecuteConverter>() {
 
     override fun initScreenState(): ScreenState<ExecuteState> = ScreenState.Loading
-    override fun initDataState(): ExecuteState = ExecuteState(event = event())
+    override fun initDataState(): ExecuteState = ExecuteState(event = { submitEvent(it)})
     override fun convertor(): ExecuteConverter = ExecuteConverter()
 
     override fun routeEvent(event: Event) {

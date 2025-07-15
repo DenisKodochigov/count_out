@@ -76,8 +76,8 @@ fun PlansScreen(vm: PlansViewModel) {
             ItemSwipe(
                 frontView = {
                     PlanCard(dataState, item, Modifier.animateItem())},
-                actionDragLeft = { dataState.event.run(PlansEvent.Del(item)) },
-                actionDragRight = { dataState.event.run(PlansEvent.Edit(item.idTraining)) },
+                actionDragLeft = { dataState.event(PlansEvent.Del(item)) },
+                actionDragRight = { dataState.event(PlansEvent.Edit(item.idTraining)) },
             )
         }
     }
@@ -97,9 +97,9 @@ fun PlansScreen(vm: PlansViewModel) {
             Spacer(modifier = Modifier.width(Dimen.width6))
 //            IconCopy(training = item )
             IconsGroup(
-                onClickCopy = {dataState.event.run(PlansEvent.Copy(item))},
-                onClickAddPlan = {dataState.event.run(PlansEvent.Copy(TrainingImplP()))},
-                onClickDelete = { dataState.event.run(PlansEvent.Del(item))}
+                onClickCopy = {dataState.event(PlansEvent.Copy(item))},
+                onClickAddPlan = {dataState.event(PlansEvent.Copy(TrainingImplP()))},
+                onClickDelete = { dataState.event(PlansEvent.Del(item))}
             )
             Spacer(modifier = Modifier.width(Dimen.width6))
         }
@@ -107,12 +107,12 @@ fun PlansScreen(vm: PlansViewModel) {
 }
 
 @Composable fun IconRun(dataState: PlansState, training: Training) {
-    IconQ.Play(onClick = { dataState.event.run(PlansEvent.Run(training)) })
+    IconQ.Play(onClick = { dataState.event(PlansEvent.Run(training)) })
 }
 
 @Composable fun PlanInformation(dataState: PlansState, item: Training, modifier: Modifier = Modifier) {
 
-    Column(modifier = modifier.clickable { dataState.event.run(PlansEvent.Edit(item.idTraining))}) {
+    Column(modifier = modifier.clickable { dataState.event(PlansEvent.Edit(item.idTraining))}) {
         TextApp(text = item.name, style = MaterialTheme.typography.titleLarge)
         Spacer(modifier = Modifier.height(Dimen.height4))
         TextApp(

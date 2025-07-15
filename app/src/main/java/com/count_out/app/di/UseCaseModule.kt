@@ -12,32 +12,33 @@ import com.count_out.domain.repository.plans.SetRepo
 import com.count_out.domain.repository.plans.SettingsRepo
 import com.count_out.domain.repository.plans.TrainingRepo
 import com.count_out.domain.use_case.UseCase
-import com.count_out.domain.use_case.activity.AddActivityUC
-import com.count_out.domain.use_case.activity.DeleteActivityUC
-import com.count_out.domain.use_case.activity.GetsActivityUC
-import com.count_out.domain.use_case.activity.UpdateActivityUC
+import com.count_out.domain.use_case.plans.activity.AddActivityUC
+import com.count_out.domain.use_case.plans.activity.DeleteActivityUC
+import com.count_out.domain.use_case.plans.activity.GetsActivityUC
+import com.count_out.domain.use_case.plans.activity.UpdateActivityUC
 import com.count_out.domain.use_case.bluetooth.ClearCacheBleUC
+import com.count_out.domain.use_case.bluetooth.LastBleDeviceUC
 import com.count_out.domain.use_case.bluetooth.SelectDeviceBleUC
 import com.count_out.domain.use_case.bluetooth.StartScanBleUC
 import com.count_out.domain.use_case.bluetooth.StopScanBleUC
-import com.count_out.domain.use_case.execute.DownIntervalUC
-import com.count_out.domain.use_case.execute.PauseWorkoutUC
-import com.count_out.domain.use_case.execute.SaveWorkoutUC
-import com.count_out.domain.use_case.execute.StartWorkoutUC
-import com.count_out.domain.use_case.execute.StopWorkoutUC
-import com.count_out.domain.use_case.execute.UpIntervalUC
-import com.count_out.domain.use_case.exercise.ChangeSequenceExerciseUC
-import com.count_out.domain.use_case.exercise.CopyExerciseUC
-import com.count_out.domain.use_case.exercise.DeleteExerciseUC
-import com.count_out.domain.use_case.exercise.UpdateExerciseUC
+import com.count_out.domain.use_case.workout.DownIntervalUC
+import com.count_out.domain.use_case.workout.PauseWorkoutUC
+import com.count_out.domain.use_case.workout.SaveWorkoutUC
+import com.count_out.domain.use_case.workout.StartWorkoutUC
+import com.count_out.domain.use_case.workout.StopWorkoutUC
+import com.count_out.domain.use_case.workout.UpIntervalUC
+import com.count_out.domain.use_case.plans.exercise.ChangeSequenceExerciseUC
+import com.count_out.domain.use_case.plans.exercise.CopyExerciseUC
+import com.count_out.domain.use_case.plans.exercise.DeleteExerciseUC
+import com.count_out.domain.use_case.plans.exercise.UpdateExerciseUC
 import com.count_out.domain.use_case.other.CollapsingUC
 import com.count_out.domain.use_case.other.CountOutServiceBindUC
 import com.count_out.domain.use_case.other.CountOutServiceUnBindUC
 import com.count_out.domain.use_case.other.GetWeatherUC
 import com.count_out.domain.use_case.other.ShowBottomSheetUC
-import com.count_out.domain.use_case.set.CopySetUC
-import com.count_out.domain.use_case.set.DeleteSetUC
-import com.count_out.domain.use_case.set.UpdateSetUC
+import com.count_out.domain.use_case.plans.set.CopySetUC
+import com.count_out.domain.use_case.plans.set.DeleteSetUC
+import com.count_out.domain.use_case.plans.set.UpdateSetUC
 import com.count_out.domain.use_case.settings.GetSettingsUC
 import com.count_out.domain.use_case.settings.UpdateSettingUC
 import com.count_out.domain.use_case.plans.CopyTrainingUC
@@ -135,6 +136,11 @@ class UseCaseModule {
     fun provideStartScanBleUseCase(
         configuration: UseCase.Configuration,
         repo: BluetoothRepo ): StartScanBleUC = StartScanBleUC(configuration, repo)
+    @Singleton
+    @Provides
+    fun provideLastBleDeviceUseCase(
+        configuration: UseCase.Configuration,
+        repo: BluetoothRepo ): LastBleDeviceUC = LastBleDeviceUC(configuration, repo)
     @Singleton
     @Provides
     fun provideStopScanBleUseCase(

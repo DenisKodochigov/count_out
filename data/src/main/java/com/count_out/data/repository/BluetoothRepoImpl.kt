@@ -22,6 +22,9 @@ class BluetoothRepoImpl @Inject constructor(private val bleSource: BleSource): B
         return flow { emit(DeviceUIImpl()) }
     }
 
+    override fun lastDevice(): Flow<DeviceUI> {
+        return flow { emit(DeviceUIImpl()) }  }
+
     override fun clearCache(): Flow<Boolean> {
         return flow { emit(true) }
     }

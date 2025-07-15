@@ -4,10 +4,10 @@ import androidx.lifecycle.viewModelScope
 import com.count_out.domain.entity.Setting
 import com.count_out.domain.entity.router.DeviceUI
 import com.count_out.domain.entity.workout.Activity
-import com.count_out.domain.use_case.activity.AddActivityUC
-import com.count_out.domain.use_case.activity.DeleteActivityUC
-import com.count_out.domain.use_case.activity.GetsActivityUC
-import com.count_out.domain.use_case.activity.UpdateActivityUC
+import com.count_out.domain.use_case.plans.activity.AddActivityUC
+import com.count_out.domain.use_case.plans.activity.DeleteActivityUC
+import com.count_out.domain.use_case.plans.activity.GetsActivityUC
+import com.count_out.domain.use_case.plans.activity.UpdateActivityUC
 import com.count_out.domain.use_case.bluetooth.ClearCacheBleUC
 import com.count_out.domain.use_case.bluetooth.SelectDeviceBleUC
 import com.count_out.domain.use_case.bluetooth.StartScanBleUC
@@ -38,7 +38,7 @@ class SettingViewModel @Inject constructor(
 ): PrimeViewModel<SettingsState, SettingsConvertor>() {
 
     override fun initScreenState(): ScreenState<SettingsState> = ScreenState.Loading
-    override fun initDataState(): SettingsState = SettingsState(event = event())
+    override fun initDataState(): SettingsState = SettingsState(event = { submitEvent(it)})
     override fun convertor(): SettingsConvertor = SettingsConvertor()
     override fun routeEvent(event: Event) {
         when (event) {

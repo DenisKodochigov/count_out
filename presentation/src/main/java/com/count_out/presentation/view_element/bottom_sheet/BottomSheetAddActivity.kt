@@ -39,7 +39,7 @@ import com.count_out.presentation.view_element.ModalBottomSheetApp
         dataState.activity.value?.let { act->
             ActivityInfoFull(
                 activity = mutableStateOf(act as ActivityImpl),
-                onChange = { dataState.event.run(SettingsEvent.UpdateActivity(it)) },
+                onChange = { dataState.event(SettingsEvent.UpdateActivity(it)) },
             )
         }
         Spacer(Modifier.height(12.dp))

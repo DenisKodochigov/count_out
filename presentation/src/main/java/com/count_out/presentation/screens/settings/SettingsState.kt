@@ -7,8 +7,8 @@ import com.count_out.domain.entity.router.DeviceUI
 import com.count_out.domain.entity.workout.Activity
 import com.count_out.domain.entity.enums.ConnectState
 import com.count_out.domain.entity.Settings
-import com.count_out.presentation.screens.prime.Action
 import com.count_out.presentation.screens.prime.DataState
+import com.count_out.presentation.screens.prime.Event
 
 data class SettingsState(
     val settings: Settings? = null,
@@ -32,5 +32,5 @@ data class SettingsState(
     @Stable var onDismissBLEScan: (SettingsState) -> Unit = { uiState ->
 //        onStopScanBLE()
         uiState.showBottomSheetBLE.value = false },
-    override val event: Action,
+    override val event: (Event) -> Unit,
 ): DataState

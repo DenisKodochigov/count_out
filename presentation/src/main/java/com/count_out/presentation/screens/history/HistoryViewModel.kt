@@ -4,8 +4,6 @@ import androidx.lifecycle.viewModelScope
 import com.count_out.presentation.screens.prime.Event
 import com.count_out.presentation.screens.prime.PrimeViewModel
 import com.count_out.presentation.screens.prime.ScreenState
-import com.count_out.presentation.screens.start_screen.ExecuteConverter
-import com.count_out.presentation.screens.start_screen.ExecuteState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -20,7 +18,7 @@ class HistoryViewModel  @Inject constructor(): PrimeViewModel<HistoryState, Hist
         HistoryState(
             getTraining = { },
             getTrainings = { },
-            event = event(),
+            event = { submitEvent(it)}
         )
     )
     val historyState: StateFlow<HistoryState> = _historyState.asStateFlow()
@@ -47,11 +45,9 @@ class HistoryViewModel  @Inject constructor(): PrimeViewModel<HistoryState, Hist
 
     override fun initScreenState(): ScreenState<HistoryState>  = ScreenState.Loading
 
-    override fun initDataState(): HistoryState = HistoryState(event = event())
+    override fun initDataState(): HistoryState = HistoryState(event = { submitEvent(it)})
 
     override fun convertor() = HistoryConvertor()
 
-    override fun routeEvent(event: Event) {
-        TODO("Not yet implemented")
-    }
+    override fun routeEvent(event: Event) {    }
 }

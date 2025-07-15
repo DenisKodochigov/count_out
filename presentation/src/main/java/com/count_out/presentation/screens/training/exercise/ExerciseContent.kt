@@ -47,7 +47,7 @@ fun ListExercises(
         dataState.nameSection = stringResource(id = R.string.exercise2)
         dataState.item = dataState.exercise
         dataState.onDismissSpeech =
-            { dataState.event.run(ShowBS(dataState.showBS.copy(element = dataState.exercise))) }
+            { dataState.event(ShowBS(dataState.showBS.copy(element = dataState.exercise))) }
         BottomSheetSpeech(dataState)
     }
     if (dataState.showBS.selectActivity){ BottomSheetSelectActivity(dataState) }
@@ -58,7 +58,7 @@ fun ListExercises(
         showList = showExercises,
         content = { item -> ElementColum( item, dataState = dataState) },
         onMoveItem = { from, to->
-            dataState.event.run(
+            dataState.event(
                 TrainingEvent.ChangeSequenceExercise(
                 item = DataForChangeSequenceImpl(
                     trainingId = dataState.training?.idTraining ?: 0,
@@ -88,7 +88,7 @@ fun ListExercises(
         val nameNewSet = stringResource(id = R.string.set) + " ${exercise.sets.size + 1}"
         IconsCollapsing(
             onClick = {
-                dataState.event.run(TrainingEvent.SetCollapsing(dataState.collapsing.copy(item = exercise))) },
+                dataState.event(TrainingEvent.SetCollapsing(dataState.collapsing.copy(item = exercise))) },
             wrap = dataState.collapsing.exercises.find { it == exercise.idExercise } != null)
         Spacer(modifier = Modifier.width(2.dp))
         Column {
@@ -104,15 +104,15 @@ fun ListExercises(
             ) }
         Spacer(modifier = Modifier.weight(1f))
         IconsGroup(
-            onClickCopy = { dataState.event.run(TrainingEvent.CopyExercise(exercise))},
-            onClickDelete = { dataState.event.run(TrainingEvent.DelExercise(exercise)) },
+            onClickCopy = { dataState.event(TrainingEvent.CopyExercise(exercise))},
+            onClickDelete = { dataState.event(TrainingEvent.DelExercise(exercise)) },
             onClickEdit = {
                 dataState.exercise = exercise
-                dataState.event.run(ShowBS(dataState.showBS.copy(element = exercise.activity)))},
+                dataState.event(ShowBS(dataState.showBS.copy(element = exercise.activity)))},
             onClickSpeech = {
                 dataState.exercise = exercise
-                dataState.event.run(ShowBS(dataState.showBS.copy(element = exercise))) },
-            onClickAddSet = { dataState.event.run( TrainingEvent.CopySet(
+                dataState.event(ShowBS(dataState.showBS.copy(element = exercise))) },
+            onClickAddSet = { dataState.event( TrainingEvent.CopySet(
                     SetImplP(name = nameNewSet, exerciseId = exercise.idExercise)))},
         )
     }

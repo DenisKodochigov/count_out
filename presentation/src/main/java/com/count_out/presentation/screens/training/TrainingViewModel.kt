@@ -8,15 +8,15 @@ import com.count_out.domain.entity.workout.Set
 import com.count_out.domain.entity.workout.ShowBottomSheet
 import com.count_out.domain.entity.workout.SpeechKit
 import com.count_out.domain.entity.workout.Training
-import com.count_out.domain.use_case.exercise.ChangeSequenceExerciseUC
-import com.count_out.domain.use_case.exercise.CopyExerciseUC
-import com.count_out.domain.use_case.exercise.DeleteExerciseUC
-import com.count_out.domain.use_case.exercise.UpdateExerciseUC
+import com.count_out.domain.use_case.plans.exercise.ChangeSequenceExerciseUC
+import com.count_out.domain.use_case.plans.exercise.CopyExerciseUC
+import com.count_out.domain.use_case.plans.exercise.DeleteExerciseUC
+import com.count_out.domain.use_case.plans.exercise.UpdateExerciseUC
 import com.count_out.domain.use_case.other.CollapsingUC
 import com.count_out.domain.use_case.other.ShowBottomSheetUC
-import com.count_out.domain.use_case.set.CopySetUC
-import com.count_out.domain.use_case.set.DeleteSetUC
-import com.count_out.domain.use_case.set.UpdateSetUC
+import com.count_out.domain.use_case.plans.set.CopySetUC
+import com.count_out.domain.use_case.plans.set.DeleteSetUC
+import com.count_out.domain.use_case.plans.set.UpdateSetUC
 import com.count_out.domain.use_case.speech.UpdateSpeechKitUC
 import com.count_out.domain.use_case.plans.GetTrainingUC
 import com.count_out.domain.use_case.plans.UpdateTrainingUC
@@ -45,7 +45,7 @@ import javax.inject.Inject
 ): PrimeViewModel<TrainingState, TrainingConverter>() {
 
     override fun initScreenState(): ScreenState<TrainingState> = ScreenState.Loading
-    override fun initDataState(): TrainingState = TrainingState(event = event())
+    override fun initDataState(): TrainingState = TrainingState(event = { submitEvent(it)})
     override fun convertor(): TrainingConverter = TrainingConverter()
 
     override fun routeEvent(event: Event) {
