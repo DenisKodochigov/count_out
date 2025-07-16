@@ -9,7 +9,6 @@ import android.os.Bundle
 import android.provider.Settings
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.runtime.LaunchedEffect
 import androidx.core.app.ActivityCompat
 import androidx.core.net.toUri
 import androidx.lifecycle.lifecycleScope
@@ -32,7 +31,7 @@ class MainActivity: ComponentActivity() {
     @Inject lateinit var countOutServiceUnBind: CountOutServiceUnBindUC
     var bindingWorkOut: ResultUC<CountOutServiceBindUC.Response>? = null
     var unBindingWorkOut: ResultUC<CountOutServiceUnBindUC.Response>? = null
-    var resultConnectingLastBleDevice: ResultUC<LastBleDeviceUC.Response>? = null
+    var connectedBleDevice: ResultUC<LastBleDeviceUC.Response>? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,7 +39,7 @@ class MainActivity: ComponentActivity() {
             countOutServiceBind.execute(CountOutServiceBindUC.Request).collect{
                 bindingWorkOut = it}
             lastHearthRateDevice.execute(LastBleDeviceUC.Request).collect{
-                resultConnectingLastBleDevice = it}
+                connectedBleDevice = it}
         }
 //        enableEdgeToEdge()
         setContent {

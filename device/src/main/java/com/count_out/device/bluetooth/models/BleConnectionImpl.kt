@@ -15,4 +15,13 @@ class BleConnectionImpl (
     override val newState: MutableStateFlow<Int> = MutableStateFlow(BluetoothGatt.STATE_DISCONNECTED),
     override val gattStatus: MutableStateFlow<Int> = MutableStateFlow(0),
     override var error: MutableStateFlow<ErrorBleService> = MutableStateFlow(ErrorBleService.NONE),
-): BleConnection
+): BleConnection {
+    constructor(item: BleConnection): this(
+        name = item.name,
+        address = item.address,
+        device = item.device,
+        gatt = item.gatt,
+        newState = item.newState,
+        error = item.error
+    )
+}

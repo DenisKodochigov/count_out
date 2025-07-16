@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -179,7 +180,7 @@ import java.math.RoundingMode
             listOf(stringResource(R.string.interval) + ":", "")
 //                if (set.intervalReps > 0) "${set.intervalReps.discard(2)}" else "")
         )
-        ColumnsB( modifier = Modifier, listParam, 0)
+        ColumnsB( modifier = Modifier.width(200.dp), listParam, 0)
         ColumnsB( modifier = Modifier.width(30.dp), listParam, 1)
         ChangeInterval(dataState, modifier = Modifier.align(Alignment.Bottom), set)
     }
@@ -194,8 +195,10 @@ import java.math.RoundingMode
 @Composable fun ChangeInterval(dataState: ExecuteState, modifier:Modifier, set: Set){
     val color = with(MaterialTheme.colorScheme){
         if(dataState.enableChangeInterval) outline else surfaceContainerLow }
-    Row(modifier = modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center,
-        verticalAlignment = Alignment.CenterVertically) {
+    Row(modifier = modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.Center,
+        verticalAlignment = Alignment.CenterVertically)
+    {
         IconQ.Slower(onClick = {if (dataState.enableChangeInterval)
                 dataState.event(ExecuteEvent.UpInterval) }, color = color)
         TextApp(

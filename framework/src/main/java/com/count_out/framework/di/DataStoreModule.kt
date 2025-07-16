@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStore
+import com.count_out.framework.datastore.LastBleDeviceSourceImpl
 import com.count_out.framework.datastore.LastPlanSourceImpl
 import com.count_out.framework.datastore.SettingsSourceImpl
 import dagger.Module
@@ -24,4 +25,7 @@ class DataStoreModule {
     @Provides
     fun provideLastPlanSourceImpl(@ApplicationContext context: Context) =
         LastPlanSourceImpl(context.dataStore)
+    @Provides
+    fun provideLastBleDeviceSourceImpl(@ApplicationContext context: Context) =
+        LastBleDeviceSourceImpl(context.dataStore)
 }

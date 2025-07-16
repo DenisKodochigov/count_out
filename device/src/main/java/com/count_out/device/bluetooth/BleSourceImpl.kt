@@ -1,5 +1,6 @@
 package com.count_out.device.bluetooth
 
+import com.count_out.data.models.throwable.ResultDataSource
 import com.count_out.data.source.framework.BleSource
 import com.count_out.domain.entity.router.DeviceUI
 import kotlinx.coroutines.flow.Flow
@@ -14,7 +15,7 @@ class BleSourceImpl @Inject constructor(): BleSource {
         TODO("Not yet implemented")
     }
 
-    override fun connectDevice(): Flow<DeviceUI> {
+    override fun connectDevice(addr: String): Flow<ResultDataSource<DeviceUI>> {
         TODO("Not yet implemented")
     }
 

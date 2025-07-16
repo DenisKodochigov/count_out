@@ -32,11 +32,11 @@ class BleConnecting @Inject constructor(
     private val uuidClientCharacteristicConfig = UUID.fromString(UUIDBle.CLIENT_CHARACTERISTIC_CONFIG)
 
     fun connectDevice(bleStates: BleStates, dataForBle: DataForBle){
-//        dataForBle.currentConnection?.let {
-//            connection = it
-//            connectingGatt( bleStates )
-//            if (bleStates.error == ErrorBleService.NOT_CONNECT_GATT)  connectingGatt( bleStates )
-//        }
+        dataForBle.currentConnection?.let {
+            connection = BleConnectionImpl(it)
+            connectingGatt( bleStates )
+            if (bleStates.error == ErrorBleService.NOT_CONNECT_GATT)  connectingGatt( bleStates )
+        }
     }
     @SuppressLint("MissingPermission")
     fun connectingGatt(bleStates: BleStates){
