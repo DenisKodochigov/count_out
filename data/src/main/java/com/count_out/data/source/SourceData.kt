@@ -1,7 +1,7 @@
 package com.count_out.data.source
 
-import com.count_out.data.models.throwable.ResultDataSource
-import com.count_out.data.models.throwable.ResultDataSource.Success
+import com.count_out.data.models.throwable.ResultSource
+import com.count_out.data.models.throwable.ResultSource.Success
 import com.count_out.data.models.throwable.ThrowableDataSource
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -11,38 +11,38 @@ import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 
 abstract class SourceData {
-    fun <O: Any> getResultFlow(content: () -> Flow<O?>): Flow<ResultDataSource<O>> {
+    fun <O: Any> Flow<O?>.resultSource(): Flow<ResultSource<O>> {
         var lastValue:O? = null
-        return content().filter { it != lastValue }
+        return this.filter { it != lastValue }
             .map {
                 it?.let {
                     lastValue = it
-                    Success(it) as ResultDataSource<O> }
-                ?: ResultDataSource.Error(
-                    ThrowableDataSource.extractThrowable(Exception("return null"))
-                ) as ResultDataSource<Nothing>
+                    Success(it) as ResultSource<O> }
+                    ?: ResultSource.Error(
+                        ThrowableDataSource.extractThrowable(Exception("return null"))
+                    ) as ResultSource<Nothing>
             }
             .flowOn(Dispatchers.IO)
-            .catch { emit(ResultDataSource.Error(ThrowableDataSource.extractThrowable(it)
-                                                        ) as ResultDataSource<Nothing>) }
+            .catch { emit(ResultSource.Error(ThrowableDataSource.extractThrowable(it)
+            ) as ResultSource<Nothing>) }
     }
 
-    fun <O: Any> getResult(content:()->O?): ResultDataSource<O> {
+    fun <O: Any> getResult(content:()->O?): ResultSource<O> {
         return try {
-            content()?.let { Success(it) as ResultDataSource<O>
-                } ?: ResultDataSource.Error(
+            content()?.let { Success(it) as ResultSource<O>
+                } ?: ResultSource.Error(
                     ThrowableDataSource.extractThrowable(Exception("return null"))
-                ) as ResultDataSource<Nothing>
+                ) as ResultSource<Nothing>
             }
             catch (e: Exception) {
-                ResultDataSource.Error(ThrowableDataSource.extractThrowable(e)) as ResultDataSource<Nothing>
+                ResultSource.Error(ThrowableDataSource.extractThrowable(e)) as ResultSource<Nothing>
             }
 
     }
-    fun <O: Any> resultNullException(): ResultDataSource<O> {
-        return ResultDataSource.Error(
+    fun <O: Any> resultNullException(): ResultSource<O> {
+        return ResultSource.Error(
             ThrowableDataSource.extractThrowable(Exception("return null"))
-        ) as ResultDataSource<Nothing>
+        ) as ResultSource<Nothing>
     }
 }
 

@@ -1,7 +1,7 @@
 package com.count_out.framework.room.source
 
 import com.count_out.data.models.SpeechImplD
-import com.count_out.data.models.throwable.ResultDataSource
+import com.count_out.data.models.throwable.ResultSource
 import com.count_out.data.source.SourceData
 import com.count_out.data.source.room.SpeechSource
 import com.count_out.framework.room.db.speech.SpeechDao
@@ -13,22 +13,22 @@ import javax.inject.Inject
 
 class SpeechSourceImpl @Inject constructor(private val dao: SpeechDao): SpeechSource, SourceData() {
 
-    override fun get(speech: SpeechImplD): Flow<ResultDataSource<SpeechImplD>> {
-        return getResultFlow { dao.getFlow(speech.idSpeech).map { it?.toSpeech() } }
+    override fun get(speech: SpeechImplD): Flow<ResultSource<SpeechImplD>> {
+        return dao.getFlow(speech.idSpeech).map { it?.toSpeech() }.resultSource()
     }
 
-    override fun copy(speech: SpeechImplD): Flow<ResultDataSource<SpeechImplD>> {
+    override fun copy(speech: SpeechImplD): Flow<ResultSource<SpeechImplD>> {
         val result = getResult { copyValue(speech) }
-        return if (result is ResultDataSource.Success){
-                 getResultFlow { dao.getFlow(result.data).map { it?.toSpeech() } }
-                } else flow { emit (result as ResultDataSource.Error) }
+        return if (result is ResultSource.Success){
+                 dao.getFlow(result.data).map { it?.toSpeech() }.resultSource()
+                } else flow { emit (result as ResultSource.Error) }
     }
-    override fun del(speech: SpeechImplD): Flow<ResultDataSource<Int>> =
+    override fun del(speech: SpeechImplD): Flow<ResultSource<Int>> =
          flow { emit (getResult{delValue(speech.idSpeech) as Int})}
 
-    override fun update(speech: SpeechImplD): Flow<ResultDataSource<SpeechImplD>> {
+    override fun update(speech: SpeechImplD): Flow<ResultSource<SpeechImplD>> {
         return updateValue(speech)?.let {
-                getResultFlow { dao.getFlow(speech.idSpeech).map { it?.toSpeech() } }
+                dao.getFlow(speech.idSpeech).map { it?.toSpeech() }.resultSource()
                 } ?: flow { emit (resultNullException()) }
     }
     private fun toSpeechTable(speech: SpeechImplD, idSpeech: Long = 0L) = SpeechTable(

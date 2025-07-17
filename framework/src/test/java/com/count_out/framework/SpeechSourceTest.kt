@@ -1,7 +1,7 @@
 package com.count_out.framework
 
 import com.count_out.data.models.SpeechImplD
-import com.count_out.data.models.throwable.ResultDataSource
+import com.count_out.data.models.throwable.ResultSource
 import com.count_out.data.source.room.SpeechSource
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flowOf
@@ -30,7 +30,7 @@ class SpeechSourceTest {
     }
     @Test
     fun getSpeech() = runTest{
-        val expected = ResultDataSource.Success(data = inputData)
+        val expected = ResultSource.Success(data = inputData)
         whenever(speechSource.get(speech)).thenReturn( flowOf(expected) )
         val speech = speechSource.get(speech).last()
         Assertions.assertEquals(expected, speech)

@@ -10,4 +10,14 @@ data class ActivityImpl(
     override val color: Int,
     override val videoClip: String,
     override val audioTrack: String,
-): Activity
+): Activity{
+    constructor(item: Activity): this(
+        idActivity = item.idActivity,
+        name = item.name,
+        description = item.description,
+        icon = item.icon,
+        color = item.color,
+        videoClip = item.videoClip,
+        audioTrack = item.audioTrack,
+    )
+}

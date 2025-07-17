@@ -2,7 +2,7 @@ package com.count_out.framework.room.source
 
 import com.count_out.data.models.SpeechImplD
 import com.count_out.data.models.SpeechKitImplD
-import com.count_out.data.models.throwable.ResultDataSource
+import com.count_out.data.models.throwable.ResultSource
 import com.count_out.data.source.SourceData
 import com.count_out.data.source.room.SpeechKitSource
 import com.count_out.framework.room.db.speech_kit.SpeechKitDao
@@ -17,16 +17,16 @@ class SpeechKitSourceImpl @Inject constructor(
     private val dao: SpeechKitDao,
 ) : SpeechKitSource, SourceData() {
 
-    override fun get(speechKit: SpeechKitImplD): Flow<ResultDataSource<SpeechKitImplD>> =
-        getResultFlow{ dao.get(speechKit.idSpeechKit).map { it?.toSpeechKit() }}
+    override fun get(speechKit: SpeechKitImplD): Flow<ResultSource<SpeechKitImplD>> =
+        dao.get(speechKit.idSpeechKit).map { it?.toSpeechKit() }.resultSource()
 
-    override fun copy(speechKit: SpeechKitImplD): Flow<ResultDataSource<SpeechKitImplD>> {
+    override fun copy(speechKit: SpeechKitImplD): Flow<ResultSource<SpeechKitImplD>> {
         return copyValue(speechKit)?.let {
-            getResultFlow { dao.get(speechKit.idSpeechKit).map { it?.toSpeechKit() } }
+            dao.get(speechKit.idSpeechKit).map { it?.toSpeechKit() }.resultSource()
         } ?: flow { emit (resultNullException()) }
     }
 
-    override fun update(speechKit: SpeechKitImplD): Flow<ResultDataSource<SpeechKitImplD>> {
+    override fun update(speechKit: SpeechKitImplD): Flow<ResultSource<SpeechKitImplD>> {
         speechKit.beforeStart?.let { speechSource.updateValue( it as SpeechImplD) }
         speechKit.afterStart?.let { speechSource.updateValue( it as SpeechImplD) }
         speechKit.beforeEnd?.let { speechSource.updateValue( it as SpeechImplD) }
@@ -34,7 +34,7 @@ class SpeechKitSourceImpl @Inject constructor(
         return flow { emit (getResult{ speechKit })}
     }
 
-    override fun del(speechKit: SpeechKitImplD): Flow<ResultDataSource<Long>> {
+    override fun del(speechKit: SpeechKitImplD): Flow<ResultSource<Long>> {
         return flow { emit (
             getResult{
                 speechKit.beforeStart?.let { speechSource.delValue( it.idSpeech )?.let{

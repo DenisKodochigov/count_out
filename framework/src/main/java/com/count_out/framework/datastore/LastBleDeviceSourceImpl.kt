@@ -4,8 +4,7 @@ import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
-import com.count_out.data.models.DeviceUIImpl
-import com.count_out.data.models.throwable.ResultDataSource
+import com.count_out.data.models.throwable.ResultSource
 import com.count_out.data.source.SourceData
 import com.count_out.data.source.local.LastBleDeviceSource
 import kotlinx.coroutines.CoroutineScope
@@ -21,12 +20,12 @@ class LastBleDeviceSourceImpl @Inject constructor(
 ): LastBleDeviceSource, SourceData() {
     internal val keyName = stringPreferencesKey("last_device")
 
-    override fun saveDevice(addr: String): Flow<ResultDataSource<Boolean>> {
+    override fun saveDevice(addr: String): Flow<ResultSource<Boolean>> {
         CoroutineScope(Dispatchers.IO).launch { dataStore.edit { it[keyName] = addr } }
-        return flow { emit(ResultDataSource.Success(true)) }
+        return flow { emit(ResultSource.Success(true)) }
     }
 
-    override fun getDevice(): Flow<ResultDataSource<String>> {
-        return getResultFlow { dataStore.data.map { it[keyName] ?: "" }}
+    override fun getDevice(): Flow<ResultSource<String>> {
+        return dataStore.data.map { it[keyName] ?: "" }.resultSource()
     }
 }

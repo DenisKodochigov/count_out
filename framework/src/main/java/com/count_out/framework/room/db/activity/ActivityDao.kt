@@ -19,10 +19,10 @@ interface ActivityDao {
     fun add(item: ActivityTable): Long
 
     @Update
-    fun update(item: ActivityTable)
+    fun update(item: ActivityTable): Int?
 
     @Query("DELETE FROM tb_activity WHERE idActivity = :id")
-    fun del(id: Long)
+    fun del(id: Long): Int
 
     @Query("UPDATE tb_activity SET color = :color WHERE idActivity =:activityId")
     fun setColor(activityId: Long, color: Int): Int

@@ -4,6 +4,7 @@ import com.count_out.domain.entity.throwable.ResultUC
 import com.count_out.domain.entity.workout.Activity
 import com.count_out.domain.repository.plans.ActivityRepo
 import com.count_out.domain.use_case.UseCase
+import com.count_out.domain.use_case.plans.activity.UpdateActivityUC.Response
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
@@ -13,7 +14,8 @@ class AddActivityUC @Inject constructor(
 ): UseCase<AddActivityUC.Request, AddActivityUC.Response>(configuration)  {
 
     override fun implementation(request: Request): Flow<ResultUC<Response>> =
-        repo.copy(request.activity).map { ResultUC.Success(Response(it)) }
+        repo.copy(request.activity).map { result->
+            converterR(result){ Response(it)} }
 
     data class Request(val activity: Activity): UseCase.Request
     data class Response(val activity: Activity): UseCase.Response

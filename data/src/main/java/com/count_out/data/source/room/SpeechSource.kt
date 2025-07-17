@@ -1,7 +1,7 @@
 package com.count_out.data.source.room
 
 import com.count_out.data.models.SpeechImplD
-import com.count_out.data.models.throwable.ResultDataSource
+import com.count_out.data.models.throwable.ResultSource
 import kotlinx.coroutines.flow.Flow
 
 interface SpeechSource {
@@ -11,8 +11,8 @@ interface SpeechSource {
 ////    fun updateDuration(speech: SpeechImpl): Flow<Speech>
 //    fun del(id: Long)
 
-    fun get(speech: SpeechImplD): Flow<ResultDataSource<SpeechImplD>>
-    fun copy(speech: SpeechImplD): Flow<ResultDataSource<SpeechImplD>>
-    fun del(speech: SpeechImplD): Flow<ResultDataSource<Int>>
-    fun update(speech: SpeechImplD): Flow<ResultDataSource<SpeechImplD>>
+    fun get(speech: SpeechImplD): Flow<ResultSource<SpeechImplD>>
+    fun copy(speech: SpeechImplD): Flow<ResultSource<SpeechImplD>>
+    fun del(speech: SpeechImplD): Flow<ResultSource<Int>>
+    fun update(speech: SpeechImplD): Flow<ResultSource<SpeechImplD>>
 }

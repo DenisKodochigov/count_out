@@ -4,7 +4,7 @@ import com.count_out.data.models.RingImpl
 import com.count_out.data.models.RoundImpl
 import com.count_out.data.models.SpeechKitImplD
 import com.count_out.data.models.TrainingImplD
-import com.count_out.data.models.throwable.ResultDataSource
+import com.count_out.data.models.throwable.ResultSource
 import com.count_out.data.source.SourceData
 import com.count_out.data.source.room.RingSource
 import com.count_out.data.source.room.RoundSource
@@ -57,8 +57,8 @@ class TrainingSourceImpl @Inject constructor(
         return dao.getTrainingRel(training.idTraining).map { it?.toTraining() }
     }
 
-    override fun get2(id: Long): Flow<ResultDataSource<TrainingImplD>> {
-        return getResultFlow { dao.getTrainingRel(id).filterNotNull().map { it.toTraining()} }
+    override fun get2(id: Long): Flow<ResultSource<TrainingImplD>> {
+        return dao.getTrainingRel(id).filterNotNull().map { it.toTraining()}.resultSource()
     }
     override fun del(training: TrainingImplD) {
         training.rounds.forEach { roundSource.del(it as RoundImpl) }

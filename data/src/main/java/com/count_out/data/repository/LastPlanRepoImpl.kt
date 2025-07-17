@@ -1,7 +1,7 @@
 package com.count_out.data.repository
 
 import com.count_out.data.entity.ConverterResult
-import com.count_out.data.models.throwable.ResultDataSource
+import com.count_out.data.models.throwable.ResultSource
 import com.count_out.data.source.local.LastPlanSource
 import com.count_out.data.source.room.TrainingSource
 import com.count_out.domain.entity.throwable.ResultUC
@@ -23,10 +23,10 @@ class LastPlanRepoImpl @Inject constructor(
     override fun getLastUsedPlan(): Flow<ResultUC<Training>> {
         return source.getLastPlan().flatMapConcat { resultDataSource->
             when(resultDataSource){
-                is ResultDataSource.Success-> {
+                is ResultSource.Success-> {
                     sourceTraining.get2( resultDataSource.data).map {
                         converter.execute(it) }}
-                is ResultDataSource.Error -> flow {
+                is ResultSource.Error -> flow {
                     emit(converter.execute(resultDataSource)) }
             }
         }
