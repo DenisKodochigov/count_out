@@ -1,7 +1,7 @@
 package com.count_out.service.service_timing
 
-import com.count_out.domain.entity.pad
 import com.count_out.domain.entity.enums.RunningState
+import com.count_out.domain.entity.pad
 import com.count_out.service.service_timing.models.TickTimeImpl
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers

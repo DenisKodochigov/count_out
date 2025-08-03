@@ -2,16 +2,16 @@ package com.count_out.presentation.screens.training
 
 import com.count_out.domain.repository.TypeRepo
 import com.count_out.domain.use_case.UseCase
+import com.count_out.domain.use_case.other.CollapsingUC
+import com.count_out.domain.use_case.other.ShowBottomSheetUC
+import com.count_out.domain.use_case.plans.GetTrainingUC
+import com.count_out.domain.use_case.plans.UpdateTrainingUC
 import com.count_out.domain.use_case.plans.exercise.ChangeSequenceExerciseUC
 import com.count_out.domain.use_case.plans.exercise.CopyExerciseUC
 import com.count_out.domain.use_case.plans.exercise.DeleteExerciseUC
-import com.count_out.domain.use_case.other.CollapsingUC
-import com.count_out.domain.use_case.other.ShowBottomSheetUC
 import com.count_out.domain.use_case.plans.set.CopySetUC
 import com.count_out.domain.use_case.plans.set.DeleteSetUC
 import com.count_out.domain.use_case.plans.set.UpdateSetUC
-import com.count_out.domain.use_case.plans.GetTrainingUC
-import com.count_out.domain.use_case.plans.UpdateTrainingUC
 import com.count_out.presentation.models.TrainingImplP
 import com.count_out.presentation.screens.prime.PrimeConvertor
 import kotlinx.coroutines.flow.MutableStateFlow

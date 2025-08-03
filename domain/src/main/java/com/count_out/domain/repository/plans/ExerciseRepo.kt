@@ -1,8 +1,6 @@
 package com.count_out.domain.repository.plans
 
-import com.count_out.domain.entity.DataForChangeSequence
 import com.count_out.domain.entity.throwable.ResultUC
-import com.count_out.domain.entity.workout.Exercise
 import com.count_out.domain.repository.TypeRepo
 import kotlinx.coroutines.flow.Flow
 

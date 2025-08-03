@@ -1,9 +1,5 @@
 package com.count_out.framework.room.entity
 
-import com.count_out.data.models.RoundImpl
-import com.count_out.data.models.SpeechImplD
-import com.count_out.data.models.SpeechKitImplD
-import com.count_out.data.models.TrainingImplD
 import com.count_out.domain.entity.enums.Units
 import com.count_out.framework.R
 import com.count_out.framework.room.AppDataBase
@@ -16,96 +12,9 @@ import com.count_out.framework.room.db.speech.SpeechTable
 import com.count_out.framework.room.db.speech_kit.SpeechKitTable
 import com.count_out.framework.room.db.training.TrainingTable
 
-object Plugins
-{
-    val listRound = mutableListOf<RoundTable>()
-    val listTr = mutableListOf<TrainingTable>()
-//    val listEx = mutableListOf<ExerciseTable>()
-//    val listSpeech = mutableListOf<SpeechTable>()
-//    val listActivity = listOf<Activity>(
-//        ActivityTable(idActivity = 0, name = "Run", icon = R.drawable.ic_setka),
-//        ActivityTable(idActivity = 1, name = "Ski", icon = R.drawable.ic_setka))
-
-    fun init(){
-        var idR = 0L
-        for (t in 0..10L){
-//            listRound.add(RoundTable( idRound = idR++, trainingId = t, roundType = RoundType.UP, exercise = mutableListOf()))
-//            listRound.add(RoundTable( idRound = idR++, trainingId = t, roundType = RoundType.OUT, exercise = mutableListOf()))
-//            listRound.add(RoundTable( idRound = idR++, trainingId = t, roundType = RoundType.DOWN, exercise = mutableListOf()))
-//            listTr.add(
-//                TrainingTable( idTraining = t,
-//                    name = "Training $t",
-//                    rounds = mutableListOf(listRound[listRound.size-3], listRound[listRound.size-2], listRound[listRound.size-1]))
-//            )
-        }
-    }
-
-
-//    fun item (id: Long): Training {
-//        return listTr.find { it.idTraining == id } ?: TrainingTable() as Training
-//    }
-}
-
-
-fun createTraining(id: Long): TrainingImplD{
-    return TrainingImplD(
-        idTraining = 0,
-        name = "Test 1",
-        amountActivity = 0,
-        isSelected = false,
-        speechId = 0,
-        speech = SpeechKitImplD(beforeEnd = SpeechImplD(), beforeStart = SpeechImplD(), afterStart = SpeechImplD(), afterEnd = SpeechImplD()),
-        rings = emptyList(),
-        rounds = listOf(
-            RoundImpl(
-                idRound = 0,
-                trainingId = TODO(),
-                speechId = TODO(),
-                roundType = TODO(),
-                speech = TODO(),
-                exercise = TODO(),
-                amount = TODO(),
-                duration = TODO()
-            ),
-
-        ),
-    )
-}
-private fun createSpeechKit(id: Long = 0): SpeechKitImplD = SpeechKitImplD(
-
-)
-private fun createSpeech(id: Long = 0): SpeechImplD {
-    return SpeechImplD(
-
-    )
-}
-
 private fun createTrainingId0( db: AppDataBase) {
-//    val training = TrainingImplD(
-//        idTraining = 0,
-//        name = "",
-//        amountActivity = 0,
-//        rings = TODO(),
-//        isSelected = TODO(),
-//        speechId = TODO(),
-//        speech = SpeechKitImpl(beforeStart = SpeechImpl(message = "Начало тренировки"), afterStart = SpeechImpl(), beforeEnd = SpeechImpl(), afterEnd = SpeechImpl(message = "Тренировка окончена"),),
-//        rounds = listOf(
-//            RoundImpl(
-//                roundType = com.count_out.domain.entity.enums.RoundType.WorkUp,
-//                speech = SpeechKitImpl(beforeStart = SpeechImpl(), afterStart = SpeechImpl(), beforeEnd = SpeechImpl(), afterEnd = SpeechImpl(),),
-//                exercise = listOf(
-//                    ExerciseImplD(
-//                        activityId = 1
-//                    )
-//                ),
-//            )
-//        )
-//    )
-
-
     val idTraining = db.trainingDao().add(TrainingTable(name = "", idTraining = 0,
         speechId = addSpeechKit(db, bs = "Начало тренировки", ae = "Тренировка окончена",)))
-    if (idTraining == null) return
 //Разминка
     db.roundDao().add(RoundTable(trainingId = idTraining, roundType = RoundType.UP.ordinal,
         speechId = addSpeechKit(db)))
@@ -190,7 +99,6 @@ private fun createTrainingPlansTesting( db: AppDataBase) {
     val reps = 3
     val idTraining = db.trainingDao().add(TrainingTable(name = "Тестовая",
         speechId = addSpeechKit(db, bs = "Начало тренировки", ae = "Тренировка окончена",)))
-    if (idTraining == null) return
 //Разминка
     var idRound = db.roundDao().add(RoundTable(trainingId = idTraining, roundType = RoundType.UP.ordinal,
         speechId = addSpeechKit(db, bs = "Разминка", ae = "",)))
@@ -257,12 +165,12 @@ private fun createTrainingPlansTesting( db: AppDataBase) {
 private fun addSpeechKit(db: AppDataBase, bs: String = "", ast: String = "", be: String = "", ae: String = ""): Long{
     return db.speechKitDao().add(
         SpeechKitTable(
-            idBeforeStart = db.speechDao().add( SpeechTable(message = bs)) ?: 0L,
-            idAfterStart = db.speechDao().add( SpeechTable( message = ast)) ?: 0L,
-            idBeforeEnd = db.speechDao().add( SpeechTable( message = be)) ?: 0L,
-            idAfterEnd = db.speechDao().add( SpeechTable( message = ae)) ?: 0L,
+            idBeforeStart = db.speechDao().add( SpeechTable(message = bs)),
+            idAfterStart = db.speechDao().add( SpeechTable( message = ast)),
+            idBeforeEnd = db.speechDao().add( SpeechTable( message = be)),
+            idAfterEnd = db.speechDao().add( SpeechTable( message = ae)),
         )
-    ) ?: 0L
+    )
 }
 private fun createTrainingPlansReal( db: AppDataBase) {
 //    createTrainingId0( db )

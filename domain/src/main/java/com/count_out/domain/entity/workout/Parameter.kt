@@ -1,6 +1,5 @@
 package com.count_out.domain.entity.workout
 
-import androidx.compose.runtime.Composable
 import com.count_out.domain.entity.enums.Units
 
 interface Parameter {

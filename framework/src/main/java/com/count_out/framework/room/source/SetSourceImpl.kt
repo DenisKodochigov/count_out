@@ -1,8 +1,6 @@
 package com.count_out.framework.room.source
 
-import android.R.attr.action
 import android.database.sqlite.SQLiteConstraintException
-import com.count_out.data.models.SetImplD
 import com.count_out.data.models.SpeechKitImplD
 import com.count_out.data.models.throwable.ResultSource
 import com.count_out.data.models.throwable.ThrowableDS
@@ -34,7 +32,7 @@ class SetSourceImpl @Inject constructor(
         try {
             if (exerciseId is TypeSource.LongT) {
                 dao.gets(exerciseId.item).filterNotNull().map { list ->
-                    TypeSource.Sets(list.filterNotNull().map { it.toSet() }) }.resultSource()
+                    TypeSource.SetsT(list.filterNotNull().map { it.toSet() }) }.resultSource()
             } else flow { emit(ResultSource.Error(ThrowableDS.NotValidType())) }
         } catch(e: SQLiteConstraintException) {
             flow { emit(ResultSource.Error(ThrowableDS.extract(e)))} }
@@ -44,7 +42,7 @@ class SetSourceImpl @Inject constructor(
             try {
                 val speechKitId = speechKitSource.copy( TypeSource.SpeechKitT(
                     set.item.speech?.let { SpeechKitImplD(it)} ?: SpeechKitImplD())).resultLong()
-                dao.add(SetTable(set = set.item, idSpeech = speechKitId)).let { count ->
+                dao.add(SetTable(set.item,0L,speechKitId)).let { count ->
                     if (count > 0) ResultSource.Success(TypeSource.LongT(item = count))
                     else ResultSource.Error(ThrowableDS.RequestFailed())
                 }

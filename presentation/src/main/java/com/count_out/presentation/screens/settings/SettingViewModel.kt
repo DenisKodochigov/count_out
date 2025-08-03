@@ -4,14 +4,14 @@ import androidx.lifecycle.viewModelScope
 import com.count_out.domain.entity.Setting
 import com.count_out.domain.entity.router.DeviceUI
 import com.count_out.domain.entity.workout.Activity
-import com.count_out.domain.use_case.plans.activity.AddActivityUC
-import com.count_out.domain.use_case.plans.activity.DeleteActivityUC
-import com.count_out.domain.use_case.plans.activity.GetsActivityUC
-import com.count_out.domain.use_case.plans.activity.UpdateActivityUC
 import com.count_out.domain.use_case.bluetooth.ClearCacheBleUC
 import com.count_out.domain.use_case.bluetooth.SelectDeviceBleUC
 import com.count_out.domain.use_case.bluetooth.StartScanBleUC
 import com.count_out.domain.use_case.bluetooth.StopScanBleUC
+import com.count_out.domain.use_case.plans.activity.AddActivityUC
+import com.count_out.domain.use_case.plans.activity.DeleteActivityUC
+import com.count_out.domain.use_case.plans.activity.GetActivitiesUC
+import com.count_out.domain.use_case.plans.activity.UpdateActivityUC
 import com.count_out.domain.use_case.settings.GetSettingsUC
 import com.count_out.domain.use_case.settings.UpdateSettingUC
 import com.count_out.presentation.screens.prime.Event
@@ -25,7 +25,7 @@ import javax.inject.Inject
 class SettingViewModel @Inject constructor(
     private val addActivity: AddActivityUC,
     private val delActivity: DeleteActivityUC,
-    private val getsActivity: GetsActivityUC,
+    private val getsActivity: GetActivitiesUC,
     private val updateActivity: UpdateActivityUC,
     private val clearCacheBle: ClearCacheBleUC,
     private val startScanBle: StartScanBleUC,
@@ -65,7 +65,7 @@ class SettingViewModel @Inject constructor(
 
     private fun getsActivity() {
         viewModelScope.launch {
-            getsActivity.execute(GetsActivityUC.Request).collect { submitState( it ) }
+            getsActivity.execute(GetActivitiesUC.Request).collect { submitState( it ) }
         }
     }
 

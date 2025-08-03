@@ -1,5 +1,6 @@
 package com.count_out.presentation.screens.plans
 
+import android.util.Log
 import com.count_out.domain.repository.TypeRepo
 import com.count_out.domain.use_case.UseCase
 import com.count_out.domain.use_case.plans.CopyTrainingUC
@@ -24,23 +25,23 @@ class PlansConvertor @Inject constructor(): PrimeConvertor<UseCase.Response, Pla
         }
     }
     private fun converterGetTrainings(data: GetTrainingsUC.Response, state: MutableStateFlow<PlansState>): PlansState {
-        if (data.trainings is TypeRepo.ListPlan)
-            state.value = state.value.copy( trainings = (data.trainings as TypeRepo.ListPlan).item)
+        if (data.trainings is TypeRepo.PlansT) {
+            state.value = state.value.copy(trainings = (data.trainings as TypeRepo.PlansT).item) }
         return state.value
     }
     private fun converterCopyTraining(data: CopyTrainingUC.Response, state: MutableStateFlow<PlansState>): PlansState {
-        if (data.trainings is TypeRepo.ListPlan)
-            state.value = state.value.copy( trainings = (data.trainings as TypeRepo.ListPlan).item)
+        if (data.trainings is TypeRepo.PlansT)
+            state.value = state.value.copy( trainings = (data.trainings as TypeRepo.PlansT).item)
         return state.value
     }
     private fun converterDeleteTraining(data: DeleteTrainingUC.Response, state: MutableStateFlow<PlansState>): PlansState {
-        if (data.trainings is TypeRepo.ListPlan)
-            state.value = state.value.copy( trainings = (data.trainings as TypeRepo.ListPlan).item)
+        if (data.trainings is TypeRepo.PlansT)
+            state.value = state.value.copy( trainings = (data.trainings as TypeRepo.PlansT).item)
         return state.value
     }
     private fun converterUpdatesTraining(data: UpdatesTrainingUC.Response, state: MutableStateFlow<PlansState>): PlansState {
-        if (data.training is TypeRepo.ListPlan)
-            state.value = state.value.copy( trainings = (data.training as TypeRepo.ListPlan).item)
+        if (data.training is TypeRepo.PlansT)
+            state.value = state.value.copy( trainings = (data.training as TypeRepo.PlansT).item)
         return state.value
     }
     private fun converterSelectTraining(data: SelectTrainingUC.Response, state: MutableStateFlow<PlansState>): PlansState {

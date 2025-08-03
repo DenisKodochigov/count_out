@@ -3,7 +3,6 @@ package com.count_out.framework.room.db.speech_kit
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.count_out.data.models.SpeechKitImplD
-import com.count_out.domain.entity.workout.SpeechKit
 
 @Entity(tableName = "tb_speech_kit")
 data class SpeechKitTable(

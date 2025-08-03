@@ -1,17 +1,17 @@
 package com.count_out.presentation.screens.execute
 
+//import com.count_out.domain.use_case.plans.GetPlanUC
 import android.util.Log
 import androidx.lifecycle.viewModelScope
 import com.count_out.domain.entity.workout.ShowBottomSheet
+import com.count_out.domain.use_case.other.ShowBottomSheetUC
+import com.count_out.domain.use_case.plans.GetStepPlanUC
 import com.count_out.domain.use_case.workout.DownIntervalUC
 import com.count_out.domain.use_case.workout.PauseWorkoutUC
 import com.count_out.domain.use_case.workout.SaveWorkoutUC
 import com.count_out.domain.use_case.workout.StartWorkoutUC
 import com.count_out.domain.use_case.workout.StopWorkoutUC
 import com.count_out.domain.use_case.workout.UpIntervalUC
-import com.count_out.domain.use_case.other.ShowBottomSheetUC
-//import com.count_out.domain.use_case.plans.GetPlanUC
-import com.count_out.domain.use_case.plans.GetStepPlanUC
 import com.count_out.presentation.models.DataForServImpl
 import com.count_out.presentation.models.Internet
 import com.count_out.presentation.screens.prime.Event

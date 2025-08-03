@@ -3,7 +3,6 @@ package com.count_out.framework.room.db.set
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.count_out.data.models.SetImplD
-import com.count_out.domain.entity.enums.Goal
 
 @Entity(tableName = "tb_set")
 data class SetTable (

@@ -1,7 +1,6 @@
 package com.count_out.framework.room.source
 
 import android.database.sqlite.SQLiteConstraintException
-import android.util.Log.e
 import com.count_out.data.models.SpeechImplD
 import com.count_out.data.models.throwable.ResultSource
 import com.count_out.data.models.throwable.ThrowableDS
@@ -11,7 +10,6 @@ import com.count_out.data.source.room.SpeechSource
 import com.count_out.framework.room.db.speech.SpeechDao
 import com.count_out.framework.room.db.speech.SpeechTable
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
@@ -29,7 +27,7 @@ class SpeechSourceImpl @Inject constructor(private val dao: SpeechDao): SpeechSo
     override fun copy(speech: TypeSource): ResultSource<TypeSource> {
         return try {
             if (speech is TypeSource.SpeechT) {
-                dao.add(SpeechTable(SpeechImplD(speech.item))).let {
+                dao.add(SpeechTable(SpeechImplD(speech.item),0L)).let {
                     if (it > 0L) { ResultSource.Success(TypeSource.LongT(item = it))
                     } else ResultSource.Error(ThrowableDS.RequestFailed())
                 }

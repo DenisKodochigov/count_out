@@ -10,14 +10,10 @@ import com.count_out.data.models.throwable.ResultSource
 import com.count_out.data.models.throwable.ThrowableDS
 import com.count_out.data.models.throwable.TypeSource
 import com.count_out.data.source.local.SettingsSource
-import com.count_out.domain.entity.Settings
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class SettingsSourceImpl @Inject constructor(private val dataStore: DataStore<Preferences>): SettingsSource {

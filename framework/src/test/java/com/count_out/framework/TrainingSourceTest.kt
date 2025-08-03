@@ -14,10 +14,10 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions
+import org.junit.jupiter.api.Test
 import org.mockito.Mockito.mock
 import org.mockito.kotlin.whenever
 import java.util.Collections.emptyList
-import org.junit.jupiter.api.Test
 
 class TrainingSourceTest {
     private val dao = mock<TrainingDao>()

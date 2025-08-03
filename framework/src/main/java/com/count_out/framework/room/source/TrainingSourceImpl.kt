@@ -28,7 +28,7 @@ class TrainingSourceImpl @Inject constructor(
     override fun gets(): Flow<ResultSource<TypeSource>>{
         return try {
             dao.getTrainingsRel().filterNotNull().map { list ->
-                TypeSource.PlansT(list.filterNotNull().map { it.toTraining() }) }.resultSource()
+                TypeSource.PlansT(list.map { it.toTraining() }) }.resultSource()
         } catch(e: SQLiteConstraintException) {
             flow { emit(ResultSource.Error(ThrowableDS.extract(e)))} }
     }
@@ -60,7 +60,7 @@ class TrainingSourceImpl @Inject constructor(
                     training.item.speech?.let { it as SpeechKitImplD } ?: SpeechKitImplD())
                 speechKitSource.copy(speechKitTypeSource).result { idSpeechKit->
                     if (idSpeechKit is TypeSource.LongT) {
-                        dao.add(TrainingTable(training.item, idSpeechKit.item))
+                        dao.add(TrainingTable(training.item, idSpeechKit.item,0L))
                             .let{ id->
                                 if (id == 0L) ResultSource.Error(ThrowableDS.RequestFailed())
                                 else {

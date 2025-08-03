@@ -21,7 +21,7 @@ import javax.inject.Singleton
 @Singleton
 @AndroidEntryPoint
 class CountOutService @Inject constructor(): Service() {
-    val NOTIFICATION_EXTRA = "WORKOUT_NOTIFICATION_EXTRA"
+    val notificationExtra = "WORKOUT_NOTIFICATION_EXTRA"
     private lateinit var router: Router
     private lateinit var workout: WorkoutRecordImpl
     var running: Boolean = false
@@ -35,7 +35,7 @@ class CountOutService @Inject constructor(): Service() {
     inner class DistributionServiceBinder: Binder() { fun getService(): CountOutService = this@CountOutService }
     override fun onBind(p0: Intent?): IBinder = DistributionServiceBinder()
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        when (intent?.getStringExtra(NOTIFICATION_EXTRA)) {
+        when (intent?.getStringExtra(notificationExtra)) {
             RunningState.Started.name -> startWork()
             RunningState.Paused.name -> pauseWork()
             RunningState.Stopped.name -> router.dataForUI.runningState.value = RunningState.Stopped

@@ -1,5 +1,6 @@
 package com.count_out.presentation.screens.plans
 
+import android.util.Log
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -66,6 +67,7 @@ fun PlansScreen(vm: PlansViewModel) {
 
 @Composable fun PlanList(dataState: PlansState, modifier: Modifier = Modifier) {
     Spacer(modifier = Modifier.fillMaxWidth())
+    Log.d("KDS", "list ${dataState.trainings}")
     LazyColumn(
         state = rememberLazyListState(),
         contentPadding = PaddingValues(horizontal = Dimen.paddingAppHor),

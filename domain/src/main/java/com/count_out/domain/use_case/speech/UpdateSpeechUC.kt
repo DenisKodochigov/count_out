@@ -6,7 +6,6 @@ import com.count_out.domain.repository.TypeRepo
 import com.count_out.domain.repository.plans.SpeechRepo
 import com.count_out.domain.use_case.UseCase
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 class UpdateSpeechUC @Inject constructor(configuration: Configuration,  private val repo: SpeechRepo

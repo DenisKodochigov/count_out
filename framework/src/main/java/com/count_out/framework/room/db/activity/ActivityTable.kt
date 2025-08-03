@@ -2,7 +2,7 @@ package com.count_out.framework.room.db.activity
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.count_out.data.models.ActivityImpl
+import com.count_out.data.models.ActivityImplD
 
 @Entity(tableName = "tb_activity")
 data class ActivityTable(
@@ -14,8 +14,8 @@ data class ActivityTable(
     var videoClip: String = "",
     var audioTrack: String = ""
 ){
-    constructor(item: ActivityImpl): this(
-        idActivity = item.idActivity,
+    constructor(item: ActivityImplD, idActivity: Long = item.idActivity): this(
+        idActivity = idActivity,
         name = item.name,
         description = item.description,
         icon = item.icon,
@@ -24,7 +24,7 @@ data class ActivityTable(
         audioTrack = item.audioTrack
     )
 
-    fun toActivity() = ActivityImpl(
+    fun toActivity() = ActivityImplD(
         idActivity = this.idActivity,
         name = this.name,
         description = this.description,

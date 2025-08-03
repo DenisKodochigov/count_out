@@ -14,7 +14,7 @@ import com.count_out.domain.repository.plans.TrainingRepo
 import com.count_out.domain.use_case.UseCase
 import com.count_out.domain.use_case.plans.activity.AddActivityUC
 import com.count_out.domain.use_case.plans.activity.DeleteActivityUC
-import com.count_out.domain.use_case.plans.activity.GetsActivityUC
+import com.count_out.domain.use_case.plans.activity.GetActivitiesUC
 import com.count_out.domain.use_case.plans.activity.UpdateActivityUC
 import com.count_out.domain.use_case.bluetooth.ClearCacheBleUC
 import com.count_out.domain.use_case.bluetooth.LastBleDeviceUC
@@ -115,7 +115,7 @@ class UseCaseModule {
     @Provides
     fun provideGetsActivityUseCase(
         configuration: UseCase.Configuration,
-        activityRepo: ActivityRepo ): GetsActivityUC = GetsActivityUC(configuration, activityRepo)
+        activityRepo: ActivityRepo ): GetActivitiesUC = GetActivitiesUC(configuration, activityRepo)
     @Singleton
     @Provides
     fun provideUpdateActivityUseCase(

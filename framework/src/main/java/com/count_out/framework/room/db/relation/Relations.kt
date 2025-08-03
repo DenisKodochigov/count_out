@@ -88,13 +88,7 @@ data class ExerciseRel(
     fun sumSets(sets: List<SetRel>?): Int {
         var summ = 0
         sets?.let { item->
-            item.forEach { set->
-                summ = set.setTable.duration.toInt() * if (set.setTable.durationU == Units.H.ordinal) 3600
-                else if (set.setTable.durationU == Units.M.ordinal) 60 else 1
-                summ = set.setTable.timeRest.toInt() * if (set.setTable.timeRestU == Units.H.ordinal) 3600
-                else if (set.setTable.timeRestU == Units.M.ordinal) 60 else 1
-                summ += set.setTable.intervalReps.toInt() * set.setTable.reps
-            }
+            item.forEach { set->summ += countTime(set)}
         }
         return summ
     }
@@ -125,13 +119,7 @@ data class RoundRel(
         var summ = 0
         exercises?.let { items->
             items.forEach { exercise->
-                exercise.sets?.forEach { set->
-                    summ = set.setTable.duration.toInt() * if (set.setTable.durationU == Units.H.ordinal) 3600
-                    else if (set.setTable.durationU == Units.M.ordinal) 60 else 1
-                    summ = set.setTable.timeRest.toInt() * if (set.setTable.timeRestU == Units.H.ordinal) 3600
-                    else if (set.setTable.timeRestU == Units.M.ordinal) 60 else 1
-                    summ += set.setTable.intervalReps.toInt() * set.setTable.reps
-                } ?: 0.0
+                exercise.sets?.forEach { set-> summ += countTime(set) } ?: 0.0
             }
         }
         return summ/60.0
@@ -159,13 +147,7 @@ data class RingRel(
         var summ = 0
         exercises?.let { items->
             items.forEach { exercise->
-                exercise.sets?.forEach { set->
-                    summ = set.setTable.duration.toInt() * if (set.setTable.durationU == Units.H.ordinal) 3600
-                    else if (set.setTable.durationU == Units.M.ordinal) 60 else 1
-                    summ = set.setTable.timeRest.toInt() * if (set.setTable.timeRestU == Units.H.ordinal) 3600
-                    else if (set.setTable.timeRestU == Units.M.ordinal) 60 else 1
-                    summ += set.setTable.intervalReps.toInt() * set.setTable.reps
-                } ?: 0.0
+                exercise.sets?.forEach { set-> summ += countTime(set) } ?: 0.0
             }
         }
         return summ/60.0
@@ -191,4 +173,19 @@ data class TrainingRel(
             rings = rings?.map { it.toRing() } ?: emptyList()
         )
     }
+}
+fun countTime(set: SetRel): Int{
+    var summ = 0
+    summ = set.setTable.duration.toInt() * when (set.setTable.durationU) {
+        Units.H.ordinal -> 3600
+        Units.M.ordinal -> 60
+        else -> 1
+    }
+    summ += set.setTable.timeRest.toInt() * when (set.setTable.timeRestU) {
+        Units.H.ordinal -> 3600
+        Units.M.ordinal -> 60
+        else -> 1
+    }
+    summ += set.setTable.intervalReps.toInt() * set.setTable.reps
+    return summ
 }

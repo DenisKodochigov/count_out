@@ -2,9 +2,7 @@ package com.count_out.framework.room.db.ring
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.count_out.data.models.ExerciseImplD
 import com.count_out.data.models.RingImpl
-import com.count_out.framework.room.db.exercise.ExerciseTable
 
 @Entity(tableName = "tb_ring")
 data class RingTable(

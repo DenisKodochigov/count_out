@@ -1,10 +1,5 @@
 package com.count_out.presentation.models
 
-import android.content.Context
-import com.count_out.presentation.view_element.lg
-import dagger.hilt.android.qualifiers.ApplicationContext
-import javax.inject.Inject
-
 
 //class MessageApp @Inject constructor(@ApplicationContext val context: Context) {
 //

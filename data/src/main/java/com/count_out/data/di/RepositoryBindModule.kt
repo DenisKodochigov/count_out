@@ -1,6 +1,6 @@
 package com.count_out.data.di
 
-import com.count_out.data.models.ActivityImpl
+import com.count_out.data.models.ActivityImplD
 import com.count_out.data.repository.ActivityRepoImpl
 import com.count_out.data.repository.BluetoothRepoImpl
 import com.count_out.data.repository.CountOutServiceRepoImpl
@@ -71,5 +71,5 @@ abstract class RepositoryBindModule {
     @Binds
     abstract fun bindLastPlanRepo(lastPlanRepoImpl: LastPlanRepoImpl): LastPlanRepo
     @Binds
-    abstract fun bindActive(activityImpl: ActivityImpl): Activity
+    abstract fun bindActive(activityImpl: ActivityImplD): Activity
 }

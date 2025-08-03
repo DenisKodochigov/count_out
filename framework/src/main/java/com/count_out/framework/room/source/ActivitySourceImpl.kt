@@ -1,7 +1,7 @@
 package com.count_out.framework.room.source
 
 import android.database.sqlite.SQLiteConstraintException
-import android.util.Log.e
+import com.count_out.data.models.ActivityImplD
 import com.count_out.data.models.throwable.ResultSource
 import com.count_out.data.models.throwable.ThrowableDS
 import com.count_out.data.models.throwable.TypeSource
@@ -10,7 +10,6 @@ import com.count_out.data.source.room.ActivitySource
 import com.count_out.framework.room.db.activity.ActivityDao
 import com.count_out.framework.room.db.activity.ActivityTable
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
@@ -19,7 +18,7 @@ class ActivitySourceImpl @Inject constructor(private val dao: ActivityDao): Acti
 
     override fun gets(): Flow<ResultSource<TypeSource>> =
         dao.gets().map { list->
-            TypeSource.Activities(item = list.map { it.toActivity() })}.resultSource()
+            TypeSource.ActivitiesT(item = list.map { it.toActivity() })}.resultSource()
 
     override fun get(id: TypeSource): Flow<ResultSource<TypeSource>> {
         return if (id is TypeSource.LongT) {
@@ -30,7 +29,7 @@ class ActivitySourceImpl @Inject constructor(private val dao: ActivityDao): Acti
     override fun copy(activity: TypeSource): ResultSource<TypeSource> {
         return try {
             if (activity is TypeSource.ActivityT) {
-                dao.add(ActivityTable(activity.item)).let {
+                dao.add(ActivityTable(activity.item, 0L)).let {
                     if (it > 0L) ResultSource.Success(TypeSource.LongT(item = it))
                     else ResultSource.Error(ThrowableDS.RequestFailed())
                 }

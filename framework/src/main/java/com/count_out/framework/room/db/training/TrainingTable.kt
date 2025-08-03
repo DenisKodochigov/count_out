@@ -2,10 +2,8 @@ package com.count_out.framework.room.db.training
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.count_out.data.models.RingImpl
 import com.count_out.data.models.TrainingImplD
 import com.count_out.domain.entity.workout.Training
-import com.count_out.framework.room.db.ring.RingTable
 
 
 @Entity(tableName = "tb_trainings")

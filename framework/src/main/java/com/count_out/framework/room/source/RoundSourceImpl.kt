@@ -1,7 +1,6 @@
 package com.count_out.framework.room.source
 
 import android.database.sqlite.SQLiteConstraintException
-import android.util.Log
 import com.count_out.data.models.ExerciseImplD
 import com.count_out.data.models.RoundImpl
 import com.count_out.data.models.SpeechKitImplD
@@ -11,7 +10,6 @@ import com.count_out.data.models.throwable.TypeSource
 import com.count_out.data.source.PrimeSource
 import com.count_out.data.source.room.ExerciseSource
 import com.count_out.data.source.room.RoundSource
-import com.count_out.framework.room.db.ring.RingTable
 import com.count_out.framework.room.db.round.RoundDao
 import com.count_out.framework.room.db.round.RoundTable
 import kotlinx.coroutines.flow.Flow
@@ -53,7 +51,7 @@ class RoundSourceImpl @Inject constructor(
                     round.item.speech?.let { it as SpeechKitImplD } ?: SpeechKitImplD())
                 speechKitSource.copy(speechKitTypeSource).result { idSpeechKit->
                     if (idSpeechKit is TypeSource.LongT) {
-                        dao.add(RoundTable(RoundImpl(round.item), idSpeechKit.item))
+                        dao.add(RoundTable(RoundImpl(round.item), idSpeechKit.item,0L))
                             .let{id->
                                 if (id == 0L) ResultSource.Error(ThrowableDS.RequestFailed())
                                 else if (round.item.exercise.isNotEmpty()){

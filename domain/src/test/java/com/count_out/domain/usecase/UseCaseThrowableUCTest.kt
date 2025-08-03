@@ -1,4 +1,4 @@
-package com.count_out.domain
+package com.count_out.domain.usecase
 
 import com.count_out.domain.entity.throwable.ResultUC
 import com.count_out.domain.entity.throwable.ThrowableUC

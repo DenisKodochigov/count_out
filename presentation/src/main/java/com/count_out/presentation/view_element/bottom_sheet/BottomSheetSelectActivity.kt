@@ -63,7 +63,7 @@ fun BottomSheetSelectActivity(dataState: TrainingState)
     ){
         items(items = dataState.activities) {item ->
             ActivityInfo(
-                activity = mutableStateOf(item as ActivityImpl),
+                activity = mutableStateOf(ActivityImpl(item)),
                 onSelect = {
                     dataState.exercise?.let {
                         dataState.event(TrainingEvent.UpdateExercise(ExerciseImplP(it, item))) } },

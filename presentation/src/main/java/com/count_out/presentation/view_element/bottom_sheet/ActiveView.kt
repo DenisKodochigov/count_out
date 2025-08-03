@@ -1,6 +1,7 @@
 package com.count_out.presentation.view_element.bottom_sheet
 
 import android.annotation.SuppressLint
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -45,11 +46,11 @@ import com.count_out.presentation.view_element.dialog.ChangeColorSectionDialog
 @Composable fun CardActivity(dataState: SettingsState, activity: Activity) {
     Frame {
         ActivityInfo(
-            activity = mutableStateOf(activity as ActivityImpl),
+            activity = mutableStateOf(ActivityImpl(activity)),
             onSelect = {
                 dataState.activity.value = activity
                 dataState.showBottomSheetAddActivity.value = true },
-            onChange = { dataState.event(SettingsEvent.SetColorActivity(activity)) },
+            onChange = { dataState.event(SettingsEvent.SetColorActivity(activity)) }, //
             onDeleteActivity = { dataState.event(SettingsEvent.DeleteActivity(activity)) },
         )
     }
@@ -89,9 +90,7 @@ import com.count_out.presentation.view_element.dialog.ChangeColorSectionDialog
             textStyle = MaterialTheme.typography.bodyLarge,
             contentAlignment = Alignment.CenterStart,
             onLossFocus = false,
-            onChangeValue = {
-                activity.value = activity.value.copy(name = it)
-                onChange(activity.value) }
+            onChangeValue = { activity.value = activity.value.copy(name = it) }//onChange(activity.value)
         )
         Spacer(modifier = Modifier
             .size(size = 32.dp)

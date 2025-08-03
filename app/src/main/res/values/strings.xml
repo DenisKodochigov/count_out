@@ -8,11 +8,9 @@
     <string name="history">history</string>
     <string name="setting">setting</string>
 
-    <string name="h">h</string>
     <string name="hour">hour</string>
     <string name="min">min</string>
     <string name="sec">sec</string>
-    <string name="s">s</string>
     <string name="km">km</string>
     <string name="m">m</string>
     <string name="kg">kg</string>

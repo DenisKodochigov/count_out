@@ -41,39 +41,39 @@ object IconQ{
     private val width = 39.dp
     private val height = 39.dp
     private val thick = 1.dp
-    private const val strokeWidth = 3f
-    private const val arrowWidthHor = 2f
-    private const val deltaUpDownY = 4f
-    private const val deltaUpDownX = 1f
-    private const val deltaLeftRightY = 1f
-    private const val deltaLeftRightX = 4f
-    private const val heightHor = 20f
-    private const val widthHor = 10f
-    private const val heightVer = 10f
-    private const val widthVer = 40f
+    private const val STROKE_WIDTH = 3f
+    private const val ARROW_WIDTH_HOR = 2f
+    private const val DELTA_UP_DOWN_Y = 4f
+    private const val DELTA_UP_DOWN_X = 1f
+    private const val DELTA_LEFT_RIGHT_Y = 1f
+    private const val DELTA_LEFT_RIGHT_X = 4f
+    private const val HEIGHT_HOR = 20f
+    private const val WIDTH_HOR = 10f
+    private const val HEIGHT_VER = 10f
+    private const val WIDTH_VER = 40f
 
     fun text(){}
     @Composable fun color() = MaterialTheme.colorScheme.outline
     @Composable fun ArrowLeft() {
         val colorLine = MaterialTheme.colorScheme.primary
         Spacer(modifier = Modifier
-            .height(Dp(heightHor))
-            .width(Dp(widthHor))
+            .height(Dp(HEIGHT_HOR))
+            .width(Dp(WIDTH_HOR))
             .drawWithCache {
                 onDrawWithContent {
                     drawLine(
                         color = colorLine,
-                        strokeWidth = arrowWidthHor,
-                        start = Offset(x = deltaLeftRightX, y = size.height / 2 + deltaLeftRightY),
-                        end = Offset(x = size.width - deltaLeftRightX, y = 0f + deltaLeftRightY),
+                        strokeWidth = ARROW_WIDTH_HOR,
+                        start = Offset(x = DELTA_LEFT_RIGHT_X, y = size.height / 2 + DELTA_LEFT_RIGHT_Y),
+                        end = Offset(x = size.width - DELTA_LEFT_RIGHT_X, y = 0f + DELTA_LEFT_RIGHT_Y),
                     )
                     drawLine(
                         color = colorLine,
-                        strokeWidth = arrowWidthHor,
-                        start = Offset(x = deltaLeftRightX, y = size.height / 2 - deltaLeftRightY),
+                        strokeWidth = ARROW_WIDTH_HOR,
+                        start = Offset(x = DELTA_LEFT_RIGHT_X, y = size.height / 2 - DELTA_LEFT_RIGHT_Y),
                         end = Offset(
-                            x = size.width - deltaLeftRightX,
-                            y = size.height - deltaLeftRightY
+                            x = size.width - DELTA_LEFT_RIGHT_X,
+                            y = size.height - DELTA_LEFT_RIGHT_Y
                         ),
                     )
                 }
@@ -83,27 +83,27 @@ object IconQ{
     @Composable fun ArrowRight() {
         val colorLine = MaterialTheme.colorScheme.primary
         Spacer(modifier = Modifier
-            .height(Dp(heightHor))
-            .width(Dp(widthHor))
+            .height(Dp(HEIGHT_HOR))
+            .width(Dp(WIDTH_HOR))
             .drawWithCache {
                 onDrawWithContent {
                     drawLine(
                         color = colorLine,
-                        strokeWidth = arrowWidthHor,
+                        strokeWidth = ARROW_WIDTH_HOR,
                         start = Offset(
-                            x = size.width - deltaLeftRightX,
-                            y = size.height / 2 + deltaLeftRightY
+                            x = size.width - DELTA_LEFT_RIGHT_X,
+                            y = size.height / 2 + DELTA_LEFT_RIGHT_Y
                         ),
-                        end = Offset(x = deltaLeftRightX, y = 0f + deltaLeftRightY),
+                        end = Offset(x = DELTA_LEFT_RIGHT_X, y = 0f + DELTA_LEFT_RIGHT_Y),
                     )
                     drawLine(
                         color = colorLine,
-                        strokeWidth = arrowWidthHor,
+                        strokeWidth = ARROW_WIDTH_HOR,
                         start = Offset(
-                            x = size.width - deltaLeftRightX,
-                            y = size.height / 2 - deltaLeftRightY
+                            x = size.width - DELTA_LEFT_RIGHT_X,
+                            y = size.height / 2 - DELTA_LEFT_RIGHT_Y
                         ),
-                        end = Offset(x = deltaLeftRightX, y = size.height - deltaLeftRightY),
+                        end = Offset(x = DELTA_LEFT_RIGHT_X, y = size.height - DELTA_LEFT_RIGHT_Y),
                     )
                 }
             }
@@ -113,22 +113,22 @@ object IconQ{
         val colorLine = MaterialTheme.colorScheme.primary
 
         Spacer(modifier = Modifier
-            .height(Dp(heightHor))
-            .width(Dp(widthVer))
+            .height(Dp(HEIGHT_HOR))
+            .width(Dp(WIDTH_VER))
             .drawWithCache {
                 onDrawWithContent {
                     drawLine(
                         color = colorLine,
-                        strokeWidth = strokeWidth,
-                        start = Offset(x = 0f + deltaUpDownX, y = size.height - deltaUpDownY),
-                        end = Offset(x = size.width / 2 + deltaUpDownX, y = 0f + deltaUpDownY),
+                        strokeWidth = STROKE_WIDTH,
+                        start = Offset(x = 0f + DELTA_UP_DOWN_X, y = size.height - DELTA_UP_DOWN_Y),
+                        end = Offset(x = size.width / 2 + DELTA_UP_DOWN_X, y = 0f + DELTA_UP_DOWN_Y),
                     )
 
                     drawLine(
                         color = colorLine,
-                        strokeWidth = strokeWidth,
-                        start = Offset(x = size.width / 2 - deltaUpDownX, y = 0f + deltaUpDownY),
-                        end = Offset(x = size.width - deltaUpDownX, y = size.height - deltaUpDownY),
+                        strokeWidth = STROKE_WIDTH,
+                        start = Offset(x = size.width / 2 - DELTA_UP_DOWN_X, y = 0f + DELTA_UP_DOWN_Y),
+                        end = Offset(x = size.width - DELTA_UP_DOWN_X, y = size.height - DELTA_UP_DOWN_Y),
                     )
                 }
             }
@@ -138,27 +138,27 @@ object IconQ{
         val colorLine = MaterialTheme.colorScheme.primary
 
         Spacer(modifier = Modifier
-            .height(Dp(heightHor))
-            .width(Dp(widthVer))
+            .height(Dp(HEIGHT_HOR))
+            .width(Dp(WIDTH_VER))
             .drawWithCache {
                 onDrawWithContent {
                     drawLine(
                         color = colorLine,
-                        strokeWidth = strokeWidth,
-                        start = Offset(x = 0f + deltaUpDownX, y = 0f + deltaUpDownY),
+                        strokeWidth = STROKE_WIDTH,
+                        start = Offset(x = 0f + DELTA_UP_DOWN_X, y = 0f + DELTA_UP_DOWN_Y),
                         end = Offset(
-                            x = size.width / 2 + deltaUpDownX,
-                            y = size.height - deltaUpDownY
+                            x = size.width / 2 + DELTA_UP_DOWN_X,
+                            y = size.height - DELTA_UP_DOWN_Y
                         ),
                     )
                     drawLine(
                         color = colorLine,
-                        strokeWidth = strokeWidth,
+                        strokeWidth = STROKE_WIDTH,
                         start = Offset(
-                            x = size.width / 2 - deltaUpDownX,
-                            y = size.height - deltaUpDownY
+                            x = size.width / 2 - DELTA_UP_DOWN_X,
+                            y = size.height - DELTA_UP_DOWN_Y
                         ),
-                        end = Offset(x = size.width - deltaUpDownX, y = 0f + deltaUpDownY),
+                        end = Offset(x = size.width - DELTA_UP_DOWN_X, y = 0f + DELTA_UP_DOWN_Y),
                     )
                 }
             }
@@ -166,13 +166,13 @@ object IconQ{
     }
     @Composable fun ArrowNoneVer(){
         Canvas(modifier = Modifier
-            .height(Dp(heightVer))
-            .width(Dp(widthVer))) {}
+            .height(Dp(HEIGHT_VER))
+            .width(Dp(WIDTH_VER))) {}
     }
     @Composable fun ArrowNoneHor(){
         Canvas(modifier = Modifier
-            .height(Dp(heightHor))
-            .width(Dp(widthHor))) {}
+            .height(Dp(HEIGHT_HOR))
+            .width(Dp(WIDTH_HOR))) {}
     }
     @Composable fun Add(color: Color = color(), onClick: ()->Unit = {}){
         Spacer(modifier = Modifier

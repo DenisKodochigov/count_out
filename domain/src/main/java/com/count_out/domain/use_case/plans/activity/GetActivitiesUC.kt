@@ -7,9 +7,9 @@ import com.count_out.domain.use_case.UseCase
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
-class GetsActivityUC @Inject constructor(
+class GetActivitiesUC @Inject constructor(
     configuration: Configuration, private val repo: ActivityRepo
-): UseCase<GetsActivityUC.Request, GetsActivityUC.Response>(configuration)  {
+): UseCase<GetActivitiesUC.Request, GetActivitiesUC.Response>(configuration)  {
 
     override fun methodRepo(request: Request): Flow<ResultUC<TypeRepo>> = repo.gets()
     override fun response(typeRepo: TypeRepo): Response = Response(typeRepo)

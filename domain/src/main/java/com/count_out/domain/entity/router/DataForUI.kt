@@ -4,8 +4,8 @@ import android.util.Pair
 import com.count_out.domain.entity.Coordinate
 import com.count_out.domain.entity.StepPlan
 import com.count_out.domain.entity.TickTime
-import com.count_out.domain.entity.enums.RunningState
 import com.count_out.domain.entity.enums.ConnectState
+import com.count_out.domain.entity.enums.RunningState
 import kotlinx.coroutines.flow.MutableStateFlow
 
 interface DataForUI {

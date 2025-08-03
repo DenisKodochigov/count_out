@@ -1,10 +1,10 @@
 package com.count_out.domain.repo
 
 import com.count_out.domain.repository.plans.TrainingRepo
-import com.count_out.domain.use_case.speech.UpdateSpeechUC
 import com.count_out.domain.use_case.plans.DeleteTrainingUC
 import com.count_out.domain.use_case.plans.GetTrainingsUC
 import com.count_out.domain.use_case.plans.SelectTrainingUC
+import com.count_out.domain.use_case.speech.UpdateSpeechUC
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import kotlinx.coroutines.Dispatchers

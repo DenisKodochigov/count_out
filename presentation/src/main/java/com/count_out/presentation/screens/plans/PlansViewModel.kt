@@ -3,12 +3,12 @@ package com.count_out.presentation.screens.plans
 import androidx.lifecycle.viewModelScope
 import com.count_out.domain.entity.workout.SpeechKit
 import com.count_out.domain.entity.workout.Training
-import com.count_out.domain.use_case.speech.UpdateSpeechKitUC
 import com.count_out.domain.use_case.plans.CopyTrainingUC
 import com.count_out.domain.use_case.plans.DeleteTrainingUC
 import com.count_out.domain.use_case.plans.GetTrainingsUC
 import com.count_out.domain.use_case.plans.SelectTrainingUC
 import com.count_out.domain.use_case.plans.UpdateTrainingUC
+import com.count_out.domain.use_case.speech.UpdateSpeechKitUC
 import com.count_out.presentation.screens.prime.Event
 import com.count_out.presentation.screens.prime.PrimeViewModel
 import com.count_out.presentation.screens.prime.ScreenState

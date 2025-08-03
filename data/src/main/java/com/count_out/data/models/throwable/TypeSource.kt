@@ -1,10 +1,9 @@
 package com.count_out.data.models.throwable
 
-import com.count_out.data.models.ActivityImpl
+import com.count_out.data.models.ActivityImplD
 import com.count_out.data.models.ExerciseImplD
 import com.count_out.data.models.RingImpl
 import com.count_out.data.models.SetImplD
-import com.count_out.data.models.SettingsImpl
 import com.count_out.data.models.SpeechImplD
 import com.count_out.data.models.SpeechKitImplD
 import com.count_out.data.models.TrainingImplD
@@ -24,33 +23,31 @@ import com.count_out.domain.entity.workout.Set
 import com.count_out.domain.entity.workout.ShowBottomSheet
 import com.count_out.domain.entity.workout.Training
 import com.count_out.domain.repository.TypeRepo
-import kotlin.reflect.KClass
 
 sealed class TypeSource {
-    data class StringT(val item: String): TypeSource()
     data class IntT(val item: Int): TypeSource()
     data class LongT(val item: Long): TypeSource()
     data class LongsT(val item: List<Long>): TypeSource()
+    data class StringT(val item: String): TypeSource()
     data class BooleanT(val item: Boolean): TypeSource()
     data class WeatherT(val item: Weather): TypeSource()
     data class CollapsingT(val item: Collapsing): TypeSource()
     data class ShowBottomSheetT(val item: ShowBottomSheet): TypeSource()
     data class SetT(val item: SetImplD): TypeSource()
-    data class Sets(val item: List<Set>): TypeSource()
+    data class SetsT(val item: List<Set>): TypeSource()
     data class RingT(val item: RingImpl): TypeSource()
     data class RingsT(val item: List<Ring>): TypeSource()
     data class RoundT(val item: Round): TypeSource()
     data class RoundsT(val item: List<Round>): TypeSource()
     data class ExerciseT(val item: ExerciseImplD): TypeSource()
-    data class Exercises(val item: List<Exercise>): TypeSource()
-    data class ActivityT(val item: ActivityImpl): TypeSource()
-    data class Activities(val item: List<Activity>): TypeSource()
+    data class ExercisesT(val item: List<Exercise>): TypeSource()
+    data class ActivityT(val item: ActivityImplD): TypeSource()
+    data class ActivitiesT(val item: List<Activity>): TypeSource()
     data class PlanT(val item: TrainingImplD): TypeSource()
     data class PlansT(val item: List<Training>): TypeSource()
     data class StepPlanT(val item: StepPlan): TypeSource()
     data class SpeechT(val item: SpeechImplD): TypeSource()
     data class SpeechKitT(val item: SpeechKitImplD): TypeSource()
-    data class ListPlan(val item: List<Training>): TypeSource()
     data class SettingT(val item: Setting): TypeSource()
     data class SettingsT(val item: Settings): TypeSource()
     data class DeviceUIT(val item: DeviceUI): TypeSource()
@@ -59,16 +56,15 @@ sealed class TypeSource {
     data object NullT: TypeSource()
 
     fun toRepo(): TypeRepo = when(this){
-        is Activities -> TypeRepo.Activities(item = this.item)
+        is ActivitiesT -> TypeRepo.ActivitiesT(item = this.item)
         is ActivityT -> TypeRepo.ActivityT(item = this.item)
         is BooleanT -> TypeRepo.BooleanT(item = this.item)
         is CollapsingT -> TypeRepo.CollapsingT(item = this.item)
         is DataForChangeSequenceT -> TypeRepo.DataForChangeSequenceT(item = this.item)
         is DeviceUIT -> TypeRepo.DeviceUIT(item = this.item)
         is ExerciseT -> TypeRepo.ExerciseT(item = this.item)
-        is Exercises -> TypeRepo.ListExercise(item = this.item)
+        is ExercisesT -> TypeRepo.ExercisesT(item = this.item)
         is IntT -> TypeRepo.IntT(item = this.item)
-        is ListPlan -> TypeRepo.ListPlan(item = this.item)
         is LongT -> TypeRepo.LongT(item = this.item)
         is LongsT ->  TypeRepo.LongsT(item = this.item)
         NullT -> TypeRepo.NullT
@@ -79,7 +75,7 @@ sealed class TypeSource {
         is RoundT -> TypeRepo.RoundT(item = this.item)
         is RoundsT ->  TypeRepo.RoundsT(item = this.item)
         is SetT -> TypeRepo.SetT(item = this.item)
-        is Sets -> TypeRepo.Sets(item = this.item)
+        is SetsT -> TypeRepo.SetsT(item = this.item)
         is SettingT -> TypeRepo.SettingT(item = this.item)
         is SettingsT -> TypeRepo.SettingsT(item = this.item)
         is ShowBottomSheetT -> TypeRepo.ShowBottomSheetT(item = this.item)

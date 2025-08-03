@@ -1,11 +1,7 @@
 package com.count_out.framework.room.source
 
 import android.database.sqlite.SQLiteConstraintException
-import android.util.Log
-import androidx.core.view.accessibility.AccessibilityRecordCompat.setSource
 import com.count_out.data.models.ExerciseImplD
-import com.count_out.data.models.RingImpl
-import com.count_out.data.models.SetImplD
 import com.count_out.data.models.SpeechKitImplD
 import com.count_out.data.models.throwable.ResultSource
 import com.count_out.data.models.throwable.ThrowableDS
@@ -13,7 +9,6 @@ import com.count_out.data.models.throwable.TypeSource
 import com.count_out.data.source.PrimeSource
 import com.count_out.data.source.room.ExerciseSource
 import com.count_out.data.source.room.RingSource
-import com.count_out.framework.room.db.exercise.ExerciseTable
 import com.count_out.framework.room.db.ring.RingDao
 import com.count_out.framework.room.db.ring.RingTable
 import kotlinx.coroutines.flow.Flow
@@ -51,7 +46,7 @@ class RingSourceImpl @Inject constructor(
                     ring.item.speech?.let { it as SpeechKitImplD } ?: SpeechKitImplD())
                 speechKitSource.copy(speechKitTypeSource).result { idSpeechKit->
                     if (idSpeechKit is TypeSource.LongT) {
-                        dao.add(RingTable(ring.item, idSpeechKit.item))
+                        dao.add(RingTable(ring.item, idSpeechKit.item,0L))
                             .let{id->
                                 if (id == 0L) ResultSource.Error(ThrowableDS.RequestFailed())
                                 else if (ring.item.exercise.isNotEmpty()){

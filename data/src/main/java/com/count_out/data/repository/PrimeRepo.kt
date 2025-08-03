@@ -1,6 +1,6 @@
 package com.count_out.data.repository
 
-import com.count_out.data.models.ActivityImpl
+import com.count_out.data.models.ActivityImplD
 import com.count_out.data.models.ExerciseImplD
 import com.count_out.data.models.RingImpl
 import com.count_out.data.models.SetImplD
@@ -105,15 +105,14 @@ abstract class PrimeRepo {
             is TypeSource.SpeechT -> TypeRepo.SpeechT(item = value.item)
             is TypeSource.SpeechKitT -> TypeRepo.SpeechKitT(item = value.item)
             is TypeSource.StringT -> TypeRepo.StringT(item = value.item)
-            is TypeSource.Activities -> TypeRepo.Activities(item = value.item)
+            is TypeSource.ActivitiesT -> TypeRepo.ActivitiesT(item = value.item)
             is TypeSource.ActivityT -> TypeRepo.ActivityT(item = value.item)
             is TypeSource.BooleanT -> TypeRepo.BooleanT(item = value.item)
             is TypeSource.CollapsingT -> TypeRepo.CollapsingT(item = value.item)
             is TypeSource.ExerciseT -> TypeRepo.ExerciseT(item = value.item)
-            is TypeSource.Exercises -> TypeRepo.ListExercise(item = value.item)
-            is TypeSource.ListPlan -> TypeRepo.ListPlan(item = value.item)
+            is TypeSource.ExercisesT -> TypeRepo.ExercisesT(item = value.item)
             is TypeSource.SetT -> TypeRepo.SetT(item = value.item)
-            is TypeSource.Sets -> TypeRepo.Sets(item = value.item)
+            is TypeSource.SetsT -> TypeRepo.SetsT(item = value.item)
             is TypeSource.SettingT -> TypeRepo.SettingT(item = value.item)
             is TypeSource.SettingsT -> TypeRepo.SettingsT(item = value.item)
             is TypeSource.ShowBottomSheetT -> TypeRepo.ShowBottomSheetT(item = value.item)
@@ -139,15 +138,14 @@ abstract class PrimeRepo {
             is TypeRepo.SpeechT -> TypeSource.SpeechT(item = SpeechImplD(value.item))
             is TypeRepo.SpeechKitT -> TypeSource.SpeechKitT(item = SpeechKitImplD(value.item))
             is TypeRepo.StringT -> TypeSource.StringT(item = value.item)
-            is TypeRepo.Activities -> TypeSource.Activities(item = value.item)
-            is TypeRepo.ActivityT -> TypeSource.ActivityT(item = ActivityImpl(value.item))
+            is TypeRepo.ActivitiesT -> TypeSource.ActivitiesT(item = value.item)
+            is TypeRepo.ActivityT -> TypeSource.ActivityT(item = ActivityImplD(value.item))
             is TypeRepo.BooleanT -> TypeSource.BooleanT(item = value.item)
             is TypeRepo.CollapsingT -> TypeSource.CollapsingT(item = value.item)
             is TypeRepo.ExerciseT -> TypeSource.ExerciseT(item = ExerciseImplD(value.item))
-            is TypeRepo.ListExercise -> TypeSource.Exercises(item = value.item)
-            is TypeRepo.ListPlan -> TypeSource.ListPlan(item = value.item)
+            is TypeRepo.ExercisesT -> TypeSource.ExercisesT(item = value.item)
             is TypeRepo.SetT -> TypeSource.SetT(item = SetImplD( value.item))
-            is TypeRepo.Sets -> TypeSource.Sets(item = value.item)
+            is TypeRepo.SetsT -> TypeSource.SetsT(item = value.item)
             is TypeRepo.SettingT -> TypeSource.SettingT(item = value.item)
             is TypeRepo.SettingsT -> TypeSource.SettingsT(item = value.item)
             is TypeRepo.ShowBottomSheetT -> TypeSource.ShowBottomSheetT(item = value.item)

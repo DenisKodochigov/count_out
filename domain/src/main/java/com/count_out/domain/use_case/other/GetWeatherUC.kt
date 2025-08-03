@@ -1,15 +1,11 @@
 package com.count_out.domain.use_case.other
 
 import com.count_out.domain.entity.throwable.ResultUC
-import com.count_out.domain.entity.weather.Weather
 import com.count_out.domain.entity.weather.WeatherRequest
 import com.count_out.domain.repository.TypeRepo
 import com.count_out.domain.repository.WeatherRepo
 import com.count_out.domain.use_case.UseCase
-import com.count_out.domain.use_case.plans.GetTrainingsUC
-import com.count_out.domain.use_case.plans.GetTrainingsUC.Response
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 class GetWeatherUC @Inject constructor(configuration: Configuration, private val repo: WeatherRepo

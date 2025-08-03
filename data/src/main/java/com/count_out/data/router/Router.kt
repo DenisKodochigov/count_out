@@ -10,8 +10,8 @@ import com.count_out.data.router.models.DataFromBle
 import com.count_out.data.router.models.DataFromSite
 import com.count_out.data.router.models.DataFromWork
 import com.count_out.data.router.models.TemporaryBase
-import com.count_out.domain.entity.router.Buffer
 import com.count_out.domain.entity.enums.RunningState
+import com.count_out.domain.entity.router.Buffer
 import com.count_out.domain.entity.router.DataForServ
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -107,9 +107,9 @@ class Router(private val dataForServ: DataForServ) {
                         heartRate = buffer.heartRate.value,
                         idTraining = dataForWork.training.value?.idTraining ?: 0,
                         phaseWorkout = buffer.phaseWorkout.value,
-                        distance = TODO(),
-                        idSet = TODO(),
-                        activityId = TODO(),
+                        distance = 0f,
+                        idSet = 0,
+                        activityId = 1,
                     )
                 }
                 delay(500L)

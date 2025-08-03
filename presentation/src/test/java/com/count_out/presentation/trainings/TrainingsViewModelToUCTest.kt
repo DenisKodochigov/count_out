@@ -1,19 +1,19 @@
 package com.count_out.presentation.trainings
 
 import com.count_out.domain.entity.throwable.ResultUC
-import com.count_out.domain.use_case.speech.UpdateSpeechKitUC
 import com.count_out.domain.use_case.plans.CopyTrainingUC
 import com.count_out.domain.use_case.plans.DeleteTrainingUC
 import com.count_out.domain.use_case.plans.GetTrainingsUC
 import com.count_out.domain.use_case.plans.SelectTrainingUC
 import com.count_out.domain.use_case.plans.UpdateTrainingUC
+import com.count_out.domain.use_case.speech.UpdateSpeechKitUC
 import com.count_out.presentation.models.SpeechImplP
 import com.count_out.presentation.models.SpeechKitImplP
 import com.count_out.presentation.models.TrainingImplP
-import com.count_out.presentation.screens.prime.ScreenState
 import com.count_out.presentation.screens.plans.PlansEvent
 import com.count_out.presentation.screens.plans.PlansState
 import com.count_out.presentation.screens.plans.PlansViewModel
+import com.count_out.presentation.screens.prime.ScreenState
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.filter

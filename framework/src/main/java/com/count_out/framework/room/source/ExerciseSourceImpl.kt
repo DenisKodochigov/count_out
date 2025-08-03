@@ -1,10 +1,6 @@
 package com.count_out.framework.room.source
 
 import android.database.sqlite.SQLiteConstraintException
-import android.util.Log.e
-import androidx.core.view.accessibility.AccessibilityRecordCompat.setSource
-import com.count_out.data.models.ExerciseImplD
-import com.count_out.data.models.ParameterImpl
 import com.count_out.data.models.SetImplD
 import com.count_out.data.models.SpeechKitImplD
 import com.count_out.data.models.throwable.ResultSource
@@ -13,9 +9,6 @@ import com.count_out.data.models.throwable.TypeSource
 import com.count_out.data.source.PrimeSource
 import com.count_out.data.source.room.ExerciseSource
 import com.count_out.data.source.room.SetSource
-import com.count_out.domain.entity.enums.Goal
-import com.count_out.domain.entity.enums.Units
-import com.count_out.domain.entity.enums.Zone
 import com.count_out.framework.room.db.exercise.ExerciseDao
 import com.count_out.framework.room.db.exercise.ExerciseTable
 import kotlinx.coroutines.flow.Flow
@@ -42,7 +35,7 @@ class ExerciseSourceImpl @Inject constructor(
         try {
             if (id is TypeSource.LongT) {
                 dao.getForRound(id.item).map{ listExerciseRel->
-                TypeSource.Exercises(listExerciseRel.map{ it.toExercise()}) }.resultSource()
+                TypeSource.ExercisesT(listExerciseRel.map{ it.toExercise()}) }.resultSource()
             } else flow { emit (ResultSource.Error(ThrowableDS.NotValidType())) }
         } catch(e: SQLiteConstraintException) {
             flow { emit(ResultSource.Error(ThrowableDS.extract(e)))} }
@@ -51,7 +44,7 @@ class ExerciseSourceImpl @Inject constructor(
         try {
             if (id is TypeSource.LongT) {
                 dao.getForRing(id.item).map{ listExerciseRel->
-                    TypeSource.Exercises(listExerciseRel.map{ it.toExercise()}) }.resultSource()
+                    TypeSource.ExercisesT(listExerciseRel.map{ it.toExercise()}) }.resultSource()
             } else flow { emit (ResultSource.Error(ThrowableDS.NotValidType())) }
         } catch(e: SQLiteConstraintException) {
             flow { emit(ResultSource.Error(ThrowableDS.extract(e)))} }
@@ -59,7 +52,7 @@ class ExerciseSourceImpl @Inject constructor(
     override fun getFilter(list: TypeSource): Flow<ResultSource<TypeSource>> =
         try{ if (list is TypeSource.LongsT) {
                 dao.getFilter(list.item).map{ listExerciseRel->
-                    TypeSource.Exercises(listExerciseRel.map{ it.toExercise()})
+                    TypeSource.ExercisesT(listExerciseRel.map{ it.toExercise()})
                 }.resultSource()
             } else flow { emit (ResultSource.Error(ThrowableDS.NotValidType())) }
         } catch(e: SQLiteConstraintException) {
@@ -72,7 +65,7 @@ class ExerciseSourceImpl @Inject constructor(
                     exercise.item.speech?.let { it as SpeechKitImplD } ?: SpeechKitImplD())
                 speechKitSource.copy(speechKitTypeSource).result { idSpeechKit->
                     if (idSpeechKit is TypeSource.LongT) {
-                        dao.add(ExerciseTable(exercise.item, idSpeechKit.item))
+                        dao.add(ExerciseTable(exercise.item,idSpeechKit.item,0L))
                             .let{exerciseId->
                                 if (exerciseId == 0L) ResultSource.Error(ThrowableDS.RequestFailed())
                                 else if (exercise.item.sets.isNotEmpty()){
