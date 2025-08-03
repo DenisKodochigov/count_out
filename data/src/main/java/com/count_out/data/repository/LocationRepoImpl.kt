@@ -6,6 +6,6 @@ import javax.inject.Inject
 
 class LocationRepoImpl @Inject constructor(private val locationSource: LocationSource): LocationRepo {
     override fun getLocation() {
-        TODO("Not yet implemented")
+
     }
 }

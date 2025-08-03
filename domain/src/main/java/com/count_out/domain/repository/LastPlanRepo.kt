@@ -5,6 +5,6 @@ import com.count_out.domain.entity.workout.Training
 import kotlinx.coroutines.flow.Flow
 
 interface LastPlanRepo {
-    fun getLastUsedPlan(): Flow<ResultUC<Training>>
-    fun saveLastUsedPlan(id: Long): Flow<ResultUC<Boolean>>
+    fun getLastUsedPlan(): Flow<ResultUC<TypeRepo>>
+    fun saveLastUsedPlan(id: TypeRepo): Flow<ResultUC<TypeRepo>>
 }

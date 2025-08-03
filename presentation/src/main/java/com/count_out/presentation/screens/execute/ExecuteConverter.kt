@@ -1,5 +1,6 @@
-package com.count_out.presentation.screens.start_screen
+package com.count_out.presentation.screens.execute
 
+import com.count_out.domain.repository.TypeRepo
 import com.count_out.domain.use_case.UseCase
 import com.count_out.domain.use_case.workout.DownIntervalUC
 import com.count_out.domain.use_case.workout.PauseWorkoutUC
@@ -48,11 +49,13 @@ class ExecuteConverter @Inject constructor(): PrimeConvertor<UseCase.Response, E
         return state.value
     }
     private fun makeLocal(data: GetStepPlanUC.Response, state: MutableStateFlow<ExecuteState>): ExecuteState {
-        state.value = state.value.copy( stepTraining = data.step)
+        if (data.step is TypeRepo.StepPlanT)
+            state.value = state.value.copy( stepTraining = (data.step as TypeRepo.StepPlanT).item)
         return state.value
     }
     private fun makeLocal(data: ShowBottomSheetUC.Response, state: MutableStateFlow<ExecuteState>): ExecuteState {
-        state.value = state.value.copy( showBS = data.show)
+        if (data.show is TypeRepo.ShowBottomSheetT)
+            state.value = state.value.copy( showBS = (data.show as TypeRepo.ShowBottomSheetT).item)
         return state.value
     }
     private fun converterOther( state: MutableStateFlow<ExecuteState>): ExecuteState {

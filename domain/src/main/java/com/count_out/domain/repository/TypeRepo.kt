@@ -1,0 +1,57 @@
+package com.count_out.domain.repository
+
+import com.count_out.domain.entity.DataForChangeSequence
+import com.count_out.domain.entity.GlobalValueApp.toStepPlan1
+import com.count_out.domain.entity.Setting
+import com.count_out.domain.entity.Settings
+import com.count_out.domain.entity.StepPlan
+import com.count_out.domain.entity.router.DeviceUI
+import com.count_out.domain.entity.weather.Weather
+import com.count_out.domain.entity.weather.WeatherRequest
+import com.count_out.domain.entity.workout.Activity
+import com.count_out.domain.entity.workout.Collapsing
+import com.count_out.domain.entity.workout.Exercise
+import com.count_out.domain.entity.workout.Ring
+import com.count_out.domain.entity.workout.Round
+import com.count_out.domain.entity.workout.Set
+import com.count_out.domain.entity.workout.ShowBottomSheet
+import com.count_out.domain.entity.workout.Speech
+import com.count_out.domain.entity.workout.SpeechKit
+import com.count_out.domain.entity.workout.Training
+
+sealed class TypeRepo {
+    data class StringT(val item: String): TypeRepo()
+    data class IntT(val item: Int): TypeRepo()
+    data class LongT(val item: Long): TypeRepo()
+    data class LongsT(val item: List<Long>): TypeRepo()
+    data class BooleanT(val item: Boolean): TypeRepo()
+    data class WeatherT(val item: Weather): TypeRepo()
+    data class CollapsingT(val item: Collapsing): TypeRepo()
+    data class ShowBottomSheetT(val item: ShowBottomSheet): TypeRepo()
+    data class SetT(val item: Set): TypeRepo()
+    data class Sets(val item: List<Set>): TypeRepo()
+    data class RingT(val item: Ring): TypeRepo()
+    data class RingsT(val item: List<Ring>): TypeRepo()
+    data class RoundT(val item: Round): TypeRepo()
+    data class RoundsT(val item: List<Round>): TypeRepo()
+    data class ExerciseT(val item: Exercise): TypeRepo()
+    data class ActivityT(val item: Activity): TypeRepo()
+    data class Activities(val item: List<Activity>): TypeRepo()
+    data class PlanT(val item: Training): TypeRepo()
+    data class PlansT(val item: List<Training>): TypeRepo()
+    data class StepPlanT(val item: StepPlan): TypeRepo()
+    data class SpeechT(val item: Speech): TypeRepo()
+    data class SpeechKitT(val item: SpeechKit): TypeRepo()
+    data class ListExercise(val item: List<Exercise>): TypeRepo()
+    data class ListPlan(val item: List<Training>): TypeRepo()
+    data class DeviceUIT(val item: DeviceUI): TypeRepo()
+    data class DataForChangeSequenceT(val item: DataForChangeSequence): TypeRepo()
+    data class SettingT(val item: Setting): TypeRepo()
+    data class SettingsT(val item: Settings): TypeRepo()
+    data class WeatherRequestT(val item: WeatherRequest): TypeRepo()
+    data object NullT: TypeRepo()
+    fun TypeRepo.toStepPlan(): TypeRepo{
+        return if (this is PlanT) StepPlanT(item = toStepPlan1(this.item))
+        else NullT
+    }
+}

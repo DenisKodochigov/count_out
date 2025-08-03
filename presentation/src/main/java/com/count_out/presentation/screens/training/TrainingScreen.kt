@@ -31,8 +31,8 @@ import com.count_out.presentation.models.Dimen
 import com.count_out.presentation.models.TrainingImplP
 import com.count_out.presentation.models.TypeKeyboard
 import com.count_out.presentation.screens.prime.PrimeScreen
-import com.count_out.presentation.screens.start_screen.ExecuteEvent
-import com.count_out.presentation.screens.start_screen.ExecuteState
+import com.count_out.presentation.screens.execute.ExecuteEvent
+import com.count_out.presentation.screens.execute.ExecuteState
 import com.count_out.presentation.screens.training.TrainingEvent.ShowBS
 import com.count_out.presentation.screens.training.round.Round
 import com.count_out.presentation.view_element.TextFieldApp

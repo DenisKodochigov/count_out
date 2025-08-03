@@ -8,10 +8,10 @@ data class SpeechImplD(
     override var duration: Long = 0L,
     override var addMessage: String = "",
 ): Speech{
-    constructor(item: Speech) : this(
-        idSpeech = item.idSpeech,
-        message = item.message,
-        duration = item.duration,
-        addMessage = item.addMessage
+    constructor(item: Speech?) : this(
+        idSpeech = item?.idSpeech ?: 0L,
+        message = item?.message ?: "",
+        duration = item?.duration ?: 0L,
+        addMessage = item?.addMessage ?: ""
     )
 }

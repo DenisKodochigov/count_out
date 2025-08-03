@@ -5,10 +5,13 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.longPreferencesKey
 import com.count_out.data.models.throwable.ResultSource
-import com.count_out.data.source.SourceData
+import com.count_out.data.models.throwable.ThrowableDS
+import com.count_out.data.models.throwable.TypeSource
+import com.count_out.data.source.PrimeSource
 import com.count_out.data.source.local.LastPlanSource
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
@@ -16,13 +19,19 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class LastPlanSourceImpl @Inject constructor(
-    private val dataStore: DataStore<Preferences>): LastPlanSource, SourceData() {
+    private val dataStore: DataStore<Preferences>
+) : LastPlanSource, PrimeSource() {
     internal val keyName = longPreferencesKey("last_plan")
-    override fun getLastPlan(): Flow<ResultSource<Long>> =
-        dataStore.data.map { it[keyName] ?: 1 }.resultSource()
+    override fun getLastPlan(): Flow<ResultSource<TypeSource>> =
+        dataStore.data.map { TypeSource.LongT(it[keyName] ?: 1) }.resultSource()
 
-    override fun saveLastPlan(id: Long): Flow<ResultSource<Boolean>> {
-        CoroutineScope(Dispatchers.IO).launch { dataStore.edit { it[keyName] = id } }
-        return flow { emit(ResultSource.Success(true)) }
+    override fun saveLastPlan(id: TypeSource): Flow<ResultSource<TypeSource>> {
+        return flow { emit(try {
+                if (id is TypeSource.LongT) {
+                    dataStore.edit { it[keyName] = id.item }
+                    ResultSource.Success(TypeSource.BooleanT(true))
+                } else ResultSource.Error(ThrowableDS.NotValidType())
+            } catch (e: Exception){ ResultSource.Error(ThrowableDS.extract(t = e))}
+        )}
     }
 }

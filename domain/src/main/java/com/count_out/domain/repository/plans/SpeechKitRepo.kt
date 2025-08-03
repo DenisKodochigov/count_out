@@ -2,11 +2,12 @@ package com.count_out.domain.repository.plans
 
 import com.count_out.domain.entity.throwable.ResultUC
 import com.count_out.domain.entity.workout.SpeechKit
+import com.count_out.domain.repository.TypeRepo
 import kotlinx.coroutines.flow.Flow
 
 interface SpeechKitRepo {
-    fun get(speechKit: SpeechKit): Flow<ResultUC<SpeechKit>>
-    fun del(speechKit: SpeechKit): Flow<ResultUC<Long>>
-    fun copy(speechKit: SpeechKit): Flow<ResultUC<SpeechKit>>
-    fun update(speechKit: SpeechKit): Flow<ResultUC<SpeechKit>>
+    fun get(speechKit: TypeRepo): Flow<ResultUC<TypeRepo>>
+    fun del(speechKit: TypeRepo): Flow<ResultUC<TypeRepo>>
+    fun copy(speechKit: TypeRepo): Flow<ResultUC<TypeRepo>>
+    fun update(speechKit: TypeRepo): Flow<ResultUC<TypeRepo>>
 }

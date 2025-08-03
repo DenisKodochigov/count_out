@@ -6,12 +6,16 @@ import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import com.count_out.data.models.SettingsImpl
+import com.count_out.data.models.throwable.ResultSource
+import com.count_out.data.models.throwable.ThrowableDS
+import com.count_out.data.models.throwable.TypeSource
 import com.count_out.data.source.local.SettingsSource
 import com.count_out.domain.entity.Settings
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -22,33 +26,58 @@ class SettingsSourceImpl @Inject constructor(private val dataStore: DataStore<Pr
     internal val keyAddress = stringPreferencesKey("address_ble_device")
     internal val keyName = stringPreferencesKey("name_ble_device")
 
-    override fun getSettings(): Flow<Settings> {
+    override fun getSettings(): Flow<ResultSource<TypeSource>> {
         return combine(
             getSettingSpeechDescr(),
             getBleAddress(),
             getBleName()
         ) { speechDescription, address, name ->
-            SettingsImpl(
-                speechDescription = speechDescription,
-                addressBle = address,
-                nameBle = name
-            )
+            ResultSource.Success(TypeSource.SettingsT(SettingsImpl(
+                speechDescription = speechDescription.resultBoolean(),
+                addressBle = address.resultString(),
+                nameBle = name.resultString())))
+
         }
     }
 
-    override fun getSettingSpeechDescr(): Flow<Boolean> = dataStore.data.map { it[keySpeechDescr] == true }
+    override fun getSettingSpeechDescr(): Flow<ResultSource<TypeSource>> =
+        dataStore.data.map{ResultSource.Success(TypeSource.BooleanT(it[keySpeechDescr] == true))}
 
-    override fun saveSettingSpeechDescr(settings: Boolean) {
-        CoroutineScope(Dispatchers.IO).launch { dataStore.edit { it[keySpeechDescr] = settings } } }
+    override fun getBleName(): Flow<ResultSource<TypeSource>> =
+        dataStore.data.map { ResultSource.Success(TypeSource.StringT(it[keyName] ?: ""))}
 
-    override fun getBleAddress(): Flow<String> = dataStore.data.map { it[keyAddress] ?: ""}
+    override fun getBleAddress(): Flow<ResultSource<TypeSource>> =
+        dataStore.data.map { ResultSource.Success(TypeSource.StringT(it[keyAddress] ?: ""))}
 
-    override fun saveBleAddress(settings: String) {
-        CoroutineScope(Dispatchers.IO).launch { dataStore.edit { it[keyAddress] = settings } } }
+    override suspend fun saveSettingSpeechDescr(settings: TypeSource): Flow<ResultSource<TypeSource>> {
+        return flow { emit(
+            try {
+                if (settings is TypeSource.BooleanT) {
+                    dataStore.edit { it[keySpeechDescr] = settings.item }
+                    ResultSource.Success(TypeSource.BooleanT(true))
+                } else ResultSource.Error(ThrowableDS.NotValidType())
+            } catch (e: Exception) { ResultSource.Error(ThrowableDS.extract(t = e)) })
+        }
+    }
 
-    override fun getBleName(): Flow<String> = dataStore.data.map { it[keyName] ?: ""}
+    override suspend fun saveBleAddress(settings: TypeSource): Flow<ResultSource<TypeSource>> {
+        return flow { emit(try {
+                if (settings is TypeSource.StringT) {
+                    dataStore.edit { it[keyAddress] = settings.item }
+                    ResultSource.Success(TypeSource.BooleanT(true))
+                } else ResultSource.Error(ThrowableDS.NotValidType())
+            } catch (e: Exception) { ResultSource.Error(ThrowableDS.extract(t = e)) })
+        }
+    }
 
-    override fun saveBleName(settings: String) {
-        CoroutineScope(Dispatchers.IO).launch { dataStore.edit { it[keyName] = settings } }}
-
+    override suspend fun saveBleName(settings: TypeSource): Flow<ResultSource<TypeSource>> {
+        return flow { emit(
+                try {
+                if (settings is TypeSource.StringT) {
+                    dataStore.edit { it[keyName] = settings.item }
+                    ResultSource.Success(TypeSource.BooleanT(true))
+                } else ResultSource.Error(ThrowableDS.NotValidType())
+            } catch (e: Exception) { ResultSource.Error(ThrowableDS.extract(t = e)) })
+        }
+    }
 }

@@ -1,29 +1,28 @@
 package com.count_out.data.repository
 
-import com.count_out.data.models.RoundImpl
 import com.count_out.data.source.room.RoundSource
-import com.count_out.domain.entity.workout.Round
+import com.count_out.domain.entity.throwable.ResultUC
+import com.count_out.domain.repository.TypeRepo
 import com.count_out.domain.repository.plans.RoundRepo
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.filterNotNull
 import javax.inject.Inject
 
-class RoundRepoImpl @Inject constructor(private val roundSource: RoundSource): RoundRepo {
-    override fun get(round: Round): Flow<Round> {
-        return roundSource.get(RoundImpl(round)).filterNotNull()
+class RoundRepoImpl @Inject constructor(private val source: RoundSource): RoundRepo, PrimeRepo() {
+    override fun get(round: TypeRepo): Flow<ResultUC<TypeRepo>>{
+        return source.get(toTypeSource(round)).convertor()
     }
 
-    override fun gets(trainingId: Long): Flow<List<Round>> {
-        return roundSource.gets(trainingId).filterNotNull()
+    override fun gets(trainingId: TypeRepo): Flow<ResultUC<TypeRepo>> {
+        return source.gets(toTypeSource(trainingId)).convertor()
     }
 
-    override fun update(round: Round): Flow<Round> {
-        roundSource.update(round as RoundImpl)
-        return roundSource.get(round).filterNotNull()
+    override fun update(round: TypeRepo): Flow<ResultUC<TypeRepo>>{
+        val typeSource = toTypeSource(round)
+        return source.update(typeSource).nextActionOk { source.gets(typeSource)}
     }
 
-    override fun del(round: Round): Flow<List<Round>> {
-        roundSource.del(round as RoundImpl)
-        return roundSource.gets(round.trainingId).filterNotNull()
+    override fun del(round: TypeRepo): Flow<ResultUC<TypeRepo>> {
+        val typeSource = toTypeSource(round)
+        return source.del(typeSource).nextActionOk { source.gets(typeSource)}
     }
 }

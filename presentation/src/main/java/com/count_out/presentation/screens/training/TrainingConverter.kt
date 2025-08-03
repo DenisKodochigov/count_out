@@ -1,5 +1,6 @@
 package com.count_out.presentation.screens.training
 
+import com.count_out.domain.repository.TypeRepo
 import com.count_out.domain.use_case.UseCase
 import com.count_out.domain.use_case.plans.exercise.ChangeSequenceExerciseUC
 import com.count_out.domain.use_case.plans.exercise.CopyExerciseUC
@@ -33,11 +34,13 @@ class TrainingConverter @Inject constructor(): PrimeConvertor<UseCase.Response, 
         }
     }
     private fun converterLocal(data: GetTrainingUC.Response, state: MutableStateFlow<TrainingState>): TrainingState {
-        state.value = state.value.copy(training = data.training)
+        if (data.training is TypeRepo.PlanT)
+            state.value = state.value.copy( training = (data.training as TypeRepo.PlanT).item)
         return state.value
     }
     private fun converterLocal(data: UpdateTrainingUC.Response, state: MutableStateFlow<TrainingState>): TrainingState {
-        state.value = state.value.copy(training = data.training)
+        if (data.training is TypeRepo.PlanT)
+            state.value = state.value.copy( training = (data.training as TypeRepo.PlanT).item)
         return state.value
     }
     private fun converterLocal(data: CopyExerciseUC.Response, state: MutableStateFlow<TrainingState>): TrainingState {
@@ -59,11 +62,13 @@ class TrainingConverter @Inject constructor(): PrimeConvertor<UseCase.Response, 
         return state.value
     }
     private fun converterLocal(data: ShowBottomSheetUC.Response, state: MutableStateFlow<TrainingState>): TrainingState {
-        state.value = state.value.copy(showBS = data.show,)
+        if (data.show is TypeRepo.ShowBottomSheetT)
+            state.value = state.value.copy( showBS = (data.show as TypeRepo.ShowBottomSheetT).item)
         return state.value
     }
     private fun converterLocal(data: CollapsingUC.Response, state: MutableStateFlow<TrainingState>): TrainingState {
-        state.value = state.value.copy(collapsing = data.collaps,)
+        if (data.collaps is TypeRepo.CollapsingT)
+            state.value = state.value.copy( collapsing = (data.collaps as TypeRepo.CollapsingT).item)
         return state.value
     }
     private fun converterOther( state: MutableStateFlow<TrainingState>): TrainingState {

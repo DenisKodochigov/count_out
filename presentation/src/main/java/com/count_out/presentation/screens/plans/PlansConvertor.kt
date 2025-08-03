@@ -1,5 +1,6 @@
 package com.count_out.presentation.screens.plans
 
+import com.count_out.domain.repository.TypeRepo
 import com.count_out.domain.use_case.UseCase
 import com.count_out.domain.use_case.plans.CopyTrainingUC
 import com.count_out.domain.use_case.plans.DeleteTrainingUC
@@ -23,19 +24,29 @@ class PlansConvertor @Inject constructor(): PrimeConvertor<UseCase.Response, Pla
         }
     }
     private fun converterGetTrainings(data: GetTrainingsUC.Response, state: MutableStateFlow<PlansState>): PlansState {
-        return state.value.copy(trainings = data.trainings)
+        if (data.trainings is TypeRepo.ListPlan)
+            state.value = state.value.copy( trainings = (data.trainings as TypeRepo.ListPlan).item)
+        return state.value
     }
     private fun converterCopyTraining(data: CopyTrainingUC.Response, state: MutableStateFlow<PlansState>): PlansState {
-        return state.value.copy(trainings = data.trainings)
+        if (data.trainings is TypeRepo.ListPlan)
+            state.value = state.value.copy( trainings = (data.trainings as TypeRepo.ListPlan).item)
+        return state.value
     }
     private fun converterDeleteTraining(data: DeleteTrainingUC.Response, state: MutableStateFlow<PlansState>): PlansState {
-        return state.value.copy(trainings = data.trainings)
+        if (data.trainings is TypeRepo.ListPlan)
+            state.value = state.value.copy( trainings = (data.trainings as TypeRepo.ListPlan).item)
+        return state.value
     }
     private fun converterUpdatesTraining(data: UpdatesTrainingUC.Response, state: MutableStateFlow<PlansState>): PlansState {
-        return state.value.copy(trainings = data.training)
+        if (data.training is TypeRepo.ListPlan)
+            state.value = state.value.copy( trainings = (data.training as TypeRepo.ListPlan).item)
+        return state.value
     }
     private fun converterSelectTraining(data: SelectTrainingUC.Response, state: MutableStateFlow<PlansState>): PlansState {
-        return state.value.copy(selectedId = data.selectedTraining)
+        if (data.selectedTraining is TypeRepo.LongT)
+            state.value = state.value.copy( selectedId = (data.selectedTraining as TypeRepo.LongT).item)
+        return state.value
 }
     private fun converterOther(state: MutableStateFlow<PlansState>): PlansState {
         return state.value.copy(trainings = emptyList())

@@ -1,4 +1,4 @@
-package com.count_out.presentation.screens.start_screen
+package com.count_out.presentation.screens.execute
 
 import android.util.Log
 import androidx.lifecycle.viewModelScope
@@ -89,8 +89,8 @@ class ExecuteViewModel @Inject constructor(
     }
     private fun showBottomSheet(item: ShowBottomSheet){
         viewModelScope.launch(Dispatchers.Default) {
-            showBottomSheetUC.execute( ShowBottomSheetUC.Request(item)).collect {
-                submitState( it ) } }
+            showBottomSheetUC.execute( ShowBottomSheetUC.Request(item))
+                .collect { submitState( it ) } }
     }
 //
 //    fun getTraining(id: Long) {

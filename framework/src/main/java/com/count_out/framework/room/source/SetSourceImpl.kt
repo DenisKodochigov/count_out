@@ -1,55 +1,84 @@
 package com.count_out.framework.room.source
 
+import android.R.attr.action
+import android.database.sqlite.SQLiteConstraintException
 import com.count_out.data.models.SetImplD
 import com.count_out.data.models.SpeechKitImplD
+import com.count_out.data.models.throwable.ResultSource
+import com.count_out.data.models.throwable.ThrowableDS
+import com.count_out.data.models.throwable.TypeSource
+import com.count_out.data.source.PrimeSource
 import com.count_out.data.source.room.SetSource
 import com.count_out.framework.room.db.set.SetDao
 import com.count_out.framework.room.db.set.SetTable
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.filterNotNull
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 class SetSourceImpl @Inject constructor(
     private val speechKitSource: SpeechKitSourceImpl,
-    private val setDao: SetDao): SetSource {
+    private val dao: SetDao
+): SetSource, PrimeSource() {
 
-    override fun get(item: SetImplD): Flow<SetImplD?> = setDao.get(item.idSet).map { it?.toSet() }
+    override fun get(id: TypeSource): Flow<ResultSource<TypeSource>> =
+        try {
+            if (id is TypeSource.LongT) {
+                dao.get(id.item).filterNotNull().map { TypeSource.SetT(it.toSet()) }.resultSource()
+            } else flow { emit(ResultSource.Error(ThrowableDS.NotValidType())) }
+        } catch(e: SQLiteConstraintException) {
+            flow { emit(ResultSource.Error(ThrowableDS.extract(e)))} }
 
-    override fun gets(exerciseId: Long): Flow<List<SetImplD>> {
-        return setDao.gets(exerciseId).map { list-> list.map{ it.toSet()} } }
+    override fun gets(exerciseId: TypeSource): Flow<ResultSource<TypeSource>> =
+        try {
+            if (exerciseId is TypeSource.LongT) {
+                dao.gets(exerciseId.item).filterNotNull().map { list ->
+                    TypeSource.Sets(list.filterNotNull().map { it.toSet() }) }.resultSource()
+            } else flow { emit(ResultSource.Error(ThrowableDS.NotValidType())) }
+        } catch(e: SQLiteConstraintException) {
+            flow { emit(ResultSource.Error(ThrowableDS.extract(e)))} }
 
-    override fun copy(item: SetImplD): Long {
-        val speechId = speechKitSource.copyValue(item.speech?.let{ it as SpeechKitImplD } ?: SpeechKitImplD()) ?: 0L
-        return setDao.add(toSetTable(item).copy(speechId = speechId)) }
+    override fun copy(set: TypeSource): ResultSource<TypeSource> =
+        if (set is TypeSource.SetT) {
+            try {
+                val speechKitId = speechKitSource.copy( TypeSource.SpeechKitT(
+                    set.item.speech?.let { SpeechKitImplD(it)} ?: SpeechKitImplD())).resultLong()
+                dao.add(SetTable(set = set.item, idSpeech = speechKitId)).let { count ->
+                    if (count > 0) ResultSource.Success(TypeSource.LongT(item = count))
+                    else ResultSource.Error(ThrowableDS.RequestFailed())
+                }
+            } catch (e: SQLiteConstraintException) { ResultSource.Error(ThrowableDS.extract(e)) }
+        } else ResultSource.Error(ThrowableDS.NotValidType())
 
-    override fun del(item: SetImplD) {
-        item.speech?.let { speechKitSource.del(SpeechKitImplD(it)) }
-        setDao.del(item.idSet)
+    override fun del(set: TypeSource): ResultSource<TypeSource> =
+        temp(set,{ dao.del(it.idSet) },{ speechKitSource.del(it) })
+
+    override fun update(set: TypeSource): ResultSource<TypeSource> =
+        temp(set,{ dao.update(it) },{ speechKitSource.update(it) })
+
+    fun temp(set: TypeSource, action:(SetTable)->Int, actionSp:(TypeSource)->ResultSource<TypeSource>
+    ): ResultSource<TypeSource>{
+        return if (set is TypeSource.SetT) {
+            try {
+                set.item.speech?.let {
+                    actionSp(TypeSource.SpeechKitT(SpeechKitImplD(it)))}
+                action(SetTable(set.item)).let { count ->
+                    if (count > 0) ResultSource.Success(TypeSource.IntT(item = count))
+                    else ResultSource.Error(ThrowableDS.RequestFailed())
+                }
+            } catch (e: SQLiteConstraintException) { ResultSource.Error(ThrowableDS.extract(e)) }
+        } else ResultSource.Error(ThrowableDS.NotValidType())
     }
-
-    override fun update(item: SetImplD) {
-        item.speech?.let { speechKitSource.update(SpeechKitImplD(it)) }
-        setDao.update(toSetTable(item, item.idSet))
-    }
-
-    private fun toSetTable(set: SetImplD, idSet: Long = 0) = SetTable(
-        idSet = idSet,
-        name = set.name,
-        speechId = set.speechId,
-        goal = set.goal.ordinal,
-        exerciseId = set.exerciseId,
-        reps = set.reps,
-        duration = set.duration.value,
-        durationU = set.duration.unit.ordinal,
-        distance = set.distance.value,
-        distanceU = set.distance.unit.ordinal,
-        weight = set.weight.value,
-        weightU = set.weight.unit.ordinal,
-        intervalReps = set.intervalReps,
-        intensity = set.intensity.ordinal,
-        intervalDown = set.intervalDown,
-        groupCount = set.groupCount,
-        timeRest = set.rest.value,
-        timeRestU = set.rest.unit.ordinal
-    )
 }
+//        if (set is TypeSource.SetT) {
+//            try {
+//                set.item.speech?.let {
+//                    speechKitSource.update(
+//                        TypeSource.SpeechKitT(SpeechKitImplD(it)))}
+//                dao.update(SetTable(set.item)).let { count ->
+//                    if (count > 0L) ResultSource.Success(TypeSource.IntT(item = count))
+//                    else ResultSource.Error(ThrowableDS.RequestFailed())
+//                }
+//            } catch (e: SQLiteConstraintException) { ResultSource.Error(ThrowableDS.extract(e)) }
+//        } else ResultSource.Error(ThrowableDS.NotValidType())

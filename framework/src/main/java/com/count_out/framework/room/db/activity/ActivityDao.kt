@@ -19,7 +19,7 @@ interface ActivityDao {
     fun add(item: ActivityTable): Long
 
     @Update
-    fun update(item: ActivityTable): Int?
+    fun update(item: ActivityTable): Int
 
     @Query("DELETE FROM tb_activity WHERE idActivity = :id")
     fun del(id: Long): Int

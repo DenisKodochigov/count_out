@@ -15,8 +15,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import com.count_out.presentation.R
 import com.count_out.presentation.models.Dimen
-import com.count_out.presentation.screens.start_screen.ExecuteEvent
-import com.count_out.presentation.screens.start_screen.ExecuteState
+import com.count_out.presentation.screens.execute.ExecuteEvent
+import com.count_out.presentation.screens.execute.ExecuteState
 import com.count_out.presentation.view_element.ButtonsOkCancel
 import com.count_out.presentation.view_element.ModalBottomSheetApp
 import com.count_out.presentation.view_element.TextApp

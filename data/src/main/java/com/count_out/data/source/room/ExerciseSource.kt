@@ -1,6 +1,7 @@
 package com.count_out.data.source.room
 
-import com.count_out.data.models.ExerciseImplD
+import com.count_out.data.models.throwable.ResultSource
+import com.count_out.data.models.throwable.TypeSource
 import kotlinx.coroutines.flow.Flow
 
 /**
@@ -20,11 +21,11 @@ import kotlinx.coroutines.flow.Flow
  *  setActivityIntoExerciseImplD - меняет ID Activity в ExerciseImplD
  */
 interface ExerciseSource {
-    fun get(exercise: ExerciseImplD): Flow<ExerciseImplD?>
-    fun getForRound(id: Long): Flow<List<ExerciseImplD>>
-    fun getForRing(id: Long): Flow<List<ExerciseImplD>>
-    fun getFilter(list: List<Long>): Flow<List<ExerciseImplD>>
-    fun copy(exercise: ExerciseImplD): Long
-    fun del(exercise: ExerciseImplD)
-    fun update(exercise: ExerciseImplD)
+    fun get(exercise: TypeSource): Flow<ResultSource<TypeSource>>
+    fun getForRound(id: TypeSource): Flow<ResultSource<TypeSource>>
+    fun getForRing(id: TypeSource): Flow<ResultSource<TypeSource>>
+    fun getFilter(list: TypeSource): Flow<ResultSource<TypeSource>>
+    fun copy(exercise: TypeSource): ResultSource<TypeSource>
+    fun del(exercise: TypeSource): ResultSource<TypeSource>
+    fun update(exercise: TypeSource): ResultSource<TypeSource>
 }

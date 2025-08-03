@@ -6,6 +6,7 @@ import com.count_out.domain.entity.workout.Exercise
 import com.count_out.domain.entity.workout.Ring
 import com.count_out.domain.entity.workout.Round
 import com.count_out.domain.entity.workout.Set
+import com.count_out.domain.repository.TypeRepo
 import com.count_out.domain.use_case.UseCase
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -14,11 +15,13 @@ import javax.inject.Inject
 class CollapsingUC @Inject constructor(configuration: Configuration
 ): UseCase<CollapsingUC.Request, CollapsingUC.Response>(configuration)  {
 
-    override fun implementation(request: Request): Flow<ResultUC<Response>> =
-        flow { emit( ResultUC.Success(Response(executeCollapsing(request.collaps)))) }
+    override fun methodRepo(request: Request): Flow<ResultUC<TypeRepo>> =
+        flow { emit( ResultUC.Success(
+            TypeRepo.CollapsingT(item = executeCollapsing(request.collaps)))) }
 
+    override fun response(typeRepo: TypeRepo): Response = Response(typeRepo)
     data class Request(val collaps: Collapsing) : UseCase.Request
-    data class Response(val collaps: Collapsing) : UseCase.Response
+    data class Response(val collaps: TypeRepo) : UseCase.Response
 
     fun executeCollapsing(item: Collapsing): Collapsing{
         return when(item.item){
@@ -35,3 +38,5 @@ class CollapsingUC @Inject constructor(configuration: Configuration
         return list
     }
 }
+//    override fun implementation(request: Request): Flow<ResultUC<Response>> =
+//        flow { emit( ResultUC.Success(Response(executeCollapsing(request.collaps)))) }

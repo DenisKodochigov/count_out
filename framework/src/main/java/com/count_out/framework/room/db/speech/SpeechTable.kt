@@ -12,6 +12,13 @@ data class SpeechTable(
     var duration: Long = 0L,
     @Ignore  var addMessage: String = "",
 ){
+    constructor(speech: SpeechImplD, id: Long = 0L): this(
+        idSpeech = id,
+        message = speech.message,
+        duration = speech.duration,
+        addMessage = speech.addMessage,
+    )
+
     fun toSpeech(): SpeechImplD {
         return SpeechImplD(
             idSpeech = this.idSpeech,

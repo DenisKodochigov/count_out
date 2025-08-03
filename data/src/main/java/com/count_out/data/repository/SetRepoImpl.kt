@@ -1,34 +1,32 @@
 package com.count_out.data.repository
 
-import com.count_out.data.models.SetImplD
 import com.count_out.data.source.room.SetSource
-import com.count_out.domain.entity.workout.Set
+import com.count_out.domain.entity.throwable.ResultUC
+import com.count_out.domain.repository.TypeRepo
 import com.count_out.domain.repository.plans.SetRepo
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.filterNotNull
 import javax.inject.Inject
 
-class SetRepoImpl @Inject constructor(private val setSource: SetSource): SetRepo {
+class SetRepoImpl @Inject constructor(private val source: SetSource): SetRepo, PrimeRepo() {
 
-    override fun gets(exerciseId: Long): Flow<List<Set>> = setSource.gets(exerciseId = exerciseId)
+    override fun gets(exerciseId: TypeRepo): Flow<ResultUC<TypeRepo>> =
+        source.gets(toTypeSource( exerciseId)).convertor()
 
-    override fun get(set: Set): Flow<Set> = setSource.get(SetImplD(set)).filterNotNull()
+    override fun get(set: TypeRepo): Flow<ResultUC<TypeRepo>> =
+        source.get(toTypeSource(set)).convertor()
 
-    override fun copy(set: Set): Flow<List<Set>> {
-        val setD = SetImplD(set)
-        setSource.copy(setD)
-        return setSource.gets(set.exerciseId)
+    override fun copy(set: TypeRepo): Flow<ResultUC<TypeRepo>> {
+        return source.copy(toTypeSource(set))
+            .nextAction{ source.gets(it)}
     }
 
-    override fun del(set: Set): Flow<Set> {
-        val setD = SetImplD(set)
-        setSource.del(setD)
-        return setSource.get(setD).filterNotNull()
+    override fun del(set: TypeRepo): Flow<ResultUC<TypeRepo>> {
+        val typeSource = toTypeSource(set)
+        return source.del(typeSource).nextActionOk { source.get(typeSource) }
     }
 
-    override fun update(set: Set): Flow<Set> {
-        val setD = SetImplD(set)
-        setSource.update(setD)
-        return setSource.get(setD).filterNotNull()
+    override fun update(set: TypeRepo): Flow<ResultUC<TypeRepo>> {
+        val typeSource = toTypeSource(set)
+        return source.update(typeSource).nextActionOk { source.get(typeSource) }
     }
 }

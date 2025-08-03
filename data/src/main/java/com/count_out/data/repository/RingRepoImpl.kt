@@ -1,30 +1,29 @@
 package com.count_out.data.repository
 
-import com.count_out.data.models.RingImpl
 import com.count_out.data.source.room.RingSource
-import com.count_out.domain.entity.workout.Ring
+import com.count_out.domain.entity.throwable.ResultUC
+import com.count_out.domain.repository.TypeRepo
 import com.count_out.domain.repository.plans.RingRepo
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.filterNotNull
 import javax.inject.Inject
 
-class RingRepoImpl @Inject constructor(private val ringSource: RingSource): RingRepo {
-    override fun get(ring: Ring): Flow<Ring> = ringSource.get(ring as RingImpl).filterNotNull()
+class RingRepoImpl @Inject constructor(private val source: RingSource): RingRepo, PrimeRepo() {
+    override fun get(ring: TypeRepo): Flow<ResultUC<TypeRepo>> =
+        source.get(toTypeSource(ring)).convertor()
 
-    override fun gets(trainingId: Long): Flow<List<Ring>> = ringSource.gets(trainingId)
+    override fun gets(trainingId: TypeRepo): Flow<ResultUC<TypeRepo>> =
+        source.get(toTypeSource(trainingId)).convertor()
 
-    override fun del(ring: Ring): Flow<List<Ring>> {
-        ringSource.del(ring as RingImpl)
-        return ringSource.gets(ring.trainingId)
-    }
+    override fun del(ring: TypeRepo): Flow<ResultUC<TypeRepo>> =
+        source.del(toTypeSource(ring))
+            .nextActionOk { source.gets(toTypeSource(ring)) }
 
-    override fun copy(ring: Ring): Flow<List<Ring>> {
-        ringSource.copy(ring as RingImpl)
-        return ringSource.gets(ring.trainingId)
-    }
+    override fun copy(ring: TypeRepo): Flow<ResultUC<TypeRepo>> =
+        source.copy(toTypeSource(ring))
+            .nextAction { source.gets(toTypeSource(ring)) }
 
-    override fun update(ring: Ring): Flow<List<Ring>> {
-        ringSource.update(ring as RingImpl)
-        return ringSource.gets(ring.trainingId)
-    }
+
+    override fun update(ring: TypeRepo): Flow<ResultUC<TypeRepo>> =
+        source.update(toTypeSource(ring))
+            .nextActionOk { source.gets(toTypeSource(ring)) }
 }

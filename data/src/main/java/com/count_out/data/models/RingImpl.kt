@@ -6,7 +6,6 @@ import com.count_out.domain.entity.workout.Parameter
 import com.count_out.domain.entity.workout.Ring
 import com.count_out.domain.entity.workout.SpeechKit
 
-
 data class RingImpl(
     override val idRing: Long = 0L,
     override var name: String = "",
@@ -17,4 +16,15 @@ data class RingImpl(
     override val exercise: List<Exercise> = emptyList(),
     override val amount: Int = 0,
     override val duration: Parameter = ParameterImpl(value = 0.0, unit = Units.M),
-): Ring
+): Ring{
+    constructor(ring: Ring) : this(
+        idRing = ring.idRing,
+        name = ring.name,
+        countRing = ring.countRing,
+        trainingId = ring.trainingId,
+        speechId = ring.speechId,
+        speech = ring.speech,
+        exercise = ring.exercise,
+        duration = ring.duration,
+        amount = ring.amount,
+    )}

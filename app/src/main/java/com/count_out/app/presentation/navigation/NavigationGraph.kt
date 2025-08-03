@@ -20,7 +20,7 @@ import androidx.navigation.compose.composable
 import com.count_out.app.presentation.Const.DEFAULT_SCREEN
 import com.count_out.app.presentation.Const.DELAY_SCREEN
 import com.count_out.app.presentation.Const.DURATION_SCREEN
-import com.count_out.presentation.screens.start_screen.ExecuteViewModel
+import com.count_out.presentation.screens.execute.ExecuteViewModel
 import com.count_out.presentation.screens.history.HistoryViewModel
 import com.count_out.presentation.screens.settings.SettingViewModel
 import com.count_out.presentation.screens.training.TrainingViewModel

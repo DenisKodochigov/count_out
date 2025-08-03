@@ -46,6 +46,26 @@ data class SetTable (
         timeRest = set.rest.value,
         timeRestU = set.rest.unit.ordinal,
     )
+    constructor(set: SetImplD, id: Long = set.idSet, idSpeech: Long = set.speechId): this(
+        idSet = id,
+        name = set.name,
+        speechId = idSpeech,
+        goal = set.goal.ordinal,
+        exerciseId = set.exerciseId,
+        reps = set.reps,
+        duration = set.duration.value,
+        durationU = set.duration.unit.ordinal,
+        distance = set.distance.value,
+        distanceU = set.distance.unit.ordinal,
+        weight = set.weight.value,
+        weightU = set.weight.unit.ordinal,
+        intervalReps = set.intervalReps,
+        intensity = set.intensity.ordinal,
+        intervalDown = set.intervalDown,
+        groupCount = set.groupCount,
+        timeRest = set.rest.value,
+        timeRestU = set.rest.unit.ordinal,
+    )
 //    fun toSetImpl() = SetImpl(
 //        idSet = this.idSet,
 //        name = this.name,

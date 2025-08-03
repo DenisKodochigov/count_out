@@ -1,19 +1,20 @@
 package com.count_out.framework.room.source
 
-import com.count_out.data.models.RingImpl
+import android.database.sqlite.SQLiteConstraintException
 import com.count_out.data.models.RoundImpl
 import com.count_out.data.models.SpeechKitImplD
-import com.count_out.data.models.TrainingImplD
 import com.count_out.data.models.throwable.ResultSource
-import com.count_out.data.source.SourceData
+import com.count_out.data.models.throwable.ThrowableDS
+import com.count_out.data.models.throwable.TypeSource
+import com.count_out.data.source.PrimeSource
 import com.count_out.data.source.room.RingSource
 import com.count_out.data.source.room.RoundSource
 import com.count_out.data.source.room.TrainingSource
-import com.count_out.domain.entity.enums.RoundType
 import com.count_out.framework.room.db.training.TrainingDao
 import com.count_out.framework.room.db.training.TrainingTable
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.filterNotNull
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
@@ -22,48 +23,102 @@ class TrainingSourceImpl @Inject constructor(
     private val roundSource: RoundSource,
     private val ringSource: RingSource,
     private val speechKitSource: SpeechKitSourceImpl,
-): TrainingSource, SourceData() {
+): TrainingSource, PrimeSource() {
 
-    override fun update(training: TrainingImplD) {
-        training.speech?.let { speechKitSource.update(SpeechKitImplD(it)) }
-        training.rounds.forEach { round -> roundSource.update(round as RoundImpl) }
-        dao.update(TrainingTable(training))
+    override fun gets(): Flow<ResultSource<TypeSource>>{
+        return try {
+            dao.getTrainingsRel().filterNotNull().map { list ->
+                TypeSource.PlansT(list.filterNotNull().map { it.toTraining() }) }.resultSource()
+        } catch(e: SQLiteConstraintException) {
+            flow { emit(ResultSource.Error(ThrowableDS.extract(e)))} }
     }
 
-    override fun copy(training: TrainingImplD): Long {
-        val speechId = speechKitSource.copyValue(
-            training.speech?.let { it as SpeechKitImplD } ?: SpeechKitImplD()) ?: 0L
-        val trainingId = (dao.add(TrainingTable(name = training.name, speechId = speechId))) ?: 0
-        if (trainingId > 0){
-            if (training.rounds.isNotEmpty()) {
-                training.rounds.forEach { round ->
-                    roundSource.copy((round as RoundImpl).copy(trainingId = trainingId))
+    override fun get(training: TypeSource): Flow<ResultSource<TypeSource>> {
+        return try {
+            if (training is TypeSource.PlanT) {
+                dao.getTrainingRel(training.item.idTraining).filterNotNull()
+                    .map { TypeSource.PlanT(it.toTraining()) }.resultSource()
+            } else flow { emit(ResultSource.Error(ThrowableDS.NotValidType())) }
+        } catch(e: SQLiteConstraintException) {
+            flow { emit(ResultSource.Error(ThrowableDS.extract(e)))} }
+    }
+
+    override fun getId(id: TypeSource): Flow<ResultSource<TypeSource>> {
+        return try {
+            if (id is TypeSource.LongT) {
+                dao.getTrainingRel(id.item).filterNotNull()
+                    .map { TypeSource.PlanT(it.toTraining()) }.resultSource()
+            } else flow { emit(ResultSource.Error(ThrowableDS.NotValidType())) }
+        } catch(e: SQLiteConstraintException) {
+            flow { emit(ResultSource.Error(ThrowableDS.extract(e)))} }
+    }
+
+    override fun copy(training: TypeSource): ResultSource<TypeSource> {
+        return try {
+            if (training is TypeSource.PlanT) {
+                val speechKitTypeSource = TypeSource.SpeechKitT(
+                    training.item.speech?.let { it as SpeechKitImplD } ?: SpeechKitImplD())
+                speechKitSource.copy(speechKitTypeSource).result { idSpeechKit->
+                    if (idSpeechKit is TypeSource.LongT) {
+                        dao.add(TrainingTable(training.item, idSpeechKit.item))
+                            .let{ id->
+                                if (id == 0L) ResultSource.Error(ThrowableDS.RequestFailed())
+                                else {
+                                    var error = false
+                                    training.item.rounds.forEach{ round->
+                                        roundSource.copy(TypeSource.RoundT(round)).let{
+                                            if (it is ResultSource.Error) {
+                                                error = true
+                                                return@forEach }
+                                        }
+                                    }
+                                    if (error) ResultSource.Error(ThrowableDS.RequestFailed())
+                                    else ResultSource.Success(TypeSource.LongT(id))
+                                }
+                        }
+                    } else ResultSource.Error(ThrowableDS.NotValidType())
                 }
-            } else {
-                roundSource.copy(RoundImpl(trainingId = trainingId, roundType = RoundType.WorkUp))
-                roundSource.copy(RoundImpl(trainingId = trainingId, roundType = RoundType.WorkOut))
-                roundSource.copy(RoundImpl(trainingId = trainingId, roundType = RoundType.WorkDown))
-            }
-        }
-        return trainingId
+            } else ResultSource.Error(ThrowableDS.NotValidType())
+        } catch (e: SQLiteConstraintException) { ResultSource.Error(ThrowableDS.extract(e)) }
+    }
+    override fun del(training: TypeSource): ResultSource<TypeSource> {
+        return try {
+            if (training is TypeSource.PlanT) {
+                var error = false
+                training.item.speech?.let {
+                    speechKitSource.del(TypeSource.SpeechKitT(SpeechKitImplD(it)))}
+                if (training.item.rounds.isNotEmpty()){
+                    training.item.rounds.forEach { round ->
+                        roundSource.del(TypeSource.RoundT(RoundImpl(round)))
+                            .let { result->
+                            if (result is ResultSource.Error) {
+                                error = true
+                                return@forEach
+                            }
+                        }
+                    }
+                }
+                if (error)ResultSource.Error(ThrowableDS.RequestFailed())
+                else {
+                    dao.del(training.item.idTraining).let{ result->
+                        if (result == 0) ResultSource.Error(ThrowableDS.RequestFailed())
+                        else ResultSource.Success(TypeSource.IntT(result))
+                    }
+                }
+            } else ResultSource.Error(ThrowableDS.NotValidType())
+        } catch (e: SQLiteConstraintException) { ResultSource.Error(ThrowableDS.extract(e)) }
     }
 
-    override fun gets(): Flow<List<TrainingImplD>> {
-        return dao.getTrainingsRel().map {
-            list -> list.map { item -> item.toTraining() } }
-    }
-
-    override fun get(training: TrainingImplD): Flow<TrainingImplD?> {
-        return dao.getTrainingRel(training.idTraining).map { it?.toTraining() }
-    }
-
-    override fun get2(id: Long): Flow<ResultSource<TrainingImplD>> {
-        return dao.getTrainingRel(id).filterNotNull().map { it.toTraining()}.resultSource()
-    }
-    override fun del(training: TrainingImplD) {
-        training.rounds.forEach { roundSource.del(it as RoundImpl) }
-        training.rings.forEach { ringSource.del(it as RingImpl) }
-        training.speech?.let { speechKitSource.del(it as SpeechKitImplD) }
-        dao.del(training.idTraining)
+    override fun update(training: TypeSource): ResultSource<TypeSource> {
+        return try {
+            if (training is TypeSource.PlanT) {
+                training.item.speech?.let {speechKitSource.update(
+                    TypeSource.SpeechKitT(SpeechKitImplD(it)))}
+                dao.update(TrainingTable(training.item)).let{result->
+                    if (result == 0) ResultSource.Error(ThrowableDS.RequestFailed())
+                    else ResultSource.Success(TypeSource.IntT(result))
+                }
+            } else ResultSource.Error(ThrowableDS.NotValidType())
+        } catch (e: SQLiteConstraintException) { ResultSource.Error(ThrowableDS.extract(e)) }
     }
 }

@@ -2,8 +2,12 @@ package com.count_out.domain.use_case.other
 
 import com.count_out.domain.entity.throwable.ResultUC
 import com.count_out.domain.entity.weather.Weather
+import com.count_out.domain.entity.weather.WeatherRequest
+import com.count_out.domain.repository.TypeRepo
 import com.count_out.domain.repository.WeatherRepo
 import com.count_out.domain.use_case.UseCase
+import com.count_out.domain.use_case.plans.GetTrainingsUC
+import com.count_out.domain.use_case.plans.GetTrainingsUC.Response
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
@@ -11,9 +15,11 @@ import javax.inject.Inject
 class GetWeatherUC @Inject constructor(configuration: Configuration, private val repo: WeatherRepo
 ): UseCase<GetWeatherUC.Request, GetWeatherUC.Response>(configuration)  {
 
-    override fun implementation(request: Request): Flow<ResultUC<Response>> =
-        repo.get(request.latitude, request.longitude, request.timezone).map { ResultUC.Success(Response(it)) }
-
-    data class Request(val latitude: Double, val longitude: Double, val timezone: String) : UseCase.Request
-    data class Response(val weather: Weather) : UseCase.Response
+    override fun methodRepo(request: Request): Flow<ResultUC<TypeRepo>> =
+        repo.get(TypeRepo.WeatherRequestT(request.weatherRequest))
+    override fun response(typeRepo: TypeRepo): Response = Response(typeRepo)
+    data class Request(val weatherRequest: WeatherRequest) : UseCase.Request
+    data class Response(val weather: TypeRepo) : UseCase.Response
 }
+//    override fun implementation(request: Request): Flow<ResultUC<Response>> =
+//        repo.get(request.latitude, request.longitude, request.timezone).map { ResultUC.Success(Response(it)) }

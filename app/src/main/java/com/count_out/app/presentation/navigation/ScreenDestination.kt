@@ -17,8 +17,8 @@ import com.count_out.presentation.screens.plans.PlansScreen
 import com.count_out.presentation.screens.plans.PlansViewModel
 import com.count_out.presentation.screens.settings.SettingScreen
 import com.count_out.presentation.screens.settings.SettingViewModel
-import com.count_out.presentation.screens.start_screen.ExecuteViewModel
-import com.count_out.presentation.screens.start_screen.ExecuteWorkoutScreen
+import com.count_out.presentation.screens.execute.ExecuteViewModel
+import com.count_out.presentation.screens.execute.ExecuteWorkoutScreen
 import com.count_out.presentation.screens.training.TrainingScreen
 import com.count_out.presentation.screens.training.TrainingViewModel
 

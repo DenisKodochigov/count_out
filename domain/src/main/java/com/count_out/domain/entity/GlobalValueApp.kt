@@ -11,12 +11,13 @@ import kotlinx.coroutines.flow.MutableStateFlow
 object GlobalValueApp {
     var planRun: MutableStateFlow<Training?> = MutableStateFlow(null)
 
-    fun toStepPlan(training: Training?): StepPlan?{
+//
+    fun toStepPlan1(training: Training): StepPlan{
         var numberExercise = 1
         var exerciseCount = 0
 
         val list: MutableList<StepPlan> = mutableListOf()
-        return training?.let { tr->
+        return training.let { tr->
             tr.rounds.forEachIndexed { indR, round-> exerciseCount += round.exercise.count() }
             tr.rounds.forEachIndexed { indR, round->
                 round.exercise.forEachIndexed { indE, exercise ->
@@ -46,7 +47,20 @@ object GlobalValueApp {
                     numberExercise ++
                 }
             }
-        }.run { if (list.isEmpty()) null else list[0] }
+        }.run { if (list.isNotEmpty()) list[0] else
+            object: StepPlan{
+                override val idPlan: Long = 1
+                override val namePlan: String = ""
+                override val round: Round? = null
+                override val exercise: Exercise? = null
+                override var nextExercise: NextExercise? = null
+                override val numberExercise: Int = numberExercise
+                override val quantityExercise: Int = exerciseCount
+                override var currentSet: Set? = null
+                override val numberSet: Int = 1
+                override val quantitySet: Int = 1
+            }
+        }
     }
 
     fun nextExercise(exercise: Exercise): NextExercise {
@@ -67,3 +81,41 @@ object GlobalValueApp {
         }
     }
 }
+
+//fun toStepPlan(training: Training?): StepPlan?{
+//        var numberExercise = 1
+//        var exerciseCount = 0
+//
+//        val list: MutableList<StepPlan> = mutableListOf()
+//        return training?.let { tr->
+//            tr.rounds.forEachIndexed { indR, round-> exerciseCount += round.exercise.count() }
+//            tr.rounds.forEachIndexed { indR, round->
+//                round.exercise.forEachIndexed { indE, exercise ->
+//                    if (list.isNotEmpty()){
+//                        val nextExercise = nextExercise(exercise)
+//                        for (ind in list.lastIndex downTo 0){
+//                            if (list[ind].nextExercise == null){
+//                                list[ind].nextExercise = nextExercise
+//                            }
+//                        }
+//                    }
+//                    exercise.sets.forEachIndexed { indS, set->
+//                        list.add(
+//                            object: StepPlan{
+//                                override val idPlan: Long = tr.idTraining
+//                                override val namePlan: String = tr.name
+//                                override val round: Round? = round
+//                                override val exercise: Exercise? = exercise
+//                                override var nextExercise: NextExercise? = null
+//                                override val numberExercise: Int = numberExercise
+//                                override val quantityExercise: Int = exerciseCount
+//                                override var currentSet: Set? = set
+//                                override val numberSet: Int = indS + 1
+//                                override val quantitySet: Int = exercise.sets.count()
+//                            })
+//                    }
+//                    numberExercise ++
+//                }
+//            }
+//        }.run { if (list.isEmpty()) null else list[0] }
+//    }

@@ -10,7 +10,7 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 class UtilsModule {
-    @Singleton
-    @Provides
-    fun provideConverterResult(): ConverterResult = ConverterResult()
+//    @Singleton
+//    @Provides
+//    fun provideConverterResult(): ConverterResult = ConverterResult()
 }
