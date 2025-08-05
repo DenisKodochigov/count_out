@@ -2,7 +2,7 @@ package com.count_out.presentation.models
 
 import com.count_out.domain.entity.workout.Activity
 
-data class ActivityImpl(
+data class ActivityImplP(
     override val idActivity: Long,
     override val name: String,
     override val description: String,

@@ -1,5 +1,8 @@
 package com.count_out.presentation.screens.training
 
+import android.R.attr.data
+import android.util.Log
+import com.count_out.domain.entity.workout.Training
 import com.count_out.domain.repository.TypeRepo
 import com.count_out.domain.use_case.UseCase
 import com.count_out.domain.use_case.other.CollapsingUC
@@ -34,8 +37,9 @@ class TrainingConverter @Inject constructor(): PrimeConvertor<UseCase.Response, 
         }
     }
     private fun converterLocal(data: GetTrainingUC.Response, state: MutableStateFlow<TrainingState>): TrainingState {
-        if (data.training is TypeRepo.PlanT)
-            state.value = state.value.copy( training = (data.training as TypeRepo.PlanT).item)
+        if (data.training is TypeRepo.PlanT) {
+            state.value = state.value.copy(training = (data.training as TypeRepo.PlanT).item)
+        }
         return state.value
     }
     private fun converterLocal(data: UpdateTrainingUC.Response, state: MutableStateFlow<TrainingState>): TrainingState {
@@ -73,7 +77,8 @@ class TrainingConverter @Inject constructor(): PrimeConvertor<UseCase.Response, 
     }
     private fun converterOther( state: MutableStateFlow<TrainingState>): TrainingState {
         state.value = state.value.copy(training = TrainingImplP())
-        return state.value}
+        return state.value
+    }
 }
 
 //    private fun converterLocal(data: ShowBSSpeechTrainingUC.Response): TrainingState {

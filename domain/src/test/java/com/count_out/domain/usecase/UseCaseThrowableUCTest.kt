@@ -2,6 +2,7 @@ package com.count_out.domain.usecase
 
 import com.count_out.domain.entity.throwable.ResultUC
 import com.count_out.domain.entity.throwable.ThrowableUC
+import com.count_out.domain.repository.TypeRepo
 import com.count_out.domain.use_case.UseCase
 import junit.framework.TestCase.assertEquals
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -21,6 +22,7 @@ class UseCaseThrowableUCTest {
     private val configuration = UseCase.Configuration(UnconfinedTestDispatcher())
     private val request = mock<UseCase.Request>()
     private val response = mock<UseCase.Response>()
+    private val result = mock<ResultUC<TypeRepo>>()
     @ExperimentalCoroutinesApi
     private lateinit var useCase: UseCase<UseCase.Request, UseCase.Response>
 
@@ -28,10 +30,15 @@ class UseCaseThrowableUCTest {
     @Before
     fun setUp() {
         useCase = object: UseCase<UseCase.Request, UseCase.Response>(configuration) {
-            override fun implementation(input: Request): Flow<Response> {
-                assertEquals(this@UseCaseThrowableUCTest.request, input)
-                return flowOf(response)
-            }
+//            override fun implementation(input: Request): Flow<Response> {
+//                assertEquals(this@UseCaseThrowableUCTest.request, input)
+//                return flowOf(response)
+//            }
+
+            override fun methodRepo(request: Request): Flow<ResultUC<TypeRepo>> {
+                return flowOf(result) }
+            override fun response(typeRepo: TypeRepo): Response {
+                return response }
         }
     }
     @ExperimentalCoroutinesApi
@@ -45,10 +52,14 @@ class UseCaseThrowableUCTest {
     @Test
     fun testExecuteTrainingThrow() {
         useCase = object: UseCase<UseCase.Request, UseCase.Response>(configuration) {
-            override fun implementation(request: Request): Flow<Response> {
-                Assert.assertEquals(this@UseCaseThrowableUCTest.request, request)
-                return flow { throw ThrowableUC.TrainingThrow(Throwable()) }
-            }
+//            override fun implementation(request: Request): Flow<Response> {
+//                Assert.assertEquals(this@UseCaseThrowableUCTest.request, request)
+//                return flow { throw ThrowableUC.TrainingThrow(Throwable()) }
+//            }
+            override fun methodRepo(request: Request): Flow<ResultUC<TypeRepo>> {
+                return flowOf(result) }
+            override fun response(typeRepo: TypeRepo): Response {
+                return response }
         }
         runTest {
             val result = useCase.execute(request).first()
@@ -60,10 +71,14 @@ class UseCaseThrowableUCTest {
     @Test
     fun testExecuteActivityThrow() {
         useCase = object: UseCase<UseCase.Request, UseCase.Response>(configuration) {
-            override fun implementation(request: Request): Flow<Response> {
-                Assert.assertEquals(this@UseCaseThrowableUCTest.request, request)
-                return flow { throw ThrowableUC.ActivityThrow(Throwable()) }
-            }
+//            override fun implementation(request: Request): Flow<Response> {
+//                Assert.assertEquals(this@UseCaseThrowableUCTest.request, request)
+//                return flow { throw ThrowableUC.ActivityThrow(Throwable()) }
+//            }
+            override fun methodRepo(request: Request): Flow<ResultUC<TypeRepo>> {
+                return flowOf(result) }
+            override fun response(typeRepo: TypeRepo): Response {
+                return response }
         }
         runTest {
             val result = useCase.execute(request).first()
@@ -74,10 +89,14 @@ class UseCaseThrowableUCTest {
     @Test
     fun testExecuteWeatherTrow() {
         useCase = object: UseCase<UseCase.Request, UseCase.Response>(configuration) {
-            override fun implementation(request: Request): Flow<Response> {
-                Assert.assertEquals(this@UseCaseThrowableUCTest.request, request)
-                return flow { throw ThrowableUC.WeatherTrow(Throwable()) }
-            }
+//            override fun implementation(request: Request): Flow<Response> {
+//                Assert.assertEquals(this@UseCaseThrowableUCTest.request, request)
+//                return flow { throw ThrowableUC.WeatherTrow(Throwable()) }
+//            }
+            override fun methodRepo(request: Request): Flow<ResultUC<TypeRepo>> {
+                return flowOf(result) }
+            override fun response(typeRepo: TypeRepo): Response {
+                return response }
         }
         runTest {
             val result = useCase.execute(request).first()

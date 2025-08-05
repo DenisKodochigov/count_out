@@ -33,11 +33,11 @@ import androidx.compose.ui.unit.sp
 
 @Preview
 @Composable fun Preview() {
-    IconQ.Faster()
+    IconQ.Distance()
 }
 
 object IconQ{
-    private val fontSize = 12.sp
+    private val fontSize = 9.sp
     private val width = 39.dp
     private val height = 39.dp
     private val thick = 1.dp

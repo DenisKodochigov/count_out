@@ -2,7 +2,7 @@ package com.count_out.framework.room.db.round
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.count_out.data.models.RoundImpl
+import com.count_out.data.models.RoundImplD
 
 @Entity(tableName = "tb_round")
 data class RoundTable(
@@ -11,7 +11,7 @@ data class RoundTable(
     var speechId: Long = 0,
     var roundType: Int = 0,
 ){
-    constructor(item: RoundImpl, speechId: Long = item.speechId, idRound: Long = item.idRound): this(
+    constructor(item: RoundImplD, speechId: Long = item.speechId, idRound: Long = item.idRound): this(
         idRound = idRound,
         trainingId = item.trainingId,
         speechId = speechId,

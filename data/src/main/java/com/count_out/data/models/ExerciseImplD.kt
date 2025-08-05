@@ -31,8 +31,22 @@ data class ExerciseImplD (
        amountSet = ex.amountSet,
        duration = ex.duration
     )
-    constructor(idRing: Long, idRound: Long): this(
+    constructor(
+        ex: Exercise,
+        idExer: Long = ex.idExercise,
+        idRound: Long = ex.roundId,
+        idRing: Long = ex.ringId
+    ): this(
         roundId = idRound,
         ringId = idRing,
+        idExercise = idExer,
+        idView = ex.idView,
+        activity = ex.activity,
+        activityId = ex.activityId,
+        speechId = ex.speechId,
+        speech = ex.speech,
+        sets = ex.sets,
+        amountSet = ex.amountSet,
+        duration = ex.duration
     )
 }

@@ -2,7 +2,8 @@ package com.count_out.data.repository
 
 import com.count_out.data.models.ActivityImplD
 import com.count_out.data.models.ExerciseImplD
-import com.count_out.data.models.RingImpl
+import com.count_out.data.models.RingImplD
+import com.count_out.data.models.RoundImplD
 import com.count_out.data.models.SetImplD
 import com.count_out.data.models.SpeechImplD
 import com.count_out.data.models.SpeechKitImplD
@@ -99,66 +100,66 @@ abstract class PrimeRepo {
         return when(value){
             is TypeSource.IntT -> TypeRepo.IntT(item = value.item)
             is TypeSource.LongT -> TypeRepo.LongT(item = value.item)
-            is TypeSource.NullT -> TypeRepo.NullT
-            is TypeSource.PlanT -> TypeRepo.PlanT(item = value.item)
-            is TypeSource.PlansT -> TypeRepo.PlansT(item = value.item)
-            is TypeSource.SpeechT -> TypeRepo.SpeechT(item = value.item)
-            is TypeSource.SpeechKitT -> TypeRepo.SpeechKitT(item = value.item)
+            is TypeSource.LongsT-> TypeRepo.LongsT(item = value.item)
             is TypeSource.StringT -> TypeRepo.StringT(item = value.item)
-            is TypeSource.ActivitiesT -> TypeRepo.ActivitiesT(item = value.item)
-            is TypeSource.ActivityT -> TypeRepo.ActivityT(item = value.item)
             is TypeSource.BooleanT -> TypeRepo.BooleanT(item = value.item)
             is TypeSource.CollapsingT -> TypeRepo.CollapsingT(item = value.item)
-            is TypeSource.ExerciseT -> TypeRepo.ExerciseT(item = value.item)
-            is TypeSource.ExercisesT -> TypeRepo.ExercisesT(item = value.item)
+            is TypeSource.ShowBottomSheetT -> TypeRepo.ShowBottomSheetT(item = value.item)
+            is TypeSource.SpeechT -> TypeRepo.SpeechT(item = value.item)
+            is TypeSource.SpeechKitT -> TypeRepo.SpeechKitT(item = value.item)
             is TypeSource.SetT -> TypeRepo.SetT(item = value.item)
             is TypeSource.SetsT -> TypeRepo.SetsT(item = value.item)
+            is TypeSource.ActivityT -> TypeRepo.ActivityT(item = value.item)
+            is TypeSource.ActivitiesT -> TypeRepo.ActivitiesT(item = value.item)
+            is TypeSource.ExerciseT -> TypeRepo.ExerciseT(item = value.item)
+            is TypeSource.ExercisesT -> TypeRepo.ExercisesT(item = value.item)
+            is TypeSource.RingT-> TypeRepo.RingT(item = value.item)
+            is TypeSource.RingsT-> TypeRepo.RingsT(item = value.item)
+            is TypeSource.RoundT-> TypeRepo.RoundT(item = value.item)
+            is TypeSource.RoundsT-> TypeRepo.RoundsT(item = value.item)
+            is TypeSource.PlanT -> TypeRepo.PlanT(item = value.item)
+            is TypeSource.PlansT -> TypeRepo.PlansT(item = value.item)
+            is TypeSource.StepPlanT -> TypeRepo.StepPlanT(item = value.item)
             is TypeSource.SettingT -> TypeRepo.SettingT(item = value.item)
             is TypeSource.SettingsT -> TypeRepo.SettingsT(item = value.item)
-            is TypeSource.ShowBottomSheetT -> TypeRepo.ShowBottomSheetT(item = value.item)
-            is TypeSource.StepPlanT -> TypeRepo.StepPlanT(item = value.item)
-            is TypeSource.WeatherT -> TypeRepo.WeatherT(item = value.item)
             is TypeSource.DeviceUIT -> TypeRepo.DeviceUIT(item = value.item)
-            is TypeSource.DataForChangeSequenceT-> TypeRepo.DataForChangeSequenceT(item = value.item)
-            is TypeSource.LongsT-> TypeRepo.LongsT(item = value.item)
-            is TypeSource.RingT-> TypeRepo.RingT(item = value.item)
-            is TypeSource.RoundT-> TypeRepo.RoundT(item = value.item)
-            is TypeSource.RingsT-> TypeRepo.RingsT(item = value.item)
-            is TypeSource.RoundsT-> TypeRepo.RoundsT(item = value.item)
+            is TypeSource.WeatherT -> TypeRepo.WeatherT(item = value.item)
             is TypeSource.WeatherRequestT-> TypeRepo.WeatherRequestT(item = value.item)
+            is TypeSource.DataForChangeSequenceT-> TypeRepo.DataForChangeSequenceT(item = value.item)
+            is TypeSource.NullT -> TypeRepo.NullT
         }
     }
     fun toTypeSource(value: TypeRepo): TypeSource{
         return when(value){
             is TypeRepo.IntT -> TypeSource.IntT(item = value.item)
             is TypeRepo.LongT -> TypeSource.LongT(item = value.item)
-            is TypeRepo.NullT -> TypeSource.NullT
-            is TypeRepo.PlanT -> TypeSource.PlanT(item = TrainingImplD(value.item))
-            is TypeRepo.PlansT -> TypeSource.PlansT(item = value.item)
-            is TypeRepo.SpeechT -> TypeSource.SpeechT(item = SpeechImplD(value.item))
-            is TypeRepo.SpeechKitT -> TypeSource.SpeechKitT(item = SpeechKitImplD(value.item))
+            is TypeRepo.LongsT-> TypeSource.LongsT(item = value.item)
             is TypeRepo.StringT -> TypeSource.StringT(item = value.item)
-            is TypeRepo.ActivitiesT -> TypeSource.ActivitiesT(item = value.item)
-            is TypeRepo.ActivityT -> TypeSource.ActivityT(item = ActivityImplD(value.item))
             is TypeRepo.BooleanT -> TypeSource.BooleanT(item = value.item)
             is TypeRepo.CollapsingT -> TypeSource.CollapsingT(item = value.item)
-            is TypeRepo.ExerciseT -> TypeSource.ExerciseT(item = ExerciseImplD(value.item))
-            is TypeRepo.ExercisesT -> TypeSource.ExercisesT(item = value.item)
+            is TypeRepo.ShowBottomSheetT -> TypeSource.ShowBottomSheetT(item = value.item)
+            is TypeRepo.SpeechT -> TypeSource.SpeechT(item = SpeechImplD(value.item))
+            is TypeRepo.SpeechKitT -> TypeSource.SpeechKitT(item = SpeechKitImplD(value.item))
             is TypeRepo.SetT -> TypeSource.SetT(item = SetImplD( value.item))
             is TypeRepo.SetsT -> TypeSource.SetsT(item = value.item)
+            is TypeRepo.ActivityT -> TypeSource.ActivityT(item = ActivityImplD(value.item))
+            is TypeRepo.ActivitiesT -> TypeSource.ActivitiesT(item = value.item)
+            is TypeRepo.ExerciseT -> TypeSource.ExerciseT(item = ExerciseImplD(value.item))
+            is TypeRepo.ExercisesT -> TypeSource.ExercisesT(item = value.item)
+            is TypeRepo.RingT-> TypeSource.RingT(item = RingImplD(value.item))
+            is TypeRepo.RingsT-> TypeSource.RingsT(item = value.item)
+            is TypeRepo.RoundT-> TypeSource.RoundT(item = RoundImplD(value.item))
+            is TypeRepo.RoundsT-> TypeSource.RoundsT(item = value.item)
+            is TypeRepo.PlanT -> TypeSource.PlanT(item = TrainingImplD(value.item))
+            is TypeRepo.PlansT -> TypeSource.PlansT(item = value.item)
+            is TypeRepo.StepPlanT -> TypeSource.StepPlanT(item = value.item)
             is TypeRepo.SettingT -> TypeSource.SettingT(item = value.item)
             is TypeRepo.SettingsT -> TypeSource.SettingsT(item = value.item)
-            is TypeRepo.ShowBottomSheetT -> TypeSource.ShowBottomSheetT(item = value.item)
-            is TypeRepo.StepPlanT -> TypeSource.StepPlanT(item = value.item)
-            is TypeRepo.WeatherT -> TypeSource.WeatherT(item = value.item)
             is TypeRepo.DeviceUIT-> TypeSource.DeviceUIT(item = value.item)
-            is TypeRepo.DataForChangeSequenceT-> TypeSource.DataForChangeSequenceT(item = value.item)
-            is TypeRepo.LongsT-> TypeSource.LongsT(item = value.item)
-            is TypeRepo.RingT-> TypeSource.RingT(item = RingImpl(value.item))
-            is TypeRepo.RoundT-> TypeSource.RoundT(item = value.item)
-            is TypeRepo.RingsT-> TypeSource.RingsT(item = value.item)
-            is TypeRepo.RoundsT-> TypeSource.RoundsT(item = value.item)
+            is TypeRepo.WeatherT -> TypeSource.WeatherT(item = value.item)
             is TypeRepo.WeatherRequestT-> TypeSource.WeatherRequestT(item = value.item)
+            is TypeRepo.DataForChangeSequenceT-> TypeSource.DataForChangeSequenceT(item = value.item)
+            is TypeRepo.NullT -> TypeSource.NullT
         }
     }
 }

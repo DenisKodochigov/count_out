@@ -4,8 +4,8 @@ import androidx.room.Embedded
 import androidx.room.Relation
 import com.count_out.data.models.ExerciseImplD
 import com.count_out.data.models.ParameterImpl
-import com.count_out.data.models.RingImpl
-import com.count_out.data.models.RoundImpl
+import com.count_out.data.models.RingImplD
+import com.count_out.data.models.RoundImplD
 import com.count_out.data.models.SetImplD
 import com.count_out.data.models.SpeechKitImplD
 import com.count_out.data.models.TrainingImplD
@@ -103,8 +103,8 @@ data class RoundRel(
     @Relation(parentColumn = "idRound", entityColumn = "roundId", entity = ExerciseTable::class) val exercise: List<ExerciseRel>?,
     @Relation(parentColumn = "speechId", entityColumn = "idSpeechKit", entity = SpeechKitTable::class) val speechKit: SpeechKitRel?,
 ){
-    fun toRound(): RoundImpl {
-        return RoundImpl(
+    fun toRound(): RoundImplD {
+        return RoundImplD(
             exercise = exercise?.map { it.toExercise() } ?: emptyList(),  ///.sortedBy{ it.idView }.sortedBy{ it.idView } реализовать в usecase
             idRound = round.idRound,
             roundType = RoundType.entries[round.roundType],
@@ -130,8 +130,8 @@ data class RingRel(
     @Relation(parentColumn = "idRing", entityColumn = "ringId", entity = ExerciseTable::class) val exercise: List<ExerciseRel>?,
     @Relation(parentColumn = "speechId", entityColumn = "idSpeechKit", entity = SpeechKitTable::class) val speechKit: SpeechKitRel?,
 ){
-    fun toRing(): RingImpl {
-        return RingImpl(
+    fun toRing(): RingImplD {
+        return RingImplD(
             idRing = ring.idRing,
             trainingId = ring.trainingId,
             name = ring.name,

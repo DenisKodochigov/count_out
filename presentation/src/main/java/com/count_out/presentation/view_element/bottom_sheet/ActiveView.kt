@@ -1,7 +1,6 @@
 package com.count_out.presentation.view_element.bottom_sheet
 
 import android.annotation.SuppressLint
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -33,7 +32,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.count_out.domain.entity.workout.Activity
 import com.count_out.presentation.R
-import com.count_out.presentation.models.ActivityImpl
+import com.count_out.presentation.models.ActivityImplP
 import com.count_out.presentation.models.TypeKeyboard
 import com.count_out.presentation.screens.settings.SettingsEvent
 import com.count_out.presentation.screens.settings.SettingsState
@@ -46,7 +45,7 @@ import com.count_out.presentation.view_element.dialog.ChangeColorSectionDialog
 @Composable fun CardActivity(dataState: SettingsState, activity: Activity) {
     Frame {
         ActivityInfo(
-            activity = mutableStateOf(ActivityImpl(activity)),
+            activity = mutableStateOf(ActivityImplP(activity)),
             onSelect = {
                 dataState.activity.value = activity
                 dataState.showBottomSheetAddActivity.value = true },
@@ -58,9 +57,9 @@ import com.count_out.presentation.view_element.dialog.ChangeColorSectionDialog
 
 @Composable fun ActivityInfo(
     edit: Boolean = false,
-    activity: MutableState<ActivityImpl>,
+    activity: MutableState<ActivityImplP>,
     onSelect: () -> Unit = {},
-    onChange: (ActivityImpl) -> Unit = {},
+    onChange: (ActivityImplP) -> Unit = {},
     onDeleteActivity:(Long)-> Unit = {}
 ){
     val activityChangeColor: MutableState<Activity?> = remember { mutableStateOf(null) }
@@ -105,7 +104,7 @@ import com.count_out.presentation.view_element.dialog.ChangeColorSectionDialog
     }
 }
 @Composable fun ActivityInfoFull(
-    activity: MutableState<ActivityImpl>,
+    activity: MutableState<ActivityImplP>,
     onChange: (Activity) -> Unit = {},
 ){
     val modifier = Modifier.padding(horizontal = 6.dp, vertical = 4.dp)

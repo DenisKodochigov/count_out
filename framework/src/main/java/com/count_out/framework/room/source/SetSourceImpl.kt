@@ -1,6 +1,7 @@
 package com.count_out.framework.room.source
 
 import android.database.sqlite.SQLiteConstraintException
+import android.util.Log
 import com.count_out.data.models.SpeechKitImplD
 import com.count_out.data.models.throwable.ResultSource
 import com.count_out.data.models.throwable.ThrowableDS
@@ -20,11 +21,11 @@ class SetSourceImpl @Inject constructor(
     private val dao: SetDao
 ): SetSource, PrimeSource() {
 
-    override fun get(id: TypeSource): Flow<ResultSource<TypeSource>> =
+    override fun get(set: TypeSource): Flow<ResultSource<TypeSource>> =
         try {
-            if (id is TypeSource.LongT) {
-                dao.get(id.item).filterNotNull().map { TypeSource.SetT(it.toSet()) }.resultSource()
-            } else flow { emit(ResultSource.Error(ThrowableDS.NotValidType())) }
+            if (set is TypeSource.SetT) {
+                dao.get(set.item.idSet).filterNotNull().map { TypeSource.SetT(it.toSet()) }.resultSource()
+            } else { flow { emit(ResultSource.Error(ThrowableDS.NotValidType())) } }
         } catch(e: SQLiteConstraintException) {
             flow { emit(ResultSource.Error(ThrowableDS.extract(e)))} }
 
@@ -57,7 +58,7 @@ class SetSourceImpl @Inject constructor(
 
     fun temp(set: TypeSource, action:(SetTable)->Int, actionSp:(TypeSource)->ResultSource<TypeSource>
     ): ResultSource<TypeSource>{
-        return if (set is TypeSource.SetT) {
+        val result = if (set is TypeSource.SetT) {
             try {
                 set.item.speech?.let {
                     actionSp(TypeSource.SpeechKitT(SpeechKitImplD(it)))}
@@ -67,6 +68,7 @@ class SetSourceImpl @Inject constructor(
                 }
             } catch (e: SQLiteConstraintException) { ResultSource.Error(ThrowableDS.extract(e)) }
         } else ResultSource.Error(ThrowableDS.NotValidType())
+        return result
     }
 }
 //        if (set is TypeSource.SetT) {

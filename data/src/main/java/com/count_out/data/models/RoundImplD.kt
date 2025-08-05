@@ -7,7 +7,7 @@ import com.count_out.domain.entity.workout.Parameter
 import com.count_out.domain.entity.workout.Round
 import com.count_out.domain.entity.workout.SpeechKit
 
-data class RoundImpl(
+data class RoundImplD(
     override val idRound: Long = 0L,
     override val trainingId: Long = 0L,
     override val speechId: Long = 0L,
@@ -17,9 +17,9 @@ data class RoundImpl(
     override val amount: Int = 0,
     override val duration: Parameter = ParameterImpl(0.0, Units.M)
 ): Round {
-    constructor(round: Round): this(
-        idRound = round.idRound,
-        trainingId = round.trainingId,
+    constructor(round: Round, id: Long = round.idRound, idPlan: Long = round.trainingId): this(
+        idRound = id,
+        trainingId = idPlan,
         speechId = round.speechId,
         roundType = round.roundType,
         speech = round.speech,

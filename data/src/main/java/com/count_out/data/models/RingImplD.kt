@@ -6,7 +6,7 @@ import com.count_out.domain.entity.workout.Parameter
 import com.count_out.domain.entity.workout.Ring
 import com.count_out.domain.entity.workout.SpeechKit
 
-data class RingImpl(
+data class RingImplD(
     override val idRing: Long = 0L,
     override var name: String = "",
     override val countRing: Int = 0,

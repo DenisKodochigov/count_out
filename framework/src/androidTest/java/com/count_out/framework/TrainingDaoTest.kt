@@ -4,7 +4,7 @@ import androidx.room.Room
 import androidx.test.platform.app.InstrumentationRegistry
 import com.count_out.data.models.ExerciseImplD
 import com.count_out.data.models.ParameterImpl
-import com.count_out.data.models.RoundImpl
+import com.count_out.data.models.RoundImplD
 import com.count_out.data.models.SetImplD
 import com.count_out.data.models.SpeechImplD
 import com.count_out.data.models.SpeechKitImplD
@@ -100,7 +100,7 @@ class TrainingDaoTest {
                 idTraining=1,
                 name="Test 1",
                 amountActivity=3,
-                rounds= listOf(RoundImpl(
+                rounds= listOf(RoundImplD(
                     idRound=1,
                     trainingId=1,
                     speechId=2,
@@ -140,7 +140,7 @@ class TrainingDaoTest {
                     ),
                     amount=1,
                     duration=ParameterImpl(value=0.18333333333333332, unit=Units.M)),
-                    RoundImpl(
+                    RoundImplD(
                         idRound=2,
                         trainingId=1,
                         speechId=5,
@@ -188,7 +188,7 @@ class TrainingDaoTest {
                         ),
                         amount=1,
                         duration=ParameterImpl(value=0.18333333333333332, unit=Units.M)),
-                    RoundImpl(
+                    RoundImplD(
                         idRound=3,
                         trainingId=1,
                         speechId=8,

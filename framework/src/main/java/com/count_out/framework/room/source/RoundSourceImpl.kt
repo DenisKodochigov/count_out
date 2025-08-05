@@ -2,7 +2,7 @@ package com.count_out.framework.room.source
 
 import android.database.sqlite.SQLiteConstraintException
 import com.count_out.data.models.ExerciseImplD
-import com.count_out.data.models.RoundImpl
+import com.count_out.data.models.RoundImplD
 import com.count_out.data.models.SpeechKitImplD
 import com.count_out.data.models.throwable.ResultSource
 import com.count_out.data.models.throwable.ThrowableDS
@@ -51,24 +51,24 @@ class RoundSourceImpl @Inject constructor(
                     round.item.speech?.let { it as SpeechKitImplD } ?: SpeechKitImplD())
                 speechKitSource.copy(speechKitTypeSource).result { idSpeechKit->
                     if (idSpeechKit is TypeSource.LongT) {
-                        dao.add(RoundTable(RoundImpl(round.item), idSpeechKit.item,0L))
-                            .let{id->
-                                if (id == 0L) ResultSource.Error(ThrowableDS.RequestFailed())
+                        dao.add(RoundTable(RoundImplD(round.item,0L), idSpeechKit.item,0L))
+                            .let{idRound->
+                                if (idRound == 0L) ResultSource.Error(ThrowableDS.RequestFailed())
                                 else if (round.item.exercise.isNotEmpty()){
                                     var error = false
                                     round.item.exercise.forEach { exercise ->
                                         source.copy(
                                             TypeSource.ExerciseT(
-                                                ExerciseImplD(exercise))).let{
+                                                ExerciseImplD(exercise,0L, idRound))).let{
                                             if (it is ResultSource.Error) {
                                                 error = true
                                                 return@forEach
                                             } }
                                     }
                                     if (error) ResultSource.Error(ThrowableDS.RequestFailed())
-                                    else ResultSource.Success(TypeSource.LongT(id))
+                                    else ResultSource.Success(TypeSource.LongT(idRound))
                                 } else source.copy(
-                                    TypeSource.ExerciseT(ExerciseImplD(ringId = id)))
+                                    TypeSource.ExerciseT(ExerciseImplD(ringId = idRound)))
                             }
                     }
                     else ResultSource.Error(ThrowableDS.NotValidType())
@@ -110,7 +110,7 @@ class RoundSourceImpl @Inject constructor(
             if (round is TypeSource.RoundT) {
                 round.item.speech?.let {speechKitSource.update(
                     TypeSource.SpeechKitT(SpeechKitImplD(it)))}
-                dao.update(RoundTable(RoundImpl(round.item))).let{result->
+                dao.update(RoundTable(RoundImplD(round.item))).let{ result->
                     if (result == 0) ResultSource.Error(ThrowableDS.RequestFailed())
                     else ResultSource.Success(TypeSource.IntT(result))
                 }

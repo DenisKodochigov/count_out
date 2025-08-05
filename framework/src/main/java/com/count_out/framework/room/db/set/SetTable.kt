@@ -3,6 +3,7 @@ package com.count_out.framework.room.db.set
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.count_out.data.models.SetImplD
+import com.count_out.domain.entity.enums.Units
 
 @Entity(tableName = "tb_set")
 data class SetTable (
@@ -13,17 +14,17 @@ data class SetTable (
     var exerciseId: Long = 0,
     var reps: Int = 0,
     var duration: Double = 0.0,
-    var durationU: Int = 1,
+    var durationU: Int = Units.S.ordinal,
     var distance: Double = 0.0,
-    var distanceU: Int = 1,
+    var distanceU: Int = Units.MT.ordinal,
     var weight: Double = 0.0,
-    var weightU: Int = 1,
+    var weightU: Int = Units.GR.ordinal,
     var intervalReps: Double = 0.0,
     var intensity: Int = 1,
     var intervalDown: Int = 0,
     var groupCount: String = "",
     var timeRest: Double = 0.0,
-    var timeRestU: Int = 1,
+    var timeRestU: Int = Units.S.ordinal,
 ){
     constructor(set: SetImplD): this(
         idSet = set.idSet,

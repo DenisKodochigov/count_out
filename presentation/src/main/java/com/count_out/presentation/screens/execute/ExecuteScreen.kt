@@ -108,7 +108,7 @@ import java.math.RoundingMode
     Column (modifier = modifier.fillMaxWidth()) {
 //        Text(text = "Screen Execute ${typography.titleLarge.fontFamily}", style = typography.titleLarge)
         Button(onClick = {
-            Log.d("KDS","AdditionalInformation ${dataState.stepTraining}")
+//            Log.d("KDS","AdditionalInformation ${dataState.stepTraining}")
             dataState.event(ExecuteEvent.ShowBS(dataState.showBS))}) { Text(text = "Show")}
     }
 }

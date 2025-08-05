@@ -1,7 +1,7 @@
 package com.count_out.framework.room.source
 
 import android.database.sqlite.SQLiteConstraintException
-import com.count_out.data.models.RoundImpl
+import com.count_out.data.models.RoundImplD
 import com.count_out.data.models.SpeechKitImplD
 import com.count_out.data.models.throwable.ResultSource
 import com.count_out.data.models.throwable.ThrowableDS
@@ -66,7 +66,9 @@ class TrainingSourceImpl @Inject constructor(
                                 else {
                                     var error = false
                                     training.item.rounds.forEach{ round->
-                                        roundSource.copy(TypeSource.RoundT(round)).let{
+                                        roundSource.copy(
+                                            TypeSource.RoundT(
+                                                RoundImplD(round, 0L, id))).let{
                                             if (it is ResultSource.Error) {
                                                 error = true
                                                 return@forEach }
@@ -89,7 +91,7 @@ class TrainingSourceImpl @Inject constructor(
                     speechKitSource.del(TypeSource.SpeechKitT(SpeechKitImplD(it)))}
                 if (training.item.rounds.isNotEmpty()){
                     training.item.rounds.forEach { round ->
-                        roundSource.del(TypeSource.RoundT(RoundImpl(round)))
+                        roundSource.del(TypeSource.RoundT(RoundImplD(round)))
                             .let { result->
                             if (result is ResultSource.Error) {
                                 error = true

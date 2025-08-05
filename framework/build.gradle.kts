@@ -46,7 +46,7 @@ android {
     buildToolsVersion = "35.0.0"
     kotlin { compilerOptions{
         jvmTarget = JvmTarget.JVM_17
-        freeCompilerArgs = listOf("-XXLanguage:+PropertyParamAnnotationDefaultTargetMode")
+//        freeCompilerArgs = listOf("-XXLanguage:+PropertyParamAnnotationDefaultTargetMode")
     } }
 }
 //val mockitoAgent = configurations.create("mockitoAgent")

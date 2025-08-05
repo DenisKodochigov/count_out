@@ -104,29 +104,32 @@ private fun createTrainingPlansTesting( db: AppDataBase) {
         speechId = addSpeechKit(db, bs = "Разминка", ae = "",)))
     //Упражнение 1
     var idExercise = db.exerciseDao().add(ExerciseTable(roundId = idRound,
-        activityId = 4, idView = 0,  //"Растереть уши"
-        speechId = addSpeechKit(db, )))
+        activityId = 4, idView = 0, speechId = addSpeechKit(db, ))) //"Растереть уши"
     db.setDao().add(
         SetTable(exerciseId = idExercise, name = "Set 2", reps = reps, distance = 10.0,
             distanceU = Units.KM.ordinal, timeRest = rest, goal = GoalSet.DISTANCE.ordinal,
+            weightU = Units.GR.ordinal, durationU = Units.S.ordinal,
             speechId = addSpeechKit(db, bs = "Старт", ae = "Конец",)))
     db.setDao().add(
         SetTable(exerciseId = idExercise, name = "Set 1", reps = reps, duration = 15.0,
-            durationU = Units.S.ordinal, timeRest = rest, goal = GoalSet.DURATION.ordinal,
+            durationU = Units.S.ordinal, timeRest = rest, goal = GoalSet.DURATION.ordinal,weightU = Units.GR.ordinal,
+            distanceU = Units.MT.ordinal,
         speechId = addSpeechKit(db, bs = "Старт", ae = "Конец",)))
     //Упражнение 2
     idExercise = db.exerciseDao().add(ExerciseTable(roundId = idRound, activityId = 5, idView = 1,  //"Растереть макушку"
         speechId = addSpeechKit(db, )))
     db.setDao().add(
         SetTable(exerciseId = idExercise, name = "Set 2", reps = reps, distance = 10.0,
-            distanceU = Units.KM.ordinal, timeRest = rest, goal = GoalSet.DISTANCE.ordinal,
+            distanceU = Units.KM.ordinal, timeRest = rest, goal = GoalSet.DISTANCE.ordinal,weightU = Units.GR.ordinal,
+            durationU = Units.S.ordinal,
         speechId = addSpeechKit(db, bs = "Старт", ae = "Конец",)))
     //Упражнение 3
     idExercise = db.exerciseDao().add(ExerciseTable(roundId = idRound, activityId = 6, idView = 2,  //"Растереть макушку"
         speechId = addSpeechKit(db, )))
     db.setDao().add(
         SetTable(exerciseId = idExercise, name = "Set 3", reps = reps, intervalReps = 1.0,
-            timeRest = rest, goal = GoalSet.COUNT.ordinal,
+            timeRest = rest, goal = GoalSet.COUNT.ordinal, weightU = Units.GR.ordinal,
+            distanceU = Units.MT.ordinal, durationU = Units.S.ordinal,
             speechId = addSpeechKit(db, bs = "Старт", ae = "Конец",)))
     //Упражнение 4
     idExercise = db.exerciseDao().add(
@@ -135,7 +138,8 @@ private fun createTrainingPlansTesting( db: AppDataBase) {
     )
     db.setDao().add(
         SetTable(exerciseId = idExercise, name = "Set 4", reps = reps, intervalReps = 1.0,
-            timeRest = rest, goal = GoalSet.COUNT.ordinal,
+            timeRest = rest, goal = GoalSet.COUNT.ordinal,weightU = Units.GR.ordinal,
+            distanceU = Units.MT.ordinal, durationU = Units.S.ordinal,
             speechId = addSpeechKit(db, bs = "Старт", ae = "Конец",)))
 
 //Основная
@@ -146,18 +150,19 @@ private fun createTrainingPlansTesting( db: AppDataBase) {
         speechId = addSpeechKit(db, )))
     db.setDao().add(
         SetTable(exerciseId = idExercise, name = "Set 3", reps = reps, intervalReps = 1.0,
-            timeRest = rest, goal = GoalSet.COUNT.ordinal,
+            timeRest = rest, goal = GoalSet.COUNT.ordinal, weightU = Units.GR.ordinal,
+            distanceU = Units.MT.ordinal, durationU = Units.S.ordinal,
             speechId = addSpeechKit(db, bs = "Старт", ae = "Конец",)))
 //Заминка
     idRound = db.roundDao().add(RoundTable(trainingId = idTraining, roundType = RoundType.DOWN.ordinal,
         speechId = addSpeechKit(db, bs = "Заминка", ae = "",)))
     //Упражнение 1
     idExercise = db.exerciseDao().add(ExerciseTable(roundId = idRound, activityId = 7,
-        idView = 0,  //"Растереть заднюю часть шеи"
-        speechId = addSpeechKit(db, )))
+        idView = 0, speechId = addSpeechKit(db, )))//"Растереть заднюю часть шеи"
     db.setDao().add(
         SetTable(exerciseId = idExercise, name = "Set 4", reps = reps, intervalReps = 1.0,
-            timeRest = rest, goal = GoalSet.COUNT.ordinal,
+            timeRest = rest, goal = GoalSet.COUNT.ordinal, weightU = Units.GR.ordinal,
+            distanceU = Units.MT.ordinal, durationU = Units.S.ordinal,
             speechId = addSpeechKit(db, bs = "Старт", ae = "Конец",)))
     addRecordWorkout(db)
     addRecordCount(db)

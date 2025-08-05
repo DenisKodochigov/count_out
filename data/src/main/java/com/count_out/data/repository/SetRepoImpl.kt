@@ -1,13 +1,16 @@
 package com.count_out.data.repository
 
 import com.count_out.data.source.room.SetSource
+import com.count_out.data.source.room.TrainingSource
 import com.count_out.domain.entity.throwable.ResultUC
 import com.count_out.domain.repository.TypeRepo
 import com.count_out.domain.repository.plans.SetRepo
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
-class SetRepoImpl @Inject constructor(private val source: SetSource): SetRepo, PrimeRepo() {
+class SetRepoImpl @Inject constructor(
+    private val source: SetSource,
+    private val sourcePlan: TrainingSource): SetRepo, PrimeRepo() {
 
     override fun gets(exerciseId: TypeRepo): Flow<ResultUC<TypeRepo>> =
         source.gets(toTypeSource( exerciseId)).convertor()

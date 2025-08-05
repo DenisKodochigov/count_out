@@ -1,5 +1,6 @@
 package com.count_out.presentation.screens.training.set
 
+import android.util.Log
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.background
@@ -147,17 +148,13 @@ val interval_between_pole = 4.dp
 }
 @Composable fun Count(dataState: TrainingState, set: SetImplP) {
     Row( horizontalArrangement = Arrangement.Center, verticalAlignment = Alignment.Top,
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(vertical = 12.dp)){
+        modifier = Modifier.fillMaxWidth().padding(vertical = 12.dp)){
         IntervalPole(dataState, set, Modifier.weight(1f))
         WeightPole(dataState, set, Modifier.weight(0.8f))
         RestPole(dataState, set, Modifier.weight(1f))
     }
     Row( horizontalArrangement = Arrangement.Center, verticalAlignment = Alignment.Top,
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(bottom = 12.dp)){
+        modifier = Modifier.fillMaxWidth().padding(bottom = 12.dp)){
         CountFieldText(dataState, set)
         CountGroupFieldText(dataState, set)
     }
@@ -168,7 +165,7 @@ val interval_between_pole = 4.dp
         unitId2 = R.string.km,
         headId = R.string.distance,
         term = set.distance.unit == Units.MT,
-        placeholder = "${ set.distance.value}",
+        placeholder = "${ set.distance.value.discard(2)}",
         modifier = modifier,
         typeKey = TypeKeyboard.DIGIT,
         onChangeValue = { dataState.event(
@@ -195,16 +192,16 @@ val interval_between_pole = 4.dp
         unitId2 = R.string.min,
         headId = R.string.duration,
         term = set.duration.unit == Units.S,
-        placeholder = "${set.duration.value}",
+        placeholder = "${set.duration.value.discard(2)}",
         modifier = modifier,
         typeKey = TypeKeyboard.DIGIT,
         onChangeValue = { dataState.event(
             TrainingEvent.UpdateSet( set.copy(
-                    distance = ParameterImplP(value = it.toDoubleMy(), unit = set.distance.unit))))
+                duration = ParameterImplP(value = it.toDoubleMy(), unit = set.duration.unit))))
         },
         onChangeUnit = {dataState.event(
             TrainingEvent.UpdateSet( set.copy(
-                    distance = ParameterImplP(value = bringingTime(set.duration),
+                duration = ParameterImplP(value = bringingTime(set.duration),
                         unit = if (set.duration.unit == Units.M) Units.S else Units.M)
                 ))
             ) }
@@ -228,19 +225,17 @@ val interval_between_pole = 4.dp
         unitId2 = R.string.kg,
         headId = R.string.weight,
         term = set.weight.unit == Units.GR,
-        placeholder = "${set.weight.value}",
+        placeholder = "${set.weight.value.discard(2)}",
         modifier = modifier,
         typeKey = TypeKeyboard.DIGIT,
-        onChangeValue = { dataState.event(
+        onChangeValue = {
+            dataState.event(
             TrainingEvent.UpdateSet(set.copy(
-                    weight = ParameterImplP(
-                        value = it.toDoubleMy(),
-                        unit = set.weight.unit))))
+                    weight = ParameterImplP(value = it.toDoubleMy(), unit = set.weight.unit))))
         },
         onChangeUnit = { dataState.event(
             TrainingEvent.UpdateSet( set.copy(
-                    weight = ParameterImplP(
-                        value = bringingWeight(set.weight),
+                    weight = ParameterImplP(value = bringingWeight(set.weight),
                         unit = if (set.weight.unit == Units.GR) Units.KG else Units.GR)
             )))
         }
@@ -252,21 +247,16 @@ val interval_between_pole = 4.dp
         unitId2 = R.string.min,
         headId = R.string.rest_time,
         term = set.rest.unit == Units.S,
-        placeholder =  "${ set.rest.value }",
+        placeholder =  "${ set.rest.value.discard(2) }",
         modifier = modifier,
         typeKey = TypeKeyboard.DIGIT,
         onChangeValue = { dataState.event(
             TrainingEvent.UpdateSet( set.copy(
-                    rest = ParameterImplP(
-                        value = it.toDoubleMy(),
-                        unit = set.rest.unit)
-            ))) },
+                rest = ParameterImplP(value = it.toDoubleMy(), unit = set.rest.unit)))) },
         onChangeUnit = { dataState.event(
             TrainingEvent.UpdateSet( set.copy(
-                    rest = ParameterImplP(
-                        value = bringingTime(set.rest),
-                        unit = if (set.rest.unit == Units.S) Units.M else Units.S)
-            )))}
+                rest = ParameterImplP(value = bringingTime(set.rest),
+                    unit = if (set.rest.unit == Units.S) Units.M else Units.S))))}
     )
 }
 
@@ -317,16 +307,22 @@ val interval_between_pole = 4.dp
     }
 }
 @Composable fun ZonePulseSwitch(dataState: TrainingState, set: SetImplP){
-    Row(verticalAlignment = Alignment.CenterVertically){
+    Row(horizontalArrangement = Arrangement.Center,
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = Modifier.fillMaxWidth()){
         Spacer(modifier = Modifier.weight(1f))
         ButtonSwitchPulse(selected = set.intensity == Zone.Low, idString = R.string.zone1,
             onClick = { dataState.event(TrainingEvent.UpdateSet(set.copy(intensity = Zone.Low)))})
+        Spacer(modifier = Modifier.weight(1f))
         ButtonSwitchPulse(selected = set.intensity == Zone.Min, idString = R.string.zone2,
             onClick = {dataState.event(TrainingEvent.UpdateSet( set.copy(intensity = Zone.Min)))})
+        Spacer(modifier = Modifier.weight(1f))
         ButtonSwitchPulse(selected = set.intensity == Zone.Medium, idString = R.string.zone3,
             onClick = {dataState.event(TrainingEvent.UpdateSet(set.copy(intensity = Zone.Medium)))})
+        Spacer(modifier = Modifier.weight(1f))
         ButtonSwitchPulse(selected = set.intensity == Zone.High, idString = R.string.zone4,
             onClick = {dataState.event(TrainingEvent.UpdateSet( set.copy(intensity = Zone.High)))})
+        Spacer(modifier = Modifier.weight(1f))
         ButtonSwitchPulse(selected = set.intensity == Zone.Max, idString = R.string.zone5,
             onClick = { dataState.event(TrainingEvent.UpdateSet( set.copy(intensity = Zone.Max)))})
         Spacer(modifier = Modifier.weight(1f))
@@ -334,7 +330,7 @@ val interval_between_pole = 4.dp
 }
 @Composable fun ButtonSwitchPulse(selected: Boolean, onClick: () -> Unit, idString: Int,){
     ButtonSwitch(selected = selected, idString = idString, onClick = onClick,
-        style = alumBodyMedium, modifier = Modifier.width(50.dp))
+        style = alumBodyMedium, modifier = Modifier.width(55.dp))
 }
 
 @Composable fun ButtonSwitch(

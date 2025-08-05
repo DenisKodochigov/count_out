@@ -1,5 +1,6 @@
 package com.count_out.presentation.view_element
 
+import android.util.Log
 import androidx.compose.foundation.focusable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -106,6 +107,8 @@ import com.count_out.presentation.models.TypeKeyboard
     val keyboardController = LocalSoftwareKeyboardController.current
     val focusManager = LocalFocusManager.current
     var text by rememberSaveable { mutableStateOf(if (!beginValueZero) placeholder else "") }
+    var placeholderL by rememberSaveable { mutableStateOf( placeholder) }
+    if (placeholderL != placeholder) text = placeholder
     BasicTextField(
         value = text,
         enabled = edit, //enabled,
@@ -138,6 +141,7 @@ import com.count_out.presentation.models.TypeKeyboard
                                     end = Offset(size.width, y),
                                     strokeWidth = 1.dp.toPx()) } }
                 ){
+//                    Log.d("KDS", "TextFieldApp placeholder:$placeholder, text:$text, beginValueZero:$beginValueZero ")
                     if (text.isEmpty()) Text(text = if (!beginValueZero) "" else placeholder, style = textStyle)
                     it()
                 }

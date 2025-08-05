@@ -67,7 +67,7 @@ fun PlansScreen(vm: PlansViewModel) {
 
 @Composable fun PlanList(dataState: PlansState, modifier: Modifier = Modifier) {
     Spacer(modifier = Modifier.fillMaxWidth())
-    Log.d("KDS", "list ${dataState.trainings}")
+//    Log.d("KDS", "list ${dataState.trainings}")
     LazyColumn(
         state = rememberLazyListState(),
         contentPadding = PaddingValues(horizontal = Dimen.paddingAppHor),

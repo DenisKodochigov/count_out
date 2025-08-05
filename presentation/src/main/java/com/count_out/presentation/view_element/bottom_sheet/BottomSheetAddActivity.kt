@@ -13,7 +13,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.count_out.presentation.models.ActivityImpl
+import com.count_out.presentation.models.ActivityImplP
 import com.count_out.presentation.screens.settings.SettingsEvent
 import com.count_out.presentation.screens.settings.SettingsState
 import com.count_out.presentation.view_element.ButtonConfirm
@@ -38,7 +38,7 @@ import com.count_out.presentation.view_element.ModalBottomSheetApp
         Spacer(Modifier.height(12.dp))
         dataState.activity.value?.let { act->
             ActivityInfoFull(
-                activity = mutableStateOf(ActivityImpl(act)),
+                activity = mutableStateOf(ActivityImplP(act)),
                 onChange = { dataState.event(SettingsEvent.UpdateActivity(it)) },
             )
         }

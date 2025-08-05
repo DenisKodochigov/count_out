@@ -1,5 +1,6 @@
 package com.count_out.data.models.throwable
 
+import android.util.Log
 import com.count_out.domain.entity.throwable.ResultApp
 import com.count_out.domain.entity.throwable.ResultUC
 import com.count_out.domain.entity.throwable.ThrowableUC

@@ -40,7 +40,7 @@ class ExecuteViewModel @Inject constructor(
     override fun convertor(): ExecuteConverter = ExecuteConverter()
 
     override fun routeEvent(event: Event) {
-        Log.d("KDS","ExecuteViewModel stepTraining=${dataState.value.stepTraining}")
+//        Log.d("KDS","ExecuteViewModel stepTraining=${dataState.value.stepTraining}")
         when (event) {
             is ExecuteEvent.BackScreen -> { navigate.backStack()}
             is ExecuteEvent.ToScreenPlans -> { navigate.goToScreenPlans()}
