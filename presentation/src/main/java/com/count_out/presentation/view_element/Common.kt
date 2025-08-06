@@ -1,6 +1,5 @@
 package com.count_out.presentation.view_element
 
-import android.util.Log
 import androidx.compose.foundation.focusable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -84,12 +83,17 @@ import com.count_out.presentation.models.TypeKeyboard
         TextButton(onClick = onConfirm, enabled = enabled) {
             TextApp(
                 text = stringResource(R.string.ok),
-//                modifier = Modifier.testTag(BUTTON_OK),
                 style = MaterialTheme.typography.titleMedium
             )
         }
     }
 }
+
+/**
+ * 1. Если не в фокусе, то подставлять Placeholder
+ * 2. Если в фокусе, то инициализировать placeholder, а дальше value
+ * 2.1 Если хотим вводить с пустого поля, то beginValueZero = true
+ */
 @Composable fun TextFieldApp(
     modifier: Modifier = Modifier,
     typeKeyboard: TypeKeyboard,
@@ -101,16 +105,15 @@ import com.count_out.presentation.models.TypeKeyboard
     maxLines: Int = 1,
     onChangeValue:(String)->Unit = {},
     edit: Boolean = false,
-    beginValueZero: Boolean = false,
+    beginValueEmpty: Boolean = false,
     colorLine: Color = MaterialTheme.colorScheme.surfaceBright,
 ){
     val keyboardController = LocalSoftwareKeyboardController.current
     val focusManager = LocalFocusManager.current
-    var text by rememberSaveable { mutableStateOf(if (!beginValueZero) placeholder else "") }
-    var placeholderL by rememberSaveable { mutableStateOf( placeholder) }
-    if (placeholderL != placeholder) text = placeholder
+    var text by rememberSaveable { mutableStateOf(if (beginValueEmpty) "" else placeholder) }
+    var isFocused by rememberSaveable { mutableStateOf( false) }
     BasicTextField(
-        value = text,
+        value = if(isFocused) text else placeholder,
         enabled = edit, //enabled,
         singleLine = maxLines == 1,
         maxLines = maxLines,
@@ -119,7 +122,7 @@ import com.count_out.presentation.models.TypeKeyboard
         modifier = modifier
             .width(IntrinsicSize.Max)
             .focusable()
-            .onFocusChanged {
+            .onFocusChanged { isFocused = it.isFocused
                 if ((!it.isFocused || !onLossFocus) && text.isNotEmpty()) { onChangeValue(text) } },
         keyboardOptions = keyBoardOpt(typeKeyboard),
         keyboardActions = KeyboardActions(onDone = {
@@ -141,8 +144,7 @@ import com.count_out.presentation.models.TypeKeyboard
                                     end = Offset(size.width, y),
                                     strokeWidth = 1.dp.toPx()) } }
                 ){
-//                    Log.d("KDS", "TextFieldApp placeholder:$placeholder, text:$text, beginValueZero:$beginValueZero ")
-                    if (text.isEmpty()) Text(text = if (!beginValueZero) "" else placeholder, style = textStyle)
+                    if (text.isEmpty()) Text(text = if (beginValueEmpty) placeholder else "", style = textStyle)
                     it()
                 }
             }

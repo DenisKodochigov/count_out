@@ -115,7 +115,7 @@ val interval_between_pole = 4.dp
             onClickDelete = { dataState.event(TrainingEvent.DeleteSet(set))},
             onClickSpeech = {
                 dataState.set = set
-                dataState.event(ShowBS(dataState.showBS.copy(element = set)))      },
+                dataState.event(ShowBS(dataState.showBS.copy(element = set)))},
         )
     }
 }
@@ -247,7 +247,7 @@ val interval_between_pole = 4.dp
         unitId2 = R.string.min,
         headId = R.string.rest_time,
         term = set.rest.unit == Units.S,
-        placeholder =  "${ set.rest.value.discard(2) }",
+        placeholder =  "${ set.rest.value.discard(3) }",
         modifier = modifier,
         typeKey = TypeKeyboard.DIGIT,
         onChangeValue = { dataState.event(
@@ -373,7 +373,7 @@ val interval_between_pole = 4.dp
         TextFieldApp(
             modifier = Modifier.fillMaxWidth().padding(horizontal = 4.dp),
             edit = true,
-            beginValueZero = true,
+            beginValueEmpty = true,
             typeKeyboard = typeKey,
             contentAlignment = Alignment.Center,
             textStyle = typography.bodyLarge.copy(textAlign = TextAlign.Center),
@@ -437,7 +437,7 @@ fun viewDistance(set: Set):String {
 }
 
 fun bringingTime(duration: Parameter): Double{
-    return (duration.value * (if (duration.unit == Units.M) 60.0 else 1/60.0)).discard(2)
+    return (duration.value * (if (duration.unit == Units.M) 60.0 else 1/60.0)).discard(3)
 }
 fun bringingDist(dist: Parameter): Double{
     return (dist.value * (if (dist.unit == Units.MT) 0.001 else 1000.0)).discard(2)

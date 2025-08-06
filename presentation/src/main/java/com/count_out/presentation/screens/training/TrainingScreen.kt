@@ -1,6 +1,7 @@
 package com.count_out.presentation.screens.training
 
 import android.annotation.SuppressLint
+import android.util.Log
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Column
@@ -58,8 +59,11 @@ import com.count_out.presentation.view_element.icons.IconsGroup
     if (dataState.showBS.training) {
         dataState.nameSection = stringResource(id = R.string.training)
         dataState.item = dataState.training
-        dataState.onDismissSpeech =
-            { dataState.event(ShowBS(dataState.showBS.copy(element = dataState.training))) }
+        dataState.onDismissSpeech = {
+            dataState.event(ShowBS(dataState.showBS.copy(element = dataState.training))) }
+        dataState.onConfirmationSpeech = {speech, item->
+            dataState.event(TrainingEvent.UpdateSpeech(speech))
+            dataState.event(ShowBS(dataState.showBS.copy(element = dataState.training))) }
         BottomSheetSpeech(dataState)
     }
 }

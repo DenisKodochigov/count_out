@@ -11,6 +11,7 @@ import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 import java.util.TimeZone
+import kotlin.math.pow
 
 fun Int.pad(): String = this.toString().padStart(2, '0')
 
@@ -20,7 +21,7 @@ fun Boolean.to01(): Int = if (this) 1 else 0
 fun Int.to01(): Int = if (this == 0) 1 else 0
 fun Double.minus(): Double = if (this - 0.1 < 0) 0.0 else ((this * 10).toInt() - 1).toDouble()/10
 fun Double.plus(): Double = ((this * 10).toInt() + 1).toDouble()/10
-fun Double.discard(q: Int): Double = ((this * 10 * q)).toDouble()/(10 * q)
+fun Double.discard(q: Int): Double = ((this * 10.0.pow(q)).toInt())/(10.0.pow(q) )
 fun <T>List<T>.addApp(device: T): List<T> = this.toMutableList().apply { this.add(device) }
 fun Float.mRound(): Int =
     if (this > 0) {

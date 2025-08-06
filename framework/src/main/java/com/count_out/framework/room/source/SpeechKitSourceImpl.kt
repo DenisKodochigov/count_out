@@ -45,7 +45,7 @@ class SpeechKitSourceImpl @Inject constructor(
                     updateSpeech(speechKit.item.afterStart) &&
                     updateSpeech(speechKit.item.beforeEnd) &&
                     updateSpeech(speechKit.item.afterEnd)
-                ) ResultSource.Success(speechKit)
+                    ) ResultSource.Success(speechKit)
                 else ResultSource.Error(ThrowableDS.RequestFailed())
             } else ResultSource.Error(ThrowableDS.NotValidType())
         } catch(e: SQLiteConstraintException) { ResultSource.Error(ThrowableDS.extract(e))}

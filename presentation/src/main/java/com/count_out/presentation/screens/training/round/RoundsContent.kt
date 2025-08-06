@@ -36,6 +36,9 @@ import com.count_out.presentation.view_element.icons.IconsGroup
         dataState.item = dataState.training?.rounds?.find { it.roundType == RoundType.WorkUp }
         dataState.onDismissSpeech =
             { dataState.event(ShowBS(dataState.showBS.copy(element = dataState.item))) }
+        dataState.onConfirmationSpeech = {speech, item->
+            dataState.event(TrainingEvent.UpdateSpeech(speech))
+            dataState.event(ShowBS(dataState.showBS.copy(element = dataState.item))) }
         BottomSheetSpeech(dataState)
     }
     if (dataState.showBS.workOut) {
@@ -43,6 +46,9 @@ import com.count_out.presentation.view_element.icons.IconsGroup
         dataState.item = dataState.training?.rounds?.find { it.roundType == RoundType.WorkOut }
         dataState.onDismissSpeech =
             { dataState.event(ShowBS(dataState.showBS.copy(element = dataState.item))) }
+        dataState.onConfirmationSpeech = {speech, item->
+            dataState.event(TrainingEvent.UpdateSpeech(speech))
+            dataState.event(ShowBS(dataState.showBS.copy(element = dataState.item))) }
         BottomSheetSpeech(dataState)
     }
     if (dataState.showBS.workDown) {
@@ -50,6 +56,9 @@ import com.count_out.presentation.view_element.icons.IconsGroup
         dataState.item = dataState.training?.rounds?.find { it.roundType == RoundType.WorkDown }
         dataState.onDismissSpeech =
             { dataState.event(ShowBS(dataState.showBS.copy(element = dataState.item))) }
+        dataState.onConfirmationSpeech = {speech, item->
+            dataState.event(TrainingEvent.UpdateSpeech(speech))
+            dataState.event(ShowBS(dataState.showBS.copy(element = dataState.item))) }
         BottomSheetSpeech(dataState)
     }
 

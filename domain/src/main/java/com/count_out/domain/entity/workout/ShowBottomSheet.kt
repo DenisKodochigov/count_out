@@ -9,5 +9,6 @@ data class ShowBottomSheet(
     val exercise: Boolean = false,
     val set: Boolean = false,
     val selectActivity: Boolean = false,
+    val show: Boolean = false,
     val element: Element? = null
 )

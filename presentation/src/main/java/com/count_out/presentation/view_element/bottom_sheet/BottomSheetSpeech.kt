@@ -40,7 +40,7 @@ import com.count_out.presentation.view_element.TextFieldApp
     val uiState by remember{ mutableStateOf( bottomSheetStateNew(itemSpeech)) }
     val sheetState = rememberModalBottomSheetState( skipPartiallyExpanded = true )
     ModalBottomSheetApp(
-        onDismissRequest = { uiState.onDismissSpeech.invoke()},
+        onDismissRequest = { uiState.onDismissSpeech() },
         modifier = Modifier.padding(horizontal = Dimen.bsPaddingHor1),
         shape = shapes.small,
         sheetState = sheetState,
@@ -66,7 +66,7 @@ fun bottomSheetStateNew(itemSpeech: BottomSheetInterface): BottomSheetState {
         nameSection = itemSpeech.nameSection,
         item = itemSpeech.item,
         onConfirmationSpeech = itemSpeech.onConfirmationSpeech,
-//        onDismissSpeech = itemSpeech.onDismissSpeech,
+        onDismissSpeech = itemSpeech.onDismissSpeech,
     )
 }
 

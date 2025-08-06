@@ -76,7 +76,8 @@ class TrainingConverter @Inject constructor(): PrimeConvertor<UseCase.Response, 
         return state.value
     }
     private fun converterOther( state: MutableStateFlow<TrainingState>): TrainingState {
-        state.value = state.value.copy(training = TrainingImplP())
+//        Log.d("KDS", "converterOther")
+//        state.value = state.value.copy(training = TrainingImplP())
         return state.value
     }
 }
