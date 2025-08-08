@@ -1,21 +1,19 @@
 package com.count_out.presentation.screens.training
 
-import android.R.attr.data
 import android.util.Log
-import com.count_out.domain.entity.workout.Training
 import com.count_out.domain.repository.TypeRepo
 import com.count_out.domain.use_case.UseCase
 import com.count_out.domain.use_case.other.CollapsingUC
 import com.count_out.domain.use_case.other.ShowBottomSheetUC
 import com.count_out.domain.use_case.plans.GetTrainingUC
 import com.count_out.domain.use_case.plans.UpdateTrainingUC
+import com.count_out.domain.use_case.plans.activity.GetActivitiesUC
 import com.count_out.domain.use_case.plans.exercise.ChangeSequenceExerciseUC
 import com.count_out.domain.use_case.plans.exercise.CopyExerciseUC
 import com.count_out.domain.use_case.plans.exercise.DeleteExerciseUC
 import com.count_out.domain.use_case.plans.set.CopySetUC
 import com.count_out.domain.use_case.plans.set.DeleteSetUC
 import com.count_out.domain.use_case.plans.set.UpdateSetUC
-import com.count_out.presentation.models.TrainingImplP
 import com.count_out.presentation.screens.prime.PrimeConvertor
 import kotlinx.coroutines.flow.MutableStateFlow
 import javax.inject.Inject
@@ -31,6 +29,7 @@ class TrainingConverter @Inject constructor(): PrimeConvertor<UseCase.Response, 
             is CopySetUC.Response-> converterLocal(resultData, state)
             is DeleteSetUC.Response-> converterLocal(resultData, state)
             is UpdateSetUC.Response-> converterLocal(resultData, state)
+            is GetActivitiesUC.Response-> converterLocal(resultData, state)
             is ShowBottomSheetUC.Response-> converterLocal(resultData, state)
             is CollapsingUC.Response-> converterLocal(resultData, state)
             else -> converterOther(state)
@@ -39,6 +38,12 @@ class TrainingConverter @Inject constructor(): PrimeConvertor<UseCase.Response, 
     private fun converterLocal(data: GetTrainingUC.Response, state: MutableStateFlow<TrainingState>): TrainingState {
         if (data.training is TypeRepo.PlanT) {
             state.value = state.value.copy(training = (data.training as TypeRepo.PlanT).item)
+        }
+        return state.value
+    }
+    private fun converterLocal(data: GetActivitiesUC.Response, state: MutableStateFlow<TrainingState>): TrainingState {
+        if (data.activity is TypeRepo.ActivitiesT) {
+            state.value = state.value.copy(activities = (data.activity as TypeRepo.ActivitiesT).item)
         }
         return state.value
     }

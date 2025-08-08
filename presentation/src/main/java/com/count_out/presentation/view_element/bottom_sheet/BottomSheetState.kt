@@ -17,6 +17,6 @@ data class BottomSheetState(
     @Stable override var item: Element? =null,
     @Stable override var listSpeech: List<SpeechKit> = emptyList(),
     @Stable override var nameSection: String = "",
-    @Stable override var onConfirmationSpeech: (SpeechKit, Any?) -> Unit = { _, _->},
+    @Stable override var onConfirmation: (Element, Element?) -> Unit = { _, _->},
     @Stable override var onDismissSpeech: () -> Unit = {},
 ): BottomSheetInterface

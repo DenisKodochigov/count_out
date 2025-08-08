@@ -27,8 +27,13 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import com.count_out.domain.entity.workout.Activity
+import com.count_out.domain.entity.workout.Element
+import com.count_out.domain.entity.workout.Exercise
+import com.count_out.domain.entity.workout.SpeechKit
 import com.count_out.presentation.R
 import com.count_out.presentation.models.Dimen
+import com.count_out.presentation.models.ExerciseImplP
 import com.count_out.presentation.models.TrainingImplP
 import com.count_out.presentation.models.TypeKeyboard
 import com.count_out.presentation.screens.execute.ExecuteEvent
@@ -38,6 +43,7 @@ import com.count_out.presentation.screens.training.TrainingEvent.ShowBS
 import com.count_out.presentation.screens.training.round.Round
 import com.count_out.presentation.view_element.TextFieldApp
 import com.count_out.presentation.view_element.TopBarApp
+import com.count_out.presentation.view_element.bottom_sheet.BottomSheetSelectActivity
 import com.count_out.presentation.view_element.bottom_sheet.BottomSheetSpeech
 import com.count_out.presentation.view_element.icons.IconsGroup
 
@@ -50,24 +56,12 @@ import com.count_out.presentation.view_element.icons.IconsGroup
 @Composable fun TrainingScreenCreateView( viewModel: TrainingViewModel){
     viewModel.screenState.collectAsState().value.let { screenState ->
         PrimeScreen(loader = screenState) { dataState ->
-            EditSpeech(dataState = dataState)
+            ShowBottomSheetSpeech(dataState, dataState.showBS.training,
+                R.string.training, dataState.training)
             TrainingScreenLayout(dataState)
         }
     }
 }
-@Composable fun EditSpeech(dataState: TrainingState) {
-    if (dataState.showBS.training) {
-        dataState.nameSection = stringResource(id = R.string.training)
-        dataState.item = dataState.training
-        dataState.onDismissSpeech = {
-            dataState.event(ShowBS(dataState.showBS.copy(element = dataState.training))) }
-        dataState.onConfirmationSpeech = {speech, item->
-            dataState.event(TrainingEvent.UpdateSpeech(speech))
-            dataState.event(ShowBS(dataState.showBS.copy(element = dataState.training))) }
-        BottomSheetSpeech(dataState)
-    }
-}
-
 @Composable fun TrainingScreenLayout(dataState: TrainingState){
     val focusManager = LocalFocusManager.current
     val interactionSource = remember { MutableInteractionSource() }
@@ -88,18 +82,8 @@ import com.count_out.presentation.view_element.icons.IconsGroup
         }
     }
 }
-@Composable fun TopBar(dataState: ExecuteState){
-    TopBarApp(
-        text = stringResource(R.string.training_text_fab) + (dataState.stepTraining?.namePlan ?: ""),
-        selected = true,
-        onClickText = { dataState.event(ExecuteEvent.ToScreenPlans) } ,
-    )
-}
-
 @Composable fun NameTraining(dataState: TrainingState) {
-
     val enteredName: MutableState<String> = remember { mutableStateOf(dataState.training?.name ?: "") }
-
     if (dataState.training?.idTraining == 0L) return
     Row( verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier
@@ -128,5 +112,33 @@ import com.count_out.presentation.view_element.icons.IconsGroup
             }
         )
         Spacer(modifier = Modifier.width(7.dp))
+    }
+}
+
+@Composable fun ShowBottomSheetSpeech(
+    dataState: TrainingState, showBS: Boolean, idString: Int, item: Element? = null
+){
+    if (showBS && dataState.item == item) {
+        dataState.nameSection = stringResource(id = idString)
+        dataState.onDismissSpeech =
+            { dataState.event(ShowBS(dataState.showBS.copy(element = item)))}
+        dataState.onConfirmation = { speech, item ->
+            dataState.event(TrainingEvent.UpdateSpeech(speech as SpeechKit))
+            dataState.event(ShowBS(dataState.showBS.copy(element = item)))
+        }
+        BottomSheetSpeech(dataState)
+    }
+}
+@Composable fun ShowBottomSheetSelectActivity(dataState: TrainingState, item: Exercise){
+    if (dataState.showBS.activity && dataState.item == item){//&& dataState.item == item
+        dataState.nameSection = stringResource(id = R.string.list_activity)
+        dataState.onDismissSpeech =
+            { dataState.event(ShowBS(dataState.showBS.copy(element = item.activity))) }
+        dataState.onConfirmation = { exercise, activity ->
+            dataState.event(
+                TrainingEvent.UpdateExercise(ExerciseImplP(exercise as Exercise, activity as Activity)))
+            dataState.event(ShowBS(dataState.showBS.copy(element = item.activity)))
+        }
+        BottomSheetSelectActivity(dataState)
     }
 }

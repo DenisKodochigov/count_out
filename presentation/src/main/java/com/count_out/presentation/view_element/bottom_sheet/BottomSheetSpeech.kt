@@ -1,5 +1,6 @@
 package com.count_out.presentation.view_element.bottom_sheet
 
+import android.util.Log
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -65,7 +66,7 @@ fun bottomSheetStateNew(itemSpeech: BottomSheetInterface): BottomSheetState {
         listSpeech = itemSpeech.listSpeech,
         nameSection = itemSpeech.nameSection,
         item = itemSpeech.item,
-        onConfirmationSpeech = itemSpeech.onConfirmationSpeech,
+        onConfirmation = itemSpeech.onConfirmation,
         onDismissSpeech = itemSpeech.onDismissSpeech,
     )
 }
@@ -114,7 +115,7 @@ fun bottomSheetStateNew(itemSpeech: BottomSheetInterface): BottomSheetState {
 }
 @Composable fun ButtonOK(uiState: BottomSheetState) {
     ButtonConfirm(onConfirm = {
-        uiState.onConfirmationSpeech(
+        uiState.onConfirmation(
             SpeechKitImplP(
                 idSpeechKit = uiState.speechKit?.idSpeechKit ?: 0,
 //                idBeforeStart = uiState.speechKit?.idBeforeStart ?: 0,

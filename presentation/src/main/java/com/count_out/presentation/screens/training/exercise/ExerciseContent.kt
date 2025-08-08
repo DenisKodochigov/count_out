@@ -1,5 +1,6 @@
 package com.count_out.presentation.screens.training.exercise
 
+import android.util.Log
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
@@ -18,72 +19,64 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import com.count_out.domain.entity.workout.Activity
 import com.count_out.domain.entity.workout.Exercise
 import com.count_out.domain.entity.workout.Round
 import com.count_out.presentation.R
 import com.count_out.presentation.models.DataForChangeSequenceImpl
 import com.count_out.presentation.models.Dimen.contourAll1
+import com.count_out.presentation.models.ExerciseImplP
 import com.count_out.presentation.models.SetImplP
+import com.count_out.presentation.screens.training.ShowBottomSheetSelectActivity
+import com.count_out.presentation.screens.training.ShowBottomSheetSpeech
 import com.count_out.presentation.screens.training.TrainingEvent
 import com.count_out.presentation.screens.training.TrainingEvent.ShowBS
 import com.count_out.presentation.screens.training.TrainingState
 import com.count_out.presentation.screens.training.set.SetContent
 import com.count_out.presentation.view_element.TextApp
 import com.count_out.presentation.view_element.bottom_sheet.BottomSheetSelectActivity
-import com.count_out.presentation.view_element.bottom_sheet.BottomSheetSpeech
 import com.count_out.presentation.view_element.custom_view.Frame
 import com.count_out.presentation.view_element.drag_drop_column.column.ColumnDragDrop
 import com.count_out.presentation.view_element.icons.IconsCollapsing
 import com.count_out.presentation.view_element.icons.IconsGroup
 
 @Composable
-fun ListExercises(
-    dataState: TrainingState,
-    round: Round,
-    modifier: Modifier = Modifier,
-    showExercises: Boolean)
+fun ListExercises(dataState: TrainingState, round: Round, modifier: Modifier = Modifier,)
 {
-    if (dataState.showBS.exercise) {
-        dataState.nameSection = stringResource(id = R.string.exercise2)
-        dataState.item = dataState.exercise
-        dataState.onDismissSpeech =
-            { dataState.event(ShowBS(dataState.showBS.copy(element = dataState.exercise))) }
-        BottomSheetSpeech(dataState)
-    }
-    if (dataState.showBS.selectActivity){ BottomSheetSelectActivity(dataState) }
     val listExercise = round.exercise
     ColumnDragDrop(
         items = listExercise,
         modifier = modifier,
-        showList = showExercises,
         content = { item -> ElementColum( item, dataState = dataState) },
         onMoveItem = { from, to->
             dataState.event(
                 TrainingEvent.ChangeSequenceExercise(
-                item = DataForChangeSequenceImpl(
-                    trainingId = dataState.training?.idTraining ?: 0,
-                    roundId = round.idRound,
-                    ringId = 0,
-                    from = from,
-                    to = to )
+                    item = DataForChangeSequenceImpl(
+                        trainingId = dataState.training?.idTraining ?: 0,
+                        roundId = round.idRound,
+                        ringId = 0,
+                        from = from,
+                        to = to )
                 ))
         },)
-    if (showExercises) Spacer(modifier = Modifier.height(4.dp))
+    Spacer(modifier = Modifier.height(4.dp))
 }
 
 @Composable fun <T>ElementColum (item:T, dataState: TrainingState,){
     Spacer(modifier = Modifier.padding(top = 1.dp))
-    dataState.exercise = item as Exercise
     Frame(contour = contourAll1) {
         Column (modifier = Modifier
             .fillMaxWidth()
             .padding(vertical = 4.dp),) {
-            SelectActivity(dataState, item as Exercise)
+            Title(dataState, item as Exercise)
             BodyExercise(dataState, item as Exercise)
         }
     }
 }
-@Composable fun SelectActivity(dataState: TrainingState, exercise: Exercise) {
+@Composable fun Title(dataState: TrainingState, exercise: Exercise) {
+    ShowBottomSheetSpeech(dataState,dataState.showBS.exercise,R.string.exercise2,exercise)
+    ShowBottomSheetSelectActivity(dataState, exercise)
+
     Row( verticalAlignment = Alignment.CenterVertically){
         val nameNewSet = stringResource(id = R.string.set) + " ${exercise.sets.size + 1}"
         IconsCollapsing(
@@ -108,9 +101,11 @@ fun ListExercises(
             onClickDelete = { dataState.event(TrainingEvent.DelExercise(exercise)) },
             onClickEdit = {
                 dataState.exercise = exercise
+                dataState.item = exercise
                 dataState.event(ShowBS(dataState.showBS.copy(element = exercise.activity)))},
             onClickSpeech = {
                 dataState.exercise = exercise
+                dataState.item = exercise
                 dataState.event(ShowBS(dataState.showBS.copy(element = exercise))) },
             onClickAddSet = { dataState.event( TrainingEvent.CopySet(
                     SetImplP(name = nameNewSet, exerciseId = exercise.idExercise)))},
@@ -124,7 +119,8 @@ fun ListExercises(
 @Composable fun ListSets(dataState: TrainingState, exercise: Exercise) {
     Column {
         exercise.sets.forEachIndexed { ind, set ->
-            Box (modifier = Modifier.fillMaxWidth()
+            Box (modifier = Modifier
+                .fillMaxWidth()
                 .border(
                     width = 1.dp,
                     color = MaterialTheme.colorScheme.surface,

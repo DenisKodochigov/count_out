@@ -1,5 +1,6 @@
 package com.count_out.presentation.screens.training.round
 
+import android.util.Log
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -13,55 +14,32 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import com.count_out.domain.entity.discard
 import com.count_out.domain.entity.enums.RoundType
 import com.count_out.domain.entity.workout.Round
 import com.count_out.presentation.R
 import com.count_out.presentation.models.Dimen.contourHor2
 import com.count_out.presentation.models.ExerciseImplP
+import com.count_out.presentation.screens.training.ShowBottomSheetSpeech
 import com.count_out.presentation.screens.training.TrainingEvent
 import com.count_out.presentation.screens.training.TrainingEvent.ShowBS
 import com.count_out.presentation.screens.training.TrainingState
 import com.count_out.presentation.screens.training.exercise.ListExercises
 import com.count_out.presentation.view_element.EnumsTo
 import com.count_out.presentation.view_element.TextApp
-import com.count_out.presentation.view_element.bottom_sheet.BottomSheetSpeech
 import com.count_out.presentation.view_element.custom_view.Frame
 import com.count_out.presentation.view_element.icons.IconsCollapsing
 import com.count_out.presentation.view_element.icons.IconsGroup
 
 @Composable fun Round(dataState: TrainingState, round: Round){
-
-    if (dataState.showBS.workUp) {
-        dataState.nameSection = stringResource(id = R.string.work_up1)
-        dataState.item = dataState.training?.rounds?.find { it.roundType == RoundType.WorkUp }
-        dataState.onDismissSpeech =
-            { dataState.event(ShowBS(dataState.showBS.copy(element = dataState.item))) }
-        dataState.onConfirmationSpeech = {speech, item->
-            dataState.event(TrainingEvent.UpdateSpeech(speech))
-            dataState.event(ShowBS(dataState.showBS.copy(element = dataState.item))) }
-        BottomSheetSpeech(dataState)
+    when(round.roundType){
+        RoundType.WorkUp -> ShowBottomSheetSpeech(dataState, dataState.showBS.workUp,
+            R.string.work_up1, round)
+        RoundType.WorkOut -> ShowBottomSheetSpeech(dataState, dataState.showBS.workOut,
+            R.string.work_out1, round)
+        RoundType.WorkDown -> ShowBottomSheetSpeech(dataState, dataState.showBS.workDown,
+            R.string.work_down1, round)
     }
-    if (dataState.showBS.workOut) {
-        dataState.nameSection = stringResource(id = R.string.work_out1)
-        dataState.item = dataState.training?.rounds?.find { it.roundType == RoundType.WorkOut }
-        dataState.onDismissSpeech =
-            { dataState.event(ShowBS(dataState.showBS.copy(element = dataState.item))) }
-        dataState.onConfirmationSpeech = {speech, item->
-            dataState.event(TrainingEvent.UpdateSpeech(speech))
-            dataState.event(ShowBS(dataState.showBS.copy(element = dataState.item))) }
-        BottomSheetSpeech(dataState)
-    }
-    if (dataState.showBS.workDown) {
-        dataState.nameSection = stringResource(id = R.string.work_down1)
-        dataState.item = dataState.training?.rounds?.find { it.roundType == RoundType.WorkDown }
-        dataState.onDismissSpeech =
-            { dataState.event(ShowBS(dataState.showBS.copy(element = dataState.item))) }
-        dataState.onConfirmationSpeech = {speech, item->
-            dataState.event(TrainingEvent.UpdateSpeech(speech))
-            dataState.event(ShowBS(dataState.showBS.copy(element = dataState.item))) }
-        BottomSheetSpeech(dataState)
-    }
-
     Frame(colorAlpha = 0.8f, contour = contourHor2){
         Column( modifier = Modifier.padding(start = 6.dp, bottom = 4.dp, top = 4.dp)){
             TitleRound(dataState = dataState, round = round)
@@ -82,7 +60,7 @@ import com.count_out.presentation.view_element.icons.IconsGroup
                 style = MaterialTheme.typography.headlineSmall,)
             TextApp( style = MaterialTheme.typography.bodySmall, fontWeight = FontWeight.Light,
                 text = "${ stringResource(id = R.string.exercises) }: ${round.amount}" +
-                        " / ${round.duration.value} ${ stringResource(id = R.string.min)}",) }
+                        " / ${round.duration.value.discard(2)} ${ stringResource(id = R.string.min)}",) }
         IconsGroup(
             onClickSpeech = { showSpeechRound(dataState, round) },
             onClickAddExercise = {
@@ -91,15 +69,12 @@ import com.count_out.presentation.view_element.icons.IconsGroup
     }
 }
 @Composable fun ListExercise(dataState: TrainingState, round: Round){
-    ListExercises(
-        dataState = dataState,
-        round = round,
-        modifier = Modifier.padding(end = 8.dp),
-        showExercises = getCollapsing(dataState, round) && round.amount > 0,
-    )
+    if (getCollapsing(dataState, round) && round.amount > 0){
+        ListExercises(dataState = dataState, round = round, modifier = Modifier.padding(end = 8.dp))
+    }
 }
-//
 fun showSpeechRound(dataState: TrainingState, round: Round){
+    dataState.item = round
     dataState.event(ShowBS(dataState.showBS.copy(element = round)))
 }
 

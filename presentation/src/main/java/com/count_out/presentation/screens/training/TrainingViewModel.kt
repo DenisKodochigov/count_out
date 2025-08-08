@@ -12,6 +12,7 @@ import com.count_out.domain.use_case.other.CollapsingUC
 import com.count_out.domain.use_case.other.ShowBottomSheetUC
 import com.count_out.domain.use_case.plans.GetTrainingUC
 import com.count_out.domain.use_case.plans.UpdateTrainingUC
+import com.count_out.domain.use_case.plans.activity.GetActivitiesUC
 import com.count_out.domain.use_case.plans.exercise.ChangeSequenceExerciseUC
 import com.count_out.domain.use_case.plans.exercise.CopyExerciseUC
 import com.count_out.domain.use_case.plans.exercise.DeleteExerciseUC
@@ -31,6 +32,7 @@ import javax.inject.Inject
 
 @HiltViewModel class TrainingViewModel @Inject constructor(
     private val getTrainingUC: GetTrainingUC,
+    private val getActivitiesUC: GetActivitiesUC,
     private val updateTrainingUC: UpdateTrainingUC,
     private val copyExerciseUC: CopyExerciseUC,
     private val delExerciseUC: DeleteExerciseUC,
@@ -70,7 +72,11 @@ import javax.inject.Inject
     fun getTraining(id: Long) {
         idTraining = id
         viewModelScope.launch(Dispatchers.IO) {
-            getTrainingUC.execute( GetTrainingUC.Request(TrainingImplP(idTraining = id))).collect { submitState( it ) }
+            getTrainingUC.execute( GetTrainingUC.Request(TrainingImplP(idTraining = id)))
+                 .collect { submitState( it ) }
+        }
+        viewModelScope.launch(Dispatchers.IO) {
+            getActivitiesUC.execute( GetActivitiesUC.Request).collect { submitState( it ) }
         }
     }
     private fun getTraining() {

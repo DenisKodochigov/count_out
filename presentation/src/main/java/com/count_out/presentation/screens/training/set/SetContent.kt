@@ -46,6 +46,7 @@ import com.count_out.presentation.models.TypeKeyboard
 import com.count_out.presentation.models.alumBodyLarge
 import com.count_out.presentation.models.alumBodyMedium
 import com.count_out.presentation.models.alumBodySmall
+import com.count_out.presentation.screens.training.ShowBottomSheetSpeech
 import com.count_out.presentation.screens.training.TrainingEvent
 import com.count_out.presentation.screens.training.TrainingEvent.ShowBS
 import com.count_out.presentation.screens.training.TrainingState
@@ -60,18 +61,6 @@ import com.count_out.presentation.view_element.icons.IconsGroup
 val interval_between_pole = 4.dp
 
 @Composable fun SetContent(dataState: TrainingState, set: SetImplP){
-
-    if (dataState.showBS.set) {
-        dataState.nameSection = stringResource(id = R.string.set2)
-        dataState.item = dataState.set
-        dataState.onDismissSpeech =
-            { dataState.event(ShowBS(dataState.showBS.copy(element = dataState.item))) }
-        dataState.onConfirmationSpeech = {speech, item->
-            dataState.event(TrainingEvent.UpdateSpeech(speech))
-            dataState.event(ShowBS(dataState.showBS.copy(element = dataState.item)))
-        }
-        BottomSheetSpeech(dataState)
-    }
     AnimatedVisibility(modifier = Modifier.padding(horizontal = 4.dp, vertical = 1.dp), visible = true) {
         Frame(colorAlpha = 0.4f, contour = contourAll1) {
             Column (horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier
@@ -115,12 +104,48 @@ val interval_between_pole = 4.dp
             onClickDelete = { dataState.event(TrainingEvent.DeleteSet(set))},
             onClickSpeech = {
                 dataState.set = set
+                dataState.item = set
                 dataState.event(ShowBS(dataState.showBS.copy(element = set)))},
         )
     }
 }
+@Composable fun TaskSwitch(dataState: TrainingState, set: SetImplP){
+    Row(verticalAlignment = Alignment.CenterVertically){
+        if (set.positions.second == 1){
+            IconsCollapsing(
+                onClick = { dataState.event(TrainingEvent.SetCollapsing(dataState.collapsing.copy(item = set)))  },
+                wrap = dataState.collapsing.sets.find { it == set.idSet } != null )
+        }
+        TextApp(
+            text = "${(set.positions.first + 1)}" ,
+            style = typography.displayMedium,
+            textAlign = TextAlign.Start,
+            modifier = Modifier.padding(start = 4.dp, end =16.dp))
+        Spacer(modifier = Modifier.weight(1f))
+        IconQ.Duration(selected = set.goal == Goal.Duration,
+            onClick = { dataState.event(TrainingEvent.UpdateSet( set.copy(goal = Goal.Duration)))},)
+        Spacer(modifier = Modifier.width(24.dp))
+        IconQ.Distance(selected = set.goal == Goal.Distance,
+            onClick = { dataState.event(TrainingEvent.UpdateSet( set.copy(goal = Goal.Distance))) },)
+        Spacer(modifier = Modifier.width(24.dp))
+        IconQ.Count(selected = set.goal == Goal.Count,
+            onClick = { dataState.event(TrainingEvent.UpdateSet( set.copy(goal = Goal.Count))) },)
+        Spacer(modifier = Modifier.width(24.dp))
+        Spacer(modifier = Modifier.weight(1f))
+        IconsGroup(
+            onClickCopy = { dataState.event(TrainingEvent.CopySet( set )) },
+            onClickDelete = {  dataState.event(
+                TrainingEvent.DeleteSet(set)) },
+            onClickSpeech = {
+                dataState.set = set
+                dataState.item = set
+                dataState.event(ShowBS(dataState.showBS.copy(element = set)))   },)
+    }
+}
 
 @Composable fun BodySet(dataState: TrainingState, set: SetImplP){
+    Log.d("KDS", "BodySet ${set.idSet} ${dataState.item}")
+    ShowBottomSheetSpeech(dataState,dataState.showBS.set,R.string.set2,set)
     when (set.goal){
         Goal.Distance -> Distance( dataState, set)
         Goal.Duration -> Duration( dataState, set)
@@ -274,38 +299,6 @@ val interval_between_pole = 4.dp
         onChangeValue ={ dataState.event(TrainingEvent.UpdateSet( set.copy(groupCount = it))) })
 }
 
-@Composable fun TaskSwitch(dataState: TrainingState, set: SetImplP){
-    Row(verticalAlignment = Alignment.CenterVertically){
-        if (set.positions.second == 1){
-            IconsCollapsing(
-                onClick = { dataState.event(TrainingEvent.SetCollapsing(dataState.collapsing.copy(item = set)))  },
-                wrap = dataState.collapsing.sets.find { it == set.idSet } != null )
-        }
-        TextApp(
-            text = "${(set.positions.first + 1)}" ,
-            style = typography.displayMedium,
-            textAlign = TextAlign.Start,
-            modifier = Modifier.padding(start = 4.dp, end =16.dp))
-        Spacer(modifier = Modifier.weight(1f))
-        IconQ.Duration(selected = set.goal == Goal.Duration,
-            onClick = { dataState.event(TrainingEvent.UpdateSet( set.copy(goal = Goal.Duration)))},)
-        Spacer(modifier = Modifier.width(24.dp))
-        IconQ.Distance(selected = set.goal == Goal.Distance,
-            onClick = { dataState.event(TrainingEvent.UpdateSet( set.copy(goal = Goal.Distance))) },)
-        Spacer(modifier = Modifier.width(24.dp))
-        IconQ.Count(selected = set.goal == Goal.Count,
-            onClick = { dataState.event(TrainingEvent.UpdateSet( set.copy(goal = Goal.Count))) },)
-        Spacer(modifier = Modifier.width(24.dp))
-        Spacer(modifier = Modifier.weight(1f))
-        IconsGroup(
-            onClickCopy = { dataState.event(TrainingEvent.CopySet( set )) },
-            onClickDelete = {  dataState.event(
-                TrainingEvent.DeleteSet(set)) },
-            onClickSpeech = {
-                dataState.set = set
-                dataState.event(TrainingEvent.ShowBS(dataState.showBS.copy(element = set)))   },)
-    }
-}
 @Composable fun ZonePulseSwitch(dataState: TrainingState, set: SetImplP){
     Row(horizontalArrangement = Arrangement.Center,
         verticalAlignment = Alignment.CenterVertically,

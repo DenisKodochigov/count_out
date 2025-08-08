@@ -29,8 +29,8 @@ data class TrainingState (
     var screenTextHeader: String = "",
     override var listSpeech: List<SpeechKit> = emptyList(),
     override var nameSection: String = "",
-    override var onConfirmationSpeech: (SpeechKit, Any?) -> Unit = { _, _ ->},
     override var item: Element? = null,
+    override var onConfirmation: (Element, Element?) -> Unit = { _, _ ->},
     override var onDismissSpeech: () -> Unit = {},
     override val event: (Event) -> Unit,
 ): BottomSheetInterface, DataState

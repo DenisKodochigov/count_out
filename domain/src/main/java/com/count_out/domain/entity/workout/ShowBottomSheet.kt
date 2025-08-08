@@ -8,7 +8,7 @@ data class ShowBottomSheet(
     val ring: Boolean = false,
     val exercise: Boolean = false,
     val set: Boolean = false,
-    val selectActivity: Boolean = false,
+    val activity: Boolean = false,
     val show: Boolean = false,
     val element: Element? = null
 )

@@ -7,6 +7,6 @@ interface BottomSheetInterface {
     var item: Element?
     val listSpeech: List<SpeechKit>
     val nameSection: String
-    var onConfirmationSpeech: (SpeechKit, Any?) -> Unit
+    var onConfirmation: (Element, Element?) -> Unit
     var onDismissSpeech: () -> Unit
 }
