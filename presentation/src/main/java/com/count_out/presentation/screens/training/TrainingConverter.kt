@@ -1,12 +1,10 @@
 package com.count_out.presentation.screens.training
 
-import android.util.Log
 import com.count_out.domain.repository.TypeRepo
 import com.count_out.domain.use_case.UseCase
 import com.count_out.domain.use_case.other.CollapsingUC
 import com.count_out.domain.use_case.other.ShowBottomSheetUC
 import com.count_out.domain.use_case.plans.GetTrainingUC
-import com.count_out.domain.use_case.plans.UpdateTrainingUC
 import com.count_out.domain.use_case.plans.activity.GetActivitiesUC
 import com.count_out.domain.use_case.plans.exercise.ChangeSequenceExerciseUC
 import com.count_out.domain.use_case.plans.exercise.CopyExerciseUC
@@ -22,7 +20,7 @@ class TrainingConverter @Inject constructor(): PrimeConvertor<UseCase.Response, 
     override fun makeSuccess(resultData: UseCase.Response, state: MutableStateFlow<TrainingState>): TrainingState {
         return when(resultData){
             is GetTrainingUC.Response-> converterLocal(resultData, state)
-            is UpdateTrainingUC.Response-> converterLocal(resultData, state)
+//            is UpdateTrainingUC.Response-> state.value
             is CopyExerciseUC.Response-> converterLocal(resultData, state)
             is DeleteExerciseUC.Response-> converterLocal(resultData, state)
             is ChangeSequenceExerciseUC.Response-> converterLocal(resultData, state)
@@ -47,11 +45,7 @@ class TrainingConverter @Inject constructor(): PrimeConvertor<UseCase.Response, 
         }
         return state.value
     }
-    private fun converterLocal(data: UpdateTrainingUC.Response, state: MutableStateFlow<TrainingState>): TrainingState {
-        if (data.training is TypeRepo.PlanT)
-            state.value = state.value.copy( training = (data.training as TypeRepo.PlanT).item)
-        return state.value
-    }
+//
     private fun converterLocal(data: CopyExerciseUC.Response, state: MutableStateFlow<TrainingState>): TrainingState {
         return state.value
     }
@@ -86,7 +80,9 @@ class TrainingConverter @Inject constructor(): PrimeConvertor<UseCase.Response, 
         return state.value
     }
 }
-
+//    private fun converterLocal(data: UpdateTrainingUC.Response, state: MutableStateFlow<TrainingState>): TrainingState {
+//        return state.value
+//    }
 //    private fun converterLocal(data: ShowBSSpeechTrainingUC.Response): TrainingState {
 //        return state.copy(showSpeechTraining = data.result,)
 //    }

@@ -21,11 +21,14 @@ import androidx.compose.material3.MaterialTheme.colorScheme
 import androidx.compose.material3.MaterialTheme.shapes
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.count_out.domain.entity.router.DeviceUI
 import com.count_out.presentation.R
+import com.count_out.presentation.models.ActivityImplP
 import com.count_out.presentation.models.Dimen.bsHeightWindowsListBle
 import com.count_out.presentation.models.Dimen.bsSpacerBottomHeight
 import com.count_out.presentation.screens.settings.SettingsEvent
@@ -34,12 +37,27 @@ import com.count_out.presentation.view_element.ModalBottomSheetApp
 import com.count_out.presentation.view_element.TextApp
 import com.count_out.presentation.view_element.icons.AnimateIcon
 
+
+@Composable fun ShowBottomSheetBle(dataState: SettingsState, showBS: Boolean
+){
+    if (showBS) {
+        LaunchedEffect(dataState.showBS.selectBleDevice){ dataState.event(SettingsEvent.StartScanBLE) }
+        BottomSheetBle(dataState)
+    }
+}
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable fun BottomSheetBle(dataState: SettingsState) {
+    dataState.onDismiss = {dataState.event(
+        SettingsEvent.ShowBS(dataState.showBS.copy(element = object: DeviceUI{
+            override var name: String = ""
+            override var address: String = ""
+        })))}
+
     val sheetState = rememberModalBottomSheetState(
         skipPartiallyExpanded = true, confirmValueChange = { true },)
     ModalBottomSheetApp(
-        onDismissRequest = { dataState.onDismissBLEScan(dataState) },
+        onDismissRequest = dataState.onDismiss,
         modifier = Modifier.padding(horizontal = 12.dp),
         shape = shapes.small,
         sheetState = sheetState,
@@ -80,7 +98,7 @@ import com.count_out.presentation.view_element.icons.AnimateIcon
             Row(modifier = Modifier
                 .padding(top = 16.dp, start = 12.dp, end = 12.dp)
                 .clickable {
-                    dataState.showBottomSheetBLE.value = false
+                    dataState.onDismiss
                     dataState.event(SettingsEvent.SelectDevice(item))
                 }) {
                 TextApp(text = item.address, style = MaterialTheme.typography.bodyMedium)

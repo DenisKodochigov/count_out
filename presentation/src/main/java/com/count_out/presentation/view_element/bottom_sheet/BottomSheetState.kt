@@ -15,8 +15,8 @@ data class BottomSheetState(
     val enteredAfterEnd: MutableState<String> = mutableStateOf(""),
     @Stable var speechKit: SpeechKit? = null,
     @Stable override var item: Element? =null,
-    @Stable override var listSpeech: List<SpeechKit> = emptyList(),
+//    @Stable override var listSpeech: List<SpeechKit> = emptyList(),
     @Stable override var nameSection: String = "",
     @Stable override var onConfirmation: (Element, Element?) -> Unit = { _, _->},
-    @Stable override var onDismissSpeech: () -> Unit = {},
+    @Stable override var onDismiss: () -> Unit = {},
 ): BottomSheetInterface

@@ -30,6 +30,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.count_out.domain.entity.router.DeviceUI
 import com.count_out.domain.entity.workout.Activity
 import com.count_out.presentation.R
 import com.count_out.presentation.models.ActivityImplP
@@ -47,9 +48,8 @@ import com.count_out.presentation.view_element.dialog.ChangeColorSectionDialog
         ActivityInfo(
             activity = mutableStateOf(ActivityImplP(activity)),
             onSelect = {
-                dataState.activity.value = activity
-                dataState.showBottomSheetAddActivity.value = true },
-            onChange = { dataState.event(SettingsEvent.SetColorActivity(activity)) }, //
+                dataState.item = activity
+                dataState.event(SettingsEvent.ShowBS(dataState.showBS.copy(element = activity)))},             onChange = { dataState.event(SettingsEvent.SetColorActivity(activity)) }, //
             onDeleteActivity = { dataState.event(SettingsEvent.DeleteActivity(activity)) },
         )
     }
@@ -79,16 +79,17 @@ import com.count_out.presentation.view_element.dialog.ChangeColorSectionDialog
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Start
     ){
-        Icon(painter = painterResource(id = activity.value.icon), contentDescription = null)
+        Icon(painter = painterResource(
+            id = activity.value.icon.let { if (it > 0) it else R.drawable.ic_setka }),
+            contentDescription = null)
         Spacer(modifier = Modifier.padding(end= 12.dp))
         TextFieldApp(
             modifier = Modifier.weight(1f).padding(end = 8.dp),
             edit = edit,
-            placeholder = activity.value.name,
+            placeholder = activity.value.name.let { it.ifEmpty { stringResource(R.string.new_activity) } },
             typeKeyboard = TypeKeyboard.TEXT,
             textStyle = MaterialTheme.typography.bodyLarge,
             contentAlignment = Alignment.CenterStart,
-            onLossFocus = false,
             onChangeValue = { activity.value = activity.value.copy(name = it) }//onChange(activity.value)
         )
         Spacer(modifier = Modifier
@@ -97,15 +98,18 @@ import com.count_out.presentation.view_element.dialog.ChangeColorSectionDialog
             .border(width = 1.dp, color = colorScheme.outline, shape = CircleShape)
             .clickable { activityChangeColor.value = activity.value }
             .background(color = Color(activity.value.color), shape = CircleShape))
-        IconButton( onClick = { onDeleteActivity(activity.value.idActivity) }) {
-            Icon(imageVector = Icons.Filled.DeleteSweep, contentDescription = null,
-                tint = colorScheme.outline)
+        if (activity.value.idActivity>0){
+            IconButton( onClick = { onDeleteActivity(activity.value.idActivity) }) {
+                Icon(imageVector = Icons.Filled.DeleteSweep, contentDescription = null,
+                    tint = colorScheme.outline)
+            }
         }
+
     }
 }
 @Composable fun ActivityInfoFull(
     activity: MutableState<ActivityImplP>,
-    onChange: (Activity) -> Unit = {},
+    onChange: (ActivityImplP) -> Unit = {},
 ){
     val modifier = Modifier.padding(horizontal = 6.dp, vertical = 4.dp)
     val modifier1 = Modifier.padding(horizontal = 6.dp, vertical = 0.dp)
@@ -115,19 +119,17 @@ import com.count_out.presentation.view_element.dialog.ChangeColorSectionDialog
             edit = true,
             onChange = onChange,
         )
-        Row(verticalAlignment = Alignment.CenterVertically, modifier = modifier
-            .background(color = colorScheme.onSecondary, shape = shapes.small),){
+        Row(verticalAlignment = Alignment.CenterVertically, modifier = modifier,){
             TextApp(text = stringResource(id = R.string.audio_track) + ":", style = MaterialTheme.typography.bodyLarge, modifier = modifier1)
             FieldF(activity.value.audioTrack, modifier.weight(1f)) {
                 onChange((activity.value ).copy(audioTrack = it))}
         }
-        Row(verticalAlignment = Alignment.CenterVertically, modifier = modifier
-            .background(color = colorScheme.onSecondary, shape = shapes.small), ){
+        Row(verticalAlignment = Alignment.CenterVertically, modifier = modifier, ){
             TextApp(text = stringResource(id = R.string.video_clip) + ":", style = MaterialTheme.typography.bodyLarge, modifier = modifier1)
             FieldF(activity.value.videoClip, modifier.weight(1f)) {
                 onChange(activity.value.copy(videoClip = it))}
         }
-        Column( modifier = modifier.background(color = colorScheme.onSecondary, shape = shapes.small)){
+        Column( modifier = modifier){
             TextApp(text = stringResource(id = R.string.description) + ":", style = MaterialTheme.typography.bodyLarge, modifier = modifier1)
             Row(Modifier.fillMaxWidth()) {
                 FieldF(activity.value.description, Modifier.weight(1f)) {
@@ -143,7 +145,6 @@ import com.count_out.presentation.view_element.dialog.ChangeColorSectionDialog
         placeholder = placeholder,
         typeKeyboard = TypeKeyboard.TEXT,
         contentAlignment = Alignment.CenterStart,
-        onLossFocus = false,
         maxLines = 3,
         textStyle = MaterialTheme.typography.bodyLarge,
         onChangeValue = { onChangeValue(it) }

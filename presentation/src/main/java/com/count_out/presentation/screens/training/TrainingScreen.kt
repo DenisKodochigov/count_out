@@ -36,15 +36,13 @@ import com.count_out.presentation.models.Dimen
 import com.count_out.presentation.models.ExerciseImplP
 import com.count_out.presentation.models.TrainingImplP
 import com.count_out.presentation.models.TypeKeyboard
-import com.count_out.presentation.screens.execute.ExecuteEvent
-import com.count_out.presentation.screens.execute.ExecuteState
 import com.count_out.presentation.screens.prime.PrimeScreen
 import com.count_out.presentation.screens.training.TrainingEvent.ShowBS
 import com.count_out.presentation.screens.training.round.Round
 import com.count_out.presentation.view_element.TextFieldApp
-import com.count_out.presentation.view_element.TopBarApp
 import com.count_out.presentation.view_element.bottom_sheet.BottomSheetSelectActivity
 import com.count_out.presentation.view_element.bottom_sheet.BottomSheetSpeech
+import com.count_out.presentation.view_element.bottom_sheet.ShowBottomSheetSpeech
 import com.count_out.presentation.view_element.icons.IconsGroup
 
 @Composable fun TrainingScreen(viewModel: TrainingViewModel, trainingId: Long){
@@ -86,59 +84,33 @@ import com.count_out.presentation.view_element.icons.IconsGroup
     val enteredName: MutableState<String> = remember { mutableStateOf(dataState.training?.name ?: "") }
     if (dataState.training?.idTraining == 0L) return
     Row( verticalAlignment = Alignment.CenterVertically,
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(bottom = 6.dp))
+        modifier = Modifier.fillMaxWidth().padding(bottom = 6.dp, end = 4.dp))
     {
         TextFieldApp(
-            placeholder = enteredName.value,
-            typeKeyboard = TypeKeyboard.TEXT,
-            textStyle = MaterialTheme.typography.headlineMedium.copy(textAlign = TextAlign.Start),
+            modifier = Modifier.padding(start = 4.dp),
             edit = true,
+            typeKeyboard = TypeKeyboard.TEXT,
+            contentAlignment = Alignment.CenterStart,
+            textStyle = MaterialTheme.typography.headlineMedium.copy(textAlign = TextAlign.Start),
             colorLine = MaterialTheme.colorScheme.outline,
+            placeholder = enteredName.value,
             onChangeValue = {
                 enteredName.value = it
-                dataState.training?.let {
-                    dataState.event( TrainingEvent.UpdateTraining(TrainingImplP(it, enteredName.value))) }
+                dataState.training?.let {tr->
+                    dataState.event( TrainingEvent.UpdateTraining(TrainingImplP(tr, enteredName.value)))
+                }
             }
         )
         Spacer(modifier = Modifier.weight(1f))
         IconsGroup(
             onClickSpeech = {
+                dataState.item = dataState.training
                 dataState.event(ShowBS(dataState.showBS.copy(element = dataState.training))) },
             onClickDelete = {
                 dataState.training?.let { dataState.event(TrainingEvent.DelTraining(dataState.training))}
-                dataState.onBaskScreen.invoke()
+                dataState.training?.let { dataState.event(TrainingEvent.BackScreen)}
             }
         )
         Spacer(modifier = Modifier.width(7.dp))
-    }
-}
-
-@Composable fun ShowBottomSheetSpeech(
-    dataState: TrainingState, showBS: Boolean, idString: Int, item: Element? = null
-){
-    if (showBS && dataState.item == item) {
-        dataState.nameSection = stringResource(id = idString)
-        dataState.onDismissSpeech =
-            { dataState.event(ShowBS(dataState.showBS.copy(element = item)))}
-        dataState.onConfirmation = { speech, item ->
-            dataState.event(TrainingEvent.UpdateSpeech(speech as SpeechKit))
-            dataState.event(ShowBS(dataState.showBS.copy(element = item)))
-        }
-        BottomSheetSpeech(dataState)
-    }
-}
-@Composable fun ShowBottomSheetSelectActivity(dataState: TrainingState, item: Exercise){
-    if (dataState.showBS.activity && dataState.item == item){//&& dataState.item == item
-        dataState.nameSection = stringResource(id = R.string.list_activity)
-        dataState.onDismissSpeech =
-            { dataState.event(ShowBS(dataState.showBS.copy(element = item.activity))) }
-        dataState.onConfirmation = { exercise, activity ->
-            dataState.event(
-                TrainingEvent.UpdateExercise(ExerciseImplP(exercise as Exercise, activity as Activity)))
-            dataState.event(ShowBS(dataState.showBS.copy(element = item.activity)))
-        }
-        BottomSheetSelectActivity(dataState)
     }
 }

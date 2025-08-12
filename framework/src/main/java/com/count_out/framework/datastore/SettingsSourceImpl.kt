@@ -1,6 +1,9 @@
 package com.count_out.framework.datastore
 
+import android.util.Log
+import android.util.Log.e
 import androidx.datastore.core.DataStore
+import androidx.datastore.dataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
@@ -10,6 +13,7 @@ import com.count_out.data.models.throwable.ResultSource
 import com.count_out.data.models.throwable.ThrowableDS
 import com.count_out.data.models.throwable.TypeSource
 import com.count_out.data.source.local.SettingsSource
+import com.count_out.domain.entity.Setting
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flow
@@ -45,32 +49,32 @@ class SettingsSourceImpl @Inject constructor(private val dataStore: DataStore<Pr
     override fun getBleAddress(): Flow<ResultSource<TypeSource>> =
         dataStore.data.map { ResultSource.Success(TypeSource.StringT(it[keyAddress] ?: ""))}
 
-    override suspend fun saveSettingSpeechDescr(settings: TypeSource): Flow<ResultSource<TypeSource>> {
+    override fun saveSettingSpeechDescr(settings: TypeSource): Flow<ResultSource<TypeSource>> {
         return flow { emit(
             try {
-                if (settings is TypeSource.BooleanT) {
-                    dataStore.edit { it[keySpeechDescr] = settings.item }
+                if (settings is TypeSource.SettingT && settings.item is Setting.SpeechDescription) {
+                    dataStore.edit {
+                        it[keySpeechDescr] = (settings.item as Setting.SpeechDescription).value }
                     ResultSource.Success(TypeSource.BooleanT(true))
                 } else ResultSource.Error(ThrowableDS.NotValidType())
             } catch (e: Exception) { ResultSource.Error(ThrowableDS.extract(t = e)) })
         }
     }
 
-    override suspend fun saveBleAddress(settings: TypeSource): Flow<ResultSource<TypeSource>> {
+    override fun saveBleAddress(settings: TypeSource): Flow<ResultSource<TypeSource>> {
         return flow { emit(try {
-                if (settings is TypeSource.StringT) {
-                    dataStore.edit { it[keyAddress] = settings.item }
+                if (settings is TypeSource.SettingT && settings.item is Setting.BleAddress) {
+                    dataStore.edit { it[keyAddress] = (settings.item as Setting.BleAddress).value }
                     ResultSource.Success(TypeSource.BooleanT(true))
                 } else ResultSource.Error(ThrowableDS.NotValidType())
             } catch (e: Exception) { ResultSource.Error(ThrowableDS.extract(t = e)) })
         }
     }
 
-    override suspend fun saveBleName(settings: TypeSource): Flow<ResultSource<TypeSource>> {
-        return flow { emit(
-                try {
-                if (settings is TypeSource.StringT) {
-                    dataStore.edit { it[keyName] = settings.item }
+    override fun saveBleName(settings: TypeSource): Flow<ResultSource<TypeSource>> {
+        return flow { emit(try {
+                if (settings is TypeSource.SettingT && settings.item is Setting.BleAddress) {
+                    dataStore.edit { it[keyName] = (settings.item as Setting.BleAddress).value }
                     ResultSource.Success(TypeSource.BooleanT(true))
                 } else ResultSource.Error(ThrowableDS.NotValidType())
             } catch (e: Exception) { ResultSource.Error(ThrowableDS.extract(t = e)) })

@@ -1,6 +1,5 @@
 package com.count_out.presentation.view_element.bottom_sheet
 
-import android.util.Log
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -21,9 +20,11 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.count_out.domain.entity.workout.Element
 import com.count_out.domain.entity.workout.Exercise
 import com.count_out.domain.entity.workout.Round
 import com.count_out.domain.entity.workout.Set
+import com.count_out.domain.entity.workout.SpeechKit
 import com.count_out.domain.entity.workout.Training
 import com.count_out.presentation.R
 import com.count_out.presentation.models.BottomSheetInterface
@@ -31,17 +32,35 @@ import com.count_out.presentation.models.Dimen
 import com.count_out.presentation.models.SpeechImplP
 import com.count_out.presentation.models.SpeechKitImplP
 import com.count_out.presentation.models.TypeKeyboard
+import com.count_out.presentation.screens.training.TrainingEvent
+import com.count_out.presentation.screens.training.TrainingEvent.ShowBS
+import com.count_out.presentation.screens.training.TrainingState
 import com.count_out.presentation.view_element.ButtonConfirm
 import com.count_out.presentation.view_element.ModalBottomSheetApp
 import com.count_out.presentation.view_element.TextApp
 import com.count_out.presentation.view_element.TextFieldApp
+
+@Composable fun ShowBottomSheetSpeech(
+    dataState: TrainingState, showBS: Boolean, idString: Int, item: Element? = null
+){
+    if (showBS && dataState.item == item) {
+        dataState.nameSection = stringResource(id = idString)
+        dataState.onDismiss =
+            { dataState.event(ShowBS(dataState.showBS.copy(element = item)))}
+        dataState.onConfirmation = { speech, item1 ->
+            dataState.event(TrainingEvent.UpdateSpeech(speech as SpeechKit))
+            dataState.event(ShowBS(dataState.showBS.copy(element = item)))
+        }
+        BottomSheetSpeech(dataState)
+    }
+}
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable fun BottomSheetSpeech(itemSpeech: BottomSheetInterface) {
     val uiState by remember{ mutableStateOf( bottomSheetStateNew(itemSpeech)) }
     val sheetState = rememberModalBottomSheetState( skipPartiallyExpanded = true )
     ModalBottomSheetApp(
-        onDismissRequest = { uiState.onDismissSpeech() },
+        onDismissRequest = { uiState.onDismiss() },
         modifier = Modifier.padding(horizontal = Dimen.bsPaddingHor1),
         shape = shapes.small,
         sheetState = sheetState,
@@ -63,11 +82,11 @@ fun bottomSheetStateNew(itemSpeech: BottomSheetInterface): BottomSheetState {
         enteredAfterStart = mutableStateOf( speech?.afterStart?.message ?: "" ),
         enteredAfterEnd = mutableStateOf( speech?.afterEnd?.message ?: "" ),
         speechKit= speech ,
-        listSpeech = itemSpeech.listSpeech,
+//        listSpeech = itemSpeech.listSpeech,
         nameSection = itemSpeech.nameSection,
         item = itemSpeech.item,
         onConfirmation = itemSpeech.onConfirmation,
-        onDismissSpeech = itemSpeech.onDismissSpeech,
+        onDismiss = itemSpeech.onDismiss,
     )
 }
 
@@ -99,16 +118,16 @@ fun bottomSheetStateNew(itemSpeech: BottomSheetInterface): BottomSheetState {
 @Composable fun FieldTextForSpeech(enterValue: MutableState<String>, nameSection: String){
     Column(modifier = Modifier.padding(horizontal = 12.dp)) {
         TextFieldApp(
+            modifier = Modifier.fillMaxWidth(),
+            typeKeyboard = TypeKeyboard.TEXT,
             textStyle = MaterialTheme.typography.bodyLarge,
+            contentAlignment = Alignment.CenterStart,
+            placeholder = enterValue.value,
             showLine = true,
-            onLossFocus = false,
             maxLines = 3,
             edit = true,
-            contentAlignment = Alignment.CenterStart,
-            modifier = Modifier.fillMaxWidth(),
-            placeholder = enterValue.value,
-            onChangeValue = { enterValue.value = it },
-            typeKeyboard = TypeKeyboard.TEXT )
+            enterValue = enterValue
+        )
         TextApp(text = nameSection, style = MaterialTheme.typography.bodySmall.copy(fontWeight = FontWeight.ExtraLight),
             modifier = Modifier.padding(start = Dimen.bsItemPaddingHor))
     }
@@ -118,10 +137,6 @@ fun bottomSheetStateNew(itemSpeech: BottomSheetInterface): BottomSheetState {
         uiState.onConfirmation(
             SpeechKitImplP(
                 idSpeechKit = uiState.speechKit?.idSpeechKit ?: 0,
-//                idBeforeStart = uiState.speechKit?.idBeforeStart ?: 0,
-//                idAfterStart = uiState.speechKit?.idAfterStart ?: 0,
-//                idBeforeEnd = uiState.speechKit?.idBeforeEnd ?: 0,
-//                idAfterEnd = uiState.speechKit?.idAfterEnd ?: 0,
                 beforeStart = (uiState.speechKit?.beforeStart?.let { SpeechImplP(it) } ?: SpeechImplP()).copy(message = uiState.enteredBeforeStart.value),
                 afterStart = (uiState.speechKit?.afterStart?.let { SpeechImplP(it) } ?: SpeechImplP()).copy(message = uiState.enteredAfterStart.value),
                 beforeEnd = (uiState.speechKit?.beforeEnd?.let { SpeechImplP(it) } ?: SpeechImplP()).copy(message = uiState.enteredBeforeEnd.value),
@@ -129,7 +144,6 @@ fun bottomSheetStateNew(itemSpeech: BottomSheetInterface): BottomSheetState {
             ),
             uiState.item
         )
-//        uiState.onDismissSpeech.invoke()
     })
 }
 

@@ -10,7 +10,6 @@ interface ExerciseRepo {
     fun copy(exercise: TypeRepo): Flow<ResultUC<TypeRepo>>
     fun update(exercise: TypeRepo): Flow<ResultUC<TypeRepo>>
     fun changeSequenceExercise(item: TypeRepo): Flow<ResultUC<TypeRepo>>
-
     fun getForRound(id: TypeRepo): Flow<ResultUC<TypeRepo>>
     fun getForRing(id: TypeRepo): Flow<ResultUC<TypeRepo>>
     fun getFilter(list: TypeRepo): Flow<ResultUC<TypeRepo>>

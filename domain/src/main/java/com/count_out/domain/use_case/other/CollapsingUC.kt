@@ -1,6 +1,7 @@
 package com.count_out.domain.use_case.other
 
 import com.count_out.domain.entity.throwable.ResultUC
+import com.count_out.domain.entity.workout.Activity
 import com.count_out.domain.entity.workout.Collapsing
 import com.count_out.domain.entity.workout.Exercise
 import com.count_out.domain.entity.workout.Ring
@@ -25,10 +26,16 @@ class CollapsingUC @Inject constructor(configuration: Configuration
 
     fun executeCollapsing(item: Collapsing): Collapsing{
         return when(item.item){
-            is Set -> {item.copy(sets = editList(item.sets, (item.item as Set).idSet))}
-            is Ring-> {item.copy(rings = editList(item.rings, (item.item as Ring).idRing))}
-            is Round-> {item.copy(rounds = editList(item.rounds, (item.item as Round).idRound))}
-            is Exercise-> {item.copy(exercises = editList(item.exercises, (item.item as Exercise).idExercise))}
+            is Set -> {item.copy(sets =
+                editList(item.sets, (item.item as Set).idSet))}
+            is Ring-> {item.copy(rings =
+                editList(item.rings, (item.item as Ring).idRing))}
+            is Round-> {item.copy(rounds =
+                editList(item.rounds, (item.item as Round).idRound))}
+            is Exercise-> {item.copy(exercises =
+                editList(item.exercises, (item.item as Exercise).idExercise))}
+            is Activity -> {item.copy(activities =
+                editList(item.activities, (item.item as Activity).idActivity))}
             else -> {item}
         }
     }

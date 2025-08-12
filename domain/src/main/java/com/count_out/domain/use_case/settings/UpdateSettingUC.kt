@@ -12,7 +12,8 @@ class UpdateSettingUC @Inject constructor(
     configuration: Configuration, private val repo: SettingsRepo
 ): UseCase<UpdateSettingUC.Request, UpdateSettingUC.Response>(configuration)  {
 
-    override fun methodRepo(request: Request): Flow<ResultUC<TypeRepo>> = repo.getSettings()
+    override fun methodRepo(request: Request): Flow<ResultUC<TypeRepo>> =
+        repo.saveSetting(TypeRepo.SettingT(request.setting))
     override fun response(typeRepo: TypeRepo): Response = Response(typeRepo)
     data class Request(val setting: Setting): UseCase.Request
     data class Response(val setting: TypeRepo): UseCase.Response

@@ -18,5 +18,3 @@ class UpdatesTrainingUC @Inject constructor(
     data class Request(val training: Training): UseCase.Request
     data class Response(val training: TypeRepo): UseCase.Response
 }
-//    fun implementation(request: Request): Flow<ResultUC<Response>> =
-//        repo.updates(request.training).map { ResultUC.Success(Response(it)) }

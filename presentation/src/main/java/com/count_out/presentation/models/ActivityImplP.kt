@@ -20,4 +20,13 @@ data class ActivityImplP(
         videoClip = item.videoClip,
         audioTrack = item.audioTrack,
     )
+    constructor(id: Long): this(
+        idActivity = id,
+        name = "",
+        description = "",
+        icon = 0,
+        color = 0,
+        videoClip = "",
+        audioTrack = ""
+    )
 }

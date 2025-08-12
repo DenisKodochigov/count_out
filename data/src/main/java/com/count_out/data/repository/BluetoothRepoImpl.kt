@@ -1,7 +1,7 @@
 package com.count_out.data.repository
 
 import com.count_out.data.source.framework.BleSource
-import com.count_out.data.source.local.LastBleDeviceSource
+import com.count_out.data.source.local.SettingsSource
 import com.count_out.domain.entity.throwable.ResultUC
 import com.count_out.domain.repository.BluetoothRepo
 import com.count_out.domain.repository.TypeRepo
@@ -10,11 +10,9 @@ import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 
 class BluetoothRepoImpl @Inject constructor(
-//    private val converter: ConverterResult,
     private val bleSource: BleSource,
-    private val savedDevice: LastBleDeviceSource
+    private val savedDevice: SettingsSource
 ): BluetoothRepo, PrimeRepo() {
-//    override fun converter(): ConverterResult = converter
     override fun startScanning(): Flow<ResultUC<TypeRepo>> {
         return bleSource.startScanning().convertor() }
 
@@ -25,7 +23,7 @@ class BluetoothRepoImpl @Inject constructor(
         return bleSource.connectDevice(toTypeSource(addr)).convertor() }
 
     override fun lastDevice(): Flow<ResultUC<TypeRepo>>{
-        return savedDevice.getDevice().concat1{ bleSource.connectDevice(it) }
+        return savedDevice.getBleAddress().concat1{ bleSource.connectDevice(it) }
     }
     override fun clearCache(): Flow<ResultUC<TypeRepo>> {
         return flow { emit(ResultUC.Success(TypeRepo.BooleanT(item = true)) )} }

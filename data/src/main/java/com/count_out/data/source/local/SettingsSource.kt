@@ -9,7 +9,7 @@ interface SettingsSource {
     fun getSettingSpeechDescr(): Flow<ResultSource<TypeSource>>
     fun getBleAddress(): Flow<ResultSource<TypeSource>>
     fun getBleName(): Flow<ResultSource<TypeSource>>
-    suspend fun saveBleName(settings: TypeSource): Flow<ResultSource<TypeSource>>
-    suspend fun saveBleAddress(settings: TypeSource): Flow<ResultSource<TypeSource>>
-    suspend fun saveSettingSpeechDescr(settings: TypeSource): Flow<ResultSource<TypeSource>>
+    fun saveBleName(settings: TypeSource): Flow<ResultSource<TypeSource>>
+    fun saveBleAddress(settings: TypeSource): Flow<ResultSource<TypeSource>>
+    fun saveSettingSpeechDescr(settings: TypeSource): Flow<ResultSource<TypeSource>>
 }

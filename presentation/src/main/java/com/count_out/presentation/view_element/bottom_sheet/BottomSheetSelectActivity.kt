@@ -19,12 +19,32 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.count_out.domain.entity.workout.Activity
+import com.count_out.domain.entity.workout.Exercise
+import com.count_out.presentation.R
 import com.count_out.presentation.models.ActivityImplP
 import com.count_out.presentation.models.Dimen
+import com.count_out.presentation.models.ExerciseImplP
+import com.count_out.presentation.screens.training.TrainingEvent
+import com.count_out.presentation.screens.training.TrainingEvent.ShowBS
 import com.count_out.presentation.screens.training.TrainingState
 import com.count_out.presentation.view_element.ModalBottomSheetApp
 
+@Composable fun ShowBottomSheetSelectActivity(dataState: TrainingState, item: Exercise){
+    if (dataState.showBS.activity && dataState.item == item){
+        dataState.nameSection = stringResource(id = R.string.list_activity)
+        dataState.onDismiss =
+            { dataState.event(ShowBS(dataState.showBS.copy(element = item.activity))) }
+        dataState.onConfirmation = { exercise, activity ->
+            dataState.event(
+                TrainingEvent.UpdateExercise(ExerciseImplP(exercise as Exercise, activity as Activity)))
+            dataState.event(ShowBS(dataState.showBS.copy(element = item.activity)))
+        }
+        BottomSheetSelectActivity(dataState)
+    }
+}
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun BottomSheetSelectActivity(dataState: TrainingState)
@@ -34,7 +54,7 @@ fun BottomSheetSelectActivity(dataState: TrainingState)
         skipPartiallyExpanded = true, confirmValueChange = { true },)
 
     ModalBottomSheetApp(
-        onDismissRequest = { dataState.onDismissSpeech()},
+        onDismissRequest = { dataState.onDismiss()},
         modifier = Modifier.padding(horizontal = Dimen.bsPaddingHor1),
         shape = MaterialTheme.shapes.small,
         sheetState = sheetState,
@@ -61,7 +81,7 @@ fun BottomSheetSelectActivity(dataState: TrainingState)
         items(items = dataState.activities) {item ->
             ActivityInfo(
                 activity = remember{ mutableStateOf(ActivityImplP(item))},
-                onSelect = { dataState.exercise?.let { dataState.onConfirmation(it, item)}},
+                onSelect = { dataState.item?.let { dataState.onConfirmation(it, item)}},
             )
         }
     }

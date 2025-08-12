@@ -1,6 +1,7 @@
 package com.count_out.framework
 
 import com.count_out.data.models.TrainingImplD
+import com.count_out.data.models.throwable.TypeSource
 import com.count_out.data.source.room.RingSource
 import com.count_out.data.source.room.RoundSource
 import com.count_out.framework.room.db.relation.TrainingRel
@@ -29,8 +30,8 @@ class TrainingSourceTest {
     @ExperimentalCoroutinesApi
     @Test
     fun testAddTraining() = runTest {
-        val training = createTraining()
-        whenever(dao.add(TrainingTable(training))).thenReturn(1L)
+        val training = TypeSource.PlanT( createTraining())
+        whenever(dao.add(TrainingTable(training.item))).thenReturn(1L)
         val trainingId = trainingSource.copy(training)
         Assertions.assertEquals(1, trainingId)
     }
@@ -55,10 +56,10 @@ class TrainingSourceTest {
     @ExperimentalCoroutinesApi
     @Test
     fun testGetTraining() = runTest {
-        val expected = createTraining(id = 1)
-        whenever(dao.getTrainingRel(expected.idTraining)).thenReturn(
+        val expected = TypeSource.PlanT( createTraining(id = 1))
+        whenever(dao.getTrainingRel(expected.item.idTraining)).thenReturn(
             flowOf( TrainingRel(
-                training = TrainingTable(expected),
+                training = TrainingTable(expected.item),
                 rounds = emptyList(),
                 rings =  emptyList(),
                 speechKit = null

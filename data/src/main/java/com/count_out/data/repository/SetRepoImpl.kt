@@ -9,8 +9,7 @@ import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 class SetRepoImpl @Inject constructor(
-    private val source: SetSource,
-    private val sourcePlan: TrainingSource): SetRepo, PrimeRepo() {
+    private val source: SetSource): SetRepo, PrimeRepo() {
 
     override fun gets(exerciseId: TypeRepo): Flow<ResultUC<TypeRepo>> =
         source.gets(toTypeSource( exerciseId)).convertor()
@@ -27,7 +26,6 @@ class SetRepoImpl @Inject constructor(
         val typeSource = toTypeSource(set)
         return source.del(typeSource).nextActionOk { source.get(typeSource) }
     }
-
     override fun update(set: TypeRepo): Flow<ResultUC<TypeRepo>> {
         val typeSource = toTypeSource(set)
         return source.update(typeSource).nextActionOk { source.get(typeSource) }

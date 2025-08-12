@@ -1,6 +1,5 @@
 package com.count_out.presentation.screens.training.exercise
 
-import android.util.Log
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
@@ -19,22 +18,19 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import com.count_out.domain.entity.workout.Activity
 import com.count_out.domain.entity.workout.Exercise
 import com.count_out.domain.entity.workout.Round
 import com.count_out.presentation.R
 import com.count_out.presentation.models.DataForChangeSequenceImpl
 import com.count_out.presentation.models.Dimen.contourAll1
-import com.count_out.presentation.models.ExerciseImplP
 import com.count_out.presentation.models.SetImplP
-import com.count_out.presentation.screens.training.ShowBottomSheetSelectActivity
-import com.count_out.presentation.screens.training.ShowBottomSheetSpeech
 import com.count_out.presentation.screens.training.TrainingEvent
 import com.count_out.presentation.screens.training.TrainingEvent.ShowBS
 import com.count_out.presentation.screens.training.TrainingState
 import com.count_out.presentation.screens.training.set.SetContent
 import com.count_out.presentation.view_element.TextApp
-import com.count_out.presentation.view_element.bottom_sheet.BottomSheetSelectActivity
+import com.count_out.presentation.view_element.bottom_sheet.ShowBottomSheetSelectActivity
+import com.count_out.presentation.view_element.bottom_sheet.ShowBottomSheetSpeech
 import com.count_out.presentation.view_element.custom_view.Frame
 import com.count_out.presentation.view_element.drag_drop_column.column.ColumnDragDrop
 import com.count_out.presentation.view_element.icons.IconsCollapsing
@@ -77,7 +73,7 @@ fun ListExercises(dataState: TrainingState, round: Round, modifier: Modifier = M
     ShowBottomSheetSpeech(dataState,dataState.showBS.exercise,R.string.exercise2,exercise)
     ShowBottomSheetSelectActivity(dataState, exercise)
 
-    Row( verticalAlignment = Alignment.CenterVertically){
+    Row( verticalAlignment = Alignment.CenterVertically, modifier = Modifier.padding(end = 4.dp)){
         val nameNewSet = stringResource(id = R.string.set) + " ${exercise.sets.size + 1}"
         IconsCollapsing(
             onClick = {
@@ -100,11 +96,11 @@ fun ListExercises(dataState: TrainingState, round: Round, modifier: Modifier = M
             onClickCopy = { dataState.event(TrainingEvent.CopyExercise(exercise))},
             onClickDelete = { dataState.event(TrainingEvent.DelExercise(exercise)) },
             onClickEdit = {
-                dataState.exercise = exercise
+//                dataState.exercise = exercise
                 dataState.item = exercise
                 dataState.event(ShowBS(dataState.showBS.copy(element = exercise.activity)))},
             onClickSpeech = {
-                dataState.exercise = exercise
+//                dataState.exercise = exercise
                 dataState.item = exercise
                 dataState.event(ShowBS(dataState.showBS.copy(element = exercise))) },
             onClickAddSet = { dataState.event( TrainingEvent.CopySet(

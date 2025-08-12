@@ -1,5 +1,6 @@
 package com.count_out.presentation.screens.training
 
+import android.util.Log
 import androidx.lifecycle.viewModelScope
 import com.count_out.domain.entity.DataForChangeSequence
 import com.count_out.domain.entity.workout.Collapsing

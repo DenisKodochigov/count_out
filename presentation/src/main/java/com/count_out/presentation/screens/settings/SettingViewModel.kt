@@ -4,10 +4,14 @@ import androidx.lifecycle.viewModelScope
 import com.count_out.domain.entity.Setting
 import com.count_out.domain.entity.router.DeviceUI
 import com.count_out.domain.entity.workout.Activity
+import com.count_out.domain.entity.workout.Collapsing
+import com.count_out.domain.entity.workout.ShowBottomSheet
 import com.count_out.domain.use_case.bluetooth.ClearCacheBleUC
 import com.count_out.domain.use_case.bluetooth.SelectDeviceBleUC
 import com.count_out.domain.use_case.bluetooth.StartScanBleUC
 import com.count_out.domain.use_case.bluetooth.StopScanBleUC
+import com.count_out.domain.use_case.other.CollapsingUC
+import com.count_out.domain.use_case.other.ShowBottomSheetUC
 import com.count_out.domain.use_case.plans.activity.AddActivityUC
 import com.count_out.domain.use_case.plans.activity.DeleteActivityUC
 import com.count_out.domain.use_case.plans.activity.GetActivitiesUC
@@ -18,6 +22,7 @@ import com.count_out.presentation.screens.prime.Event
 import com.count_out.presentation.screens.prime.PrimeViewModel
 import com.count_out.presentation.screens.prime.ScreenState
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -33,12 +38,12 @@ class SettingViewModel @Inject constructor(
     private val selectDeviceBle: SelectDeviceBleUC,
     private val getSettings: GetSettingsUC,
     private val updateSetting: UpdateSettingUC,
-//    private val serviceBind: CountOutServiceBind,
-//    private val dataRepository: DataRepository
+    private val showBottomSheetUC: ShowBottomSheetUC,
+    private val collapsingSetUC: CollapsingUC,
 ): PrimeViewModel<SettingsState, SettingsConvertor>() {
 
     override fun initScreenState(): ScreenState<SettingsState> = ScreenState.Loading
-    override fun initDataState(): SettingsState = SettingsState(event = { submitEvent(it)})
+    override fun initDataState(): SettingsState = SettingsState(event = { submitEvent(it) })
     override fun convertor(): SettingsConvertor = SettingsConvertor()
     override fun routeEvent(event: Event) {
         when (event) {
@@ -47,82 +52,60 @@ class SettingViewModel @Inject constructor(
             is SettingsEvent.DeleteActivity -> { delActivity(event.activity) }
             is SettingsEvent.UpdateActivity -> { updateActivity(event.activity) }
             is SettingsEvent.UpdateSetting -> { updateSetting(event.setting) }
-//            is SettingsEvent.GetSetting -> { getSetting(event.setting) }
             is SettingsEvent.GetSettings -> { getSettings() }
             is SettingsEvent.StartScanBLE -> { startScanBle() }
             is SettingsEvent.StopScanBLE -> { stopScanBle() }
             is SettingsEvent.SelectDevice -> { selectDeviceBle(event.device) }
             is SettingsEvent.ClearCacheBLE -> { clearCacheBle() }
+            is SettingsEvent.ShowBS -> { showBottomSheet(event.item) }
+            is SettingsEvent.SetCollapsing -> { collapsingSet(event.item) }
             is SettingsEvent.Init -> { init() }
         }
     }
-
-    private fun addActivity(activity: Activity) {
-        viewModelScope.launch {
-            addActivity.execute(AddActivityUC.Request(activity)).collect { submitState( it ) }
-        }
-    }
-
-    private fun getsActivity() {
-        viewModelScope.launch {
-            getsActivity.execute(GetActivitiesUC.Request).collect { submitState( it ) }
-        }
-    }
-
-    private fun delActivity(activity: Activity) {
-        viewModelScope.launch {
-            delActivity.execute(DeleteActivityUC.Request(activity)).collect { submitState( it ) }
-        }
-    }
-
-    private fun updateActivity(activity: Activity) {
-        viewModelScope.launch {
-            updateActivity.execute(UpdateActivityUC.Request(activity)).collect { submitState( it ) }
-        }
-    }
-
-    private fun getSettings() {
-        viewModelScope.launch {
-            getSettings.execute(GetSettingsUC.Request).collect { submitState( it ) }
-        }
-    }
-
-    private fun updateSetting(setting: Setting) {
-        viewModelScope.launch {
-            updateSetting.execute(UpdateSettingUC.Request(setting)).collect { submitState( it ) }
-        }
-    }
-    private fun startScanBle() {
-        viewModelScope.launch {
-            startScanBle.execute(StartScanBleUC.Request).collect { submitState( it ) }
-        }
-    }
-
-    private fun stopScanBle() {
-        viewModelScope.launch {
-            stopScanBle.execute(StopScanBleUC.Request).collect { submitState( it ) }
-        }
-    }
-
-    private fun clearCacheBle() {
-        viewModelScope.launch {
-            clearCacheBle.execute(ClearCacheBleUC.Request).collect { submitState( it ) }
-        }
-    }
-
-    private fun selectDeviceBle(device: DeviceUI) {
-        viewModelScope.launch {
-            selectDeviceBle.execute(SelectDeviceBleUC.Request(device)).collect { submitState( it ) }
-        }
-    }
-
     fun init() {
         getSettings()
         getsActivity()
     }
-
-    fun getDevBleStored() {}
-    fun getStateScanningBle() {}
-    fun getStateConnectingBle() {}
-    fun getHearthRate() {}
+    private fun addActivity(activity: Activity) {
+        viewModelScope.launch {
+            addActivity.execute(AddActivityUC.Request(activity))
+                .collect { submitState( it ) } } }
+    private fun getsActivity() {
+        viewModelScope.launch {
+            getsActivity.execute(GetActivitiesUC.Request).collect { submitState( it ) } } }
+    private fun delActivity(activity: Activity) {
+        viewModelScope.launch {
+            delActivity.execute(DeleteActivityUC.Request(activity))
+                .collect { submitState( it ) } } }
+    private fun updateActivity(activity: Activity) {
+        viewModelScope.launch {
+            updateActivity.execute(UpdateActivityUC.Request(activity))
+                .collect { submitState( it ) } } }
+    private fun getSettings() {
+        viewModelScope.launch {
+            getSettings.execute(GetSettingsUC.Request).collect { submitState( it ) } } }
+    private fun updateSetting(setting: Setting) {
+        viewModelScope.launch {
+            updateSetting.execute(UpdateSettingUC.Request(setting)).collect { submitState( it ) } } }
+    private fun startScanBle() {
+        viewModelScope.launch {
+            startScanBle.execute(StartScanBleUC.Request).collect { submitState( it ) } } }
+    private fun stopScanBle() {
+        viewModelScope.launch {
+            stopScanBle.execute(StopScanBleUC.Request).collect { submitState( it ) } } }
+    private fun clearCacheBle() {
+        viewModelScope.launch {
+            clearCacheBle.execute(ClearCacheBleUC.Request).collect { submitState( it ) } } }
+    private fun selectDeviceBle(device: DeviceUI) {
+        viewModelScope.launch {
+            selectDeviceBle.execute(SelectDeviceBleUC.Request(device))
+                .collect { submitState( it ) } } }
+    private fun showBottomSheet(show: ShowBottomSheet){
+        viewModelScope.launch(Dispatchers.IO) {
+            showBottomSheetUC.execute( ShowBottomSheetUC.Request(show))
+                .collect { submitState( it ) } } }
+    private fun collapsingSet(collaps: Collapsing){
+        viewModelScope.launch(Dispatchers.IO) {
+            collapsingSetUC.execute( CollapsingUC.Request(collaps))
+                .collect { submitState( it ) } } }
 }

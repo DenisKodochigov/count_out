@@ -12,11 +12,9 @@ class UpdateTrainingUC @Inject constructor(
     configuration: Configuration, private val repo: TrainingRepo
 ): UseCase<UpdateTrainingUC.Request, UpdateTrainingUC.Response>(configuration)  {
 
-    override fun methodRepo(request: Request): Flow<ResultUC<TypeRepo>> = repo.gets()
+    override fun methodRepo(request: Request): Flow<ResultUC<TypeRepo>> =
+        repo.update(TypeRepo.PlanT(request.training))
     override fun response(typeRepo: TypeRepo): Response = Response(typeRepo)
     data class Request(val training: Training): UseCase.Request
     data class Response(val training: TypeRepo): UseCase.Response
 }
-//
-//    fun implementation(request: Request): Flow<ResultUC<Response>> =
-//        repo.update(request.training).map { ResultUC.Success(Response(it)) }

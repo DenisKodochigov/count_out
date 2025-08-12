@@ -1,6 +1,5 @@
 package com.count_out.presentation.screens.training.set
 
-import android.util.Log
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.background
@@ -46,13 +45,12 @@ import com.count_out.presentation.models.TypeKeyboard
 import com.count_out.presentation.models.alumBodyLarge
 import com.count_out.presentation.models.alumBodyMedium
 import com.count_out.presentation.models.alumBodySmall
-import com.count_out.presentation.screens.training.ShowBottomSheetSpeech
 import com.count_out.presentation.screens.training.TrainingEvent
 import com.count_out.presentation.screens.training.TrainingEvent.ShowBS
 import com.count_out.presentation.screens.training.TrainingState
 import com.count_out.presentation.view_element.TextApp
 import com.count_out.presentation.view_element.TextFieldApp
-import com.count_out.presentation.view_element.bottom_sheet.BottomSheetSpeech
+import com.count_out.presentation.view_element.bottom_sheet.ShowBottomSheetSpeech
 import com.count_out.presentation.view_element.custom_view.Frame
 import com.count_out.presentation.view_element.custom_view.IconQ
 import com.count_out.presentation.view_element.icons.IconsCollapsing
@@ -62,11 +60,10 @@ val interval_between_pole = 4.dp
 
 @Composable fun SetContent(dataState: TrainingState, set: SetImplP){
     AnimatedVisibility(modifier = Modifier.padding(horizontal = 4.dp, vertical = 1.dp), visible = true) {
-        Frame(colorAlpha = 0.4f, contour = contourAll1) {
-            Column (horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier
-                .fillMaxWidth()
-                .padding(vertical = 4.dp)) {
-                if (set.positions.second == 1 && dataState.collapsing.sets.find { it == set.idSet } == null)
+        Frame(colorAlpha = 0.5f, contour = contourAll1) {
+            Column (horizontalAlignment = Alignment.CenterHorizontally,
+                modifier = Modifier.fillMaxWidth().padding(vertical = 3.dp)) {
+                if (dataState.collapsing.sets.find { it == set.idSet } == null)
                     FirstLine(dataState, set )
                 else {
                     TaskSwitch( dataState, set )
@@ -79,7 +76,7 @@ val interval_between_pole = 4.dp
 }
 @Composable fun FirstLine(dataState: TrainingState, set: SetImplP) {
     val setInfo = when (set.goal) {
-        Goal.Distance -> viewDistance(set) + stringResource(id = set.distance.unit.id )
+        Goal.Distance -> viewDistance(set) +" "+ stringResource(id = set.distance.unit.id )
         Goal.Duration -> "${set.duration.value} ${stringResource(id = set.duration.unit.id)}"
         Goal.Count -> "${stringResource(id = R.string.counts)}: ${set.reps}"
         Goal.CountGroup -> "${set.reps} ${stringResource(id = R.string.counts)}"
@@ -90,7 +87,7 @@ val interval_between_pole = 4.dp
             wrap = dataState.collapsing.sets.find { it == set.idSet } != null )
         TextApp(
             text = "${(set.positions.first + 1)}" ,
-            style = typography.titleMedium,
+            style = typography.titleMedium ,
             textAlign = TextAlign.Start,
             modifier = Modifier.padding(start = 4.dp, end =16.dp))
         Spacer(modifier = Modifier.weight(1f))
@@ -99,23 +96,14 @@ val interval_between_pole = 4.dp
             style = typography.bodySmall,
             fontWeight = FontWeight.Light,
             textAlign = TextAlign.Start,)
-        IconsGroup(
-            onClickCopy = { dataState.event(TrainingEvent.CopySet(set))},
-            onClickDelete = { dataState.event(TrainingEvent.DeleteSet(set))},
-            onClickSpeech = {
-                dataState.set = set
-                dataState.item = set
-                dataState.event(ShowBS(dataState.showBS.copy(element = set)))},
-        )
+        IconGroupContent(dataState,set)
     }
 }
 @Composable fun TaskSwitch(dataState: TrainingState, set: SetImplP){
-    Row(verticalAlignment = Alignment.CenterVertically){
-        if (set.positions.second == 1){
-            IconsCollapsing(
-                onClick = { dataState.event(TrainingEvent.SetCollapsing(dataState.collapsing.copy(item = set)))  },
-                wrap = dataState.collapsing.sets.find { it == set.idSet } != null )
-        }
+    Row(verticalAlignment = Alignment.CenterVertically, modifier= Modifier.fillMaxWidth()){
+        IconsCollapsing(
+            onClick = { dataState.event(TrainingEvent.SetCollapsing(dataState.collapsing.copy(item = set)))  },
+            wrap = dataState.collapsing.sets.find { it == set.idSet } != null )
         TextApp(
             text = "${(set.positions.first + 1)}" ,
             style = typography.displayMedium,
@@ -132,19 +120,20 @@ val interval_between_pole = 4.dp
             onClick = { dataState.event(TrainingEvent.UpdateSet( set.copy(goal = Goal.Count))) },)
         Spacer(modifier = Modifier.width(24.dp))
         Spacer(modifier = Modifier.weight(1f))
-        IconsGroup(
-            onClickCopy = { dataState.event(TrainingEvent.CopySet( set )) },
-            onClickDelete = {  dataState.event(
-                TrainingEvent.DeleteSet(set)) },
-            onClickSpeech = {
-                dataState.set = set
-                dataState.item = set
-                dataState.event(ShowBS(dataState.showBS.copy(element = set)))   },)
+        IconGroupContent(dataState,set)
     }
+}
+@Composable fun IconGroupContent(dataState: TrainingState, set: SetImplP){
+    IconsGroup(
+        onClickCopy = { dataState.event(TrainingEvent.CopySet( set )) },
+        onClickDelete = {  dataState.event(TrainingEvent.DeleteSet(set)) },
+        onClickSpeech = {
+//            dataState.set = set
+            dataState.item = set
+            dataState.event(ShowBS(dataState.showBS.copy(element = set)))   },)
 }
 
 @Composable fun BodySet(dataState: TrainingState, set: SetImplP){
-    Log.d("KDS", "BodySet ${set.idSet} ${dataState.item}")
     ShowBottomSheetSpeech(dataState,dataState.showBS.set,R.string.set2,set)
     when (set.goal){
         Goal.Distance -> Distance( dataState, set)
@@ -287,10 +276,12 @@ val interval_between_pole = 4.dp
 
 @Composable fun CountFieldText(dataState: TrainingState, set: SetImplP){
     PoleInput(
-        headId = R.string.counts, typeKey = TypeKeyboard.DIGIT, placeholder = "${ set.reps }",
+        headId = R.string.counts,
+        typeKey = TypeKeyboard.DIGIT,
+        beginValueEmpty = true,
+        placeholder = "${ set.reps }",
         modifier = Modifier.width(IntrinsicSize.Min),
         onChangeValue = { dataState.event(TrainingEvent.UpdateSet( set.copy(reps = it.toIntMy())))})
-
 }
 @Composable fun CountGroupFieldText(dataState: TrainingState, set: SetImplP){
     PoleInput(
@@ -373,23 +364,36 @@ val interval_between_pole = 4.dp
             onChangeValue = { onChangeValue(it) },
             placeholder = placeholder,
         )
-        Text(
-            text = buildAnnotatedString {
-                append("(")
-                withStyle(style = SpanStyle(
-                    fontWeight = if (term) FontWeight.ExtraBold else FontWeight.Normal))
-                { append(stringResource(unitId1)) }
-                if (unitId2 != R.string.no) {
-                    append("/")
+        if (unitId2 != R.string.no){
+            Text(
+                text = buildAnnotatedString {
+                    append("(")
                     withStyle(style = SpanStyle(
-                        fontWeight = if (term) FontWeight.Normal else FontWeight.ExtraBold))
-                    { append(stringResource(unitId2)) }
-                }
-                append(")")},
-            modifier = Modifier.padding(start = 2.dp, top = 2.dp).clickable { onChangeUnit() },
-            style = alumBodyLarge,
-            color = colorScheme.outline
-        )
+                        fontWeight = if (term) FontWeight.ExtraBold else FontWeight.Normal))
+                    { append(stringResource(unitId1)) }
+                    if (unitId2 != R.string.no) {
+                        append("/")
+                        withStyle(style = SpanStyle(
+                            fontWeight = if (term) FontWeight.Normal else FontWeight.ExtraBold))
+                        { append(stringResource(unitId2)) }
+                    }
+                    append(")")},
+                modifier = Modifier.padding(start = 2.dp, top = 2.dp).clickable { onChangeUnit() },
+                style = alumBodyLarge,
+                color = colorScheme.outline
+            )
+        }else {
+            Text(
+                text = buildAnnotatedString {
+                    append("(")
+                    withStyle(style = SpanStyle(fontWeight = FontWeight.Normal)) { append(stringResource(unitId1)) }
+                    append(")")},
+                modifier = Modifier.padding(start = 2.dp, top = 2.dp).clickable { onChangeUnit() },
+                style = alumBodyLarge,
+//                color = colorScheme.outline
+            )
+
+        }
     }
 }
 
@@ -398,6 +402,7 @@ val interval_between_pole = 4.dp
     placeholder: String,
     modifier: Modifier = Modifier,
     typeKey: TypeKeyboard = TypeKeyboard.TEXT,
+    beginValueEmpty: Boolean = false,
     onChangeValue: (String)-> Unit,
 ){
     Column (horizontalAlignment = Alignment.CenterHorizontally,
@@ -407,20 +412,19 @@ val interval_between_pole = 4.dp
             .background(color = colorScheme.onSecondary, shape = shapes.small)
             .padding(top = 2.dp, bottom = 6.dp, start = 4.dp, end = 4.dp)
     ) {
-        Row (verticalAlignment = Alignment.Top, modifier = Modifier.weight(1f)) {
-            TextFieldApp(
-                modifier = Modifier.weight(1f),
-                edit = true,
-                typeKeyboard = typeKey,
-                contentAlignment = Alignment.Center,
-                textStyle = typography.bodyLarge.copy(textAlign = TextAlign.Center),
-                onChangeValue = { onChangeValue(it) },
-                placeholder = placeholder,
-            )
-        }
+        TextFieldApp(
+            modifier = Modifier.fillMaxWidth(),//.weight(1f),
+            edit = true,
+            beginValueEmpty = beginValueEmpty,
+            typeKeyboard = typeKey,
+            contentAlignment = Alignment.Center,
+            textStyle = typography.bodyLarge.copy(textAlign = TextAlign.Center),
+            onChangeValue = { onChangeValue(it) },
+            placeholder = placeholder,
+        )
         TextApp(
             text = stringResource(headId), textAlign = TextAlign.Center, style = alumBodySmall,
-            modifier = Modifier
+            maxLines = 2
         )
     }
 }

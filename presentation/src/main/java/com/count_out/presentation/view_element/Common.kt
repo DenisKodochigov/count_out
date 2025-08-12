@@ -21,6 +21,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -99,14 +100,14 @@ import com.count_out.presentation.models.TypeKeyboard
     typeKeyboard: TypeKeyboard,
     textStyle: TextStyle,
     contentAlignment:Alignment = Alignment.BottomCenter,
+    colorLine: Color = MaterialTheme.colorScheme.surfaceBright,
     placeholder: String = "",
     showLine: Boolean = true,
-    onLossFocus: Boolean = true,
     maxLines: Int = 1,
-    onChangeValue:(String)->Unit = {},
     edit: Boolean = false,
     beginValueEmpty: Boolean = false,
-    colorLine: Color = MaterialTheme.colorScheme.surfaceBright,
+    onChangeValue:(String)->Unit = {},
+    enterValue: MutableState<String> = mutableStateOf("")
 ){
     val keyboardController = LocalSoftwareKeyboardController.current
     val focusManager = LocalFocusManager.current
@@ -122,27 +123,28 @@ import com.count_out.presentation.models.TypeKeyboard
         modifier = modifier
             .width(IntrinsicSize.Max)
             .focusable()
-            .onFocusChanged { isFocused = it.isFocused
-                if ((!it.isFocused || !onLossFocus) && text.isNotEmpty()) { onChangeValue(text) } },
+            .onFocusChanged {
+                if ((isFocused && !it.isFocused) && text.isNotEmpty()) onChangeValue(text)
+                isFocused = it.isFocused
+            },
         keyboardOptions = keyBoardOpt(typeKeyboard),
         keyboardActions = KeyboardActions(onDone = {
             focusManager.clearFocus()
-            onChangeValue(text)
             keyboardController?.hide() }),
         onValueChange = {
-            text = it
-            if (!onLossFocus) onChangeValue(text)},
+            enterValue.value = it
+            text = it },
         decorationBox = {
             Row( verticalAlignment = Alignment.CenterVertically){
                 Box( contentAlignment = contentAlignment,
                     modifier = modifier.drawBehind {
-                            val y = size.height - 1.dp.toPx() / 2
-                            if (edit && showLine) {
-                                drawLine(
-                                    color = colorLine,
-                                    start = Offset(0f, y),
-                                    end = Offset(size.width, y),
-                                    strokeWidth = 1.dp.toPx()) } }
+                        val y = size.height - 1.dp.toPx() / 2
+                        if (edit && showLine) {
+                            drawLine(
+                                color = colorLine,
+                                start = Offset(0f, y),
+                                end = Offset(size.width, y),
+                                strokeWidth = 1.dp.toPx()) } }
                 ){
                     if (text.isEmpty()) Text(text = if (beginValueEmpty) placeholder else "", style = textStyle)
                     it()

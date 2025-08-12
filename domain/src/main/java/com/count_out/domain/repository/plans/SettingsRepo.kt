@@ -6,6 +6,5 @@ import kotlinx.coroutines.flow.Flow
 
 interface SettingsRepo {
     fun getSettings(): Flow<ResultUC<TypeRepo>>
-//    fun getSetting(setting: Setting): Flow<Boolean>
-    suspend fun saveSetting(setting: TypeRepo): Flow<ResultUC<TypeRepo>>
+    fun saveSetting(setting: TypeRepo): Flow<ResultUC<TypeRepo>>
 }

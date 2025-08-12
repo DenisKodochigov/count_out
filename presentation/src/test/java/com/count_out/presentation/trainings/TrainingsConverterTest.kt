@@ -1,5 +1,6 @@
 package com.count_out.presentation.trainings
 
+import com.count_out.domain.repository.TypeRepo
 import com.count_out.domain.use_case.plans.CopyTrainingUC
 import com.count_out.domain.use_case.plans.DeleteTrainingUC
 import com.count_out.domain.use_case.plans.GetTrainingsUC
@@ -22,10 +23,11 @@ class TrainingsConverterTest {
     private val training1 = TrainingImplP(idTraining = 1)
     private val training2 = TrainingImplP(idTraining = 2)
     private val listTraining = listOf(training1,training2)
+    private val typeListTraining = TypeRepo.PlansT(listOf(training1,training2))
 
     @Test
     fun testGetTrainingsConvert() {
-        val response = GetTrainingsUC.Response(trainings = listTraining)
+        val response = GetTrainingsUC.Response(trainings = typeListTraining)
         val result = converter.makeSuccess(response, trainingState)
         val exception = trainingState.value.copy(trainings = listTraining)
         Assertions.assertEquals(exception, result)
@@ -33,7 +35,7 @@ class TrainingsConverterTest {
     @Test
     fun testCopyTrainingsConvert() {
         val listTraining = listOf(TrainingImplP())
-        val response = CopyTrainingUC.Response(trainings = listTraining)
+        val response = CopyTrainingUC.Response(trainings = typeListTraining)
         val result = converter.makeSuccess(response, trainingState)
         val exception = trainingState.value.copy(trainings = listTraining)
         Assertions.assertEquals(exception, result)
@@ -41,7 +43,7 @@ class TrainingsConverterTest {
     @Test
     fun testDeleteTrainingsConvert() {
         val listTraining = listOf(TrainingImplP())
-        val response = DeleteTrainingUC.Response(trainings = listTraining)
+        val response = DeleteTrainingUC.Response(trainings = typeListTraining)
         val result = converter.makeSuccess(response, trainingState)
         val exception = trainingState.value.copy(trainings = listTraining)
         Assertions.assertEquals(exception, result)
@@ -56,7 +58,7 @@ class TrainingsConverterTest {
 //    }
     @Test
     fun testSelectTrainingsConvert() {
-        val response = SelectTrainingUC.Response(selectedTraining = 1)
+        val response = SelectTrainingUC.Response(selectedTraining = TypeRepo.IntT(1))
         val result = converter.makeSuccess(response, trainingState)
         val exception = trainingState.value.copy(selectedId = 1)
         Assertions.assertEquals(exception, result)

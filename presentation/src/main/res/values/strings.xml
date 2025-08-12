@@ -48,10 +48,10 @@
     <string name="not_select_device">There are no selected devices</string>
 
 
-    <string name="not_connected">не подключен</string>
-    <string name="connected">подключен</string>
-    <string name="connecting">подключение</string>
-    <string name="no_name">нет имени.</string>
+    <string name="not_connected">not connected</string>
+    <string name="connected">connected</string>
+    <string name="connecting">connecting</string>
+    <string name="no_name">not name.</string>
     <string name="history">History</string>
 
     <plurals name="exercise">
@@ -75,7 +75,60 @@
         <item quantity="many">%d repetitions</item>
         <item quantity="other">repetitions</item>
     </plurals>
-
+    <plurals name="set_2">
+        <item quantity="one">set</item>
+        <item quantity="few">sets</item>
+        <item quantity="many">sets</item>
+        <item quantity="other">sets</item>
+    </plurals>
+    <plurals name="repeat1">
+        <item quantity="one">%d rest</item>
+        <item quantity="few">%d rests</item>
+        <item quantity="many">%d rests</item>
+        <item quantity="other">rests</item>
+    </plurals>
+    <plurals name="hour">
+        <item quantity="one">%d hour</item>
+        <item quantity="few">%d hours</item>
+        <item quantity="many">%d hours</item>
+        <item quantity="other">hours</item>
+    </plurals>
+    <plurals name="min">
+        <item quantity="one">%d minute</item>
+        <item quantity="few">%d minutes</item>
+        <item quantity="many">%d minutes</item>
+        <item quantity="other">minutes</item>
+    </plurals>
+    <plurals name="sec">
+        <item quantity="one">%d second</item>
+        <item quantity="few">%d seconds</item>
+        <item quantity="many">%d seconds</item>
+        <item quantity="other">seconds</item>
+    </plurals>
+    <plurals name="km">
+        <item quantity="one">%d kilometr</item>
+        <item quantity="few">%d kilometers</item>
+        <item quantity="many">%d kilometers</item>
+        <item quantity="other">kilometers</item>
+    </plurals>
+    <plurals name="m">
+        <item quantity="one">%d metr</item>
+        <item quantity="few">%d meters</item>
+        <item quantity="many">%d meters</item>
+        <item quantity="other">meters</item>
+    </plurals>
+    <plurals name="kg">
+        <item quantity="one">%d kilogram</item>
+        <item quantity="few">%d kilograms</item>
+        <item quantity="many">%d kilograms</item>
+        <item quantity="other">kilograms</item>
+    </plurals>
+    <plurals name="gr">
+        <item quantity="one">%d gram</item>
+        <item quantity="few">%d grams</item>
+        <item quantity="many">%d grams</item>
+        <item quantity="other">grams</item>
+    </plurals>
     <string name="clear_sky">Clear sky</string>
     <string name="mainly_clear">Mainly clear</string>
     <string name="partly_cloudy">partly cloudy</string>
@@ -108,14 +161,15 @@
     <string name="save_traning">Save training?</string>
     <string name="no">NO</string>
     <string name="yes">YES</string>
-    <string name="zone1">ZONE I</string>
-    <string name="zone2">ZONE II</string>
+    <string name="zone1">ZONE I  </string>
+    <string name="zone2">ZONE II </string>
     <string name="zone3">ZONE III</string>
-    <string name="zone4">ZONE IV</string>
-    <string name="zone5">ZONE V</string>
+    <string name="zone4">ZONE IV </string>
+    <string name="zone5">ZONE V </string>
     <string name="gr">gr</string>
     <string name="interval">Интервал</string>
     <string name="reps">Reps</string>
     <string name="set2">set</string>
     <string name="next">Next</string>
+    <string name="new_activity">New activity</string>
 </resources>

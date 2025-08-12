@@ -5,6 +5,7 @@ import com.count_out.domain.entity.throwable.ResultUC
 import com.count_out.domain.repository.TypeRepo
 import com.count_out.domain.repository.plans.TrainingRepo
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 
 class TrainingRepoImpl @Inject constructor(
@@ -24,7 +25,7 @@ class TrainingRepoImpl @Inject constructor(
     }
 
     override fun update(training: TypeRepo): Flow<ResultUC<TypeRepo>> {
-        return source.update(toTypeSource(training)).nextActionOk { source.gets() }
+        return flow { emit(convertor(source.update(toTypeSource(training))))}
     }
     override fun updates(training: TypeRepo): Flow<ResultUC<TypeRepo>> {
         return source.update(toTypeSource(training)).nextActionOk { source.gets() }

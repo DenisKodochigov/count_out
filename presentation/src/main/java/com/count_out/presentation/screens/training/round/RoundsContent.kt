@@ -20,13 +20,13 @@ import com.count_out.domain.entity.workout.Round
 import com.count_out.presentation.R
 import com.count_out.presentation.models.Dimen.contourHor2
 import com.count_out.presentation.models.ExerciseImplP
-import com.count_out.presentation.screens.training.ShowBottomSheetSpeech
 import com.count_out.presentation.screens.training.TrainingEvent
 import com.count_out.presentation.screens.training.TrainingEvent.ShowBS
 import com.count_out.presentation.screens.training.TrainingState
 import com.count_out.presentation.screens.training.exercise.ListExercises
 import com.count_out.presentation.view_element.EnumsTo
 import com.count_out.presentation.view_element.TextApp
+import com.count_out.presentation.view_element.bottom_sheet.ShowBottomSheetSpeech
 import com.count_out.presentation.view_element.custom_view.Frame
 import com.count_out.presentation.view_element.icons.IconsCollapsing
 import com.count_out.presentation.view_element.icons.IconsGroup
@@ -48,7 +48,7 @@ import com.count_out.presentation.view_element.icons.IconsGroup
     }
 }
 @Composable fun TitleRound(dataState: TrainingState, round: Round){
-    Row( verticalAlignment = Alignment.CenterVertically ){
+    Row( verticalAlignment = Alignment.CenterVertically, modifier = Modifier.padding(end = 6.dp)){
         IconsCollapsing(
             onClick = { setCollapsing(dataState, round) },
             wrap = getCollapsing(dataState, round) )

@@ -66,24 +66,4 @@ data class SetTable (
         timeRest = set.rest.value,
         timeRestU = set.rest.unit.ordinal,
     )
-//    fun toSetImpl() = SetImpl(
-//        idSet = this.idSet,
-//        name = this.name,
-//        speechId = this.speechId,
-//        goal = Goal.entries[this.goal],
-//        exerciseId = this.exerciseId,
-//        reps = this.reps,
-//        duration = this.duration,
-//        durationU = TimeUnit.entries[this.durationU],
-//        distance = this.distance,
-//        distanceU = DistanceUnit.entries[this.distanceU],
-//        weight = this.weight,
-//        weightU = WeightUnit.entries[this.weightU],
-//        intervalReps = this.intervalReps,
-//        intensity = Zone.entries[this.intensity],
-//        intervalDown = this.intervalDown,
-//        groupCount = this.groupCount,
-//        timeRest = this.timeRest,
-//        timeRestU = TimeUnit.entries[this.durationU],
-//    )
 }
