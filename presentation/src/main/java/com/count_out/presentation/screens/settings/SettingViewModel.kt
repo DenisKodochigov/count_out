@@ -1,5 +1,6 @@
 package com.count_out.presentation.screens.settings
 
+import android.util.Log
 import androidx.lifecycle.viewModelScope
 import com.count_out.domain.entity.Setting
 import com.count_out.domain.entity.router.DeviceUI
@@ -67,37 +68,37 @@ class SettingViewModel @Inject constructor(
         getsActivity()
     }
     private fun addActivity(activity: Activity) {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             addActivity.execute(AddActivityUC.Request(activity))
                 .collect { submitState( it ) } } }
     private fun getsActivity() {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             getsActivity.execute(GetActivitiesUC.Request).collect { submitState( it ) } } }
     private fun delActivity(activity: Activity) {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             delActivity.execute(DeleteActivityUC.Request(activity))
                 .collect { submitState( it ) } } }
     private fun updateActivity(activity: Activity) {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             updateActivity.execute(UpdateActivityUC.Request(activity))
                 .collect { submitState( it ) } } }
     private fun getSettings() {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             getSettings.execute(GetSettingsUC.Request).collect { submitState( it ) } } }
     private fun updateSetting(setting: Setting) {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             updateSetting.execute(UpdateSettingUC.Request(setting)).collect { submitState( it ) } } }
     private fun startScanBle() {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             startScanBle.execute(StartScanBleUC.Request).collect { submitState( it ) } } }
     private fun stopScanBle() {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             stopScanBle.execute(StopScanBleUC.Request).collect { submitState( it ) } } }
     private fun clearCacheBle() {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             clearCacheBle.execute(ClearCacheBleUC.Request).collect { submitState( it ) } } }
     private fun selectDeviceBle(device: DeviceUI) {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             selectDeviceBle.execute(SelectDeviceBleUC.Request(device))
                 .collect { submitState( it ) } } }
     private fun showBottomSheet(show: ShowBottomSheet){

@@ -1,5 +1,6 @@
 package com.count_out.presentation.view_element.bottom_sheet
 
+import android.util.Log
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -13,17 +14,11 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.count_out.domain.entity.workout.Activity
-import com.count_out.domain.entity.workout.Element
-import com.count_out.domain.entity.workout.SpeechKit
 import com.count_out.presentation.models.ActivityImplP
 import com.count_out.presentation.screens.settings.SettingsEvent
 import com.count_out.presentation.screens.settings.SettingsState
-import com.count_out.presentation.screens.training.TrainingEvent
-import com.count_out.presentation.screens.training.TrainingEvent.ShowBS
-import com.count_out.presentation.screens.training.TrainingState
 import com.count_out.presentation.view_element.ButtonConfirm
 import com.count_out.presentation.view_element.ModalBottomSheetApp
 
@@ -49,18 +44,21 @@ import com.count_out.presentation.view_element.ModalBottomSheetApp
     val activityNew = remember { mutableStateOf(
         (dataState.item)?.let{ ActivityImplP(it as Activity)} ?: ActivityImplP(0L)) }
     Column( horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = Modifier.fillMaxWidth().padding(12.dp))
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(12.dp))
     {
         Spacer(Modifier.height(12.dp))
-        ActivityInfoFull(
+        ActivityEdit(
             activity = activityNew,
             onChange = { activityNew.value = it },
         )
         Spacer(Modifier.height(12.dp))
         ButtonConfirm( onConfirm = {
-            dataState.event(SettingsEvent.AddActivity(activityNew.value))
-            dataState.event(ShowBS(dataState.showBS.copy(element = activityNew.value)))} )
+            if (activityNew.value.idActivity > 0)
+                dataState.event(SettingsEvent.UpdateActivity(activityNew.value))
+            else dataState.event(SettingsEvent.AddActivity(activityNew.value))
+            dataState.event(SettingsEvent.ShowBS(dataState.showBS.copy(element = activityNew.value)))} )
         Spacer(Modifier.height(12.dp))
     }
-
 }

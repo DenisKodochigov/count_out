@@ -22,8 +22,7 @@ class ShowBottomSheetUC @Inject constructor(configuration: Configuration
 
     override fun methodRepo(request: Request): Flow<ResultUC<TypeRepo>> {
         return flow { emit(ResultUC.Success(
-                TypeRepo.ShowBottomSheetT(item = calculate(request.show))))}
-    }
+                TypeRepo.ShowBottomSheetT(item = calculate(request.show))))} }
 
     override fun response(typeRepo: TypeRepo): Response = Response(typeRepo)
 
@@ -31,10 +30,9 @@ class ShowBottomSheetUC @Inject constructor(configuration: Configuration
     data class Response(val show: TypeRepo) : UseCase.Response
 
     fun calculate(item: ShowBottomSheet): ShowBottomSheet{
-        Log.d("KDS","calculate $item")
         return when(item.element){
             is Set -> {item.copy(set = !item.set)}
-            is Activity-> { item.copy(activityAdd = !item.activityAdd)}
+            is Activity-> { item.copy(activity = !item.activity)}
             is Exercise-> {item.copy(exercise = !item.exercise)}
             is Ring-> {item.copy(ring = !item.ring)}
             is Round-> {calculateRound(item) }

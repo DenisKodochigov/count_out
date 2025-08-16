@@ -1,7 +1,5 @@
 package com.count_out.framework.room.source
 
-import android.database.sqlite.SQLiteConstraintException
-import com.count_out.data.models.ActivityImplD
 import com.count_out.data.models.throwable.ResultSource
 import com.count_out.data.models.throwable.ThrowableDS
 import com.count_out.data.models.throwable.TypeSource
@@ -20,32 +18,32 @@ class ActivitySourceImpl @Inject constructor(private val dao: ActivityDao): Acti
         dao.gets().map { list->
             TypeSource.ActivitiesT(item = list.map { it.toActivity() })}.resultSource()
 
-    override fun get(id: TypeSource): Flow<ResultSource<TypeSource>> {
-        return if (id is TypeSource.LongT) {
-            dao.get(id.item).map { TypeSource.ActivityT(it.toActivity()) }.resultSource()
+    override fun get(activity: TypeSource): Flow<ResultSource<TypeSource>> {
+        return if (activity is TypeSource.ActivityT) {
+            dao.get(activity.item.idActivity).map { TypeSource.ActivityT(it.toActivity()) }.resultSource()
         } else flow { emit (ResultSource.Error(ThrowableDS.NotValidType())) }
     }
 
     override fun copy(activity: TypeSource): ResultSource<TypeSource> {
         return try {
             if (activity is TypeSource.ActivityT) {
-                dao.add(ActivityTable(activity.item, 0L)).let {
+                dao.add(ActivityTable(activity.item)).let {
                     if (it > 0L) ResultSource.Success(TypeSource.LongT(item = it))
                     else ResultSource.Error(ThrowableDS.RequestFailed())
                 }
             } else ResultSource.Error(ThrowableDS.NotValidType())
-        } catch(e: SQLiteConstraintException) { ResultSource.Error(ThrowableDS.extract(e))}
+        } catch(e: Exception) { ResultSource.Error(ThrowableDS.extract(e))}
     }
 
     override fun update(activity: TypeSource): ResultSource<TypeSource> {
         return try {
             if (activity is TypeSource.ActivityT) {
                 dao.update(ActivityTable(activity.item)).let {
-                    if (it > 0L) ResultSource.Success(TypeSource.IntT(item = it))
+                    if (it > 0L) { ResultSource.Success(TypeSource.IntT(item = it)) }
                     else ResultSource.Error(ThrowableDS.RequestFailed())
                 }
             } else ResultSource.Error(ThrowableDS.NotValidType())
-        } catch(e: SQLiteConstraintException) { ResultSource.Error(ThrowableDS.extract(e))}
+        } catch(e: Exception) { ResultSource.Error(ThrowableDS.extract(e))}
     }
 
     override fun del(id: TypeSource): ResultSource<TypeSource>{
@@ -58,6 +56,6 @@ class ActivitySourceImpl @Inject constructor(private val dao: ActivityDao): Acti
                     }
                 } else ResultSource.Error(ThrowableDS.RequestFailed())
             } else ResultSource.Error(ThrowableDS.NotValidType())
-        } catch(e: SQLiteConstraintException) { ResultSource.Error(ThrowableDS.extract(e))}
+        } catch(e: Exception) { ResultSource.Error(ThrowableDS.extract(e))}
     }
 }

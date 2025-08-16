@@ -1,6 +1,7 @@
 package com.count_out.presentation.view_element.bottom_sheet
 
 import android.annotation.SuppressLint
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -18,7 +19,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.MaterialTheme.colorScheme
-import androidx.compose.material3.MaterialTheme.shapes
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
@@ -30,7 +30,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import com.count_out.domain.entity.router.DeviceUI
 import com.count_out.domain.entity.workout.Activity
 import com.count_out.presentation.R
 import com.count_out.presentation.models.ActivityImplP
@@ -45,7 +44,7 @@ import com.count_out.presentation.view_element.dialog.ChangeColorSectionDialog
 @SuppressLint("UnrememberedMutableState")
 @Composable fun CardActivity(dataState: SettingsState, activity: Activity) {
     Frame {
-        ActivityInfo(
+        ActivityTitle(
             activity = mutableStateOf(ActivityImplP(activity)),
             onSelect = {
                 dataState.item = activity
@@ -55,7 +54,7 @@ import com.count_out.presentation.view_element.dialog.ChangeColorSectionDialog
     }
 }
 
-@Composable fun ActivityInfo(
+@Composable fun ActivityTitle(
     edit: Boolean = false,
     activity: MutableState<ActivityImplP>,
     onSelect: () -> Unit = {},
@@ -90,7 +89,7 @@ import com.count_out.presentation.view_element.dialog.ChangeColorSectionDialog
             typeKeyboard = TypeKeyboard.TEXT,
             textStyle = MaterialTheme.typography.bodyLarge,
             contentAlignment = Alignment.CenterStart,
-            onChangeValue = { activity.value = activity.value.copy(name = it) }//onChange(activity.value)
+            onChangeValue = { activity.value = activity.value.copy(name = it) }
         )
         Spacer(modifier = Modifier
             .size(size = 32.dp)
@@ -98,47 +97,42 @@ import com.count_out.presentation.view_element.dialog.ChangeColorSectionDialog
             .border(width = 1.dp, color = colorScheme.outline, shape = CircleShape)
             .clickable { activityChangeColor.value = activity.value }
             .background(color = Color(activity.value.color), shape = CircleShape))
-        if (activity.value.idActivity>0){
+        if (activity.value.idActivity > 0){
             IconButton( onClick = { onDeleteActivity(activity.value.idActivity) }) {
                 Icon(imageVector = Icons.Filled.DeleteSweep, contentDescription = null,
                     tint = colorScheme.outline)
             }
         }
-
     }
 }
-@Composable fun ActivityInfoFull(
+@Composable fun ActivityEdit(
     activity: MutableState<ActivityImplP>,
     onChange: (ActivityImplP) -> Unit = {},
 ){
     val modifier = Modifier.padding(horizontal = 6.dp, vertical = 4.dp)
     val modifier1 = Modifier.padding(horizontal = 6.dp, vertical = 0.dp)
     Column(horizontalAlignment = Alignment.Start, modifier = Modifier.fillMaxWidth()) {
-        ActivityInfo(
-            activity = activity,
-            edit = true,
-            onChange = onChange,
-        )
+        ActivityTitle(edit = true, activity = activity, onChange = onChange,)
         Row(verticalAlignment = Alignment.CenterVertically, modifier = modifier,){
             TextApp(text = stringResource(id = R.string.audio_track) + ":", style = MaterialTheme.typography.bodyLarge, modifier = modifier1)
-            FieldF(activity.value.audioTrack, modifier.weight(1f)) {
+            FieldEdit(activity.value.audioTrack, modifier.weight(1f)) {
                 onChange((activity.value ).copy(audioTrack = it))}
         }
         Row(verticalAlignment = Alignment.CenterVertically, modifier = modifier, ){
             TextApp(text = stringResource(id = R.string.video_clip) + ":", style = MaterialTheme.typography.bodyLarge, modifier = modifier1)
-            FieldF(activity.value.videoClip, modifier.weight(1f)) {
+            FieldEdit(activity.value.videoClip, modifier.weight(1f)) {
                 onChange(activity.value.copy(videoClip = it))}
         }
         Column( modifier = modifier){
             TextApp(text = stringResource(id = R.string.description) + ":", style = MaterialTheme.typography.bodyLarge, modifier = modifier1)
             Row(Modifier.fillMaxWidth()) {
-                FieldF(activity.value.description, Modifier.weight(1f)) {
+                FieldEdit(activity.value.description, Modifier.weight(1f)) {
                     onChange(activity.value.copy(description = it))}
             }
         }
     }
 }
-@Composable fun FieldF(placeholder: String, modifier:Modifier = Modifier, onChangeValue: (String)->Unit){
+@Composable fun FieldEdit(placeholder: String, modifier:Modifier = Modifier, onChangeValue: (String)->Unit){
     TextFieldApp(
         modifier = modifier,
         edit = true,
@@ -150,46 +144,3 @@ import com.count_out.presentation.view_element.dialog.ChangeColorSectionDialog
         onChangeValue = { onChangeValue(it) }
     )
 }
-//@SuppressLint("UnrememberedMutableState")
-//@Composable
-//fun ActivityValueSelect1(
-//    activity: MutableState<Activity>,
-//    onSelect: () -> Unit = {},
-//    onChangeColor: (Int) -> Unit = {},
-//    onDeleteActivity:(Long)-> Unit = {}
-//){
-//    val activityChangeColor: MutableState<Activity?> = remember { mutableStateOf(null) }
-//    activityChangeColor.value?.let { changeColor->
-//        ChangeColorSectionDialog(
-//            colorItem = changeColor.color,
-//            onDismiss = { activityChangeColor.value = null},
-//            onConfirm = {
-//                onChangeColor(it)
-//                activity.value = ( activity.value as ActivityDB ).copy(color = it)
-//                activityChangeColor.value = null
-//            },
-//        )
-//    }
-//    Row( modifier = Modifier.padding(start = 12.dp).clickable { onSelect() }.fillMaxWidth(),
-//        verticalAlignment = Alignment.CenterVertically,
-//        horizontalArrangement = Arrangement.Start
-//    ){
-//        Icon(painter = painterResource(id = activity.value.icon), contentDescription = null)
-//        Spacer(modifier = Modifier.padding(end= 12.dp))
-//        TextApp(
-//            text = activity.value.name,
-//            textAlign = TextAlign.Start,
-//            style = mTypography.bodyMedium,
-//            modifier = Modifier.weight(1f),)
-//        Spacer(modifier = Modifier
-//            .size(size = 32.dp)
-//            .clip(shape = CircleShape)
-//            .border(width = 1.dp, color = MaterialTheme.colorScheme.outline, shape = CircleShape)
-//            .clickable { activityChangeColor.value = activity.value }
-//            .background(color = Color(activity.value.color), shape = CircleShape))
-//        IconButton( onClick = { onDeleteActivity(activity.value.idActivity) }) {
-//            Icon(imageVector = Icons.Filled.DeleteSweep, contentDescription = null,
-//                tint = MaterialTheme.colorScheme.outline)
-//        }
-//    }
-//}

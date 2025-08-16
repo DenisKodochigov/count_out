@@ -1,6 +1,5 @@
 package com.count_out.framework.room.source
 
-import android.database.sqlite.SQLiteConstraintException
 import com.count_out.data.models.SetImplD
 import com.count_out.data.models.SpeechKitImplD
 import com.count_out.data.models.throwable.ResultSource
@@ -28,7 +27,7 @@ class ExerciseSourceImpl @Inject constructor(
                 dao.get(exercise.item.idExercise).map{ it?.let{
                 TypeSource.ExerciseT(it.toExercise())}}.resultSource()
             } else flow { emit (ResultSource.Error(ThrowableDS.NotValidType())) }
-        } catch(e: SQLiteConstraintException) {
+        } catch(e: Exception) {
             flow { emit(ResultSource.Error(ThrowableDS.extract(e)))} }
     }
     override fun getForRound(id: TypeSource): Flow<ResultSource<TypeSource>> =
@@ -37,7 +36,7 @@ class ExerciseSourceImpl @Inject constructor(
                 dao.getForRound(id.item).map{ listExerciseRel->
                 TypeSource.ExercisesT(listExerciseRel.map{ it.toExercise()}) }.resultSource()
             } else flow { emit (ResultSource.Error(ThrowableDS.NotValidType())) }
-        } catch(e: SQLiteConstraintException) {
+        } catch(e: Exception) {
             flow { emit(ResultSource.Error(ThrowableDS.extract(e)))} }
 
     override fun getForRing(id: TypeSource): Flow<ResultSource<TypeSource>> =
@@ -46,7 +45,7 @@ class ExerciseSourceImpl @Inject constructor(
                 dao.getForRing(id.item).map{ listExerciseRel->
                     TypeSource.ExercisesT(listExerciseRel.map{ it.toExercise()}) }.resultSource()
             } else flow { emit (ResultSource.Error(ThrowableDS.NotValidType())) }
-        } catch(e: SQLiteConstraintException) {
+        } catch(e: Exception) {
             flow { emit(ResultSource.Error(ThrowableDS.extract(e)))} }
 
     override fun getFilter(list: TypeSource): Flow<ResultSource<TypeSource>> =
@@ -55,7 +54,7 @@ class ExerciseSourceImpl @Inject constructor(
                     TypeSource.ExercisesT(listExerciseRel.map{ it.toExercise()})
                 }.resultSource()
             } else flow { emit (ResultSource.Error(ThrowableDS.NotValidType())) }
-        } catch(e: SQLiteConstraintException) {
+        } catch(e: Exception) {
             flow { emit(ResultSource.Error(ThrowableDS.extract(e)))} }
 
     override fun copy(exercise: TypeSource): ResultSource<TypeSource> {
@@ -88,7 +87,7 @@ class ExerciseSourceImpl @Inject constructor(
                 }
             } else ResultSource.Error(ThrowableDS.NotValidType())
 
-        } catch (e: SQLiteConstraintException) { ResultSource.Error(ThrowableDS.extract(e)) }
+        } catch (e: Exception) { ResultSource.Error(ThrowableDS.extract(e)) }
     }
 
     override fun update(exercise: TypeSource): ResultSource<TypeSource> {
@@ -101,7 +100,7 @@ class ExerciseSourceImpl @Inject constructor(
                             else ResultSource.Success(TypeSource.IntT(exerciseId))
                         }
             } else ResultSource.Error(ThrowableDS.NotValidType())
-        } catch (e: SQLiteConstraintException) { ResultSource.Error(ThrowableDS.extract(e)) }
+        } catch (e: Exception) { ResultSource.Error(ThrowableDS.extract(e)) }
     }
 
     override fun del(exercise: TypeSource): ResultSource<TypeSource> {
@@ -127,6 +126,6 @@ class ExerciseSourceImpl @Inject constructor(
                     }
                 }
             } else ResultSource.Error(ThrowableDS.NotValidType())
-        } catch (e: SQLiteConstraintException) { ResultSource.Error(ThrowableDS.extract(e)) }
+        } catch (e: Exception) { ResultSource.Error(ThrowableDS.extract(e)) }
     }
 }

@@ -6,7 +6,7 @@ import kotlinx.coroutines.flow.Flow
 
 interface ActivityRepo{
     fun gets(): Flow<ResultUC<TypeRepo>>
-    fun get(id: TypeRepo): Flow<ResultUC<TypeRepo>>
+    fun get(activity: TypeRepo): Flow<ResultUC<TypeRepo>>
     fun del(activity: TypeRepo): Flow<ResultUC<TypeRepo>>
     fun copy(activity: TypeRepo): Flow<ResultUC<TypeRepo>>
     fun update(activity: TypeRepo): Flow<ResultUC<TypeRepo>>

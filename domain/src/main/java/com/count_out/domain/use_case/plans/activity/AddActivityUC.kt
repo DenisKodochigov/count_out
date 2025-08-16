@@ -17,7 +17,3 @@ class AddActivityUC @Inject constructor(
     data class Request(val activity: Activity): UseCase.Request
     data class Response(val activity: TypeRepo): UseCase.Response
 }
-//
-//    override fun implementation(request: Request): Flow<ResultUC<Response>> =
-//        repo.copy(request.activity).map { result->
-//            converterR(result){ Response(it)} }

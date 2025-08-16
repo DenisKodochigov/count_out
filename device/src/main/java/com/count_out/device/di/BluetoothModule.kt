@@ -36,8 +36,8 @@ class BluetoothModule {
     fun provideBluetoothScanner(
         @ApplicationContext context: Context,
         bluetoothAdapter: BluetoothAdapter,
-//        permissionApp: PermissionApp
-    ): BleScanner = BleScanner(context, bluetoothAdapter) //, permissionApp)
+        permissionApp: PermissionApp
+    ): BleScanner = BleScanner(context, bluetoothAdapter, permissionApp)
 
     @Singleton
     @Provides

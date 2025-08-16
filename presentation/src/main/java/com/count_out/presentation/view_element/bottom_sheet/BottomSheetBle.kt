@@ -1,6 +1,7 @@
 package com.count_out.presentation.view_element.bottom_sheet
 
 import android.annotation.SuppressLint
+import android.util.Log
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -36,7 +37,6 @@ import com.count_out.presentation.screens.settings.SettingsState
 import com.count_out.presentation.view_element.ModalBottomSheetApp
 import com.count_out.presentation.view_element.TextApp
 import com.count_out.presentation.view_element.icons.AnimateIcon
-
 
 @Composable fun ShowBottomSheetBle(dataState: SettingsState, showBS: Boolean
 ){

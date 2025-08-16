@@ -33,7 +33,7 @@ class SpeechSourceImpl @Inject constructor(private val dao: SpeechDao): SpeechSo
                     } else ResultSource.Error(ThrowableDS.RequestFailed())
                 }
             } else ResultSource.Error(ThrowableDS.NotValidType())
-        } catch(e: SQLiteConstraintException) { ResultSource.Error(ThrowableDS.extract(e))}
+        } catch(e: Exception) { ResultSource.Error(ThrowableDS.extract(e))}
     }
 //
     override fun del(speech: TypeSource): ResultSource<TypeSource> {
@@ -44,7 +44,7 @@ class SpeechSourceImpl @Inject constructor(private val dao: SpeechDao): SpeechSo
                     } else ResultSource.Error(ThrowableDS.RequestFailed())
                 }
             } else ResultSource.Error(ThrowableDS.NotValidType())
-        } catch(e: SQLiteConstraintException) { ResultSource.Error(ThrowableDS.extract(e))}
+        } catch(e: Exception) { ResultSource.Error(ThrowableDS.extract(e))}
     }
 
     override fun update(speech: TypeSource): ResultSource<TypeSource> {
@@ -55,7 +55,7 @@ class SpeechSourceImpl @Inject constructor(private val dao: SpeechDao): SpeechSo
                     } else ResultSource.Error(ThrowableDS.RequestFailed())
                 }
             } else ResultSource.Error(ThrowableDS.NotValidType())
-        } catch(e: SQLiteConstraintException) { ResultSource.Error(ThrowableDS.extract(e))}
+        } catch(e: Exception) { ResultSource.Error(ThrowableDS.extract(e))}
     }
 //    fun getValue(id: Long) = dao.get(id)
 //    fun delValue(id: Long) = dao.del(id)

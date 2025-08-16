@@ -361,7 +361,7 @@ val interval_between_pole = 4.dp
             typeKeyboard = typeKey,
             contentAlignment = Alignment.Center,
             textStyle = typography.bodyLarge.copy(textAlign = TextAlign.Center),
-            onChangeValue = { onChangeValue(it) },
+            onChangeFocus = { onChangeValue(it) },
             placeholder = placeholder,
         )
         if (unitId2 != R.string.no){
@@ -419,7 +419,7 @@ val interval_between_pole = 4.dp
             typeKeyboard = typeKey,
             contentAlignment = Alignment.Center,
             textStyle = typography.bodyLarge.copy(textAlign = TextAlign.Center),
-            onChangeValue = { onChangeValue(it) },
+            onChangeFocus = { onChangeValue(it) },
             placeholder = placeholder,
         )
         TextApp(

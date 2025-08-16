@@ -35,7 +35,7 @@ class SpeechKitSourceImpl @Inject constructor(
                     } else ResultSource.Error(ThrowableDS.RequestFailed())
                 }
             } else ResultSource.Error(ThrowableDS.NotValidType())
-        } catch(e: SQLiteConstraintException) { ResultSource.Error(ThrowableDS.extract(e))}
+        } catch(e: Exception) { ResultSource.Error(ThrowableDS.extract(e))}
     }
 
     override fun update(speechKit: TypeSource): ResultSource<TypeSource> {
@@ -48,7 +48,7 @@ class SpeechKitSourceImpl @Inject constructor(
                     ) ResultSource.Success(speechKit)
                 else ResultSource.Error(ThrowableDS.RequestFailed())
             } else ResultSource.Error(ThrowableDS.NotValidType())
-        } catch(e: SQLiteConstraintException) { ResultSource.Error(ThrowableDS.extract(e))}
+        } catch(e: Exception) { ResultSource.Error(ThrowableDS.extract(e))}
     }
 
     override fun del(speechKit: TypeSource): ResultSource<TypeSource> {
@@ -64,7 +64,7 @@ class SpeechKitSourceImpl @Inject constructor(
                         else ResultSource.Success(TypeSource.IntT(1)) }
                 } else ResultSource.Error(ThrowableDS.RequestFailed())
             } else ResultSource.Error(ThrowableDS.NotValidType())
-        } catch(e: SQLiteConstraintException) { ResultSource.Error(ThrowableDS.extract(e))}
+        } catch(e: Exception) { ResultSource.Error(ThrowableDS.extract(e))}
     }
 
     fun copy(speechKit: SpeechKitImplD): Long {

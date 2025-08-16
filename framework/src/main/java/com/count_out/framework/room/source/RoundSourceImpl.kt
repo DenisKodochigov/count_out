@@ -33,7 +33,7 @@ class RoundSourceImpl @Inject constructor(
                 dao.gets(trainingId.item).filterNotNull().map { list ->
                     TypeSource.RoundsT(list.map { it.toRound() }) }.resultSource()
             } else flow { emit(ResultSource.Error(ThrowableDS.NotValidType())) }
-        } catch(e: SQLiteConstraintException) {
+        } catch(e: Exception) {
             flow { emit(ResultSource.Error(ThrowableDS.extract(e)))} }
 
     override fun get(round: TypeSource): Flow<ResultSource<TypeSource>> =
@@ -41,7 +41,7 @@ class RoundSourceImpl @Inject constructor(
             if (round is TypeSource.RoundT) {
                 dao.get(round.item.idRound).filterNotNull().map { TypeSource.RoundT(it.toRound()) }.resultSource()
             } else flow { emit(ResultSource.Error(ThrowableDS.NotValidType())) }
-        } catch(e: SQLiteConstraintException) {
+        } catch(e: Exception) {
             flow { emit(ResultSource.Error(ThrowableDS.extract(e)))} }
 
     override fun copy(round: TypeSource): ResultSource<TypeSource> {
@@ -75,7 +75,7 @@ class RoundSourceImpl @Inject constructor(
                 }
             } else ResultSource.Error(ThrowableDS.NotValidType())
 
-        } catch (e: SQLiteConstraintException) { ResultSource.Error(ThrowableDS.extract(e)) }
+        } catch (e: Exception) { ResultSource.Error(ThrowableDS.extract(e)) }
     }
 
     override fun del(round: TypeSource): ResultSource<TypeSource> {
@@ -102,7 +102,7 @@ class RoundSourceImpl @Inject constructor(
                     }
                 }
             } else ResultSource.Error(ThrowableDS.NotValidType())
-        } catch (e: SQLiteConstraintException) { ResultSource.Error(ThrowableDS.extract(e)) }
+        } catch (e: Exception) { ResultSource.Error(ThrowableDS.extract(e)) }
     }
 
     override fun update(round: TypeSource): ResultSource<TypeSource> {
@@ -115,6 +115,6 @@ class RoundSourceImpl @Inject constructor(
                     else ResultSource.Success(TypeSource.IntT(result))
                 }
             } else ResultSource.Error(ThrowableDS.NotValidType())
-        } catch (e: SQLiteConstraintException) { ResultSource.Error(ThrowableDS.extract(e)) }
+        } catch (e: Exception) { ResultSource.Error(ThrowableDS.extract(e)) }
     }
 }

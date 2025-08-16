@@ -79,7 +79,7 @@ fun BottomSheetSelectActivity(dataState: TrainingState)
         modifier = Modifier.heightIn(min = 0.dp, max = 250.dp)
     ){
         items(items = dataState.activities) {item ->
-            ActivityInfo(
+            ActivityTitle(
                 activity = remember{ mutableStateOf(ActivityImplP(item))},
                 onSelect = { dataState.item?.let { dataState.onConfirmation(it, item)}},
             )

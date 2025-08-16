@@ -30,7 +30,7 @@ class TrainingSourceImpl @Inject constructor(
         return try {
             dao.getTrainingsRel().filterNotNull().map { list ->
                 TypeSource.PlansT(list.map { it.toTraining() }) }.resultSource()
-        } catch(e: SQLiteConstraintException) {
+        } catch(e: Exception) {
             flow { emit(ResultSource.Error(ThrowableDS.extract(e)))} }
     }
 
@@ -40,7 +40,7 @@ class TrainingSourceImpl @Inject constructor(
                 dao.getTrainingRel(training.item.idTraining).filterNotNull()
                     .map { TypeSource.PlanT(it.toTraining()) }.resultSource()
             } else flow { emit(ResultSource.Error(ThrowableDS.NotValidType())) }
-        } catch(e: SQLiteConstraintException) {
+        } catch(e: Exception) {
             flow { emit(ResultSource.Error(ThrowableDS.extract(e)))} }
     }
 
@@ -50,7 +50,7 @@ class TrainingSourceImpl @Inject constructor(
                 dao.getTrainingRel(id.item).filterNotNull()
                     .map { TypeSource.PlanT(it.toTraining()) }.resultSource()
             } else flow { emit(ResultSource.Error(ThrowableDS.NotValidType())) }
-        } catch(e: SQLiteConstraintException) {
+        } catch(e: Exception) {
             flow { emit(ResultSource.Error(ThrowableDS.extract(e)))} }
     }
 
@@ -82,7 +82,7 @@ class TrainingSourceImpl @Inject constructor(
                     } else ResultSource.Error(ThrowableDS.NotValidType())
                 }
             } else ResultSource.Error(ThrowableDS.NotValidType())
-        } catch (e: SQLiteConstraintException) { ResultSource.Error(ThrowableDS.extract(e)) }
+        } catch (e: Exception) { ResultSource.Error(ThrowableDS.extract(e)) }
     }
     override fun del(training: TypeSource): ResultSource<TypeSource> {
         return try {
@@ -109,7 +109,7 @@ class TrainingSourceImpl @Inject constructor(
                     }
                 }
             } else ResultSource.Error(ThrowableDS.NotValidType())
-        } catch (e: SQLiteConstraintException) { ResultSource.Error(ThrowableDS.extract(e)) }
+        } catch (e: Exception) { ResultSource.Error(ThrowableDS.extract(e)) }
     }
 
     override fun update(training: TypeSource): ResultSource<TypeSource> {
@@ -122,6 +122,6 @@ class TrainingSourceImpl @Inject constructor(
                     else ResultSource.Success(TypeSource.IntT(result))
                 }
             } else ResultSource.Error(ThrowableDS.NotValidType())
-        } catch (e: SQLiteConstraintException) { ResultSource.Error(ThrowableDS.extract(e)) }
+        } catch (e: Exception) { ResultSource.Error(ThrowableDS.extract(e)) }
     }
 }

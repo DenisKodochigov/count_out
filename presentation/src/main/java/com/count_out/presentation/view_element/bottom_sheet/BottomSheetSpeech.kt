@@ -126,7 +126,7 @@ fun bottomSheetStateNew(itemSpeech: BottomSheetInterface): BottomSheetState {
             showLine = true,
             maxLines = 3,
             edit = true,
-            enterValue = enterValue
+            onChangeValue = { enterValue.value = it}
         )
         TextApp(text = nameSection, style = MaterialTheme.typography.bodySmall.copy(fontWeight = FontWeight.ExtraLight),
             modifier = Modifier.padding(start = Dimen.bsItemPaddingHor))

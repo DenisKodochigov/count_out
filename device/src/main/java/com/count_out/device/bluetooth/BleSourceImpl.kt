@@ -8,9 +8,9 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 
-class BleSourceImpl @Inject constructor(): BleSource {
+class BleSourceImpl @Inject constructor(private val ble: Bluetooth): BleSource {
     override fun startScanning(): Flow<ResultSource<TypeSource>> {
-        return flow { emit(ResultSource.Error(ThrowableDS.RequestFailed())) }
+        return ble.startScanning()
     }
 
     override fun stopScanning(): Flow<ResultSource<TypeSource>> {

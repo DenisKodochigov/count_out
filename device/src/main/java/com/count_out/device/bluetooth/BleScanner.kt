@@ -8,12 +8,15 @@ import android.bluetooth.le.ScanResult
 import android.bluetooth.le.ScanSettings
 import android.content.Context
 import android.os.ParcelUuid
-import com.count_out.data.router.models.DataFromBle
-import com.count_out.device.bluetooth.models.BleStates
+import com.count_out.device.bluetooth.models.BleDeviceImpl
 import com.count_out.device.bluetooth.models.Const
-import com.count_out.domain.entity.enums.RunningState
+import com.count_out.device.bluetooth.models.ResultBle
+import com.count_out.device.bluetooth.models.ThrowableBle
+import com.count_out.device.permission.PermissionApp
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import java.util.UUID
 import javax.inject.Inject
@@ -23,15 +26,23 @@ import javax.inject.Singleton
 class BleScanner @Inject constructor(
     val context: Context,
     private val bluetoothAdapter: BluetoothAdapter,
-//    private val permissionApp: PermissionApp
+    private val permissionApp: PermissionApp
 ) {
-//    private val timer = TimerMy()
     private lateinit var scanCallback: ScanCallback
-    private val bleScanner by lazy { bluetoothAdapter.bluetoothLeScanner }
-    private val timeScanning = 120
+    private val bluetoothScanner by lazy { bluetoothAdapter.bluetoothLeScanner }
+    val dataFromBle: MutableStateFlow<ResultBle> = MutableStateFlow(ResultBle.Nothing)
 
+    private fun settings(): ScanSettings {
+        return ScanSettings.Builder()
+            .setScanMode(ScanSettings.SCAN_MODE_BALANCED)
+            .setCallbackType(ScanSettings.CALLBACK_TYPE_ALL_MATCHES)
+            .setMatchMode(ScanSettings.MATCH_MODE_AGGRESSIVE)
+            .setNumOfMatches(ScanSettings.MATCH_NUM_ONE_ADVERTISEMENT)
+            .setReportDelay(0L)
+            .build()
+    }
     /** Scan all device*/
-    private fun scanFilters(): List<ScanFilter> {
+    private fun filters(): List<ScanFilter> {
         val filters = mutableListOf<ScanFilter>()
         for(serviceUUID in Const.serviceUUIDs){
             val filter = ScanFilter.Builder().setServiceUuid(
@@ -44,79 +55,40 @@ class BleScanner @Inject constructor(
     }
 
     @SuppressLint("MissingPermission", "SuspiciousIndentation")
-    fun startScannerBLEDevices(dataFromBle: DataFromBle, bleStates: BleStates) {
+    fun startScannerBLEDevices(): Flow<ResultBle> {
         CoroutineScope(Dispatchers.Default).launch {
-            scanCallback = objectScanCallback(bleStates, dataFromBle)
-//            permissionApp.checkBleScan{
-                bleScanner.startScan( scanFilters(), scanSettings(0L), scanCallback)
-//            }
-            dataFromBle.scannedBle.value = true
-//            Delay().run(
-//                delay = timeScanning * 1000L,
-//                bleStates.stateBleScanner
-//            )
-            bleStates.stateBleScanner.value = RunningState.Stopped
-            stopScanner(dataFromBle)
-//            timer.start(
-//                sec = timeScanning,
-//                endCommand = {
-//                    bleStates.stateBleScanner = StateBleScanner.END
-//                    stopScanner(dataFromBle)
-//                }
-//            )
+            scanCallback = objectScanCallback(dataFromBle)
+            bluetoothScanner.startScan(filters(), settings(), scanCallback)
         }
+        return dataFromBle
     }
-    fun stopScannerBLEDevices(dataFromBle: DataFromBle) {
-//        timer.cancel()
-        stopScanner(dataFromBle)
-    }
+
     @SuppressLint("MissingPermission")
-    fun stopScanner(dataFromBle: DataFromBle){
-//        lg("BleScanner. Stop scanner")
-//        permissionApp.checkBleScan{
-            bleScanner.stopScan(scanCallback)
-//        }
-        dataFromBle.scannedBle.value = false
+    fun stopScanner(): Flow<ResultBle>{
+        bluetoothScanner.stopScan(scanCallback)
+        return dataFromBle
     }
-    private fun objectScanCallback(bleStates: BleStates, dataFromBle: DataFromBle): ScanCallback = object: ScanCallback() {
+
+    private fun objectScanCallback(dataFromBle: MutableStateFlow<ResultBle>): ScanCallback = object: ScanCallback() {
         override fun onScanResult(callbackType: Int, result: ScanResult?) {
             super.onScanResult(callbackType, result)
             result?.device?.let { dev ->
-                val fff = dataFromBle.foundDevices.value
-
-//                if (dataFromBle.foundDevices.value.find { it.address == dev.address } == null){
-//                    dataFromBle.foundDevices.value = dataFromBle.foundDevices.value.addApp(
-//                        BleDeviceImpl().fromBluetoothDevice(dev))
-//                }
-            }
+                dataFromBle.value = ResultBle
+                    .Device( BleDeviceImpl().fromBluetoothDevice(dev)) }
         }
         override fun onBatchScanResults(results: MutableList<ScanResult>?) {
             super.onBatchScanResults(results)
             if (!results.isNullOrEmpty()) {
                 results.forEach{ result->
-//                    if (dataFromBle.foundDevices.value.find { it.address == result.device.address } == null){
-//                        dataFromBle.foundDevices.value =
-//                            dataFromBle.foundDevices.value.addApp(BleDeviceImpl().fromBluetoothDevice(result.device))
-//                    }
-                }
+                    dataFromBle.value = ResultBle
+                        .Device( BleDeviceImpl().fromBluetoothDevice(result.device)) }
+
             }
         }
         override fun onScanFailed(errorCode: Int) {
-//            lg("Error scan BLE device. $errorCode")
-            dataFromBle.scannedBle.value = false
-            bleStates.stateBleScanner.value = RunningState.Stopped
+            dataFromBle.value = ResultBle.Error(throwable = ThrowableBle.Scanning())
         }
     }
-    private fun scanSettings(reportDelay: Long): ScanSettings {
-        return ScanSettings.Builder()
-            .setScanMode(ScanSettings.SCAN_MODE_BALANCED)
-            .setCallbackType(ScanSettings.CALLBACK_TYPE_ALL_MATCHES)
-            .setMatchMode(ScanSettings.MATCH_MODE_AGGRESSIVE)
-            .setNumOfMatches(ScanSettings.MATCH_NUM_ONE_ADVERTISEMENT)
-            .setReportDelay(reportDelay)
-            .build()
-    }
-
 }
 
 //fun BluetoothGattCharacteristic.isWritableWithoutResponse(): Boolean =

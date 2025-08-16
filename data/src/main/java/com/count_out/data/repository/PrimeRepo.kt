@@ -14,6 +14,7 @@ import com.count_out.data.models.throwable.TypeSource
 import com.count_out.domain.entity.throwable.ResultUC
 import com.count_out.domain.entity.throwable.ThrowableUC
 import com.count_out.domain.repository.TypeRepo
+import com.count_out.domain.repository.TypeRepo.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
@@ -96,36 +97,44 @@ abstract class PrimeRepo {
             is Success -> ResultUC.Success(toTypeRepo(source.data))
         }
     }
+    fun wrapFlow(source: ResultSource<TypeSource>): Flow<ResultUC<TypeRepo>> {
+        return flow { emit(
+            when (source) {
+                is ResultSource.Error -> ResultUC.Error(ThrowableUC.extract(source.throwable))
+                is Success -> ResultUC.Success(toTypeRepo(source.data))
+            }
+        ) } }
     fun toTypeRepo(value: TypeSource): TypeRepo {
         return when(value){
-            is TypeSource.IntT -> TypeRepo.IntT(item = value.item)
-            is TypeSource.LongT -> TypeRepo.LongT(item = value.item)
-            is TypeSource.LongsT-> TypeRepo.LongsT(item = value.item)
-            is TypeSource.StringT -> TypeRepo.StringT(item = value.item)
-            is TypeSource.BooleanT -> TypeRepo.BooleanT(item = value.item)
-            is TypeSource.CollapsingT -> TypeRepo.CollapsingT(item = value.item)
-            is TypeSource.ShowBottomSheetT -> TypeRepo.ShowBottomSheetT(item = value.item)
-            is TypeSource.SpeechT -> TypeRepo.SpeechT(item = value.item)
-            is TypeSource.SpeechKitT -> TypeRepo.SpeechKitT(item = value.item)
-            is TypeSource.SetT -> TypeRepo.SetT(item = value.item)
-            is TypeSource.SetsT -> TypeRepo.SetsT(item = value.item)
-            is TypeSource.ActivityT -> TypeRepo.ActivityT(item = value.item)
-            is TypeSource.ActivitiesT -> TypeRepo.ActivitiesT(item = value.item)
-            is TypeSource.ExerciseT -> TypeRepo.ExerciseT(item = value.item)
-            is TypeSource.ExercisesT -> TypeRepo.ExercisesT(item = value.item)
-            is TypeSource.RingT-> TypeRepo.RingT(item = value.item)
-            is TypeSource.RingsT-> TypeRepo.RingsT(item = value.item)
-            is TypeSource.RoundT-> TypeRepo.RoundT(item = value.item)
-            is TypeSource.RoundsT-> TypeRepo.RoundsT(item = value.item)
-            is TypeSource.PlanT -> TypeRepo.PlanT(item = value.item)
-            is TypeSource.PlansT -> TypeRepo.PlansT(item = value.item)
-            is TypeSource.StepPlanT -> TypeRepo.StepPlanT(item = value.item)
-            is TypeSource.SettingT -> TypeRepo.SettingT(item = value.item)
-            is TypeSource.SettingsT -> TypeRepo.SettingsT(item = value.item)
-            is TypeSource.DeviceUIT -> TypeRepo.DeviceUIT(item = value.item)
-            is TypeSource.WeatherT -> TypeRepo.WeatherT(item = value.item)
-            is TypeSource.WeatherRequestT-> TypeRepo.WeatherRequestT(item = value.item)
-            is TypeSource.DataForChangeSequenceT-> TypeRepo.DataForChangeSequenceT(item = value.item)
+            is TypeSource.IntT -> IntT(item = value.item)
+            is TypeSource.LongT -> LongT(item = value.item)
+            is TypeSource.LongsT-> LongsT(item = value.item)
+            is TypeSource.StringT -> StringT(item = value.item)
+            is TypeSource.BooleanT -> BooleanT(item = value.item)
+            is TypeSource.CollapsingT -> CollapsingT(item = value.item)
+            is TypeSource.ShowBottomSheetT -> ShowBottomSheetT(item = value.item)
+            is TypeSource.SpeechT -> SpeechT(item = value.item)
+            is TypeSource.SpeechKitT -> SpeechKitT(item = value.item)
+            is TypeSource.SetT -> SetT(item = value.item)
+            is TypeSource.SetsT -> SetsT(item = value.item)
+            is TypeSource.ActivityT -> ActivityT(item = value.item)
+            is TypeSource.ActivitiesT -> ActivitiesT(item = value.item)
+            is TypeSource.ExerciseT -> ExerciseT(item = value.item)
+            is TypeSource.ExercisesT -> ExercisesT(item = value.item)
+            is TypeSource.RingT-> RingT(item = value.item)
+            is TypeSource.RingsT-> RingsT(item = value.item)
+            is TypeSource.RoundT-> RoundT(item = value.item)
+            is TypeSource.RoundsT-> RoundsT(item = value.item)
+            is TypeSource.PlanT -> PlanT(item = value.item)
+            is TypeSource.PlansT -> PlansT(item = value.item)
+            is TypeSource.StepPlanT -> StepPlanT(item = value.item)
+            is TypeSource.SettingT -> SettingT(item = value.item)
+            is TypeSource.SettingsT -> SettingsT(item = value.item)
+            is TypeSource.DeviceUIT -> DeviceUIT(item = value.item)
+            is TypeSource.DevicesUIT -> TypeRepo.DevicesUIT(item = value.item)
+            is TypeSource.WeatherT -> WeatherT(item = value.item)
+            is TypeSource.WeatherRequestT-> WeatherRequestT(item = value.item)
+            is TypeSource.DataForChangeSequenceT-> DataForChangeSequenceT(item = value.item)
             is TypeSource.NullT -> TypeRepo.NullT
         }
     }
@@ -156,6 +165,7 @@ abstract class PrimeRepo {
             is TypeRepo.SettingT -> TypeSource.SettingT(item = value.item)
             is TypeRepo.SettingsT -> TypeSource.SettingsT(item = value.item)
             is TypeRepo.DeviceUIT-> TypeSource.DeviceUIT(item = value.item)
+            is TypeRepo.DevicesUIT -> TypeSource.DevicesUIT(item = value.item)
             is TypeRepo.WeatherT -> TypeSource.WeatherT(item = value.item)
             is TypeRepo.WeatherRequestT-> TypeSource.WeatherRequestT(item = value.item)
             is TypeRepo.DataForChangeSequenceT-> TypeSource.DataForChangeSequenceT(item = value.item)

@@ -7,6 +7,7 @@ sealed class ThrowableDS (private val t: Throwable?): Throwable(t){
     class RequestFailed(t:Throwable = Exception("return null")): ThrowableDS(t)
     class ReturnNull(t:Throwable = Exception("return null")): ThrowableDS(t)
     class NotValidType(t:Throwable = Exception("not valid type")): ThrowableDS(t)
+    class NotValidBle(t:Throwable = Exception("not valid bluetooth")): ThrowableDS(t)
     class SQlError(t:Throwable): ThrowableDS(t)
     class UnknownThrow(t:Throwable): ThrowableDS(t)
     companion object {

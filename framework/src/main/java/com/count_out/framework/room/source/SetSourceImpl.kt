@@ -26,7 +26,7 @@ class SetSourceImpl @Inject constructor(
             if (set is TypeSource.SetT) {
                 dao.get(set.item.idSet).filterNotNull().map { TypeSource.SetT(it.toSet()) }.resultSource()
             } else { flow { emit(ResultSource.Error(ThrowableDS.NotValidType())) } }
-        } catch(e: SQLiteConstraintException) {
+        } catch(e: Exception) {
             flow { emit(ResultSource.Error(ThrowableDS.extract(e)))} }
 
     override fun gets(exerciseId: TypeSource): Flow<ResultSource<TypeSource>> =
@@ -35,7 +35,7 @@ class SetSourceImpl @Inject constructor(
                 dao.gets(exerciseId.item).filterNotNull().map { list ->
                     TypeSource.SetsT(list.filterNotNull().map { it.toSet() }) }.resultSource()
             } else flow { emit(ResultSource.Error(ThrowableDS.NotValidType())) }
-        } catch(e: SQLiteConstraintException) {
+        } catch(e: Exception) {
             flow { emit(ResultSource.Error(ThrowableDS.extract(e)))} }
 
     override fun copy(set: TypeSource): ResultSource<TypeSource> =
@@ -47,7 +47,7 @@ class SetSourceImpl @Inject constructor(
                     if (count > 0) ResultSource.Success(TypeSource.LongT(item = count))
                     else ResultSource.Error(ThrowableDS.RequestFailed())
                 }
-            } catch (e: SQLiteConstraintException) { ResultSource.Error(ThrowableDS.extract(e)) }
+            } catch (e: Exception) { ResultSource.Error(ThrowableDS.extract(e)) }
         } else ResultSource.Error(ThrowableDS.NotValidType())
 
     override fun del(set: TypeSource): ResultSource<TypeSource> =
@@ -66,7 +66,7 @@ class SetSourceImpl @Inject constructor(
                     if (count > 0) ResultSource.Success(TypeSource.IntT(item = count))
                     else ResultSource.Error(ThrowableDS.RequestFailed())
                 }
-            } catch (e: SQLiteConstraintException) { ResultSource.Error(ThrowableDS.extract(e)) }
+            } catch (e: Exception) { ResultSource.Error(ThrowableDS.extract(e)) }
         } else ResultSource.Error(ThrowableDS.NotValidType())
         return result
     }
@@ -80,5 +80,5 @@ class SetSourceImpl @Inject constructor(
 //                    if (count > 0L) ResultSource.Success(TypeSource.IntT(item = count))
 //                    else ResultSource.Error(ThrowableDS.RequestFailed())
 //                }
-//            } catch (e: SQLiteConstraintException) { ResultSource.Error(ThrowableDS.extract(e)) }
+//            } catch (e: Exception) { ResultSource.Error(ThrowableDS.extract(e)) }
 //        } else ResultSource.Error(ThrowableDS.NotValidType())

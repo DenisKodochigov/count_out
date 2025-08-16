@@ -1,8 +1,6 @@
 package com.count_out.presentation.screens.settings
 
-import android.R.attr.data
 import android.annotation.SuppressLint
-import android.util.Log
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -33,7 +31,6 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.count_out.domain.entity.Setting
 import com.count_out.domain.entity.enums.ConnectState
 import com.count_out.domain.entity.router.DeviceUI
-import com.count_out.domain.repository.TypeRepo
 import com.count_out.presentation.R
 import com.count_out.presentation.models.ActivityImplP
 import com.count_out.presentation.models.alumBodySmall
@@ -41,7 +38,6 @@ import com.count_out.presentation.screens.prime.PrimeScreen
 import com.count_out.presentation.view_element.EnumsTo
 import com.count_out.presentation.view_element.SwitchApp
 import com.count_out.presentation.view_element.TextApp
-import com.count_out.presentation.view_element.bottom_sheet.BottomSheetBle
 import com.count_out.presentation.view_element.bottom_sheet.CardActivity
 import com.count_out.presentation.view_element.bottom_sheet.ShowBottomSheetAddActivity
 import com.count_out.presentation.view_element.bottom_sheet.ShowBottomSheetBle
@@ -65,9 +61,7 @@ import com.count_out.presentation.view_element.icons.IconsCollapsing
 @Composable fun SettingScreenLayout(dataState: SettingsState){
     Column(
         modifier = Modifier
-            .verticalScroll(rememberScrollState())
-            .padding(8.dp)
-            .fillMaxSize(),
+            .verticalScroll(rememberScrollState()).padding(8.dp).fillMaxSize(),
         content = {
             ActivitySection(dataState = dataState)
             OtherSettings(dataState = dataState)
@@ -85,7 +79,7 @@ import com.count_out.presentation.view_element.icons.IconsCollapsing
     }
 }
 @Composable fun ActivitySectionTitle(dataState: SettingsState){
-    ShowBottomSheetAddActivity(dataState, dataState.showBS.activityAdd)
+    ShowBottomSheetAddActivity(dataState, dataState.showBS.activity)
     Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.fillMaxWidth()){
         IconsCollapsing(
             onClick = { dataState.event(SettingsEvent.SetCollapsing(dataState.collapsing

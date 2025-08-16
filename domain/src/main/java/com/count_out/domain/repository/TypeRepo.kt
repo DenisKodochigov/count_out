@@ -45,6 +45,7 @@ sealed class TypeRepo {
     data class SettingT(val item: Setting): TypeRepo()
     data class SettingsT(val item: Settings): TypeRepo()
     data class DeviceUIT(val item: DeviceUI): TypeRepo()
+    data class DevicesUIT(val item: List<DeviceUI>): TypeRepo()
     data class WeatherT(val item: Weather): TypeRepo()
     data class WeatherRequestT(val item: WeatherRequest): TypeRepo()
     data class DataForChangeSequenceT(val item: DataForChangeSequence): TypeRepo()

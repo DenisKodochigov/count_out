@@ -106,8 +106,8 @@ import com.count_out.presentation.models.TypeKeyboard
     maxLines: Int = 1,
     edit: Boolean = false,
     beginValueEmpty: Boolean = false,
+    onChangeFocus:(String)->Unit = {},
     onChangeValue:(String)->Unit = {},
-    enterValue: MutableState<String> = mutableStateOf("")
 ){
     val keyboardController = LocalSoftwareKeyboardController.current
     val focusManager = LocalFocusManager.current
@@ -124,7 +124,7 @@ import com.count_out.presentation.models.TypeKeyboard
             .width(IntrinsicSize.Max)
             .focusable()
             .onFocusChanged {
-                if ((isFocused && !it.isFocused) && text.isNotEmpty()) onChangeValue(text)
+                if ((isFocused && !it.isFocused) && text.isNotEmpty()) onChangeFocus(text)
                 isFocused = it.isFocused
             },
         keyboardOptions = keyBoardOpt(typeKeyboard),
@@ -132,7 +132,7 @@ import com.count_out.presentation.models.TypeKeyboard
             focusManager.clearFocus()
             keyboardController?.hide() }),
         onValueChange = {
-            enterValue.value = it
+            onChangeValue(it)
             text = it },
         decorationBox = {
             Row( verticalAlignment = Alignment.CenterVertically){
