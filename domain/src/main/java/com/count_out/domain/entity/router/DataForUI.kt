@@ -22,7 +22,7 @@ interface DataForUI {
     val heartRate: MutableStateFlow<Int>
     val scannedBle: MutableStateFlow<Boolean>
     val bleConnectState: MutableStateFlow<ConnectState>
-    val foundDevices: MutableStateFlow<List<DeviceUI>>
+    val foundDevices: MutableStateFlow<List<DeviceBle>>
     val coordinate: MutableStateFlow<Coordinate?>
     var cancelCoroutineWork: ()-> Unit
     fun setWork(buffer: Buffer)

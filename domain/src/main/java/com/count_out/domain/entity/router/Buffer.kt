@@ -31,8 +31,8 @@ interface Buffer {
     val heartRate: MutableStateFlow<Int>
     val scannedBle: MutableStateFlow<Boolean>
     val bleConnectState: MutableStateFlow<ConnectState>
-    val foundDevices: MutableStateFlow<List<DeviceUI>>
-    val lastConnectHearthRateDevice: MutableStateFlow<DeviceUI?>
+    val foundDevices: MutableStateFlow<List<DeviceBle>>
+    val lastConnectHearthRateDevice: MutableStateFlow<DeviceBle?>
 
     val flowTime: MutableStateFlow<TickTime?>
     val countRest: MutableStateFlow<Int>

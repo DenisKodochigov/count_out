@@ -5,7 +5,9 @@ import com.count_out.domain.entity.GlobalValueApp.toStepPlan1
 import com.count_out.domain.entity.Setting
 import com.count_out.domain.entity.Settings
 import com.count_out.domain.entity.StepPlan
-import com.count_out.domain.entity.router.DeviceUI
+import com.count_out.domain.entity.enums.ConnectState
+import com.count_out.domain.entity.enums.StateBleConnecting
+import com.count_out.domain.entity.router.DeviceBle
 import com.count_out.domain.entity.weather.Weather
 import com.count_out.domain.entity.weather.WeatherRequest
 import com.count_out.domain.entity.workout.Activity
@@ -44,8 +46,9 @@ sealed class TypeRepo {
     data class StepPlanT(val item: StepPlan): TypeRepo()
     data class SettingT(val item: Setting): TypeRepo()
     data class SettingsT(val item: Settings): TypeRepo()
-    data class DeviceUIT(val item: DeviceUI): TypeRepo()
-    data class DevicesUIT(val item: List<DeviceUI>): TypeRepo()
+    data class DeviceUIT(val item: DeviceBle): TypeRepo()
+    data class DevicesUIT(val item: Map<String, DeviceBle>): TypeRepo()
+    data class BleConnectStateT(val item: ConnectState): TypeRepo()
     data class WeatherT(val item: Weather): TypeRepo()
     data class WeatherRequestT(val item: WeatherRequest): TypeRepo()
     data class DataForChangeSequenceT(val item: DataForChangeSequence): TypeRepo()

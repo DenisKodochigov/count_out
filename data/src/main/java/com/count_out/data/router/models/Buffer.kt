@@ -6,15 +6,15 @@ import com.count_out.domain.entity.TickTime
 import com.count_out.domain.entity.enums.ConnectState
 import com.count_out.domain.entity.enums.RunningState
 import com.count_out.domain.entity.router.Buffer
-import com.count_out.domain.entity.router.DeviceUI
+import com.count_out.domain.entity.router.DeviceBle
 import kotlinx.coroutines.flow.MutableStateFlow
 
 data class BufferImpl (
     override val heartRate: MutableStateFlow<Int> = MutableStateFlow(0),
     override val scannedBle: MutableStateFlow<Boolean> = MutableStateFlow(false),
     override val bleConnectState: MutableStateFlow<ConnectState> = MutableStateFlow(ConnectState.NOT_CONNECTED),
-    override val foundDevices: MutableStateFlow<List<DeviceUI>> = MutableStateFlow(emptyList()),
-    override val lastConnectHearthRateDevice: MutableStateFlow<DeviceUI?> = MutableStateFlow(null),
+    override val foundDevices: MutableStateFlow<List<DeviceBle>> = MutableStateFlow(emptyList()),
+    override val lastConnectHearthRateDevice: MutableStateFlow<DeviceBle?> = MutableStateFlow(null),
 
     override val flowTime: MutableStateFlow<TickTime?> = MutableStateFlow(null),
     override val countRest: MutableStateFlow<Int> = MutableStateFlow(0),

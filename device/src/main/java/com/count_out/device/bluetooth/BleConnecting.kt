@@ -11,46 +11,46 @@ import android.bluetooth.BluetoothGattDescriptor.ENABLE_INDICATION_VALUE
 import android.bluetooth.BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE
 import android.content.Context
 import android.os.Build
+import android.util.Log
 import com.count_out.data.router.models.DataForBle
 import com.count_out.device.bluetooth.models.BleConnectionImpl
-import com.count_out.device.bluetooth.models.BleStates
+import com.count_out.device.bluetooth.models.ResultBle
+import com.count_out.device.bluetooth.models.ThrowableBle
 import com.count_out.domain.entity.enums.ErrorBleService
 import com.count_out.domain.entity.enums.StateBleConnecting
 import com.count_out.domain.entity.enums.UUIDBle
 import jakarta.inject.Inject
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.flow
 import java.util.UUID
 
-class BleConnecting @Inject constructor(
-    val context: Context,
-//    private val permissionApp: com.count_out.app.permission.PermissionApp,
-//    private val messengerA: MessageApp
-) {
-    private var connection = BleConnectionImpl()
+class BleConnecting @Inject constructor(val context: Context) {
+    private var connection: MutableStateFlow<BleConnectionImpl> = MutableStateFlow( BleConnectionImpl())
     val heartRate: MutableStateFlow<Int> = MutableStateFlow(0)
     private val uuidHeartRateMeasurement = UUID.fromString(UUIDBle.HEART_RATE_MEASUREMENT)
     private val uuidClientCharacteristicConfig = UUID.fromString(UUIDBle.CLIENT_CHARACTERISTIC_CONFIG)
 
-    fun connectDevice(bleStates: BleStates, dataForBle: DataForBle){
-        dataForBle.currentConnection?.let {
-            connection = BleConnectionImpl(it)
-            connectingGatt( bleStates )
-            if (bleStates.error == ErrorBleService.NOT_CONNECT_GATT)  connectingGatt( bleStates )
-        }
+    fun connectDevice( bleConnection: BleConnectionImpl): Flow<ResultBle> {
+        Log.d("KDS", "connectDevice")
+            connection.value = bleConnection
+            return connectingGatt()
+//            if (bleStates.error == ErrorBleService.NOT_CONNECT_GATT)  connectingGatt( bleStates )
+//        dataForBle.currentConnection?.let {
+//            connection = BleConnectionImpl(it)
+//            connectingGatt( bleStates )
+//            if (bleStates.error == ErrorBleService.NOT_CONNECT_GATT)  connectingGatt( bleStates )
+//        }
     }
     @SuppressLint("MissingPermission")
-    fun connectingGatt(bleStates: BleStates){
-        if (bleStates.stateBleConnecting == StateBleConnecting.GET_REMOTE_DEVICE) {
-            connection.device?.let { dev->
+    fun connectingGatt(): Flow<ResultBle>{
+        return flow { emit(
+            connection.value.device?.let { dev->
                 if ( dev.connectGatt(context, true, bluetoothGattCallback, TRANSPORT_LE) != null) {
-                    bleStates.stateBleConnecting = StateBleConnecting.CONNECT_GAT
-//                    messengerA.messageApi("CONNECT_GAT")
-                } else {
-                    bleStates.error = ErrorBleService.NOT_CONNECT_GATT
-//                    messengerA.errorApi(R.string.gatt_connect_error)
-                }
-            }
-        }
+                    ResultBle.StateConnectingBle(StateBleConnecting.CONNECT_GAT)
+                } else ResultBle.Error(ThrowableBle.NotConnectingGatt())
+            } ?: ResultBle.Error(ThrowableBle.NoDevice())
+        ) }
     }
 
     private val bluetoothGattCallback = object: BluetoothGattCallback() {
@@ -74,7 +74,6 @@ class BleConnecting @Inject constructor(
             super.onCharacteristicRead(gatt, characteristic, value, status)
             bluetoothGattCallbackCharacteristicRead(status, value, characteristic)
         }
-
         override fun onCharacteristicChanged(
             gatt: BluetoothGatt,
             characteristic: BluetoothGattCharacteristic,
@@ -96,52 +95,31 @@ class BleConnecting @Inject constructor(
     }
     @SuppressLint("MissingPermission")
     fun bluetoothGattCallbackConnectionStateChange(gatt: BluetoothGatt?, status: Int, newState: Int){
-        connection.gattStatus.value = status
-        connection.newState.value = newState
-        if (status == GATT_SUCCESS) {
-            connection.gatt = gatt
+        connection.value = connection.value.copy(gattStatus = status, newState = newState)
+        if (status == GATT_SUCCESS && gatt != null) {
+            connection.value = connection.value.copy(gatt = gatt)
             when (newState) {
-                BluetoothGatt.STATE_CONNECTED -> { gatt?.discoverServices() }
-                BluetoothGatt.STATE_DISCONNECTED -> {
-//                    messengerA.messageApi(R.string.gatt_disconnected)
-                    disconnectDevice(gatt)
-                }
-//                else -> { messengerA.messageApi(R.string.gatt_connect_ok) }
+                BluetoothGatt.STATE_CONNECTED -> { gatt.discoverServices() }
+                BluetoothGatt.STATE_DISCONNECTED -> { disconnectDevice(gatt) }
             }
-        } else {
-//            lg("BluetoothGatt status: $status (${hciStatusFromValue(status)})")
-            disconnectDevice(gatt)
-        }
+        } else { disconnectDevice(gatt) }
     }
     @SuppressLint("MissingPermission")
     fun bluetoothGattCallbackServicesDiscovered(gatt: BluetoothGatt?, status: Int) {
-        connection.gattStatus.value = status
-        if (status == GATT_SUCCESS) {
-//            messengerA.messageApi("Discover services connect")
-            gatt?.let {
-                setCharacteristicNotification(it, uuidHeartRateMeasurement, true)
-            }
-//            messengerA.messageApi("Set characteristic notification")
-        } else {
-//            messengerA.errorApi(R.string.ble_discovery_failed)
-            connection.error.value = ErrorBleService.DISCOVER_SERVICE
-            if (status == GATT_FAILURE) disconnectDevice(gatt)
-        }
+        connection.value = connection.value.copy(gattStatus = status)
+        if (status == GATT_SUCCESS && gatt != null) {
+            setCharacteristicNotification(gatt, uuidHeartRateMeasurement, true)
+        } else if (status == GATT_FAILURE) disconnectDevice(gatt)
     }
     fun bluetoothGattCallbackCharacteristicRead(
         status: Int, value: ByteArray, characteristic: BluetoothGattCharacteristic, ) {
-        connection.gattStatus.value = status
+        connection.value = connection.value.copy(gattStatus = status)
         if (status == GATT_SUCCESS) receiveValue(value, characteristic)
-        else {
-//            messengerA.errorApi(
-//                R.string.read_characteristic_error,
-//                ": ${characteristic.uuid}, status $status"
-//            )
-        }
     }
     fun bluetoothGattCallbackCharacteristicChanged(value: ByteArray, characteristic: BluetoothGattCharacteristic, ) {
         receiveValue( value, characteristic)
     }
+
     private fun receiveValue(value: ByteArray, characteristic: BluetoothGattCharacteristic){
         when (characteristic.uuid) {
             uuidHeartRateMeasurement -> { heartRate.value = heartRateSDK(value, characteristic) }
@@ -151,12 +129,13 @@ class BleConnecting @Inject constructor(
     private fun heartRateSDK(value: ByteArray, characteristic: BluetoothGattCharacteristic): Int{
         val heartRate = if ( Build.VERSION.SDK_INT >= 33 ) value[1].dec().toInt()
                         else characteristic.value[1].dec().toInt()
+        Log.d("KDS", "heartRateSDK $heartRate")
         return heartRate
     }
 
     fun clearServicesCache(): Boolean {
         var result = false
-        connection.gatt?.let { gattL ->
+        connection.value.gatt?.let { gattL ->
             try {
                 val refreshMethod = gattL.javaClass.getMethod("refresh")
                 result = refreshMethod.invoke(gattL) as Boolean
@@ -168,9 +147,10 @@ class BleConnecting @Inject constructor(
     }
 
     @SuppressLint("MissingPermission")
-    fun disconnectDevice(gatt: BluetoothGatt? = connection.gatt) {
+    fun disconnectDevice(gatt: BluetoothGatt? = connection.value.gatt) {
         gatt?.let {
-//            permissionApp.checkBleScan { it.disconnect()it.close() }
+            it.disconnect()
+            it.close()
         }
     }
 

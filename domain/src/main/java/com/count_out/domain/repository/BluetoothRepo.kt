@@ -11,4 +11,5 @@ interface BluetoothRepo {
     fun clearCache(): Flow<ResultUC<TypeRepo>>
     fun selectDeice(device: TypeRepo): Flow<ResultUC<TypeRepo>>
     fun getStateBle(): Flow<ResultUC<TypeRepo>>
+    fun getHeartRate(): Flow<ResultUC<TypeRepo>>
 }

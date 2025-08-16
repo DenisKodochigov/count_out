@@ -73,8 +73,8 @@ class SettingsSourceImpl @Inject constructor(private val dataStore: DataStore<Pr
 
     override fun saveBleName(settings: TypeSource): Flow<ResultSource<TypeSource>> {
         return flow { emit(try {
-                if (settings is TypeSource.SettingT && settings.item is Setting.BleAddress) {
-                    dataStore.edit { it[keyName] = (settings.item as Setting.BleAddress).value }
+                if (settings is TypeSource.SettingT && settings.item is Setting.BleName) {
+                    dataStore.edit { it[keyName] = (settings.item as Setting.BleName).value }
                     ResultSource.Success(TypeSource.BooleanT(true))
                 } else ResultSource.Error(ThrowableDS.NotValidType())
             } catch (e: Exception) { ResultSource.Error(ThrowableDS.extract(t = e)) })

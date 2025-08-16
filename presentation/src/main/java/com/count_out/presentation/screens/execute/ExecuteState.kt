@@ -6,7 +6,7 @@ import com.count_out.domain.entity.StepPlan
 import com.count_out.domain.entity.TickTime
 import com.count_out.domain.entity.enums.ConnectState
 import com.count_out.domain.entity.enums.RunningState
-import com.count_out.domain.entity.router.DeviceUI
+import com.count_out.domain.entity.router.DeviceBle
 import com.count_out.domain.entity.workout.ShowBottomSheet
 import com.count_out.presentation.models.TickTimeImplP
 import com.count_out.presentation.models.TrainingImplP
@@ -26,7 +26,7 @@ data class ExecuteState(
     val stateWorkOut: RunningState = RunningState.Binding,
 
     val heartRate: Int = 0,
-    val lastConnectHearthRateDevice: DeviceUI? = null,
+    val lastConnectHearthRateDevice: DeviceBle? = null,
     val bleConnectState: ConnectState = ConnectState.NOT_CONNECTED,
 
     val coordinate: Coordinate? = null,

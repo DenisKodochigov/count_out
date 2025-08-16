@@ -8,16 +8,14 @@ import android.bluetooth.le.ScanResult
 import android.bluetooth.le.ScanSettings
 import android.content.Context
 import android.os.ParcelUuid
-import com.count_out.device.bluetooth.models.BleDeviceImpl
+import android.util.Log
+import com.count_out.device.bluetooth.models.BleConnectionImpl
 import com.count_out.device.bluetooth.models.Const
 import com.count_out.device.bluetooth.models.ResultBle
 import com.count_out.device.bluetooth.models.ThrowableBle
 import com.count_out.device.permission.PermissionApp
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.launch
 import java.util.UUID
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -28,9 +26,9 @@ class BleScanner @Inject constructor(
     private val bluetoothAdapter: BluetoothAdapter,
     private val permissionApp: PermissionApp
 ) {
-    private lateinit var scanCallback: ScanCallback
-    private val bluetoothScanner by lazy { bluetoothAdapter.bluetoothLeScanner }
     val dataFromBle: MutableStateFlow<ResultBle> = MutableStateFlow(ResultBle.Nothing)
+    private var scanCallback: ScanCallback = objectScanCallback(dataFromBle)
+    private val bluetoothScanner by lazy { bluetoothAdapter.bluetoothLeScanner }
 
     private fun settings(): ScanSettings {
         return ScanSettings.Builder()
@@ -41,7 +39,6 @@ class BleScanner @Inject constructor(
             .setReportDelay(0L)
             .build()
     }
-    /** Scan all device*/
     private fun filters(): List<ScanFilter> {
         val filters = mutableListOf<ScanFilter>()
         for(serviceUUID in Const.serviceUUIDs){
@@ -55,16 +52,15 @@ class BleScanner @Inject constructor(
     }
 
     @SuppressLint("MissingPermission", "SuspiciousIndentation")
-    fun startScannerBLEDevices(): Flow<ResultBle> {
-        CoroutineScope(Dispatchers.Default).launch {
-            scanCallback = objectScanCallback(dataFromBle)
-            bluetoothScanner.startScan(filters(), settings(), scanCallback)
-        }
+    fun startScanner(): Flow<ResultBle> {
+        Log.d("KDS", "startScanner")
+        bluetoothScanner.startScan(filters(), settings(), scanCallback)
         return dataFromBle
     }
 
     @SuppressLint("MissingPermission")
     fun stopScanner(): Flow<ResultBle>{
+        Log.d("KDS", "stopScanner")
         bluetoothScanner.stopScan(scanCallback)
         return dataFromBle
     }
@@ -73,16 +69,17 @@ class BleScanner @Inject constructor(
         override fun onScanResult(callbackType: Int, result: ScanResult?) {
             super.onScanResult(callbackType, result)
             result?.device?.let { dev ->
-                dataFromBle.value = ResultBle
-                    .Device( BleDeviceImpl().fromBluetoothDevice(dev)) }
+                Log.d("KDS", "onBatchScanResults $dev")
+                dataFromBle.value = ResultBle.Device(
+                    BleConnectionImpl().fromBluetoothDevice(dev)) }
         }
         override fun onBatchScanResults(results: MutableList<ScanResult>?) {
             super.onBatchScanResults(results)
             if (!results.isNullOrEmpty()) {
                 results.forEach{ result->
+                    Log.d("KDS", "onBatchScanResults ${result.device}")
                     dataFromBle.value = ResultBle
-                        .Device( BleDeviceImpl().fromBluetoothDevice(result.device)) }
-
+                        .Device( BleConnectionImpl().fromBluetoothDevice(result.device)) }
             }
         }
         override fun onScanFailed(errorCode: Int) {

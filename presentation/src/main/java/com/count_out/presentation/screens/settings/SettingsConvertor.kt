@@ -3,6 +3,10 @@ package com.count_out.presentation.screens.settings
 import android.util.Log
 import com.count_out.domain.repository.TypeRepo
 import com.count_out.domain.use_case.UseCase
+import com.count_out.domain.use_case.bluetooth.GetConnectionStateUC
+import com.count_out.domain.use_case.bluetooth.GetHeartRateUC
+import com.count_out.domain.use_case.bluetooth.LastBleDeviceUC
+import com.count_out.domain.use_case.bluetooth.StartScanBleUC
 import com.count_out.domain.use_case.other.CollapsingUC
 import com.count_out.domain.use_case.other.ShowBottomSheetUC
 import com.count_out.domain.use_case.plans.activity.GetActivitiesUC
@@ -23,6 +27,10 @@ class SettingsConvertor @Inject constructor():
             is UpdateSettingUC.Response-> converterLocal(resultData, state)
             is CollapsingUC.Response-> converterLocal(resultData, state)
             is ShowBottomSheetUC.Response-> converterLocal(resultData, state)
+            is StartScanBleUC.Response-> converterLocal(resultData, state)
+            is GetHeartRateUC.Response-> converterLocal(resultData, state)
+            is LastBleDeviceUC.Response-> converterLocal(resultData, state)
+            is GetConnectionStateUC.Response-> converterLocal(resultData, state)
             else -> converterOther(state)
         }
     }
@@ -50,6 +58,26 @@ class SettingsConvertor @Inject constructor():
     private fun converterLocal(data: ShowBottomSheetUC.Response, state: MutableStateFlow<SettingsState>): SettingsState {
         if (data.show is TypeRepo.ShowBottomSheetT)
             state.value = state.value.copy( showBS = (data.show as TypeRepo.ShowBottomSheetT).item)
+        return state.value
+    }
+    private fun converterLocal(data: StartScanBleUC.Response, state: MutableStateFlow<SettingsState>): SettingsState {
+        if (data.result is TypeRepo.DevicesUIT)
+            state.value = state.value.copy( devicesUI = (data.result as TypeRepo.DevicesUIT).item)
+        return state.value
+    }
+    private fun converterLocal(data: GetConnectionStateUC.Response, state: MutableStateFlow<SettingsState>): SettingsState {
+        if (data.result is TypeRepo.BleConnectStateT)
+            state.value = state.value.copy( connectingState = (data.result as TypeRepo.BleConnectStateT).item)
+        return state.value
+    }
+    private fun converterLocal(data: GetHeartRateUC.Response, state: MutableStateFlow<SettingsState>): SettingsState {
+        if (data.result is TypeRepo.IntT)
+            state.value = state.value.copy( heartRate = (data.result as TypeRepo.IntT).item)
+        return state.value
+    }
+    private fun converterLocal(data: LastBleDeviceUC.Response, state: MutableStateFlow<SettingsState>): SettingsState {
+        if (data.result is TypeRepo.DeviceUIT)
+            state.value = state.value.copy( lastConnectHearthRateDevice = (data.result as TypeRepo.DeviceUIT).item)
         return state.value
     }
     private fun converterOther(state: MutableStateFlow<SettingsState>): SettingsState {

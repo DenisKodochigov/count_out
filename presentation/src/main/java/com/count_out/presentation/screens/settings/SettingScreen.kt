@@ -30,7 +30,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.count_out.domain.entity.Setting
 import com.count_out.domain.entity.enums.ConnectState
-import com.count_out.domain.entity.router.DeviceUI
+import com.count_out.domain.entity.router.DeviceBle
 import com.count_out.presentation.R
 import com.count_out.presentation.models.ActivityImplP
 import com.count_out.presentation.models.alumBodySmall
@@ -163,7 +163,7 @@ import com.count_out.presentation.view_element.icons.IconsCollapsing
             icon = Icons.AutoMirrored.Rounded.BluetoothSearching,
             animate = dataState.connectingState != ConnectState.CONNECTED,
             onClick = {dataState.event(SettingsEvent.ShowBS(dataState.showBS.copy( element =
-                    object: DeviceUI{
+                    object: DeviceBle{
                         override var name: String = ""
                         override var address: String = ""
                 })))},

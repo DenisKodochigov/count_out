@@ -8,7 +8,7 @@ import com.count_out.domain.entity.enums.ConnectState
 import com.count_out.domain.entity.enums.RunningState
 import com.count_out.domain.entity.router.Buffer
 import com.count_out.domain.entity.router.DataForUI
-import com.count_out.domain.entity.router.DeviceUI
+import com.count_out.domain.entity.router.DeviceBle
 import kotlinx.coroutines.flow.MutableStateFlow
 import java.util.Collections.emptyList
 
@@ -26,7 +26,7 @@ data class DataForUIImpl (
     override val heartRate: MutableStateFlow<Int> = MutableStateFlow(0),
     override val scannedBle: MutableStateFlow<Boolean> = MutableStateFlow(false),
     override val bleConnectState: MutableStateFlow<ConnectState> = MutableStateFlow(ConnectState.NOT_CONNECTED),
-    override val foundDevices: MutableStateFlow<List<DeviceUI>> = MutableStateFlow(emptyList()),
+    override val foundDevices: MutableStateFlow<List<DeviceBle>> = MutableStateFlow(emptyList()),
     override val coordinate: MutableStateFlow<Coordinate?> = MutableStateFlow( null),
     override var cancelCoroutineWork: ()-> Unit = {}
 ): DataForUI {

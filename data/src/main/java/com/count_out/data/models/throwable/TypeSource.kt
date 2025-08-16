@@ -12,7 +12,8 @@ import com.count_out.domain.entity.DataForChangeSequence
 import com.count_out.domain.entity.Setting
 import com.count_out.domain.entity.Settings
 import com.count_out.domain.entity.StepPlan
-import com.count_out.domain.entity.router.DeviceUI
+import com.count_out.domain.entity.enums.ConnectState
+import com.count_out.domain.entity.router.DeviceBle
 import com.count_out.domain.entity.weather.Weather
 import com.count_out.domain.entity.weather.WeatherRequest
 import com.count_out.domain.entity.workout.Activity
@@ -50,8 +51,9 @@ sealed class TypeSource {
     data class StepPlanT(val item: StepPlan): TypeSource()
     data class SettingT(val item: Setting): TypeSource()
     data class SettingsT(val item: Settings): TypeSource()
-    data class DeviceUIT(val item: DeviceUI): TypeSource()
-    data class DevicesUIT(val item: List<DeviceUI>): TypeSource()
+    data class DeviceUIT(val item: DeviceBle): TypeSource()
+    data class DevicesUIT(val item: Map<String, DeviceBle>): TypeSource()
+    data class BleConnectStateT(val item: ConnectState): TypeSource()
     data class WeatherT(val item: Weather): TypeSource()
     data class WeatherRequestT(val item: WeatherRequest): TypeSource()
     data class DataForChangeSequenceT(val item: DataForChangeSequence): TypeSource()
@@ -87,6 +89,7 @@ sealed class TypeSource {
         is WeatherT -> TypeRepo.WeatherT(item = this.item)
         is WeatherRequestT -> TypeRepo.WeatherRequestT(item = this.item)
         is DataForChangeSequenceT -> TypeRepo.DataForChangeSequenceT(item = this.item)
+        is BleConnectStateT -> TypeRepo.BleConnectStateT(item = this.item)
         NullT -> TypeRepo.NullT
     }
 }

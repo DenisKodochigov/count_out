@@ -1,13 +1,15 @@
 package com.count_out.presentation.screens.settings
 
-import android.util.Log
 import androidx.lifecycle.viewModelScope
 import com.count_out.domain.entity.Setting
-import com.count_out.domain.entity.router.DeviceUI
+import com.count_out.domain.entity.router.DeviceBle
 import com.count_out.domain.entity.workout.Activity
 import com.count_out.domain.entity.workout.Collapsing
 import com.count_out.domain.entity.workout.ShowBottomSheet
 import com.count_out.domain.use_case.bluetooth.ClearCacheBleUC
+import com.count_out.domain.use_case.bluetooth.GetConnectionStateUC
+import com.count_out.domain.use_case.bluetooth.GetHeartRateUC
+import com.count_out.domain.use_case.bluetooth.LastBleDeviceUC
 import com.count_out.domain.use_case.bluetooth.SelectDeviceBleUC
 import com.count_out.domain.use_case.bluetooth.StartScanBleUC
 import com.count_out.domain.use_case.bluetooth.StopScanBleUC
@@ -41,6 +43,9 @@ class SettingViewModel @Inject constructor(
     private val updateSetting: UpdateSettingUC,
     private val showBottomSheetUC: ShowBottomSheetUC,
     private val collapsingSetUC: CollapsingUC,
+    private val getConnectionState: GetConnectionStateUC,
+    private val getHeartRate: GetHeartRateUC,
+    private val getLastBleDevice: LastBleDeviceUC,
 ): PrimeViewModel<SettingsState, SettingsConvertor>() {
 
     override fun initScreenState(): ScreenState<SettingsState> = ScreenState.Loading
@@ -66,7 +71,22 @@ class SettingViewModel @Inject constructor(
     fun init() {
         getSettings()
         getsActivity()
+        getConnectionState()
+        getHeartRate()
+        getLastBleDevice()
     }
+    private fun getConnectionState() {
+        viewModelScope.launch(Dispatchers.IO) {
+            getConnectionState.execute(AddActivityUC.Request(activity))
+                .collect { submitState( it ) } } }
+    private fun getHeartRate() {
+        viewModelScope.launch(Dispatchers.IO) {
+            getHeartRate.execute(AddActivityUC.Request(activity))
+                .collect { submitState( it ) } } }
+    private fun getLastBleDevice() {
+        viewModelScope.launch(Dispatchers.IO) {
+            getLastBleDevice.execute(LastBleDeviceUC.Request)
+                .collect { submitState( it ) } } }
     private fun addActivity(activity: Activity) {
         viewModelScope.launch(Dispatchers.IO) {
             addActivity.execute(AddActivityUC.Request(activity))
@@ -97,7 +117,7 @@ class SettingViewModel @Inject constructor(
     private fun clearCacheBle() {
         viewModelScope.launch(Dispatchers.IO) {
             clearCacheBle.execute(ClearCacheBleUC.Request).collect { submitState( it ) } } }
-    private fun selectDeviceBle(device: DeviceUI) {
+    private fun selectDeviceBle(device: DeviceBle) {
         viewModelScope.launch(Dispatchers.IO) {
             selectDeviceBle.execute(SelectDeviceBleUC.Request(device))
                 .collect { submitState( it ) } } }

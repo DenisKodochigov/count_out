@@ -24,6 +24,5 @@ class SettingsRepoImpl @Inject constructor(
                     settingsSource.saveSettingSpeechDescr(toTypeSource(setting)).convertor()}
             }
         } else flow { emit(throwableNull) }
-
     }
 }

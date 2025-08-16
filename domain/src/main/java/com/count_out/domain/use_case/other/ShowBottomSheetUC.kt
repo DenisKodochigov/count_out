@@ -1,8 +1,7 @@
 package com.count_out.domain.use_case.other
 
-import android.util.Log
 import com.count_out.domain.entity.enums.RoundType
-import com.count_out.domain.entity.router.DeviceUI
+import com.count_out.domain.entity.router.DeviceBle
 import com.count_out.domain.entity.throwable.ResultUC
 import com.count_out.domain.entity.workout.Activity
 import com.count_out.domain.entity.workout.Exercise
@@ -37,7 +36,7 @@ class ShowBottomSheetUC @Inject constructor(configuration: Configuration
             is Ring-> {item.copy(ring = !item.ring)}
             is Round-> {calculateRound(item) }
             is Training-> {item.copy(training = !item.training)}
-            is DeviceUI-> {item.copy(selectBleDevice = !item.selectBleDevice)}
+            is DeviceBle-> {item.copy(selectBleDevice = !item.selectBleDevice)}
             else -> {item}
         }
     }
