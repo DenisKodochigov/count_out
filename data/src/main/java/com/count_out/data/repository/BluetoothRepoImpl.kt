@@ -1,24 +1,24 @@
 package com.count_out.data.repository
 
-import android.util.Log
 import com.count_out.data.models.throwable.ResultSource
 import com.count_out.data.models.throwable.TypeSource
 import com.count_out.data.source.framework.BleSource
 import com.count_out.data.source.local.SettingsSource
+import com.count_out.domain.entity.Setting
 import com.count_out.domain.entity.throwable.ResultUC
+import com.count_out.domain.entity.throwable.ThrowableUC
 import com.count_out.domain.repository.BluetoothRepo
 import com.count_out.domain.repository.TypeRepo
-import com.count_out.domain.entity.Setting
-import com.count_out.domain.entity.throwable.ThrowableUC
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.flatMapConcat
 import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 class BluetoothRepoImpl @Inject constructor(
     private val bleSource: BleSource,
-    private val savedDevice: SettingsSource
+    private val storeDevice: SettingsSource
 ): BluetoothRepo, PrimeRepo() {
     override fun startScanning(): Flow<ResultUC<TypeRepo>> {
         return bleSource.startScanning().convertor() }
@@ -30,34 +30,33 @@ class BluetoothRepoImpl @Inject constructor(
         return bleSource.connectDevice(toTypeSource(addr)).convertor() }
 
     override fun lastDevice(): Flow<ResultUC<TypeRepo>>{
-        return savedDevice.getBleAddress().convertor() //.concat1{ bleSource.connectDevice(it) }
+        return storeDevice.getBleName().convertor()
     }
     override fun clearCache(): Flow<ResultUC<TypeRepo>> {
-        return flow { emit(ResultUC.Success(TypeRepo.BooleanT(item = true)) )} }
+        return bleSource.clearCache().convertor()}
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     override fun selectDeice(device: TypeRepo): Flow<ResultUC<TypeRepo>> {
         return if (device is TypeRepo.DeviceUIT) {
             val adr = TypeSource.SettingT(Setting.BleAddress(device.item.address))
             val name = TypeSource.SettingT(Setting.BleName(device.item.name))
             combine(
-                savedDevice.saveBleAddress(adr),
-                savedDevice.saveBleName(name)
+                storeDevice.saveBleAddress(adr),
+                storeDevice.saveBleName(name)
                ) { f1, f2->
-                   if (f1 is ResultSource.Error) f1
-                   else if (f2 is ResultSource.Error) f2
-                   else {
-                       bleSource.connectDevice(adr)
-                       ResultSource.Success(TypeSource.BooleanT(true))
-                   }
-               }.convertor()
+                f1 as? ResultSource.Error
+                    ?: (f2 as? ResultSource.Error
+                        ?: ResultSource.Success(TypeSource.BooleanT(true)))
+               }.flatMapConcat { res->
+                   if (res is ResultSource.Success) bleSource.connectDevice(adr)
+                   else flow { emit(res) } }
+                   .convertor()
         } else flow { emit(ResultUC.Error(throwable = ThrowableUC.NotValidType())) }
-
-
-
     }
-//       return
-
 
     override fun getStateBle(): Flow<ResultUC<TypeRepo>> {
-        return flow { emit(ResultUC.Success(TypeRepo.BooleanT(item = true)) )} }
+        return bleSource.getStateBle().convertor() }
+
+    override fun getHeartRate(): Flow<ResultUC<TypeRepo>> {
+        return bleSource.getHeartRate().convertor() }
 }

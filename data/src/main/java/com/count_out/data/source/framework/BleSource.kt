@@ -11,4 +11,5 @@ interface BleSource {
     fun connectDevice(adr: TypeSource): Flow<ResultSource<TypeSource>>
     fun clearCache(): Flow<ResultSource<TypeSource>>
     fun getStateBle(): Flow<ResultSource<TypeSource>>
+    fun getHeartRate(): Flow<ResultSource<TypeSource>>
 }

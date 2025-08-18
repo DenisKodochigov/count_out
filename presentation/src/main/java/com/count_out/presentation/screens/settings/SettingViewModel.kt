@@ -77,27 +77,22 @@ class SettingViewModel @Inject constructor(
     }
     private fun getConnectionState() {
         viewModelScope.launch(Dispatchers.IO) {
-            getConnectionState.execute(AddActivityUC.Request(activity))
-                .collect { submitState( it ) } } }
+            getConnectionState.execute(GetConnectionStateUC.Request).collect { submitState( it ) } } }
     private fun getHeartRate() {
         viewModelScope.launch(Dispatchers.IO) {
-            getHeartRate.execute(AddActivityUC.Request(activity))
-                .collect { submitState( it ) } } }
+            getHeartRate.execute(GetHeartRateUC.Request).collect { submitState( it ) } } }
     private fun getLastBleDevice() {
         viewModelScope.launch(Dispatchers.IO) {
-            getLastBleDevice.execute(LastBleDeviceUC.Request)
-                .collect { submitState( it ) } } }
+            getLastBleDevice.execute(LastBleDeviceUC.Request).collect { submitState( it ) } } }
     private fun addActivity(activity: Activity) {
         viewModelScope.launch(Dispatchers.IO) {
-            addActivity.execute(AddActivityUC.Request(activity))
-                .collect { submitState( it ) } } }
+            addActivity.execute(AddActivityUC.Request(activity)).collect { submitState( it ) } } }
     private fun getsActivity() {
         viewModelScope.launch(Dispatchers.IO) {
             getsActivity.execute(GetActivitiesUC.Request).collect { submitState( it ) } } }
     private fun delActivity(activity: Activity) {
         viewModelScope.launch(Dispatchers.IO) {
-            delActivity.execute(DeleteActivityUC.Request(activity))
-                .collect { submitState( it ) } } }
+            delActivity.execute(DeleteActivityUC.Request(activity)).collect{ submitState( it )}}}
     private fun updateActivity(activity: Activity) {
         viewModelScope.launch(Dispatchers.IO) {
             updateActivity.execute(UpdateActivityUC.Request(activity))

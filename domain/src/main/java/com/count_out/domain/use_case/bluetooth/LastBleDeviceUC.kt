@@ -12,11 +12,8 @@ class LastBleDeviceUC @Inject constructor(
 ): UseCase<LastBleDeviceUC.Request, LastBleDeviceUC.Response>(configuration)  {
 
     override fun methodRepo(request: Request): Flow<ResultUC<TypeRepo>> = repo.lastDevice()
+//    override fun methodDomain(result: ResultUC<TypeRepo>) = result
     override fun response(typeRepo: TypeRepo): Response = Response(typeRepo)
     data object Request: UseCase.Request
     data class Response(val result: TypeRepo): UseCase.Response
 }
-//    override fun implementation(request: Request): Flow<ResultUC<Response>> {
-//        return repo.lastDevice().map {
-//            converterR(it){ result-> Response(result) } }
-//    }

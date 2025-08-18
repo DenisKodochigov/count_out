@@ -48,9 +48,8 @@ class BluetoothModule {
 
     @Singleton
     @Provides
-    fun provideBluetooth(permissionApp: PermissionApp,
-                         bleScanner: BleScanner,
+    fun provideBluetooth(bleScanner: BleScanner,
                          bleConnecting: BleConnecting,
                          bluetoothAdapter: BluetoothAdapter,
-    ): Bluetooth = Bluetooth(permissionApp, bleScanner, bleConnecting, bluetoothAdapter)
+    ): Bluetooth = Bluetooth( bleScanner, bleConnecting, bluetoothAdapter)
 }

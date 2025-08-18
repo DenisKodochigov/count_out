@@ -95,7 +95,7 @@ import com.count_out.presentation.view_element.custom_view.IconQ
 }
 @Composable fun AnimateIcon(
     initValue: Dp = sizeIcon,
-    targetValue: Dp = 17.dp,
+    targetValue: Dp = 22.dp,
     icon: ImageVector = Icons.Default.Bluetooth,
     animate: Boolean = false,
     onClick: ()->Unit = {},

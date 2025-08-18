@@ -1,6 +1,5 @@
 package com.count_out.presentation.screens.settings
 
-import android.util.Log
 import com.count_out.domain.repository.TypeRepo
 import com.count_out.domain.use_case.UseCase
 import com.count_out.domain.use_case.bluetooth.GetConnectionStateUC
@@ -13,7 +12,6 @@ import com.count_out.domain.use_case.plans.activity.GetActivitiesUC
 import com.count_out.domain.use_case.settings.GetSettingsUC
 import com.count_out.domain.use_case.settings.UpdateSettingUC
 import com.count_out.presentation.screens.prime.PrimeConvertor
-import com.count_out.presentation.screens.training.TrainingState
 import kotlinx.coroutines.flow.MutableStateFlow
 import javax.inject.Inject
 
@@ -76,8 +74,8 @@ class SettingsConvertor @Inject constructor():
         return state.value
     }
     private fun converterLocal(data: LastBleDeviceUC.Response, state: MutableStateFlow<SettingsState>): SettingsState {
-        if (data.result is TypeRepo.DeviceUIT)
-            state.value = state.value.copy( lastConnectHearthRateDevice = (data.result as TypeRepo.DeviceUIT).item)
+        if (data.result is TypeRepo.StringT)
+            state.value = state.value.copy( lastDevice = (data.result as TypeRepo.StringT).item)
         return state.value
     }
     private fun converterOther(state: MutableStateFlow<SettingsState>): SettingsState {

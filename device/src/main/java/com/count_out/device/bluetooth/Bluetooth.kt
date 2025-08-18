@@ -2,39 +2,26 @@ package com.count_out.device.bluetooth
 
 import android.annotation.SuppressLint
 import android.bluetooth.BluetoothAdapter
-import android.bluetooth.BluetoothDevice
-import android.health.connect.datatypes.Device
 import android.util.Log
-import android.util.Log.e
 import com.count_out.data.models.throwable.TypeSource
-import com.count_out.data.router.models.DataForBle
-import com.count_out.data.router.models.DataFromBle
 import com.count_out.device.bluetooth.models.BleConnectionImpl
 import com.count_out.device.bluetooth.models.ResultBle
 import com.count_out.device.bluetooth.models.ThrowableBle
-import com.count_out.device.permission.PermissionApp
+import com.count_out.domain.entity.Setting
 import com.count_out.domain.entity.enums.ConnectState
-import com.count_out.domain.entity.enums.ErrorBleService
-import com.count_out.domain.entity.enums.RunningState
-import com.count_out.domain.entity.enums.StateBleConnecting
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flatMapConcat
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 import javax.inject.Singleton
+
 /**
  * Запускаем сразу сканрование. Предполагаем, что если сканирование уже запущено, то вывалится ошибка
  */
 @Singleton
 class Bluetooth @Inject constructor(
-    private val permission: PermissionApp,
     private val bleScanner: BleScanner,
     private val bleConnecting: BleConnecting,
     private val bluetoothAdapter: BluetoothAdapter,
@@ -58,12 +45,13 @@ class Bluetooth @Inject constructor(
     fun connectDevice(adr: TypeSource): Flow<ResultBle>  {
         if (!bluetoothAdapter.isEnabled) return flow { emit(
             ResultBle.Error(throwable = ThrowableBle.NotValidBle())) }
-        val result = if (adr is TypeSource.StringT){
+        return if (adr is TypeSource.SettingT && adr.item is Setting.BleAddress){
             try {
                 disconnectDevice()
+                Log.d("KDS", "connectDevice")
                 bleScanner.stopScanner().flatMapConcat{ it1->
                     if (it1 is ResultBle.Error) flow { emit(it1) } else {
-                        getRemoteDevice( adr.item).flatMapConcat{ it2->
+                        getRemoteDevice( (adr.item as Setting.BleAddress).value).flatMapConcat{ it2->
                             if (it2 is ResultBle.Error) flow { emit(it2) } else {
                                 bleConnecting.connectDevice(currentConnection)
 //                                    .flatMapConcat{it3->
@@ -79,11 +67,15 @@ class Bluetooth @Inject constructor(
             } catch (e: Exception){ flow { emit(
                 ResultBle.Error(throwable = ThrowableBle.extract(t = e))) } }
         } else flow { emit(ResultBle.Error(throwable = ThrowableBle.NotValidType())) }
-        return result
+//        runBlocking {
+//            result.collect { Log.d("KDS","connectDevice $it") }
+//        }
+
     }
 
     @SuppressLint("MissingPermission")
     private fun getRemoteDevice(address: String): Flow<ResultBle> {
+        Log.d("KDS","getRemoteDevice")
         return flow { emit(
             try {
                 bluetoothAdapter.getRemoteDevice(address)?.let { dv ->
@@ -93,12 +85,23 @@ class Bluetooth @Inject constructor(
             } catch (e: IllegalArgumentException) { ResultBle.Error(ThrowableBle.extract(t=e)) }
         ) }
     }
+
     fun disconnectDevice() {
         bleConnecting.disconnectDevice()
     }
 
-    fun onClearCacheBLE() {
-        bleConnecting.clearServicesCache()
+    fun onClearCacheBLE(): Flow<ResultBle> {
+        ConnectState.entries[0]
+        return flow { emit(
+            if (bleConnecting.clearServicesCache()) ResultBle.BooleanT(true)
+            else ResultBle.Error(throwable = ThrowableBle.ClearCache())
+        ) }
+    }
+    fun getStateBle(): Flow<ResultBle> {
+        return bleConnecting.connection.map { ResultBle.ConnectingStateT(ConnectState.entries[it.newState]) }
+    }
+    fun getHeartRate(): Flow<ResultBle> {
+        return bleConnecting.heartRate.map { ResultBle.IntT( it) }
     }
 
 //    private fun sendHeartRate(heartRate: MutableStateFlow<Int>, dataFromBle: DataFromBle): Flow<ResultBle> {

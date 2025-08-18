@@ -10,6 +10,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.CleaningServices
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.MaterialTheme.shapes
@@ -29,6 +31,7 @@ import com.count_out.presentation.screens.settings.SettingsState
 import com.count_out.presentation.view_element.ModalBottomSheetApp
 import com.count_out.presentation.view_element.TextApp
 import com.count_out.presentation.view_element.icons.AnimateIcon
+import com.count_out.presentation.view_element.icons.IconSingle
 
 @Composable fun ShowBottomSheetBle(dataState: SettingsState, showBS: Boolean
 ){
@@ -75,7 +78,10 @@ import com.count_out.presentation.view_element.icons.AnimateIcon
             style = MaterialTheme.typography.bodyLarge
         )
         Spacer(modifier = Modifier.weight(1f))
-        AnimateIcon(animate = dataState.scannedBle)
+        IconSingle(image = Icons.Rounded.CleaningServices,
+            onClick = { dataState.event(SettingsEvent.ClearCacheBLE)})
+        Spacer(modifier = Modifier.width(12.dp))
+//        AnimateIcon(animate = dataState.scannedBle)
     }
     Spacer(modifier = Modifier.height(12.dp))
 
@@ -84,8 +90,6 @@ import com.count_out.presentation.view_element.icons.AnimateIcon
         Row(horizontalArrangement = Arrangement.Start,
             modifier = Modifier.fillMaxWidth().padding(top = 16.dp, start = 12.dp, end = 12.dp)
                 .clickable {
-//                    dataState.onDismiss
-                    dataState.event(SettingsEvent.StopScanBLE)
                     dataState.event(SettingsEvent.ShowBS(dataState.showBS.copy(element =
                         object: DeviceBle{ override val name: String = ""; override val address: String = "" })))
                     dataState.event(SettingsEvent.SelectDevice(dev))

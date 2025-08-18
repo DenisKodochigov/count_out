@@ -64,12 +64,11 @@ class BleScanner @Inject constructor(
         bluetoothScanner.stopScan(scanCallback)
         return dataFromBle
     }
-
     private fun objectScanCallback(dataFromBle: MutableStateFlow<ResultBle>): ScanCallback = object: ScanCallback() {
         override fun onScanResult(callbackType: Int, result: ScanResult?) {
             super.onScanResult(callbackType, result)
             result?.device?.let { dev ->
-                Log.d("KDS", "onBatchScanResults $dev")
+                Log.d("KDS", "onScanResult $dev")
                 dataFromBle.value = ResultBle.Device(
                     BleConnectionImpl().fromBluetoothDevice(dev)) }
         }

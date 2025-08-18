@@ -25,7 +25,7 @@ abstract class UseCase< I: UseCase.Request, O: UseCase.Response>(private val con
 
     fun execute(request: I): Flow<ResultUC<O>> = methodRepo(request).map{ result->
         when(result){
-            is ResultUC.Success-> ResultUC.Success(response(result.data))
+            is ResultUC.Success-> { ResultUC.Success(response(result.data)) }
             is ResultUC.Error -> result as ResultUC<Nothing>
         }
     }

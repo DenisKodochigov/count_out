@@ -16,6 +16,7 @@ data class SettingsState(
     val settings: Settings? = null,
     val heartRate: Int = 0,
     val lastConnectHearthRateDevice: DeviceBle? = null,
+    val lastDevice: String? = null,
     val devicesUI: Map<String, DeviceBle> = emptyMap(),
     val scannedBle: Boolean = false,
     val connectingState: ConnectState = ConnectState.NOT_CONNECTED,

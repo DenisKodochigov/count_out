@@ -11,7 +11,7 @@ class GetConnectionStateUC @Inject constructor(
     configuration: Configuration, private val repo: BluetoothRepo
 ): UseCase<GetConnectionStateUC.Request, GetConnectionStateUC.Response>(configuration)  {
 
-    override fun methodRepo(request: Request): Flow<ResultUC<TypeRepo>> = repo.lastDevice()
+    override fun methodRepo(request: Request): Flow<ResultUC<TypeRepo>> = repo.getStateBle()
     override fun response(typeRepo: TypeRepo): Response = Response(typeRepo)
     data object Request: UseCase.Request
     data class Response(val result: TypeRepo): UseCase.Response

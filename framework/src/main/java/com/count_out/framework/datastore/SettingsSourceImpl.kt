@@ -41,7 +41,7 @@ class SettingsSourceImpl @Inject constructor(private val dataStore: DataStore<Pr
     }
 
     override fun getSettingSpeechDescr(): Flow<ResultSource<TypeSource>> =
-        dataStore.data.map{ResultSource.Success(TypeSource.BooleanT(it[keySpeechDescr] == true))}
+        dataStore.data.map{ ResultSource.Success(TypeSource.BooleanT(it[keySpeechDescr] == true))}
 
     override fun getBleName(): Flow<ResultSource<TypeSource>> =
         dataStore.data.map { ResultSource.Success(TypeSource.StringT(it[keyName] ?: ""))}
@@ -62,8 +62,10 @@ class SettingsSourceImpl @Inject constructor(private val dataStore: DataStore<Pr
     }
 
     override fun saveBleAddress(settings: TypeSource): Flow<ResultSource<TypeSource>> {
-        return flow { emit(try {
+        return flow { emit(
+            try {
                 if (settings is TypeSource.SettingT && settings.item is Setting.BleAddress) {
+//                    Log.d("KDS", "saveBleAddress ${settings.item}")
                     dataStore.edit { it[keyAddress] = (settings.item as Setting.BleAddress).value }
                     ResultSource.Success(TypeSource.BooleanT(true))
                 } else ResultSource.Error(ThrowableDS.NotValidType())
@@ -74,6 +76,7 @@ class SettingsSourceImpl @Inject constructor(private val dataStore: DataStore<Pr
     override fun saveBleName(settings: TypeSource): Flow<ResultSource<TypeSource>> {
         return flow { emit(try {
                 if (settings is TypeSource.SettingT && settings.item is Setting.BleName) {
+//                    Log.d("KDS", "saveBleName ${settings.item}")
                     dataStore.edit { it[keyName] = (settings.item as Setting.BleName).value }
                     ResultSource.Success(TypeSource.BooleanT(true))
                 } else ResultSource.Error(ThrowableDS.NotValidType())

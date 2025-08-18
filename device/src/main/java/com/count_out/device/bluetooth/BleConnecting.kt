@@ -12,11 +12,9 @@ import android.bluetooth.BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE
 import android.content.Context
 import android.os.Build
 import android.util.Log
-import com.count_out.data.router.models.DataForBle
 import com.count_out.device.bluetooth.models.BleConnectionImpl
 import com.count_out.device.bluetooth.models.ResultBle
 import com.count_out.device.bluetooth.models.ThrowableBle
-import com.count_out.domain.entity.enums.ErrorBleService
 import com.count_out.domain.entity.enums.StateBleConnecting
 import com.count_out.domain.entity.enums.UUIDBle
 import jakarta.inject.Inject
@@ -26,7 +24,7 @@ import kotlinx.coroutines.flow.flow
 import java.util.UUID
 
 class BleConnecting @Inject constructor(val context: Context) {
-    private var connection: MutableStateFlow<BleConnectionImpl> = MutableStateFlow( BleConnectionImpl())
+    val connection: MutableStateFlow<BleConnectionImpl> = MutableStateFlow( BleConnectionImpl())
     val heartRate: MutableStateFlow<Int> = MutableStateFlow(0)
     private val uuidHeartRateMeasurement = UUID.fromString(UUIDBle.HEART_RATE_MEASUREMENT)
     private val uuidClientCharacteristicConfig = UUID.fromString(UUIDBle.CLIENT_CHARACTERISTIC_CONFIG)
@@ -129,7 +127,7 @@ class BleConnecting @Inject constructor(val context: Context) {
     private fun heartRateSDK(value: ByteArray, characteristic: BluetoothGattCharacteristic): Int{
         val heartRate = if ( Build.VERSION.SDK_INT >= 33 ) value[1].dec().toInt()
                         else characteristic.value[1].dec().toInt()
-        Log.d("KDS", "heartRateSDK $heartRate")
+//        Log.d("KDS", "heartRateSDK $heartRate")
         return heartRate
     }
 

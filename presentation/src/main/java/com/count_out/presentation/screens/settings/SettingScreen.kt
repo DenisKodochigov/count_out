@@ -45,6 +45,7 @@ import com.count_out.presentation.view_element.custom_view.Frame
 import com.count_out.presentation.view_element.icons.AnimateIcon
 import com.count_out.presentation.view_element.icons.IconSingle
 import com.count_out.presentation.view_element.icons.IconsCollapsing
+import com.count_out.presentation.view_element.lg
 
 @Composable fun SettingScreen(viewModel: SettingViewModel){
     LaunchedEffect(Unit) { viewModel.submitEvent(SettingsEvent.Init) }
@@ -156,9 +157,6 @@ import com.count_out.presentation.view_element.icons.IconsCollapsing
             modifier = Modifier.padding(horizontal = 4.dp)
         )
         Spacer(modifier = Modifier.weight(1f))
-        IconSingle(image = Icons.Rounded.CleaningServices, onClick = {
-            dataState.event(SettingsEvent.ClearCacheBLE)})
-        Spacer(modifier = Modifier.width(12.dp))
         AnimateIcon(
             icon = Icons.AutoMirrored.Rounded.BluetoothSearching,
             animate = dataState.connectingState != ConnectState.CONNECTED,
@@ -178,26 +176,22 @@ import com.count_out.presentation.view_element.icons.IconsCollapsing
         horizontalArrangement = Arrangement.Start,
         verticalAlignment = Alignment.CenterVertically
     ){
-        if (dataState.connectingState == ConnectState.CONNECTED) {
-            RowBleDeviceItem(modifier = Modifier.weight(1f), dataState = dataState,
-                style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Bold))
-        } else {
-            RowBleDeviceItem(modifier = Modifier.weight(1f), dataState = dataState,
-                style = MaterialTheme.typography.titleMedium)
-        }
+        val style = if (dataState.connectingState == ConnectState.CONNECTED)
+                MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Bold)
+                else  MaterialTheme.typography.titleMedium
+        RowBleDeviceItem(modifier = Modifier.weight(1f), dataState = dataState, style)
     }
 }
 @Composable fun RowBleDeviceItem(modifier: Modifier, dataState: SettingsState, style: TextStyle){
-//    lg("RowBleDeviceItem ${dataState.lastConnectHearthRateDevice?.name}")
-    val nameDevice = dataState.lastConnectHearthRateDevice?.name?.ifEmpty { stringResource(id = R.string.no_name)}
+    lg("RowBleDeviceItem ${dataState.lastDevice}")
+    val nameDevice = dataState.lastDevice?.ifEmpty { stringResource(id = R.string.no_name)}
         ?: stringResource(id = R.string.not_select_device)
-    val heartRate = if (dataState.heartRate > 0) dataState.heartRate.toString() else ""
-    Column (modifier = modifier
-        .padding(start = 12.dp, end = 12.dp)
-        .fillMaxWidth()) {
+    Column (modifier = modifier.padding(start = 12.dp, end = 12.dp).fillMaxWidth()) {
         TextApp(text = nameDevice, textAlign = TextAlign.Start, style = style)
         TextApp(text = stringResource(id = EnumsTo(dataState.connectingState).string()), style = alumBodySmall)
     }
-    TextApp(text = heartRate, style = MaterialTheme.typography.displayMedium, modifier = Modifier.padding(start = 12.dp, end = 12.dp))
+    TextApp(text = if (dataState.heartRate > 0) dataState.heartRate.toString() else "",
+        style = MaterialTheme.typography.displayMedium,
+        modifier = Modifier.padding(start = 12.dp, end = 12.dp))
 }
 
