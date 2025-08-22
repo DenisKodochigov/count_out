@@ -1,6 +1,6 @@
 package com.count_out.presentation.screens.settings
 
-import com.count_out.domain.repository.TypeRepo
+import com.count_out.domain.entity.TypeRepo
 import com.count_out.domain.use_case.UseCase
 import com.count_out.domain.use_case.bluetooth.GetConnectionStateUC
 import com.count_out.domain.use_case.bluetooth.GetHeartRateUC
@@ -74,8 +74,8 @@ class SettingsConvertor @Inject constructor():
         return state.value
     }
     private fun converterLocal(data: LastBleDeviceUC.Response, state: MutableStateFlow<SettingsState>): SettingsState {
-        if (data.result is TypeRepo.StringT)
-            state.value = state.value.copy( lastDevice = (data.result as TypeRepo.StringT).item)
+        if (data.result is TypeRepo.DeviceUIT)
+            state.value = state.value.copy( lastConnectHearthRateDevice = (data.result as TypeRepo.DeviceUIT).item)
         return state.value
     }
     private fun converterOther(state: MutableStateFlow<SettingsState>): SettingsState {

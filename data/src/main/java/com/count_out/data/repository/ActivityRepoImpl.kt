@@ -2,7 +2,7 @@ package com.count_out.data.repository
 
 import com.count_out.data.source.room.ActivitySource
 import com.count_out.domain.entity.throwable.ResultUC
-import com.count_out.domain.repository.TypeRepo
+import com.count_out.domain.entity.TypeRepo
 import com.count_out.domain.repository.plans.ActivityRepo
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject

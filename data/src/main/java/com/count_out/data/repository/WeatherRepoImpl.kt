@@ -2,7 +2,7 @@ package com.count_out.data.repository
 
 import com.count_out.data.source.network.WeatherSource
 import com.count_out.domain.entity.throwable.ResultUC
-import com.count_out.domain.repository.TypeRepo
+import com.count_out.domain.entity.TypeRepo
 import com.count_out.domain.repository.WeatherRepo
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject

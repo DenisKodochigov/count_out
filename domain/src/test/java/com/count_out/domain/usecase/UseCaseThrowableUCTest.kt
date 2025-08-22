@@ -2,7 +2,7 @@ package com.count_out.domain.usecase
 
 import com.count_out.domain.entity.throwable.ResultUC
 import com.count_out.domain.entity.throwable.ThrowableUC
-import com.count_out.domain.repository.TypeRepo
+import com.count_out.domain.entity.TypeRepo
 import com.count_out.domain.use_case.UseCase
 import junit.framework.TestCase.assertEquals
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -35,7 +35,7 @@ class UseCaseThrowableUCTest {
 //                return flowOf(response)
 //            }
 
-            override fun methodRepo(request: Request): Flow<ResultUC<TypeRepo>> {
+            override fun method(request: Request): Flow<ResultUC<TypeRepo>> {
                 return flowOf(result) }
             override fun response(typeRepo: TypeRepo): Response {
                 return response }
@@ -56,7 +56,7 @@ class UseCaseThrowableUCTest {
 //                Assert.assertEquals(this@UseCaseThrowableUCTest.request, request)
 //                return flow { throw ThrowableUC.TrainingThrow(Throwable()) }
 //            }
-            override fun methodRepo(request: Request): Flow<ResultUC<TypeRepo>> {
+            override fun method(request: Request): Flow<ResultUC<TypeRepo>> {
                 return flowOf(result) }
             override fun response(typeRepo: TypeRepo): Response {
                 return response }
@@ -75,7 +75,7 @@ class UseCaseThrowableUCTest {
 //                Assert.assertEquals(this@UseCaseThrowableUCTest.request, request)
 //                return flow { throw ThrowableUC.ActivityThrow(Throwable()) }
 //            }
-            override fun methodRepo(request: Request): Flow<ResultUC<TypeRepo>> {
+            override fun method(request: Request): Flow<ResultUC<TypeRepo>> {
                 return flowOf(result) }
             override fun response(typeRepo: TypeRepo): Response {
                 return response }
@@ -93,7 +93,7 @@ class UseCaseThrowableUCTest {
 //                Assert.assertEquals(this@UseCaseThrowableUCTest.request, request)
 //                return flow { throw ThrowableUC.WeatherTrow(Throwable()) }
 //            }
-            override fun methodRepo(request: Request): Flow<ResultUC<TypeRepo>> {
+            override fun method(request: Request): Flow<ResultUC<TypeRepo>> {
                 return flowOf(result) }
             override fun response(typeRepo: TypeRepo): Response {
                 return response }

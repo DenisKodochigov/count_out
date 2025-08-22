@@ -1,7 +1,7 @@
 package com.count_out.presentation.screens.plans
 
 import android.util.Log
-import com.count_out.domain.repository.TypeRepo
+import com.count_out.domain.entity.TypeRepo
 import com.count_out.domain.use_case.UseCase
 import com.count_out.domain.use_case.plans.CopyTrainingUC
 import com.count_out.domain.use_case.plans.DeleteTrainingUC

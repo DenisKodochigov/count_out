@@ -24,7 +24,7 @@ import com.count_out.domain.entity.workout.Round
 import com.count_out.domain.entity.workout.Set
 import com.count_out.domain.entity.workout.ShowBottomSheet
 import com.count_out.domain.entity.workout.Training
-import com.count_out.domain.repository.TypeRepo
+import com.count_out.domain.entity.TypeRepo
 
 sealed class TypeSource {
     data class IntT(val item: Int): TypeSource()

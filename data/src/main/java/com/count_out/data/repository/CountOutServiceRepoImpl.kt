@@ -3,7 +3,7 @@ package com.count_out.data.repository
 import com.count_out.data.source.services.CountOutServiceSource
 import com.count_out.domain.entity.throwable.ResultUC
 import com.count_out.domain.repository.CountOutServiceRepo
-import com.count_out.domain.repository.TypeRepo
+import com.count_out.domain.entity.TypeRepo
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 

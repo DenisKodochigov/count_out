@@ -16,7 +16,6 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.BluetoothSearching
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.rounded.CleaningServices
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -183,8 +182,8 @@ import com.count_out.presentation.view_element.lg
     }
 }
 @Composable fun RowBleDeviceItem(modifier: Modifier, dataState: SettingsState, style: TextStyle){
-    lg("RowBleDeviceItem ${dataState.lastDevice}")
-    val nameDevice = dataState.lastDevice?.ifEmpty { stringResource(id = R.string.no_name)}
+    lg("RowBleDeviceItem ${dataState.lastConnectHearthRateDevice?.name ?: ""}")
+    val nameDevice = dataState.lastConnectHearthRateDevice?.name?.ifEmpty { stringResource(id = R.string.no_name)}
         ?: stringResource(id = R.string.not_select_device)
     Column (modifier = modifier.padding(start = 12.dp, end = 12.dp).fillMaxWidth()) {
         TextApp(text = nameDevice, textAlign = TextAlign.Start, style = style)

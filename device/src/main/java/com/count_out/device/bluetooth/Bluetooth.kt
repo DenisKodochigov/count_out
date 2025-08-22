@@ -45,21 +45,15 @@ class Bluetooth @Inject constructor(
     fun connectDevice(adr: TypeSource): Flow<ResultBle>  {
         if (!bluetoothAdapter.isEnabled) return flow { emit(
             ResultBle.Error(throwable = ThrowableBle.NotValidBle())) }
-        return if (adr is TypeSource.SettingT && adr.item is Setting.BleAddress){
+        return if (adr is TypeSource.StringT){
             try {
                 disconnectDevice()
                 Log.d("KDS", "connectDevice")
                 bleScanner.stopScanner().flatMapConcat{ it1->
                     if (it1 is ResultBle.Error) flow { emit(it1) } else {
-                        getRemoteDevice( (adr.item as Setting.BleAddress).value).flatMapConcat{ it2->
+                        getRemoteDevice( adr.item).flatMapConcat{ it2->
                             if (it2 is ResultBle.Error) flow { emit(it2) } else {
                                 bleConnecting.connectDevice(currentConnection)
-//                                    .flatMapConcat{it3->
-//                                    if (it3 is ResultBle.Error) flow { emit(it3) } else {
-//                                        bleConnecting.heartRate.collect { ResultBle.HeartRate(it) }
-////                                        bleConnecting.heartRate.map { ResultBle.HeartRate(it) }
-//                                    }
-//                                }
                             }
                         }
                     }
@@ -67,10 +61,6 @@ class Bluetooth @Inject constructor(
             } catch (e: Exception){ flow { emit(
                 ResultBle.Error(throwable = ThrowableBle.extract(t = e))) } }
         } else flow { emit(ResultBle.Error(throwable = ThrowableBle.NotValidType())) }
-//        runBlocking {
-//            result.collect { Log.d("KDS","connectDevice $it") }
-//        }
-
     }
 
     @SuppressLint("MissingPermission")

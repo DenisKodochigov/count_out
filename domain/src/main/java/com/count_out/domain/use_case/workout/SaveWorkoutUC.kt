@@ -2,7 +2,7 @@ package com.count_out.domain.use_case.workout
 
 import com.count_out.domain.entity.throwable.ResultUC
 import com.count_out.domain.repository.ExecuteWorkOutRepo
-import com.count_out.domain.repository.TypeRepo
+import com.count_out.domain.entity.TypeRepo
 import com.count_out.domain.use_case.UseCase
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -12,7 +12,7 @@ class SaveWorkoutUC @Inject constructor(configuration: Configuration, private va
 ): UseCase<SaveWorkoutUC.Request, SaveWorkoutUC.Response>(configuration)  {
 
 
-    override fun methodRepo(request: Request): Flow<ResultUC<TypeRepo>>{
+    override fun method(request: Request): Flow<ResultUC<TypeRepo>>{
         repo.save()
         return flow { emit(ResultUC.Success(TypeRepo.BooleanT(item = true))) }
     }

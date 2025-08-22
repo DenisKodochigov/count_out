@@ -4,7 +4,7 @@ import android.util.Log
 import com.count_out.domain.entity.throwable.ResultApp
 import com.count_out.domain.entity.throwable.ResultUC
 import com.count_out.domain.entity.throwable.ThrowableUC
-import com.count_out.domain.repository.TypeRepo
+import com.count_out.domain.entity.TypeRepo
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map

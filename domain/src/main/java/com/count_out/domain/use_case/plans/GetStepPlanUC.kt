@@ -5,8 +5,8 @@ import com.count_out.domain.entity.GlobalValueApp.toStepPlan1
 import com.count_out.domain.entity.throwable.ResultUC
 import com.count_out.domain.repository.ExecuteWorkOutRepo
 import com.count_out.domain.repository.LastPlanRepo
-import com.count_out.domain.repository.TypeRepo
-import com.count_out.domain.repository.TypeRepo.NullT.toStepPlan
+import com.count_out.domain.entity.TypeRepo
+import com.count_out.domain.entity.TypeRepo.NullT.toStepPlan
 import com.count_out.domain.use_case.UseCase
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
@@ -25,7 +25,7 @@ class GetStepPlanUC @Inject constructor(
     private val repoLastPlan: LastPlanRepo,
 ): UseCase<GetStepPlanUC.Request, GetStepPlanUC.Response>(configuration)  {
 
-    override fun methodRepo(request: Request): Flow<ResultUC<TypeRepo>> {
+    override fun method(request: Request): Flow<ResultUC<TypeRepo>> {
         val result = GlobalValueApp.planRun.map { training ->
             training?.let {
                 ResultUC.Success( TypeRepo.StepPlanT(item = toStepPlan1(it))) }

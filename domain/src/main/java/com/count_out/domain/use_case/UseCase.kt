@@ -2,7 +2,7 @@ package com.count_out.domain.use_case
 
 import com.count_out.domain.entity.throwable.ResultUC
 import com.count_out.domain.entity.throwable.ThrowableUC
-import com.count_out.domain.repository.TypeRepo
+import com.count_out.domain.entity.TypeRepo
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
@@ -20,10 +20,10 @@ abstract class UseCase< I: UseCase.Request, O: UseCase.Response>(private val con
     class Configuration(val dispatcher: CoroutineDispatcher)
     interface Request
     interface Response
-    internal abstract fun methodRepo(request: I): Flow<ResultUC<TypeRepo>>
+    internal abstract fun method(request: I): Flow<ResultUC<TypeRepo>>
     internal abstract fun response(typeRepo:TypeRepo): O
 
-    fun execute(request: I): Flow<ResultUC<O>> = methodRepo(request).map{ result->
+    fun execute(request: I): Flow<ResultUC<O>> = method(request).map{ result->
         when(result){
             is ResultUC.Success-> { ResultUC.Success(response(result.data)) }
             is ResultUC.Error -> result as ResultUC<Nothing>

@@ -1,12 +1,6 @@
-package com.count_out.domain.repository
+package com.count_out.domain.entity
 
-import com.count_out.domain.entity.DataForChangeSequence
-import com.count_out.domain.entity.GlobalValueApp.toStepPlan1
-import com.count_out.domain.entity.Setting
-import com.count_out.domain.entity.Settings
-import com.count_out.domain.entity.StepPlan
 import com.count_out.domain.entity.enums.ConnectState
-import com.count_out.domain.entity.enums.StateBleConnecting
 import com.count_out.domain.entity.router.DeviceBle
 import com.count_out.domain.entity.weather.Weather
 import com.count_out.domain.entity.weather.WeatherRequest
@@ -54,7 +48,7 @@ sealed class TypeRepo {
     data class DataForChangeSequenceT(val item: DataForChangeSequence): TypeRepo()
     data object NullT: TypeRepo()
     fun TypeRepo.toStepPlan(): TypeRepo{
-        return if (this is PlanT) StepPlanT(item = toStepPlan1(this.item))
+        return if (this is PlanT) StepPlanT(item = GlobalValueApp.toStepPlan1(this.item))
         else NullT
     }
 }

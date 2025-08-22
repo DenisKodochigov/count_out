@@ -1,6 +1,6 @@
 package com.count_out.presentation.trainings
 
-import com.count_out.domain.repository.TypeRepo
+import com.count_out.domain.entity.TypeRepo
 import com.count_out.domain.use_case.plans.CopyTrainingUC
 import com.count_out.domain.use_case.plans.DeleteTrainingUC
 import com.count_out.domain.use_case.plans.GetTrainingsUC

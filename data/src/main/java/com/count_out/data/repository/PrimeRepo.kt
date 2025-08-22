@@ -13,8 +13,8 @@ import com.count_out.data.models.throwable.ResultSource.Success
 import com.count_out.data.models.throwable.TypeSource
 import com.count_out.domain.entity.throwable.ResultUC
 import com.count_out.domain.entity.throwable.ThrowableUC
-import com.count_out.domain.repository.TypeRepo
-import com.count_out.domain.repository.TypeRepo.*
+import com.count_out.domain.entity.TypeRepo
+import com.count_out.domain.entity.TypeRepo.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow

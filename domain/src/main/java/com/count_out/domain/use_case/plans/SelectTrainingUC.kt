@@ -4,7 +4,7 @@ import com.count_out.domain.entity.GlobalValueApp
 import com.count_out.domain.entity.throwable.ResultUC
 import com.count_out.domain.entity.workout.Training
 import com.count_out.domain.repository.LastPlanRepo
-import com.count_out.domain.repository.TypeRepo
+import com.count_out.domain.entity.TypeRepo
 import com.count_out.domain.use_case.UseCase
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -13,7 +13,7 @@ import javax.inject.Inject
 class SelectTrainingUC @Inject constructor(
     configuration: Configuration, private val repoLastPlan: LastPlanRepo
 ): UseCase<SelectTrainingUC.Request, SelectTrainingUC.Response>(configuration)  {
-    override fun methodRepo(request: Request): Flow<ResultUC<TypeRepo>> {
+    override fun method(request: Request): Flow<ResultUC<TypeRepo>> {
         GlobalValueApp.planRun.value = request.training
         return flow { emit(ResultUC.Success(
             TypeRepo.LongT(item = request.training.idTraining)))}
