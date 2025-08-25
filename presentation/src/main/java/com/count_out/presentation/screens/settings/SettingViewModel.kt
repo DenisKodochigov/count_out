@@ -7,6 +7,7 @@ import com.count_out.domain.entity.workout.Activity
 import com.count_out.domain.entity.workout.Collapsing
 import com.count_out.domain.entity.workout.ShowBottomSheet
 import com.count_out.domain.use_case.bluetooth.ClearCacheBleUC
+import com.count_out.domain.use_case.bluetooth.ConnectDeviceHrUC
 import com.count_out.domain.use_case.bluetooth.GetConnectionStateUC
 import com.count_out.domain.use_case.bluetooth.GetHeartRateUC
 import com.count_out.domain.use_case.bluetooth.LastBleDeviceUC
@@ -44,8 +45,9 @@ class SettingViewModel @Inject constructor(
     private val showBottomSheetUC: ShowBottomSheetUC,
     private val collapsingSetUC: CollapsingUC,
     private val getConnectionState: GetConnectionStateUC,
-    private val getHeartRate: GetHeartRateUC,
+    private val subscribeHeartRate: GetHeartRateUC,
     private val getLastBleDevice: LastBleDeviceUC,
+    private val connectDeviceHr: ConnectDeviceHrUC,
 ): PrimeViewModel<SettingsState, SettingsConvertor>() {
 
     override fun initScreenState(): ScreenState<SettingsState> = ScreenState.Loading
@@ -72,15 +74,19 @@ class SettingViewModel @Inject constructor(
         getSettings()
         getsActivity()
         getConnectionState()
-        getHeartRate()
+        subscribeHeartRate()
+        connectDeviceHr()
         getLastBleDevice()
     }
+    private fun connectDeviceHr() {
+        viewModelScope.launch(Dispatchers.IO) {
+            connectDeviceHr.execute(ConnectDeviceHrUC.Request).collect { submitState( it ) } } }
     private fun getConnectionState() {
         viewModelScope.launch(Dispatchers.IO) {
             getConnectionState.execute(GetConnectionStateUC.Request).collect { submitState( it ) } } }
-    private fun getHeartRate() {
+    private fun subscribeHeartRate() {
         viewModelScope.launch(Dispatchers.IO) {
-            getHeartRate.execute(GetHeartRateUC.Request).collect { submitState( it ) } } }
+            subscribeHeartRate.execute(GetHeartRateUC.Request).collect { submitState( it ) } } }
     private fun getLastBleDevice() {
         viewModelScope.launch(Dispatchers.IO) {
             getLastBleDevice.execute(LastBleDeviceUC.Request).collect { submitState( it ) } } }

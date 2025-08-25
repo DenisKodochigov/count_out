@@ -8,8 +8,8 @@ sealed class ExecuteEvent: Event {
     data object Pause: ExecuteEvent()
     data class Stop(val item: ShowBottomSheet) : ExecuteEvent()
     data object Save : ExecuteEvent()
+    data object Init : ExecuteEvent()
 
-    data object GetPlan: ExecuteEvent()
     data object UpInterval: ExecuteEvent()
     data object DownInterval: ExecuteEvent()
     data class ShowBS(val item: ShowBottomSheet): ExecuteEvent()

@@ -4,6 +4,9 @@ package com.count_out.presentation.screens.execute
 import android.util.Log
 import androidx.lifecycle.viewModelScope
 import com.count_out.domain.entity.workout.ShowBottomSheet
+import com.count_out.domain.use_case.bluetooth.ConnectDeviceHrUC
+import com.count_out.domain.use_case.bluetooth.GetConnectionStateUC
+import com.count_out.domain.use_case.bluetooth.GetHeartRateUC
 import com.count_out.domain.use_case.other.ShowBottomSheetUC
 import com.count_out.domain.use_case.plans.GetStepPlanUC
 import com.count_out.domain.use_case.workout.DownIntervalUC
@@ -32,6 +35,9 @@ class ExecuteViewModel @Inject constructor(
     private val downIntervalUC: DownIntervalUC,
     private val getStepPlanUC: GetStepPlanUC,
     private val showBottomSheetUC: ShowBottomSheetUC,
+    private val connectDeviceHr: ConnectDeviceHrUC,
+    private val subscribeHeartRate: GetHeartRateUC,
+    private val getConnectionState: GetConnectionStateUC,
     private val internet: Internet,
 ): PrimeViewModel<ExecuteState, ExecuteConverter>() {
 
@@ -50,10 +56,25 @@ class ExecuteViewModel @Inject constructor(
             is ExecuteEvent.Save -> { saveWorkOut() }
             is ExecuteEvent.UpInterval -> { upInterval() }
             is ExecuteEvent.DownInterval -> { downInterval() }
-            is ExecuteEvent.GetPlan -> { getStepPlan() }
             is ExecuteEvent.ShowBS -> { showBottomSheet(event.item) }
+            is ExecuteEvent.Init -> { init() }
         }
     }
+    fun init() {
+        getStepPlan()
+        getConnectionState()
+        subscribeHeartRate()
+        connectDeviceHr()
+    }
+    private fun connectDeviceHr() {
+        viewModelScope.launch(Dispatchers.IO) {
+            connectDeviceHr.execute(ConnectDeviceHrUC.Request).collect { submitState( it ) } } }
+    private fun getConnectionState() {
+        viewModelScope.launch(Dispatchers.IO) {
+            getConnectionState.execute(GetConnectionStateUC.Request).collect { submitState( it ) } } }
+    private fun subscribeHeartRate() {
+        viewModelScope.launch(Dispatchers.IO) {
+            subscribeHeartRate.execute(GetHeartRateUC.Request).collect { submitState( it ) } } }
 
     private val dataForServ = DataForServImpl()
 

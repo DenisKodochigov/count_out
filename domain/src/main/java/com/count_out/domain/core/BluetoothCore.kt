@@ -21,48 +21,57 @@ class BluetoothCore @Inject constructor(
 
     val lastBleAddress = MutableStateFlow("")
 
-    fun lastDeviceAddress(){
-        repo.lastDeviceAddress().map { adr->
-            Log.d("KDS", "lastDeviceAddress $adr")
-            if (adr is ResultUC.Success && adr.data is TypeRepo.DeviceUIT && adr.data.item.address.isNotEmpty()) {
-                lastBleAddress.value = adr.data.item.address
-                repo.connectDevice(TypeRepo.StringT(adr.data.item.address))
-            }
-        } }
     fun startScanning(): Flow<ResultUC<TypeRepo>>{
         return repo.startScanning() }
     fun stopScanning(): Flow<ResultUC<TypeRepo>>{
         return repo.stopScanning() }
-    fun connectDevice(address: TypeRepo): Flow<ResultUC<TypeRepo>>{
-        return repo.connectDevice(address)
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    fun connectDeviceHr(): Flow<ResultUC<TypeRepo>>{
+        return lastBleAddress.flatMapConcat { lastBleAddress->
+            if (lastBleAddress.isNotEmpty())
+                repo.connectDevice(TypeRepo.StringT(lastBleAddress))
+            else flow{emit(ResultUC.Success(TypeRepo.BooleanT(false)))}
+        }
     }
 
     @OptIn(ExperimentalCoroutinesApi::class)
     fun lastDevice(): Flow<ResultUC<TypeRepo>>{
-        return repo.lastDevice().map { name->
-            if (name is ResultUC.Success ) lastDeviceAddress()
-            name
+        return repo.lastDevice().map { device->
+            if (device is ResultUC.Success &&
+                device.data is TypeRepo.DeviceUIT &&
+                device.data.item.address.isNotEmpty()) {
+                    lastBleAddress.value = device.data.item.address
+            }
+            device
         }
     }
+
     fun clearCache(): Flow<ResultUC<TypeRepo>>{
         return repo.clearCache() }
 
     @OptIn(ExperimentalCoroutinesApi::class)
     fun selectDeice(device: TypeRepo): Flow<ResultUC<TypeRepo>>{
-        return if (device is TypeRepo.DeviceUIT) {
-            val adr = TypeRepo.SettingT(Setting.BleAddress(device.item.address))
-            val name = TypeRepo.SettingT(Setting.BleName(device.item.name))
-            combine(
-                repoSet.saveSetting(adr),
-                repoSet.saveSetting(name)
-            ) { f1, f2->
-                f1 as? ResultUC.Error
-                    ?: (f2 as? ResultUC.Error
-                        ?: ResultUC.Success(TypeRepo.BooleanT(true)))
-            }.flatMapConcat { res->
-                if (res is ResultUC.Success) connectDevice(TypeRepo.StringT(device.item.address))
-                else flow { emit(res) } }
-        } else flow { emit(ResultUC.Error(throwable = ThrowableUC.NotValidType())) }
+        return repo.stopScanning().flatMapConcat { stopScanning->
+            if (stopScanning is ResultUC.Error) flow { emit(stopScanning)}
+            else{
+                if (device is TypeRepo.DeviceUIT) {
+                    val adr = TypeRepo.SettingT(Setting.BleAddress(device.item.address))
+                    val name = TypeRepo.SettingT(Setting.BleName(device.item.name))
+                    combine(
+                        repoSet.saveSetting(adr),
+                        repoSet.saveSetting(name)
+                    ) { f1, f2->
+                        f1 as? ResultUC.Error ?: if (f2 is ResultUC.Error) f2
+                        else {
+                            lastBleAddress.value = device.item.address
+                            ResultUC.Success(TypeRepo.BooleanT(true))
+                        }
+                    }
+                } else flow { emit(ResultUC.Error(throwable = ThrowableUC.NotValidType())) }
+            }
+        }
+
     }
     fun getStateBle(): Flow<ResultUC<TypeRepo>>{
         return repo.getStateBle() }

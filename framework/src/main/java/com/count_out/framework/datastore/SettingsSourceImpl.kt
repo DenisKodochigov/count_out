@@ -1,9 +1,6 @@
 package com.count_out.framework.datastore
 
-import android.util.Log
-import android.util.Log.e
 import androidx.datastore.core.DataStore
-import androidx.datastore.dataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit

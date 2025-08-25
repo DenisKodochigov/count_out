@@ -1,5 +1,8 @@
 package com.count_out.data.repository
 
+import com.count_out.data.models.throwable.ResultSource
+import com.count_out.data.models.throwable.ThrowableDS
+import com.count_out.data.models.throwable.TypeSource
 import com.count_out.data.source.framework.BleSource
 import com.count_out.data.source.local.SettingsSource
 import com.count_out.domain.entity.TypeRepo
@@ -8,7 +11,6 @@ import com.count_out.domain.entity.throwable.ResultUC
 import com.count_out.domain.repository.BluetoothRepo
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.flatMapConcat
 import javax.inject.Inject
 
 class BluetoothRepoImpl @Inject constructor(
@@ -24,20 +26,26 @@ class BluetoothRepoImpl @Inject constructor(
     override fun connectDevice(address: TypeRepo): Flow<ResultUC<TypeRepo>>{
         return bleSource.connectDevice(toTypeSource(address)).convertor() }
 
-    override fun lastDevice(): Flow<ResultUC<TypeRepo>>{
+    override fun lastDevice(): Flow<ResultUC<TypeRepo>> {
         return combine(
             storeDevice.getBleName(),
             storeDevice.getBleAddress()
-        ){ f1, f2 ->
-            f1 as? ResultUC.Error
-                ?: (f2 as? ResultUC.Error
-                    ?: object: DeviceBle { override val name: String = ""; override val address: String = "" })
-        }.flatMapConcat { res->
-
-        }
-
-
-        storeDevice.getBleName().convertor() }
+        ) { f1, f2 ->
+            if (f1 is ResultSource.Success) {
+                if (f2 is ResultSource.Success) {
+                    if (f1.data is TypeSource.StringT && f2.data is TypeSource.StringT) {
+                        ResultSource.Success(
+                            TypeSource.DeviceUIT(
+                                object : DeviceBle {
+                                    override val name: String = f1.data.item
+                                    override val address: String = f2.data.item
+                                })
+                        )
+                    } else ResultSource.Error(ThrowableDS.NotValidType())
+                } else f2
+            } else f1
+        }.convertor()
+    }
 
     override fun clearCache(): Flow<ResultUC<TypeRepo>> {
         return bleSource.clearCache().convertor()}

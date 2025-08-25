@@ -47,7 +47,7 @@ import com.count_out.presentation.view_element.custom_view.IconQ
 import java.math.RoundingMode
 
 @Composable fun ExecuteWorkoutScreen(viewModel: ExecuteViewModel){
-    LaunchedEffect(Unit) { viewModel.submitEvent(ExecuteEvent.GetPlan) }
+    LaunchedEffect(Unit) { viewModel.submitEvent(ExecuteEvent.Init) }
     ExecuteWorkoutScreenCreateView( viewModel = viewModel )
 }
 @Composable fun ExecuteWorkoutScreenCreateView(viewModel: ExecuteViewModel){
