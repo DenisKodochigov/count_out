@@ -1,6 +1,5 @@
 package com.count_out.framework.room.source
 
-import android.database.sqlite.SQLiteConstraintException
 import com.count_out.data.models.ExerciseImplD
 import com.count_out.data.models.RoundImplD
 import com.count_out.data.models.SpeechKitImplD
@@ -27,22 +26,6 @@ class RoundSourceImpl @Inject constructor(
     private val source: ExerciseSource,
     private val speechKitSource: SpeechKitSourceImpl,
 ): RoundSource, PrimeSource() {
-    override fun gets(trainingId: TypeSource): Flow<ResultSource<TypeSource>> =
-        try {
-            if (trainingId is TypeSource.LongT) {
-                dao.gets(trainingId.item).filterNotNull().map { list ->
-                    TypeSource.RoundsT(list.map { it.toRound() }) }.resultSource()
-            } else flow { emit(ResultSource.Error(ThrowableDS.NotValidType())) }
-        } catch(e: Exception) {
-            flow { emit(ResultSource.Error(ThrowableDS.extract(e)))} }
-
-    override fun get(round: TypeSource): Flow<ResultSource<TypeSource>> =
-        try {
-            if (round is TypeSource.RoundT) {
-                dao.get(round.item.idRound).filterNotNull().map { TypeSource.RoundT(it.toRound()) }.resultSource()
-            } else flow { emit(ResultSource.Error(ThrowableDS.NotValidType())) }
-        } catch(e: Exception) {
-            flow { emit(ResultSource.Error(ThrowableDS.extract(e)))} }
 
     override fun copy(round: TypeSource): ResultSource<TypeSource> {
         return try {
@@ -118,3 +101,19 @@ class RoundSourceImpl @Inject constructor(
         } catch (e: Exception) { ResultSource.Error(ThrowableDS.extract(e)) }
     }
 }
+//    override fun gets(trainingId: TypeSource): Flow<ResultSource<TypeSource>> =
+//        try {
+//            if (trainingId is TypeSource.LongT) {
+//                dao.gets(trainingId.item).filterNotNull().map { list ->
+//                    TypeSource.RoundsT(list.map { it.toRound() }) }.resultSource()
+//            } else flow { emit(ResultSource.Error(ThrowableDS.NotValidType())) }
+//        } catch(e: Exception) {
+//            flow { emit(ResultSource.Error(ThrowableDS.extract(e)))} }
+//
+//    override fun get(round: TypeSource): Flow<ResultSource<TypeSource>> =
+//        try {
+//            if (round is TypeSource.RoundT) {
+//                dao.get(round.item.idRound).filterNotNull().map { TypeSource.RoundT(it.toRound()) }.resultSource()
+//            } else flow { emit(ResultSource.Error(ThrowableDS.NotValidType())) }
+//        } catch(e: Exception) {
+//            flow { emit(ResultSource.Error(ThrowableDS.extract(e)))} }

@@ -1,6 +1,5 @@
 package com.count_out.framework.room.source
 
-import android.database.sqlite.SQLiteConstraintException
 import com.count_out.data.models.ExerciseImplD
 import com.count_out.data.models.SpeechKitImplD
 import com.count_out.data.models.throwable.ResultSource
@@ -22,22 +21,6 @@ class RingSourceImpl @Inject constructor(
     private val source: ExerciseSource,
     private val speechKitSource: SpeechKitSourceImpl,
 ): RingSource, PrimeSource() {
-    override fun get(ring: TypeSource): Flow<ResultSource<TypeSource>> =
-        try {
-            if (ring is TypeSource.RingT) {
-                dao.get(ring.item.idRing).filterNotNull().map { TypeSource.RingT(it.toRing()) }.resultSource()
-            } else flow { emit(ResultSource.Error(ThrowableDS.NotValidType())) }
-        } catch(e: Exception) {
-            flow { emit(ResultSource.Error(ThrowableDS.extract(e)))} }
-
-    override fun gets(trainingId: TypeSource): Flow<ResultSource<TypeSource>> =
-        try {
-            if (trainingId is TypeSource.LongT) {
-                dao.gets(trainingId.item).filterNotNull().map { list ->
-                    TypeSource.RingsT(list.map { it.toRing() }) }.resultSource()
-            } else flow { emit(ResultSource.Error(ThrowableDS.NotValidType())) }
-        } catch(e: Exception) {
-            flow { emit(ResultSource.Error(ThrowableDS.extract(e)))} }
 
     override fun copy(ring: TypeSource): ResultSource<TypeSource> {
         return try {
@@ -110,3 +93,19 @@ class RingSourceImpl @Inject constructor(
         } catch (e: Exception) { ResultSource.Error(ThrowableDS.extract(e)) }
     }
 }
+//    override fun get(ring: TypeSource): Flow<ResultSource<TypeSource>> =
+//        try {
+//            if (ring is TypeSource.RingT) {
+//                dao.get(ring.item.idRing).filterNotNull().map { TypeSource.RingT(it.toRing()) }.resultSource()
+//            } else flow { emit(ResultSource.Error(ThrowableDS.NotValidType())) }
+//        } catch(e: Exception) {
+//            flow { emit(ResultSource.Error(ThrowableDS.extract(e)))} }
+//
+//    override fun gets(trainingId: TypeSource): Flow<ResultSource<TypeSource>> =
+//        try {
+//            if (trainingId is TypeSource.LongT) {
+//                dao.gets(trainingId.item).filterNotNull().map { list ->
+//                    TypeSource.RingsT(list.map { it.toRing() }) }.resultSource()
+//            } else flow { emit(ResultSource.Error(ThrowableDS.NotValidType())) }
+//        } catch(e: Exception) {
+//            flow { emit(ResultSource.Error(ThrowableDS.extract(e)))} }

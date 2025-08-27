@@ -22,9 +22,9 @@ import com.count_out.app.presentation.Const.DELAY_SCREEN
 import com.count_out.app.presentation.Const.DURATION_SCREEN
 import com.count_out.presentation.screens.execute.ExecuteViewModel
 import com.count_out.presentation.screens.history.HistoryViewModel
+import com.count_out.presentation.screens.plans.PlansViewModel
 import com.count_out.presentation.screens.settings.SettingViewModel
 import com.count_out.presentation.screens.training.TrainingViewModel
-import com.count_out.presentation.screens.plans.PlansViewModel
 
 fun NavGraphBuilder.executeWorkout(navigateEvent: NavigateEventImpl) {
     template(

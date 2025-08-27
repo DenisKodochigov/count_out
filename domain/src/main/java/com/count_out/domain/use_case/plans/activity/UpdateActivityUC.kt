@@ -1,10 +1,9 @@
 package com.count_out.domain.use_case.plans.activity
 
 import com.count_out.domain.core.plans.ActivityCore
+import com.count_out.domain.entity.TypeRepo
 import com.count_out.domain.entity.throwable.ResultUC
 import com.count_out.domain.entity.workout.Activity
-import com.count_out.domain.entity.TypeRepo
-import com.count_out.domain.repository.plans.ActivityRepo
 import com.count_out.domain.use_case.UseCase
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject

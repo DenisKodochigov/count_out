@@ -14,7 +14,6 @@ import com.count_out.domain.use_case.workout.StartWorkoutUC
 import com.count_out.domain.use_case.workout.StopWorkoutUC
 import com.count_out.domain.use_case.workout.UpIntervalUC
 import com.count_out.presentation.screens.prime.PrimeConvertor
-import com.count_out.presentation.screens.settings.SettingsState
 import kotlinx.coroutines.flow.MutableStateFlow
 import javax.inject.Inject
 

@@ -5,9 +5,9 @@ import com.count_out.data.models.throwable.TypeSource
 import kotlinx.coroutines.flow.Flow
 
 interface RoundSource {
-    fun get(round: TypeSource): Flow<ResultSource<TypeSource>>
-    fun gets(trainingId: TypeSource): Flow<ResultSource<TypeSource>>
     fun del(round: TypeSource): ResultSource<TypeSource>
     fun copy(round: TypeSource): ResultSource<TypeSource>
     fun update(round: TypeSource): ResultSource<TypeSource>
 }
+//    fun get(round: TypeSource): Flow<ResultSource<TypeSource>>
+//    fun gets(trainingId: TypeSource): Flow<ResultSource<TypeSource>>

@@ -10,21 +10,6 @@ import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface ExerciseDao {
-    @Transaction
-    @Query("SELECT * FROM tb_exercise ")
-    fun gets(): Flow<List<ExerciseRel>>
-    @Transaction
-    @Query("SELECT * FROM tb_exercise WHERE idExercise = :id ORDER BY idView ASC")
-    fun get(id: Long): Flow<ExerciseRel?>
-    @Transaction
-    @Query("SELECT * FROM tb_exercise WHERE roundId = :id ORDER BY idView ASC")
-    fun getForRound(id: Long): Flow<List<ExerciseRel>>
-    @Transaction
-    @Query("SELECT * FROM tb_exercise WHERE ringId = :id ORDER BY idView ASC")
-    fun getForRing(id: Long): Flow<List<ExerciseRel>>
-    @Transaction
-    @Query("SELECT * FROM tb_exercise WHERE idExercise IN (:list)")
-    fun getFilter( list: List<Long>): Flow<List<ExerciseRel>>
     @Insert
     fun add(item: ExerciseTable): Long
     @Update
@@ -32,7 +17,11 @@ interface ExerciseDao {
     @Query("DELETE FROM tb_exercise WHERE idExercise = :id")
     fun del(id: Long): Int
     @Query("UPDATE tb_exercise SET activityId = :activityId WHERE idExercise =:exerciseId")
-    fun setActivity(exerciseId: Long, activityId: Long): Int?
+    fun setActivity(exerciseId: Long, activityId: Long): Int
+
+    @Query("UPDATE tb_exercise SET idView = :newViewId WHERE idView =:viewId AND roundId=:roundId")
+    fun setViewId(roundId: Long, viewId: Long, newViewId: Long): Int
+}
 
 //    @Query("SELECT max( idView) FROM tb_exercise WHERE roundId = :roundId")
 //    fun getExerciseMaxSequential(roundId: Long): Flow<ExerciseRel>
@@ -43,4 +32,18 @@ interface ExerciseDao {
 //    fun delRound(id: Long)
 //    @Query("DELETE FROM tb_exercise WHERE ringId = :id")
 //    fun delRing(id: Long)
-}
+//    @Transaction
+//    @Query("SELECT * FROM tb_exercise ")
+//    fun gets(): Flow<List<ExerciseRel>>
+//    @Transaction
+//    @Query("SELECT * FROM tb_exercise WHERE idExercise = :id ORDER BY idView ASC")
+//    fun get(id: Long): Flow<ExerciseRel?>
+//    @Transaction
+//    @Query("SELECT * FROM tb_exercise WHERE roundId = :id ORDER BY idView ASC")
+//    fun getForRound(id: Long): Flow<List<ExerciseRel>>
+//    @Transaction
+//    @Query("SELECT * FROM tb_exercise WHERE ringId = :id ORDER BY idView ASC")
+//    fun getForRing(id: Long): Flow<List<ExerciseRel>>
+//    @Transaction
+//    @Query("SELECT * FROM tb_exercise WHERE idExercise IN (:list)")
+//    fun getFilter( list: List<Long>): Flow<List<ExerciseRel>>

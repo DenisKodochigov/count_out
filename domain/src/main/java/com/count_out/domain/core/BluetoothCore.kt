@@ -1,6 +1,5 @@
 package com.count_out.domain.core
 
-import android.util.Log
 import com.count_out.domain.entity.Setting
 import com.count_out.domain.entity.TypeRepo
 import com.count_out.domain.entity.throwable.ResultUC

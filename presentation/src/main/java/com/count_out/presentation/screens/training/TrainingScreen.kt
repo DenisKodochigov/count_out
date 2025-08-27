@@ -37,7 +37,7 @@ import com.count_out.presentation.view_element.bottom_sheet.ShowBottomSheetSpeec
 import com.count_out.presentation.view_element.icons.IconsGroup
 
 @Composable fun TrainingScreen(viewModel: TrainingViewModel, trainingId: Long){
-    LaunchedEffect(Unit) { viewModel.submitEvent(TrainingEvent.GetTraining(trainingId)) }
+    LaunchedEffect(Unit) { viewModel.submitEvent(TrainingEvent.Init(trainingId)) }
     TrainingScreenCreateView( viewModel = viewModel )
 }
 

@@ -6,9 +6,7 @@ import com.count_out.framework.retrofit.weather.entity.ResponseOpenMeteo
 import com.count_out.framework.retrofit.weather.entity.WeatherResponse
 import com.count_out.framework.retrofit.weather.entity.WeatherUnitsOpenMeteo
 import com.count_out.framework.retrofit.weather.source.WeatherSourceImpl
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
-import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 import org.mockito.Mockito.mock
 import org.mockito.kotlin.whenever

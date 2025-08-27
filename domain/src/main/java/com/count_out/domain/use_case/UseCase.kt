@@ -1,8 +1,8 @@
 package com.count_out.domain.use_case
 
+import com.count_out.domain.entity.TypeRepo
 import com.count_out.domain.entity.throwable.ResultUC
 import com.count_out.domain.entity.throwable.ThrowableUC
-import com.count_out.domain.entity.TypeRepo
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map

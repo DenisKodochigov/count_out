@@ -1,7 +1,5 @@
 package com.count_out.framework.room.source
 
-import android.database.sqlite.SQLiteConstraintException
-import android.util.Log
 import com.count_out.data.models.RoundImplD
 import com.count_out.data.models.SpeechKitImplD
 import com.count_out.data.models.throwable.ResultSource

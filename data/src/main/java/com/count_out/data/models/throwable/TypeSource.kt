@@ -1,5 +1,6 @@
 package com.count_out.data.models.throwable
 
+import com.count_out.data.entity.SetViewIdD
 import com.count_out.data.models.ActivityImplD
 import com.count_out.data.models.ExerciseImplD
 import com.count_out.data.models.RingImplD
@@ -12,6 +13,7 @@ import com.count_out.domain.entity.DataForChangeSequence
 import com.count_out.domain.entity.Setting
 import com.count_out.domain.entity.Settings
 import com.count_out.domain.entity.StepPlan
+import com.count_out.domain.entity.TypeRepo
 import com.count_out.domain.entity.enums.ConnectState
 import com.count_out.domain.entity.router.DeviceBle
 import com.count_out.domain.entity.weather.Weather
@@ -24,7 +26,6 @@ import com.count_out.domain.entity.workout.Round
 import com.count_out.domain.entity.workout.Set
 import com.count_out.domain.entity.workout.ShowBottomSheet
 import com.count_out.domain.entity.workout.Training
-import com.count_out.domain.entity.TypeRepo
 
 sealed class TypeSource {
     data class IntT(val item: Int): TypeSource()
@@ -42,6 +43,7 @@ sealed class TypeSource {
     data class ActivitiesT(val item: List<Activity>): TypeSource()
     data class ExerciseT(val item: ExerciseImplD): TypeSource()
     data class ExercisesT(val item: List<Exercise>): TypeSource()
+    data class SetViewIdT(val item: SetViewIdD): TypeSource()
     data class RingT(val item: RingImplD): TypeSource()
     data class RingsT(val item: List<Ring>): TypeSource()
     data class RoundT(val item: RoundImplD): TypeSource()
@@ -91,5 +93,6 @@ sealed class TypeSource {
         is DataForChangeSequenceT -> TypeRepo.DataForChangeSequenceT(item = this.item)
         is BleConnectStateT -> TypeRepo.BleConnectStateT(item = this.item)
         NullT -> TypeRepo.NullT
+        is SetViewIdT -> TypeRepo.NullT
     }
 }

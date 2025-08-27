@@ -3,16 +3,10 @@ package com.count_out.data
 import com.count_out.data.models.WeatherImpl
 import com.count_out.data.repository.WeatherRepoImpl
 import com.count_out.data.source.network.WeatherSource
-import com.count_out.domain.entity.weather.Weather
-import junit.framework.TestCase.assertEquals
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.flowOf
-import kotlinx.coroutines.flow.last
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
 import org.mockito.Mockito.mock
-import org.mockito.kotlin.whenever
-import java.util.TimeZone
 
 class WeatherRepoImplTest {
     private val weatherSource = mock<WeatherSource>()

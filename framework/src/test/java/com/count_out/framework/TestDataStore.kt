@@ -3,17 +3,9 @@ package com.count_out.framework
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import com.count_out.framework.datastore.SettingsSourceImpl
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.flowOf
-import kotlinx.coroutines.test.runTest
-import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.MethodOrderer
-import org.junit.jupiter.api.Order
-import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestMethodOrder
 import org.mockito.Mockito.mock
-import org.mockito.kotlin.whenever
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation::class)
 class TestDataStore {

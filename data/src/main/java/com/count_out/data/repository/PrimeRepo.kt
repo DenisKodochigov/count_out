@@ -1,5 +1,6 @@
 package com.count_out.data.repository
 
+import com.count_out.data.entity.SetViewIdD
 import com.count_out.data.models.ActivityImplD
 import com.count_out.data.models.ExerciseImplD
 import com.count_out.data.models.RingImplD
@@ -11,10 +12,40 @@ import com.count_out.data.models.TrainingImplD
 import com.count_out.data.models.throwable.ResultSource
 import com.count_out.data.models.throwable.ResultSource.Success
 import com.count_out.data.models.throwable.TypeSource
+import com.count_out.domain.entity.TypeRepo
+import com.count_out.domain.entity.TypeRepo.ActivitiesT
+import com.count_out.domain.entity.TypeRepo.ActivityT
+import com.count_out.domain.entity.TypeRepo.BleConnectStateT
+import com.count_out.domain.entity.TypeRepo.BooleanT
+import com.count_out.domain.entity.TypeRepo.CollapsingT
+import com.count_out.domain.entity.TypeRepo.DataForChangeSequenceT
+import com.count_out.domain.entity.TypeRepo.DeviceUIT
+import com.count_out.domain.entity.TypeRepo.DevicesUIT
+import com.count_out.domain.entity.TypeRepo.ExerciseT
+import com.count_out.domain.entity.TypeRepo.ExercisesT
+import com.count_out.domain.entity.TypeRepo.IntT
+import com.count_out.domain.entity.TypeRepo.LongT
+import com.count_out.domain.entity.TypeRepo.LongsT
+import com.count_out.domain.entity.TypeRepo.NullT
+import com.count_out.domain.entity.TypeRepo.PlanT
+import com.count_out.domain.entity.TypeRepo.PlansT
+import com.count_out.domain.entity.TypeRepo.RingT
+import com.count_out.domain.entity.TypeRepo.RingsT
+import com.count_out.domain.entity.TypeRepo.RoundT
+import com.count_out.domain.entity.TypeRepo.RoundsT
+import com.count_out.domain.entity.TypeRepo.SetT
+import com.count_out.domain.entity.TypeRepo.SetsT
+import com.count_out.domain.entity.TypeRepo.SettingT
+import com.count_out.domain.entity.TypeRepo.SettingsT
+import com.count_out.domain.entity.TypeRepo.ShowBottomSheetT
+import com.count_out.domain.entity.TypeRepo.SpeechKitT
+import com.count_out.domain.entity.TypeRepo.SpeechT
+import com.count_out.domain.entity.TypeRepo.StepPlanT
+import com.count_out.domain.entity.TypeRepo.StringT
+import com.count_out.domain.entity.TypeRepo.WeatherRequestT
+import com.count_out.domain.entity.TypeRepo.WeatherT
 import com.count_out.domain.entity.throwable.ResultUC
 import com.count_out.domain.entity.throwable.ThrowableUC
-import com.count_out.domain.entity.TypeRepo
-import com.count_out.domain.entity.TypeRepo.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
@@ -24,6 +55,7 @@ import kotlinx.coroutines.flow.flatMapConcat
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
+
 abstract class PrimeRepo {
     val throwableNull = ResultUC.Error(ThrowableUC.extract(Exception("return null")))
 
@@ -137,6 +169,7 @@ abstract class PrimeRepo {
             is TypeSource.DataForChangeSequenceT-> DataForChangeSequenceT(item = value.item)
             is TypeSource.NullT -> NullT
             is TypeSource.BleConnectStateT -> BleConnectStateT(item = value.item)
+            is TypeSource.SetViewIdT -> NullT
         }
     }
     fun toTypeSource(value: TypeRepo): TypeSource{
@@ -172,6 +205,7 @@ abstract class PrimeRepo {
             is DataForChangeSequenceT-> TypeSource.DataForChangeSequenceT(item = value.item)
             is NullT -> TypeSource.NullT
             is BleConnectStateT -> TypeSource.BleConnectStateT(item = value.item)
+            is TypeRepo.SetViewIdT -> TypeSource.SetViewIdT(item = SetViewIdD(value.item))
         }
     }
 }

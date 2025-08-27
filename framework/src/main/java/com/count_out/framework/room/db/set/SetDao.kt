@@ -16,14 +16,12 @@ interface SetDao {
     fun update(item: SetTable): Int
     @Query("DELETE FROM tb_set WHERE idSet = :id")
     fun del(id: Long): Int
-    @Query("DELETE FROM tb_set WHERE exerciseId = :id")
-    fun dels(id: Long): Int
-
-    @Transaction
-    @Query("SELECT * FROM tb_set WHERE exerciseId = :exerciseId")
-    fun gets(exerciseId: Long): Flow<List<SetRel?>>
-
-    @Transaction
-    @Query("SELECT * FROM tb_set WHERE idSet = :id")
-    fun get(id: Long): Flow<SetRel?>
 }
+//    @Query("DELETE FROM tb_set WHERE exerciseId = :id")
+//    fun dels(id: Long): Int
+//    @Transaction
+//    @Query("SELECT * FROM tb_set WHERE exerciseId = :exerciseId")
+//    fun gets(exerciseId: Long): Flow<List<SetRel?>>
+//    @Transaction
+//    @Query("SELECT * FROM tb_set WHERE idSet = :id")
+//    fun get(id: Long): Flow<SetRel?>

@@ -2,8 +2,8 @@ package com.count_out.data.repository
 
 import com.count_out.data.source.local.SettingsSource
 import com.count_out.domain.entity.Setting
-import com.count_out.domain.entity.throwable.ResultUC
 import com.count_out.domain.entity.TypeRepo
+import com.count_out.domain.entity.throwable.ResultUC
 import com.count_out.domain.repository.plans.SettingsRepo
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow

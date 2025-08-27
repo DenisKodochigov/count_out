@@ -1,7 +1,6 @@
 package com.count_out.presentation.screens.execute
 
 //import com.count_out.domain.use_case.plans.GetPlanUC
-import android.util.Log
 import androidx.lifecycle.viewModelScope
 import com.count_out.domain.entity.workout.ShowBottomSheet
 import com.count_out.domain.use_case.bluetooth.ConnectDeviceHrUC

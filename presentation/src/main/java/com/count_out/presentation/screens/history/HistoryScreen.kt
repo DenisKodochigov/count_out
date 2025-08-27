@@ -19,10 +19,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.count_out.presentation.screens.history.day.HistoryDay
-import com.count_out.presentation.screens.history.week.HistoryWeek
 import com.count_out.domain.entity.enums.UnitTime
+import com.count_out.presentation.screens.history.day.HistoryDay
 import com.count_out.presentation.screens.history.month.HistoryMonth
+import com.count_out.presentation.screens.history.week.HistoryWeek
 import com.count_out.presentation.screens.history.year.HistoryYear
 import com.count_out.presentation.view_element.TextApp
 

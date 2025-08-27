@@ -11,14 +11,14 @@ import androidx.lifecycle.ViewModel
 import androidx.navigation.NavType
 import androidx.navigation.navArgument
 import com.count_out.app.R
+import com.count_out.presentation.screens.execute.ExecuteViewModel
+import com.count_out.presentation.screens.execute.ExecuteWorkoutScreen
 import com.count_out.presentation.screens.history.HistoryScreen
 import com.count_out.presentation.screens.history.HistoryViewModel
 import com.count_out.presentation.screens.plans.PlansScreen
 import com.count_out.presentation.screens.plans.PlansViewModel
 import com.count_out.presentation.screens.settings.SettingScreen
 import com.count_out.presentation.screens.settings.SettingViewModel
-import com.count_out.presentation.screens.execute.ExecuteViewModel
-import com.count_out.presentation.screens.execute.ExecuteWorkoutScreen
 import com.count_out.presentation.screens.training.TrainingScreen
 import com.count_out.presentation.screens.training.TrainingViewModel
 

@@ -20,11 +20,11 @@ interface TrainingDao {
     @Query("SELECT * FROM tb_trainings WHERE idTraining = :id")
     fun getTrainingRel(id: Long): Flow<TrainingRel?>
     @Transaction
-    @Query("SELECT * FROM tb_trainings WHERE idTraining = :id")
-    fun getPlanRel(id: Long): TrainingRel?
-    @Transaction
     @Query("SELECT * FROM tb_trainings WHERE idTraining != 1")
     fun getTrainingsRel(): Flow<List<TrainingRel>>
-    @Query("SELECT name FROM tb_trainings WHERE idTraining = :id")
-    fun getName(id: Long): Flow<String?>
 }
+//    @Transaction
+//    @Query("SELECT * FROM tb_trainings WHERE idTraining = :id")
+//    fun getPlanRel(id: Long): TrainingRel?
+//@Query("SELECT name FROM tb_trainings WHERE idTraining = :id")
+//fun getName(id: Long): Flow<String?>

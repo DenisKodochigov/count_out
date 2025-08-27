@@ -1,5 +1,6 @@
 package com.count_out.framework.room.db.relation
 
+import android.R.attr.duration
 import androidx.room.Embedded
 import androidx.room.Relation
 import com.count_out.data.models.ExerciseImplD
@@ -105,7 +106,7 @@ data class RoundRel(
 ){
     fun toRound(): RoundImplD {
         return RoundImplD(
-            exercise = exercise?.map { it.toExercise() } ?: emptyList(),  ///.sortedBy{ it.idView }.sortedBy{ it.idView } реализовать в usecase
+            exercise = exercise?.map{ exercise-> exercise.toExercise()}?.sortedBy{ it.idView } ?: emptyList(),
             idRound = round.idRound,
             roundType = RoundType.entries[round.roundType],
             speechId = round.speechId,

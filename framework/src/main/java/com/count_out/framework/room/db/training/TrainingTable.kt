@@ -12,9 +12,6 @@ data class TrainingTable(
     var name: String = "",
     var isSelected: Boolean = false,
     var speechId: Long = 0,
-//    @Ignore  var amountActivity: Int = 0,
-//    @Ignore  var speech: SpeechKit = SpeechKitTable(),
-//    @Ignore  var rounds: List<Round> = emptyList(),
 ){
     constructor(training: Training) : this(
         idTraining = training.idTraining,

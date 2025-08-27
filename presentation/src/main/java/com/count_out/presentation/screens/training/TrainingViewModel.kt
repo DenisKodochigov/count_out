@@ -1,6 +1,5 @@
 package com.count_out.presentation.screens.training
 
-import android.util.Log
 import androidx.lifecycle.viewModelScope
 import com.count_out.domain.entity.DataForChangeSequence
 import com.count_out.domain.entity.workout.Collapsing
@@ -26,6 +25,7 @@ import com.count_out.presentation.models.TrainingImplP
 import com.count_out.presentation.screens.prime.Event
 import com.count_out.presentation.screens.prime.PrimeViewModel
 import com.count_out.presentation.screens.prime.ScreenState
+import com.count_out.presentation.screens.settings.SettingsEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -54,7 +54,6 @@ import javax.inject.Inject
     override fun routeEvent(event: Event) {
         when (event) {
             is TrainingEvent.BackScreen -> { navigate.backStack()}
-            is TrainingEvent.GetTraining -> { getTraining(event.id) }
             is TrainingEvent.UpdateTraining -> { updateTraining(event.training)}
             is TrainingEvent.CopyExercise -> { copyExercise(event.exercise) }
             is TrainingEvent.DelExercise -> { deleteExercise(event.exercise) }
@@ -66,24 +65,24 @@ import javax.inject.Inject
             is TrainingEvent.ShowBS -> { showBottomSheet(event.item) }
             is TrainingEvent.SetCollapsing -> { collapsingSet(event.item) }
             is TrainingEvent.UpdateSpeech -> { updateSpeechKit(event.item) }
+            is TrainingEvent.Init -> { init(event.item) }
         }
     }
-    var idTraining: Long = 0
+    fun init( item: Long){
+        getTraining(item)
+        getActivities()
+//        subscribeSequenceExercise()
+    }
 
     fun getTraining(id: Long) {
-        idTraining = id
         viewModelScope.launch(Dispatchers.IO) {
             getTrainingUC.execute( GetTrainingUC.Request(TrainingImplP(idTraining = id)))
                  .collect { submitState( it ) }
         }
+    }
+    fun getActivities() {
         viewModelScope.launch(Dispatchers.IO) {
             getActivitiesUC.execute( GetActivitiesUC.Request).collect { submitState( it ) }
-        }
-    }
-    private fun getTraining() {
-        viewModelScope.launch(Dispatchers.IO) {
-            getTrainingUC.execute( GetTrainingUC.Request(TrainingImplP(idTraining = idTraining)))
-                .collect { submitState( it ) }
         }
     }
     private fun updateTraining(training: Training){
@@ -95,43 +94,36 @@ import javax.inject.Inject
     private fun changeSequenceExercise(item: DataForChangeSequence){
         viewModelScope.launch(Dispatchers.IO) {
             changeSequenceExerciseUC.execute( ChangeSequenceExerciseUC.Request(item)).collect { submitState( it ) }
-            getTraining()
         }
     }
     private fun copyExercise(exercise: Exercise){
         viewModelScope.launch(Dispatchers.IO) {
             copyExerciseUC.execute( CopyExerciseUC.Request(exercise)).collect { submitState( it ) }
-            getTraining()
         }
     }
     private fun deleteExercise(exercise: Exercise){
         viewModelScope.launch(Dispatchers.IO) {
             delExerciseUC.execute( DeleteExerciseUC.Request(exercise)).collect { submitState( it ) }
-            getTraining()
         }
     }
     private fun updateExercise(exercise: Exercise){
         viewModelScope.launch(Dispatchers.IO) {
             updateExerciseUC.execute( UpdateExerciseUC.Request(exercise)).collect { submitState( it ) }
-            getTraining()
         }
     }
     private fun copySet(item: Set){
         viewModelScope.launch(Dispatchers.IO) {
             copySetUC.execute( CopySetUC.Request(item)).collect { submitState( it ) }
-            getTraining()
         }
     }
     private fun deleteSet(item: Set){
         viewModelScope.launch(Dispatchers.IO) {
             deleteSetUC.execute( DeleteSetUC.Request(item)).collect { submitState( it ) }
-            getTraining()
         }
     }
     private fun changeSet(item: Set){
         viewModelScope.launch(Dispatchers.IO) {
             changeSetUC.execute( UpdateSetUC.Request(item)).collect { submitState( it ) }
-            getTraining()
         }
     }
     private fun showBottomSheet(item: ShowBottomSheet){

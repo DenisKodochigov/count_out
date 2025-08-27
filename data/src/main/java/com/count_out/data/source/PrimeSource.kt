@@ -1,14 +1,19 @@
 package com.count_out.data.source
 
+import android.R.attr.data
 import com.count_out.data.models.throwable.ResultSource
 import com.count_out.data.models.throwable.ResultSource.Success
 import com.count_out.data.models.throwable.ThrowableDS
 import com.count_out.data.models.throwable.TypeSource
+import com.count_out.domain.entity.TypeRepo
+import com.count_out.domain.entity.throwable.ResultUC
+import com.count_out.domain.entity.throwable.ThrowableUC
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.filterNotNull
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 
@@ -26,6 +31,7 @@ abstract class PrimeSource {
             .flowOn(Dispatchers.IO)
             .catch { emit(ResultSource.Error(ThrowableDS.RequestFailed())) }
     }
+
 //
 //    fun wrapResult(content:()->TypeSource?): ResultSource<TypeSource> {
 //        return try {

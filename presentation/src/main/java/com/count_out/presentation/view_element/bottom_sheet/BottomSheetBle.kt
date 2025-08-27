@@ -30,7 +30,6 @@ import com.count_out.presentation.screens.settings.SettingsEvent
 import com.count_out.presentation.screens.settings.SettingsState
 import com.count_out.presentation.view_element.ModalBottomSheetApp
 import com.count_out.presentation.view_element.TextApp
-import com.count_out.presentation.view_element.icons.AnimateIcon
 import com.count_out.presentation.view_element.icons.IconSingle
 
 @Composable fun ShowBottomSheetBle(dataState: SettingsState, showBS: Boolean

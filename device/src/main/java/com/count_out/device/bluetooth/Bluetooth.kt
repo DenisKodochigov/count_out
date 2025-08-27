@@ -7,7 +7,6 @@ import com.count_out.data.models.throwable.TypeSource
 import com.count_out.device.bluetooth.models.BleConnectionImpl
 import com.count_out.device.bluetooth.models.ResultBle
 import com.count_out.device.bluetooth.models.ThrowableBle
-import com.count_out.domain.entity.Setting
 import com.count_out.domain.entity.enums.ConnectState
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow

@@ -31,6 +31,7 @@ sealed class TypeRepo {
     data class ActivitiesT(val item: List<Activity>): TypeRepo()
     data class ExerciseT(val item: Exercise): TypeRepo()
     data class ExercisesT(val item: List<Exercise>): TypeRepo()
+    data class SetViewIdT(val item: SetViewId): TypeRepo()
     data class RingT(val item: Ring): TypeRepo()
     data class RingsT(val item: List<Ring>): TypeRepo()
     data class RoundT(val item: Round): TypeRepo()

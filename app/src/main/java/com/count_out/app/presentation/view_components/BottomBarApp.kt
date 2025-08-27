@@ -17,8 +17,8 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.count_out.app.presentation.navigation.ScreenDestination
 import com.count_out.app.presentation.navigation.PlansDestination
+import com.count_out.app.presentation.navigation.ScreenDestination
 import com.count_out.app.presentation.navigation.navBottomScreens
 import com.count_out.app.presentation.theme.bottomBarShape
 import com.count_out.presentation.view_element.icons.IconSubscribe

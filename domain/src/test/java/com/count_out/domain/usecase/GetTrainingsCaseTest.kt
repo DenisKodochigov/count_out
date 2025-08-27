@@ -4,13 +4,9 @@ import com.count_out.domain.entity.workout.Training
 import com.count_out.domain.repository.plans.TrainingRepo
 import com.count_out.domain.use_case.plans.GetTrainingsUC
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
-import org.junit.Assert
 import org.junit.Test
 import org.mockito.kotlin.mock
-import org.mockito.kotlin.whenever
 
 class GetTrainingsCaseTest {
 

@@ -1,5 +1,6 @@
 package com.count_out.presentation.screens.training.exercise
 
+import android.util.Log
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
@@ -96,11 +97,9 @@ fun ListExercises(dataState: TrainingState, round: Round, modifier: Modifier = M
             onClickCopy = { dataState.event(TrainingEvent.CopyExercise(exercise))},
             onClickDelete = { dataState.event(TrainingEvent.DelExercise(exercise)) },
             onClickEdit = {
-//                dataState.exercise = exercise
                 dataState.item = exercise
                 dataState.event(ShowBS(dataState.showBS.copy(element = exercise.activity)))},
             onClickSpeech = {
-//                dataState.exercise = exercise
                 dataState.item = exercise
                 dataState.event(ShowBS(dataState.showBS.copy(element = exercise))) },
             onClickAddSet = { dataState.event( TrainingEvent.CopySet(

@@ -1,7 +1,5 @@
 package com.count_out.framework.room.source
 
-import android.database.sqlite.SQLiteConstraintException
-import android.util.Log
 import com.count_out.data.models.SpeechImplD
 import com.count_out.data.models.throwable.ResultSource
 import com.count_out.data.models.throwable.ThrowableDS
@@ -20,7 +18,7 @@ class SpeechSourceImpl @Inject constructor(private val dao: SpeechDao): SpeechSo
 
     override fun get(id: TypeSource): Flow<ResultSource<TypeSource>> {
         return if (id is TypeSource.LongT) {
-            dao.getF(id.item).filterNotNull().map {
+            dao.get(id.item).filterNotNull().map {
                 TypeSource.SpeechT(item = it.toSpeech()) }.resultSource()
         } else flow { emit(ResultSource.Error(ThrowableDS.NotValidType())) }
     }

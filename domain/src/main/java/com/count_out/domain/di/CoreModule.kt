@@ -33,16 +33,9 @@ import com.count_out.domain.repository.plans.SpeechKitRepo
 import com.count_out.domain.repository.plans.SpeechRepo
 import com.count_out.domain.repository.plans.TrainingRepo
 import com.count_out.domain.use_case.UseCase
-import com.count_out.domain.use_case.bluetooth.ClearCacheBleUC
-import com.count_out.domain.use_case.bluetooth.LastBleDeviceUC
-import com.count_out.domain.use_case.bluetooth.SelectDeviceBleUC
-import com.count_out.domain.use_case.bluetooth.StartScanBleUC
-import com.count_out.domain.use_case.bluetooth.StopScanBleUC
-import com.count_out.domain.use_case.other.CollapsingUC
 import com.count_out.domain.use_case.other.CountOutServiceBindUC
 import com.count_out.domain.use_case.other.CountOutServiceUnBindUC
 import com.count_out.domain.use_case.other.GetWeatherUC
-import com.count_out.domain.use_case.other.ShowBottomSheetUC
 import com.count_out.domain.use_case.plans.CopyTrainingUC
 import com.count_out.domain.use_case.plans.DeleteTrainingUC
 import com.count_out.domain.use_case.plans.GetStepPlanUC
@@ -51,10 +44,6 @@ import com.count_out.domain.use_case.plans.GetTrainingsUC
 import com.count_out.domain.use_case.plans.SaveLastUsePlanUC
 import com.count_out.domain.use_case.plans.SelectTrainingUC
 import com.count_out.domain.use_case.plans.UpdateTrainingUC
-import com.count_out.domain.use_case.plans.activity.AddActivityUC
-import com.count_out.domain.use_case.plans.activity.DeleteActivityUC
-import com.count_out.domain.use_case.plans.activity.GetActivitiesUC
-import com.count_out.domain.use_case.plans.activity.UpdateActivityUC
 import com.count_out.domain.use_case.plans.exercise.ChangeSequenceExerciseUC
 import com.count_out.domain.use_case.plans.exercise.CopyExerciseUC
 import com.count_out.domain.use_case.plans.exercise.DeleteExerciseUC
@@ -117,7 +106,6 @@ class CoreModule {
     fun provideShowBSCore(): ShowBSCore = ShowBSCore()
 
 
-
     @Singleton
     @Provides
     fun provideUseCaseConfiguration(): UseCase.Configuration = UseCase.Configuration(Dispatchers.IO)
@@ -159,12 +147,6 @@ class CoreModule {
         trainingRepo: TrainingRepo
     ): UpdateTrainingUC = UpdateTrainingUC(configuration, trainingRepo)
 
-    @Singleton
-    @Provides
-    fun provideChangeSequenceExerciseUseCase(
-        configuration: UseCase.Configuration,
-        repo: ExerciseRepo
-    ): ChangeSequenceExerciseUC = ChangeSequenceExerciseUC(configuration, repo)
     @Singleton
     @Provides
     fun provideCopyExerciseUseCase(

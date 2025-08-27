@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
     <string name="plans_workout">планы тренировок</string>
     <string name="plan_workout">план тренировки</string>
     <string name="training">тренировка</string>

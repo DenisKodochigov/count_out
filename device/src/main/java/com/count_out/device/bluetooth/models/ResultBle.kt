@@ -1,8 +1,8 @@
 package com.count_out.device.bluetooth.models
 
-import com.count_out.domain.entity.router.DeviceBle
 import com.count_out.domain.entity.enums.ConnectState
 import com.count_out.domain.entity.enums.StateBleConnecting
+import com.count_out.domain.entity.router.DeviceBle
 
 sealed class ResultBle {
     data class HeartRate(val value: Int): ResultBle()

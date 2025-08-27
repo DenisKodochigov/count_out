@@ -10,7 +10,6 @@ import com.count_out.domain.entity.workout.Training
 import com.count_out.presentation.screens.prime.Event
 
 sealed class TrainingEvent: Event {
-    data class GetTraining(val id: Long): TrainingEvent()
     data class DelTraining(val training: Training) : TrainingEvent()
     data class UpdateTraining(val training: Training) : TrainingEvent()
 
@@ -28,6 +27,7 @@ sealed class TrainingEvent: Event {
 
     data class UpdateSpeech(val item: SpeechKit): TrainingEvent()
     data object BackScreen : TrainingEvent()
+    data class Init(val item: Long): TrainingEvent()
 }
 
 //    data class WorkUpCollapsing(val item: Boolean): TrainingEvent()
