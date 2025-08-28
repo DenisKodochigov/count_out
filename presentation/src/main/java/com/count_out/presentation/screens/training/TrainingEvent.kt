@@ -1,6 +1,6 @@
 package com.count_out.presentation.screens.training
 
-import com.count_out.domain.entity.DataForChangeSequence
+import com.count_out.domain.entity.SetViewId
 import com.count_out.domain.entity.workout.Collapsing
 import com.count_out.domain.entity.workout.Exercise
 import com.count_out.domain.entity.workout.Set
@@ -16,7 +16,7 @@ sealed class TrainingEvent: Event {
     data class CopyExercise(val exercise: Exercise): TrainingEvent()
     data class DelExercise(val exercise: Exercise): TrainingEvent()
     data class UpdateExercise(val exercise: Exercise): TrainingEvent()
-    data class ChangeSequenceExercise(val item: DataForChangeSequence): TrainingEvent()
+    data class ChangeSequenceExercise(val item: SetViewId): TrainingEvent()
 
     data class CopySet(val item: Set): TrainingEvent()
     data class DeleteSet(val item: Set): TrainingEvent()

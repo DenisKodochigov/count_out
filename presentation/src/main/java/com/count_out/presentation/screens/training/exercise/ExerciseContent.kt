@@ -19,10 +19,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import com.count_out.domain.entity.SetViewId
 import com.count_out.domain.entity.workout.Exercise
 import com.count_out.domain.entity.workout.Round
 import com.count_out.presentation.R
-import com.count_out.presentation.models.DataForChangeSequenceImpl
 import com.count_out.presentation.models.Dimen.contourAll1
 import com.count_out.presentation.models.SetImplP
 import com.count_out.presentation.screens.training.TrainingEvent
@@ -46,15 +46,10 @@ fun ListExercises(dataState: TrainingState, round: Round, modifier: Modifier = M
         modifier = modifier,
         content = { item -> ElementColum( item, dataState = dataState) },
         onMoveItem = { from, to->
+            Log.d("KDS"," from=$from   to=$to")
             dataState.event(
                 TrainingEvent.ChangeSequenceExercise(
-                    item = DataForChangeSequenceImpl(
-                        trainingId = dataState.training?.idTraining ?: 0,
-                        roundId = round.idRound,
-                        ringId = 0,
-                        from = from,
-                        to = to )
-                ))
+                    item = SetViewId(roundId = round.idRound, from = from, to = to)))
         },)
     Spacer(modifier = Modifier.height(4.dp))
 }

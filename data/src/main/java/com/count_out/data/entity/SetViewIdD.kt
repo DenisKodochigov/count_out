@@ -4,12 +4,12 @@ import com.count_out.domain.entity.SetViewId
 
 class SetViewIdD (
     val roundId: Long = 0,
-    val viewId: Long = 0,
-    val newViewId: Long = 0,
+    val from: Int = 0,
+    val to: Int = 0,
 ){
     constructor(item: SetViewId): this(
         item.roundId,
-        item.viewId,
-        item.newViewId
+        item.from,
+        item.to
     )
 }

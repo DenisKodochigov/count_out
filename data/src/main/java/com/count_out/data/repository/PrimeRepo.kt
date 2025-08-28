@@ -18,7 +18,6 @@ import com.count_out.domain.entity.TypeRepo.ActivityT
 import com.count_out.domain.entity.TypeRepo.BleConnectStateT
 import com.count_out.domain.entity.TypeRepo.BooleanT
 import com.count_out.domain.entity.TypeRepo.CollapsingT
-import com.count_out.domain.entity.TypeRepo.DataForChangeSequenceT
 import com.count_out.domain.entity.TypeRepo.DeviceUIT
 import com.count_out.domain.entity.TypeRepo.DevicesUIT
 import com.count_out.domain.entity.TypeRepo.ExerciseT
@@ -166,7 +165,6 @@ abstract class PrimeRepo {
             is TypeSource.DevicesUIT -> DevicesUIT(item = value.item)
             is TypeSource.WeatherT -> WeatherT(item = value.item)
             is TypeSource.WeatherRequestT-> WeatherRequestT(item = value.item)
-            is TypeSource.DataForChangeSequenceT-> DataForChangeSequenceT(item = value.item)
             is TypeSource.NullT -> NullT
             is TypeSource.BleConnectStateT -> BleConnectStateT(item = value.item)
             is TypeSource.SetViewIdT -> NullT
@@ -202,7 +200,6 @@ abstract class PrimeRepo {
             is DevicesUIT -> TypeSource.DevicesUIT(item = value.item)
             is WeatherT -> TypeSource.WeatherT(item = value.item)
             is WeatherRequestT-> TypeSource.WeatherRequestT(item = value.item)
-            is DataForChangeSequenceT-> TypeSource.DataForChangeSequenceT(item = value.item)
             is NullT -> TypeSource.NullT
             is BleConnectStateT -> TypeSource.BleConnectStateT(item = value.item)
             is TypeRepo.SetViewIdT -> TypeSource.SetViewIdT(item = SetViewIdD(value.item))

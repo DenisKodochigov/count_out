@@ -9,7 +9,6 @@ import com.count_out.data.models.SetImplD
 import com.count_out.data.models.SpeechImplD
 import com.count_out.data.models.SpeechKitImplD
 import com.count_out.data.models.TrainingImplD
-import com.count_out.domain.entity.DataForChangeSequence
 import com.count_out.domain.entity.Setting
 import com.count_out.domain.entity.Settings
 import com.count_out.domain.entity.StepPlan
@@ -58,7 +57,6 @@ sealed class TypeSource {
     data class BleConnectStateT(val item: ConnectState): TypeSource()
     data class WeatherT(val item: Weather): TypeSource()
     data class WeatherRequestT(val item: WeatherRequest): TypeSource()
-    data class DataForChangeSequenceT(val item: DataForChangeSequence): TypeSource()
     data object NullT: TypeSource()
 
     fun toRepo(): TypeRepo = when(this){
@@ -90,7 +88,6 @@ sealed class TypeSource {
         is DevicesUIT -> TypeRepo.DevicesUIT(item = this.item)
         is WeatherT -> TypeRepo.WeatherT(item = this.item)
         is WeatherRequestT -> TypeRepo.WeatherRequestT(item = this.item)
-        is DataForChangeSequenceT -> TypeRepo.DataForChangeSequenceT(item = this.item)
         is BleConnectStateT -> TypeRepo.BleConnectStateT(item = this.item)
         NullT -> TypeRepo.NullT
         is SetViewIdT -> TypeRepo.NullT

@@ -43,11 +43,9 @@ class ExerciseSourceImpl @Inject constructor(
                                 } else setSource.copy(
                                     TypeSource.SetT(SetImplD(exerciseId = exerciseId)))
                             }
-                    }
-                    else ResultSource.Error(ThrowableDS.NotValidType())
+                    } else ResultSource.Error(ThrowableDS.NotValidType())
                 }
             } else ResultSource.Error(ThrowableDS.NotValidType())
-
         } catch (e: Exception) { ResultSource.Error(ThrowableDS.extract(e)) }
     }
 
@@ -64,14 +62,18 @@ class ExerciseSourceImpl @Inject constructor(
         } catch (e: Exception) { ResultSource.Error(ThrowableDS.extract(e)) }
     }
 
-    override fun setViewId(setViewId: TypeSource): ResultSource<TypeSource> {
+    override fun changeSequenceExercise(setViewId: TypeSource): ResultSource<TypeSource> {
         return try {
             if (setViewId is TypeSource.SetViewIdT) {
-                dao.setViewId(setViewId.item.roundId,
-                    setViewId.item.viewId,
-                    setViewId.item.newViewId).let{ result->
-                    if (result == 0) ResultSource.Error(ThrowableDS.RequestFailed())
-                    else ResultSource.Success(TypeSource.IntT(result))
+                val from = setViewId.item.from
+                val to = setViewId.item.to
+                val listExercise = dao.getExerciseRound(setViewId.item.roundId).toMutableList()
+                if (from > to) for ( id in to..< from){ listExercise[id].idView = id + 1 }
+                else for ( id in (from + 1)..to){ listExercise[id].idView = id - 1}
+                listExercise[from].idView = to
+                dao.updates(listExercise).let { result->
+                    if (result == listExercise.count()) ResultSource.Success(TypeSource.IntT(result))
+                    else ResultSource.Error(ThrowableDS.RequestFailed())
                 }
             } else ResultSource.Error(ThrowableDS.NotValidType())
         } catch (e: Exception) { ResultSource.Error(ThrowableDS.extract(e)) }
@@ -103,38 +105,3 @@ class ExerciseSourceImpl @Inject constructor(
         } catch (e: Exception) { ResultSource.Error(ThrowableDS.extract(e)) }
     }
 }
-//    override fun get(exercise: TypeSource): Flow<ResultSource<TypeSource>> {
-//        return try {
-//            if (exercise is TypeSource.ExerciseT) {
-//                dao.get(exercise.item.idExercise).map{ it?.let{
-//                TypeSource.ExerciseT(it.toExercise())}}.resultSource()
-//            } else flow { emit (ResultSource.Error(ThrowableDS.NotValidType())) }
-//        } catch(e: Exception) {
-//            flow { emit(ResultSource.Error(ThrowableDS.extract(e)))} }
-//    }
-//override fun getForRound(id: TypeSource): Flow<ResultSource<TypeSource>> =
-//    try {
-//        if (id is TypeSource.LongT) {
-//            dao.getForRound(id.item).map{ listExerciseRel->
-//                TypeSource.ExercisesT(listExerciseRel.map{ it.toExercise()}) }.resultSource()
-//        } else flow { emit (ResultSource.Error(ThrowableDS.NotValidType())) }
-//    } catch(e: Exception) {
-//        flow { emit(ResultSource.Error(ThrowableDS.extract(e)))} }
-//
-//override fun getForRing(id: TypeSource): Flow<ResultSource<TypeSource>> =
-//    try {
-//        if (id is TypeSource.LongT) {
-//            dao.getForRing(id.item).map{ listExerciseRel->
-//                TypeSource.ExercisesT(listExerciseRel.map{ it.toExercise()}) }.resultSource()
-//        } else flow { emit (ResultSource.Error(ThrowableDS.NotValidType())) }
-//    } catch(e: Exception) {
-//        flow { emit(ResultSource.Error(ThrowableDS.extract(e)))} }
-//
-//override fun getFilter(list: TypeSource): Flow<ResultSource<TypeSource>> =
-//    try{ if (list is TypeSource.LongsT) {
-//        dao.getFilter(list.item).map{ listExerciseRel->
-//            TypeSource.ExercisesT(listExerciseRel.map{ it.toExercise()})
-//        }.resultSource()
-//    } else flow { emit (ResultSource.Error(ThrowableDS.NotValidType())) }
-//    } catch(e: Exception) {
-//        flow { emit(ResultSource.Error(ThrowableDS.extract(e)))} }

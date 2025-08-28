@@ -46,7 +46,6 @@ sealed class TypeRepo {
     data class BleConnectStateT(val item: ConnectState): TypeRepo()
     data class WeatherT(val item: Weather): TypeRepo()
     data class WeatherRequestT(val item: WeatherRequest): TypeRepo()
-    data class DataForChangeSequenceT(val item: DataForChangeSequence): TypeRepo()
     data object NullT: TypeRepo()
     fun TypeRepo.toStepPlan(): TypeRepo{
         return if (this is PlanT) StepPlanT(item = GlobalValueApp.toStepPlan1(this.item))

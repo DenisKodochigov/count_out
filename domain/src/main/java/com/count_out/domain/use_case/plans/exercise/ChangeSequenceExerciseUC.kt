@@ -1,7 +1,7 @@
 package com.count_out.domain.use_case.plans.exercise
 
 import com.count_out.domain.core.plans.ExerciseCore
-import com.count_out.domain.entity.DataForChangeSequence
+import com.count_out.domain.entity.SetViewId
 import com.count_out.domain.entity.TypeRepo
 import com.count_out.domain.entity.throwable.ResultUC
 import com.count_out.domain.repository.plans.ExerciseRepo
@@ -14,8 +14,8 @@ class ChangeSequenceExerciseUC @Inject constructor(
 ): UseCase<ChangeSequenceExerciseUC.Request, ChangeSequenceExerciseUC.Response>(configuration)  {
 
     override fun method(request: Request): Flow<ResultUC<TypeRepo>> =
-        core.changeSequenceExercise(TypeRepo.DataForChangeSequenceT(request.item))
+        core.changeSequenceExercise(TypeRepo.SetViewIdT(request.item))
     override fun response(typeRepo: TypeRepo): Response = Response(typeRepo)
-    data class Request(val item: DataForChangeSequence): UseCase.Request
+    data class Request(val item: SetViewId): UseCase.Request
     data class Response(val training: TypeRepo): UseCase.Response
 }

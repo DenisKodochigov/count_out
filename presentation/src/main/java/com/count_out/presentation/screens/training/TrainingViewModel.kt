@@ -1,7 +1,7 @@
 package com.count_out.presentation.screens.training
 
 import androidx.lifecycle.viewModelScope
-import com.count_out.domain.entity.DataForChangeSequence
+import com.count_out.domain.entity.SetViewId
 import com.count_out.domain.entity.workout.Collapsing
 import com.count_out.domain.entity.workout.Exercise
 import com.count_out.domain.entity.workout.Set
@@ -91,7 +91,7 @@ import javax.inject.Inject
                 submitState( it ) }
         }
     }
-    private fun changeSequenceExercise(item: DataForChangeSequence){
+    private fun changeSequenceExercise(item: SetViewId){
         viewModelScope.launch(Dispatchers.IO) {
             changeSequenceExerciseUC.execute( ChangeSequenceExerciseUC.Request(item)).collect { submitState( it ) }
         }

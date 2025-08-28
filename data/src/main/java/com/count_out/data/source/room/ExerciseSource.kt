@@ -26,9 +26,5 @@ interface ExerciseSource {
     fun copy(exercise: TypeSource): ResultSource<TypeSource>
     fun del(exercise: TypeSource): ResultSource<TypeSource>
     fun update(exercise: TypeSource): ResultSource<TypeSource>
-    fun setViewId(setViewId: TypeSource): ResultSource<TypeSource>
+    fun changeSequenceExercise(setViewId: TypeSource): ResultSource<TypeSource>
 }
-//    fun get(exercise: TypeSource): Flow<ResultSource<TypeSource>>
-//    fun getForRound(id: TypeSource): Flow<ResultSource<TypeSource>>
-//    fun getForRing(id: TypeSource): Flow<ResultSource<TypeSource>>
-//    fun getFilter(list: TypeSource): Flow<ResultSource<TypeSource>>

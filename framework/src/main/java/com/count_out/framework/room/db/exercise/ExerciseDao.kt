@@ -14,13 +14,16 @@ interface ExerciseDao {
     fun add(item: ExerciseTable): Long
     @Update
     fun update( exercise: ExerciseTable): Int
+    @Update
+    fun updates( exercise: List<ExerciseTable>): Int
     @Query("DELETE FROM tb_exercise WHERE idExercise = :id")
     fun del(id: Long): Int
     @Query("UPDATE tb_exercise SET activityId = :activityId WHERE idExercise =:exerciseId")
     fun setActivity(exerciseId: Long, activityId: Long): Int
 
-    @Query("UPDATE tb_exercise SET idView = :newViewId WHERE idView =:viewId AND roundId=:roundId")
-    fun setViewId(roundId: Long, viewId: Long, newViewId: Long): Int
+    @Transaction
+    @Query("SELECT * FROM tb_exercise WHERE roundId = :id ORDER BY idView ASC")
+    fun getExerciseRound(id: Long): List<ExerciseTable>
 }
 
 //    @Query("SELECT max( idView) FROM tb_exercise WHERE roundId = :roundId")

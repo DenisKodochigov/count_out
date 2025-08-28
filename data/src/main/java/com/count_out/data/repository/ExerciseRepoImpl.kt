@@ -11,47 +11,15 @@ class ExerciseRepoImpl @Inject constructor(
     private val source: ExerciseSource): ExerciseRepo, PrimeRepo() {
 
     override fun del(exercise: TypeRepo): Flow<ResultUC<TypeRepo>> {
-        val typeSource = toTypeSource(exercise)
-        return wrapFlow(source.del(typeSource))
+        return wrapFlow(source.del(toTypeSource(exercise)))
     }
     override fun copy(exercise: TypeRepo): Flow<ResultUC<TypeRepo>> {
-        val typeSource = toTypeSource(exercise)
-        return wrapFlow(source.copy(typeSource))
+        return wrapFlow(source.copy(toTypeSource(exercise)))
     }
     override fun update(exercise: TypeRepo): Flow<ResultUC<TypeRepo>> {
-        val typeSource = toTypeSource(exercise)
-        return wrapFlow(source.update(typeSource))
+        return wrapFlow(source.update(toTypeSource(exercise)))
     }
-    override fun setViewId(setViewId: TypeRepo): Flow<ResultUC<TypeRepo>> {
-        return wrapFlow( source.setViewId(toTypeSource(setViewId)))
+    override fun changeSequenceExercise(setViewId: TypeRepo): Flow<ResultUC<TypeRepo>> {
+        return wrapFlow( source.changeSequenceExercise(toTypeSource(setViewId)))
     }
 }
-//override fun del(exercise: TypeRepo): Flow<ResultUC<TypeRepo>> {
-//    val typeSource = toTypeSource(exercise)
-//    return source.del(typeSource).nextActionOk { source.get(typeSource) }
-//}
-//override fun copy(exercise: TypeRepo): Flow<ResultUC<TypeRepo>> {
-//    val typeSource = toTypeSource(exercise)
-//    return source.copy(typeSource) .nextAction{ source.get(it)}
-//}
-//override fun update(exercise: TypeRepo): Flow<ResultUC<TypeRepo>> {
-//    val typeSource = toTypeSource(exercise)
-//    return source.update(typeSource).nextActionOk { source.get(typeSource) }
-//}
-//    override fun get(exercise: TypeRepo): Flow<ResultUC<TypeRepo>> =
-//        source.get(toTypeSource(exercise)).convertor()
-//    override fun getForRound(id: TypeRepo): Flow<ResultUC<TypeRepo>> =
-//        source.getForRound(toTypeSource(id)).convertor()
-//    override fun getForRing(id: TypeRepo): Flow<ResultUC<TypeRepo>> =
-//        source.getForRing(toTypeSource(id)).convertor()
-//    override fun getFilter(list: TypeRepo): Flow<ResultUC<TypeRepo>> =
-//        source.getFilter(toTypeSource(list)).convertor()
-//    fun getExercise(exercise: TypeRepo): Flow<ResultSource<TypeSource>>{
-//        return if (exercise is TypeRepo.ExerciseT){
-//            if (exercise.item.roundId != 0L)
-//                exerciseSource.getForRound(TypeSource.LongT(item = exercise.item.roundId))
-//            else if (exercise.item.ringId != 0L)
-//                exerciseSource.getForRing(TypeSource.LongT(item = exercise.item.roundId))
-//            else flow { emit(ResultSource.Error(ThrowableDS.extract(Exception("return null")))) }
-//        } else flow { emit(ResultSource.Error(ThrowableUC.extract(Exception("return null")))) }
-//    }
