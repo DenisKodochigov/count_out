@@ -5,6 +5,7 @@ import com.count_out.domain.entity.enums.Units
 import com.count_out.domain.entity.enums.Zone
 import com.count_out.domain.entity.workout.Parameter
 import com.count_out.domain.entity.workout.Set
+import com.count_out.domain.entity.workout.Speech
 import com.count_out.domain.entity.workout.SpeechKit
 
 data class SetImplP(
@@ -12,7 +13,6 @@ data class SetImplP(
     override val name: String = "",
     override val exerciseId: Long = 0,
     override val speechId: Long = 0,
-    override val speech: SpeechKit? = null,
     override val goal: Goal = Goal.Duration,
     override val weight: Parameter = ParameterImplP(value = 0.0, unit = Units.GR),
     override val distance: Parameter = ParameterImplP(value = 0.0, unit = Units.MT),
@@ -24,13 +24,14 @@ data class SetImplP(
     override val groupCount: String = "",
     override val rest: Parameter = ParameterImplP(value = 0.0, unit = Units.M),
     var positions: Pair<Int, Int> = Pair(0 , 0),
+    override val speechKit: SpeechKit,
 ): Set {
     constructor(set: Set) : this(
         idSet = set.idSet,
         name = set.name,
         exerciseId = set.exerciseId,
         speechId = set.speechId,
-        speech = set.speech,
+        speechKit = set.speechKit,
         goal = set.goal,
         weight = set.weight,
         distance = set.distance,
@@ -48,7 +49,7 @@ data class SetImplP(
         name = set.name,
         exerciseId = set.exerciseId,
         speechId = set.speechId,
-        speech = set.speech,
+        speechKit = set.speechKit,
         goal = set.goal,
         weight = set.weight,
         distance = set.distance,

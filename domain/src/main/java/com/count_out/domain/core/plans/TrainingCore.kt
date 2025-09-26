@@ -17,7 +17,6 @@ class TrainingCore @Inject constructor(private val repo: TrainingRepo): Core()  
     fun copy(training: TypeRepo): Flow<ResultUC<TypeRepo>>{
         return repo.copy(training) }
     fun update(training: TypeRepo): Flow<ResultUC<TypeRepo>>{
-    return repo.update(training) }
-    fun updates(training: TypeRepo): Flow<ResultUC<TypeRepo>>{
-        return repo.updates(training) }
+        return repo.update(training) }
+
 }

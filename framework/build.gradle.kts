@@ -4,7 +4,7 @@ plugins {
     alias(libs.plugins.androidLibrary)
     alias(libs.plugins.jetbrainsKotlinAndroid)
     alias(libs.plugins.serialization)
-    alias(libs.plugins.mannodermaus)
+//    alias(libs.plugins.mannodermaus)
     alias(libs.plugins.hilt)
     alias(libs.plugins.ksp)
 }
@@ -44,6 +44,9 @@ android {
         viewBinding = true
     }
     buildToolsVersion = "35.0.0"
+    kotlinOptions {
+        freeCompilerArgs = listOf("-XXLanguage:+PropertyParamAnnotationDefaultTargetMode")
+    }
     kotlin { compilerOptions{
         jvmTarget = JvmTarget.JVM_17
 //        freeCompilerArgs = listOf("-XXLanguage:+PropertyParamAnnotationDefaultTargetMode")

@@ -3,24 +3,24 @@ package com.count_out.domain.entity
 import com.count_out.domain.entity.enums.Goal
 import com.count_out.domain.entity.enums.Units
 import com.count_out.domain.entity.workout.Exercise
-import com.count_out.domain.entity.workout.Round
+import com.count_out.domain.entity.workout.Part
+import com.count_out.domain.entity.workout.Plan
 import com.count_out.domain.entity.workout.Set
-import com.count_out.domain.entity.workout.Training
 import kotlinx.coroutines.flow.MutableStateFlow
 
 object GlobalValueApp {
-    var planRun: MutableStateFlow<Training?> = MutableStateFlow(null)
+    var planRun: MutableStateFlow<Plan?> = MutableStateFlow(null)
 
-//
-    fun toStepPlan1(training: Training): StepPlan{
+    fun toStepPlan(plan: Plan): StepPlan{
         var numberExercise = 1
         var exerciseCount = 0
-
         val list: MutableList<StepPlan> = mutableListOf()
-        return training.let { tr->
-            tr.rounds.forEachIndexed { indR, round-> exerciseCount += round.exercise.count() }
-            tr.rounds.forEachIndexed { indR, round->
-                round.exercise.forEachIndexed { indE, exercise ->
+
+        return plan.parts.forEach { part->
+
+            part.rings.forEachIndexed { indR, ring-> exerciseCount += ring.exercises.count() }
+            part.rings.forEachIndexed { indR, ring->
+                ring.exercises.forEachIndexed { indE, exercise ->
                     if (list.isNotEmpty()){
                         val nextExercise = nextExercise(exercise)
                         for (ind in list.lastIndex downTo 0){
@@ -32,9 +32,9 @@ object GlobalValueApp {
                     exercise.sets.forEachIndexed { indS, set->
                         list.add(
                             object: StepPlan{
-                                override val idPlan: Long = tr.idTraining
-                                override val namePlan: String = tr.name
-                                override val round: Round? = round
+                                override val idPlan: Long = plan.idPlan
+                                override val namePlan: String = plan.name
+                                override val part: Part? = part
                                 override val exercise: Exercise? = exercise
                                 override var nextExercise: NextExercise? = null
                                 override val numberExercise: Int = numberExercise
@@ -51,7 +51,7 @@ object GlobalValueApp {
             object: StepPlan{
                 override val idPlan: Long = 1
                 override val namePlan: String = ""
-                override val round: Round? = null
+                override val part: Part? = null
                 override val exercise: Exercise? = null
                 override var nextExercise: NextExercise? = null
                 override val numberExercise: Int = numberExercise

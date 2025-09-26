@@ -11,13 +11,13 @@ class SetRepoImpl @Inject constructor(
     private val source: SetSource): SetRepo, PrimeRepo() {
 
     override fun copy(set: TypeRepo): Flow<ResultUC<TypeRepo>> {
-        return wrapFlow(source.copy(toTypeSource(set)))
+        return source.copy(toTypeSource(set)).wrapFlow()
     }
 
     override fun del(set: TypeRepo): Flow<ResultUC<TypeRepo>> {
-        return wrapFlow(source.del(toTypeSource(set)))
+        return source.del(toTypeSource(set)).wrapFlow()
     }
     override fun update(set: TypeRepo): Flow<ResultUC<TypeRepo>> {
-        return wrapFlow(source.update(toTypeSource(set)))
+        return source.update(toTypeSource(set)).wrapFlow()
     }
 }

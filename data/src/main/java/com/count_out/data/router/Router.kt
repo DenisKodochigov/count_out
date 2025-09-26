@@ -57,7 +57,7 @@ class Router(private val dataForServ: DataForServ) {
     }
     private fun initDataForWork(dataForServ: DataForServ): DataForWork {
         return DataForWork(
-            training = dataForServ.training,
+            plan = dataForServ.training,
             indexSet = dataForServ.indexSet,
             indexRound = dataForServ.indexRound,
             indexExercise = dataForServ.indexExercise,
@@ -105,7 +105,7 @@ class Router(private val dataForServ: DataForServ) {
                         accuracy = buffer.coordinate.value?.accuracy ?: 0f,
                         speed = buffer.coordinate.value?.speed ?: 0f,
                         heartRate = buffer.heartRate.value,
-                        idTraining = dataForWork.training.value?.idTraining ?: 0,
+                        idTraining = dataForWork.plan.value?.idPlan ?: 0,
                         phaseWorkout = buffer.phaseWorkout.value,
                         distance = 0f,
                         idSet = 0,

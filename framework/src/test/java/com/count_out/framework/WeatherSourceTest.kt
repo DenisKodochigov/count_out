@@ -1,6 +1,6 @@
 package com.count_out.framework
 
-import com.count_out.data.models.WeatherImpl
+import com.count_out.data.models.WeatherDb
 import com.count_out.framework.retrofit.weather.WeatherService
 import com.count_out.framework.retrofit.weather.entity.ResponseOpenMeteo
 import com.count_out.framework.retrofit.weather.entity.WeatherResponse
@@ -24,7 +24,7 @@ class WeatherSourceTest {
 //        Assertions.assertEquals(expectedWeather, result)
     }
 
-    private fun getWeather() = WeatherImpl(
+    private fun getWeather() = WeatherDb(
         time = 0,
         interval = 0,
         temperature2m = 0.0,

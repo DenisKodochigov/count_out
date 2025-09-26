@@ -24,23 +24,23 @@ class PlansConvertor @Inject constructor(): PrimeConvertor<UseCase.Response, Pla
         }
     }
     private fun converterGetTrainings(data: GetTrainingsUC.Response, state: MutableStateFlow<PlansState>): PlansState {
-        if (data.trainings is TypeRepo.PlansT) {
-            state.value = state.value.copy(trainings = (data.trainings as TypeRepo.PlansT).item) }
+        if (data.plans is TypeRepo.PlansT) {
+            state.value = state.value.copy(plans = (data.plans as TypeRepo.PlansT).item) }
         return state.value
     }
     private fun converterCopyTraining(data: CopyTrainingUC.Response, state: MutableStateFlow<PlansState>): PlansState {
-        if (data.trainings is TypeRepo.PlansT)
-            state.value = state.value.copy( trainings = (data.trainings as TypeRepo.PlansT).item)
+        if (data.plans is TypeRepo.PlansT)
+            state.value = state.value.copy( plans = (data.plans as TypeRepo.PlansT).item)
         return state.value
     }
     private fun converterDeleteTraining(data: DeleteTrainingUC.Response, state: MutableStateFlow<PlansState>): PlansState {
-        if (data.trainings is TypeRepo.PlansT)
-            state.value = state.value.copy( trainings = (data.trainings as TypeRepo.PlansT).item)
+        if (data.plans is TypeRepo.PlansT)
+            state.value = state.value.copy( plans = (data.plans as TypeRepo.PlansT).item)
         return state.value
     }
     private fun converterUpdatesTraining(data: UpdatesTrainingUC.Response, state: MutableStateFlow<PlansState>): PlansState {
-        if (data.training is TypeRepo.PlansT)
-            state.value = state.value.copy( trainings = (data.training as TypeRepo.PlansT).item)
+        if (data.plan is TypeRepo.PlansT)
+            state.value = state.value.copy( plans = (data.plan as TypeRepo.PlansT).item)
         return state.value
     }
     private fun converterSelectTraining(data: SelectTrainingUC.Response, state: MutableStateFlow<PlansState>): PlansState {
@@ -49,6 +49,6 @@ class PlansConvertor @Inject constructor(): PrimeConvertor<UseCase.Response, Pla
         return state.value
 }
     private fun converterOther(state: MutableStateFlow<PlansState>): PlansState {
-        return state.value.copy(trainings = emptyList())
+        return state.value.copy(plans = emptyList())
     }
 }

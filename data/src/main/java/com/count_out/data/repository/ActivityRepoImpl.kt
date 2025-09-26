@@ -13,11 +13,11 @@ class ActivityRepoImpl @Inject constructor( private val source: ActivitySource):
         source.get(toTypeSource(activity)).convertor()
 
     override fun del(activity: TypeRepo): Flow<ResultUC<TypeRepo>> =
-        wrapFlow(source.del(toTypeSource(activity)))
+        source.del(toTypeSource(activity)).wrapFlow()
 
     override fun copy(activity: TypeRepo): Flow<ResultUC<TypeRepo>> =
-        wrapFlow(source.copy(toTypeSource(activity)))
+        source.copy(toTypeSource(activity)).wrapFlow()
 
     override fun update(activity: TypeRepo): Flow<ResultUC<TypeRepo>> =
-        wrapFlow(source.update(toTypeSource(activity)))
+        source.update(toTypeSource(activity)).wrapFlow()
 }

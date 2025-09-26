@@ -11,15 +11,15 @@ class ExerciseRepoImpl @Inject constructor(
     private val source: ExerciseSource): ExerciseRepo, PrimeRepo() {
 
     override fun del(exercise: TypeRepo): Flow<ResultUC<TypeRepo>> {
-        return wrapFlow(source.del(toTypeSource(exercise)))
+        return source.del(toTypeSource(exercise)).wrapFlow()
     }
     override fun copy(exercise: TypeRepo): Flow<ResultUC<TypeRepo>> {
-        return wrapFlow(source.copy(toTypeSource(exercise)))
+        return source.copy(toTypeSource(exercise)).wrapFlow()
     }
     override fun update(exercise: TypeRepo): Flow<ResultUC<TypeRepo>> {
-        return wrapFlow(source.update(toTypeSource(exercise)))
+        return source.update(toTypeSource(exercise)).wrapFlow()
     }
     override fun changeSequenceExercise(setViewId: TypeRepo): Flow<ResultUC<TypeRepo>> {
-        return wrapFlow( source.changeSequenceExercise(toTypeSource(setViewId)))
+        return source.changeSequenceExercise(toTypeSource(setViewId)).wrapFlow()
     }
 }

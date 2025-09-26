@@ -1,6 +1,6 @@
 package com.count_out.domain.use_case.settings
 
-import com.count_out.domain.entity.Setting
+import com.count_out.domain.entity.Settings
 import com.count_out.domain.entity.TypeRepo
 import com.count_out.domain.entity.throwable.ResultUC
 import com.count_out.domain.repository.plans.SettingsRepo
@@ -13,9 +13,9 @@ class UpdateSettingUC @Inject constructor(
 ): UseCase<UpdateSettingUC.Request, UpdateSettingUC.Response>(configuration)  {
 
     override fun method(request: Request): Flow<ResultUC<TypeRepo>> =
-        repo.saveSetting(TypeRepo.SettingT(request.setting))
+        repo.saveSetting(TypeRepo.SettingsT(request.setting))
     override fun response(typeRepo: TypeRepo): Response = Response(typeRepo)
-    data class Request(val setting: Setting): UseCase.Request
+    data class Request(val setting: Settings): UseCase.Request
     data class Response(val setting: TypeRepo): UseCase.Response
 }
 //    fun implementation(request: Request): Flow<ResultUC<Response>> =

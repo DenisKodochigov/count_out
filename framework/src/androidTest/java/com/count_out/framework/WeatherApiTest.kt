@@ -1,6 +1,6 @@
 package com.count_out.framework
 
-import com.count_out.data.models.WeatherImpl
+import com.count_out.data.models.WeatherDb
 import com.count_out.framework.retrofit.weather.WeatherService
 import com.count_out.framework.retrofit.weather.source.WeatherSourceImpl
 import com.squareup.moshi.Moshi
@@ -22,7 +22,7 @@ class WeatherApiTest {
     companion object{
         private lateinit var weatherService: WeatherService
         private lateinit var source: WeatherSourceImpl
-        private lateinit var expected: WeatherImpl
+        private lateinit var expected: WeatherDb
 
         @BeforeAll
         @JvmStatic
@@ -47,7 +47,7 @@ class WeatherApiTest {
         @JvmStatic
         internal fun afterAll() {  }
 
-        private fun createExpectedWeather() = WeatherImpl(
+        private fun createExpectedWeather() = WeatherDb(
             time =  System.currentTimeMillis(),
             interval = 0,
             temperature2m = 0.0,

@@ -1,6 +1,6 @@
 package com.count_out.framework.retrofit.weather.entity
 
-import com.count_out.data.models.WeatherImpl
+import com.count_out.data.models.WeatherDb
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
@@ -24,7 +24,7 @@ data class WeatherResponse(
     @param:Json(name = "wind_direction_10m")  val windDirection10m: Int = 0,
     @param:Json(name = "wind_gusts_10m")  val windGusts10m: Double = 0.0,
 ){
-    fun toWeatherSource() = WeatherImpl(
+    fun toWeatherSource() = WeatherDb(
         time = this.time.toLong(),
         rain = this.rain,
         isDay = this.isDay,

@@ -5,11 +5,11 @@ import com.count_out.domain.entity.TypeRepo
 import com.count_out.domain.entity.throwable.ResultUC
 import com.count_out.domain.repository.LocationRepo
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOf
 import javax.inject.Inject
 
 class LocationRepoImpl @Inject constructor(private val locationSource: LocationSource): LocationRepo {
     override fun getLocation(): Flow<ResultUC<TypeRepo>> {
-        return flow { emit(ResultUC.Success(TypeRepo.BooleanT(true))) }
+        return flowOf(ResultUC.Success(TypeRepo.BooleanT(true)))
     }
 }

@@ -1,6 +1,6 @@
 package com.count_out.domain.core
 
-import com.count_out.domain.entity.Setting
+import com.count_out.domain.entity.Settings
 import com.count_out.domain.entity.TypeRepo
 import com.count_out.domain.entity.throwable.ResultUC
 import com.count_out.domain.entity.throwable.ThrowableUC
@@ -16,7 +16,7 @@ import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 class BluetoothCore @Inject constructor(
-    private val repo: BluetoothRepo, private val repoSet: SettingsRepo): Core() {
+    private val repo: BluetoothRepo, private val repoSetting: SettingsRepo): Core() {
 
     val lastBleAddress = MutableStateFlow("")
 
@@ -55,11 +55,11 @@ class BluetoothCore @Inject constructor(
             if (stopScanning is ResultUC.Error) flow { emit(stopScanning)}
             else{
                 if (device is TypeRepo.DeviceUIT) {
-                    val adr = TypeRepo.SettingT(Setting.BleAddress(device.item.address))
-                    val name = TypeRepo.SettingT(Setting.BleName(device.item.name))
                     combine(
-                        repoSet.saveSetting(adr),
-                        repoSet.saveSetting(name)
+                        repoSetting.saveSetting(
+                            TypeRepo.SettingsT(Settings.NameBle(device.item.name))),
+                        repoSetting.saveSetting(
+                            TypeRepo.SettingsT(Settings.AddressBle(device.item.address))),
                     ) { f1, f2->
                         f1 as? ResultUC.Error ?: if (f2 is ResultUC.Error) f2
                         else {
@@ -70,7 +70,6 @@ class BluetoothCore @Inject constructor(
                 } else flow { emit(ResultUC.Error(throwable = ThrowableUC.NotValidType())) }
             }
         }
-
     }
     fun getStateBle(): Flow<ResultUC<TypeRepo>>{
         return repo.getStateBle() }

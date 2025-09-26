@@ -1,7 +1,7 @@
 package com.count_out.presentation.screens.settings
 
 import androidx.lifecycle.viewModelScope
-import com.count_out.domain.entity.Setting
+import com.count_out.domain.entity.Settings
 import com.count_out.domain.entity.router.DeviceBle
 import com.count_out.domain.entity.workout.Activity
 import com.count_out.domain.entity.workout.Collapsing
@@ -106,7 +106,7 @@ class SettingViewModel @Inject constructor(
     private fun getSettings() {
         viewModelScope.launch(Dispatchers.IO) {
             getSettings.execute(GetSettingsUC.Request).collect { submitState( it ) } } }
-    private fun updateSetting(setting: Setting) {
+    private fun updateSetting(setting: Settings) {
         viewModelScope.launch(Dispatchers.IO) {
             updateSetting.execute(UpdateSettingUC.Request(setting)).collect { submitState( it ) } } }
     private fun startScanBle() {

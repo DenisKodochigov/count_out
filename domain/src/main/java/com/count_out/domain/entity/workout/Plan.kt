@@ -1,0 +1,10 @@
+package com.count_out.domain.entity.workout
+
+interface Plan: Element {
+    val idPlan: Long
+    val speechId: Long
+    val name: String
+    val amountActivity: Int
+    val parts: List<Part>
+    val speechKit: SpeechKit
+}

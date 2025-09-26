@@ -35,7 +35,7 @@ class Work @Inject constructor(
                     dataForWork.empty()
                     stop()
                 } }
-            runWorkOut.runWorkOut(dataForWork, dataFromWork)
+//            runWorkOut.runWorkOut(dataForWork, dataFromWork)
         }
     }
     private fun getTick( dataFromWork: DataFromWork ){

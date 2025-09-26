@@ -57,7 +57,7 @@ import java.math.RoundingMode
     }
 }
 @Composable fun ExecuteWorkoutScreenLayout(dataState: ExecuteState){
-    if (dataState.showBS.training) BottomSheetSaveTraining(dataState)
+    if (dataState.showBS.plan) BottomSheetSaveTraining(dataState)
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -108,7 +108,8 @@ import java.math.RoundingMode
 //        Text(text = "Screen Execute ${typography.titleLarge.fontFamily}", style = typography.titleLarge)
         Button(onClick = {
 //            Log.d("KDS","AdditionalInformation ${dataState.stepTraining}")
-            dataState.event(ExecuteEvent.ShowBS(dataState.showBS))}) { Text(text = "Show")}
+//            dataState.event(ExecuteEvent.ShowBS(dataState.showBS))
+        }) { Text(text = "Show")}
     }
 }
 @Composable fun ExerciseInfo(dataState: ExecuteState) {

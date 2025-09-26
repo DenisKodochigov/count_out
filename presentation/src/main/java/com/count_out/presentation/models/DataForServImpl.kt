@@ -3,11 +3,11 @@ package com.count_out.presentation.models
 import com.count_out.domain.entity.bluetooth.BleConnection
 import com.count_out.domain.entity.enums.RunningState
 import com.count_out.domain.entity.router.DataForServ
-import com.count_out.domain.entity.workout.Training
+import com.count_out.domain.entity.workout.Plan
 import kotlinx.coroutines.flow.MutableStateFlow
 
 data class DataForServImpl(
-    override var training: MutableStateFlow<Training?> = MutableStateFlow(null),
+    override var training: MutableStateFlow<Plan?> = MutableStateFlow(null),
     override var runningState: MutableStateFlow<RunningState> = MutableStateFlow(RunningState.Stopped),
     override var enableSpeechDescription: MutableStateFlow<Boolean> = MutableStateFlow(true),
     override val idSetChangeInterval: MutableStateFlow<Long> = MutableStateFlow(0),

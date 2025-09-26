@@ -20,6 +20,7 @@ import com.count_out.app.presentation.navigation.backScreenDestination
 import com.count_out.app.presentation.navigation.navigateToScreen
 import com.count_out.app.presentation.theme.AppTheme
 import com.count_out.app.presentation.view_components.BottomBarApp
+import com.count_out.domain.entity.enums.PartName
 import com.count_out.domain.entity.enums.Units
 
 @OptIn(ExperimentalComposeUiApi::class, ExperimentalMaterial3Api::class)
@@ -32,6 +33,7 @@ fun StartApp() {
         val navController = rememberNavController()
         val currentScreen = navController.backScreenDestination()
         initUnits()
+        initPartName()
         Scaffold(
             modifier = Modifier.Companion.semantics { testTagsAsResourceId = true },
             topBar = {
@@ -74,7 +76,11 @@ fun initUnits(){
     Units.KG.id = R.string.kg
     Units.GR.id = R.string.gr
 }
-
+fun initPartName(){
+    PartName.WorkUp.idName = R.string.work_up
+    PartName.WorkOut.idName = R.string.work_out
+    PartName.WorkDown.idName = R.string.work_down
+}
 @Preview
 @Composable
 fun StartAppPreview(){

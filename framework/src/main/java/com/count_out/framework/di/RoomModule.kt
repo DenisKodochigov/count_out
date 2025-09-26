@@ -7,14 +7,14 @@ import androidx.sqlite.db.SupportSQLiteDatabase
 import com.count_out.framework.room.AppDataBase
 import com.count_out.framework.room.db.activity.ActivityDao
 import com.count_out.framework.room.db.exercise.ExerciseDao
+import com.count_out.framework.room.db.old.settings.SettingDao
+import com.count_out.framework.room.db.part.PartDao
+import com.count_out.framework.room.db.plan.PlanDao
 import com.count_out.framework.room.db.ring.RingDao
-import com.count_out.framework.room.db.round.RoundDao
-import com.count_out.framework.room.db.set.SetDao
-import com.count_out.framework.room.db.settings.SettingDao
 import com.count_out.framework.room.db.speech.SpeechDao
 import com.count_out.framework.room.db.speech_kit.SpeechKitDao
-import com.count_out.framework.room.db.training.TrainingDao
 import com.count_out.framework.room.db.traking.TrackingDao
+import com.count_out.framework.room.db.set.SetDao
 import com.count_out.framework.room.entity.prepopulateRealDb
 import com.count_out.framework.room.entity.prepopulateTestDb
 import dagger.Module
@@ -72,13 +72,13 @@ class RoomModule {
 
     @Singleton
     @Provides
-    fun provideTrainingDao(appDatabase: AppDataBase): TrainingDao = appDatabase.trainingDao()
+    fun providePlanDao(appDatabase: AppDataBase): PlanDao = appDatabase.planDao()
     @Singleton
     @Provides
-    fun provideRoundDao(appDatabase: AppDataBase): RoundDao = appDatabase.roundDao()
+    fun providePartDao(appDatabase: AppDataBase): PartDao = appDatabase.partDao()
     @Singleton
     @Provides
-    fun provideRingDao(appDatabase: AppDataBase): RingDao = appDatabase.ringDao()
+    fun provideRoundDao(appDatabase: AppDataBase): RingDao = appDatabase.ringDao()
     @Singleton
     @Provides
     fun provideExerciseDao(appDatabase: AppDataBase): ExerciseDao = appDatabase.exerciseDao()

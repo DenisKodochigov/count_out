@@ -2,11 +2,11 @@ package com.count_out.domain.entity.router
 
 import com.count_out.domain.entity.bluetooth.BleConnection
 import com.count_out.domain.entity.enums.RunningState
-import com.count_out.domain.entity.workout.Training
+import com.count_out.domain.entity.workout.Plan
 import kotlinx.coroutines.flow.MutableStateFlow
 
 interface DataForServ {
-    var training: MutableStateFlow<Training?>
+    var training: MutableStateFlow<Plan?>
     var runningState: MutableStateFlow<RunningState>
     var enableSpeechDescription: MutableStateFlow<Boolean>
     val idSetChangeInterval: MutableStateFlow<Long>

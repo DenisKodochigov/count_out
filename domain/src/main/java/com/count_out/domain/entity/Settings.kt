@@ -1,7 +1,7 @@
 package com.count_out.domain.entity
 
-interface Settings {
-    val speechDescription: Boolean
-    val addressBle: String
-    val nameBle: String
+sealed class Settings {
+    data class SpeechDescription(val item: Boolean) : Settings()
+    data class AddressBle(val item: String) : Settings()
+    data class NameBle(val item: String) : Settings()
 }

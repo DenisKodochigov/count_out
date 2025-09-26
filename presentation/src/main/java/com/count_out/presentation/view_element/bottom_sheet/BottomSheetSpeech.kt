@@ -22,33 +22,32 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.count_out.domain.entity.workout.Element
 import com.count_out.domain.entity.workout.Exercise
-import com.count_out.domain.entity.workout.Round
+import com.count_out.domain.entity.workout.Part
 import com.count_out.domain.entity.workout.Set
-import com.count_out.domain.entity.workout.SpeechKit
-import com.count_out.domain.entity.workout.Training
+import com.count_out.domain.entity.workout.Plan
+import com.count_out.domain.entity.workout.Ring
+import com.count_out.domain.entity.workout.Speech
 import com.count_out.presentation.R
 import com.count_out.presentation.models.BottomSheetInterface
 import com.count_out.presentation.models.Dimen
-import com.count_out.presentation.models.SpeechImplP
-import com.count_out.presentation.models.SpeechKitImplP
 import com.count_out.presentation.models.TypeKeyboard
-import com.count_out.presentation.screens.training.TrainingEvent
-import com.count_out.presentation.screens.training.TrainingEvent.ShowBS
-import com.count_out.presentation.screens.training.TrainingState
+import com.count_out.presentation.screens.training.PlanEvent
+import com.count_out.presentation.screens.training.PlanEvent.ShowBS
+import com.count_out.presentation.screens.training.PlanState
 import com.count_out.presentation.view_element.ButtonConfirm
 import com.count_out.presentation.view_element.ModalBottomSheetApp
 import com.count_out.presentation.view_element.TextApp
 import com.count_out.presentation.view_element.TextFieldApp
 
 @Composable fun ShowBottomSheetSpeech(
-    dataState: TrainingState, showBS: Boolean, idString: Int, item: Element? = null
+    dataState: PlanState, showBS: Boolean, idString: Int, item: Element? = null
 ){
     if (showBS && dataState.item == item) {
         dataState.nameSection = stringResource(id = idString)
         dataState.onDismiss =
             { dataState.event(ShowBS(dataState.showBS.copy(element = item)))}
         dataState.onConfirmation = { speech, item1 ->
-            dataState.event(TrainingEvent.UpdateSpeech(speech as SpeechKit))
+            dataState.event(PlanEvent.UpdateSpeech(speech as Speech))
             dataState.event(ShowBS(dataState.showBS.copy(element = item)))
         }
         BottomSheetSpeech(dataState)
@@ -70,18 +69,19 @@ import com.count_out.presentation.view_element.TextFieldApp
 
 fun bottomSheetStateNew(itemSpeech: BottomSheetInterface): BottomSheetState {
     val speech = when (itemSpeech.item) {
-        is Training -> (itemSpeech.item as Training).speech
-        is Exercise -> (itemSpeech.item as Exercise).speech
-        is Round -> (itemSpeech.item as Round).speech
-        is Set -> (itemSpeech.item as Set).speech
+        is Plan -> (itemSpeech.item as Plan).speechKit
+        is Part -> (itemSpeech.item as Part).speechKit
+        is Ring -> (itemSpeech.item as Ring).speechKit
+        is Exercise -> (itemSpeech.item as Exercise).speechKit
+        is Set -> (itemSpeech.item as Set).speechKit
         else -> null
     }
     return BottomSheetState(
         enteredBeforeStart = mutableStateOf( speech?.beforeStart?.message ?: ""),
-        enteredBeforeEnd = mutableStateOf( speech?.beforeEnd?.message ?: "" ),
-        enteredAfterStart = mutableStateOf( speech?.afterStart?.message ?: "" ),
-        enteredAfterEnd = mutableStateOf( speech?.afterEnd?.message ?: "" ),
-        speechKit= speech ,
+        enteredBeforeEnd = mutableStateOf( speech?.afterStart?.message ?: ""),
+        enteredAfterStart = mutableStateOf( speech?.beforeEnd?.message ?: ""),
+        enteredAfterEnd = mutableStateOf( speech?.afterEnd?.message ?: ""),
+        speechKit= speech,
 //        listSpeech = itemSpeech.listSpeech,
         nameSection = itemSpeech.nameSection,
         item = itemSpeech.item,
@@ -134,16 +134,7 @@ fun bottomSheetStateNew(itemSpeech: BottomSheetInterface): BottomSheetState {
 }
 @Composable fun ButtonOK(uiState: BottomSheetState) {
     ButtonConfirm(onConfirm = {
-        uiState.onConfirmation(
-            SpeechKitImplP(
-                idSpeechKit = uiState.speechKit?.idSpeechKit ?: 0,
-                beforeStart = (uiState.speechKit?.beforeStart?.let { SpeechImplP(it) } ?: SpeechImplP()).copy(message = uiState.enteredBeforeStart.value),
-                afterStart = (uiState.speechKit?.afterStart?.let { SpeechImplP(it) } ?: SpeechImplP()).copy(message = uiState.enteredAfterStart.value),
-                beforeEnd = (uiState.speechKit?.beforeEnd?.let { SpeechImplP(it) } ?: SpeechImplP()).copy(message = uiState.enteredBeforeEnd.value),
-                afterEnd = (uiState.speechKit?.afterEnd?.let { SpeechImplP(it) } ?: SpeechImplP()).copy(message = uiState.enteredAfterEnd.value)
-            ),
-            uiState.item
-        )
+        uiState.speechKit?.let { uiState.onConfirmation( it, uiState.item)}
     })
 }
 

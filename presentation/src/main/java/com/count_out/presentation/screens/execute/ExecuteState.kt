@@ -9,7 +9,6 @@ import com.count_out.domain.entity.enums.RunningState
 import com.count_out.domain.entity.router.DeviceBle
 import com.count_out.domain.entity.workout.ShowBottomSheet
 import com.count_out.presentation.models.TickTimeImplP
-import com.count_out.presentation.models.TrainingImplP
 import com.count_out.presentation.screens.prime.DataState
 import com.count_out.presentation.screens.prime.Event
 import javax.inject.Singleton
@@ -30,8 +29,7 @@ data class ExecuteState(
     val bleConnectState: ConnectState = ConnectState.NOT_CONNECTED,
 
     val coordinate: Coordinate? = null,
-
-    val showBS: ShowBottomSheet = ShowBottomSheet(element = TrainingImplP()),
+    val showBS: ShowBottomSheet = ShowBottomSheet(),
 
     @Stable var startTime: Long = 0L,
     override val event: (Event) -> Unit,

@@ -13,15 +13,18 @@ import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 
 abstract class PrimeSource {
+    inline fun <reified TS : TypeSource> ResultSource<TypeSource>.getTyped(): TS? =
+        (this as? ResultSource.Success)?.data as? TS
+
     //###################################################################################
-    fun Flow<TypeSource?>.resultSource(): Flow<ResultSource<TypeSource>> {
-        var lastValue: TypeSource? = null
-        return this.filterNotNull().filter { it != lastValue }
-            .map {
-                lastValue = it
-                Success(it) as ResultSource<TypeSource>
-            }
-            .flowOn(Dispatchers.IO)
-            .catch { emit(ResultSource.Error(ThrowableDS.RequestFailed())) }
-    }
+//    fun Flow<TypeSource?>.resultSource(): Flow<ResultSource<TypeSource>> {
+//        var lastValue: TypeSource? = null
+//        return this.filter { it != lastValue }
+//            .map {
+//                lastValue = it
+//                ResultSource.Success(it) as ResultSource<TypeSource>
+//            } ResultUC
+//            .flowOn(Dispatchers.IO)
+//            .catch { emit(ResultSource.Error(ThrowableDS.RequestFailed())) }
+//    }
 }

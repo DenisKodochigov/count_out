@@ -1,7 +1,6 @@
 package com.count_out.domain.use_case.plans
 
 import com.count_out.domain.entity.GlobalValueApp
-import com.count_out.domain.entity.GlobalValueApp.toStepPlan1
 import com.count_out.domain.entity.TypeRepo
 import com.count_out.domain.entity.TypeRepo.NullT.toStepPlan
 import com.count_out.domain.entity.throwable.ResultUC
@@ -26,9 +25,9 @@ class GetStepPlanUC @Inject constructor(
 ): UseCase<GetStepPlanUC.Request, GetStepPlanUC.Response>(configuration)  {
 
     override fun method(request: Request): Flow<ResultUC<TypeRepo>> {
-        val result = GlobalValueApp.planRun.map { training ->
-            training?.let {
-                ResultUC.Success( TypeRepo.StepPlanT(item = toStepPlan1(it))) }
+        val result = GlobalValueApp.planRun.map { plan ->
+            plan?.let {
+                ResultUC.Success( TypeRepo.StepPlanT(item = GlobalValueApp.toStepPlan(it))) }
                 ?: exceptionNull
         }
 
@@ -54,8 +53,8 @@ class GetStepPlanUC @Inject constructor(
 //
 //    override fun implementation(request: Request): Flow<ResultUC<Response>> {
 //
-//        val result = GlobalValueApp.planRun.map { training ->
-//            training?.let {
+//        val result = GlobalValueApp.planRun.map { plan ->
+//            plan?.let {
 //                ResultUC.Success( TypeRepo.StepPlanMy(item = toStepPlan1(it))) }
 //                ?: exceptionNull
 //        }

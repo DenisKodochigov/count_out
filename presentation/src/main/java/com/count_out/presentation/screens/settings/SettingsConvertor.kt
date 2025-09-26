@@ -11,6 +11,7 @@ import com.count_out.domain.use_case.other.ShowBottomSheetUC
 import com.count_out.domain.use_case.plans.activity.GetActivitiesUC
 import com.count_out.domain.use_case.settings.GetSettingsUC
 import com.count_out.domain.use_case.settings.UpdateSettingUC
+import com.count_out.presentation.models.ActivityImplP
 import com.count_out.presentation.screens.prime.PrimeConvertor
 import kotlinx.coroutines.flow.MutableStateFlow
 import javax.inject.Inject
@@ -40,7 +41,8 @@ class SettingsConvertor @Inject constructor():
     }
     private fun converterLocal(data: GetActivitiesUC.Response, state: MutableStateFlow<SettingsState>): SettingsState{
         if (data.activity is TypeRepo.ActivitiesT)
-            state.value = state.value.copy( activities = (data.activity as TypeRepo.ActivitiesT).item)
+            state.value = state.value.copy(
+                activities = (data.activity as TypeRepo.ActivitiesT).item.map { it as ActivityImplP})
         return state.value
     }
     private fun converterLocal(data: UpdateSettingUC.Response, state: MutableStateFlow<SettingsState>): SettingsState{

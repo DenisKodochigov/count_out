@@ -7,7 +7,7 @@ import androidx.room.Query
 @Dao
 interface TrackingDao {
     @Insert
-    fun addRecordMetric(item: TemporaryTable): Long
+    fun addRecordMetric(item: TemporaryTb): Long
 
     @Query("DELETE FROM tb_temporary")
     fun clearTemporaryData()
@@ -16,8 +16,8 @@ interface TrackingDao {
     fun countTemporary(): Int
     
     @Query("SELECT * FROM tb_temporary LIMIT :limit OFFSET :offset")
-    fun selectNRecord(limit: Int, offset: Int): List<TemporaryTable>
+    fun selectNRecord(limit: Int, offset: Int): List<TemporaryTb>
 
     @Insert
-    fun addWorkout(workout: WorkoutTable): Long
+    fun addWorkout(workout: TrackingTb): Long
 }

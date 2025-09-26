@@ -21,13 +21,13 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.count_out.domain.entity.SetViewId
 import com.count_out.domain.entity.workout.Exercise
-import com.count_out.domain.entity.workout.Round
+import com.count_out.domain.entity.workout.Ring
 import com.count_out.presentation.R
 import com.count_out.presentation.models.Dimen.contourAll1
 import com.count_out.presentation.models.SetImplP
-import com.count_out.presentation.screens.training.TrainingEvent
-import com.count_out.presentation.screens.training.TrainingEvent.ShowBS
-import com.count_out.presentation.screens.training.TrainingState
+import com.count_out.presentation.screens.training.PlanEvent
+import com.count_out.presentation.screens.training.PlanEvent.ShowBS
+import com.count_out.presentation.screens.training.PlanState
 import com.count_out.presentation.screens.training.set.SetContent
 import com.count_out.presentation.view_element.TextApp
 import com.count_out.presentation.view_element.bottom_sheet.ShowBottomSheetSelectActivity
@@ -38,9 +38,9 @@ import com.count_out.presentation.view_element.icons.IconsCollapsing
 import com.count_out.presentation.view_element.icons.IconsGroup
 
 @Composable
-fun ListExercises(dataState: TrainingState, round: Round, modifier: Modifier = Modifier,)
+fun ListExercises(dataState: PlanState, ring: Ring, modifier: Modifier = Modifier,)
 {
-    val listExercise = round.exercise
+    val listExercise = ring.exercises
     ColumnDragDrop(
         items = listExercise,
         modifier = modifier,
@@ -48,13 +48,13 @@ fun ListExercises(dataState: TrainingState, round: Round, modifier: Modifier = M
         onMoveItem = { from, to->
             Log.d("KDS"," from=$from   to=$to")
             dataState.event(
-                TrainingEvent.ChangeSequenceExercise(
-                    item = SetViewId(roundId = round.idRound, from = from, to = to)))
+                PlanEvent.ChangeSequenceExercise(
+                    item = SetViewId(roundId = ring.idRing, from = from, to = to)))
         },)
     Spacer(modifier = Modifier.height(4.dp))
 }
 
-@Composable fun <T>ElementColum (item:T, dataState: TrainingState,){
+@Composable fun <T>ElementColum (item:T, dataState: PlanState,){
     Spacer(modifier = Modifier.padding(top = 1.dp))
     Frame(contour = contourAll1) {
         Column (modifier = Modifier
@@ -65,7 +65,7 @@ fun ListExercises(dataState: TrainingState, round: Round, modifier: Modifier = M
         }
     }
 }
-@Composable fun Title(dataState: TrainingState, exercise: Exercise) {
+@Composable fun Title(dataState: PlanState, exercise: Exercise) {
     ShowBottomSheetSpeech(dataState,dataState.showBS.exercise,R.string.exercise2,exercise)
     ShowBottomSheetSelectActivity(dataState, exercise)
 
@@ -73,7 +73,7 @@ fun ListExercises(dataState: TrainingState, round: Round, modifier: Modifier = M
         val nameNewSet = stringResource(id = R.string.set) + " ${exercise.sets.size + 1}"
         IconsCollapsing(
             onClick = {
-                dataState.event(TrainingEvent.SetCollapsing(dataState.collapsing.copy(item = exercise))) },
+                dataState.event(PlanEvent.SetCollapsing(dataState.collapsing.copy(item = exercise))) },
             wrap = dataState.collapsing.exercises.find { it == exercise.idExercise } != null)
         Spacer(modifier = Modifier.width(2.dp))
         Column {
@@ -89,24 +89,24 @@ fun ListExercises(dataState: TrainingState, round: Round, modifier: Modifier = M
             ) }
         Spacer(modifier = Modifier.weight(1f))
         IconsGroup(
-            onClickCopy = { dataState.event(TrainingEvent.CopyExercise(exercise))},
-            onClickDelete = { dataState.event(TrainingEvent.DelExercise(exercise)) },
+            onClickCopy = { dataState.event(PlanEvent.CopyExercise(exercise))},
+            onClickDelete = { dataState.event(PlanEvent.DelExercise(exercise)) },
             onClickEdit = {
                 dataState.item = exercise
                 dataState.event(ShowBS(dataState.showBS.copy(element = exercise.activity)))},
             onClickSpeech = {
                 dataState.item = exercise
                 dataState.event(ShowBS(dataState.showBS.copy(element = exercise))) },
-            onClickAddSet = { dataState.event( TrainingEvent.CopySet(
+            onClickAddSet = { dataState.event( PlanEvent.CopySet(
                     SetImplP(name = nameNewSet, exerciseId = exercise.idExercise)))},
         )
     }
 }
-@Composable fun BodyExercise(dataState: TrainingState, exercise: Exercise){
+@Composable fun BodyExercise(dataState: PlanState, exercise: Exercise){
     val visibleLazy = dataState.collapsing.exercises.find { it ==exercise.idExercise } != null
     AnimatedVisibility( visible = visibleLazy){ ListSets(dataState, exercise) }
 }
-@Composable fun ListSets(dataState: TrainingState, exercise: Exercise) {
+@Composable fun ListSets(dataState: PlanState, exercise: Exercise) {
     Column {
         exercise.sets.forEachIndexed { ind, set ->
             Box (modifier = Modifier

@@ -1,111 +1,61 @@
 package com.count_out.framework.room.source
 
-import com.count_out.data.models.ExerciseImplD
-import com.count_out.data.models.SpeechKitImplD
+import com.count_out.data.models.ExerciseDb
 import com.count_out.data.models.throwable.ResultSource
+import com.count_out.data.models.throwable.ResultSource.Companion.asType
+import com.count_out.data.models.throwable.ResultSource.Companion.flatMap
 import com.count_out.data.models.throwable.ThrowableDS
 import com.count_out.data.models.throwable.TypeSource
 import com.count_out.data.source.PrimeSource
 import com.count_out.data.source.room.ExerciseSource
 import com.count_out.data.source.room.RingSource
+import com.count_out.framework.result
+import com.count_out.framework.room.db.exercise.ExerciseTb
 import com.count_out.framework.room.db.ring.RingDao
-import com.count_out.framework.room.db.ring.RingTable
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.filterNotNull
-import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.map
+import com.count_out.framework.room.db.ring.RingTb
 import javax.inject.Inject
 
+/**
+ * Добавляем раунд только когда создаем новый тренировочный план. Поэтому эта функция не появляется в Repo
+ * Удаляем раунд только когда удалякм тренировочный план. Поэтому эта функция не появляется в Repo
+ */
 class RingSourceImpl @Inject constructor(
     private val dao: RingDao,
     private val source: ExerciseSource,
     private val speechKitSource: SpeechKitSourceImpl,
 ): RingSource, PrimeSource() {
 
-    override fun copy(ring: TypeSource): ResultSource<TypeSource> {
-        return try {
-            if (ring is TypeSource.RingT) {
-                val speechKitTypeSource = TypeSource.SpeechKitT(
-                    ring.item.speech?.let { it as SpeechKitImplD } ?: SpeechKitImplD())
-                speechKitSource.copy(speechKitTypeSource).result { idSpeechKit->
-                    if (idSpeechKit is TypeSource.LongT) {
-                        dao.add(RingTable(ring.item, idSpeechKit.item,0L))
-                            .let{id->
-                                if (id == 0L) ResultSource.Error(ThrowableDS.RequestFailed())
-                                else if (ring.item.exercise.isNotEmpty()){
-                                    var error = false
-                                    ring.item.exercise.forEach { exercise ->
-                                        source.copy(
-                                            TypeSource.ExerciseT(
-                                                ExerciseImplD(exercise))).let{
-                                            if (it is ResultSource.Error) {
-                                                error = true
-                                                return@forEach
-                                            } }
-                                    }
-                                    if (error) ResultSource.Error(ThrowableDS.RequestFailed())
-                                    else ResultSource.Success(TypeSource.LongT(id))
-                                } else source.copy(
-                                    TypeSource.ExerciseT(ExerciseImplD(ringId = id)))
-                            }
-                    }
-                    else ResultSource.Error(ThrowableDS.NotValidType())
-                }
-            } else ResultSource.Error(ThrowableDS.NotValidType())
-        } catch (e: Exception) { ResultSource.Error(ThrowableDS.extract(e)) }
-    }
-    override fun del(ring: TypeSource):ResultSource<TypeSource> {
-        return try {
-            if (ring is TypeSource.RingT) {
-                var error = false
-                ring.item.speech?.let {
-                    speechKitSource.del(TypeSource.SpeechKitT(SpeechKitImplD(it)))}
-                if (ring.item.exercise.isNotEmpty()){
-                    ring.item.exercise.forEach { exercise ->
-                        source.del(TypeSource.ExerciseT(
-                            ExerciseImplD(exercise))).let { result->
-                            if (result is ResultSource.Error) {
-                                error = true
-                                return@forEach
-                            } }
-                    }
-                }
-                if (error)ResultSource.Error(ThrowableDS.RequestFailed())
-                else {
-                    dao.del(ring.item.idRing).let{result->
-                        if (result == 0) ResultSource.Error(ThrowableDS.RequestFailed())
-                        else ResultSource.Success(TypeSource.IntT(result))
-                    }
-                }
-            } else ResultSource.Error(ThrowableDS.NotValidType())
-        } catch (e: Exception) { ResultSource.Error(ThrowableDS.extract(e)) }
-    }
-    override fun update(ring: TypeSource):ResultSource<TypeSource> {
-        return try {
-            if (ring is TypeSource.RingT) {
-                ring.item.speech?.let {speechKitSource.update(
-                    TypeSource.SpeechKitT(SpeechKitImplD(it)))}
-                dao.update(RingTable(ring.item)).let{result->
-                    if (result == 0) ResultSource.Error(ThrowableDS.RequestFailed())
-                    else ResultSource.Success(TypeSource.IntT(result))
-                }
-            } else ResultSource.Error(ThrowableDS.NotValidType())
-        } catch (e: Exception) { ResultSource.Error(ThrowableDS.extract(e)) }
-    }
+    override fun copy(ring: TypeSource): ResultSource<TypeSource> =
+        (ring as? TypeSource.RingT)?.let { ring ->
+            speechKitSource.insert(ring.item.speechId).asType<TypeSource.LongT>()
+            .flatMap { idSpeechKit ->
+                val obj = (ring.item as RingTb).apply{this.speechId = idSpeechKit.item; this.idRing = 0L }
+                dao.insert(obj).result()
+            }
+            .flatMap { ownerId->
+                if (ownerId.item == 0L) ResultSource.Error(ThrowableDS.RequestFailed())
+                else copyExercises(ring.item.exercises, ownerId) }
+        } ?: ResultSource.Error(ThrowableDS.NotValidType())
+
+    override fun del(ring: TypeSource): ResultSource<TypeSource> =
+        ring.use { dao.delete( it).toLong() }
+
+    override fun update(ring: TypeSource): ResultSource<TypeSource> =
+        ring.use { dao.update(it).toLong() }
+
+    //##############################################################################################
+    inline fun TypeSource.use(crossinline block: (RingTb) -> Long): ResultSource<TypeSource> =
+        if (this is TypeSource.RingT) {
+            try { block(this.item as RingTb).result() }
+            catch (e: Exception) { ResultSource.Error(ThrowableDS.extract(e)) }
+        } else ResultSource.Error(ThrowableDS.NotValidType())
+
+    fun copyExercises(exercises: List<ExerciseDb>, ownerId: TypeSource.LongT): ResultSource<TypeSource> =
+        if (exercises.isEmpty()) { ResultSource.Success(TypeSource.IntT(0)) }
+        else {
+            exercises.map {ex-> source.copy(TypeSource.ExerciseT(
+                (ex as ExerciseTb).apply{ this.ringId = ownerId.item})) }
+                .firstOrNull {it is ResultSource.Error}
+                ?: ResultSource.Success(TypeSource.IntT(exercises.size))
+        }
 }
-//    override fun get(ring: TypeSource): Flow<ResultSource<TypeSource>> =
-//        try {
-//            if (ring is TypeSource.RingT) {
-//                dao.get(ring.item.idRing).filterNotNull().map { TypeSource.RingT(it.toRing()) }.resultSource()
-//            } else flow { emit(ResultSource.Error(ThrowableDS.NotValidType())) }
-//        } catch(e: Exception) {
-//            flow { emit(ResultSource.Error(ThrowableDS.extract(e)))} }
-//
-//    override fun gets(trainingId: TypeSource): Flow<ResultSource<TypeSource>> =
-//        try {
-//            if (trainingId is TypeSource.LongT) {
-//                dao.gets(trainingId.item).filterNotNull().map { list ->
-//                    TypeSource.RingsT(list.map { it.toRing() }) }.resultSource()
-//            } else flow { emit(ResultSource.Error(ThrowableDS.NotValidType())) }
-//        } catch(e: Exception) {
-//            flow { emit(ResultSource.Error(ThrowableDS.extract(e)))} }

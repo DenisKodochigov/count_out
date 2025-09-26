@@ -27,7 +27,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.count_out.domain.entity.Setting
+import com.count_out.domain.entity.Settings
 import com.count_out.domain.entity.enums.ConnectState
 import com.count_out.domain.entity.router.DeviceBle
 import com.count_out.presentation.R
@@ -119,16 +119,14 @@ import com.count_out.presentation.view_element.lg
 @Composable fun OtherSettingSpeechDescription(dataState: SettingsState){
     Spacer(modifier = Modifier.height(12.dp))
     Frame{
-        dataState.settings?.speechDescription?.let { setting->
-            SwitchApp(
-                setting = setting,
-                description = R.string.speech_description,
-                modifier = Modifier.padding(horizontal = 8.dp, vertical = 3.dp),
-                change = { checked->
-                    dataState.event(SettingsEvent.UpdateSetting(Setting.SpeechDescription(!setting)))
-                }
-            )
-        }
+        SwitchApp(
+            setting = dataState.speechDescription,
+            description = R.string.speech_description,
+            modifier = Modifier.padding(horizontal = 8.dp, vertical = 3.dp),
+            change = { checked-> dataState.event( SettingsEvent.UpdateSetting(
+                Settings.SpeechDescription(!dataState.speechDescription)))
+            }
+        )
     }
 }
 

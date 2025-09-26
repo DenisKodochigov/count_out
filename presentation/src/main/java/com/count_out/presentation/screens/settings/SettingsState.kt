@@ -13,6 +13,9 @@ import com.count_out.presentation.screens.prime.DataState
 import com.count_out.presentation.screens.prime.Event
 
 data class SettingsState(
+    val speechDescription: Boolean = true,
+    val nameBle: String = "",
+    val addressBle: String = "",
     val settings: Settings? = null,
     val heartRate: Int = 0,
     val lastConnectHearthRateDevice: DeviceBle? = null,
@@ -21,7 +24,7 @@ data class SettingsState(
     val scannedBle: Boolean = false,
     val connectingState: ConnectState = ConnectState.NOT_CONNECTED,
 
-    val activities: List<Activity> = emptyList(),
+    val activities: List<ActivityImplP> = emptyList(),
     val activityTmpl: Activity = ActivityImplP(1L),
     //for screen
 

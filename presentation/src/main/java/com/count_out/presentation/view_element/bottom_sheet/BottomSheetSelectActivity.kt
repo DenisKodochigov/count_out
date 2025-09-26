@@ -23,23 +23,38 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.count_out.domain.entity.workout.Activity
 import com.count_out.domain.entity.workout.Exercise
+import com.count_out.domain.entity.workout.Parameter
+import com.count_out.domain.entity.workout.Set
+import com.count_out.domain.entity.workout.Speech
+import com.count_out.domain.entity.workout.SpeechKit
 import com.count_out.presentation.R
 import com.count_out.presentation.models.ActivityImplP
 import com.count_out.presentation.models.Dimen
-import com.count_out.presentation.models.ExerciseImplP
-import com.count_out.presentation.screens.training.TrainingEvent
-import com.count_out.presentation.screens.training.TrainingEvent.ShowBS
-import com.count_out.presentation.screens.training.TrainingState
+import com.count_out.presentation.screens.training.PlanEvent
+import com.count_out.presentation.screens.training.PlanEvent.ShowBS
+import com.count_out.presentation.screens.training.PlanState
 import com.count_out.presentation.view_element.ModalBottomSheetApp
 
-@Composable fun ShowBottomSheetSelectActivity(dataState: TrainingState, item: Exercise){
+@Composable fun ShowBottomSheetSelectActivity(dataState: PlanState, item: Exercise){
     if (dataState.showBS.activity && dataState.item == item){
         dataState.nameSection = stringResource(id = R.string.list_activity)
         dataState.onDismiss =
             { dataState.event(ShowBS(dataState.showBS.copy(element = item.activity))) }
         dataState.onConfirmation = { exercise, activity ->
             dataState.event(
-                TrainingEvent.UpdateExercise(ExerciseImplP(exercise as Exercise, activity as Activity)))
+                PlanEvent.UpdateExercise(
+                    object: Exercise{
+                        override val idExercise: Long = (exercise as Exercise).idExercise
+                        override val ringId: Long = (exercise as Exercise).ringId
+                        override val idView: Int = (exercise as Exercise).idView
+                        override val activity: Activity? = (activity as Activity)
+                        override val activityId: Long= (activity as Activity).idActivity
+                        override val speechId: Long = (exercise as Exercise).speechId
+                        override val speechKit: SpeechKit = (exercise as Exercise).speechKit
+                        override val sets: List<Set> = (exercise as Exercise).sets
+                        override val amountSet: Int = (exercise as Exercise).amountSet
+                        override val duration: Parameter = (exercise as Exercise).duration
+                    }))
             dataState.event(ShowBS(dataState.showBS.copy(element = item.activity)))
         }
         BottomSheetSelectActivity(dataState)
@@ -47,7 +62,7 @@ import com.count_out.presentation.view_element.ModalBottomSheetApp
 }
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun BottomSheetSelectActivity(dataState: TrainingState)
+fun BottomSheetSelectActivity(dataState: PlanState)
 {
     Log.d("KDS", "BottomSheetSelectActivity ${dataState.item}")
     val sheetState = rememberModalBottomSheetState(
@@ -62,7 +77,7 @@ fun BottomSheetSelectActivity(dataState: TrainingState)
     )
 }
 
-@Composable fun BottomSheetSelectActivityContent(dataState: TrainingState) {
+@Composable fun BottomSheetSelectActivityContent(dataState: PlanState) {
     Column( horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier.fillMaxWidth().padding(Dimen.bsItemPaddingHor)
     ){
@@ -72,7 +87,7 @@ fun BottomSheetSelectActivity(dataState: TrainingState)
     }
 }
 
-@Composable fun LazyActivity(dataState: TrainingState){
+@Composable fun LazyActivity(dataState: PlanState){
     LazyColumn(
         state = rememberLazyListState(),
         verticalArrangement = Arrangement.spacedBy(8.dp),

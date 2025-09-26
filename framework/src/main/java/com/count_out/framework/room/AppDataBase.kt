@@ -2,57 +2,51 @@ package com.count_out.framework.room
 
 import androidx.room.Database
 import androidx.room.RoomDatabase
-import androidx.room.TypeConverters
 import com.count_out.framework.room.db.activity.ActivityDao
-import com.count_out.framework.room.db.activity.ActivityTable
+import com.count_out.framework.room.db.activity.ActivityTb
 import com.count_out.framework.room.db.exercise.ExerciseDao
-import com.count_out.framework.room.db.exercise.ExerciseTable
-import com.count_out.framework.room.db.relation.ConverterDistanceE
-import com.count_out.framework.room.db.relation.ConverterGoalSet
-import com.count_out.framework.room.db.relation.ConverterTimeE
-import com.count_out.framework.room.db.relation.ConverterWeightE
-import com.count_out.framework.room.db.relation.ConverterZone
+import com.count_out.framework.room.db.exercise.ExerciseTb
+import com.count_out.framework.room.db.old.settings.SettingDao
+import com.count_out.framework.room.db.old.settings.SettingTb
+import com.count_out.framework.room.db.part.PartDao
+import com.count_out.framework.room.db.part.PartTb
+import com.count_out.framework.room.db.plan.PlanDao
+import com.count_out.framework.room.db.plan.PlanTb
 import com.count_out.framework.room.db.ring.RingDao
-import com.count_out.framework.room.db.ring.RingTable
-import com.count_out.framework.room.db.round.RoundDao
-import com.count_out.framework.room.db.round.RoundTable
+import com.count_out.framework.room.db.ring.RingTb
 import com.count_out.framework.room.db.set.SetDao
-import com.count_out.framework.room.db.set.SetTable
-import com.count_out.framework.room.db.settings.SettingDao
-import com.count_out.framework.room.db.settings.SettingTable
+import com.count_out.framework.room.db.set.SetTb
 import com.count_out.framework.room.db.speech.SpeechDao
-import com.count_out.framework.room.db.speech.SpeechTable
+import com.count_out.framework.room.db.speech.SpeechTb
 import com.count_out.framework.room.db.speech_kit.SpeechKitDao
-import com.count_out.framework.room.db.speech_kit.SpeechKitTable
-import com.count_out.framework.room.db.training.TrainingDao
-import com.count_out.framework.room.db.training.TrainingTable
-import com.count_out.framework.room.db.traking.TemporaryTable
+import com.count_out.framework.room.db.speech_kit.SpeechKitTb
+import com.count_out.framework.room.db.traking.TemporaryTb
 import com.count_out.framework.room.db.traking.TrackingDao
-import com.count_out.framework.room.db.traking.WorkoutTable
+import com.count_out.framework.room.db.traking.TrackingTb
 
 @Database(entities = [
-    TrainingTable::class,
-    RoundTable::class,
-    RingTable::class,
-    ExerciseTable::class,
-    ActivityTable::class,
-    SetTable::class,
-    SpeechTable::class,
-    SpeechKitTable::class,
-    SettingTable::class,
-    WorkoutTable::class,
-    TemporaryTable::class,
+    PlanTb::class,
+    PartTb::class,
+    RingTb::class,
+    ExerciseTb::class,
+    ActivityTb::class,
+    SetTb::class,
+    SpeechTb::class,
+    SpeechKitTb::class,
+    SettingTb::class,
+    TrackingTb::class,
+    TemporaryTb::class,
 ], version = 1, exportSchema = false)
-@TypeConverters(
-    ConverterZone::class,
-    ConverterGoalSet::class,
-    ConverterDistanceE::class,
-    ConverterTimeE::class,
-    ConverterWeightE::class)
+//@TypeConverters(
+//    ConverterZone::class,
+//    ConverterGoalSet::class,
+//    ConverterDistanceE::class,
+//    ConverterTimeE::class,
+//    ConverterWeightE::class)
 abstract class AppDataBase : RoomDatabase() {
-    abstract fun trainingDao(): TrainingDao
+    abstract fun planDao(): PlanDao
+    abstract fun partDao(): PartDao
     abstract fun ringDao(): RingDao
-    abstract fun roundDao(): RoundDao
     abstract fun exerciseDao(): ExerciseDao
     abstract fun activityDao(): ActivityDao
     abstract fun setDao(): SetDao

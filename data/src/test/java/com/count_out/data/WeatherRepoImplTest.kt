@@ -1,6 +1,6 @@
 package com.count_out.data
 
-import com.count_out.data.models.WeatherImpl
+import com.count_out.data.models.WeatherDb
 import com.count_out.data.repository.WeatherRepoImpl
 import com.count_out.data.source.network.WeatherSource
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -12,7 +12,7 @@ class WeatherRepoImplTest {
     private val weatherSource = mock<WeatherSource>()
     private val weatherRepoImpl = WeatherRepoImpl(weatherSource)
 
-    val target1Weather = WeatherImpl(time=0, interval = 0, temperature2m = 0.0, relativeHumidity2m = 0,
+    val target1WeatherDb = WeatherDb(time=0, interval = 0, temperature2m = 0.0, relativeHumidity2m = 0,
         apparentTemperature = 0.0, isDay = 0, precipitation = 0.0, rain = 0.0, showers = 0.0,
         snowfall = 0.0, weatherCode = 0, cloudCover = 0, pressureMsl = 0.0, surfacePressure = 0.0,
         windSpeed10m = 0.0, windDirection10m = 0, windGusts10m = 0.0,)
@@ -20,7 +20,7 @@ class WeatherRepoImplTest {
     @ExperimentalCoroutinesApi
     @Test
     fun testWeather() = runTest {
-        val weather = target1Weather
+        val weather = target1WeatherDb
 //        whenever(weatherSource.get(0.0,0.0, TimeZone.getDefault().displayName)).thenReturn(flowOf(weather as Weather))
 //        val result = weatherRepoImpl.get(0.0,0.0, TimeZone.getDefault().displayName).last()
 //        println ("$result")

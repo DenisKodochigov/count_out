@@ -24,7 +24,7 @@ import com.count_out.presentation.screens.execute.ExecuteViewModel
 import com.count_out.presentation.screens.history.HistoryViewModel
 import com.count_out.presentation.screens.plans.PlansViewModel
 import com.count_out.presentation.screens.settings.SettingViewModel
-import com.count_out.presentation.screens.training.TrainingViewModel
+import com.count_out.presentation.screens.training.PlanViewModel
 
 fun NavGraphBuilder.executeWorkout(navigateEvent: NavigateEventImpl) {
     template(
@@ -51,7 +51,7 @@ fun NavGraphBuilder.training( navigateEvent: NavigateEventImpl) {
         routeTo = TrainingDestination.routeWithArgs,
         argument = TrainingDestination.arguments,
         content = { navBackStackEntry ->
-            val vm: TrainingViewModel = hiltViewModel()
+            val vm: PlanViewModel = hiltViewModel()
             vm.initNavigate(navigateEvent)
             val arg = listOf((navBackStackEntry.arguments?.getLong(TrainingDestination.ARG) ?: 0).toString())
             TrainingDestination.Show(vm, arg)

@@ -1,8 +1,9 @@
 package com.count_out.domain.entity.workout
 
 interface Speech {
-    var idSpeech: Long
-    var message: String
-    var duration: Long
-    var addMessage: String
+    val idSpeech: Long
+    val idKit: Long
+    val message: String
+    val duration: Long
+    val addMessage: String
 }

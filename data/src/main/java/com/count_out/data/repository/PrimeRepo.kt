@@ -1,208 +1,225 @@
 package com.count_out.data.repository
 
-import com.count_out.data.entity.SetViewIdD
-import com.count_out.data.models.ActivityImplD
-import com.count_out.data.models.ExerciseImplD
-import com.count_out.data.models.RingImplD
-import com.count_out.data.models.RoundImplD
-import com.count_out.data.models.SetImplD
-import com.count_out.data.models.SpeechImplD
-import com.count_out.data.models.SpeechKitImplD
-import com.count_out.data.models.TrainingImplD
+import com.count_out.data.models.ActivityDb
+import com.count_out.data.models.ExerciseDb
+import com.count_out.data.models.PartDb
+import com.count_out.data.models.PlanDb
+import com.count_out.data.models.RingDb
+import com.count_out.data.models.SetDb
+import com.count_out.data.models.SettingsDb
+import com.count_out.data.models.SpeechDb
 import com.count_out.data.models.throwable.ResultSource
 import com.count_out.data.models.throwable.ResultSource.Success
 import com.count_out.data.models.throwable.TypeSource
+import com.count_out.data.models.throwable.TypeSource.Companion.toRepo
+import com.count_out.domain.entity.Settings
 import com.count_out.domain.entity.TypeRepo
-import com.count_out.domain.entity.TypeRepo.ActivitiesT
 import com.count_out.domain.entity.TypeRepo.ActivityT
-import com.count_out.domain.entity.TypeRepo.BleConnectStateT
-import com.count_out.domain.entity.TypeRepo.BooleanT
-import com.count_out.domain.entity.TypeRepo.CollapsingT
-import com.count_out.domain.entity.TypeRepo.DeviceUIT
-import com.count_out.domain.entity.TypeRepo.DevicesUIT
 import com.count_out.domain.entity.TypeRepo.ExerciseT
-import com.count_out.domain.entity.TypeRepo.ExercisesT
-import com.count_out.domain.entity.TypeRepo.IntT
 import com.count_out.domain.entity.TypeRepo.LongT
-import com.count_out.domain.entity.TypeRepo.LongsT
-import com.count_out.domain.entity.TypeRepo.NullT
 import com.count_out.domain.entity.TypeRepo.PlanT
-import com.count_out.domain.entity.TypeRepo.PlansT
-import com.count_out.domain.entity.TypeRepo.RingT
-import com.count_out.domain.entity.TypeRepo.RingsT
-import com.count_out.domain.entity.TypeRepo.RoundT
-import com.count_out.domain.entity.TypeRepo.RoundsT
 import com.count_out.domain.entity.TypeRepo.SetT
-import com.count_out.domain.entity.TypeRepo.SetsT
-import com.count_out.domain.entity.TypeRepo.SettingT
 import com.count_out.domain.entity.TypeRepo.SettingsT
-import com.count_out.domain.entity.TypeRepo.ShowBottomSheetT
-import com.count_out.domain.entity.TypeRepo.SpeechKitT
-import com.count_out.domain.entity.TypeRepo.SpeechT
-import com.count_out.domain.entity.TypeRepo.StepPlanT
 import com.count_out.domain.entity.TypeRepo.StringT
 import com.count_out.domain.entity.TypeRepo.WeatherRequestT
-import com.count_out.domain.entity.TypeRepo.WeatherT
 import com.count_out.domain.entity.throwable.ResultUC
 import com.count_out.domain.entity.throwable.ThrowableUC
+import com.count_out.domain.entity.workout.Activity
+import com.count_out.domain.entity.workout.Exercise
+import com.count_out.domain.entity.workout.Part
+import com.count_out.domain.entity.workout.Plan
+import com.count_out.domain.entity.workout.Ring
+import com.count_out.domain.entity.workout.Set
+import com.count_out.domain.entity.workout.Speech
+import com.count_out.domain.entity.workout.SpeechKit
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.filter
-import kotlinx.coroutines.flow.flatMapConcat
-import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.filterNotNull
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 
 abstract class PrimeRepo {
     val throwableNull = ResultUC.Error(ThrowableUC.extract(Exception("return null")))
 
-    @OptIn(ExperimentalCoroutinesApi::class)
-    fun Flow<ResultSource<TypeSource>>.concat1(action: (TypeSource)-> Flow<ResultSource<TypeSource>>
-    ): Flow<ResultUC<TypeRepo>> {
-        return this.flatMapConcat { resultDS ->
-            when (resultDS) {
-                is ResultSource.Error -> flow { emit(
-                    ResultUC.Error(ThrowableUC.extract(resultDS.throwable))) }
-                is Success -> {
-                    action(resultDS.data).map {resultSource ->
-                        when(resultSource){
-                            is Success-> { ResultUC.Success( toTypeRepo(resultSource.data))}
-                            is ResultSource.Error -> { ResultUC.Error(ThrowableUC.extract(resultSource.throwable))}
-                        }
-                    }
-                }
-            }
-        }
-    }
-    @OptIn(ExperimentalCoroutinesApi::class)
-    fun Flow<ResultSource<TypeSource>>.concatOk(action: ()-> Flow<ResultSource<TypeSource>>
-    ): Flow<ResultUC<TypeRepo>> {
-        return this.flatMapConcat {
-            when (it) {
-                is ResultSource.Error -> flow { emit(
-                    ResultUC.Error(ThrowableUC.extract(it.throwable))) }
-                is Success -> {
-                    if(getResult(it.data) > 0L ){
-                        action().map {resultSource ->
-                            when(resultSource){
-                                is Success-> { ResultUC.Success( toTypeRepo(resultSource.data))}
-                                is ResultSource.Error -> { ResultUC.Error(ThrowableUC.extract(resultSource.throwable))}
-                            }
-                        }
-                    } else { flow { emit(throwableNull) } }
-                }
-            }
-        }
-    }
-    fun getResult(resultSource: TypeSource): Int{
-        return when(resultSource){
-            is TypeSource.IntT -> resultSource.item
-            is TypeSource.LongT -> resultSource.item.toInt()
-            is TypeSource.BooleanT -> if (resultSource.item) 1 else 0
-            else -> 0
-        }
-    }
-
     fun Flow<ResultSource<TypeSource>?>.convertor(): Flow<ResultUC<TypeRepo>> {
         var lastValue:TypeSource = TypeSource.NullT
-        return this.filter { it != lastValue }.map{ resultSource->
-                resultSource?.let { resultS->
-                    when(resultS){
-                        is ResultSource.Error -> throwableNull
-                        is Success -> {
-                            lastValue = resultS.data
-                            ResultUC.Success(toTypeRepo(resultS.data))
-                        }
+        return this.filterNotNull().filter { it != lastValue }.map{ resultS->
+                when(resultS){
+                    is ResultSource.Error -> throwableNull
+                    is Success -> {
+                        lastValue = resultS.data
+                        ResultUC.Success(resultS.data.toRepo())
                     }
-                } ?: throwableNull
+                }
             }
             .flowOn(Dispatchers.IO)
             .catch { emit(ResultUC.Error(ThrowableUC.extract(it)
             ) as ResultUC<Nothing>) }
     }
-    fun convertor(source: ResultSource<TypeSource>): ResultUC<TypeRepo> {
-        return when (source) {
-            is ResultSource.Error -> ResultUC.Error(ThrowableUC.extract(source.throwable))
-            is Success -> ResultUC.Success(toTypeRepo(source.data))
-        }
-    }
-    fun wrapFlow(source: ResultSource<TypeSource>): Flow<ResultUC<TypeRepo>> {
-        return flow { emit(
-            when (source) {
-                is ResultSource.Error -> ResultUC.Error(ThrowableUC.extract(source.throwable))
-                is Success -> ResultUC.Success(toTypeRepo(source.data))
+
+    fun ResultSource<TypeSource>.wrapFlow(): Flow<ResultUC<TypeRepo>> {
+        return flowOf(
+            when (this) {
+                is ResultSource.Error -> ResultUC.Error(ThrowableUC.extract(this.throwable))
+                is Success -> ResultUC.Success(this.data.toRepo())
             }
-        ) } }
-    fun toTypeRepo(value: TypeSource): TypeRepo {
-        return when(value){
-            is TypeSource.IntT -> IntT(item = value.item)
-            is TypeSource.LongT -> LongT(item = value.item)
-            is TypeSource.LongsT-> LongsT(item = value.item)
-            is TypeSource.StringT -> StringT(item = value.item)
-            is TypeSource.BooleanT -> BooleanT(item = value.item)
-            is TypeSource.CollapsingT -> CollapsingT(item = value.item)
-            is TypeSource.ShowBottomSheetT -> ShowBottomSheetT(item = value.item)
-            is TypeSource.SpeechT -> SpeechT(item = value.item)
-            is TypeSource.SpeechKitT -> SpeechKitT(item = value.item)
-            is TypeSource.SetT -> SetT(item = value.item)
-            is TypeSource.SetsT -> SetsT(item = value.item)
-            is TypeSource.ActivityT -> ActivityT(item = value.item)
-            is TypeSource.ActivitiesT -> ActivitiesT(item = value.item)
-            is TypeSource.ExerciseT -> ExerciseT(item = value.item)
-            is TypeSource.ExercisesT -> ExercisesT(item = value.item)
-            is TypeSource.RingT-> RingT(item = value.item)
-            is TypeSource.RingsT-> RingsT(item = value.item)
-            is TypeSource.RoundT-> RoundT(item = value.item)
-            is TypeSource.RoundsT-> RoundsT(item = value.item)
-            is TypeSource.PlanT -> PlanT(item = value.item)
-            is TypeSource.PlansT -> PlansT(item = value.item)
-            is TypeSource.StepPlanT -> StepPlanT(item = value.item)
-            is TypeSource.SettingT -> SettingT(item = value.item)
-            is TypeSource.SettingsT -> SettingsT(item = value.item)
-            is TypeSource.DeviceUIT -> DeviceUIT(item = value.item)
-            is TypeSource.DevicesUIT -> DevicesUIT(item = value.item)
-            is TypeSource.WeatherT -> WeatherT(item = value.item)
-            is TypeSource.WeatherRequestT-> WeatherRequestT(item = value.item)
-            is TypeSource.NullT -> NullT
-            is TypeSource.BleConnectStateT -> BleConnectStateT(item = value.item)
-            is TypeSource.SetViewIdT -> NullT
-        }
-    }
+        ) }
     fun toTypeSource(value: TypeRepo): TypeSource{
         return when(value){
-            is IntT -> TypeSource.IntT(item = value.item)
-            is LongT -> TypeSource.LongT(item = value.item)
-            is LongsT-> TypeSource.LongsT(item = value.item)
+            is SettingsT -> TypeSource.SettingsT(item = settingsDb(value.item))
             is StringT -> TypeSource.StringT(item = value.item)
-            is BooleanT -> TypeSource.BooleanT(item = value.item)
-            is CollapsingT -> TypeSource.CollapsingT(item = value.item)
-            is ShowBottomSheetT -> TypeSource.ShowBottomSheetT(item = value.item)
-            is SpeechT -> TypeSource.SpeechT(item = SpeechImplD(value.item))
-            is SpeechKitT -> TypeSource.SpeechKitT(item = SpeechKitImplD(value.item))
-            is SetT -> TypeSource.SetT(item = SetImplD( value.item))
-            is SetsT -> TypeSource.SetsT(item = value.item)
-            is ActivityT -> TypeSource.ActivityT(item = ActivityImplD(value.item))
-            is ActivitiesT -> TypeSource.ActivitiesT(item = value.item)
-            is ExerciseT -> TypeSource.ExerciseT(item = ExerciseImplD(value.item))
-            is ExercisesT -> TypeSource.ExercisesT(item = value.item)
-            is RingT-> TypeSource.RingT(item = RingImplD(value.item))
-            is RingsT-> TypeSource.RingsT(item = value.item)
-            is RoundT-> TypeSource.RoundT(item = RoundImplD(value.item))
-            is RoundsT-> TypeSource.RoundsT(item = value.item)
-            is PlanT -> TypeSource.PlanT(item = TrainingImplD(value.item))
-            is PlansT -> TypeSource.PlansT(item = value.item)
-            is StepPlanT -> TypeSource.StepPlanT(item = value.item)
-            is SettingT -> TypeSource.SettingT(item = value.item)
-            is SettingsT -> TypeSource.SettingsT(item = value.item)
-            is DeviceUIT-> TypeSource.DeviceUIT(item = value.item)
-            is DevicesUIT -> TypeSource.DevicesUIT(item = value.item)
-            is WeatherT -> TypeSource.WeatherT(item = value.item)
+            is ActivityT -> TypeSource.ActivityT(item = activityDb(value.item))
+            is ExerciseT -> TypeSource.ExerciseT(item = exerciseDb(value.item))
+            is LongT -> TypeSource.LongT(item = value.item)
+            is SetT -> TypeSource.SetT(item = setDb( value.item))
+            is TypeRepo.SpeechT -> TypeSource.SpeechT(speechDb(value.item))
+            is PlanT -> TypeSource.PlanT(item = planDb(value.item))
             is WeatherRequestT-> TypeSource.WeatherRequestT(item = value.item)
-            is NullT -> TypeSource.NullT
-            is BleConnectStateT -> TypeSource.BleConnectStateT(item = value.item)
-            is TypeRepo.SetViewIdT -> TypeSource.SetViewIdT(item = SetViewIdD(value.item))
+            else -> TypeSource.NullT
         }
     }
+    fun settingsDb(item: Settings) = when(item){
+        is Settings.AddressBle -> SettingsDb.AddressBle(item.item)
+        is Settings.NameBle -> SettingsDb.NameBle(item.item)
+        is Settings.SpeechDescription -> SettingsDb.SpeechDescription(item.item)
+    }
+    fun planDb(item: Plan) = object: PlanDb {
+        override val idPlan: Long = item.idPlan
+        override val name: String = item.name
+        override val speechId: Long = item.speechId
+        override val speeches: List<SpeechDb> = listSpeech(item.speechKit)
+        override val parts: List<PartDb> = item.parts.map { partDb(it) }
+        override val amountActivity: Int = item.amountActivity
+    }
+    fun partDb(item: Part) = object: PartDb{
+        override val idPart: Long = item.idPart
+        override val planId: Long = item.planId
+        override val speechId: Long = item.speechId
+        override val speeches: List<SpeechDb> = listSpeech(item.speechKit)
+        override val rings: List<RingDb> = item.rings.map { ringDb(it) }
+        override val amount: Int = item.amount
+        override val duration: Double = item.duration.value
+    }
+    fun ringDb(item: Ring) = object : RingDb{
+        override val idRing: Long = item.idRing
+        override val partId: Long = item.partId
+        override val speechId: Long = item.speechId
+        override val speeches: List<SpeechDb> = listSpeech(item.speechKit)
+        override val exercises: List<ExerciseDb> = item.exercises.map { exerciseDb(it) }
+        override val amount: Int = item.amount
+        override val duration: Double = item.duration.value
+        override val numberLaps: Int = item.numberLaps
+    }
+    fun exerciseDb(item: Exercise) = object : ExerciseDb{
+        override val idExercise: Long = item.idExercise
+        override val ringId: Long = item.ringId
+        override val idView: Int = item.idView
+        override val activityId: Long = item.activityId
+        override val activity: ActivityDb? = item.activity?.let { activityDb(it) }
+        override val speechId: Long = item.speechId
+        override val speeches: List<SpeechDb> = listSpeech(item.speechKit)
+        override val sets: List<SetDb> = item.sets.map { setDb(it) }
+        override val amountSet: Int = item.amountSet
+        override val duration: Double = item.duration.value
+    }
+    fun activityDb(item: Activity) = object: ActivityDb{
+        override val idActivity: Long = item.idActivity
+        override val name: String = item.name
+        override val description: String = item.description
+        override val icon: Int = item.icon
+        override val color: Int = item.color
+        override val videoClip: String = item.videoClip
+        override val audioTrack: String = item.audioTrack }
+    fun speechDb(item: Speech) = object: SpeechDb{
+        override val idSpeech: Long = item.idSpeech
+        override val idKit: Long = item.idKit
+        override val message: String = item.message
+        override val duration: Long = item.duration
+        override val addMessage: String = item.addMessage
+    }
+    fun setDb(item: Set) = object: SetDb{
+        override val idSet: Long = item.idSet
+        override val name: String = item.name
+        override val exerciseId: Long = item.exerciseId
+        override val speechId: Long = item.speechId
+        override val speeches: List<SpeechDb> = listSpeech(item.speechKit)
+        override val goal: Int = item.goal.ordinal
+        override val weightV: Double = item.weight.value
+        override val weightU: Int = item.weight.unit.ordinal
+        override val distanceV: Double = item.distance.value
+        override val distanceU: Int = item.distance.unit.ordinal
+        override val durationV: Double = item.duration.value
+        override val durationU: Int = item.duration.unit.ordinal
+        override val reps: Int = item.reps
+        override val intensity: Int = item.intensity.ordinal
+        override val intervalReps: Double = item.intervalReps
+        override val intervalDown: Int = item.intervalDown
+        override val groupCount: String = item.groupCount
+        override val timeRestV: Double = item.rest.value
+        override val timeRestU: Int = item.rest.unit.ordinal
+    }
+    fun listSpeech(kit: SpeechKit): List<SpeechDb>{
+        return listOf(speechDb(kit.beforeStart),
+            speechDb(kit.afterStart),
+            speechDb(kit.beforeEnd),
+            speechDb(kit.afterEnd),)
+    }
 }
+
+
+
+
+//            is IntT -> TypeSource.IntT(item = value.item)
+////            is LongsT-> TypeSource.LongsT(item = value.item)
+//            is BooleanT -> TypeSource.BooleanT(item = value.item)
+//            is SetsT -> TypeSource.SetsT(item = value.item)
+//            is ActivitiesT -> TypeSource.ActivitiesT(item = value.item)
+//            is ExercisesT -> TypeSource.ExercisesT(item = value.item)
+//            is PlansT -> TypeSource.PlansT(item = value.item)
+////            is StepPlanT -> TypeSource.StepPlanT(item = value.item)
+//            is SettingsT -> TypeSource.SettingsT(item = value.item)
+//            is DeviceUIT-> TypeSource.DeviceUIT(item = value.item)
+//            is DevicesUIT -> TypeSource.DevicesUIT(item = value.item)
+//            is WeatherT -> TypeSource.WeatherT(item = value.item)
+//            is NullT -> TypeSource.NullT
+//            is BleConnectStateT -> TypeSource.BleConnectStateT(item = value.item)
+//            is TypeRepo.SetViewIdT -> TypeSource.SetViewIdT(item = SetViewIdD(value.item))
+
+//    fun ResultSource<TypeSource>.convertor(): ResultUC<TypeRepo> {
+//        return when (this) {
+//            is ResultSource.Error -> ResultUC.Error(ThrowableUC.extract(this.throwable))
+//            is Success -> ResultUC.Success(this.data.toRepo())
+//        }
+//    }
+
+//    @OptIn(ExperimentalCoroutinesApi::class)
+//    fun Flow<ResultSource<TypeSource>>.concatOk(action: ()-> Flow<ResultSource<TypeSource>>
+//    ): Flow<ResultUC<TypeRepo>> {
+//        return this.flatMapConcat {
+//            when (it) {
+//                is ResultSource.Error -> flowOf(
+//                    ResultUC.Error(ThrowableUC.extract(it.throwable)))
+//                is Success -> {
+//                    if(getResult(it.data) > 0L ){
+//                        action().map {resultSource ->
+//                            when(resultSource){
+//                                is Success-> { ResultUC.Success( resultSource.data.toRepo())}
+//                                is ResultSource.Error -> { ResultUC.Error(ThrowableUC.extract(resultSource.throwable))}
+//                            }
+//                        }
+//                    } else { flowOf(throwableNull)}
+//                }
+//            }
+//        }
+//    }
+//    fun getResult(resultSource: TypeSource): Int{
+//        return when(resultSource){
+//            is TypeSource.IntT -> resultSource.item
+//            is TypeSource.LongT -> resultSource.item.toInt()
+//            is TypeSource.BooleanT -> if (resultSource.item) 1 else 0
+//            else -> 0
+//        }
+//    }

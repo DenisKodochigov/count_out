@@ -7,13 +7,13 @@ import com.count_out.domain.entity.weather.WeatherRequest
 import com.count_out.domain.entity.workout.Activity
 import com.count_out.domain.entity.workout.Collapsing
 import com.count_out.domain.entity.workout.Exercise
+import com.count_out.domain.entity.workout.Part
+import com.count_out.domain.entity.workout.Plan
 import com.count_out.domain.entity.workout.Ring
-import com.count_out.domain.entity.workout.Round
 import com.count_out.domain.entity.workout.Set
 import com.count_out.domain.entity.workout.ShowBottomSheet
 import com.count_out.domain.entity.workout.Speech
 import com.count_out.domain.entity.workout.SpeechKit
-import com.count_out.domain.entity.workout.Training
 
 sealed class TypeRepo {
     data class IntT(val item: Int): TypeRepo()
@@ -31,24 +31,24 @@ sealed class TypeRepo {
     data class ActivitiesT(val item: List<Activity>): TypeRepo()
     data class ExerciseT(val item: Exercise): TypeRepo()
     data class ExercisesT(val item: List<Exercise>): TypeRepo()
-    data class SetViewIdT(val item: SetViewId): TypeRepo()
     data class RingT(val item: Ring): TypeRepo()
     data class RingsT(val item: List<Ring>): TypeRepo()
-    data class RoundT(val item: Round): TypeRepo()
-    data class RoundsT(val item: List<Round>): TypeRepo()
-    data class PlanT(val item: Training): TypeRepo()
-    data class PlansT(val item: List<Training>): TypeRepo()
+    data class PartT(val item: Part): TypeRepo()
+    data class PartsT(val item: List<Part>): TypeRepo()
+    data class PlanT(val item: Plan): TypeRepo()
+    data class PlansT(val item: List<Plan>): TypeRepo()
+    data class SetViewIdT(val item: SetViewId): TypeRepo()
     data class StepPlanT(val item: StepPlan): TypeRepo()
-    data class SettingT(val item: Setting): TypeRepo()
     data class SettingsT(val item: Settings): TypeRepo()
     data class DeviceUIT(val item: DeviceBle): TypeRepo()
     data class DevicesUIT(val item: Map<String, DeviceBle>): TypeRepo()
     data class BleConnectStateT(val item: ConnectState): TypeRepo()
     data class WeatherT(val item: Weather): TypeRepo()
     data class WeatherRequestT(val item: WeatherRequest): TypeRepo()
+    data class SpeechesT(val item : List<Speech>): TypeRepo()
     data object NullT: TypeRepo()
     fun TypeRepo.toStepPlan(): TypeRepo{
-        return if (this is PlanT) StepPlanT(item = GlobalValueApp.toStepPlan1(this.item))
+        return if (this is PlanT) StepPlanT(item = GlobalValueApp.toStepPlan(this.item))
         else NullT
     }
 }

@@ -9,5 +9,5 @@ interface ActivitySource {
     fun get(activity: TypeSource): Flow<ResultSource<TypeSource>>
     fun copy(activity: TypeSource): ResultSource<TypeSource>
     fun update(activity: TypeSource): ResultSource<TypeSource>
-    fun del(id: TypeSource): ResultSource<TypeSource>
+    fun del(idActivity: TypeSource): ResultSource<TypeSource>
 }

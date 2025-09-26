@@ -2,12 +2,11 @@ package com.count_out.domain.entity.workout
 
 interface Ring: Element {
     val idRing: Long
-    var name: String
-    val countRing: Int
-    val trainingId: Long
+    val partId: Long
     val speechId: Long
-    val speech: SpeechKit?
-    val exercise: List<Exercise>
+    val numberLaps: Int
     val amount: Int
     val duration: Parameter
+    val speechKit: SpeechKit
+    val exercises: List<Exercise>
 }

@@ -7,14 +7,18 @@
     <string name="screen_execute">run</string>
     <string name="history">history</string>
     <string name="setting">setting</string>
-
+    <string name="h">h</string>
     <string name="hour">hour</string>
     <string name="min">min</string>
     <string name="sec">sec</string>
     <string name="km">km</string>
     <string name="m">m</string>
+    <string name="s">s</string>
     <string name="kg">kg</string>
     <string name="gr">gr</string>
+    <string name="work_up">Work-up</string>
+    <string name="work_out">Work out</string>
+    <string name="work_down">Work-down</string>
 
     <string name="clear_sky">Clear sky</string>
     <string name="mainly_clear">Mainly clear</string>

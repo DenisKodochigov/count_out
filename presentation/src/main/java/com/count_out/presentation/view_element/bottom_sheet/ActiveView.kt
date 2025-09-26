@@ -41,7 +41,7 @@ import com.count_out.presentation.view_element.custom_view.Frame
 import com.count_out.presentation.view_element.dialog.ChangeColorSectionDialog
 
 @SuppressLint("UnrememberedMutableState")
-@Composable fun CardActivity(dataState: SettingsState, activity: Activity) {
+@Composable fun CardActivity(dataState: SettingsState, activity: ActivityImplP) {
     Frame {
         ActivityTitle(
             activity = mutableStateOf(ActivityImplP(activity)),

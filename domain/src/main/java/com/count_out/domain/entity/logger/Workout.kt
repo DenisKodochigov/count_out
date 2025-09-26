@@ -1,13 +1,12 @@
 package com.count_out.domain.entity.logger
 
 import com.count_out.domain.entity.weather.Weather
-import com.count_out.domain.entity.workout.Training
-
+import com.count_out.domain.entity.workout.Plan
 
 interface Workout {
     val idWorkout: Long
     val trainingId: Long
-    val training: Training?
+    val training: Plan?
     val isSelected: Boolean
     val name: String
     val address: String
@@ -52,6 +51,6 @@ interface Workout {
     val resultAmount :Double
     val resultRange  :Double
 
-    fun formTraining(training: Training)
+    fun formTraining(training: Plan)
     fun formWeather(weather: Weather)
 }

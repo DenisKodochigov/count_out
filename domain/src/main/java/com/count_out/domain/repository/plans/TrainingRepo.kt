@@ -11,5 +11,4 @@ interface TrainingRepo {
     fun copy(training: TypeRepo): Flow<ResultUC<TypeRepo>> //: Flow<List<Training>>
 //    fun select(training: TypeRepo): Flow<ResultUC<TypeRepo>> //: Flow<List<Training>>
     fun update(training: TypeRepo): Flow<ResultUC<TypeRepo>> // Flow<Training>
-    fun updates(training: TypeRepo): Flow<ResultUC<TypeRepo>> //: Flow<List<Training>>
 }

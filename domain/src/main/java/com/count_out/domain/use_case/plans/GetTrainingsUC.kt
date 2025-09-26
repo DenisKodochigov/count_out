@@ -13,5 +13,5 @@ class GetTrainingsUC @Inject constructor(configuration: Configuration, private v
     override fun method(request: Request): Flow<ResultUC<TypeRepo>> = repo.gets()
     override fun response(typeRepo: TypeRepo): Response = Response(typeRepo)
     data object Request : UseCase.Request
-    data class Response(val trainings: TypeRepo): UseCase.Response
+    data class Response(val plans: TypeRepo): UseCase.Response
 }

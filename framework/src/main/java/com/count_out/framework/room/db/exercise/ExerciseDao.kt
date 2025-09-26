@@ -1,29 +1,19 @@
 package com.count_out.framework.room.db.exercise
 
 import androidx.room.Dao
-import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Transaction
-import androidx.room.Update
-import com.count_out.framework.room.db.relation.ExerciseRel
-import kotlinx.coroutines.flow.Flow
+import com.count_out.framework.room.db.PrimeDao
 
 @Dao
-interface ExerciseDao {
-    @Insert
-    fun add(item: ExerciseTable): Long
-    @Update
-    fun update( exercise: ExerciseTable): Int
-    @Update
-    fun updates( exercise: List<ExerciseTable>): Int
-    @Query("DELETE FROM tb_exercise WHERE idExercise = :id")
+interface ExerciseDao: PrimeDao<ExerciseTb> {
+    @Query("DELETE FROM exercise_tb WHERE idExercise = :id")
     fun del(id: Long): Int
-    @Query("UPDATE tb_exercise SET activityId = :activityId WHERE idExercise =:exerciseId")
+    @Query("UPDATE exercise_tb SET activityId = :activityId WHERE idExercise =:exerciseId")
     fun setActivity(exerciseId: Long, activityId: Long): Int
-
     @Transaction
-    @Query("SELECT * FROM tb_exercise WHERE roundId = :id ORDER BY idView ASC")
-    fun getExerciseRound(id: Long): List<ExerciseTable>
+    @Query("SELECT * FROM exercise_tb WHERE ringId = :id ORDER BY idView ASC")
+    fun getExerciseRound(id: Long): List<ExerciseTb>
 }
 
 //    @Query("SELECT max( idView) FROM tb_exercise WHERE roundId = :roundId")

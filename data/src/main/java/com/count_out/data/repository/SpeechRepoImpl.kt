@@ -10,18 +10,8 @@ import javax.inject.Inject
 class SpeechRepoImpl @Inject constructor(
     private val source: SpeechSource): SpeechRepo, PrimeRepo()
 {
-    override fun get(speech: TypeRepo): Flow<ResultUC<TypeRepo>> =
-        source.get(toTypeSource(speech)).convertor()
-
-    override fun copy(speech: TypeRepo): Flow<ResultUC<TypeRepo>> {
-        return source.copy(toTypeSource(speech))
-            .nextAction{ it-> source.get(it)}
-    }
-
     override fun update(speech: TypeRepo): Flow<ResultUC<TypeRepo>> {
-        return source.update(toTypeSource(speech))
-            .nextAction{ it-> source.get(it)}
-    }
+        return source.update(toTypeSource(speech)).wrapFlow() }
 }
 
 

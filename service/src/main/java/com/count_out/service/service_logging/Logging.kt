@@ -1,6 +1,5 @@
 package com.count_out.service.service_logging
 
-import com.count_out.data.entity.WorkoutRecord
 import com.count_out.data.router.models.TemporaryBase
 import com.count_out.domain.entity.enums.RunningState
 import jakarta.inject.Inject
@@ -30,11 +29,11 @@ class Logging @Inject constructor() {
     }
     fun stop(){ stateDouble.value = RunningState.Stopped}
 
-    fun saveTraining(workout: WorkoutRecord){
-        CoroutineScope(Dispatchers.Default).launch {
-//            dataRepository.saveTraining(workout)
-        }
-    }
+//    fun saveTraining(workout: WorkoutRecord){
+//        CoroutineScope(Dispatchers.Default).launch {
+////            dataRepository.saveTraining(workout)
+//        }
+//    }
     fun notSaveTraining(){
 //        dataRepository.clearTemporaryData()
     }

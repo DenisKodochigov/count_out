@@ -4,29 +4,24 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Update
+import com.count_out.data.models.throwable.TypeSource
+import com.count_out.framework.room.db.PrimeDao
 import kotlinx.coroutines.flow.Flow
 
 @Dao
-interface ActivityDao {
+interface ActivityDao: PrimeDao<ActivityTb> {
 
     @Query("SELECT * FROM tb_activity")
-    fun gets(): Flow<List<ActivityTable>>
+    fun gets(): Flow<List<ActivityTb>>
 
     @Query("SELECT * FROM tb_activity WHERE idActivity = :id")
-    fun get(id: Long): Flow<ActivityTable>
-
-    @Insert
-    fun add(item: ActivityTable): Long
-
-    @Update
-    fun update(item: ActivityTable): Int
+    fun get(id: Long): Flow<ActivityTb>
 
     @Query("DELETE FROM tb_activity WHERE idActivity = :id")
     fun del(id: Long): Int
 
-    @Query("UPDATE tb_activity SET color = :color WHERE idActivity =:activityId")
-    fun setColor(activityId: Long, color: Int): Int
-
-    @Query("SELECT idExercise FROM tb_exercise WHERE activityId =:activityId")
+    @Query("SELECT idExercise FROM exercise_tb WHERE activityId =:activityId")
     fun checkExerciseWithActivity(activityId: Long): Long?
 }
+//    @Query("UPDATE tb_activity SET color = :color WHERE idActivity =:activityId")
+//    fun setColor(activityId: Long, color: Int): Int

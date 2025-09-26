@@ -20,10 +20,10 @@
     <string name="message_after_end">Сообщение после окончания</string>
     <string name="list_activity">Упражнения</string>
     <string name="work_up">Разминка</string>
-    <string name="work_up1">разминки</string>
     <string name="work_out">Основнная часть</string>
-    <string name="work_out1">основнной части</string>
     <string name="work_down">Заминка</string>
+    <string name="work_up1">разминки</string>
+    <string name="work_out1">основнной части</string>
     <string name="work_down1">заминки</string>
     <string name="weight">Вес</string>
     <string name="rest">Отдых</string>

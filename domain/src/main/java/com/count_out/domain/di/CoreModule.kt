@@ -10,12 +10,10 @@ import com.count_out.domain.core.ShowBSCore
 import com.count_out.domain.core.WeatherCore
 import com.count_out.domain.core.plans.ActivityCore
 import com.count_out.domain.core.plans.ExerciseCore
-import com.count_out.domain.core.plans.RingCore
 import com.count_out.domain.core.plans.RoundCore
 import com.count_out.domain.core.plans.SetCore
 import com.count_out.domain.core.plans.SettingsCore
 import com.count_out.domain.core.plans.SpeechCore
-import com.count_out.domain.core.plans.SpeechKitCore
 import com.count_out.domain.core.plans.TrainingCore
 import com.count_out.domain.repository.BluetoothRepo
 import com.count_out.domain.repository.CountOutServiceRepo
@@ -25,11 +23,9 @@ import com.count_out.domain.repository.LocationRepo
 import com.count_out.domain.repository.WeatherRepo
 import com.count_out.domain.repository.plans.ActivityRepo
 import com.count_out.domain.repository.plans.ExerciseRepo
-import com.count_out.domain.repository.plans.RingRepo
 import com.count_out.domain.repository.plans.RoundRepo
 import com.count_out.domain.repository.plans.SetRepo
 import com.count_out.domain.repository.plans.SettingsRepo
-import com.count_out.domain.repository.plans.SpeechKitRepo
 import com.count_out.domain.repository.plans.SpeechRepo
 import com.count_out.domain.repository.plans.TrainingRepo
 import com.count_out.domain.use_case.UseCase
@@ -39,12 +35,11 @@ import com.count_out.domain.use_case.other.GetWeatherUC
 import com.count_out.domain.use_case.plans.CopyTrainingUC
 import com.count_out.domain.use_case.plans.DeleteTrainingUC
 import com.count_out.domain.use_case.plans.GetStepPlanUC
-import com.count_out.domain.use_case.plans.GetTrainingUC
+import com.count_out.domain.use_case.plans.GetPlanUC
 import com.count_out.domain.use_case.plans.GetTrainingsUC
 import com.count_out.domain.use_case.plans.SaveLastUsePlanUC
 import com.count_out.domain.use_case.plans.SelectTrainingUC
-import com.count_out.domain.use_case.plans.UpdateTrainingUC
-import com.count_out.domain.use_case.plans.exercise.ChangeSequenceExerciseUC
+import com.count_out.domain.use_case.plans.UpdatePlanUC
 import com.count_out.domain.use_case.plans.exercise.CopyExerciseUC
 import com.count_out.domain.use_case.plans.exercise.DeleteExerciseUC
 import com.count_out.domain.use_case.plans.exercise.UpdateExerciseUC
@@ -74,8 +69,6 @@ class CoreModule {
     @Singleton @Provides
     fun provideExerciseCoreCore(repo: ExerciseRepo ): ExerciseCore = ExerciseCore(repo)
     @Singleton @Provides
-    fun provideRingCore(repo: RingRepo ): RingCore = RingCore(repo)
-    @Singleton @Provides
     fun provideRoundCore(repo: RoundRepo ): RoundCore = RoundCore(repo)
     @Singleton @Provides
     fun provideSetCore(repo: SetRepo ): SetCore = SetCore(repo)
@@ -83,8 +76,8 @@ class CoreModule {
     fun provideSettingsCore(repo: SettingsRepo ): SettingsCore = SettingsCore(repo)
     @Singleton @Provides
     fun provideSpeechCore(repo: SpeechRepo ): SpeechCore = SpeechCore(repo)
-    @Singleton @Provides
-    fun provideSpeechKitCore(repo: SpeechKitRepo ): SpeechKitCore = SpeechKitCore(repo)
+//    @Singleton @Provides
+//    fun provideSpeechKitCore(repo: SpeechKitRepo ): SpeechKitCore = SpeechKitCore(repo)
     @Singleton @Provides
     fun provideTrainingCore(repo: TrainingRepo ): TrainingCore = TrainingCore(repo)
     @Singleton @Provides
@@ -133,7 +126,7 @@ class CoreModule {
     fun provideGetTrainingUseCase(
         configuration: UseCase.Configuration,
         trainingRepo: TrainingRepo
-    ): GetTrainingUC = GetTrainingUC(configuration, trainingRepo)
+    ): GetPlanUC = GetPlanUC(configuration, trainingRepo)
     @Singleton
     @Provides
     fun provideSelectTrainingUseCase(
@@ -145,7 +138,7 @@ class CoreModule {
     fun provideUpdateTrainingUseCase(
         configuration: UseCase.Configuration,
         trainingRepo: TrainingRepo
-    ): UpdateTrainingUC = UpdateTrainingUC(configuration, trainingRepo)
+    ): UpdatePlanUC = UpdatePlanUC(configuration, trainingRepo)
 
     @Singleton
     @Provides

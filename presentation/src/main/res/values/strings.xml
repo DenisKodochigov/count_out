@@ -21,13 +21,13 @@
     <string name="training_text_fab">Training</string>
     <string name="weight">Weight</string>
     <string name="rest">Rest</string>
-    <string name="work_down">Work-down</string>
-    <string name="work_down1">work-down</string>
-    <string name="work_out">Work out</string>
-    <string name="work_out1">work out</string>
     <string name="work_up">Work-up</string>
-    <string name="work_up1">work-up</string>
+    <string name="work_out">Work out</string>
+    <string name="work_down">Work-down</string>
     <string name="Workout">Workout</string>
+    <string name="work_up1">work-up</string>
+    <string name="work_out1">work out</string>
+    <string name="work_down1">work-down</string>
 
     <string name="hour">hour</string>
     <string name="sec">sec</string>

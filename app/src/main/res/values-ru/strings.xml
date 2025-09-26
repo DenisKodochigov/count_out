@@ -17,6 +17,9 @@
     <string name="m">м</string>
     <string name="kg">кг</string>
     <string name="gr">гр</string>
+    <string name="work_up">Разминка</string>
+    <string name="work_out">Основнная часть</string>
+    <string name="work_down">Заминка</string>
 
     <string name="clear_sky">Чистое небо</string>
     <string name="mainly_clear">Преимущественно ясно</string>

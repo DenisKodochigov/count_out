@@ -5,21 +5,19 @@ import com.count_out.data.source.local.SettingsSource
 import com.count_out.data.source.room.ActivitySource
 import com.count_out.data.source.room.ExerciseSource
 import com.count_out.data.source.room.RingSource
-import com.count_out.data.source.room.RoundSource
 import com.count_out.data.source.room.SetSource
 import com.count_out.data.source.room.SpeechKitSource
 import com.count_out.data.source.room.SpeechSource
-import com.count_out.data.source.room.TrainingSource
+import com.count_out.data.source.room.PlanSource
 import com.count_out.framework.datastore.LastPlanSourceImpl
 import com.count_out.framework.datastore.SettingsSourceImpl
 import com.count_out.framework.room.source.ActivitySourceImpl
 import com.count_out.framework.room.source.ExerciseSourceImpl
 import com.count_out.framework.room.source.RingSourceImpl
-import com.count_out.framework.room.source.RoundSourceImpl
 import com.count_out.framework.room.source.SetSourceImpl
 import com.count_out.framework.room.source.SpeechKitSourceImpl
 import com.count_out.framework.room.source.SpeechSourceImpl
-import com.count_out.framework.room.source.TrainingSourceImpl
+import com.count_out.framework.room.source.PlanSourceImpl
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -29,11 +27,9 @@ import dagger.hilt.components.SingletonComponent
 @InstallIn(SingletonComponent::class)
 abstract class SourceFrameWorkModule {
     @Binds
-    abstract fun bindTrainingSource(trainingSource: TrainingSourceImpl): TrainingSource
+    abstract fun bindTrainingSource(trainingSource: PlanSourceImpl): PlanSource
     @Binds
-    abstract fun bindRingSource(ringSource: RingSourceImpl): RingSource
-    @Binds
-    abstract fun bindRoundSource(roundSource: RoundSourceImpl): RoundSource
+    abstract fun bindRoundSource(roundSource: RingSourceImpl): RingSource
     @Binds
     abstract fun bindExerciseSource(exerciseSource: ExerciseSourceImpl): ExerciseSource
     @Binds

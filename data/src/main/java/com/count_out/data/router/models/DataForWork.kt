@@ -1,12 +1,11 @@
 package com.count_out.data.router.models
 
-import com.count_out.data.models.SetImplD
 import com.count_out.domain.entity.StepPlan
-import com.count_out.domain.entity.workout.Training
+import com.count_out.domain.entity.workout.Plan
 import kotlinx.coroutines.flow.MutableStateFlow
 
 data class DataForWork (
-    var training: MutableStateFlow<Training?> = MutableStateFlow(null),
+    var plan: MutableStateFlow<Plan?> = MutableStateFlow(null),
     var enableSpeechDescription: MutableStateFlow<Boolean> = MutableStateFlow(true),
     var idSetChangeInterval: MutableStateFlow<Long> = MutableStateFlow(0),
     var interval: MutableStateFlow<Double> = MutableStateFlow(0.0),
@@ -33,13 +32,15 @@ data class DataForWork (
         dataFromWork?.stepTraining?.value = map[indexMap]
     }
     fun sendStepTraining(){
-        dataFromWork?.stepTraining?.value =
-            if (interval.value > 0) {
-                (map[indexMap] as StepPlanImpl).copy(
-                    currentSet = map[indexMap].currentSet?.let { set ->
-                       (set as SetImplD).copy(intervalReps = interval.value) }
-                )}
-            else map[indexMap]
+//        dataFromWork?.stepTraining?.value =
+//            if (interval.value > 0) {
+//                (map[indexMap] as StepPlanDb).copy(
+//                    currentSet = map[indexMap].currentSet?.let { set -> set
+////                       set.copy(intervalReps = interval.value) }
+//                    }
+//                )
+//            }
+//            else map[indexMap]
     }
 
     fun createMapTraining(){

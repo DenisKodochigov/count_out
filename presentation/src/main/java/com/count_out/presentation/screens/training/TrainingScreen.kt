@@ -27,31 +27,30 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.count_out.presentation.R
 import com.count_out.presentation.models.Dimen
-import com.count_out.presentation.models.TrainingImplP
 import com.count_out.presentation.models.TypeKeyboard
 import com.count_out.presentation.screens.prime.PrimeScreen
-import com.count_out.presentation.screens.training.TrainingEvent.ShowBS
-import com.count_out.presentation.screens.training.round.Round
+import com.count_out.presentation.screens.training.PlanEvent.ShowBS
+import com.count_out.presentation.screens.training.round.Part
 import com.count_out.presentation.view_element.TextFieldApp
 import com.count_out.presentation.view_element.bottom_sheet.ShowBottomSheetSpeech
 import com.count_out.presentation.view_element.icons.IconsGroup
 
-@Composable fun TrainingScreen(viewModel: TrainingViewModel, trainingId: Long){
-    LaunchedEffect(Unit) { viewModel.submitEvent(TrainingEvent.Init(trainingId)) }
+@Composable fun TrainingScreen(viewModel: PlanViewModel, trainingId: Long){
+    LaunchedEffect(Unit) { viewModel.submitEvent(PlanEvent.Init(trainingId)) }
     TrainingScreenCreateView( viewModel = viewModel )
 }
 
 @SuppressLint("StateFlowValueCalledInComposition")
-@Composable fun TrainingScreenCreateView( viewModel: TrainingViewModel){
+@Composable fun TrainingScreenCreateView( viewModel: PlanViewModel){
     viewModel.screenState.collectAsState().value.let { screenState ->
         PrimeScreen(loader = screenState) { dataState ->
-            ShowBottomSheetSpeech(dataState, dataState.showBS.training,
-                R.string.training, dataState.training)
+            ShowBottomSheetSpeech(dataState, dataState.showBS.plan,
+                R.string.training, dataState.plan)
             TrainingScreenLayout(dataState)
         }
     }
 }
-@Composable fun TrainingScreenLayout(dataState: TrainingState){
+@Composable fun TrainingScreenLayout(dataState: PlanState){
     val focusManager = LocalFocusManager.current
     val interactionSource = remember { MutableInteractionSource() }
     Column(
@@ -65,15 +64,17 @@ import com.count_out.presentation.view_element.icons.IconsGroup
     ){
         Spacer(modifier = Modifier.height(Dimen.width8))
         NameTraining(dataState = dataState)
-        dataState.training?.rounds?.forEach { round ->
+        dataState.plan?.parts?.forEach { part ->
             Spacer(modifier = Modifier.height(Dimen.width8))
-            Round(dataState = dataState, round = round)
+            Part(dataState = dataState, part = part)
         }
+
+
     }
 }
-@Composable fun NameTraining(dataState: TrainingState) {
-    val enteredName: MutableState<String> = remember { mutableStateOf(dataState.training?.name ?: "") }
-    if (dataState.training?.idTraining == 0L) return
+@Composable fun NameTraining(dataState: PlanState) {
+    val enteredName: MutableState<String> = remember { mutableStateOf(dataState.plan?.name ?: "") }
+    if (dataState.plan?.idPlan == 0L) return
     Row( verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier.fillMaxWidth().padding(bottom = 6.dp, end = 4.dp))
     {
@@ -87,19 +88,19 @@ import com.count_out.presentation.view_element.icons.IconsGroup
             placeholder = enteredName.value,
             onChangeFocus = {
                 enteredName.value = it
-                dataState.training?.let {tr->
-                    dataState.event( TrainingEvent.UpdateTraining(TrainingImplP(tr, enteredName.value)))
+                dataState.plan?.let { tr->
+                    dataState.event( PlanEvent.UpdatePlan(tr.apply { this.name = enteredName.value}))
                 }
             }
         )
         Spacer(modifier = Modifier.weight(1f))
         IconsGroup(
             onClickSpeech = {
-                dataState.item = dataState.training
-                dataState.event(ShowBS(dataState.showBS.copy(element = dataState.training))) },
+                dataState.item = dataState.plan
+                dataState.event(ShowBS(dataState.showBS.copy(element = dataState.plan))) },
             onClickDelete = {
-                dataState.training?.let { dataState.event(TrainingEvent.DelTraining(dataState.training))}
-                dataState.training?.let { dataState.event(TrainingEvent.BackScreen)}
+                dataState.plan?.let { dataState.event(PlanEvent.DelPlan(dataState.plan))}
+                dataState.plan?.let { dataState.event(PlanEvent.BackScreen)}
             }
         )
         Spacer(modifier = Modifier.width(7.dp))
