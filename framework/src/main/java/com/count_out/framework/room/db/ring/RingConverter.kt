@@ -1,8 +1,6 @@
 package com.count_out.framework.room.db.ring
 
 import androidx.room.TypeConverter
-import com.count_out.framework.room.db.exercise.ExerciseRel
-import com.count_out.framework.room.db.exercise.ExerciseTb
 
 class RingConverter {
     @TypeConverter

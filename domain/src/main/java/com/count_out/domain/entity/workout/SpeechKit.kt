@@ -6,4 +6,14 @@ interface SpeechKit: Element {
     val afterStart: Speech
     val beforeEnd: Speech
     val afterEnd: Speech
+
+    companion object{
+        val EMPTY = object: SpeechKit{
+            override val idSpeechKit: Long = 0
+            override val beforeStart: Speech = Speech.EMPTY
+            override val afterStart: Speech = Speech.EMPTY
+            override val beforeEnd: Speech = Speech.EMPTY
+            override val afterEnd: Speech = Speech.EMPTY
+        }
+    }
 }

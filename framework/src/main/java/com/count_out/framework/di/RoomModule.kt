@@ -11,10 +11,10 @@ import com.count_out.framework.room.db.old.settings.SettingDao
 import com.count_out.framework.room.db.part.PartDao
 import com.count_out.framework.room.db.plan.PlanDao
 import com.count_out.framework.room.db.ring.RingDao
+import com.count_out.framework.room.db.set.SetDao
 import com.count_out.framework.room.db.speech.SpeechDao
 import com.count_out.framework.room.db.speech_kit.SpeechKitDao
 import com.count_out.framework.room.db.traking.TrackingDao
-import com.count_out.framework.room.db.set.SetDao
 import com.count_out.framework.room.entity.prepopulateRealDb
 import com.count_out.framework.room.entity.prepopulateTestDb
 import dagger.Module

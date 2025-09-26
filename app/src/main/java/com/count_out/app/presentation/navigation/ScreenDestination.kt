@@ -19,8 +19,8 @@ import com.count_out.presentation.screens.plans.PlansScreen
 import com.count_out.presentation.screens.plans.PlansViewModel
 import com.count_out.presentation.screens.settings.SettingScreen
 import com.count_out.presentation.screens.settings.SettingViewModel
-import com.count_out.presentation.screens.training.TrainingScreen
 import com.count_out.presentation.screens.training.PlanViewModel
+import com.count_out.presentation.screens.training.TrainingScreen
 
 /*** Contract for information needed on every App navigation destination*/
 interface ScreenDestination {

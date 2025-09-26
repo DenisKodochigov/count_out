@@ -3,9 +3,9 @@ package com.count_out.presentation.screens.training
 import com.count_out.domain.entity.SetViewId
 import com.count_out.domain.entity.workout.Collapsing
 import com.count_out.domain.entity.workout.Exercise
+import com.count_out.domain.entity.workout.Plan
 import com.count_out.domain.entity.workout.Set
 import com.count_out.domain.entity.workout.ShowBottomSheet
-import com.count_out.domain.entity.workout.Plan
 import com.count_out.domain.entity.workout.Speech
 import com.count_out.presentation.screens.prime.Event
 

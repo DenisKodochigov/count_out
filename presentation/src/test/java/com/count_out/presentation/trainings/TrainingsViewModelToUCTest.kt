@@ -5,8 +5,6 @@ import com.count_out.domain.use_case.plans.DeleteTrainingUC
 import com.count_out.domain.use_case.plans.GetTrainingsUC
 import com.count_out.domain.use_case.plans.SelectTrainingUC
 import com.count_out.domain.use_case.plans.UpdatePlanUC
-import com.count_out.presentation.models.SpeechImplP
-import com.count_out.presentation.models.SpeechKitImplP
 import com.count_out.presentation.screens.plans.PlansEvent
 import com.count_out.presentation.screens.plans.PlansViewModel
 import com.count_out.presentation.screens.prime.ScreenState

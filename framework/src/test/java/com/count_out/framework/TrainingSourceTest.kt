@@ -1,21 +1,21 @@
 package com.count_out.framework
 
-import com.count_out.data.models.old.TrainingImplD
-import com.count_out.data.models.throwable.TypeSource
-import com.count_out.data.source.room.RingSource
-import com.count_out.framework.room.db.old.training.TrainingTable
-import com.count_out.framework.room.source.SpeechKitSourceImpl
-import com.count_out.framework.room.source.PlanSourceImpl
-import com.google.android.gms.common.util.CollectionUtils.listOf
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.flowOf
-import kotlinx.coroutines.test.runTest
-import org.junit.jupiter.api.Assertions
-import org.junit.jupiter.api.Test
-import org.mockito.Mockito.mock
-import org.mockito.kotlin.whenever
-import java.util.Collections.emptyList
+//import com.count_out.data.models.old.TrainingImplD
+//import com.count_out.data.models.throwable.TypeSource
+//import com.count_out.data.source.room.RingSource
+//import com.count_out.framework.room.db.old.training.TrainingTable
+//import com.count_out.framework.room.source.SpeechKitSourceImpl
+//import com.count_out.framework.room.source.PlanSourceImpl
+//import com.google.android.gms.common.util.CollectionUtils.listOf
+//import kotlinx.coroutines.ExperimentalCoroutinesApi
+//import kotlinx.coroutines.flow.first
+//import kotlinx.coroutines.flow.flowOf
+//import kotlinx.coroutines.test.runTest
+//import org.junit.jupiter.api.Assertions
+//import org.junit.jupiter.api.Test
+//import org.mockito.Mockito.mock
+//import org.mockito.kotlin.whenever
+//import java.util.Collections.emptyList
 
 //class TrainingSourceTest {
 //    private val dao = mock<PlanDao>()

@@ -23,9 +23,9 @@ import androidx.compose.ui.unit.dp
 import com.count_out.domain.entity.workout.Element
 import com.count_out.domain.entity.workout.Exercise
 import com.count_out.domain.entity.workout.Part
-import com.count_out.domain.entity.workout.Set
 import com.count_out.domain.entity.workout.Plan
 import com.count_out.domain.entity.workout.Ring
+import com.count_out.domain.entity.workout.Set
 import com.count_out.domain.entity.workout.Speech
 import com.count_out.presentation.R
 import com.count_out.presentation.models.BottomSheetInterface

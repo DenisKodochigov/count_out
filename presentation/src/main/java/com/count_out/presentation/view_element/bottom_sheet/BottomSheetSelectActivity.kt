@@ -25,7 +25,6 @@ import com.count_out.domain.entity.workout.Activity
 import com.count_out.domain.entity.workout.Exercise
 import com.count_out.domain.entity.workout.Parameter
 import com.count_out.domain.entity.workout.Set
-import com.count_out.domain.entity.workout.Speech
 import com.count_out.domain.entity.workout.SpeechKit
 import com.count_out.presentation.R
 import com.count_out.presentation.models.ActivityImplP

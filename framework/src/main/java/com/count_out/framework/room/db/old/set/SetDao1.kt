@@ -1,9 +1,9 @@
 package com.count_out.framework.room.db.old.set
 
-import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.Query
-import androidx.room.Update
+//import androidx.room.Dao
+//import androidx.room.Insert
+//import androidx.room.Query
+//import androidx.room.Update
 
 //@Dao
 //interface SetDao1 {

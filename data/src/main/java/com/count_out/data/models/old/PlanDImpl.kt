@@ -1,8 +1,8 @@
 package com.count_out.data.models.old
 
-import com.count_out.domain.entity.workout.Part
-import com.count_out.domain.entity.workout.Plan
-import com.count_out.domain.entity.workout.Speech
+//import com.count_out.domain.entity.workout.Part
+//import com.count_out.domain.entity.workout.Plan
+//import com.count_out.domain.entity.workout.Speech
 
 //data class PlanDImpl(
 //    override val idPlan: Long = 0L,

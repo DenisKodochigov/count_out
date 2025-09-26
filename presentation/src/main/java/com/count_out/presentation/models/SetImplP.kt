@@ -5,7 +5,6 @@ import com.count_out.domain.entity.enums.Units
 import com.count_out.domain.entity.enums.Zone
 import com.count_out.domain.entity.workout.Parameter
 import com.count_out.domain.entity.workout.Set
-import com.count_out.domain.entity.workout.Speech
 import com.count_out.domain.entity.workout.SpeechKit
 
 data class SetImplP(
@@ -24,7 +23,7 @@ data class SetImplP(
     override val groupCount: String = "",
     override val rest: Parameter = ParameterImplP(value = 0.0, unit = Units.M),
     var positions: Pair<Int, Int> = Pair(0 , 0),
-    override val speechKit: SpeechKit,
+    override val speechKit: SpeechKit = SpeechKit.EMPTY,
 ): Set {
     constructor(set: Set) : this(
         idSet = set.idSet,

@@ -1,11 +1,11 @@
 package com.count_out.framework.room.db.old.training
 
-import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.Query
-import androidx.room.Transaction
-import androidx.room.Update
-import kotlinx.coroutines.flow.Flow
+//import androidx.room.Dao
+//import androidx.room.Insert
+//import androidx.room.Query
+//import androidx.room.Transaction
+//import androidx.room.Update
+//import kotlinx.coroutines.flow.Flow
 
 //@Dao
 //interface TrainingDao {

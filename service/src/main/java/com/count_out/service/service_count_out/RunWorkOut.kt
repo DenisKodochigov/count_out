@@ -1,21 +1,8 @@
 package com.count_out.service.service_count_out
 
 import android.content.Context
-import com.count_out.data.router.models.DataForWork
-import com.count_out.data.router.models.DataFromWork
-import com.count_out.domain.entity.enums.Goal
-import com.count_out.domain.entity.enums.RunningState
-import com.count_out.domain.entity.enums.Units
-import com.count_out.domain.entity.workout.Speech
-import com.count_out.domain.entity.workout.SpeechKit
 import com.count_out.framework.text_to_speech.SpeechManager
-import com.count_out.service.R
-import com.count_out.service.service_timing.Delay
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class RunWorkOut @Inject constructor(

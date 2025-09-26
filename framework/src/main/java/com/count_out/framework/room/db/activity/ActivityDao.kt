@@ -1,10 +1,7 @@
 package com.count_out.framework.room.db.activity
 
 import androidx.room.Dao
-import androidx.room.Insert
 import androidx.room.Query
-import androidx.room.Update
-import com.count_out.data.models.throwable.TypeSource
 import com.count_out.framework.room.db.PrimeDao
 import kotlinx.coroutines.flow.Flow
 
