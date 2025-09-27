@@ -31,9 +31,9 @@ import com.count_out.presentation.R
 import com.count_out.presentation.models.BottomSheetInterface
 import com.count_out.presentation.models.Dimen
 import com.count_out.presentation.models.TypeKeyboard
-import com.count_out.presentation.screens.training.PlanEvent
-import com.count_out.presentation.screens.training.PlanEvent.ShowBS
-import com.count_out.presentation.screens.training.PlanState
+import com.count_out.presentation.screens.plan.PlanEvent
+import com.count_out.presentation.screens.plan.PlanEvent.ShowBS
+import com.count_out.presentation.screens.plan.PlanState
 import com.count_out.presentation.view_element.ButtonConfirm
 import com.count_out.presentation.view_element.ModalBottomSheetApp
 import com.count_out.presentation.view_element.TextApp

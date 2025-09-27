@@ -17,11 +17,15 @@ import javax.inject.Inject
 class ActivitySourceImpl @Inject constructor(private val dao: ActivityDao): ActivitySource, PrimeSource() {
 
     override fun gets(): Flow<ResultSource<TypeSource>> =
-        dao.gets().map { list-> TypeSource.ActivitiesT(item = list)}.resultSource()
+        dao.gets().map { list->
+            if(list.isEmpty()) ResultSource.Success(TypeSource.ActivitiesT(item = list))
+            else ResultSource.Error(ThrowableDS.RequestFailed())
+        }
 
     override fun get(activity: TypeSource): Flow<ResultSource<TypeSource>> {
         return if (activity is TypeSource.ActivityT) {
-            dao.get(activity.item.idActivity).map { TypeSource.ActivityT(it) }.resultSource()
+            dao.get(activity.item.idActivity).map {
+                ResultSource.Success(TypeSource.ActivityT(it)) }
         } else flow { emit (ResultSource.Error(ThrowableDS.NotValidType())) }
     }
 

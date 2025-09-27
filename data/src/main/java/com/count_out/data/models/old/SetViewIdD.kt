@@ -8,7 +8,7 @@ class SetViewIdD (
     val to: Int = 0,
 ){
     constructor(item: SetViewId): this(
-        item.roundId,
+        item.ringId,
         item.from,
         item.to
     )

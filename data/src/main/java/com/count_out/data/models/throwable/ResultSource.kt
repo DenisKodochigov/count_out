@@ -33,7 +33,6 @@ sealed class ResultSource< out T: TypeSource>: ResultApp {
         }
     }
     companion object {
-
         inline fun <T: TypeSource, R: TypeSource> ResultSource<T>.flatMap(transform: (T) -> ResultSource<R>): ResultSource<R> =
             when (this) {
                 is Success -> transform(data)

@@ -1,4 +1,4 @@
-package com.count_out.presentation.screens.training
+package com.count_out.presentation.screens.plan
 
 import com.count_out.domain.entity.TypeRepo
 import com.count_out.domain.use_case.UseCase

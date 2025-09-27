@@ -1,6 +1,6 @@
 package com.count_out.domain.repo
 
-import com.count_out.domain.repository.plans.TrainingRepo
+import com.count_out.domain.repository.plans.PlanRepo
 import com.count_out.domain.use_case.plans.DeleteTrainingUC
 import com.count_out.domain.use_case.plans.GetTrainingsUC
 import com.count_out.domain.use_case.plans.SelectTrainingUC
@@ -35,7 +35,7 @@ class SpeechRepoTest {
 //    val listTraining = mutableListOf(training1,training2)
 
     companion object{
-        val repo = mock<TrainingRepo>()
+        val repo = mock<PlanRepo>()
         val delTrainingUC = mock<DeleteTrainingUC>()
         val getTrainingsUC = mock<GetTrainingsUC>()
         val selectTrainingUC = mock<SelectTrainingUC>()

@@ -1,6 +1,7 @@
-package com.count_out.presentation.screens.training
+package com.count_out.presentation.screens.plan
 
 import com.count_out.domain.entity.SetViewId
+import com.count_out.domain.entity.supportive.NameId
 import com.count_out.domain.entity.workout.Collapsing
 import com.count_out.domain.entity.workout.Exercise
 import com.count_out.domain.entity.workout.Plan
@@ -11,7 +12,7 @@ import com.count_out.presentation.screens.prime.Event
 
 sealed class PlanEvent: Event {
     data class DelPlan(val training: Plan) : PlanEvent()
-    data class UpdatePlan(val training: Plan) : PlanEvent()
+    data class UpdatePlanName(val nameID: NameId) : PlanEvent()
 
     data class CopyExercise(val exercise: Exercise): PlanEvent()
     data class DelExercise(val exercise: Exercise): PlanEvent()

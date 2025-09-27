@@ -2,6 +2,7 @@ package com.count_out.data.repository
 
 import com.count_out.data.models.ActivityDb
 import com.count_out.data.models.ExerciseDb
+import com.count_out.data.models.NameIdDb
 import com.count_out.data.models.PartDb
 import com.count_out.data.models.PlanDb
 import com.count_out.data.models.RingDb
@@ -22,6 +23,7 @@ import com.count_out.domain.entity.TypeRepo.SetT
 import com.count_out.domain.entity.TypeRepo.SettingsT
 import com.count_out.domain.entity.TypeRepo.StringT
 import com.count_out.domain.entity.TypeRepo.WeatherRequestT
+import com.count_out.domain.entity.supportive.NameId
 import com.count_out.domain.entity.throwable.ResultUC
 import com.count_out.domain.entity.throwable.ThrowableUC
 import com.count_out.domain.entity.workout.Activity
@@ -78,6 +80,7 @@ abstract class PrimeRepo {
             is TypeRepo.SpeechT -> TypeSource.SpeechT(speechDb(value.item))
             is PlanT -> TypeSource.PlanT(item = planDb(value.item))
             is WeatherRequestT-> TypeSource.WeatherRequestT(item = value.item)
+            is NameId-> TypeSource.NameIdT(item =  NameIdDb(name = value.name, id = value.id ))
             else -> TypeSource.NullT
         }
     }

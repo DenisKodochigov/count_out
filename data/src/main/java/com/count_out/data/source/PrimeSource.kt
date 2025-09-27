@@ -1,7 +1,14 @@
 package com.count_out.data.source
 
 import com.count_out.data.models.throwable.ResultSource
+import com.count_out.data.models.throwable.ThrowableDS
 import com.count_out.data.models.throwable.TypeSource
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.map
 
 abstract class PrimeSource {
     inline fun <reified TS : TypeSource> ResultSource<TypeSource>.getTyped(): TS? =
@@ -14,7 +21,7 @@ abstract class PrimeSource {
 //            .map {
 //                lastValue = it
 //                ResultSource.Success(it) as ResultSource<TypeSource>
-//            } ResultUC
+//            }
 //            .flowOn(Dispatchers.IO)
 //            .catch { emit(ResultSource.Error(ThrowableDS.RequestFailed())) }
 //    }

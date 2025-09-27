@@ -1,4 +1,4 @@
-package com.count_out.presentation.screens.training.round
+package com.count_out.presentation.screens.plan.round
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -17,9 +17,9 @@ import com.count_out.domain.entity.discard
 import com.count_out.domain.entity.workout.Part
 import com.count_out.presentation.R
 import com.count_out.presentation.models.Dimen.contourHor2
-import com.count_out.presentation.screens.training.PlanEvent
-import com.count_out.presentation.screens.training.PlanEvent.ShowBS
-import com.count_out.presentation.screens.training.PlanState
+import com.count_out.presentation.screens.plan.PlanEvent
+import com.count_out.presentation.screens.plan.PlanEvent.ShowBS
+import com.count_out.presentation.screens.plan.PlanState
 import com.count_out.presentation.view_element.TextApp
 import com.count_out.presentation.view_element.custom_view.Frame
 import com.count_out.presentation.view_element.icons.IconsCollapsing

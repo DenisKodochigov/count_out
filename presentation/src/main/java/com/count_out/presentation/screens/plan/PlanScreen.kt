@@ -1,4 +1,4 @@
-package com.count_out.presentation.screens.training
+package com.count_out.presentation.screens.plan
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.clickable
@@ -25,32 +25,33 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import com.count_out.domain.entity.supportive.NameId
 import com.count_out.presentation.R
 import com.count_out.presentation.models.Dimen
 import com.count_out.presentation.models.TypeKeyboard
 import com.count_out.presentation.screens.prime.PrimeScreen
-import com.count_out.presentation.screens.training.PlanEvent.ShowBS
-import com.count_out.presentation.screens.training.round.Part
+import com.count_out.presentation.screens.plan.PlanEvent.ShowBS
+import com.count_out.presentation.screens.plan.round.Part
 import com.count_out.presentation.view_element.TextFieldApp
 import com.count_out.presentation.view_element.bottom_sheet.ShowBottomSheetSpeech
 import com.count_out.presentation.view_element.icons.IconsGroup
 
-@Composable fun TrainingScreen(viewModel: PlanViewModel, trainingId: Long){
+@Composable fun PlanScreen(viewModel: PlanViewModel, trainingId: Long){
     LaunchedEffect(Unit) { viewModel.submitEvent(PlanEvent.Init(trainingId)) }
-    TrainingScreenCreateView( viewModel = viewModel )
+    PlanScreenCreateView( viewModel = viewModel )
 }
 
 @SuppressLint("StateFlowValueCalledInComposition")
-@Composable fun TrainingScreenCreateView( viewModel: PlanViewModel){
+@Composable fun PlanScreenCreateView(viewModel: PlanViewModel){
     viewModel.screenState.collectAsState().value.let { screenState ->
         PrimeScreen(loader = screenState) { dataState ->
             ShowBottomSheetSpeech(dataState, dataState.showBS.plan,
                 R.string.training, dataState.plan)
-            TrainingScreenLayout(dataState)
+            PlanScreenLayout(dataState)
         }
     }
 }
-@Composable fun TrainingScreenLayout(dataState: PlanState){
+@Composable fun PlanScreenLayout(dataState: PlanState){
     val focusManager = LocalFocusManager.current
     val interactionSource = remember { MutableInteractionSource() }
     Column(
@@ -63,7 +64,7 @@ import com.count_out.presentation.view_element.icons.IconsGroup
             },
     ){
         Spacer(modifier = Modifier.height(Dimen.width8))
-        NameTraining(dataState = dataState)
+        NamePlan(dataState = dataState)
         dataState.plan?.parts?.forEach { part ->
             Spacer(modifier = Modifier.height(Dimen.width8))
             Part(dataState = dataState, part = part)
@@ -72,7 +73,7 @@ import com.count_out.presentation.view_element.icons.IconsGroup
 
     }
 }
-@Composable fun NameTraining(dataState: PlanState) {
+@Composable fun NamePlan(dataState: PlanState) {
     val enteredName: MutableState<String> = remember { mutableStateOf(dataState.plan?.name ?: "") }
     if (dataState.plan?.idPlan == 0L) return
     Row( verticalAlignment = Alignment.CenterVertically,
@@ -88,8 +89,9 @@ import com.count_out.presentation.view_element.icons.IconsGroup
             placeholder = enteredName.value,
             onChangeFocus = {
                 enteredName.value = it
-                dataState.plan?.let { tr->
-                    dataState.event( PlanEvent.UpdatePlan(tr.apply { this.name = enteredName.value}))
+                dataState.plan?.let { pl->
+                    dataState.event(
+                        PlanEvent.UpdatePlanName(NameId(enteredName.value,pl.idPlan)))
                 }
             }
         )

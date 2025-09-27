@@ -10,7 +10,7 @@ import com.count_out.data.repository.LocationRepoImpl
 import com.count_out.data.repository.SetRepoImpl
 import com.count_out.data.repository.SettingsRepoImpl
 import com.count_out.data.repository.SpeechRepoImpl
-import com.count_out.data.repository.TrainingRepoImpl
+import com.count_out.data.repository.PlanRepoImpl
 import com.count_out.data.repository.WeatherRepoImpl
 import com.count_out.domain.repository.BluetoothRepo
 import com.count_out.domain.repository.CountOutServiceRepo
@@ -23,7 +23,7 @@ import com.count_out.domain.repository.plans.ExerciseRepo
 import com.count_out.domain.repository.plans.SetRepo
 import com.count_out.domain.repository.plans.SettingsRepo
 import com.count_out.domain.repository.plans.SpeechRepo
-import com.count_out.domain.repository.plans.TrainingRepo
+import com.count_out.domain.repository.plans.PlanRepo
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -41,7 +41,7 @@ abstract class RepositoryBindModule {
     @Binds
     abstract fun bindSettingsRepo(settingsRepo: SettingsRepoImpl): SettingsRepo
     @Binds
-    abstract fun bindTrainingRepo(trainingRepoImpl: TrainingRepoImpl): TrainingRepo
+    abstract fun bindTrainingRepo(trainingRepoImpl: PlanRepoImpl): PlanRepo
     @Binds
     abstract fun bindExerciseRepo(exerciseRepoImpl: ExerciseRepoImpl): ExerciseRepo
     @Binds

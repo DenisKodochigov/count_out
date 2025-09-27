@@ -29,9 +29,9 @@ import com.count_out.domain.entity.workout.SpeechKit
 import com.count_out.presentation.R
 import com.count_out.presentation.models.ActivityImplP
 import com.count_out.presentation.models.Dimen
-import com.count_out.presentation.screens.training.PlanEvent
-import com.count_out.presentation.screens.training.PlanEvent.ShowBS
-import com.count_out.presentation.screens.training.PlanState
+import com.count_out.presentation.screens.plan.PlanEvent
+import com.count_out.presentation.screens.plan.PlanEvent.ShowBS
+import com.count_out.presentation.screens.plan.PlanState
 import com.count_out.presentation.view_element.ModalBottomSheetApp
 
 @Composable fun ShowBottomSheetSelectActivity(dataState: PlanState, item: Exercise){

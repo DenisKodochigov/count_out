@@ -9,6 +9,6 @@ interface PlanSource {
     fun get(plan: TypeSource): Flow<ResultSource<TypeSource>>
     fun getId(idPlan: TypeSource): Flow<ResultSource<TypeSource>>
     fun copy(plan: TypeSource): ResultSource<TypeSource>
-    fun update(plan: TypeSource): ResultSource<TypeSource>
+    fun update(nameId: TypeSource): ResultSource<TypeSource>
     fun del(plan: TypeSource): ResultSource<TypeSource>
 }

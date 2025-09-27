@@ -2,6 +2,7 @@ package com.count_out.domain.entity
 
 import com.count_out.domain.entity.enums.ConnectState
 import com.count_out.domain.entity.router.DeviceBle
+import com.count_out.domain.entity.supportive.NameId
 import com.count_out.domain.entity.weather.Weather
 import com.count_out.domain.entity.weather.WeatherRequest
 import com.count_out.domain.entity.workout.Activity
@@ -46,6 +47,7 @@ sealed class TypeRepo {
     data class WeatherT(val item: Weather): TypeRepo()
     data class WeatherRequestT(val item: WeatherRequest): TypeRepo()
     data class SpeechesT(val item : List<Speech>): TypeRepo()
+    data class NamIdT(val item : NameId): TypeRepo()
     data object NullT: TypeRepo()
     fun TypeRepo.toStepPlan(): TypeRepo{
         return if (this is PlanT) StepPlanT(item = GlobalValueApp.toStepPlan(this.item))

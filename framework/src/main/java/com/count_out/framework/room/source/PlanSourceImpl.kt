@@ -1,5 +1,6 @@
 package com.count_out.framework.room.source
 
+import com.count_out.data.models.NameIdDb
 import com.count_out.data.models.PartDb
 import com.count_out.data.models.throwable.ResultSource
 import com.count_out.data.models.throwable.ResultSource.Companion.asType
@@ -55,8 +56,8 @@ class PlanSourceImpl @Inject constructor(
     override fun del(plan: TypeSource): ResultSource<TypeSource> =
         plan.use { dao.delete( it).toLong() }
 
-    override fun update(plan: TypeSource): ResultSource<TypeSource> =
-        plan.use { dao.update(it).toLong() }
+    override fun update(nameId: TypeSource): ResultSource<TypeSource> =
+        nameId.useName { dao.updateName(it.name, it.id).toLong() }
 
     //##############################################################################################
     inline fun TypeSource.use(crossinline block: (PlanTb) -> Long): ResultSource<TypeSource> =
@@ -65,6 +66,11 @@ class PlanSourceImpl @Inject constructor(
             catch (e: Exception) { ResultSource.Error(ThrowableDS.extract(e)) }
         } else ResultSource.Error(ThrowableDS.NotValidType())
 
+    inline fun TypeSource.useName(crossinline block: (NameIdDb) -> Long): ResultSource<TypeSource> =
+        if (this is TypeSource.NameIdT) {
+            try { block(this.item).result() }
+            catch (e: Exception) { ResultSource.Error(ThrowableDS.extract(e)) }
+        } else ResultSource.Error(ThrowableDS.NotValidType())
     inline fun TypeSource.usePlanFlow(crossinline block: (PlanTb) -> Flow<PlanTb>): Flow<ResultSource<TypeSource>> =
         if (this is TypeSource.PlanT) {
             try { block(this.item as PlanTb).filterNotNull()

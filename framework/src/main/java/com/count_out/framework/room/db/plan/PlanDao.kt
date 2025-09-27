@@ -16,6 +16,8 @@ interface PlanDao: PrimeDao<PlanTb> {
     @Transaction
     @Query("SELECT * FROM plan_tb WHERE idPlan != 1")
     fun getPlans(): Flow<List<PlanTb>>
+    @Query("UPDATE plan_tb SET name = :name WHERE idPlan =:id")
+    fun updateName( name: String, id: Long): Int
 }
 //    @Transaction
 //    @Query("SELECT * FROM tb_trainings WHERE idTraining = :id")

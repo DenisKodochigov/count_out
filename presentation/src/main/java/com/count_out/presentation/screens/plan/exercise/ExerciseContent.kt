@@ -1,4 +1,4 @@
-package com.count_out.presentation.screens.training.exercise
+package com.count_out.presentation.screens.plan.exercise
 
 import android.util.Log
 import androidx.compose.animation.AnimatedVisibility
@@ -25,10 +25,10 @@ import com.count_out.domain.entity.workout.Ring
 import com.count_out.presentation.R
 import com.count_out.presentation.models.Dimen.contourAll1
 import com.count_out.presentation.models.SetImplP
-import com.count_out.presentation.screens.training.PlanEvent
-import com.count_out.presentation.screens.training.PlanEvent.ShowBS
-import com.count_out.presentation.screens.training.PlanState
-import com.count_out.presentation.screens.training.set.SetContent
+import com.count_out.presentation.screens.plan.PlanEvent
+import com.count_out.presentation.screens.plan.PlanEvent.ShowBS
+import com.count_out.presentation.screens.plan.PlanState
+import com.count_out.presentation.screens.plan.set.SetContent
 import com.count_out.presentation.view_element.TextApp
 import com.count_out.presentation.view_element.bottom_sheet.ShowBottomSheetSelectActivity
 import com.count_out.presentation.view_element.bottom_sheet.ShowBottomSheetSpeech
@@ -49,7 +49,7 @@ fun ListExercises(dataState: PlanState, ring: Ring, modifier: Modifier = Modifie
             Log.d("KDS"," from=$from   to=$to")
             dataState.event(
                 PlanEvent.ChangeSequenceExercise(
-                    item = SetViewId(roundId = ring.idRing, from = from, to = to)))
+                    item = SetViewId(ringId = ring.idRing, from = from, to = to)))
         },)
     Spacer(modifier = Modifier.height(4.dp))
 }

@@ -3,11 +3,11 @@ package com.count_out.domain.core.plans
 import com.count_out.domain.core.Core
 import com.count_out.domain.entity.TypeRepo
 import com.count_out.domain.entity.throwable.ResultUC
-import com.count_out.domain.repository.plans.TrainingRepo
+import com.count_out.domain.repository.plans.PlanRepo
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
-class TrainingCore @Inject constructor(private val repo: TrainingRepo): Core()  {
+class TrainingCore @Inject constructor(private val repo: PlanRepo): Core()  {
     fun get(training: TypeRepo): Flow<ResultUC<TypeRepo>>{
         return repo.get(training) }
     fun gets(): Flow<ResultUC<TypeRepo>>{

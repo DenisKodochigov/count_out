@@ -24,7 +24,7 @@ import com.count_out.presentation.screens.execute.ExecuteViewModel
 import com.count_out.presentation.screens.history.HistoryViewModel
 import com.count_out.presentation.screens.plans.PlansViewModel
 import com.count_out.presentation.screens.settings.SettingViewModel
-import com.count_out.presentation.screens.training.PlanViewModel
+import com.count_out.presentation.screens.plan.PlanViewModel
 
 fun NavGraphBuilder.executeWorkout(navigateEvent: NavigateEventImpl) {
     template(

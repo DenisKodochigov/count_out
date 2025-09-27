@@ -2,6 +2,7 @@ package com.count_out.data.models.throwable
 
 import com.count_out.data.models.ActivityDb
 import com.count_out.data.models.ExerciseDb
+import com.count_out.data.models.NameIdDb
 import com.count_out.data.models.PartDb
 import com.count_out.data.models.PlanDb
 import com.count_out.data.models.RingDb
@@ -18,6 +19,7 @@ import com.count_out.domain.entity.enums.PartName
 import com.count_out.domain.entity.enums.Units
 import com.count_out.domain.entity.enums.Zone
 import com.count_out.domain.entity.router.DeviceBle
+import com.count_out.domain.entity.supportive.NameId
 import com.count_out.domain.entity.weather.Weather
 import com.count_out.domain.entity.weather.WeatherRequest
 import com.count_out.domain.entity.workout.Activity
@@ -54,6 +56,7 @@ sealed class TypeSource {
     data class BleConnectStateT(val item: ConnectState) : TypeSource()
     data class WeatherT(val item: WeatherDb) : TypeSource()
     data class WeatherRequestT(val item: WeatherRequest) : TypeSource()
+    data class NameIdT(val item : NameIdDb): TypeSource()
     data object NullT : TypeSource()
 
 

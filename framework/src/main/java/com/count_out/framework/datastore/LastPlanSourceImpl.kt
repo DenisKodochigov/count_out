@@ -19,7 +19,8 @@ class LastPlanSourceImpl @Inject constructor(
 ) : LastPlanSource, PrimeSource() {
     internal val keyName = longPreferencesKey("last_plan")
     override fun getLastPlan(): Flow<ResultSource<TypeSource>> =
-        dataStore.data.map { TypeSource.LongT(it[keyName] ?: 1) }.resultSource()
+        dataStore.data.map {
+            ResultSource.Success(TypeSource.LongT(it[keyName] ?: 1) )}
 
     override fun saveLastPlan(id: TypeSource): Flow<ResultSource<TypeSource>> {
         return flow { emit(try {

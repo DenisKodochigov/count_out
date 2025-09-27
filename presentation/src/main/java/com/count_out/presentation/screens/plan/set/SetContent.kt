@@ -1,4 +1,4 @@
-package com.count_out.presentation.screens.training.set
+package com.count_out.presentation.screens.plan.set
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateContentSize
@@ -45,9 +45,9 @@ import com.count_out.presentation.models.TypeKeyboard
 import com.count_out.presentation.models.alumBodyLarge
 import com.count_out.presentation.models.alumBodyMedium
 import com.count_out.presentation.models.alumBodySmall
-import com.count_out.presentation.screens.training.PlanEvent
-import com.count_out.presentation.screens.training.PlanEvent.ShowBS
-import com.count_out.presentation.screens.training.PlanState
+import com.count_out.presentation.screens.plan.PlanEvent
+import com.count_out.presentation.screens.plan.PlanEvent.ShowBS
+import com.count_out.presentation.screens.plan.PlanState
 import com.count_out.presentation.view_element.TextApp
 import com.count_out.presentation.view_element.TextFieldApp
 import com.count_out.presentation.view_element.bottom_sheet.ShowBottomSheetSpeech

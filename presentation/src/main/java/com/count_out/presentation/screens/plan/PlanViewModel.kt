@@ -1,10 +1,10 @@
-package com.count_out.presentation.screens.training
+package com.count_out.presentation.screens.plan
 
 import androidx.lifecycle.viewModelScope
 import com.count_out.domain.entity.SetViewId
+import com.count_out.domain.entity.supportive.NameId
 import com.count_out.domain.entity.workout.Collapsing
 import com.count_out.domain.entity.workout.Exercise
-import com.count_out.domain.entity.workout.Plan
 import com.count_out.domain.entity.workout.Set
 import com.count_out.domain.entity.workout.ShowBottomSheet
 import com.count_out.domain.entity.workout.Speech
@@ -52,7 +52,7 @@ import javax.inject.Inject
     override fun routeEvent(event: Event) {
         when (event) {
             is PlanEvent.BackScreen -> { navigate.backStack()}
-            is PlanEvent.UpdatePlan -> { updateTraining(event.training)}
+            is PlanEvent.UpdatePlanName -> { updateTraining(event.nameID)}
             is PlanEvent.CopyExercise -> { copyExercise(event.exercise) }
             is PlanEvent.DelExercise -> { deleteExercise(event.exercise) }
             is PlanEvent.UpdateExercise -> { updateExercise(event.exercise) }
@@ -83,7 +83,7 @@ import javax.inject.Inject
             getActivitiesUC.execute( GetActivitiesUC.Request).collect { submitState( it ) }
         }
     }
-    private fun updateTraining(training: Plan){
+    private fun updateTraining(training: NameId){
         viewModelScope.launch(Dispatchers.IO) {
             updatePlanUC.execute( UpdatePlanUC.Request(training)).collect {
                 submitState( it ) }
