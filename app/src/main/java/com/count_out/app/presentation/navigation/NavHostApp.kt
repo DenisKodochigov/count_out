@@ -19,7 +19,7 @@ fun NavHostApp(
         val navEvent = NavigateEventImpl(navController)
         executeWorkout( navigateEvent = navEvent)
         plans( navigateEvent = navEvent)
-        training( navigateEvent = navEvent)
+        plan( navigateEvent = navEvent)
         history(navigateEvent = navEvent)
         settings(navigateEvent = navEvent)
     }

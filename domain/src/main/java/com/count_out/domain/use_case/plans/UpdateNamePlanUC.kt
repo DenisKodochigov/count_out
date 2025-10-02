@@ -8,13 +8,13 @@ import com.count_out.domain.use_case.UseCase
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
-class UpdatePlanUC @Inject constructor(
+class UpdateNamePlanUC @Inject constructor(
     configuration: Configuration, private val repo: PlanRepo
-): UseCase<UpdatePlanUC.Request, UpdatePlanUC.Response>(configuration)  {
+): UseCase<UpdateNamePlanUC.Request, UpdateNamePlanUC.Response>(configuration)  {
 
     override fun method(request: Request): Flow<ResultUC<TypeRepo>> =
-        repo.update(TypeRepo.NamIdT(request.plan))
+        repo.update(TypeRepo.NamIdT(request.nameID))
     override fun response(typeRepo: TypeRepo): Response = Response(typeRepo)
-    data class Request(val plan: NameId): UseCase.Request
-    data class Response(val plan: TypeRepo): UseCase.Response
+    data class Request(val nameID: NameId): UseCase.Request
+    data class Response(val result: TypeRepo): UseCase.Response
 }

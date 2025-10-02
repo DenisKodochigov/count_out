@@ -2,10 +2,10 @@ package com.count_out.presentation.screens.plans
 
 import com.count_out.domain.entity.TypeRepo
 import com.count_out.domain.use_case.UseCase
-import com.count_out.domain.use_case.plans.CopyTrainingUC
-import com.count_out.domain.use_case.plans.DeleteTrainingUC
-import com.count_out.domain.use_case.plans.GetTrainingsUC
-import com.count_out.domain.use_case.plans.SelectTrainingUC
+import com.count_out.domain.use_case.plans.CopyPlanUC
+import com.count_out.domain.use_case.plans.DeletePlanUC
+import com.count_out.domain.use_case.plans.GetPlansUC
+import com.count_out.domain.use_case.plans.SelectPlanUC
 import com.count_out.domain.use_case.plans.UpdatesTrainingUC
 import com.count_out.presentation.screens.prime.PrimeConvertor
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -15,25 +15,25 @@ class PlansConvertor @Inject constructor(): PrimeConvertor<UseCase.Response, Pla
 
     override fun makeSuccess(resultData: UseCase.Response, state: MutableStateFlow<PlansState>): PlansState {
         return when(resultData){
-            is GetTrainingsUC.Response-> converterGetTrainings(resultData, state)
-            is CopyTrainingUC.Response-> converterCopyTraining(resultData, state)
-            is DeleteTrainingUC.Response-> converterDeleteTraining(resultData, state)
+            is GetPlansUC.Response-> converterGetTrainings(resultData, state)
+            is CopyPlanUC.Response-> converterCopyTraining(resultData, state)
+            is DeletePlanUC.Response-> converterDeleteTraining(resultData, state)
             is UpdatesTrainingUC.Response-> converterUpdatesTraining(resultData, state)
-            is SelectTrainingUC.Response-> converterSelectTraining(resultData, state)
+            is SelectPlanUC.Response-> converterSelectTraining(resultData, state)
             else -> converterOther(state)
         }
     }
-    private fun converterGetTrainings(data: GetTrainingsUC.Response, state: MutableStateFlow<PlansState>): PlansState {
+    private fun converterGetTrainings(data: GetPlansUC.Response, state: MutableStateFlow<PlansState>): PlansState {
         if (data.plans is TypeRepo.PlansT) {
             state.value = state.value.copy(plans = (data.plans as TypeRepo.PlansT).item) }
         return state.value
     }
-    private fun converterCopyTraining(data: CopyTrainingUC.Response, state: MutableStateFlow<PlansState>): PlansState {
+    private fun converterCopyTraining(data: CopyPlanUC.Response, state: MutableStateFlow<PlansState>): PlansState {
         if (data.plans is TypeRepo.PlansT)
             state.value = state.value.copy( plans = (data.plans as TypeRepo.PlansT).item)
         return state.value
     }
-    private fun converterDeleteTraining(data: DeleteTrainingUC.Response, state: MutableStateFlow<PlansState>): PlansState {
+    private fun converterDeleteTraining(data: DeletePlanUC.Response, state: MutableStateFlow<PlansState>): PlansState {
         if (data.plans is TypeRepo.PlansT)
             state.value = state.value.copy( plans = (data.plans as TypeRepo.PlansT).item)
         return state.value
@@ -43,7 +43,7 @@ class PlansConvertor @Inject constructor(): PrimeConvertor<UseCase.Response, Pla
             state.value = state.value.copy( plans = (data.plan as TypeRepo.PlansT).item)
         return state.value
     }
-    private fun converterSelectTraining(data: SelectTrainingUC.Response, state: MutableStateFlow<PlansState>): PlansState {
+    private fun converterSelectTraining(data: SelectPlanUC.Response, state: MutableStateFlow<PlansState>): PlansState {
         if (data.selectedTraining is TypeRepo.LongT)
             state.value = state.value.copy( selectedId = (data.selectedTraining as TypeRepo.LongT).item)
         return state.value

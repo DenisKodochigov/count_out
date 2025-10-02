@@ -13,7 +13,7 @@ fun NavHostController.navigateToScreenPlans() {
     this.navigateToScreen(PlansDestination.route)
 }
 fun NavHostController.navigateToScreenTraining(trainingId: Long) {
-    this.navigateToScreen("${TrainingDestination.route}/$trainingId")
+    this.navigateToScreen("${PlanDestination.route}/$trainingId")
 }
 
 fun NavHostController.navigateToScreen(route: String) = this.navigate(route) { launchSingleTop = true }

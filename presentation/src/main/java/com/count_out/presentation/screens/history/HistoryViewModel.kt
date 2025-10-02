@@ -1,5 +1,6 @@
 package com.count_out.presentation.screens.history
 
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.count_out.presentation.screens.prime.Event
 import com.count_out.presentation.screens.prime.PrimeViewModel
@@ -13,7 +14,9 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class HistoryViewModel  @Inject constructor(): PrimeViewModel<HistoryState, HistoryConvertor>() {
+class HistoryViewModel  @Inject constructor(
+    private val savedStateHandle: SavedStateHandle,
+): PrimeViewModel<HistoryState, HistoryConvertor>() {
     private val _historyState = MutableStateFlow(
         HistoryState(
             getTraining = { },

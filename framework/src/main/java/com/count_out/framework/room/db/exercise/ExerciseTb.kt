@@ -28,7 +28,7 @@ import com.count_out.framework.room.db.speech.SpeechTb
 data class ExerciseTb(
     override var idExercise: Long = 0L,
     override var ringId: Long = 0,
-    override var speechId: Long = 0,
+    override var speechId: Long? = null,
     override var activityId: Long = 0,
     override var idView: Int = 0,
     override var amountSet: Int = 0,

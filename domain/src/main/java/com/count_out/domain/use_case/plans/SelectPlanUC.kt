@@ -10,13 +10,12 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 
-class SelectTrainingUC @Inject constructor(
+class SelectPlanUC @Inject constructor(
     configuration: Configuration, private val repoLastPlan: LastPlanRepo
-): UseCase<SelectTrainingUC.Request, SelectTrainingUC.Response>(configuration)  {
+): UseCase<SelectPlanUC.Request, SelectPlanUC.Response>(configuration)  {
     override fun method(request: Request): Flow<ResultUC<TypeRepo>> {
         GlobalValueApp.planRun.value = request.plan
-        return flow { emit(ResultUC.Success(
-            TypeRepo.LongT(item = request.plan.idPlan)))}
+        return flow { emit(ResultUC.Success(TypeRepo.LongT(item = request.plan.idPlan)))}
     }
     override fun response(typeRepo: TypeRepo): Response = Response(typeRepo)
     data class Request(val plan: Plan): UseCase.Request

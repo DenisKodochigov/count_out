@@ -44,7 +44,7 @@ class PlanSourceImpl @Inject constructor(
 
     override fun copy(plan: TypeSource): ResultSource<TypeSource> =
         (plan as? TypeSource.PlanT)?.let { pl ->
-            speechKitSource.insert(pl.item.speechId).asType<TypeSource.LongT>()
+            speechKitSource.insert(pl.item.speechId ?: 0).asType<TypeSource.LongT>()
             .flatMap { idSpeechKit ->
                 val obj = (pl.item as PlanTb).apply{this.speechId = idSpeechKit.item; this.idPlan = 0L }
                 dao.insert(obj).result() }

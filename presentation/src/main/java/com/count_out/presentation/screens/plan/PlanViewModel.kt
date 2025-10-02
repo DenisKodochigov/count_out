@@ -1,5 +1,6 @@
 package com.count_out.presentation.screens.plan
 
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.count_out.domain.entity.SetViewId
 import com.count_out.domain.entity.supportive.NameId
@@ -11,7 +12,7 @@ import com.count_out.domain.entity.workout.Speech
 import com.count_out.domain.use_case.other.CollapsingUC
 import com.count_out.domain.use_case.other.ShowBottomSheetUC
 import com.count_out.domain.use_case.plans.GetPlanUC
-import com.count_out.domain.use_case.plans.UpdatePlanUC
+import com.count_out.domain.use_case.plans.UpdateNamePlanUC
 import com.count_out.domain.use_case.plans.activity.GetActivitiesUC
 import com.count_out.domain.use_case.plans.exercise.ChangeSequenceExerciseUC
 import com.count_out.domain.use_case.plans.exercise.CopyExerciseUC
@@ -30,9 +31,10 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel class PlanViewModel @Inject constructor(
+    private val savedStateHandle: SavedStateHandle,
     private val getPlanUC: GetPlanUC,
     private val getActivitiesUC: GetActivitiesUC,
-    private val updatePlanUC: UpdatePlanUC,
+    private val updateNamePlanUC: UpdateNamePlanUC,
     private val copyExerciseUC: CopyExerciseUC,
     private val delExerciseUC: DeleteExerciseUC,
     private val updateExerciseUC: UpdateExerciseUC,
@@ -51,8 +53,8 @@ import javax.inject.Inject
 
     override fun routeEvent(event: Event) {
         when (event) {
-            is PlanEvent.BackScreen -> { navigate.backStack()}
-            is PlanEvent.UpdatePlanName -> { updateTraining(event.nameID)}
+//            is PlanEvent.BackScreen -> { navigate.backStack()}
+            is PlanEvent.UpdatePlanName -> { updatePlan(event.nameID)}
             is PlanEvent.CopyExercise -> { copyExercise(event.exercise) }
             is PlanEvent.DelExercise -> { deleteExercise(event.exercise) }
             is PlanEvent.UpdateExercise -> { updateExercise(event.exercise) }
@@ -63,11 +65,12 @@ import javax.inject.Inject
             is PlanEvent.ShowBS -> { showBottomSheet(event.item) }
             is PlanEvent.SetCollapsing -> { collapsingSet(event.item) }
             is PlanEvent.UpdateSpeech -> { updateSpeech(event.item) }
-            is PlanEvent.Init -> { init(event.item) }
+//            is PlanEvent.Init -> { init(event.item) }
         }
     }
-    fun init( item: Long){
-        getPlan(item)
+    init{
+        val planId: Long? = savedStateHandle["arg1"]
+        planId?.let {  getPlan(it)}
         getActivities()
 //        subscribeSequenceExercise()
     }
@@ -83,9 +86,9 @@ import javax.inject.Inject
             getActivitiesUC.execute( GetActivitiesUC.Request).collect { submitState( it ) }
         }
     }
-    private fun updateTraining(training: NameId){
+    private fun updatePlan(nameId: NameId){
         viewModelScope.launch(Dispatchers.IO) {
-            updatePlanUC.execute( UpdatePlanUC.Request(training)).collect {
+            updateNamePlanUC.execute( UpdateNamePlanUC.Request(nameId)).collect {
                 submitState( it ) }
         }
     }

@@ -17,7 +17,7 @@ class SetSourceImpl @Inject constructor(
 
     override fun copy(set: TypeSource): ResultSource<TypeSource> =
         set.use { setTb ->
-            val newId = (speechKitSource.insert(setTb.speechId))
+            val newId = (speechKitSource.insert(setTb.speechId ?: 0))
                 .getTyped<TypeSource.LongT>()
                 ?.item ?: return@use 0L
             dao.insert(setTb.copy(idSet = 0L, speechId = newId))

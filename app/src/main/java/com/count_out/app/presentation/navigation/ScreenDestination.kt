@@ -8,19 +8,21 @@ import androidx.compose.material.icons.filled.Settings
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.lifecycle.ViewModel
+import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavType
 import androidx.navigation.navArgument
 import com.count_out.app.R
+import com.count_out.domain.entity.NavigateEvent
 import com.count_out.presentation.screens.execute.ExecuteViewModel
 import com.count_out.presentation.screens.execute.ExecuteWorkoutScreen
 import com.count_out.presentation.screens.history.HistoryScreen
 import com.count_out.presentation.screens.history.HistoryViewModel
+import com.count_out.presentation.screens.plan.PlanScreen
+import com.count_out.presentation.screens.plan.PlanViewModel
 import com.count_out.presentation.screens.plans.PlansScreen
 import com.count_out.presentation.screens.plans.PlansViewModel
 import com.count_out.presentation.screens.settings.SettingScreen
 import com.count_out.presentation.screens.settings.SettingViewModel
-import com.count_out.presentation.screens.plan.PlanViewModel
-import com.count_out.presentation.screens.plan.PlanScreen
 
 /*** Contract for information needed on every App navigation destination*/
 interface ScreenDestination {
@@ -34,7 +36,7 @@ interface ScreenDestination {
     val showFab: Boolean
     var textFABId: Int
     var onClickFAB: () -> Unit
-    @Composable fun Show (vm: ViewModel, arg: List<String>)
+    @Composable fun Show (vm: ViewModel, navigateEvent: NavigateEvent)
 }
 /*** App app navigation destinations*/
 object ExecuteDestination : ScreenDestination {
@@ -49,8 +51,9 @@ object ExecuteDestination : ScreenDestination {
     override var textFABId = R.string.screen_execute
     override var onClickFAB: () -> Unit = {}
 
-    @Composable override fun Show(vm: ViewModel, arg: List<String>) {
-        ExecuteWorkoutScreen(vm as ExecuteViewModel) }
+    @Composable override fun Show(vm: ViewModel, navigateEvent: NavigateEvent) {
+        ExecuteWorkoutScreen(vm as ExecuteViewModel, navigateEvent)
+    }
 }
 object PlansDestination : ScreenDestination {
     override val route = "plans"
@@ -64,9 +67,11 @@ object PlansDestination : ScreenDestination {
     override var textFABId = R.string.plans
     override var onClickFAB: () -> Unit = {}
     @Composable
-    override fun Show (vm: ViewModel, arg: List<String>) { PlansScreen(vm as PlansViewModel)}
+    override fun Show (vm: ViewModel, navigateEvent: NavigateEvent) {
+        PlansScreen(vm as PlansViewModel, navigateEvent)
+    }
 }
-object TrainingDestination : ScreenDestination {
+object PlanDestination : ScreenDestination {
     override val route = "training"
     override val nameScreen = R.string.plan_workout
     override val icon = Icons.Filled.Brightness5
@@ -77,10 +82,12 @@ object TrainingDestination : ScreenDestination {
     override var textFABId = R.string.training
     override var onClickFAB: () -> Unit = {}
 
-    @Composable override fun Show(vm: ViewModel, arg: List<String>) {
-        PlanScreen(vm as PlanViewModel, arg[0].toLong()) }
+    @Composable override fun Show(vm: ViewModel, navigateEvent: NavigateEvent) {
+        PlanScreen(vm as PlanViewModel, navigateEvent)
+//        PlanScreen(vm as PlanViewModel, arg[0].toLong())
+    }
 
-    const val ARG = "arg_training"
+    const val ARG = "arg1"
     override val routeWithArgs = "${route}/{$ARG}"
     val arguments = listOf(navArgument(ARG) { type = NavType.LongType })
 }
@@ -96,8 +103,8 @@ object HistoryDestination : ScreenDestination {
     override var textFABId = R.string.history
     override var onClickFAB: () -> Unit = {}
 
-    @Composable override fun Show(vm: ViewModel, arg: List<String>) {
-        HistoryScreen(vm as HistoryViewModel) }
+    @Composable override fun Show(vm: ViewModel, navigateEvent: NavigateEvent) {
+        HistoryScreen(vm as HistoryViewModel, navigateEvent) }
 }
 object SettingDestination : ScreenDestination {
     override val route = "settings"
@@ -112,13 +119,15 @@ object SettingDestination : ScreenDestination {
     override var onClickFAB: () -> Unit = {}
 
     @Composable
-    override fun Show(vm: ViewModel, arg: List<String>) { SettingScreen(vm as SettingViewModel) }
+    override fun Show(vm: ViewModel, navigateEvent: NavigateEvent) {
+        SettingScreen(vm as SettingViewModel)
+    }
 }
 val navBottomScreens =
     listOf(ExecuteDestination, PlansDestination, HistoryDestination, SettingDestination)
 val listScreens = listOf(
         PlansDestination,
-        TrainingDestination,
+        PlanDestination,
         ExecuteDestination,
         HistoryDestination,
         SettingDestination,

@@ -3,7 +3,7 @@ package com.count_out.data.models
 interface PartDb {
     val idPart: Long
     val planId: Long
-    val speechId: Long
+    val speechId: Long?
     val speeches: List<SpeechDb>
     val rings: List<RingDb>
     val amount: Int

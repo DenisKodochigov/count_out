@@ -28,7 +28,7 @@ class PartSourceImpl @Inject constructor(
 
     override fun copy(part: TypeSource): ResultSource<TypeSource> =
         (part as? TypeSource.PartT)?.let { pr ->
-        speechKitSource.insert(pr.item.speechId).asType<TypeSource.LongT>()
+        speechKitSource.insert(pr.item.speechId ?: 0).asType<TypeSource.LongT>()
         .flatMap { idSpeechKit ->
             val obj = (pr.item as PartTb).apply{this.speechId = idSpeechKit.item; this.idPart = 0L }
             dao.insert(obj).result() }

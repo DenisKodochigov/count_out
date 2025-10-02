@@ -32,14 +32,14 @@ import com.count_out.domain.use_case.UseCase
 import com.count_out.domain.use_case.other.CountOutServiceBindUC
 import com.count_out.domain.use_case.other.CountOutServiceUnBindUC
 import com.count_out.domain.use_case.other.GetWeatherUC
-import com.count_out.domain.use_case.plans.CopyTrainingUC
-import com.count_out.domain.use_case.plans.DeleteTrainingUC
+import com.count_out.domain.use_case.plans.CopyPlanUC
+import com.count_out.domain.use_case.plans.DeletePlanUC
 import com.count_out.domain.use_case.plans.GetPlanUC
 import com.count_out.domain.use_case.plans.GetStepPlanUC
-import com.count_out.domain.use_case.plans.GetTrainingsUC
+import com.count_out.domain.use_case.plans.GetPlansUC
 import com.count_out.domain.use_case.plans.SaveLastUsePlanUC
-import com.count_out.domain.use_case.plans.SelectTrainingUC
-import com.count_out.domain.use_case.plans.UpdatePlanUC
+import com.count_out.domain.use_case.plans.SelectPlanUC
+import com.count_out.domain.use_case.plans.UpdateNamePlanUC
 import com.count_out.domain.use_case.plans.exercise.CopyExerciseUC
 import com.count_out.domain.use_case.plans.exercise.DeleteExerciseUC
 import com.count_out.domain.use_case.plans.exercise.UpdateExerciseUC
@@ -108,19 +108,19 @@ class CoreModule {
     fun provideCopyTrainingUseCase(
         configuration: UseCase.Configuration,
         planRepo: PlanRepo
-    ): CopyTrainingUC = CopyTrainingUC(configuration, planRepo)
+    ): CopyPlanUC = CopyPlanUC(configuration, planRepo)
     @Singleton
     @Provides
     fun provideDelTrainingUCUseCase(
         configuration: UseCase.Configuration,
         planRepo: PlanRepo
-    ): DeleteTrainingUC = DeleteTrainingUC(configuration, planRepo)
+    ): DeletePlanUC = DeletePlanUC(configuration, planRepo)
     @Singleton
     @Provides
     fun provideGetTrainingsUseCase(
         configuration: UseCase.Configuration,
         planRepo: PlanRepo
-    ): GetTrainingsUC = GetTrainingsUC(configuration, planRepo)
+    ): GetPlansUC = GetPlansUC(configuration, planRepo)
     @Singleton
     @Provides
     fun provideGetTrainingUseCase(
@@ -132,13 +132,13 @@ class CoreModule {
     fun provideSelectTrainingUseCase(
         configuration: UseCase.Configuration,
         lastPlanRepo: LastPlanRepo
-    ): SelectTrainingUC = SelectTrainingUC(configuration, lastPlanRepo)
+    ): SelectPlanUC = SelectPlanUC(configuration, lastPlanRepo)
     @Singleton
     @Provides
     fun provideUpdateTrainingUseCase(
         configuration: UseCase.Configuration,
         planRepo: PlanRepo
-    ): UpdatePlanUC = UpdatePlanUC(configuration, planRepo)
+    ): UpdateNamePlanUC = UpdateNamePlanUC(configuration, planRepo)
 
     @Singleton
     @Provides

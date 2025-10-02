@@ -8,8 +8,8 @@ import com.count_out.domain.use_case.UseCase
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
-class CopyTrainingUC @Inject constructor(configuration: Configuration, private val repo: PlanRepo
-): UseCase<CopyTrainingUC.Request, CopyTrainingUC.Response>(configuration)  {
+class CopyPlanUC @Inject constructor(configuration: Configuration, private val repo: PlanRepo
+): UseCase<CopyPlanUC.Request, CopyPlanUC.Response>(configuration)  {
 
     override fun method(request: Request): Flow<ResultUC<TypeRepo>> =
         repo.copy(TypeRepo.PlanT( request.plan))

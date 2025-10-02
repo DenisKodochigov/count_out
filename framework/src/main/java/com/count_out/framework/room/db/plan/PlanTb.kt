@@ -14,7 +14,7 @@ import com.count_out.framework.room.db.speech.SpeechTb
 )
 data class PlanTb(
     override var idPlan: Long = 0L,
-    override var speechId: Long = 0L,
+    override var speechId: Long? = null,
     override var name: String = "",
     override var amountActivity: Int = 0,
     override var speeches: List<SpeechTb> = emptyList(),

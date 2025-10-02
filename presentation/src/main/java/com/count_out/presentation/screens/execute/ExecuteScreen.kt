@@ -1,5 +1,6 @@
 package com.count_out.presentation.screens.execute
 
+import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -29,6 +30,7 @@ import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import com.count_out.domain.entity.NavigateEvent
 import com.count_out.domain.entity.NextExercise
 import com.count_out.domain.entity.StepPlan
 import com.count_out.domain.entity.enums.ConnectState
@@ -45,25 +47,26 @@ import com.count_out.presentation.view_element.custom_view.Frame
 import com.count_out.presentation.view_element.custom_view.IconQ
 import java.math.RoundingMode
 
-@Composable fun ExecuteWorkoutScreen(viewModel: ExecuteViewModel){
-    LaunchedEffect(Unit) { viewModel.submitEvent(ExecuteEvent.Init) }
-    ExecuteWorkoutScreenCreateView( viewModel = viewModel )
+@Composable fun ExecuteWorkoutScreen(viewModel: ExecuteViewModel, navigateEvent: NavigateEvent){
+    Log.d("KDS", "ExecuteWorkoutScreen")
+//    LaunchedEffect(Unit) { viewModel.submitEvent(ExecuteEvent.Init) }
+    ExecuteWorkoutScreenCreateView( viewModel = viewModel, navigateEvent)
 }
-@Composable fun ExecuteWorkoutScreenCreateView(viewModel: ExecuteViewModel){
+@Composable fun ExecuteWorkoutScreenCreateView(viewModel: ExecuteViewModel, navigateEvent: NavigateEvent){
     viewModel.screenState.collectAsState().value.let { screenState ->
         PrimeScreen(loader = screenState) { dataState ->
-            ExecuteWorkoutScreenLayout(dataState)
+            ExecuteWorkoutScreenLayout(dataState, navigateEvent)
         }
     }
 }
-@Composable fun ExecuteWorkoutScreenLayout(dataState: ExecuteState){
+@Composable fun ExecuteWorkoutScreenLayout(dataState: ExecuteState, navigateEvent: NavigateEvent){
     if (dataState.showBS.plan) BottomSheetSaveTraining(dataState)
     Column(
         modifier = Modifier
             .fillMaxSize()
             .padding(horizontal = 4.dp),
         content = {
-            TopBar(dataState)
+            TopBar(dataState, navigateEvent)
             SensorInfo(dataState)
             AdditionalInformation(dataState, modifier = Modifier.weight(1f))
             ExerciseInfo(dataState)
@@ -71,11 +74,11 @@ import java.math.RoundingMode
         }
     )
 }
-@Composable fun TopBar(dataState: ExecuteState){
+@Composable fun TopBar(dataState: ExecuteState, navigateEvent: NavigateEvent){
     TopBarApp(
         text = "${stringResource(R.string.training_text_fab)}: ${dataState.stepTraining?.namePlan ?: ""}",
         selected = true,
-        onClickText = { dataState.event(ExecuteEvent.ToScreenPlans) } ,
+        onClickText = { navigateEvent.goToScreenPlans() } ,
     )
 }
 @Composable fun SensorInfo(dataState: ExecuteState) {

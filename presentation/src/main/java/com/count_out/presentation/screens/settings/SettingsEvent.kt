@@ -24,6 +24,6 @@ sealed class SettingsEvent: Event {
     data class ShowBS(val item: ShowBottomSheet): SettingsEvent()
     data class SetCollapsing(val item: Collapsing): SettingsEvent()
     data class SelectDevice(val device: DeviceBle): SettingsEvent()
-    data object Init : SettingsEvent()
-    data object BackScreen : SettingsEvent()
+//    data object Init : SettingsEvent()
+//    data object BackScreen : SettingsEvent()
 }

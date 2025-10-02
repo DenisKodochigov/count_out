@@ -25,6 +25,7 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.count_out.domain.entity.NavigateEvent
 import com.count_out.domain.entity.workout.Plan
 import com.count_out.presentation.R
 import com.count_out.presentation.models.Dimen
@@ -39,15 +40,17 @@ import com.count_out.presentation.view_element.custom_view.IconQ
 import com.count_out.presentation.view_element.icons.IconsGroup
 
 @Composable
-fun PlansScreen(vm: PlansViewModel) {
-    LaunchedEffect(Unit) { vm.submitEvent(PlansEvent.Gets) }
-    PlansScreenCreateView(vm)
+fun PlansScreen(vm: PlansViewModel, navigateEvent: NavigateEvent) {
+//    LaunchedEffect(Unit) { vm.submitEvent(PlansEvent.Gets) }
+    PlansScreenCreateView(vm, navigateEvent)
 }
 
-@Composable fun PlansScreenCreateView(viewModel: PlansViewModel) {
+@Composable fun PlansScreenCreateView(viewModel: PlansViewModel, navigateEvent: NavigateEvent) {
     viewModel.screenState.collectAsState().value.let { screenState ->
         PrimeScreen(loader = screenState) { dataState ->
-            PlansScreenLayout(dataState ) }
+            dataState.goToScreenExecuteWorkout = { navigateEvent.goToScreenExecuteWorkout() }
+            dataState.goToScreenTraining = { navigateEvent.goToScreenTraining(it) }
+            PlansScreenLayout(dataState) }
     }
 }
 
@@ -77,7 +80,7 @@ fun PlansScreen(vm: PlansViewModel) {
                 frontView = {
                     PlanCard(dataState, item, Modifier.animateItem())},
                 actionDragLeft = { dataState.event(PlansEvent.Del(item)) },
-                actionDragRight = { dataState.event(PlansEvent.Edit(item.idPlan)) },
+                actionDragRight = { dataState.goToScreenTraining(item.idPlan) },
             )
         }
     }
@@ -107,7 +110,10 @@ fun PlansScreen(vm: PlansViewModel) {
 }
 
 @Composable fun IconRun(dataState: PlansState, training: Plan) {
-    IconQ.Play(onClick = { dataState.event(PlansEvent.Run(training)) })
+    IconQ.Play(onClick = {
+        dataState.event(PlansEvent.Run(training))
+        dataState.goToScreenExecuteWorkout()
+    })
 }
 
 @Composable fun PlanInformation(dataState: PlansState, item: Plan, modifier: Modifier = Modifier) {

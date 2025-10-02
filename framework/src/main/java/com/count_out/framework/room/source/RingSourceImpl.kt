@@ -27,7 +27,7 @@ class RingSourceImpl @Inject constructor(
 
     override fun copy(ring: TypeSource): ResultSource<TypeSource> =
         (ring as? TypeSource.RingT)?.let { ring ->
-            speechKitSource.insert(ring.item.speechId).asType<TypeSource.LongT>()
+            speechKitSource.insert(ring.item.speechId ?: 0).asType<TypeSource.LongT>()
             .flatMap { idSpeechKit ->
                 val obj = (ring.item as RingTb).apply{this.speechId = idSpeechKit.item; this.idRing = 0L }
                 dao.insert(obj).result()

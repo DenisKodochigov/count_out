@@ -1,5 +1,6 @@
 package com.count_out.presentation.screens.settings
 
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.count_out.domain.entity.Settings
 import com.count_out.domain.entity.router.DeviceBle
@@ -32,6 +33,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SettingViewModel @Inject constructor(
+    private val savedStateHandle: SavedStateHandle,
     private val addActivity: AddActivityUC,
     private val delActivity: DeleteActivityUC,
     private val getsActivity: GetActivitiesUC,
@@ -55,7 +57,7 @@ class SettingViewModel @Inject constructor(
     override fun convertor(): SettingsConvertor = SettingsConvertor()
     override fun routeEvent(event: Event) {
         when (event) {
-            is SettingsEvent.BackScreen -> { navigate.backStack() }
+//            is SettingsEvent.BackScreen -> { navigate.backStack() }
             is SettingsEvent.AddActivity -> { addActivity(event.activity) }
             is SettingsEvent.DeleteActivity -> { delActivity(event.activity) }
             is SettingsEvent.UpdateActivity -> { updateActivity(event.activity) }
@@ -67,10 +69,10 @@ class SettingViewModel @Inject constructor(
             is SettingsEvent.ClearCacheBLE -> { clearCacheBle() }
             is SettingsEvent.ShowBS -> { showBottomSheet(event.item) }
             is SettingsEvent.SetCollapsing -> { collapsingSet(event.item) }
-            is SettingsEvent.Init -> { init() }
+//            is SettingsEvent.Init -> { init() }
         }
     }
-    fun init() {
+    init {
         getSettings()
         getsActivity()
         getConnectionState()

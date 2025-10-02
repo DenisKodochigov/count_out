@@ -1,6 +1,7 @@
 package com.count_out.presentation.screens.execute
 
-//import com.count_out.domain.use_case.plans.GetPlanUC
+import android.util.Log
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.count_out.domain.entity.workout.ShowBottomSheet
 import com.count_out.domain.use_case.bluetooth.ConnectDeviceHrUC
@@ -26,6 +27,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ExecuteViewModel @Inject constructor(
+    private val savedStateHandle: SavedStateHandle,
     private val startWorkoutUC: StartWorkoutUC,
     private val stopWorkoutUC: StopWorkoutUC,
     private val pauseWorkoutUC: PauseWorkoutUC,
@@ -47,8 +49,8 @@ class ExecuteViewModel @Inject constructor(
     override fun routeEvent(event: Event) {
 //        Log.d("KDS","ExecuteViewModel stepTraining=${dataState.value.stepTraining}")
         when (event) {
-            is ExecuteEvent.BackScreen -> { navigate.backStack()}
-            is ExecuteEvent.ToScreenPlans -> { navigate.goToScreenPlans()}
+//            is ExecuteEvent.BackScreen -> { navigate.backStack()}
+//            is ExecuteEvent.ToScreenPlans -> { navigate.goToScreenPlans()}
             is ExecuteEvent.Start -> { startWorkOut() }
             is ExecuteEvent.Stop -> { stopWorkOut(event.item) }
             is ExecuteEvent.Pause -> { pauseWorkOut() }
@@ -56,10 +58,11 @@ class ExecuteViewModel @Inject constructor(
             is ExecuteEvent.UpInterval -> { upInterval() }
             is ExecuteEvent.DownInterval -> { downInterval() }
             is ExecuteEvent.ShowBS -> { showBottomSheet(event.item) }
-            is ExecuteEvent.Init -> { init() }
+//            is ExecuteEvent.Init -> { init() }
         }
     }
-    fun init() {
+    init {
+        Log.d("KDS", "ExecuteViewModel")
         getStepPlan()
         getConnectionState()
         subscribeHeartRate()

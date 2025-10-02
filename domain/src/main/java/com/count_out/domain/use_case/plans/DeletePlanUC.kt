@@ -8,8 +8,8 @@ import com.count_out.domain.use_case.UseCase
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
-class DeleteTrainingUC @Inject constructor(configuration: Configuration, private val repo: PlanRepo
-): UseCase<DeleteTrainingUC.Request, DeleteTrainingUC.Response>(configuration)  {
+class DeletePlanUC @Inject constructor(configuration: Configuration, private val repo: PlanRepo
+): UseCase<DeletePlanUC.Request, DeletePlanUC.Response>(configuration)  {
     override fun method(request: Request): Flow<ResultUC<TypeRepo>> =
         repo.del(TypeRepo.PlanT( request.plan))
     override fun response(typeRepo: TypeRepo): Response = Response(typeRepo)

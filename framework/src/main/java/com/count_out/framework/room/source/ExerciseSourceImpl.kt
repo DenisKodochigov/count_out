@@ -23,7 +23,7 @@ class ExerciseSourceImpl @Inject constructor(
 
     override fun copy(exercise: TypeSource): ResultSource<TypeSource> =
         (exercise as? TypeSource.ExerciseT)?.let { ex ->
-            speechKitSource.insert(ex.item.speechId).asType<TypeSource.LongT>()
+            speechKitSource.insert(ex.item.speechId ?: 0).asType<TypeSource.LongT>()
             .flatMap { idSpeechKit ->
                 val tempEx = (ex.item as ExerciseTb).apply {
                     this.speechId = idSpeechKit.item

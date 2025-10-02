@@ -25,6 +25,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import com.count_out.domain.entity.NavigateEvent
 import com.count_out.domain.entity.supportive.NameId
 import com.count_out.presentation.R
 import com.count_out.presentation.models.Dimen
@@ -36,22 +37,22 @@ import com.count_out.presentation.view_element.TextFieldApp
 import com.count_out.presentation.view_element.bottom_sheet.ShowBottomSheetSpeech
 import com.count_out.presentation.view_element.icons.IconsGroup
 
-@Composable fun PlanScreen(viewModel: PlanViewModel, trainingId: Long){
-    LaunchedEffect(Unit) { viewModel.submitEvent(PlanEvent.Init(trainingId)) }
-    PlanScreenCreateView( viewModel = viewModel )
+@Composable fun PlanScreen(viewModel: PlanViewModel, navigateEvent: NavigateEvent){
+//    LaunchedEffect(Unit) { viewModel.submitEvent(PlanEvent.Init(trainingId)) }
+    PlanScreenCreateView( viewModel = viewModel, navigateEvent )
 }
 
 @SuppressLint("StateFlowValueCalledInComposition")
-@Composable fun PlanScreenCreateView(viewModel: PlanViewModel){
+@Composable fun PlanScreenCreateView(viewModel: PlanViewModel, navigateEvent: NavigateEvent){
     viewModel.screenState.collectAsState().value.let { screenState ->
         PrimeScreen(loader = screenState) { dataState ->
             ShowBottomSheetSpeech(dataState, dataState.showBS.plan,
                 R.string.training, dataState.plan)
-            PlanScreenLayout(dataState)
+            PlanScreenLayout(dataState, navigateEvent)
         }
     }
 }
-@Composable fun PlanScreenLayout(dataState: PlanState){
+@Composable fun PlanScreenLayout(dataState: PlanState, navigateEvent: NavigateEvent){
     val focusManager = LocalFocusManager.current
     val interactionSource = remember { MutableInteractionSource() }
     Column(
@@ -64,7 +65,7 @@ import com.count_out.presentation.view_element.icons.IconsGroup
             },
     ){
         Spacer(modifier = Modifier.height(Dimen.width8))
-        NamePlan(dataState = dataState)
+        NamePlan(dataState = dataState, navigateEvent)
         dataState.plan?.parts?.forEach { part ->
             Spacer(modifier = Modifier.height(Dimen.width8))
             Part(dataState = dataState, part = part)
@@ -73,7 +74,7 @@ import com.count_out.presentation.view_element.icons.IconsGroup
 
     }
 }
-@Composable fun NamePlan(dataState: PlanState) {
+@Composable fun NamePlan(dataState: PlanState, navigateEvent: NavigateEvent) {
     val enteredName: MutableState<String> = remember { mutableStateOf(dataState.plan?.name ?: "") }
     if (dataState.plan?.idPlan == 0L) return
     Row( verticalAlignment = Alignment.CenterVertically,

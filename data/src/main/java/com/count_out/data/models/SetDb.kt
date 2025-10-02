@@ -4,7 +4,7 @@ interface SetDb {
     val idSet: Long
     val name: String
     val exerciseId: Long
-    val speechId: Long
+    val speechId: Long?
     val speeches: List<SpeechDb>
     val goal: Int
     val weightV: Double

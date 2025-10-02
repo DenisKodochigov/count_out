@@ -13,38 +13,42 @@ import com.count_out.framework.room.db.set.SetTb
 
 @Entity(tableName = "speech_kit_tb",
     primaryKeys = ["idSpeechKit"],
-    indices = [Index(value = ["idSpeechKit"], unique = true)],
+    indices = [Index(value = ["idSpeechKit", "idOwner"], unique = true)],
     foreignKeys = [
         ForeignKey(
             entity = PlanTb::class,
             parentColumns = ["speechId"],
-            childColumns = ["idSpeechKit"],
+            childColumns = ["idOwner"],
             onDelete = ForeignKey.CASCADE,
             onUpdate = NO_ACTION),
         ForeignKey(
             entity = PartTb::class,
             parentColumns = ["speechId"],
-            childColumns = ["idSpeechKit"],
+            childColumns = ["idOwner"],
             onDelete = ForeignKey.CASCADE,
             onUpdate = NO_ACTION
         ),
         ForeignKey(
             entity = RingTb::class,
             parentColumns = ["speechId"],
-            childColumns = ["idSpeechKit"],
+            childColumns = ["idOwner"],
             onDelete = ForeignKey.CASCADE,
             onUpdate = NO_ACTION),
         ForeignKey(
             entity = ExerciseTb::class,
             parentColumns = ["speechId"],
-            childColumns = ["idSpeechKit"],
+            childColumns = ["idOwner"],
             onDelete = ForeignKey.CASCADE,
             onUpdate = NO_ACTION),
         ForeignKey(
             entity = SetTb::class,
             parentColumns = ["speechId"],
-            childColumns = ["idSpeechKit"],
+            childColumns = ["idOwner"],
             onDelete = ForeignKey.CASCADE,
             onUpdate = NO_ACTION),])
-data class SpeechKitTb(override var idSpeechKit: Long = 0): SpeechKitDb
+data class SpeechKitTb(
+    override var idSpeechKit: Long = 0,
+    override val idOwner: Long = 0,
+
+): SpeechKitDb
 //@PrimaryKey(autoGenerate = true)

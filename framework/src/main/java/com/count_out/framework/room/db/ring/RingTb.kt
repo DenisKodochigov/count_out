@@ -27,7 +27,7 @@ import com.count_out.framework.room.db.speech.SpeechTb
 data class RingTb(
     override var idRing: Long = 0L,
     override var partId: Long = 0L,
-    override var speechId: Long = 0,
+    override var speechId: Long? = null,
     override var numberLaps: Int = 0,
     override var amount: Int = 0,
     override var duration: Double = 0.0,

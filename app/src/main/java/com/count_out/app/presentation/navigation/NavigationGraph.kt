@@ -12,11 +12,11 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.runtime.Composable
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NamedNavArgument
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.count_out.app.presentation.Const.DEFAULT_SCREEN
 import com.count_out.app.presentation.Const.DELAY_SCREEN
 import com.count_out.app.presentation.Const.DURATION_SCREEN
@@ -30,50 +30,55 @@ fun NavGraphBuilder.executeWorkout(navigateEvent: NavigateEventImpl) {
     template(
         routeTo = ExecuteDestination.route,
         content = { navBackStackEntry ->
-            val vm: ExecuteViewModel = hiltViewModel()
-            vm.initNavigate(navigateEvent)
-            ExecuteDestination.Show(vm, arg = emptyList())
+            val vm: ExecuteViewModel = hiltViewModel(navBackStackEntry)
+//            vm.initNavigate(navigateEvent)
+            ExecuteDestination.Show( navigateEvent = navigateEvent,
+                vm =  vm)
         }
     )
 }
 fun NavGraphBuilder.plans(navigateEvent: NavigateEventImpl ) {
     template(
         routeTo = PlansDestination.route,
-        content = {
-            val vm: PlansViewModel = hiltViewModel()
-            vm.initNavigate(navigateEvent)
-            PlansDestination.Show(vm, emptyList())
+        content = {navBackStackEntry ->
+//            val vm: PlansViewModel = hiltViewModel(navBackStackEntry)
+//            vm.initNavigate(navigateEvent)
+            PlansDestination.Show(navigateEvent = navigateEvent,
+                vm =  hiltViewModel(navBackStackEntry) as PlansViewModel)
         }
     )
 }
-fun NavGraphBuilder.training( navigateEvent: NavigateEventImpl) {
+fun NavGraphBuilder.plan(navigateEvent: NavigateEventImpl) {
     template(
-        routeTo = TrainingDestination.routeWithArgs,
-        argument = TrainingDestination.arguments,
+        routeTo = PlanDestination.routeWithArgs,
+        argument = PlanDestination.arguments,
         content = { navBackStackEntry ->
-            val vm: PlanViewModel = hiltViewModel()
-            vm.initNavigate(navigateEvent)
-            val arg = listOf((navBackStackEntry.arguments?.getLong(TrainingDestination.ARG) ?: 0).toString())
-            TrainingDestination.Show(vm, arg)
+//            val vm: PlanViewModel = hiltViewModel(navBackStackEntry)
+//            vm.initNavigate(navigateEvent)
+//            val arg = listOf((navBackStackEntry.arguments?.getLong(PlanDestination.ARG) ?: 0).toString())
+            PlanDestination.Show(navigateEvent = navigateEvent,
+                vm =  hiltViewModel(navBackStackEntry) as PlanViewModel)
         }
     )
 }
 fun NavGraphBuilder.history(navigateEvent: NavigateEventImpl) {
     template(
         routeTo = HistoryDestination.route,
-        content = {
-            val vm: HistoryViewModel = hiltViewModel()
+        content = {navBackStackEntry ->
+//            val vm: HistoryViewModel = hiltViewModel(navBackStackEntry)
 //            vm.initNavigate(navigateEvent)
-            HistoryDestination.Show(vm, emptyList()) }
+            HistoryDestination.Show(navigateEvent = navigateEvent,
+                vm =  hiltViewModel(navBackStackEntry) as HistoryViewModel) }
     )
 }
 fun NavGraphBuilder.settings(navigateEvent: NavigateEventImpl) {
     template(
         routeTo = SettingDestination.route,
-        content = {
-            val vm: SettingViewModel = hiltViewModel()
-            vm.initNavigate(navigateEvent)
-            SettingDestination.Show(vm, emptyList())}
+        content = {navBackStackEntry ->
+//            val vm: SettingViewModel = hiltViewModel(navBackStackEntry)
+//            vm.initNavigate(navigateEvent)
+            SettingDestination.Show(navigateEvent = navigateEvent,
+                vm =  hiltViewModel(navBackStackEntry) as SettingViewModel)}
     )
 }
 

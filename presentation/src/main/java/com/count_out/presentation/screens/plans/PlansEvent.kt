@@ -11,7 +11,7 @@ sealed class PlansEvent: Event {
     data class Del(val item: Plan) : PlansEvent()
     data object Add : PlansEvent()
     data class Copy(val item: Plan) : PlansEvent()
-    data class Update(val item: Plan) : PlansEvent()
+//    data class Update(val item: Plan) : PlansEvent()
     data class Select(val item: Plan) : PlansEvent()
     data class UpdateSpeech(val item: Speech) : PlansEvent()
     data object BackScreen : PlansEvent()

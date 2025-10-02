@@ -27,6 +27,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.count_out.domain.entity.NavigateEvent
 import com.count_out.domain.entity.Settings
 import com.count_out.domain.entity.enums.ConnectState
 import com.count_out.domain.entity.router.DeviceBle
@@ -47,7 +48,7 @@ import com.count_out.presentation.view_element.icons.IconsCollapsing
 import com.count_out.presentation.view_element.lg
 
 @Composable fun SettingScreen(viewModel: SettingViewModel){
-    LaunchedEffect(Unit) { viewModel.submitEvent(SettingsEvent.Init) }
+//    LaunchedEffect(Unit) { viewModel.submitEvent(SettingsEvent.Init) }
     SettingScreenCreateView( viewModel = viewModel )
 }
 @Composable fun SettingScreenCreateView( viewModel: SettingViewModel){
