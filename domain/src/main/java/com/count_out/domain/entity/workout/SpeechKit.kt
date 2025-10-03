@@ -1,7 +1,6 @@
 package com.count_out.domain.entity.workout
 
 interface SpeechKit: Element {
-    val idSpeechKit: Long
     val beforeStart: Speech
     val afterStart: Speech
     val beforeEnd: Speech
@@ -9,7 +8,6 @@ interface SpeechKit: Element {
 
     companion object{
         val EMPTY = object: SpeechKit{
-            override val idSpeechKit: Long = 0
             override val beforeStart: Speech = Speech.EMPTY
             override val afterStart: Speech = Speech.EMPTY
             override val beforeEnd: Speech = Speech.EMPTY

@@ -122,13 +122,12 @@ sealed class TypeSource {
             override val duration = speech.duration
             override val addMessage = speech.addMessage
         }
-        fun convListSpeech(idKit: Long?, speeches: List<SpeechDb>): SpeechKit {
+        fun convListSpeech(speeches: List<SpeechDb>): SpeechKit {
             val convSpeeches = if (speeches.size > 3) {
                 listOf(speeches[0], speeches[1], speeches[2], speeches[3]).map(::convSpeech)
             } else { List(4) { Speech.EMPTY } }
 
             return object : SpeechKit {
-                override val idSpeechKit: Long = idKit ?: 0L
                 override val beforeStart: Speech = convSpeeches[0]
                 override val afterStart: Speech = convSpeeches[1]
                 override val beforeEnd: Speech = convSpeeches[2]
@@ -149,11 +148,10 @@ sealed class TypeSource {
         fun convListPlan(plans: List<PlanDb>) = plans.map { plan -> convPlan(plan) }
         fun convPlan(plan: PlanDb) = object : Plan {
             override val idPlan: Long = plan.idPlan
-            override val speechId: Long = plan.speechId ?: 0
             override val name: String = plan.name
             override val amountActivity: Int = plan.amountActivity
             override val parts: List<Part> = convListPart(plan.parts)
-            override val speechKit: SpeechKit = convListSpeech(plan.speechId,plan.speeches)
+            override val speechKit: SpeechKit = convListSpeech(plan.speeches)
         }
         fun convListPart(parts: List<PartDb>): List<Part>{
             var i = 0
@@ -165,8 +163,7 @@ sealed class TypeSource {
             override val name: PartName = PartName.entries[name]
             override val rings: List<Ring> = convListRing(plan.rings)
             override val amount: Int = plan.amount
-            override var speechId: Long = plan.speechId ?: 0
-            override val speechKit: SpeechKit = convListSpeech(plan.speechId,plan.speeches)
+            override val speechKit: SpeechKit = convListSpeech(plan.speeches)
             override val duration: Parameter = object: Parameter{
                 override val value: Double = plan.duration
                 override val unit: Units = Units.M }
@@ -175,10 +172,9 @@ sealed class TypeSource {
         fun convRing(ring: RingDb) = object: Ring {
             override val idRing: Long = ring.idRing
             override val partId: Long = ring.partId
-            override val speechId: Long = ring.speechId ?: 0
             override val numberLaps: Int = ring.numberLaps
             override val amount: Int = ring.amount
-            override val speechKit: SpeechKit = convListSpeech(ring.speechId,ring.speeches)
+            override val speechKit: SpeechKit = convListSpeech(ring.speeches)
             override val exercises: List<Exercise> = convListExercise(ring.exercises)
             override val duration: Parameter = object: Parameter{
                 override val value: Double = ring.duration
@@ -192,8 +188,7 @@ sealed class TypeSource {
             override val idView: Int = exercise.idView
             override val activity: Activity? = exercise.activity?.let {convActivity(it)}
             override val activityId: Long = exercise.activityId
-            override val speechId: Long = exercise.speechId ?: 0
-            override val speechKit: SpeechKit = convListSpeech(exercise.speechId,exercise.speeches)
+            override val speechKit: SpeechKit = convListSpeech(exercise.speeches)
             override val sets: List<Set> = convListSet(exercise.sets)
             override val amountSet: Int = exercise.amountSet
             override val duration: Parameter = object: Parameter{
@@ -205,8 +200,7 @@ sealed class TypeSource {
             override val idSet: Long = set.idSet
             override val name: String = set.name
             override val exerciseId: Long = set.exerciseId
-            override val speechId: Long = set.speechId ?: 0
-            override val speechKit: SpeechKit = convListSpeech(set.speechId,set.speeches)
+            override val speechKit: SpeechKit = convListSpeech(set.speeches)
             override val goal: Goal = Goal.entries[set.goal]
             override val reps: Int = set.reps
             override val intensity: Zone = Zone.entries[set.intensity]

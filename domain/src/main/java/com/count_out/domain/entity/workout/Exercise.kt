@@ -6,7 +6,6 @@ interface Exercise: Element {
      val idView: Int
      val activity: Activity?
      val activityId: Long
-     val speechId: Long
      val speechKit: SpeechKit
      val sets: List<Set>
      val amountSet: Int

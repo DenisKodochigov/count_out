@@ -9,6 +9,5 @@ interface Part: Element  {
     val rings: List<Ring>
     val amount: Int
     val duration: Parameter
-    val speechId: Long
     val speechKit: SpeechKit
 }

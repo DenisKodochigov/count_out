@@ -7,7 +7,6 @@ interface Set: Element {
     val idSet: Long
     val name: String
     val exerciseId: Long
-    val speechId: Long
     val speechKit: SpeechKit
     val goal: Goal
     val weight: Parameter
