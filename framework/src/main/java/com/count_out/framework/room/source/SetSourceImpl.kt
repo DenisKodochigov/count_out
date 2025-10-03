@@ -1,6 +1,7 @@
 package com.count_out.framework.room.source
 
 import com.count_out.data.models.throwable.ResultSource
+import com.count_out.data.models.throwable.ResultSource.Companion.flatMap
 import com.count_out.data.models.throwable.ThrowableDS
 import com.count_out.data.models.throwable.TypeSource
 import com.count_out.data.source.PrimeSource
@@ -16,11 +17,10 @@ class SetSourceImpl @Inject constructor(
 ): SetSource, PrimeSource() {
 
     override fun copy(set: TypeSource): ResultSource<TypeSource> =
-        set.use { setTb ->
-            val newId = (speechKitSource.insert(setTb.speechId ?: 0))
-                .getTyped<TypeSource.LongT>()
-                ?.item ?: return@use 0L
-            dao.insert(setTb.copy(idSet = 0L, speechId = newId))
+        set.useResult { setTb ->
+            val speechKitId = if ( !setTb.speeches.isEmpty()) setTb.speeches.get(0).idKit else 0L
+            speechKitSource.insert(speechKitId = speechKitId, idSet = setTb.idSet)
+                .flatMap { dao.insert(setTb.copy(idSet = 0L)).result() }
         }
 
     override fun del(set: TypeSource): ResultSource<TypeSource> =
@@ -34,6 +34,12 @@ class SetSourceImpl @Inject constructor(
     inline fun TypeSource.use(crossinline block: (SetTb) -> Long): ResultSource<TypeSource> =
         if (this is TypeSource.SetT) {
             try { block(this.item as SetTb).result() }
+            catch (e: Exception) { ResultSource.Error(ThrowableDS.extract(e)) }
+        } else ResultSource.Error(ThrowableDS.NotValidType())
+
+    inline fun TypeSource.useResult(crossinline block: (SetTb) -> ResultSource<TypeSource>): ResultSource<TypeSource> =
+        if (this is TypeSource.SetT) {
+            try { block(this.item as SetTb) }
             catch (e: Exception) { ResultSource.Error(ThrowableDS.extract(e)) }
         } else ResultSource.Error(ThrowableDS.NotValidType())
 

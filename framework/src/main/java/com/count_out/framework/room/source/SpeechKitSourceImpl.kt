@@ -13,12 +13,15 @@ import javax.inject.Inject
 class SpeechKitSourceImpl @Inject constructor(
     private val sourceSpeech: SpeechSourceImpl,
     private val daoKit: SpeechKitDao,
-):SpeechKitSource, PrimeSource() {
-    override fun insert(speechKitId: Long): ResultSource<TypeSource> {
-        val newIdKit = daoKit.insert(SpeechKitTb(idSpeechKit = 0L))
+): SpeechKitSource, PrimeSource() {
+    override fun insert(speechKitId: Long, idSet: Long?, idExercise: Long?,
+                        idRing: Long?, idPart: Long?, idPlan: Long?
+    ): ResultSource<TypeSource> {
+        val newIdKit = daoKit.insert(SpeechKitTb(idSpeechKit = 0L, setId = idSet,
+            exerciseId = idExercise, ringId = idRing, partId = idPart, planId = idPlan))
         val listSpeech = if (speechKitId > 0) {
             sourceSpeech.getForKit(speechKitId)
-                .filterNot {list-> list == emptyList<SpeechTb>() }
+                .filterNot { it == emptyList<SpeechTb>() }
                 .map { item->
                     item.idSpeech = 0
                     item.idKit = newIdKit
@@ -34,9 +37,7 @@ class SpeechKitSourceImpl @Inject constructor(
                 ResultSource.Success(TypeSource.IntT(listSpeech.count()))
             else ResultSource.Error(ThrowableDS.RequestFailed())
         } else ResultSource.Error(ThrowableDS.RequestFailed())
-
     }
-
 }
 //    override fun insert(speechKit: TypeSource): ResultSource<TypeSource> =
 //        speechKit.use{kitTb-> insert(kitTb.idSpeechKit) }

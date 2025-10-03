@@ -8,7 +8,6 @@ import com.count_out.data.models.SetDb
 import com.count_out.framework.room.db.exercise.ExerciseTb
 import com.count_out.framework.room.db.speech.SpeechTb
 
-
 @Entity(tableName = "set_tb", 
     primaryKeys = ["idSet"],
     ignoredColumns = ["speeches"],
@@ -26,7 +25,6 @@ import com.count_out.framework.room.db.speech.SpeechTb
 data class SetTb (
     override var idSet: Long = 0L,
     override var exerciseId: Long = 0,
-    override var speechId: Long? = null,
     override var name: String = "",
     override var goal: Int = 1,
     override var reps: Int = 0,
