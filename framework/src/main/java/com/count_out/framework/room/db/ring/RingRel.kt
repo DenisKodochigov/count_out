@@ -10,4 +10,4 @@ data class RingRel(
     @Embedded val parentTb: RingTb,
     @param:TypeConverters(RingConverter::class)
     @Relation(parentColumn = "idRing", entityColumn = "ringId", entity = ExerciseTb::class) val exercises: List<ExerciseTb>,
-    @Relation(parentColumn = "speechId", entityColumn = "idKit", entity = SpeechTb::class) val speeches: List<SpeechTb>)
+    @Relation(parentColumn = "idSet", entityColumn = "setId", entity = SpeechTb::class) val speeches: List<SpeechTb>)

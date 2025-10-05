@@ -24,7 +24,7 @@ import javax.inject.Inject
 class PlanSourceImpl @Inject constructor(
     private val dao: PlanDao,
     private val partSource: PartSource,
-    private val speechKitSource: SpeechKitSourceImpl,
+    private val speechSource: SpeechSourceImpl,
 ): PlanSource, PrimeSource() {
 
     override fun gets(): Flow<ResultSource<TypeSource>>{
@@ -43,15 +43,15 @@ class PlanSourceImpl @Inject constructor(
         idPlan.useLongFlow { id-> dao.getPlan(id).filterNotNull() }
 
     override fun copy(plan: TypeSource): ResultSource<TypeSource> =
-        (plan as? TypeSource.PlanT)?.let { pl ->
-            speechKitSource.insert(pl.item.speechId ?: 0).asType<TypeSource.LongT>()
-            .flatMap { idSpeechKit ->
-                val obj = (pl.item as PlanTb).apply{this.speechId = idSpeechKit.item; this.idPlan = 0L }
-                dao.insert(obj).result() }
-            .flatMap { ownerId->
-                if (ownerId.item == 0L) ResultSource.Error(ThrowableDS.RequestFailed())
-                else copyParts(pl.item.parts, ownerId) }
-        } ?: ResultSource.Error(ThrowableDS.NotValidType())
+        plan.useResult { planTb->
+            dao.insert(planTb.copy(idPlan = 0L)).result().flatMap { ownerId->
+                val listSpeech = speechSource.getListSpeech( planId = planTb.idPlan)
+                    .map { it.apply { planId = ownerId.item } }
+                if (speechSource.insert(listSpeech).count() == listSpeech.count())
+                    ResultSource.Success(TypeSource.IntT(listSpeech.count()))
+                else ResultSource.Error(ThrowableDS.RequestFailed())
+            }
+        }
 
     override fun del(plan: TypeSource): ResultSource<TypeSource> =
         plan.use { dao.delete( it).toLong() }
@@ -84,6 +84,12 @@ class PlanSourceImpl @Inject constructor(
                 .map{ plan-> ResultSource.Success(TypeSource.PlanT(plan)) } }
             catch (e: Exception) { flowOf(ResultSource.Error(ThrowableDS.extract(e)))}
         } else flowOf(ResultSource.Error(ThrowableDS.NotValidType()))
+
+    inline fun TypeSource.useResult(crossinline block: (PlanTb) -> ResultSource<TypeSource>): ResultSource<TypeSource> =
+        if (this is TypeSource.PlanT) {
+            try { block(this.item as PlanTb) }
+            catch (e: Exception) { ResultSource.Error(ThrowableDS.extract(e)) }
+        } else ResultSource.Error(ThrowableDS.NotValidType())
 
     fun copyParts(parts: List<PartDb>, ownerId: TypeSource.LongT): ResultSource<TypeSource> =
         if (parts.isEmpty()) { Success(TypeSource.IntT(0)) }

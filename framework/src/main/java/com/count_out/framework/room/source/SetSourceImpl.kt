@@ -9,28 +9,32 @@ import com.count_out.data.source.room.SetSource
 import com.count_out.framework.result
 import com.count_out.framework.room.db.set.SetDao
 import com.count_out.framework.room.db.set.SetTb
+import com.count_out.framework.room.db.speech.SpeechTb
 import javax.inject.Inject
 
 class SetSourceImpl @Inject constructor(
-    private val speechKitSource: SpeechKitSourceImpl,
+    private val speechSource: SpeechSourceImpl,
     private val dao: SetDao
 ): SetSource, PrimeSource() {
 
     override fun copy(set: TypeSource): ResultSource<TypeSource> =
         set.useResult { setTb ->
-            val speechKitId = if ( !setTb.speeches.isEmpty()) setTb.speeches.get(0).idKit else 0L
-            speechKitSource.insert(speechKitId = speechKitId, idSet = setTb.idSet)
-                .flatMap { dao.insert(setTb.copy(idSet = 0L)).result() }
+            dao.insert( setTb.copy(idSet = 0L)).result().flatMap { ownerId->
+                val listSpeech = speechSource.getListSpeech(setId = setTb.idSet)
+                        .map { it.apply { setId = ownerId.item } }
+                if (speechSource.insert(listSpeech).count() == listSpeech.count())
+                    ResultSource.Success(TypeSource.IntT(listSpeech.count()))
+                else ResultSource.Error(ThrowableDS.RequestFailed())
+            }
         }
 
     override fun del(set: TypeSource): ResultSource<TypeSource> =
         set.use { item -> dao.delete(item).toLong() }
 
-
     override fun update(set: TypeSource): ResultSource<TypeSource> =
         set.use { setTb -> dao.update(setTb).toLong() }
 
-    //##############################################################################################
+//##############################################################################################
     inline fun TypeSource.use(crossinline block: (SetTb) -> Long): ResultSource<TypeSource> =
         if (this is TypeSource.SetT) {
             try { block(this.item as SetTb).result() }

@@ -12,4 +12,4 @@ data class ExerciseRel(
     @param:TypeConverters(ExerciseConverter::class)
     @Relation(parentColumn = "activityId", entityColumn = "idActivity", entity = ActivityTb::class) val activity: ActivityTb,
     @Relation(parentColumn = "idExercise", entityColumn = "exerciseId", entity = SetTb::class) val sets: List<SetTb>,
-    @Relation(parentColumn = "speechId", entityColumn = "idKit", entity = SpeechTb::class) val speeches: List<SpeechTb>)
+    @Relation(parentColumn = "idSet", entityColumn = "setId", entity = SpeechTb::class) val speeches: List<SpeechTb>)

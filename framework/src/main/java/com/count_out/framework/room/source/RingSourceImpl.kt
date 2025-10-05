@@ -22,20 +22,19 @@ import javax.inject.Inject
 class RingSourceImpl @Inject constructor(
     private val dao: RingDao,
     private val source: ExerciseSource,
-    private val speechKitSource: SpeechKitSourceImpl,
+    private val speechSource: SpeechSourceImpl,
 ): RingSource, PrimeSource() {
 
     override fun copy(ring: TypeSource): ResultSource<TypeSource> =
-        (ring as? TypeSource.RingT)?.let { ring ->
-            speechKitSource.insert(ring.item.speechId ?: 0).asType<TypeSource.LongT>()
-            .flatMap { idSpeechKit ->
-                val obj = (ring.item as RingTb).apply{this.speechId = idSpeechKit.item; this.idRing = 0L }
-                dao.insert(obj).result()
+        ring.useResult { ringTb->
+            dao.insert(ringTb.copy(idRing = 0L)).result().flatMap { ownerId ->
+                val listSpeech = speechSource.getListSpeech( ringId = ringTb.idRing)
+                    .map { it.apply { ringId = ownerId.item } }
+                if (speechSource.insert(listSpeech).count() == listSpeech.count())
+                    ResultSource.Success(TypeSource.IntT(listSpeech.count()))
+                else ResultSource.Error(ThrowableDS.RequestFailed())
             }
-            .flatMap { ownerId->
-                if (ownerId.item == 0L) ResultSource.Error(ThrowableDS.RequestFailed())
-                else copyExercises(ring.item.exercises, ownerId) }
-        } ?: ResultSource.Error(ThrowableDS.NotValidType())
+        }
 
     override fun del(ring: TypeSource): ResultSource<TypeSource> =
         ring.use { dao.delete( it).toLong() }
@@ -43,10 +42,16 @@ class RingSourceImpl @Inject constructor(
     override fun update(ring: TypeSource): ResultSource<TypeSource> =
         ring.use { dao.update(it).toLong() }
 
-    //##############################################################################################
+//##############################################################################################
     inline fun TypeSource.use(crossinline block: (RingTb) -> Long): ResultSource<TypeSource> =
         if (this is TypeSource.RingT) {
             try { block(this.item as RingTb).result() }
+            catch (e: Exception) { ResultSource.Error(ThrowableDS.extract(e)) }
+        } else ResultSource.Error(ThrowableDS.NotValidType())
+
+    inline fun TypeSource.useResult(crossinline block: (RingTb) -> ResultSource<TypeSource>): ResultSource<TypeSource> =
+        if (this is TypeSource.RingT) {
+            try { block(this.item as RingTb) }
             catch (e: Exception) { ResultSource.Error(ThrowableDS.extract(e)) }
         } else ResultSource.Error(ThrowableDS.NotValidType())
 
@@ -58,4 +63,5 @@ class RingSourceImpl @Inject constructor(
                 .firstOrNull {it is ResultSource.Error}
                 ?: ResultSource.Success(TypeSource.IntT(exercises.size))
         }
+
 }

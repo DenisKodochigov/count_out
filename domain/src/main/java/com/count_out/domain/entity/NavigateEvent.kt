@@ -4,7 +4,7 @@ import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavHostController
 
 interface NavigateEvent {
-    fun goToScreenTraining(id: Long)
+    fun goToScreenPlan(id: Long)
     fun goToScreenExecuteWorkout()
     fun goToScreenPlans()
     fun backStack()

@@ -2,7 +2,6 @@ package com.count_out.framework.room.source
 
 import com.count_out.data.models.SetDb
 import com.count_out.data.models.throwable.ResultSource
-import com.count_out.data.models.throwable.ResultSource.Companion.asType
 import com.count_out.data.models.throwable.ResultSource.Companion.flatMap
 import com.count_out.data.models.throwable.ThrowableDS
 import com.count_out.data.models.throwable.TypeSource
@@ -18,23 +17,21 @@ import javax.inject.Inject
 class ExerciseSourceImpl @Inject constructor(
     private val dao: ExerciseDao,
     private val setSource: SetSource,
-    private val speechKitSource: SpeechKitSourceImpl,
+    private val speechSource: SpeechSourceImpl,
 ): ExerciseSource, PrimeSource() {
 
     override fun copy(exercise: TypeSource): ResultSource<TypeSource> =
-        (exercise as? TypeSource.ExerciseT)?.let { ex ->
-            speechKitSource.insert(ex.item.speechId ?: 0).asType<TypeSource.LongT>()
-            .flatMap { idSpeechKit ->
-                val tempEx = (ex.item as ExerciseTb).apply {
-                    this.speechId = idSpeechKit.item
-                    this.idExercise = 0L }
-                dao.insert(tempEx).result()
+        exercise.useResult { exerciseTb->
+            dao.insert(exerciseTb.copy(idExercise = 0L)).result()
+                .flatMap { ownerId->
+                    val listSpeech = speechSource.getListSpeech(exerciseId = exerciseTb.idExercise)
+                        .map { it.apply { exerciseId = ownerId.item } }
+                    if (speechSource.insert(listSpeech).count() == listSpeech.count())
+                        ResultSource.Success(TypeSource.IntT(listSpeech.count()))
+                    else ResultSource.Error(ThrowableDS.RequestFailed())
+                }
             }
-            .flatMap { ownerId->
-                if (ownerId.item == 0L) ResultSource.Error(ThrowableDS.RequestFailed())
-                else copySets(ex.item.sets, ownerId)
-            }
-        } ?: ResultSource.Error(ThrowableDS.NotValidType())
+
 
     fun copySets(sets: List<SetDb>, ownerId: TypeSource.LongT): ResultSource<TypeSource> =
         if (sets.isEmpty()) { ResultSource.Success(TypeSource.IntT(0)) }
@@ -74,5 +71,10 @@ class ExerciseSourceImpl @Inject constructor(
             catch (e: Exception) { ResultSource.Error(ThrowableDS.extract(e)) }
         } else ResultSource.Error(ThrowableDS.NotValidType())
 
+    inline fun TypeSource.useResult(crossinline block: (ExerciseTb) -> ResultSource<TypeSource>): ResultSource<TypeSource> =
+        if (this is TypeSource.ExerciseT) {
+            try { block(this.item as ExerciseTb) }
+            catch (e: Exception) { ResultSource.Error(ThrowableDS.extract(e)) }
+        } else ResultSource.Error(ThrowableDS.NotValidType())
 
 }

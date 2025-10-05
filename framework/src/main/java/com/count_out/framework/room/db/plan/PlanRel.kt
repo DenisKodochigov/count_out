@@ -10,4 +10,4 @@ data class PlanRel(
     @Embedded val parentTb: PlanTb,
     @param:TypeConverters(PlanConverter::class)
     @Relation(parentColumn = "idPlan", entityColumn = "planId", entity = PartTb::class) val parts: List<PartTb>,
-    @Relation(parentColumn = "speechId", entityColumn = "idKit", entity = SpeechTb::class) val speeches: List<SpeechTb>)
+    @Relation(parentColumn = "idSet", entityColumn = "setId", entity = SpeechTb::class) val speeches: List<SpeechTb>)

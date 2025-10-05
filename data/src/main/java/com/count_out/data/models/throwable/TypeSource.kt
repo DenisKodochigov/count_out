@@ -19,7 +19,6 @@ import com.count_out.domain.entity.enums.PartName
 import com.count_out.domain.entity.enums.Units
 import com.count_out.domain.entity.enums.Zone
 import com.count_out.domain.entity.router.DeviceBle
-import com.count_out.domain.entity.supportive.NameId
 import com.count_out.domain.entity.weather.Weather
 import com.count_out.domain.entity.weather.WeatherRequest
 import com.count_out.domain.entity.workout.Activity

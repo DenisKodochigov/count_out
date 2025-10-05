@@ -11,6 +11,7 @@ import com.count_out.data.source.PrimeSource
 import com.count_out.data.source.room.PartSource
 import com.count_out.data.source.room.RingSource
 import com.count_out.framework.result
+import com.count_out.framework.room.db.exercise.ExerciseTb
 import com.count_out.framework.room.db.part.PartDao
 import com.count_out.framework.room.db.part.PartTb
 import com.count_out.framework.room.db.ring.RingTb
@@ -23,19 +24,29 @@ import javax.inject.Inject
 class PartSourceImpl @Inject constructor(
     private val dao: PartDao,
     private val source: RingSource,
-    private val speechKitSource: SpeechKitSourceImpl,
+    private val speechSource: SpeechSourceImpl,
 ): PartSource, PrimeSource() {
 
     override fun copy(part: TypeSource): ResultSource<TypeSource> =
-        (part as? TypeSource.PartT)?.let { pr ->
-        speechKitSource.insert(pr.item.speechId ?: 0).asType<TypeSource.LongT>()
-        .flatMap { idSpeechKit ->
-            val obj = (pr.item as PartTb).apply{this.speechId = idSpeechKit.item; this.idPart = 0L }
-            dao.insert(obj).result() }
-        .flatMap { ownerId->
-            if (ownerId.item == 0L) ResultSource.Error(ThrowableDS.RequestFailed())
-            else copyRings(pr.item.rings, ownerId) }
-        } ?: ResultSource.Error(ThrowableDS.NotValidType())
+        part.useResult { partTb->
+            dao.insert(partTb.copy(idPart = 0L)).result().flatMap { ownerId->
+                val listSpeech = speechSource.getListSpeech(partId = partTb.idPart)
+                    .map { it.apply { partId = ownerId.item } }
+                if (speechSource.insert(listSpeech).count() == listSpeech.count())
+                    ResultSource.Success(TypeSource.IntT(listSpeech.count()))
+                else ResultSource.Error(ThrowableDS.RequestFailed())
+            }
+        }
+
+//        (part as? TypeSource.PartT)?.let { pr ->
+//        speechKitSource.insert(pr.item.speechId ?: 0).asType<TypeSource.LongT>()
+//        .flatMap { idSpeechKit ->
+//            val obj = (pr.item as PartTb).apply{this.speechId = idSpeechKit.item; this.idPart = 0L }
+//            dao.insert(obj).result() }
+//        .flatMap { ownerId->
+//            if (ownerId.item == 0L) ResultSource.Error(ThrowableDS.RequestFailed())
+//            else copyRings(pr.item.rings, ownerId) }
+//        } ?: ResultSource.Error(ThrowableDS.NotValidType())
 
     override fun del(part: TypeSource): ResultSource<TypeSource> =
         part.use { dao.delete( it).toLong() }
@@ -47,6 +58,12 @@ class PartSourceImpl @Inject constructor(
     inline fun TypeSource.use(crossinline block: (PartTb) -> Long): ResultSource<TypeSource> =
         if (this is TypeSource.PartT) {
             try { block(this.item as PartTb).result() }
+            catch (e: Exception) { ResultSource.Error(ThrowableDS.extract(e)) }
+        } else ResultSource.Error(ThrowableDS.NotValidType())
+
+    inline fun TypeSource.useResult(crossinline block: (PartTb) -> ResultSource<TypeSource>): ResultSource<TypeSource> =
+        if (this is TypeSource.PartT) {
+            try { block(this.item as PartTb) }
             catch (e: Exception) { ResultSource.Error(ThrowableDS.extract(e)) }
         } else ResultSource.Error(ThrowableDS.NotValidType())
 
