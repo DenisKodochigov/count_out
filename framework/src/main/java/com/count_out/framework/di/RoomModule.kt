@@ -13,7 +13,6 @@ import com.count_out.framework.room.db.plan.PlanDao
 import com.count_out.framework.room.db.ring.RingDao
 import com.count_out.framework.room.db.set.SetDao
 import com.count_out.framework.room.db.speech.SpeechDao
-import com.count_out.framework.room.db.speech_kit.SpeechKitDao
 import com.count_out.framework.room.db.traking.TrackingDao
 import com.count_out.framework.room.entity.prepopulateRealDb
 import com.count_out.framework.room.entity.prepopulateTestDb
@@ -91,9 +90,6 @@ class RoomModule {
     @Singleton
     @Provides
     fun provideSpeechDao(appDatabase: AppDataBase): SpeechDao = appDatabase.speechDao()
-    @Singleton
-    @Provides
-    fun provideSpeechKitDao(appDatabase: AppDataBase): SpeechKitDao = appDatabase.speechKitDao()
     @Singleton
     @Provides
     fun provideSettingDao(appDatabase: AppDataBase): SettingDao = appDatabase.settingDao()

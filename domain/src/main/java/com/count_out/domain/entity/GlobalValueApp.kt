@@ -2,6 +2,7 @@ package com.count_out.domain.entity
 
 import com.count_out.domain.entity.enums.Goal
 import com.count_out.domain.entity.enums.Units
+import com.count_out.domain.entity.throwable.ResultUC
 import com.count_out.domain.entity.workout.Exercise
 import com.count_out.domain.entity.workout.Part
 import com.count_out.domain.entity.workout.Plan
@@ -9,7 +10,7 @@ import com.count_out.domain.entity.workout.Set
 import kotlinx.coroutines.flow.MutableStateFlow
 
 object GlobalValueApp {
-    var planRun: MutableStateFlow<Plan?> = MutableStateFlow(null)
+    var planLast: MutableStateFlow<ResultUC<TypeRepo>?> = MutableStateFlow(null)
 
     fun toStepPlan(plan: Plan): StepPlan{
         var numberExercise = 1

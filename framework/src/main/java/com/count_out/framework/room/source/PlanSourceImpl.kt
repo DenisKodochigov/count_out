@@ -1,9 +1,9 @@
 package com.count_out.framework.room.source
 
+import android.util.Log
 import com.count_out.data.models.NameIdDb
 import com.count_out.data.models.PartDb
 import com.count_out.data.models.throwable.ResultSource
-import com.count_out.data.models.throwable.ResultSource.Companion.asType
 import com.count_out.data.models.throwable.ResultSource.Companion.flatMap
 import com.count_out.data.models.throwable.ResultSource.Success
 import com.count_out.data.models.throwable.ThrowableDS
@@ -31,26 +31,30 @@ class PlanSourceImpl @Inject constructor(
         return try {
             dao.getPlans().filterNotNull().map { list ->
                 if (list.isEmpty()) ResultSource.Error(ThrowableDS.RequestFailed())
-                else ResultSource.Success(TypeSource.PlansT(list))
+                else ResultSource.Success(TypeSource.PlansT(list.map { it.toTable() }))
             }
         } catch(e: Exception) { flowOf(ResultSource.Error(ThrowableDS.extract(e))) }
     }
 
     override fun get(plan: TypeSource): Flow<ResultSource<TypeSource>> =
-        plan.usePlanFlow{dao.getPlan( it.idPlan)}
+        plan.usePlanFlow{ plan-> dao.getPlan( plan.idPlan).filterNotNull().map { it.toTable() }}
 
     override fun getId(idPlan: TypeSource): Flow<ResultSource<TypeSource>> =
-        idPlan.useLongFlow { id-> dao.getPlan(id).filterNotNull() }
+        idPlan.useLongFlow { id->
+            dao.getPlan(id).filterNotNull().map{ it.toTable() } }
 
     override fun copy(plan: TypeSource): ResultSource<TypeSource> =
         plan.useResult { planTb->
-            dao.insert(planTb.copy(idPlan = 0L)).result().flatMap { ownerId->
-                val listSpeech = speechSource.getListSpeech( planId = planTb.idPlan)
-                    .map { it.apply { planId = ownerId.item } }
-                if (speechSource.insert(listSpeech).count() == listSpeech.count())
-                    ResultSource.Success(TypeSource.IntT(listSpeech.count()))
-                else ResultSource.Error(ThrowableDS.RequestFailed())
-            }
+            var idNew = TypeSource.LongT(0L)
+            dao.insert(planTb.copy(idPlan = 0L)).result()
+                .flatMap { ownerId->
+                    idNew = ownerId
+                    val listSpeech = speechSource.getListSpeech( planId = planTb.idPlan)
+                        .map { it.apply { planId = ownerId.item } }
+                    if (speechSource.insert(listSpeech).count() == listSpeech.count())
+                        ResultSource.Success(TypeSource.IntT(listSpeech.count()))
+                    else ResultSource.Error(ThrowableDS.RequestFailed()) }
+                .flatMap { copyParts(planTb.parts, ownerId = idNew) }
         }
 
     override fun del(plan: TypeSource): ResultSource<TypeSource> =
@@ -99,5 +103,4 @@ class PlanSourceImpl @Inject constructor(
                 .firstOrNull {it is ResultSource.Error}
                 ?: Success(TypeSource.IntT(parts.size))
         }
-
 }

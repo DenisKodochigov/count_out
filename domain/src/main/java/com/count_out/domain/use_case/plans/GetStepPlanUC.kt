@@ -9,7 +9,6 @@ import com.count_out.domain.repository.LastPlanRepo
 import com.count_out.domain.use_case.UseCase
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 /**
@@ -25,20 +24,15 @@ class GetStepPlanUC @Inject constructor(
 ): UseCase<GetStepPlanUC.Request, GetStepPlanUC.Response>(configuration)  {
 
     override fun method(request: Request): Flow<ResultUC<TypeRepo>> {
-        val result = GlobalValueApp.planRun.map { plan ->
-            plan?.let {
-                ResultUC.Success( TypeRepo.StepPlanT(item = GlobalValueApp.toStepPlan(it))) }
-                ?: exceptionNull
-        }
-
-        return combine(result,
-            repoLastPlan.getLastUsedPlan().wrap{ it.toStepPlan() },
-            repoExecute.getPlan().wrap{ it.toStepPlan()}
-        ){ r1, r2, r3 ->
-            val result = r1.chek() ?: r2.chek() ?: r3.chek()
+        return combine(
+            GlobalValueApp.planLast,
+            repoLastPlan.getLastUsedPlan(),
+            repoExecute.getPlan()
+        ){ r1, r2, r3->
+            val result = (r1?.chek() ?: r2.chek() ?: r3.chek())
             when(result){
-                is ResultUC.Error -> exceptionNull
-                is ResultUC.Success -> ResultUC.Success(result.data)
+                is ResultUC.Error -> result
+                is ResultUC.Success -> ResultUC.Success(result.data.toStepPlan())
                 null -> exceptionNull
             }
         }

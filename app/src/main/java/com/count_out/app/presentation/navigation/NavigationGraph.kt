@@ -30,10 +30,8 @@ fun NavGraphBuilder.executeWorkout(navigateEvent: NavigateEventImpl) {
     template(
         routeTo = ExecuteDestination.route,
         content = { navBackStackEntry ->
-            val vm: ExecuteViewModel = hiltViewModel(navBackStackEntry)
-//            vm.initNavigate(navigateEvent)
             ExecuteDestination.Show( navigateEvent = navigateEvent,
-                vm =  vm)
+                vm =  hiltViewModel(navBackStackEntry) as ExecuteViewModel)
         }
     )
 }
@@ -41,8 +39,6 @@ fun NavGraphBuilder.plans(navigateEvent: NavigateEventImpl ) {
     template(
         routeTo = PlansDestination.route,
         content = {navBackStackEntry ->
-//            val vm: PlansViewModel = hiltViewModel(navBackStackEntry)
-//            vm.initNavigate(navigateEvent)
             PlansDestination.Show(navigateEvent = navigateEvent,
                 vm =  hiltViewModel(navBackStackEntry) as PlansViewModel)
         }
@@ -53,8 +49,6 @@ fun NavGraphBuilder.plan(navigateEvent: NavigateEventImpl) {
         routeTo = PlanDestination.routeWithArgs,
         argument = PlanDestination.arguments,
         content = { navBackStackEntry ->
-//            val vm: PlanViewModel = hiltViewModel(navBackStackEntry)
-//            vm.initNavigate(navigateEvent)
 //            val arg = listOf((navBackStackEntry.arguments?.getLong(PlanDestination.ARG) ?: 0).toString())
             PlanDestination.Show(navigateEvent = navigateEvent,
                 vm =  hiltViewModel(navBackStackEntry) as PlanViewModel)
@@ -65,8 +59,6 @@ fun NavGraphBuilder.history(navigateEvent: NavigateEventImpl) {
     template(
         routeTo = HistoryDestination.route,
         content = {navBackStackEntry ->
-//            val vm: HistoryViewModel = hiltViewModel(navBackStackEntry)
-//            vm.initNavigate(navigateEvent)
             HistoryDestination.Show(navigateEvent = navigateEvent,
                 vm =  hiltViewModel(navBackStackEntry) as HistoryViewModel) }
     )
@@ -75,8 +67,6 @@ fun NavGraphBuilder.settings(navigateEvent: NavigateEventImpl) {
     template(
         routeTo = SettingDestination.route,
         content = {navBackStackEntry ->
-//            val vm: SettingViewModel = hiltViewModel(navBackStackEntry)
-//            vm.initNavigate(navigateEvent)
             SettingDestination.Show(navigateEvent = navigateEvent,
                 vm =  hiltViewModel(navBackStackEntry) as SettingViewModel)}
     )

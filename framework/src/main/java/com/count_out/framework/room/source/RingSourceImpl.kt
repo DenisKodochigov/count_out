@@ -27,13 +27,16 @@ class RingSourceImpl @Inject constructor(
 
     override fun copy(ring: TypeSource): ResultSource<TypeSource> =
         ring.useResult { ringTb->
-            dao.insert(ringTb.copy(idRing = 0L)).result().flatMap { ownerId ->
-                val listSpeech = speechSource.getListSpeech( ringId = ringTb.idRing)
-                    .map { it.apply { ringId = ownerId.item } }
-                if (speechSource.insert(listSpeech).count() == listSpeech.count())
-                    ResultSource.Success(TypeSource.IntT(listSpeech.count()))
-                else ResultSource.Error(ThrowableDS.RequestFailed())
-            }
+            var idNew = TypeSource.LongT(0L)
+            dao.insert(ringTb.copy(idRing = 0L)).result()
+                .flatMap { ownerId ->
+                    idNew = ownerId
+                    val listSpeech = speechSource.getListSpeech( ringId = ringTb.idRing)
+                        .map { it.apply { ringId = ownerId.item } }
+                    if (speechSource.insert(listSpeech).count() == listSpeech.count())
+                        ResultSource.Success(TypeSource.IntT(listSpeech.count()))
+                    else ResultSource.Error(ThrowableDS.RequestFailed()) }
+                .flatMap { copyExercises(ringTb.exercises, ownerId = idNew) }
         }
 
     override fun del(ring: TypeSource): ResultSource<TypeSource> =

@@ -62,11 +62,10 @@ class ExecuteViewModel @Inject constructor(
         }
     }
     init {
-        Log.d("KDS", "ExecuteViewModel")
         getStepPlan()
-        getConnectionState()
-        subscribeHeartRate()
-        connectDeviceHr()
+//        getConnectionState()
+//        subscribeHeartRate()
+//        connectDeviceHr()
     }
     private fun connectDeviceHr() {
         viewModelScope.launch(Dispatchers.IO) {

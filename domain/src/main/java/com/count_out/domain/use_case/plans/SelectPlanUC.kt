@@ -14,7 +14,7 @@ class SelectPlanUC @Inject constructor(
     configuration: Configuration, private val repoLastPlan: LastPlanRepo
 ): UseCase<SelectPlanUC.Request, SelectPlanUC.Response>(configuration)  {
     override fun method(request: Request): Flow<ResultUC<TypeRepo>> {
-        GlobalValueApp.planRun.value = request.plan
+        GlobalValueApp.planLast.value = ResultUC.Success(TypeRepo.PlanT(item = request.plan))
         return flow { emit(ResultUC.Success(TypeRepo.LongT(item = request.plan.idPlan)))}
     }
     override fun response(typeRepo: TypeRepo): Response = Response(typeRepo)

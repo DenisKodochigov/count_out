@@ -22,22 +22,24 @@ class ExerciseSourceImpl @Inject constructor(
 
     override fun copy(exercise: TypeSource): ResultSource<TypeSource> =
         exercise.useResult { exerciseTb->
+            var idNew = TypeSource.LongT(0L)
             dao.insert(exerciseTb.copy(idExercise = 0L)).result()
                 .flatMap { ownerId->
+                    idNew = ownerId
                     val listSpeech = speechSource.getListSpeech(exerciseId = exerciseTb.idExercise)
                         .map { it.apply { exerciseId = ownerId.item } }
                     if (speechSource.insert(listSpeech).count() == listSpeech.count())
                         ResultSource.Success(TypeSource.IntT(listSpeech.count()))
-                    else ResultSource.Error(ThrowableDS.RequestFailed())
-                }
+                    else ResultSource.Error(ThrowableDS.RequestFailed()) }
+                .flatMap { copySets(exerciseTb.sets, ownerId = idNew) }
             }
 
 
     fun copySets(sets: List<SetDb>, ownerId: TypeSource.LongT): ResultSource<TypeSource> =
         if (sets.isEmpty()) { ResultSource.Success(TypeSource.IntT(0)) }
         else {
-            sets.map {set-> setSource.copy(TypeSource.SetT(
-                (set as SetTb).copy(idSet = 0L, exerciseId = ownerId.item))) }
+            sets.map {set-> setSource.copy(
+                TypeSource.SetT((set as SetTb).copy(idSet = 0L, exerciseId = ownerId.item))) }
                 .firstOrNull {it is ResultSource.Error}
                 ?: ResultSource.Success(TypeSource.IntT(sets.size))
         }

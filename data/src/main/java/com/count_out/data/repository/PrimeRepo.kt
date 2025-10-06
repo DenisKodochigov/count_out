@@ -1,5 +1,6 @@
 package com.count_out.data.repository
 
+import android.util.Log
 import com.count_out.data.models.ActivityDb
 import com.count_out.data.models.ExerciseDb
 import com.count_out.data.models.NameIdDb
@@ -47,20 +48,28 @@ abstract class PrimeRepo {
     val throwableNull = ResultUC.Error(ThrowableUC.extract(Exception("return null")))
 
     fun Flow<ResultSource<TypeSource>?>.convertor(): Flow<ResultUC<TypeRepo>> {
-        var lastValue:TypeSource = TypeSource.NullT
-        return this.filterNotNull().filter { it != lastValue }.map{ resultS->
-                when(resultS){
-                    is ResultSource.Error -> throwableNull
-                    is Success -> {
-                        lastValue = resultS.data
-                        ResultUC.Success(resultS.data.toRepo())
-                    }
-                }
+        return this.filterNotNull().map{ resultS->
+            when(resultS){
+                is ResultSource.Error -> ResultUC.Error(ThrowableUC.extract(resultS.throwable))
+                is Success -> ResultUC.Success(resultS.data.toRepo())
             }
-            .flowOn(Dispatchers.IO)
-            .catch { emit(ResultUC.Error(ThrowableUC.extract(it)
-            ) as ResultUC<Nothing>) }
+        }
+//        .flowOn(Dispatchers.IO)
+//        .catch { emit(ResultUC.Error(ThrowableUC.extract(it)))}
     }
+//        var lastValue:TypeSource = TypeSource.NullT
+//        return this.filterNotNull().filter { it != lastValue }.map{ resultS->
+//                when(resultS){
+//                    is ResultSource.Error -> ResultUC.Error(ThrowableUC.extract(resultS.throwable))
+//                    is Success -> {
+//                        lastValue = resultS.data
+//                        ResultUC.Success(resultS.data.toRepo())
+//                    }
+//                }
+//            }
+//            .flowOn(Dispatchers.IO)
+//            .catch { emit(ResultUC.Error(ThrowableUC.extract(it)
+//            ) as ResultUC<Nothing>) }
 
     fun ResultSource<TypeSource>.wrapFlow(): Flow<ResultUC<TypeRepo>> {
         return flowOf(
@@ -92,7 +101,6 @@ abstract class PrimeRepo {
     fun planDb(item: Plan) = object: PlanDb {
         override val idPlan: Long = item.idPlan
         override val name: String = item.name
-        override val speechId: Long = item.speechId
         override val speeches: List<SpeechDb> = listSpeech(item.speechKit)
         override val parts: List<PartDb> = item.parts.map { partDb(it) }
         override val amountActivity: Int = item.amountActivity
@@ -100,7 +108,6 @@ abstract class PrimeRepo {
     fun partDb(item: Part) = object: PartDb{
         override val idPart: Long = item.idPart
         override val planId: Long = item.planId
-        override val speechId: Long = item.speechId
         override val speeches: List<SpeechDb> = listSpeech(item.speechKit)
         override val rings: List<RingDb> = item.rings.map { ringDb(it) }
         override val amount: Int = item.amount
@@ -109,7 +116,6 @@ abstract class PrimeRepo {
     fun ringDb(item: Ring) = object : RingDb{
         override val idRing: Long = item.idRing
         override val partId: Long = item.partId
-        override val speechId: Long = item.speechId
         override val speeches: List<SpeechDb> = listSpeech(item.speechKit)
         override val exercises: List<ExerciseDb> = item.exercises.map { exerciseDb(it) }
         override val amount: Int = item.amount
@@ -122,7 +128,6 @@ abstract class PrimeRepo {
         override val idView: Int = item.idView
         override val activityId: Long = item.activityId
         override val activity: ActivityDb? = item.activity?.let { activityDb(it) }
-        override val speechId: Long = item.speechId
         override val speeches: List<SpeechDb> = listSpeech(item.speechKit)
         override val sets: List<SetDb> = item.sets.map { setDb(it) }
         override val amountSet: Int = item.amountSet
@@ -138,7 +143,11 @@ abstract class PrimeRepo {
         override val audioTrack: String = item.audioTrack }
     fun speechDb(item: Speech) = object: SpeechDb{
         override val idSpeech: Long = item.idSpeech
-        override val idKit: Long = item.idKit
+        override val setId: Long? = item.setId
+        override val exerciseId: Long? = item.exerciseId
+        override val ringId: Long? = item.ringId
+        override val partId: Long? = item.partId
+        override val planId: Long? = item.planId
         override val message: String = item.message
         override val duration: Long = item.duration
         override val addMessage: String = item.addMessage
@@ -147,7 +156,6 @@ abstract class PrimeRepo {
         override val idSet: Long = item.idSet
         override val name: String = item.name
         override val exerciseId: Long = item.exerciseId
-        override val speechId: Long = item.speechId
         override val speeches: List<SpeechDb> = listSpeech(item.speechKit)
         override val goal: Int = item.goal.ordinal
         override val weightV: Double = item.weight.value

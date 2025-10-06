@@ -48,7 +48,6 @@ import com.count_out.presentation.view_element.ModalBottomSheetApp
                         override val idView: Int = (exercise as Exercise).idView
                         override val activity: Activity? = (activity as Activity)
                         override val activityId: Long= (activity as Activity).idActivity
-                        override val speechId: Long = (exercise as Exercise).speechId
                         override val speechKit: SpeechKit = (exercise as Exercise).speechKit
                         override val sets: List<Set> = (exercise as Exercise).sets
                         override val amountSet: Int = (exercise as Exercise).amountSet

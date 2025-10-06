@@ -12,10 +12,10 @@ interface PlanDao: PrimeDao<PlanTb> {
     fun del(id: Long): Int
     @Transaction
     @Query("SELECT * FROM plan_tb WHERE idPlan = :id")
-    fun getPlan(id: Long): Flow<PlanTb>
+    fun getPlan(id: Long): Flow<PlanRel?>
     @Transaction
     @Query("SELECT * FROM plan_tb WHERE idPlan != 1")
-    fun getPlans(): Flow<List<PlanTb>>
+    fun getPlans(): Flow<List<PlanRel>>
     @Query("UPDATE plan_tb SET name = :name WHERE idPlan =:id")
     fun updateName( name: String, id: Long): Int
 }

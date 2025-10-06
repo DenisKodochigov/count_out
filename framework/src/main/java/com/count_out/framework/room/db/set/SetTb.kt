@@ -4,16 +4,15 @@ import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.ForeignKey.Companion.NO_ACTION
 import androidx.room.Index
+import androidx.room.PrimaryKey
 import com.count_out.data.models.SetDb
 import com.count_out.framework.room.db.exercise.ExerciseTb
 import com.count_out.framework.room.db.speech.SpeechTb
 
-@Entity(tableName = "set_tb", 
-    primaryKeys = ["idSet"],
+@Entity(tableName = "set_tb",
     ignoredColumns = ["speeches"],
     indices = [
         Index(value = ["idSet"], unique = true),
-        Index(value = ["speechId"], unique = true),
         Index(value = ["exerciseId"])],
     foreignKeys = [ForeignKey(
         entity = ExerciseTb::class,
@@ -23,7 +22,7 @@ import com.count_out.framework.room.db.speech.SpeechTb
         onUpdate = NO_ACTION
     )])
 data class SetTb (
-    override var idSet: Long = 0L,
+    @PrimaryKey(autoGenerate = true) override var idSet: Long = 0L,
     override var exerciseId: Long = 0,
     override var name: String = "",
     override var goal: Int = 1,

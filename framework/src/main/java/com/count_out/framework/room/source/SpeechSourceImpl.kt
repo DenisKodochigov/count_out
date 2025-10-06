@@ -42,8 +42,8 @@ class SpeechSourceImpl @Inject constructor(private val dao: SpeechDao): SpeechSo
                 getSpeeches(setId, exerciseId, ringId, partId, planId)
                     .filterNot { it == emptyList<SpeechTb>() }
                     .map { it.apply { idSpeech = 0L } }
-            } catch (e: Exception) { listOf(SpeechTb(), SpeechTb(), SpeechTb(), SpeechTb()) }
-        } else { listOf(SpeechTb(), SpeechTb(), SpeechTb(), SpeechTb()) }
+            } catch (e: Exception) { List(4) { SpeechTb() } }
+        } else { List(4) { SpeechTb() } }
     }
 }
 

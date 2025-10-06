@@ -13,6 +13,7 @@ import com.count_out.data.source.room.RingSource
 import com.count_out.framework.result
 import com.count_out.framework.room.db.exercise.ExerciseTb
 import com.count_out.framework.room.db.part.PartDao
+import com.count_out.framework.room.db.part.PartRel
 import com.count_out.framework.room.db.part.PartTb
 import com.count_out.framework.room.db.ring.RingTb
 import javax.inject.Inject
@@ -29,13 +30,16 @@ class PartSourceImpl @Inject constructor(
 
     override fun copy(part: TypeSource): ResultSource<TypeSource> =
         part.useResult { partTb->
-            dao.insert(partTb.copy(idPart = 0L)).result().flatMap { ownerId->
-                val listSpeech = speechSource.getListSpeech(partId = partTb.idPart)
-                    .map { it.apply { partId = ownerId.item } }
-                if (speechSource.insert(listSpeech).count() == listSpeech.count())
-                    ResultSource.Success(TypeSource.IntT(listSpeech.count()))
-                else ResultSource.Error(ThrowableDS.RequestFailed())
-            }
+            var idNew = TypeSource.LongT(0L)
+            dao.insert(partTb.copy(idPart = 0L)).result()
+                .flatMap { ownerId->
+                    idNew = ownerId
+                    val listSpeech = speechSource.getListSpeech(partId = partTb.idPart)
+                        .map { it.apply { partId = ownerId.item } }
+                    if (speechSource.insert(listSpeech).count() == listSpeech.count())
+                        ResultSource.Success(TypeSource.IntT(listSpeech.count()))
+                    else ResultSource.Error(ThrowableDS.RequestFailed()) }
+                .flatMap { copyRings(partTb.rings, ownerId = idNew) }
         }
 
 //        (part as? TypeSource.PartT)?.let { pr ->

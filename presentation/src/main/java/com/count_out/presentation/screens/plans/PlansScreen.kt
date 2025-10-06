@@ -49,7 +49,7 @@ fun PlansScreen(vm: PlansViewModel, navigateEvent: NavigateEvent) {
     viewModel.screenState.collectAsState().value.let { screenState ->
         PrimeScreen(loader = screenState) { dataState ->
             dataState.goToScreenExecuteWorkout = { navigateEvent.goToScreenExecuteWorkout() }
-            dataState.goToScreenTraining = { navigateEvent.goToScreenTraining(it) }
+            dataState.goToScreenTraining = { navigateEvent.goToScreenPlan(it) }
             PlansScreenLayout(dataState) }
     }
 }

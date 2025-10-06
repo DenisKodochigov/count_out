@@ -18,8 +18,6 @@ import com.count_out.framework.room.db.set.SetDao
 import com.count_out.framework.room.db.set.SetTb
 import com.count_out.framework.room.db.speech.SpeechDao
 import com.count_out.framework.room.db.speech.SpeechTb
-import com.count_out.framework.room.db.speech_kit.SpeechKitDao
-import com.count_out.framework.room.db.speech_kit.SpeechKitTb
 import com.count_out.framework.room.db.traking.TemporaryTb
 import com.count_out.framework.room.db.traking.TrackingDao
 import com.count_out.framework.room.db.traking.TrackingTb
@@ -32,7 +30,6 @@ import com.count_out.framework.room.db.traking.TrackingTb
     ActivityTb::class,
     SetTb::class,
     SpeechTb::class,
-    SpeechKitTb::class,
     SettingTb::class,
     TrackingTb::class,
     TemporaryTb::class,
@@ -51,7 +48,6 @@ abstract class AppDataBase : RoomDatabase() {
     abstract fun activityDao(): ActivityDao
     abstract fun setDao(): SetDao
     abstract fun speechDao(): SpeechDao
-    abstract fun speechKitDao(): SpeechKitDao
     abstract fun settingDao(): SettingDao
     abstract fun trackingDao(): TrackingDao
 }

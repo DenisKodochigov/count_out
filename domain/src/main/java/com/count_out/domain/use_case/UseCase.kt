@@ -34,7 +34,7 @@ abstract class UseCase< I: UseCase.Request, O: UseCase.Response>(private val con
         return this.map {resultUcTypeRepo->
             if ( resultUcTypeRepo is ResultUC.Success) {
                 convertTR(resultUcTypeRepo.data).let { st-> ResultUC.Success(st) }
-            } else exceptionNull
+            } else resultUcTypeRepo
         }
     }
     val exceptionNull = ResultUC.Error(

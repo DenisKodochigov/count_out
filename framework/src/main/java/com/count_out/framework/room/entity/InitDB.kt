@@ -11,27 +11,26 @@ import com.count_out.framework.room.db.plan.PlanTb
 import com.count_out.framework.room.db.ring.RingTb
 import com.count_out.framework.room.db.set.SetTb
 import com.count_out.framework.room.db.speech.SpeechTb
-import com.count_out.framework.room.db.speech_kit.SpeechKitTb
 
-private fun createplanId0( db: AppDataBase) {
-    val idPlan = db.planDao().insert(
-        PlanTb(name = "", idPlan = 0,
-            speechId = insertSpeechKit(db, bs = "Начало тренировки", ae = "Тренировка окончена",)
-        )
-    )
+private fun createPlanId0(db: AppDataBase) {
+    val idPlan = db.planDao().insert(PlanTb(name = "", idPlan = 0,))
+    insertSpeeches(db, planId = idPlan, bs = "Начало тренировки", ae = "Тренировка окончена")
 //Разминка
-    db.partDao().insert(PartTb(planId = idPlan, speechId = insertSpeechKit(db)))
+    var idPart = db.partDao().insert(PartTb(planId = idPlan))
+    insertSpeeches(db, partId = idPart)
 //Основная
-    val idPart = db.partDao().insert(PartTb(planId = idPlan, speechId = insertSpeechKit(db)))
-    val idRing = db.ringDao().insert(RingTb(partId = idPart, speechId = insertSpeechKit(db)))
-    val idExercise = db.exerciseDao().insert(
-        ExerciseTb(ringId = idRing, activityId = 1, idView = 1, speechId = insertSpeechKit(db)))
-    db.setDao().insert(
-        SetTb(exerciseId = idExercise, name = "", goal = GoalSet.DURATION.ordinal, durationV = 1440.0,
-            speechId = insertSpeechKit(db))
-    )
+    idPart = db.partDao().insert(PartTb(planId = idPlan))
+    insertSpeeches(db, partId = idPart)
+    val idRing = db.ringDao().insert(RingTb(partId = idPart))
+    insertSpeeches(db, ringId = idRing)
+    val idExercise = db.exerciseDao().insert(ExerciseTb(ringId = idRing, activityId = 1, idView = 1))
+    insertSpeeches(db, exerId = idExercise)
+    val idSet = db.setDao().insert(SetTb(exerciseId = idExercise, name = "",
+        goal = GoalSet.DURATION.ordinal, durationV = 1440.0))
+    insertSpeeches(db, setId = idSet)
 //Заминка
-    db.partDao().insert(PartTb(planId = idPlan, speechId = insertSpeechKit(db)))
+    idPart = db.partDao().insert(PartTb(planId = idPlan))
+    insertSpeeches(db, partId = idPart)
     insertRecordWorkout(db)
     insertRecordCount(db)
 }
@@ -95,30 +94,27 @@ private fun createSetting( db: AppDataBase){
     db.settingDao().insert(SettingTb(parameter = R.string.speech_description, value = 1))
 }
 
-
 private fun createTrainingPlansTesting( db: AppDataBase) {
-    createplanId0( db )
+    createPlanId0( db )
     val rest = 10.0
     val reps = 3
-    val idPlan = db.planDao().insert(
-        PlanTb(
-            name = "Тестовая",
-            speechId = insertSpeechKit(db, bs = "Начало тренировки", ae = "Тренировка окончена",)
-        )
-    )
+    val idPlan = db.planDao().insert(PlanTb(name = "Тестовая"))
+    insertSpeeches(db, planId = idPlan, bs = "Начало тренировки", ae = "Тренировка окончена")
 //Разминка
-    var idPart = db.partDao().insert(PartTb(planId = idPlan, speechId = insertSpeechKit(db, bs = "Разминка", ae = "",)))
-    var idRing = db.ringDao().insert(RingTb(partId = idPart, speechId = insertSpeechKit(db)))
+    var idPart = db.partDao().insert(PartTb( planId = idPlan ))
+    insertSpeeches(db, partId = idPart, bs = "Разминка")
+    var idRing = db.ringDao().insert(RingTb(partId = idPart))
+    insertSpeeches(db, ringId = idRing)
     //Упражнение 1
-    var idExercise = db.exerciseDao().insert(ExerciseTb(ringId = idRing, activityId = 4, idView = 0, speechId = insertSpeechKit(db,))
-    ) //"Растереть уши"
-    db.setDao().insert(SetTb(
+    var idExercise = db.exerciseDao().insert(ExerciseTb(ringId = idRing, activityId = 4, idView = 0)) //"Растереть уши"
+    insertSpeeches(db, exerId = idExercise)
+    var idSet = db.setDao().insert(SetTb(
             exerciseId = idExercise, name = "Set 2", reps = reps, distanceV = 10.0,
             distanceU = Units.KM.ordinal, timeRestV = rest, goal = GoalSet.DISTANCE.ordinal,
             weightU = Units.GR.ordinal, durationU = Units.S.ordinal,
-            speechId = insertSpeechKit(db, bs = "Старт", ae = "Конец",)
         ))
-    db.setDao().insert(SetTb(
+    insertSpeeches(db, setId = idSet, bs = "Старт", ae = "Конец")
+    idSet = db.setDao().insert(SetTb(
             exerciseId = idExercise,
             name = "Set 1",
             reps = reps,
@@ -128,15 +124,12 @@ private fun createTrainingPlansTesting( db: AppDataBase) {
             goal = GoalSet.DURATION.ordinal,
             weightU = Units.GR.ordinal,
             distanceU = Units.MT.ordinal,
-            speechId = insertSpeechKit(db, bs = "Старт", ae = "Конец",)
         ))
+    insertSpeeches(db, setId = idSet, bs = "Старт", ae = "Конец")
     //Упражнение 2
-    idExercise = db.exerciseDao().insert(
-        ExerciseTb(
-            ringId = idRing, activityId = 5, idView = 1,  //"Растереть макушку"
-            speechId = insertSpeechKit(db,)
-        ))
-    db.setDao().insert(SetTb(
+    idExercise = db.exerciseDao().insert(ExerciseTb(ringId = idRing, activityId = 5, idView = 1))  //"Растереть макушку"
+    insertSpeeches(db, exerId = idExercise)
+    idSet = db.setDao().insert(SetTb(
             exerciseId = idExercise,
             name = "Set 2",
             reps = reps,
@@ -146,66 +139,62 @@ private fun createTrainingPlansTesting( db: AppDataBase) {
             goal = GoalSet.DISTANCE.ordinal,
             weightU = Units.GR.ordinal,
             durationU = Units.S.ordinal,
-            speechId = insertSpeechKit(db, bs = "Старт", ae = "Конец",)
         ))
+    insertSpeeches(db, setId = idSet, bs = "Старт", ae = "Конец")
     //Упражнение 3
-    idExercise = db.exerciseDao().insert(ExerciseTb(
-            ringId = idRing, activityId = 6, idView = 2,  //"Растереть макушку"
-            speechId = insertSpeechKit(db,)
-        ))
-    db.setDao().insert(SetTb(
+    idExercise = db.exerciseDao().insert(ExerciseTb(ringId = idRing, activityId = 6, idView = 2))  //"Растереть макушку"
+    insertSpeeches(db, exerId = idExercise)
+    idSet = db.setDao().insert(SetTb(
             exerciseId = idExercise, name = "Set 3", reps = reps, intervalReps = 1.0,
             timeRestV = rest, goal = GoalSet.COUNT.ordinal, weightU = Units.GR.ordinal,
-            distanceU = Units.MT.ordinal, durationU = Units.S.ordinal,
-            speechId = insertSpeechKit(db, bs = "Старт", ae = "Конец",)
-        ))
+            distanceU = Units.MT.ordinal, durationU = Units.S.ordinal))
+    insertSpeeches(db, setId = idSet, bs = "Старт", ae = "Конец")
     //Упражнение 4
-    idExercise = db.exerciseDao().insert(ExerciseTb(
-            ringId = idRing, activityId = 7, idView = 3,  //"Растереть макушку"
-            speechId = insertSpeechKit(db,)
-        ))
-    db.setDao().insert(SetTb(
+    idExercise = db.exerciseDao().insert(ExerciseTb(ringId = idRing, activityId = 7, idView = 3))  //"Растереть макушку"
+    insertSpeeches(db, exerId = idExercise)
+    idSet = db.setDao().insert(SetTb(
             exerciseId = idExercise, name = "Set 4", reps = reps, intervalReps = 1.0,
             timeRestV = rest, goal = GoalSet.COUNT.ordinal, weightU = Units.GR.ordinal,
-            distanceU = Units.MT.ordinal, durationU = Units.S.ordinal,
-            speechId = insertSpeechKit(db, bs = "Старт", ae = "Конец",)
-        ))
+            distanceU = Units.MT.ordinal, durationU = Units.S.ordinal))
+    insertSpeeches(db, setId = idSet, bs = "Старт", ae = "Конец")
 
 //Основная
-    idPart = db.partDao().insert(PartTb(planId = idPlan, speechId = insertSpeechKit(db, bs = "Основная", ae = "",)))
-    idRing = db.ringDao().insert(RingTb(partId = idPart, speechId = insertSpeechKit(db)))
-
+    idPart = db.partDao().insert(PartTb(planId = idPlan ))
+    insertSpeeches(db, partId = idPart, bs = "Основная")
+    idRing = db.ringDao().insert(RingTb(partId = idPart))
+    insertSpeeches(db, ringId = idRing)
     //Упражнение 1
-    idExercise = db.exerciseDao().insert(ExerciseTb(
-            ringId = idRing, activityId = 6, idView = 0,  //"Растереть виски"
-            speechId = insertSpeechKit(db,)))
-    db.setDao().insert(SetTb(
+    idExercise = db.exerciseDao().insert(ExerciseTb(ringId = idRing, activityId = 6, idView = 0))  //"Растереть виски"
+    insertSpeeches(db, exerId = idExercise)
+    idSet = db.setDao().insert(SetTb(
             exerciseId = idExercise, name = "Set 3", reps = reps, intervalReps = 1.0,
             timeRestV = rest, goal = GoalSet.COUNT.ordinal, weightU = Units.GR.ordinal,
-            distanceU = Units.MT.ordinal, durationU = Units.S.ordinal,
-            speechId = insertSpeechKit(db, bs = "Старт", ae = "Конец",)))
+            distanceU = Units.MT.ordinal, durationU = Units.S.ordinal))
+    insertSpeeches(db, setId = idSet, bs = "Старт", ae = "Конец")
 //Заминка
-    idPart = db.partDao().insert(PartTb(planId = idPlan, speechId = insertSpeechKit(db, bs = "Заминка", ae = "",)))
-    idRing = db.ringDao().insert(RingTb(partId = idPart, speechId = insertSpeechKit(db)))
+    idPart = db.partDao().insert(PartTb(planId = idPlan ))
+    insertSpeeches(db, partId = idPart, bs = "Заминка")
+    idRing = db.ringDao().insert(RingTb(partId = idPart))
+    insertSpeeches(db, ringId = idRing)
     //Упражнение 1
-    idExercise = db.exerciseDao().insert(ExerciseTb(ringId = idRing, activityId = 7, idView = 0, speechId = insertSpeechKit(db,))
-    )//"Растереть заднюю часть шеи"
-    db.setDao().insert(SetTb(
+    idExercise = db.exerciseDao().insert(ExerciseTb(ringId = idRing, activityId = 7, idView = 0))//"Растереть заднюю часть шеи"
+    insertSpeeches(db, exerId = idExercise)
+    idSet = db.setDao().insert(SetTb(
             exerciseId = idExercise, name = "Set 4", reps = reps, intervalReps = 1.0,
             timeRestV = rest, goal = GoalSet.COUNT.ordinal, weightU = Units.GR.ordinal,
-            distanceU = Units.MT.ordinal, durationU = Units.S.ordinal,
-            speechId = insertSpeechKit(db, bs = "Старт", ae = "Конец",)))
+            distanceU = Units.MT.ordinal, durationU = Units.S.ordinal))
+    insertSpeeches(db, setId = idSet, bs = "Старт", ae = "Конец")
     insertRecordWorkout(db)
     insertRecordCount(db)
 }
-private fun insertSpeechKit(db: AppDataBase, bs: String = "", ast: String = "", be: String = "", ae: String = ""): Long{
-    val id = db.speechKitDao().insert(SpeechKitTb())
-    db.speechDao().insert(SpeechTb(idKit = id, message = bs))
-    db.speechDao().insert( SpeechTb(idKit = id, message = ast))
-    db.speechDao().insert( SpeechTb(idKit = id, message = be))
-    db.speechDao().insert( SpeechTb(idKit = id, message = ae))
+private fun insertSpeeches(
+    db: AppDataBase, planId: Long? = null, partId: Long? = null,ringId: Long? = null,exerId: Long? = null,setId: Long? = null,
+    bs: String = "", ast: String = "", be: String = "", ae: String = "" ){
+    db.speechDao().insert(SpeechTb(0L, setId, exerId, ringId, partId, planId, message = bs))
+    db.speechDao().insert(SpeechTb(0L, setId, exerId, ringId, partId, planId, message = ast))
+    db.speechDao().insert(SpeechTb(0L, setId, exerId, ringId, partId, planId, message = be))
+    db.speechDao().insert(SpeechTb(0L, setId, exerId, ringId, partId, planId, message = ae))
 //    db.speechKitDao().update(SpeechKitTable(id, idS1, idS2,idS3,idS4))
-    return id
 //    return db.speechKitDao().insert(
 //        SpeechKitTable(
 //            idBeforeStart = db.speechDao().insert( SpeechTable(message = bs)),

@@ -116,10 +116,14 @@ sealed class TypeSource {
         }
         fun convSpeech(speech: SpeechDb) = object : Speech {
             override val idSpeech = speech.idSpeech
-            override val idKit: Long = speech.idKit
             override val message = speech.message
             override val duration = speech.duration
             override val addMessage = speech.addMessage
+            override val setId: Long? = speech.setId
+            override val exerciseId: Long? = speech.exerciseId
+            override val ringId: Long? = speech.ringId
+            override val partId: Long? = speech.partId
+            override val planId: Long? = speech.planId
         }
         fun convListSpeech(speeches: List<SpeechDb>): SpeechKit {
             val convSpeeches = if (speeches.size > 3) {
