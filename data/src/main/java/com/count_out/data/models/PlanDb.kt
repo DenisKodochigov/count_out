@@ -1,6 +1,6 @@
 package com.count_out.data.models
 
-interface PlanDb {
+interface PlanDb: Data {
     val idPlan: Long
     val name: String
     val speeches: List<SpeechDb>

@@ -22,7 +22,6 @@ abstract class UseCase< I: UseCase.Request, O: UseCase.Response>(private val con
     interface Response
     internal abstract fun method(request: I): Flow<ResultUC<TypeRepo>>
     internal abstract fun response(typeRepo:TypeRepo): O
-
     fun execute(request: I): Flow<ResultUC<O>> = method(request).map{ result->
         when(result){
             is ResultUC.Success-> { ResultUC.Success(response(result.data)) }
@@ -39,6 +38,8 @@ abstract class UseCase< I: UseCase.Request, O: UseCase.Response>(private val con
     }
     val exceptionNull = ResultUC.Error(
         ThrowableUC.extract(Exception("return null"))) as ResultUC<Nothing>
+//###############################################################################################
+
 }
 
 //    fun exec_old(request: I): Flow<ResultUC<O>> = implementation_old(request)

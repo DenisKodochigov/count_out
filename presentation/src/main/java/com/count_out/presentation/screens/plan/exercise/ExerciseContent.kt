@@ -93,10 +93,10 @@ fun ListExercises(dataState: PlanState, ring: Ring, modifier: Modifier = Modifie
             onClickDelete = { dataState.event(PlanEvent.DelExercise(exercise)) },
             onClickEdit = {
                 dataState.item = exercise
-                dataState.event(ShowBS(dataState.showBS.copy(element = exercise.activity)))},
+                dataState.event(ShowBS(dataState.showBS.copy(domain = exercise.activity)))},
             onClickSpeech = {
                 dataState.item = exercise
-                dataState.event(ShowBS(dataState.showBS.copy(element = exercise))) },
+                dataState.event(ShowBS(dataState.showBS.copy(domain = exercise))) },
             onClickAddSet = { dataState.event( PlanEvent.CopySet(
                     SetImplP(name = nameNewSet, exerciseId = exercise.idExercise)))},
         )

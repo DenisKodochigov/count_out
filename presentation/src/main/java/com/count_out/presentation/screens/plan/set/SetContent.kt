@@ -130,7 +130,7 @@ val interval_between_pole = 4.dp
         onClickSpeech = {
 //            dataState.set = set
             dataState.item = set
-            dataState.event(ShowBS(dataState.showBS.copy(element = set)))   },)
+            dataState.event(ShowBS(dataState.showBS.copy(domain = set)))   },)
 }
 
 @Composable fun BodySet(dataState: PlanState, set: SetImplP){

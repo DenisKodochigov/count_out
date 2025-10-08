@@ -6,5 +6,5 @@ data class Collapsing(
     val rounds: List<Long> = emptyList(),
     val exercises: List<Long> = emptyList(),
     val activities: List<Long> = emptyList(),
-    var item: Element? = null
+    var item: Domain? = null
 )

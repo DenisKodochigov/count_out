@@ -47,7 +47,7 @@ import com.count_out.presentation.view_element.dialog.ChangeColorSectionDialog
             activity = mutableStateOf(ActivityImplP(activity)),
             onSelect = {
                 dataState.item = activity
-                dataState.event(SettingsEvent.ShowBS(dataState.showBS.copy(element = activity)))},             onChange = { dataState.event(SettingsEvent.SetColorActivity(activity)) }, //
+                dataState.event(SettingsEvent.ShowBS(dataState.showBS.copy(domain = activity)))},             onChange = { dataState.event(SettingsEvent.SetColorActivity(activity)) }, //
             onDeleteActivity = { dataState.event(SettingsEvent.DeleteActivity(activity)) },
         )
     }

@@ -18,7 +18,6 @@ import androidx.compose.material.icons.automirrored.rounded.BluetoothSearching
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -27,7 +26,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.count_out.domain.entity.NavigateEvent
 import com.count_out.domain.entity.Settings
 import com.count_out.domain.entity.enums.ConnectState
 import com.count_out.domain.entity.router.DeviceBle
@@ -91,7 +89,7 @@ import com.count_out.presentation.view_element.lg
         IconSingle(
             image = Icons.Default.Add,
             onClick = { dataState.event(SettingsEvent.ShowBS(
-                dataState.showBS.copy(element = ActivityImplP(0L))))})
+                dataState.showBS.copy(domain = ActivityImplP(0L))))})
         Spacer(modifier = Modifier.width(12.dp))
     }
 }
@@ -158,7 +156,7 @@ import com.count_out.presentation.view_element.lg
         AnimateIcon(
             icon = Icons.AutoMirrored.Rounded.BluetoothSearching,
             animate = dataState.connectingState != ConnectState.CONNECTED,
-            onClick = {dataState.event(SettingsEvent.ShowBS(dataState.showBS.copy( element =
+            onClick = {dataState.event(SettingsEvent.ShowBS(dataState.showBS.copy( domain =
                     object: DeviceBle{
                         override var name: String = ""
                         override var address: String = ""

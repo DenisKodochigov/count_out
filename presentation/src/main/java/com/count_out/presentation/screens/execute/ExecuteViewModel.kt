@@ -1,6 +1,5 @@
 package com.count_out.presentation.screens.execute
 
-import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.count_out.domain.entity.workout.ShowBottomSheet
@@ -35,6 +34,7 @@ class ExecuteViewModel @Inject constructor(
     private val upIntervalUC: UpIntervalUC,
     private val downIntervalUC: DownIntervalUC,
     private val getStepPlanUC: GetStepPlanUC,
+    private val getStepPlanUC1: GetStepPlanUC1,
     private val showBottomSheetUC: ShowBottomSheetUC,
     private val connectDeviceHr: ConnectDeviceHrUC,
     private val subscribeHeartRate: GetHeartRateUC,
@@ -47,10 +47,7 @@ class ExecuteViewModel @Inject constructor(
     override fun convertor(): ExecuteConverter = ExecuteConverter()
 
     override fun routeEvent(event: Event) {
-//        Log.d("KDS","ExecuteViewModel stepTraining=${dataState.value.stepTraining}")
         when (event) {
-//            is ExecuteEvent.BackScreen -> { navigate.backStack()}
-//            is ExecuteEvent.ToScreenPlans -> { navigate.goToScreenPlans()}
             is ExecuteEvent.Start -> { startWorkOut() }
             is ExecuteEvent.Stop -> { stopWorkOut(event.item) }
             is ExecuteEvent.Pause -> { pauseWorkOut() }
@@ -58,7 +55,6 @@ class ExecuteViewModel @Inject constructor(
             is ExecuteEvent.UpInterval -> { upInterval() }
             is ExecuteEvent.DownInterval -> { downInterval() }
             is ExecuteEvent.ShowBS -> { showBottomSheet(event.item) }
-//            is ExecuteEvent.Init -> { init() }
         }
     }
     init {
@@ -81,6 +77,7 @@ class ExecuteViewModel @Inject constructor(
 
     private fun getStepPlan(){
         viewModelScope.launch(Dispatchers.IO) {
+            getStepPlanUC1.execute(GetStepPlanUC1.Request)
             getStepPlanUC.execute(GetStepPlanUC.Request).collect { submitState( it ) }
         }
     }

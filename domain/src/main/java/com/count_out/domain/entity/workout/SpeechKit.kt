@@ -1,6 +1,6 @@
 package com.count_out.domain.entity.workout
 
-interface SpeechKit: Element {
+interface SpeechKit: Domain {
     val beforeStart: Speech
     val afterStart: Speech
     val beforeEnd: Speech

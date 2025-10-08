@@ -20,7 +20,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.count_out.domain.entity.workout.Element
+import com.count_out.domain.entity.workout.Domain
 import com.count_out.domain.entity.workout.Exercise
 import com.count_out.domain.entity.workout.Part
 import com.count_out.domain.entity.workout.Plan
@@ -40,15 +40,15 @@ import com.count_out.presentation.view_element.TextApp
 import com.count_out.presentation.view_element.TextFieldApp
 
 @Composable fun ShowBottomSheetSpeech(
-    dataState: PlanState, showBS: Boolean, idString: Int, item: Element? = null
+    dataState: PlanState, showBS: Boolean, idString: Int, item: Domain? = null
 ){
     if (showBS && dataState.item == item) {
         dataState.nameSection = stringResource(id = idString)
         dataState.onDismiss =
-            { dataState.event(ShowBS(dataState.showBS.copy(element = item)))}
+            { dataState.event(ShowBS(dataState.showBS.copy(domain = item)))}
         dataState.onConfirmation = { speech, item1 ->
             dataState.event(PlanEvent.UpdateSpeech(speech as Speech))
-            dataState.event(ShowBS(dataState.showBS.copy(element = item)))
+            dataState.event(ShowBS(dataState.showBS.copy(domain = item)))
         }
         BottomSheetSpeech(dataState)
     }

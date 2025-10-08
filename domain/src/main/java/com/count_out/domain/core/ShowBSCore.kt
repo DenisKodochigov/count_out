@@ -24,7 +24,7 @@ class ShowBSCore: Core()  {
     }
 
     fun calculate(item: ShowBottomSheet): ShowBottomSheet{
-        return when(item.element){
+        return when(item.domain){
             is Set -> {item.copy(set = !item.set)}
             is Activity-> { item.copy(activity = !item.activity)}
             is Exercise-> { item.copy(exercise = !item.exercise)}

@@ -1,6 +1,6 @@
 package com.count_out.domain.entity.workout
 
-interface Exercise: Element {
+interface Exercise: Domain {
      val idExercise: Long
      val ringId: Long
      val idView: Int

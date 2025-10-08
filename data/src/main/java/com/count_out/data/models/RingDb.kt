@@ -1,6 +1,6 @@
 package com.count_out.data.models
 
-interface RingDb {
+interface RingDb: Data {
     val idRing: Long
     val partId: Long
     val speeches: List<SpeechDb>

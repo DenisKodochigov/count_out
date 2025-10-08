@@ -1,8 +1,8 @@
 package com.count_out.domain.entity.router
 
-import com.count_out.domain.entity.workout.Element
+import com.count_out.domain.entity.workout.Domain
 
-interface DeviceBle: Element {
+interface DeviceBle: Domain {
     val name: String
     val address: String
 }

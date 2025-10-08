@@ -14,4 +14,5 @@ abstract class PrimeConvertor<D : Any, T : Any> {
             is ResultUC.Success -> { ScreenState.Success(makeSuccess(result.data, state)) }
         }
     }
+
 }

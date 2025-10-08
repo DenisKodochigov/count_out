@@ -1,6 +1,5 @@
 package com.count_out.data.repository
 
-import android.util.Log
 import com.count_out.data.models.ActivityDb
 import com.count_out.data.models.ExerciseDb
 import com.count_out.data.models.NameIdDb
@@ -10,9 +9,13 @@ import com.count_out.data.models.RingDb
 import com.count_out.data.models.SetDb
 import com.count_out.data.models.SettingsDb
 import com.count_out.data.models.SpeechDb
+import com.count_out.data.models.Data
 import com.count_out.data.models.throwable.ResultSource
 import com.count_out.data.models.throwable.ResultSource.Success
+import com.count_out.data.models.throwable.ResultSource1
 import com.count_out.data.models.throwable.TypeSource
+import com.count_out.data.models.throwable.TypeSource.Companion.convListPart
+import com.count_out.data.models.throwable.TypeSource.Companion.convListSpeech
 import com.count_out.data.models.throwable.TypeSource.Companion.toRepo
 import com.count_out.domain.entity.Settings
 import com.count_out.domain.entity.TypeRepo
@@ -28,6 +31,7 @@ import com.count_out.domain.entity.supportive.NameId
 import com.count_out.domain.entity.throwable.ResultUC
 import com.count_out.domain.entity.throwable.ThrowableUC
 import com.count_out.domain.entity.workout.Activity
+import com.count_out.domain.entity.workout.Domain
 import com.count_out.domain.entity.workout.Exercise
 import com.count_out.domain.entity.workout.Part
 import com.count_out.domain.entity.workout.Plan
@@ -35,13 +39,9 @@ import com.count_out.domain.entity.workout.Ring
 import com.count_out.domain.entity.workout.Set
 import com.count_out.domain.entity.workout.Speech
 import com.count_out.domain.entity.workout.SpeechKit
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.flowOf
-import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 
 abstract class PrimeRepo {
@@ -54,8 +54,14 @@ abstract class PrimeRepo {
                 is Success -> ResultUC.Success(resultS.data.toRepo())
             }
         }
-//        .flowOn(Dispatchers.IO)
-//        .catch { emit(ResultUC.Error(ThrowableUC.extract(it)))}
+    }
+    fun Flow<ResultSource1<Data>?>.convertor1(): Flow<ResultUC<Domain>> {
+        return this.filterNotNull().map{ resultS->
+            when(resultS){
+                is ResultSource1.Error -> ResultUC.Error(ThrowableUC.extract(resultS.throwable))
+                is ResultSource1.Success -> ResultUC.Success(formTbtoElement(resultS.data))
+            }
+        }
     }
 //        var lastValue:TypeSource = TypeSource.NullT
 //        return this.filterNotNull().filter { it != lastValue }.map{ resultS->
@@ -70,7 +76,19 @@ abstract class PrimeRepo {
 //            .flowOn(Dispatchers.IO)
 //            .catch { emit(ResultUC.Error(ThrowableUC.extract(it)
 //            ) as ResultUC<Nothing>) }
-
+    fun formTbtoElement(data: Data): Domain{
+        return when(data){
+            is PlanDb-> { convPlan(data) }
+            else -> {object : Domain{}}
+        }
+    }
+    fun convPlan(plan: PlanDb) = object : Plan {
+        override val idPlan: Long = plan.idPlan
+        override val name: String = plan.name
+        override val amountActivity: Int = plan.amountActivity
+        override val parts: List<Part> = convListPart(plan.parts)
+        override val speechKit: SpeechKit = convListSpeech(plan.speeches)
+    }
     fun ResultSource<TypeSource>.wrapFlow(): Flow<ResultUC<TypeRepo>> {
         return flowOf(
             when (this) {

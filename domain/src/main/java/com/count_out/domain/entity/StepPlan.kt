@@ -1,10 +1,11 @@
 package com.count_out.domain.entity
 
+import com.count_out.domain.entity.workout.Domain
 import com.count_out.domain.entity.workout.Exercise
 import com.count_out.domain.entity.workout.Part
 import com.count_out.domain.entity.workout.Set
 
-interface StepPlan {
+interface StepPlan: Domain {
     val idPlan: Long
     val namePlan: String
     val part: Part?

@@ -1,6 +1,6 @@
 package com.count_out.data.models
 
-interface SetDb {
+interface SetDb: Data {
     val idSet: Long
     val name: String
     val exerciseId: Long

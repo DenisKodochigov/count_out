@@ -24,23 +24,23 @@ data class SetImplP(
     var positions: Pair<Int, Int> = Pair(0 , 0),
     override val speechKit: SpeechKit = SpeechKit.EMPTY,
 ): Set {
-    constructor(set: Set) : this(
-        idSet = set.idSet,
-        name = set.name,
-        exerciseId = set.exerciseId,
-        speechKit = set.speechKit,
-        goal = set.goal,
-        weight = set.weight,
-        distance = set.distance,
-        duration = set.duration,
-        reps = set.reps,
-        intensity = set.intensity,
-        intervalReps = set.intervalReps,
-        intervalDown = set.intervalDown,
-        groupCount = set.groupCount,
-        rest = set.rest,
-        positions = Pair(0 , 0)
-    )
+//    constructor(set: Set) : this(
+//        idSet = set.idSet,
+//        name = set.name,
+//        exerciseId = set.exerciseId,
+//        speechKit = set.speechKit,
+//        goal = set.goal,
+//        weight = set.weight,
+//        distance = set.distance,
+//        duration = set.duration,
+//        reps = set.reps,
+//        intensity = set.intensity,
+//        intervalReps = set.intervalReps,
+//        intervalDown = set.intervalDown,
+//        groupCount = set.groupCount,
+//        rest = set.rest,
+//        positions = Pair(0 , 0)
+//    )
     constructor(set: Set, position: Pair<Int, Int>) : this(
         idSet = set.idSet,
         name = set.name,

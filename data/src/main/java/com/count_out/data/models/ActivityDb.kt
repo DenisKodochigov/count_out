@@ -1,6 +1,6 @@
 package com.count_out.data.models
 
-interface ActivityDb {
+interface ActivityDb:Data {
     val idActivity: Long
     val name: String
     val description: String

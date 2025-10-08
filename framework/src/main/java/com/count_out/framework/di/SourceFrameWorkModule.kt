@@ -38,8 +38,6 @@ abstract class SourceFrameWorkModule {
     abstract fun bindSetSource(setSource: SetSourceImpl): SetSource
     @Binds
     abstract fun bindActivitySource(activitySource: ActivitySourceImpl): ActivitySource
-//    @Binds
-//    abstract fun bindSpeechKitSource(speechKitSource: SpeechKitSourceImpl): SpeechKitSource
     @Binds
     abstract fun bindSpeechSource(speechSource: SpeechSourceImpl): SpeechSource
     @Binds

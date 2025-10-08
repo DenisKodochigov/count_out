@@ -11,5 +11,5 @@ data class ShowBottomSheet(
     val activity: Boolean = false,
     val selectBleDevice: Boolean = false,
     val show: Boolean = false,
-    val element: Element? = null
+    val domain: Domain? = null
 )

@@ -15,7 +15,6 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateOf
@@ -100,7 +99,7 @@ import com.count_out.presentation.view_element.icons.IconsGroup
         IconsGroup(
             onClickSpeech = {
                 dataState.item = dataState.plan
-                dataState.event(ShowBS(dataState.showBS.copy(element = dataState.plan))) },
+                dataState.event(ShowBS(dataState.showBS.copy(domain = dataState.plan))) },
             onClickDelete = {
                 dataState.plan?.let { dataState.event(PlanEvent.DelPlan(dataState.plan))}
                 dataState.plan?.let { dataState.event(PlanEvent.BackScreen)}

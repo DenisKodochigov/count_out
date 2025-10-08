@@ -8,6 +8,7 @@ import com.count_out.domain.repository.LastPlanRepo
 import com.count_out.domain.use_case.UseCase
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOf
 import javax.inject.Inject
 
 class SelectPlanUC @Inject constructor(
@@ -15,7 +16,9 @@ class SelectPlanUC @Inject constructor(
 ): UseCase<SelectPlanUC.Request, SelectPlanUC.Response>(configuration)  {
     override fun method(request: Request): Flow<ResultUC<TypeRepo>> {
         GlobalValueApp.planLast.value = ResultUC.Success(TypeRepo.PlanT(item = request.plan))
-        return flow { emit(ResultUC.Success(TypeRepo.LongT(item = request.plan.idPlan)))}
+        return repoLastPlan.saveLastUsedPlan(
+            TypeRepo.LongT(item = request.plan.idPlan))
+              .wrap {TypeRepo.LongT(item = request.plan.idPlan) }
     }
     override fun response(typeRepo: TypeRepo): Response = Response(typeRepo)
     data class Request(val plan: Plan): UseCase.Request

@@ -1,6 +1,6 @@
 package com.count_out.data.models
 
-interface ExerciseDb {
+interface ExerciseDb:Data {
     val idExercise: Long
     val ringId: Long
     val idView: Int

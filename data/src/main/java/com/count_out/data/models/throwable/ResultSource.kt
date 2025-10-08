@@ -1,5 +1,6 @@
 package com.count_out.data.models.throwable
 
+import com.count_out.data.models.Data
 import com.count_out.data.models.throwable.TypeSource.Companion.toRepo
 import com.count_out.domain.entity.TypeRepo
 import com.count_out.domain.entity.throwable.ResultApp
@@ -9,17 +10,17 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 
-sealed class ResultSource< out T: TypeSource>: ResultApp {
-    data class Success<out T: TypeSource>(val data: T): ResultSource<T>()
+sealed class ResultSource< out T: Data>: ResultApp {
+    data class Success<out T: Data>(val data: T): ResultSource<T>()
     data class Error(val throwable: ThrowableDS):ResultSource<Nothing>()
 
-    fun result(content:(TypeSource)-> ResultSource<TypeSource>): ResultSource<TypeSource>{
+    fun result(content:(Data)-> ResultSource<Data>): ResultSource<Data>{
         return when (this) {
             is Error -> this
             is Success -> { content(this.data) }
         }
     }
-    fun nextActionOk( next:()-> Flow<ResultSource<TypeSource>>): Flow<ResultUC<TypeRepo>> {
+    fun nextActionOk( next:()-> Flow<ResultSource<Data>>): Flow<ResultUC<TypeRepo>> {
         return when (this) {
             is Error -> { flowOf(ResultUC.Error(ThrowableUC.extract(throwable)))}
             is Success -> {
@@ -33,18 +34,18 @@ sealed class ResultSource< out T: TypeSource>: ResultApp {
         }
     }
     companion object {
-        inline fun <T: TypeSource, R: TypeSource> ResultSource<T>.flatMap(transform: (T) -> ResultSource<R>): ResultSource<R> =
+        inline fun <T: Data, R: Data> ResultSource<T>.flatMap(transform: (T) -> ResultSource<R>): ResultSource<R> =
             when (this) {
                 is Success -> transform(data)
                 is Error -> this
             }
 
-        inline fun <T: TypeSource, R: TypeSource> ResultSource<T>.flatMapFlow(transform: (T) -> Flow<ResultSource<R>>): Flow<ResultSource<R>> =
+        inline fun <T: Data, R: Data> ResultSource<T>.flatMapFlow(transform: (T) -> Flow<ResultSource<R>>): Flow<ResultSource<R>> =
             when (this) {
                 is Success -> transform(data)
                 is Error -> flowOf(this)
             }
-        inline fun <reified TS : TypeSource> ResultSource<TypeSource>.asType(): ResultSource<TS> =
+        inline fun <reified TS : Data> ResultSource<Data>.asType(): ResultSource<TS> =
             when (this) {
                 is Success -> {
                     val typed = data as? TS

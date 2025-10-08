@@ -44,7 +44,7 @@ import com.count_out.presentation.view_element.icons.IconSingle
 @Composable fun BottomSheetBle(dataState: SettingsState) {
     dataState.onDismiss = {
         dataState.event(SettingsEvent.StopScanBLE)
-        dataState.event(SettingsEvent.ShowBS(dataState.showBS.copy(element =
+        dataState.event(SettingsEvent.ShowBS(dataState.showBS.copy(domain =
             object: DeviceBle{ override val name: String = ""; override val address: String = "" })))
     }
 
@@ -89,7 +89,7 @@ import com.count_out.presentation.view_element.icons.IconSingle
         Row(horizontalArrangement = Arrangement.Start,
             modifier = Modifier.fillMaxWidth().padding(top = 16.dp, start = 12.dp, end = 12.dp)
                 .clickable {
-                    dataState.event(SettingsEvent.ShowBS(dataState.showBS.copy(element =
+                    dataState.event(SettingsEvent.ShowBS(dataState.showBS.copy(domain =
                         object: DeviceBle{ override val name: String = ""; override val address: String = "" })))
                     dataState.event(SettingsEvent.SelectDevice(dev))
                 }

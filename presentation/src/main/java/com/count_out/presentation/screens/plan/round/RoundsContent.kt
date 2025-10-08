@@ -83,7 +83,7 @@ import com.count_out.presentation.view_element.icons.IconsGroup
 }
 fun showSpeechRound(dataState: PlanState, part: Part){
     dataState.item = part
-    dataState.event(ShowBS(dataState.showBS.copy(element = part)))
+    dataState.event(ShowBS(dataState.showBS.copy(domain = part)))
 }
 
 fun setCollapsing(dataState: PlanState, part: Part) {

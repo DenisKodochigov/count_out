@@ -1,10 +1,10 @@
 package com.count_out.presentation.models
 
-import com.count_out.domain.entity.workout.Element
+import com.count_out.domain.entity.workout.Domain
 
 interface BottomSheetInterface {
-    var item: Element?
+    var item: Domain?
     val nameSection: String
-    var onConfirmation: (Element, Element?) -> Unit
+    var onConfirmation: (Domain, Domain?) -> Unit
     var onDismiss: () -> Unit
 }

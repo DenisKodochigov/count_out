@@ -5,7 +5,7 @@ import com.count_out.domain.entity.enums.ConnectState
 import com.count_out.domain.entity.router.DeviceBle
 import com.count_out.domain.entity.workout.Activity
 import com.count_out.domain.entity.workout.Collapsing
-import com.count_out.domain.entity.workout.Element
+import com.count_out.domain.entity.workout.Domain
 import com.count_out.domain.entity.workout.ShowBottomSheet
 import com.count_out.presentation.models.ActivityImplP
 import com.count_out.presentation.models.BottomSheetInterface
@@ -31,8 +31,8 @@ data class SettingsState(
     val showBS: ShowBottomSheet = ShowBottomSheet(),
     val collapsing: Collapsing = Collapsing(),
     override val event: (Event) -> Unit,
-    override var item: Element? = null,
+    override var item: Domain? = null,
     override val nameSection: String = "",
     override var onDismiss: () -> Unit= {},
-    override var onConfirmation: (Element, Element?) -> Unit = { _, _ ->},
+    override var onConfirmation: (Domain, Domain?) -> Unit = { _, _ ->},
 ): BottomSheetInterface, DataState

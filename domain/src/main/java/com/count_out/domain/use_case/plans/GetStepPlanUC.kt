@@ -38,8 +38,13 @@ class GetStepPlanUC @Inject constructor(
         }
     }
     override fun response(typeRepo: TypeRepo): Response = Response(typeRepo)
+
     data object Request : UseCase.Request
     data class Response(val step: TypeRepo) : UseCase.Response
+
+
+
+
 }
 //            convertor4(repoLastPlan.getLastUsedPlan()){ tr->
 //                TypeRepo.StepPlanMy(item = toStepPlan(tr.))},

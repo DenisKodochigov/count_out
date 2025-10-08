@@ -3,7 +3,7 @@ package com.count_out.domain.entity.workout
 import com.count_out.domain.entity.enums.Goal
 import com.count_out.domain.entity.enums.Zone
 
-interface Set: Element {
+interface Set: Domain {
     val idSet: Long
     val name: String
     val exerciseId: Long

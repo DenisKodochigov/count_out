@@ -32,7 +32,7 @@ import com.count_out.presentation.view_element.ModalBottomSheetApp
         skipPartiallyExpanded = true, confirmValueChange = { true },)
     ModalBottomSheetApp(
         onDismissRequest = { dataState.event(
-            SettingsEvent.ShowBS(dataState.showBS.copy(element = ActivityImplP(0L)))) },
+            SettingsEvent.ShowBS(dataState.showBS.copy(domain = ActivityImplP(0L)))) },
         modifier = Modifier.padding(horizontal = 12.dp),
         shape = MaterialTheme.shapes.small,
         sheetState = sheetState,
@@ -57,7 +57,7 @@ import com.count_out.presentation.view_element.ModalBottomSheetApp
             if (activityNew.value.idActivity > 0)
                 dataState.event(SettingsEvent.UpdateActivity(activityNew.value))
             else dataState.event(SettingsEvent.AddActivity(activityNew.value))
-            dataState.event(SettingsEvent.ShowBS(dataState.showBS.copy(element = activityNew.value)))} )
+            dataState.event(SettingsEvent.ShowBS(dataState.showBS.copy(domain = activityNew.value)))} )
         Spacer(Modifier.height(12.dp))
     }
 }

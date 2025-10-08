@@ -1,6 +1,6 @@
 package com.count_out.data.models
 
-interface SpeechDb {
+interface SpeechDb: Data {
     val idSpeech: Long
     val setId: Long?
     val exerciseId: Long?

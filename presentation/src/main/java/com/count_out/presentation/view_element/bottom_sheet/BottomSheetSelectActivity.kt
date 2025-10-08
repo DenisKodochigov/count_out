@@ -38,7 +38,7 @@ import com.count_out.presentation.view_element.ModalBottomSheetApp
     if (dataState.showBS.activity && dataState.item == item){
         dataState.nameSection = stringResource(id = R.string.list_activity)
         dataState.onDismiss =
-            { dataState.event(ShowBS(dataState.showBS.copy(element = item.activity))) }
+            { dataState.event(ShowBS(dataState.showBS.copy(domain = item.activity))) }
         dataState.onConfirmation = { exercise, activity ->
             dataState.event(
                 PlanEvent.UpdateExercise(
@@ -53,7 +53,7 @@ import com.count_out.presentation.view_element.ModalBottomSheetApp
                         override val amountSet: Int = (exercise as Exercise).amountSet
                         override val duration: Parameter = (exercise as Exercise).duration
                     }))
-            dataState.event(ShowBS(dataState.showBS.copy(element = item.activity)))
+            dataState.event(ShowBS(dataState.showBS.copy(domain = item.activity)))
         }
         BottomSheetSelectActivity(dataState)
     }
