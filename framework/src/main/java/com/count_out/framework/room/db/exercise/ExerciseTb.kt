@@ -34,7 +34,8 @@ data class ExerciseTb(
     override var speeches: List<SpeechTb> = emptyList(),
     override var sets: List<SetTb> = emptyList(),
     override var activity: ActivityTb? = null,
-): ExerciseDb {
+): ExerciseDb()
+//{
 //    constructor(item: ExerciseImplD, speechId: Long = item.speechId, idExercise: Long = item.idExercise): this(
 //        idExercise = idExercise,
 //        ringId = item.ringId,
@@ -42,4 +43,4 @@ data class ExerciseTb(
 //        activityId = item.activityId,
 //        idView = item.idView,
 //    )
-}
+//}

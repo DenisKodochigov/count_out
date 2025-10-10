@@ -1,6 +1,6 @@
 package com.count_out.domain.entity.workout
 
-interface Speech {
+interface Speech: Domain {
     val idSpeech: Long
     val message: String
     val duration: Long

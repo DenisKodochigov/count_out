@@ -14,7 +14,7 @@ import androidx.core.net.toUri
 import androidx.lifecycle.lifecycleScope
 import com.count_out.app.permission.RequestPermissionsAll
 import com.count_out.app.presentation.StartApp
-import com.count_out.domain.entity.throwable.ResultUC
+import com.count_out.domain.entity.throwable.ResultDomain
 import com.count_out.domain.use_case.bluetooth.LastBleDeviceUC
 import com.count_out.domain.use_case.other.CountOutServiceBindUC
 import com.count_out.domain.use_case.other.CountOutServiceUnBindUC
@@ -29,9 +29,9 @@ class MainActivity: ComponentActivity() {
     @Inject lateinit var lastHearthRateDevice: LastBleDeviceUC
     @Inject lateinit var countOutServiceBind: CountOutServiceBindUC
     @Inject lateinit var countOutServiceUnBind: CountOutServiceUnBindUC
-    var bindingWorkOut: ResultUC<CountOutServiceBindUC.Response>? = null
-    var unBindingWorkOut: ResultUC<CountOutServiceUnBindUC.Response>? = null
-    var connectedBleDevice: ResultUC<LastBleDeviceUC.Response>? = null
+    var bindingWorkOut: ResultDomain<CountOutServiceBindUC.Response>? = null
+    var unBindingWorkOut: ResultDomain<CountOutServiceUnBindUC.Response>? = null
+    var connectedBleDevice: ResultDomain<LastBleDeviceUC.Response>? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

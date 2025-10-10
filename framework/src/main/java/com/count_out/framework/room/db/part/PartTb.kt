@@ -28,4 +28,4 @@ data class PartTb(
     override var duration: Double = 0.0,
     override var speeches: List<SpeechTb> = emptyList(),
     override var rings: List<RingTb> = emptyList(),
-): PartDb
+): PartDb()

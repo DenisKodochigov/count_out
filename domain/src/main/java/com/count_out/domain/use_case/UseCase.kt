@@ -1,8 +1,8 @@
 package com.count_out.domain.use_case
 
-import com.count_out.domain.entity.TypeRepo
-import com.count_out.domain.entity.throwable.ResultUC
+import com.count_out.domain.entity.throwable.ResultDomain
 import com.count_out.domain.entity.throwable.ThrowableUC
+import com.count_out.domain.entity.workout.Domain
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
@@ -20,24 +20,24 @@ abstract class UseCase< I: UseCase.Request, O: UseCase.Response>(private val con
     class Configuration(val dispatcher: CoroutineDispatcher)
     interface Request
     interface Response
-    internal abstract fun method(request: I): Flow<ResultUC<TypeRepo>>
-    internal abstract fun response(typeRepo:TypeRepo): O
-    fun execute(request: I): Flow<ResultUC<O>> = method(request).map{ result->
+    internal abstract fun method(request: I): Flow<ResultDomain<Domain>>
+    internal abstract fun response(result:Domain): O
+    fun execute(request: I): Flow<ResultDomain<O>> = method(request).map{ result->
         when(result){
-            is ResultUC.Success-> { ResultUC.Success(response(result.data)) }
-            is ResultUC.Error -> result as ResultUC<Nothing>
+            is ResultDomain.Success-> { ResultDomain.Success(response(result.data)) }
+            is ResultDomain.Error -> result as ResultDomain<Nothing>
         }
     }
 
-    fun Flow<ResultUC<TypeRepo>>.wrap(convertTR: (TypeRepo)-> TypeRepo): Flow<ResultUC<TypeRepo>>{
+    fun Flow<ResultDomain<Domain>>.wrap(convertTR: (Domain)-> Domain): Flow<ResultDomain<Domain>>{
         return this.map {resultUcTypeRepo->
-            if ( resultUcTypeRepo is ResultUC.Success) {
-                convertTR(resultUcTypeRepo.data).let { st-> ResultUC.Success(st) }
+            if ( resultUcTypeRepo is ResultDomain.Success) {
+                convertTR(resultUcTypeRepo.data).let { st-> ResultDomain.Success(st) }
             } else resultUcTypeRepo
         }
     }
-    val exceptionNull = ResultUC.Error(
-        ThrowableUC.extract(Exception("return null"))) as ResultUC<Nothing>
+    val exceptionNull = ResultDomain.Error(
+        ThrowableUC.extract(Exception("return null"))) as ResultDomain<Nothing>
 //###############################################################################################
 
 }

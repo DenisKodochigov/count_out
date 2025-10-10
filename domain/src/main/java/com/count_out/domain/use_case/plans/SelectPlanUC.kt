@@ -1,32 +1,30 @@
 package com.count_out.domain.use_case.plans
 
 import com.count_out.domain.entity.GlobalValueApp
-import com.count_out.domain.entity.TypeRepo
-import com.count_out.domain.entity.throwable.ResultUC
+import com.count_out.domain.entity.throwable.ResultDomain
+import com.count_out.domain.entity.types_domai.LongDm
+import com.count_out.domain.entity.workout.Domain
 import com.count_out.domain.entity.workout.Plan
 import com.count_out.domain.repository.LastPlanRepo
 import com.count_out.domain.use_case.UseCase
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.flowOf
 import javax.inject.Inject
 
 class SelectPlanUC @Inject constructor(
     configuration: Configuration, private val repoLastPlan: LastPlanRepo
 ): UseCase<SelectPlanUC.Request, SelectPlanUC.Response>(configuration)  {
-    override fun method(request: Request): Flow<ResultUC<TypeRepo>> {
-        GlobalValueApp.planLast.value = ResultUC.Success(TypeRepo.PlanT(item = request.plan))
-        return repoLastPlan.saveLastUsedPlan(
-            TypeRepo.LongT(item = request.plan.idPlan))
-              .wrap {TypeRepo.LongT(item = request.plan.idPlan) }
+    override fun method(request: Request): Flow<ResultDomain<Domain>> {
+        GlobalValueApp.planLast.value = ResultDomain.Success(request.plan)
+        return repoLastPlan.saveLastUsedPlan(LongDm(item = request.plan.idPlan))
+              .wrap { LongDm(item = request.plan.idPlan) }
     }
-    override fun response(typeRepo: TypeRepo): Response = Response(typeRepo)
+    override fun response(result: Domain): Response = Response(result)
     data class Request(val plan: Plan): UseCase.Request
-    data class Response(val selectedTraining: TypeRepo): UseCase.Response
+    data class Response(val selectedTraining: Domain): UseCase.Response
 }
 //override fun implementation(request: Request): Flow<ResultUC<Response>> {
 //        GlobalValueApp.planRun.value = request.training
 //        val resultSave = repoLastPlan.saveLastUsedPlan(request.training.idTraining)
 //        return flow { emit(ResultUC.Success(
-//            Response(TypeRepo.LongMy(item = request.training.idTraining))))}
+//            Response(Domain.LongMy(item = request.training.idTraining))))}
 //    }

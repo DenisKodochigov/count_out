@@ -13,7 +13,8 @@ data class ActivityTb(
     override var color: Int = 0,
     override var videoClip: String = "",
     override var audioTrack: String = ""
-): ActivityDb {
+): ActivityDb()
+//{
 //    constructor(item: ActivityImplD, idActivity: Long = item.idActivity): this(
 //        idActivity = idActivity,
 //        name = item.name,
@@ -33,4 +34,4 @@ data class ActivityTb(
 //        videoClip = this.videoClip,
 //        audioTrack = this.audioTrack
 //    )
-}
+//}

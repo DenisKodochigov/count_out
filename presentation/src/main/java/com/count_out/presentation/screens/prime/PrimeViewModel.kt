@@ -2,8 +2,7 @@ package com.count_out.presentation.screens.prime
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.count_out.domain.entity.NavigateEvent
-import com.count_out.domain.entity.throwable.ResultUC
+import com.count_out.domain.entity.throwable.ResultDomain
 import com.count_out.domain.use_case.UseCase
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -29,6 +28,6 @@ abstract class PrimeViewModel<T: Any, C: PrimeConvertor<UseCase.Response,T>>: Vi
     init { viewModelScope.launch { eventFlow.collect { routeEvent(it) } } }
 
     fun submitEvent(event: Event) { viewModelScope.launch { eventFlow.emit(event) } }
-    fun submitState(result: ResultUC<UseCase.Response>){
+    fun submitState(result: ResultDomain<UseCase.Response>){
         viewModelScope.launch { _screenState.value = convertor().make(result, dataState) }}
 }

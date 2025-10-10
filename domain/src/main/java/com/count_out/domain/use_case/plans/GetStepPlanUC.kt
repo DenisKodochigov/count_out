@@ -1,9 +1,11 @@
 package com.count_out.domain.use_case.plans
 
 import com.count_out.domain.entity.GlobalValueApp
-import com.count_out.domain.entity.TypeRepo
+import com.count_out.domain.entity.StepPlan
 import com.count_out.domain.entity.TypeRepo.NullT.toStepPlan
-import com.count_out.domain.entity.throwable.ResultUC
+import com.count_out.domain.entity.throwable.ResultDomain
+import com.count_out.domain.entity.workout.Domain
+import com.count_out.domain.entity.workout.Plan
 import com.count_out.domain.repository.ExecuteWorkOutRepo
 import com.count_out.domain.repository.LastPlanRepo
 import com.count_out.domain.use_case.UseCase
@@ -23,7 +25,7 @@ class GetStepPlanUC @Inject constructor(
     private val repoLastPlan: LastPlanRepo,
 ): UseCase<GetStepPlanUC.Request, GetStepPlanUC.Response>(configuration)  {
 
-    override fun method(request: Request): Flow<ResultUC<TypeRepo>> {
+    override fun method(request: Request): Flow<ResultDomain<Domain>> {
         return combine(
             GlobalValueApp.planLast,
             repoLastPlan.getLastUsedPlan(),
@@ -31,20 +33,15 @@ class GetStepPlanUC @Inject constructor(
         ){ r1, r2, r3->
             val result = (r1?.chek() ?: r2.chek() ?: r3.chek())
             when(result){
-                is ResultUC.Error -> result
-                is ResultUC.Success -> ResultUC.Success(result.data.toStepPlan())
+                is ResultDomain.Error -> result
+                is ResultDomain.Success -> ResultDomain.Success(GlobalValueApp.toStepPlan(result.data as? Plan))
                 null -> exceptionNull
             }
         }
     }
-    override fun response(typeRepo: TypeRepo): Response = Response(typeRepo)
-
+    override fun response(result: Domain): Response = Response(result)
     data object Request : UseCase.Request
-    data class Response(val step: TypeRepo) : UseCase.Response
-
-
-
-
+    data class Response(val step: Domain) : UseCase.Response
 }
 //            convertor4(repoLastPlan.getLastUsedPlan()){ tr->
 //                TypeRepo.StepPlanMy(item = toStepPlan(tr.))},

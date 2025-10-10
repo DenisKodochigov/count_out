@@ -1,10 +1,11 @@
 package com.count_out.data.repository
 
-import com.count_out.data.models.throwable.ResultSource.Companion.flatMapFlow
+import com.count_out.data.models.Data.Companion.toData
+import com.count_out.data.models.throwable.ResultData.Companion.flatMapFlow
 import com.count_out.data.source.local.LastPlanSource
 import com.count_out.data.source.room.PlanSource
-import com.count_out.domain.entity.TypeRepo
-import com.count_out.domain.entity.throwable.ResultUC
+import com.count_out.domain.entity.throwable.ResultDomain
+import com.count_out.domain.entity.workout.Domain
 import com.count_out.domain.repository.LastPlanRepo
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
@@ -16,11 +17,11 @@ class LastPlanRepoImpl @Inject constructor(
     private val source: LastPlanSource): LastPlanRepo, PrimeRepo()
 {
     @OptIn(ExperimentalCoroutinesApi::class)
-    override fun getLastUsedPlan(): Flow<ResultUC<TypeRepo>> =
+    override fun getLastUsedPlan(): Flow<ResultDomain<Domain>> =
         source.getLastPlan().flatMapConcat { resultDS ->
-            resultDS.flatMapFlow { res-> sourceTraining.get(res) }.convertor() }
+            resultDS.flatMapFlow { res-> sourceTraining.get(res) }.convertorFlow() }
 
-    override fun saveLastUsedPlan(id: TypeRepo): Flow<ResultUC<TypeRepo>> =
-        source.saveLastPlan(toTypeSource( id)).convertor()
+    override fun saveLastUsedPlan(id: Domain): Flow<ResultDomain<Domain>> =
+        source.saveLastPlan(toData( id)).convertorFlow()
 
 }

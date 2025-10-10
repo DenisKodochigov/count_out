@@ -1,8 +1,11 @@
 package com.count_out.device.bluetooth
 
-import com.count_out.data.models.throwable.ResultSource
+import com.count_out.data.models.Data
+import com.count_out.data.models.throwable.ResultData
 import com.count_out.data.models.throwable.ThrowableDS
-import com.count_out.data.models.throwable.TypeSource
+import com.count_out.data.models.types_data.BooleanDb
+import com.count_out.data.models.types_data.LongDb
+import com.count_out.data.models.types_data.MapDb
 import com.count_out.data.source.PrimeSource
 import com.count_out.data.source.framework.BleSource
 import com.count_out.device.bluetooth.models.ResultBle
@@ -12,70 +15,69 @@ import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 class BleSourceImpl @Inject constructor(private val ble: Bluetooth): BleSource, PrimeSource() {
-    override fun startScanning(): Flow<ResultSource<TypeSource>> {
+    override fun startScanning(): Flow<ResultData<Data>> {
         val mapDevice: MutableMap<String,DeviceBle> = mutableMapOf()
         return ble.startScanning().map { devUI->
             when(devUI){
-                is ResultBle.Error -> ResultSource.Error(throwable = ThrowableDS.extract(t = devUI.throwable))
-                is ResultBle.Nothing -> ResultSource.Success(TypeSource.NullT)
+                is ResultBle.Error -> ResultData.Error(throwable = ThrowableDS.extract(t = devUI.throwable))
+                is ResultBle.Nothing -> ResultData.Success(LongDb(0L))
                 is ResultBle.Device -> {
                     mapDevice.put(devUI.device.address, devUI.device)
-                    ResultSource.Success(TypeSource.DevicesUIT(mapDevice as Map<String, DeviceBle>))
+                    ResultData.Success(MapDb(mapDevice ))
                 }
-                else -> ResultSource.Error(throwable = ThrowableDS.NotValidType())
+                else -> ResultData.Error(throwable = ThrowableDS.NotValidType())
             }
         }
     }
 
-    override fun stopScanning(): Flow<ResultSource<TypeSource>> {
+    override fun stopScanning(): Flow<ResultData<Data>> {
         return ble.stopScanning().map { device->
             when(device){
-                is ResultBle.Error -> ResultSource.Error(throwable = ThrowableDS.extract(t = device.throwable))
-                is ResultBle.Nothing -> ResultSource.Success(TypeSource.NullT)
-                else -> ResultSource.Success(TypeSource.BooleanT(true))
+                is ResultBle.Error -> ResultData.Error(throwable = ThrowableDS.extract(t = device.throwable))
+                is ResultBle.Nothing -> ResultData.Success(LongDb(0L))
+                else -> ResultData.Success(BooleanDb(true))
             }
         }
     }
 
-    override fun connectDevice(adr: TypeSource): Flow<ResultSource<TypeSource>> {
+    override fun connectDevice(adr: Data): Flow<ResultData<Data>> {
         return ble.connectDevice(adr).map {
             when(it){
-                is ResultBle.Error -> ResultSource.Error(throwable = ThrowableDS.extract(t = it.throwable))
-                is ResultBle.Nothing -> ResultSource.Success(TypeSource.NullT)
-                else -> ResultSource.Success(TypeSource.BooleanT(true))
+                is ResultBle.Error -> ResultData.Error(throwable = ThrowableDS.extract(t = it.throwable))
+                is ResultBle.Nothing -> ResultData.Success(LongDb(0L))
+                else -> ResultData.Success(BooleanDb(true))
             }
         }
     }
 
-    override fun clearCache(): Flow<ResultSource<TypeSource>> {
+    override fun clearCache(): Flow<ResultData<Data>> {
         return ble.onClearCacheBLE().map {
             when (it) {
-                is ResultBle.Error -> ResultSource.Error(throwable = ThrowableDS.extract(t = it.throwable))
-                is ResultBle.Nothing -> ResultSource.Success(TypeSource.NullT)
-                else -> ResultSource.Success(TypeSource.BooleanT(true))
+                is ResultBle.Error -> ResultData.Error(throwable = ThrowableDS.extract(t = it.throwable))
+                is ResultBle.Nothing -> ResultData.Success(LongDb(0L))
+                else -> ResultData.Success(BooleanDb(true))
             }
         }
     }
 
-    override fun getStateBle(): Flow<ResultSource<TypeSource>> {
+    override fun getStateBle(): Flow<ResultData<Data>> {
         return ble.getStateBle().map {
             when (it) {
-                is ResultBle.Error -> ResultSource.Error(throwable = ThrowableDS.extract(t = it.throwable))
-                is ResultBle.Nothing -> ResultSource.Success(TypeSource.NullT)
-                is ResultBle.ConnectingStateT -> ResultSource.Success(
-                    TypeSource.BleConnectStateT(it.connectState))
-                else -> ResultSource.Success(TypeSource.BooleanT(true))
+                is ResultBle.Error -> ResultData.Error(throwable = ThrowableDS.extract(t = it.throwable))
+                is ResultBle.Nothing -> ResultData.Success(LongDb(0L))
+                is ResultBle.ConnectingStateT -> ResultData.Success(LongDb(it.connectState.ordinal.toLong()))
+                else -> ResultData.Success(BooleanDb(true))
             }
         }
     }
 
-    override fun getHeartRate(): Flow<ResultSource<TypeSource>> {
+    override fun getHeartRate(): Flow<ResultData<Data>> {
         return ble.getHeartRate().map {
             when (it) {
-                is ResultBle.Error -> ResultSource.Error(throwable = ThrowableDS.extract(t = it.throwable))
-                is ResultBle.Nothing -> ResultSource.Success(TypeSource.NullT)
-                is ResultBle.IntT -> ResultSource.Success(TypeSource.IntT(it.value))
-                else -> ResultSource.Success(TypeSource.IntT(0))
+                is ResultBle.Error -> ResultData.Error(throwable = ThrowableDS.extract(t = it.throwable))
+                is ResultBle.Nothing -> ResultData.Success(LongDb(0L))
+                is ResultBle.IntT -> ResultData.Success(LongDb(it.value.toLong()))
+                else -> ResultData.Success(LongDb(0L))
             }
         }
     }

@@ -61,15 +61,15 @@ sealed class TypeSource {
 
 
     companion object {
-        inline fun TypeSource.useLong(crossinline block: (Long) -> Long): ResultSource<TypeSource> =
-            if (this is TypeSource.LongT) {
-                try { block(this.item).result() }
-                catch (e: Exception) { ResultSource.Error(ThrowableDS.extract(e)) }
-            } else ResultSource.Error(ThrowableDS.NotValidType())
-
-        fun Long.result(): ResultSource<TypeSource.LongT> =
-            if (this > 0L) ResultSource.Success(TypeSource.LongT(this))
-            else ResultSource.Error(ThrowableDS.RequestFailed())
+//        inline fun TypeSource.useLong(crossinline block: (Long) -> Long): ResultSource<TypeSource> =
+//            if (this is TypeSource.LongT) {
+//                try { block(this.item).result() }
+//                catch (e: Exception) { ResultSource.Error(ThrowableDS.extract(e)) }
+//            } else ResultSource.Error(ThrowableDS.NotValidType())
+//
+//        fun Long.result(): ResultSource<TypeSource.LongT> =
+//            if (this > 0L) ResultSource.Success(TypeSource.LongT(this))
+//            else ResultSource.Error(ThrowableDS.RequestFailed())
 
         fun TypeSource.toRepo(): TypeRepo =
             when (this) {

@@ -1,15 +1,15 @@
 package com.count_out.data.source.framework
 
 
-import com.count_out.data.models.throwable.ResultSource
-import com.count_out.data.models.throwable.TypeSource
+import com.count_out.data.models.Data
+import com.count_out.data.models.throwable.ResultData
 import kotlinx.coroutines.flow.Flow
 
 interface BleSource {
-    fun startScanning(): Flow<ResultSource<TypeSource>>
-    fun stopScanning(): Flow<ResultSource<TypeSource>>
-    fun connectDevice(adr: TypeSource): Flow<ResultSource<TypeSource>>
-    fun clearCache(): Flow<ResultSource<TypeSource>>
-    fun getStateBle(): Flow<ResultSource<TypeSource>>
-    fun getHeartRate(): Flow<ResultSource<TypeSource>>
+    fun startScanning(): Flow<ResultData<Data>>
+    fun stopScanning(): Flow<ResultData<Data>>
+    fun connectDevice(adr: Data): Flow<ResultData<Data>>
+    fun clearCache(): Flow<ResultData<Data>>
+    fun getStateBle(): Flow<ResultData<Data>>
+    fun getHeartRate(): Flow<ResultData<Data>>
 }

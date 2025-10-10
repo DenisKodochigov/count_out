@@ -1,9 +1,9 @@
 package com.count_out.domain.core
 
-import com.count_out.domain.entity.TypeRepo
-import com.count_out.domain.entity.throwable.ResultUC
+import com.count_out.domain.entity.throwable.ResultDomain
 import com.count_out.domain.entity.workout.Activity
 import com.count_out.domain.entity.workout.Collapsing
+import com.count_out.domain.entity.workout.Domain
 import com.count_out.domain.entity.workout.Exercise
 import com.count_out.domain.entity.workout.Ring
 import com.count_out.domain.entity.workout.Set
@@ -11,13 +11,12 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 
 class CollapsingCore: Core()  {
-    fun get(request: TypeRepo): Flow<ResultUC<TypeRepo>>{
-        return flow { emit(ResultUC.Success(execute(request)))} }
+    fun get(request: Domain): Flow<ResultDomain<Domain>>{
+        return flow { emit(ResultDomain.Success(execute(request)))} }
 
-    fun execute(item: TypeRepo): TypeRepo{
-        return if (item is TypeRepo.CollapsingT)
-            TypeRepo.CollapsingT(executeCollapsing(item.item) )
-        else TypeRepo.NullT
+    fun execute(item: Domain): Domain {
+        return if (item is Collapsing) executeCollapsing(item)
+        else object: Domain{}
     }
     fun executeCollapsing(item: Collapsing): Collapsing{
         return when(item.item){

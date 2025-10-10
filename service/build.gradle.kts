@@ -37,10 +37,7 @@ android {
         viewBinding = true
     }
     buildToolsVersion = "35.0.0"
-    kotlin { compilerOptions{
-        jvmTarget = JvmTarget.JVM_17
-//        freeCompilerArgs = listOf("-XXLanguage:+PropertyParamAnnotationDefaultTargetMode")
-    } }
+    kotlin { compilerOptions{ jvmTarget = JvmTarget.JVM_17 } }
 }
 
 dependencies {

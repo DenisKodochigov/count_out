@@ -3,7 +3,7 @@ package com.count_out.device.bluetooth
 import android.annotation.SuppressLint
 import android.bluetooth.BluetoothAdapter
 import android.util.Log
-import com.count_out.data.models.throwable.TypeSource
+import com.count_out.data.models.Data
 import com.count_out.device.bluetooth.models.BleConnectionImpl
 import com.count_out.device.bluetooth.models.ResultBle
 import com.count_out.device.bluetooth.models.ThrowableBle
@@ -41,16 +41,16 @@ class Bluetooth @Inject constructor(
     fun stopScanning(): Flow<ResultBle> = bleScanner.stopScanner()
 
     @OptIn(ExperimentalCoroutinesApi::class)
-    fun connectDevice(adr: TypeSource): Flow<ResultBle>  {
+    fun connectDevice(address: Data): Flow<ResultBle>  {
         if (!bluetoothAdapter.isEnabled) return flow { emit(
             ResultBle.Error(throwable = ThrowableBle.NotValidBle())) }
-        return if (adr is TypeSource.StringT){
+        return if (address is String){
             try {
                 disconnectDevice()
                 Log.d("KDS", "connectDevice")
                 bleScanner.stopScanner().flatMapConcat{ it1->
                     if (it1 is ResultBle.Error) flow { emit(it1) } else {
-                        getRemoteDevice( adr.item).flatMapConcat{ it2->
+                        getRemoteDevice(address).flatMapConcat{ it2->
                             if (it2 is ResultBle.Error) flow { emit(it2) } else {
                                 bleConnecting.connectDevice(currentConnection)
                             }

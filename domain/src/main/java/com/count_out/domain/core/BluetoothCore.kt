@@ -2,8 +2,12 @@ package com.count_out.domain.core
 
 import com.count_out.domain.entity.Settings
 import com.count_out.domain.entity.TypeRepo
-import com.count_out.domain.entity.throwable.ResultUC
+import com.count_out.domain.entity.router.DeviceBle
+import com.count_out.domain.entity.throwable.ResultDomain
 import com.count_out.domain.entity.throwable.ThrowableUC
+import com.count_out.domain.entity.types_domai.BooleanDm
+import com.count_out.domain.entity.types_domai.StringDm
+import com.count_out.domain.entity.workout.Domain
 import com.count_out.domain.repository.BluetoothRepo
 import com.count_out.domain.repository.plans.SettingsRepo
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -12,6 +16,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flatMapConcat
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
@@ -20,59 +25,55 @@ class BluetoothCore @Inject constructor(
 
     val lastBleAddress = MutableStateFlow("")
 
-    fun startScanning(): Flow<ResultUC<TypeRepo>>{
+    fun startScanning(): Flow<ResultDomain<Domain>>{
         return repo.startScanning() }
-    fun stopScanning(): Flow<ResultUC<TypeRepo>>{
+    fun stopScanning(): Flow<ResultDomain<Domain>>{
         return repo.stopScanning() }
 
     @OptIn(ExperimentalCoroutinesApi::class)
-    fun connectDeviceHr(): Flow<ResultUC<TypeRepo>>{
+    fun connectDeviceHr(): Flow<ResultDomain<Domain>>{
         return lastBleAddress.flatMapConcat { lastBleAddress->
             if (lastBleAddress.isNotEmpty())
-                repo.connectDevice(TypeRepo.StringT(lastBleAddress))
-            else flow{emit(ResultUC.Success(TypeRepo.BooleanT(false)))}
+                repo.connectDevice(StringDm(lastBleAddress))
+            else flowOf (ResultDomain.Success(BooleanDm(false)))
         }
     }
 
     @OptIn(ExperimentalCoroutinesApi::class)
-    fun lastDevice(): Flow<ResultUC<TypeRepo>>{
+    fun lastDevice(): Flow<ResultDomain<Domain>>{
         return repo.lastDevice().map { device->
-            if (device is ResultUC.Success &&
-                device.data is TypeRepo.DeviceUIT &&
-                device.data.item.address.isNotEmpty()) {
-                    lastBleAddress.value = device.data.item.address
+            if (device is ResultDomain.Success && device.data is DeviceBle && device.data.address.isNotEmpty()) {
+                    lastBleAddress.value = device.data.address
             }
             device
         }
     }
 
-    fun clearCache(): Flow<ResultUC<TypeRepo>>{
+    fun clearCache(): Flow<ResultDomain<Domain>>{
         return repo.clearCache() }
 
     @OptIn(ExperimentalCoroutinesApi::class)
-    fun selectDeice(device: TypeRepo): Flow<ResultUC<TypeRepo>>{
+    fun selectDeice(device: Domain): Flow<ResultDomain<Domain>>{
         return repo.stopScanning().flatMapConcat { stopScanning->
-            if (stopScanning is ResultUC.Error) flow { emit(stopScanning)}
+            if (stopScanning is ResultDomain.Error) flowOf(stopScanning)
             else{
-                if (device is TypeRepo.DeviceUIT) {
+                if (device is DeviceBle) {
                     combine(
-                        repoSetting.saveSetting(
-                            TypeRepo.SettingsT(Settings.NameBle(device.item.name))),
-                        repoSetting.saveSetting(
-                            TypeRepo.SettingsT(Settings.AddressBle(device.item.address))),
+                        repoSetting.saveSetting(Settings.NameBle(device.name)),
+                        repoSetting.saveSetting(Settings.AddressBle(device.address)),
                     ) { f1, f2->
-                        f1 as? ResultUC.Error ?: if (f2 is ResultUC.Error) f2
+                        f1 as? ResultDomain.Error ?: if (f2 is ResultDomain.Error) f2
                         else {
-                            lastBleAddress.value = device.item.address
-                            ResultUC.Success(TypeRepo.BooleanT(true))
+                            lastBleAddress.value = device.address
+                            ResultDomain.Success(BooleanDm(true))
                         }
                     }
-                } else flow { emit(ResultUC.Error(throwable = ThrowableUC.NotValidType())) }
+                } else flowOf(ResultDomain.Error(throwable = ThrowableUC.NotValidType()))
             }
         }
     }
-    fun getStateBle(): Flow<ResultUC<TypeRepo>>{
+    fun getStateBle(): Flow<ResultDomain<Domain>>{
         return repo.getStateBle() }
-    fun getHeartRate(): Flow<ResultUC<TypeRepo>>{
+    fun getHeartRate(): Flow<ResultDomain<Domain>>{
         return repo.getHeartRate() }
 }

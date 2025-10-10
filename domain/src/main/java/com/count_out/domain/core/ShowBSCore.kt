@@ -1,9 +1,9 @@
 package com.count_out.domain.core
 
-import com.count_out.domain.entity.TypeRepo
 import com.count_out.domain.entity.router.DeviceBle
-import com.count_out.domain.entity.throwable.ResultUC
+import com.count_out.domain.entity.throwable.ResultDomain
 import com.count_out.domain.entity.workout.Activity
+import com.count_out.domain.entity.workout.Domain
 import com.count_out.domain.entity.workout.Exercise
 import com.count_out.domain.entity.workout.Plan
 import com.count_out.domain.entity.workout.Ring
@@ -11,16 +11,16 @@ import com.count_out.domain.entity.workout.Set
 import com.count_out.domain.entity.workout.ShowBottomSheet
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOf
 
 class ShowBSCore: Core()  {
 
-    fun get(request: TypeRepo): Flow<ResultUC<TypeRepo>> {
-        return flow { emit(ResultUC.Success(execute(request)))} }
+    fun get(request: Domain): Flow<ResultDomain<Domain>> {
+        return flowOf(ResultDomain.Success(execute(request))) }
 
-    fun execute(item: TypeRepo): TypeRepo{
-        return if (item is TypeRepo.ShowBottomSheetT)
-            TypeRepo.ShowBottomSheetT(calculate(item.item) )
-        else TypeRepo.NullT
+    fun execute(item: Domain): Domain{
+        return if (item is ShowBottomSheet) calculate(item)
+        else object:Domain{}
     }
 
     fun calculate(item: ShowBottomSheet): ShowBottomSheet{

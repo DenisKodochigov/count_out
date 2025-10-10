@@ -24,23 +24,23 @@ data class WeatherResponse(
     @param:Json(name = "wind_direction_10m")  val windDirection10m: Int = 0,
     @param:Json(name = "wind_gusts_10m")  val windGusts10m: Double = 0.0,
 ){
-    fun toWeatherSource() = WeatherDb(
-        time = this.time.toLong(),
-        rain = this.rain,
-        isDay = this.isDay,
-        showers = this.showers,
-        interval = this.interval,
-        snowfall = this.snowfall,
-        cloudCover = this.cloudCover,
-        weatherCode = this.weatherCode,
-        pressureMsl = this.pressureMsl,
-        windSpeed10m = this.windSpeed10m,
-        windGusts10m = this.windGusts10m,
-        temperature2m = this.temperature2m,
-        precipitation = this.precipitation,
-        surfacePressure = this.surfacePressure,
-        windDirection10m = this.windDirection10m,
-        relativeHumidity2m = this.relativeHumidity2m,
-        apparentTemperature = this.apparentTemperature,
-    )
+    fun toWeatherSource() = object: WeatherDb() {
+        override val time: Long = this@WeatherResponse.time.toLong()
+        override val interval: Int = this@WeatherResponse.interval
+        override val temperature2m: Double = this@WeatherResponse.temperature2m
+        override val relativeHumidity2m: Int = this@WeatherResponse.relativeHumidity2m
+        override val apparentTemperature: Double = this@WeatherResponse.apparentTemperature
+        override val isDay: Int = this@WeatherResponse.isDay
+        override val precipitation: Double = this@WeatherResponse.precipitation
+        override val rain: Double = this@WeatherResponse.rain
+        override val showers: Double = this@WeatherResponse.showers
+        override val snowfall: Double = this@WeatherResponse.snowfall
+        override val weatherCode: Int = this@WeatherResponse.weatherCode
+        override val cloudCover: Int = this@WeatherResponse.cloudCover
+        override val pressureMsl: Double = this@WeatherResponse.pressureMsl
+        override val surfacePressure: Double = this@WeatherResponse.surfacePressure
+        override val windSpeed10m: Double = this@WeatherResponse.windSpeed10m
+        override val windDirection10m: Int = this@WeatherResponse.windDirection10m
+        override val windGusts10m: Double = this@WeatherResponse.windGusts10m
+    }
 }

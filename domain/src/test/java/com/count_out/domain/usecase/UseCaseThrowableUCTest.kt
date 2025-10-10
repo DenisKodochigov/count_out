@@ -1,7 +1,7 @@
 package com.count_out.domain.usecase
 
 import com.count_out.domain.entity.TypeRepo
-import com.count_out.domain.entity.throwable.ResultUC
+import com.count_out.domain.entity.throwable.ResultDomain
 import com.count_out.domain.entity.throwable.ThrowableUC
 import com.count_out.domain.use_case.UseCase
 import junit.framework.TestCase.assertEquals
@@ -21,7 +21,7 @@ class UseCaseThrowableUCTest {
     private val configuration = UseCase.Configuration(UnconfinedTestDispatcher())
     private val request = mock<UseCase.Request>()
     private val response = mock<UseCase.Response>()
-    private val result = mock<ResultUC<TypeRepo>>()
+    private val result = mock<ResultDomain<TypeRepo>>()
     @ExperimentalCoroutinesApi
     private lateinit var useCase: UseCase<UseCase.Request, UseCase.Response>
 
@@ -34,7 +34,7 @@ class UseCaseThrowableUCTest {
 //                return flowOf(response)
 //            }
 
-            override fun method(request: Request): Flow<ResultUC<TypeRepo>> {
+            override fun method(request: Request): Flow<ResultDomain<TypeRepo>> {
                 return flowOf(result) }
             override fun response(typeRepo: TypeRepo): Response {
                 return response }
@@ -44,7 +44,7 @@ class UseCaseThrowableUCTest {
     @Test
     fun testExecuteSuccess() = runTest {
         val result = useCase.execute(request).first()
-        assertEquals(ResultUC.Success(response), result)
+        assertEquals(ResultDomain.Success(response), result)
     }
 
     @ExperimentalCoroutinesApi
@@ -55,14 +55,14 @@ class UseCaseThrowableUCTest {
 //                Assert.assertEquals(this@UseCaseThrowableUCTest.request, request)
 //                return flow { throw ThrowableUC.TrainingThrow(Throwable()) }
 //            }
-            override fun method(request: Request): Flow<ResultUC<TypeRepo>> {
+            override fun method(request: Request): Flow<ResultDomain<TypeRepo>> {
                 return flowOf(result) }
             override fun response(typeRepo: TypeRepo): Response {
                 return response }
         }
         runTest {
             val result = useCase.execute(request).first()
-            Assert.assertTrue((result as ResultUC.Error).throwable is ThrowableUC.TrainingThrow)
+            Assert.assertTrue((result as ResultDomain.Error).throwable is ThrowableUC.TrainingThrow)
         }
     }
 
@@ -74,14 +74,14 @@ class UseCaseThrowableUCTest {
 //                Assert.assertEquals(this@UseCaseThrowableUCTest.request, request)
 //                return flow { throw ThrowableUC.ActivityThrow(Throwable()) }
 //            }
-            override fun method(request: Request): Flow<ResultUC<TypeRepo>> {
+            override fun method(request: Request): Flow<ResultDomain<TypeRepo>> {
                 return flowOf(result) }
             override fun response(typeRepo: TypeRepo): Response {
                 return response }
         }
         runTest {
             val result = useCase.execute(request).first()
-            Assert.assertTrue((result as ResultUC.Error).throwable is ThrowableUC.ActivityThrow)
+            Assert.assertTrue((result as ResultDomain.Error).throwable is ThrowableUC.ActivityThrow)
         }
     }
     @ExperimentalCoroutinesApi
@@ -92,14 +92,14 @@ class UseCaseThrowableUCTest {
 //                Assert.assertEquals(this@UseCaseThrowableUCTest.request, request)
 //                return flow { throw ThrowableUC.WeatherTrow(Throwable()) }
 //            }
-            override fun method(request: Request): Flow<ResultUC<TypeRepo>> {
+            override fun method(request: Request): Flow<ResultDomain<TypeRepo>> {
                 return flowOf(result) }
             override fun response(typeRepo: TypeRepo): Response {
                 return response }
         }
         runTest {
             val result = useCase.execute(request).first()
-            Assert.assertTrue((result as ResultUC.Error).throwable is ThrowableUC.WeatherTrow)
+            Assert.assertTrue((result as ResultDomain.Error).throwable is ThrowableUC.WeatherTrow)
         }
     }
 }

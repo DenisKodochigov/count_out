@@ -1,6 +1,6 @@
 package com.count_out.presentation.example.list.prime
 
-import com.count_out.domain.entity.throwable.ResultUC
+import com.count_out.domain.entity.throwable.ResultDomain
 import com.count_out.domain.use_case.UseCase
 import com.count_out.presentation.screens.prime.Event
 import com.count_out.presentation.screens.prime.PrimeConvertor
@@ -72,8 +72,8 @@ class PrimeViewModelTest {
     fun testSubmitState() = runTest {
         val response = ResponseTest(test = "test11111111")
         val expected = ScreenState.Success(response.test)
-        val resultUC = ResultUC.Success(response)
-        viewModel.submitState(resultUC)
+        val resultDomain = ResultDomain.Success(response)
+        viewModel.submitState(resultDomain)
         val result =  viewModel.screenState.value
 //        advanceUntilIdle()
         assertEquals(expected, result)

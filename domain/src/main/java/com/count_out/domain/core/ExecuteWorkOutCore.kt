@@ -1,24 +1,24 @@
 package com.count_out.domain.core
 
-import com.count_out.domain.entity.TypeRepo
-import com.count_out.domain.entity.throwable.ResultUC
+import com.count_out.domain.entity.throwable.ResultDomain
+import com.count_out.domain.entity.workout.Domain
 import com.count_out.domain.repository.ExecuteWorkOutRepo
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 class ExecuteWorkOutCore @Inject constructor(private val repo: ExecuteWorkOutRepo): Core() {
-    fun start(): Flow<ResultUC<TypeRepo>>{
+    fun start(): Flow<ResultDomain<Domain>>{
         return repo.start() }
-    fun stop(): Flow<ResultUC<TypeRepo>>{
+    fun stop(): Flow<ResultDomain<Domain>>{
         return repo.stop() }
-    fun pause(): Flow<ResultUC<TypeRepo>>{
+    fun pause(): Flow<ResultDomain<Domain>>{
         return repo.pause() }
-    fun save(): Flow<ResultUC<TypeRepo>>{
+    fun save(): Flow<ResultDomain<Domain>>{
         return repo.save() }
-    fun upInterval(): Flow<ResultUC<TypeRepo>>{
+    fun upInterval(): Flow<ResultDomain<Domain>>{
         return repo.upInterval() }
-    fun downInterval(): Flow<ResultUC<TypeRepo>>{
+    fun downInterval(): Flow<ResultDomain<Domain>>{
         return repo.downInterval() }
-    fun getPlan(): Flow<ResultUC<TypeRepo>>{
+    fun getPlan(): Flow<ResultDomain<Domain>>{
         return repo.getPlan() }
 }

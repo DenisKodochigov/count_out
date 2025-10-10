@@ -15,7 +15,6 @@ android {
     defaultConfig {
         minSdk = 28
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-//        consumerProguardFiles("consumer-rules.pro")
     }
     repositories {
         google()
@@ -37,10 +36,7 @@ android {
         viewBinding = true
     }
     buildToolsVersion = "35.0.0"
-    kotlin { compilerOptions{
-        jvmTarget = JvmTarget.JVM_17
-//        freeCompilerArgs = listOf("-XXLanguage:+PropertyParamAnnotationDefaultTargetMode")
-    } }
+    kotlin { compilerOptions{ jvmTarget = JvmTarget.JVM_17 } }
 }
 
 dependencies {

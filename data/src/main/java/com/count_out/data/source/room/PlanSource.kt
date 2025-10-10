@@ -1,16 +1,14 @@
 package com.count_out.data.source.room
 
 import com.count_out.data.models.Data
-import com.count_out.data.models.throwable.ResultSource
-import com.count_out.data.models.throwable.ResultSource1
-import com.count_out.data.models.throwable.TypeSource
+import com.count_out.data.models.throwable.ResultData
 import kotlinx.coroutines.flow.Flow
 
 interface PlanSource {
-    fun gets(): Flow<ResultSource<Data>>
-    fun get(plan: TypeSource): Flow<ResultSource<Data>>
-    fun getId(idPlan: TypeSource): Flow<ResultSource<Data>>
-    fun copy(plan: TypeSource): ResultSource<Data>
-    fun update(nameId: TypeSource): ResultSource<Data>
-    fun del(plan: TypeSource): ResultSource<Data>
+    fun gets(): Flow<ResultData<Data>>
+    fun get(plan: Data): Flow<ResultData<Data>>
+    fun getId(idPlan: Data): Flow<ResultData<Data>>
+    fun copy(plan: Data): ResultData<Data>
+    fun update(nameId: Data): ResultData<Data>
+    fun del(plan: Data): ResultData<Data>
 }

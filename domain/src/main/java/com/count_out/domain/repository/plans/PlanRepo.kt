@@ -1,14 +1,14 @@
 package com.count_out.domain.repository.plans
 
-import com.count_out.domain.entity.TypeRepo
-import com.count_out.domain.entity.throwable.ResultUC
+import com.count_out.domain.entity.throwable.ResultDomain
+import com.count_out.domain.entity.workout.Domain
 import kotlinx.coroutines.flow.Flow
 
 interface PlanRepo {
-    fun get(plan: TypeRepo): Flow<ResultUC<TypeRepo>> //: Flow<Training>
-    fun gets(): Flow<ResultUC<TypeRepo>> //: Flow<List<Training>>
-    fun del(training: TypeRepo): Flow<ResultUC<TypeRepo>> //: Flow<List<Training>>
-    fun copy(training: TypeRepo): Flow<ResultUC<TypeRepo>> //: Flow<List<Training>>
-//    fun select(training: TypeRepo): Flow<ResultUC<TypeRepo>> //: Flow<List<Training>>
-    fun update(nameId: TypeRepo): Flow<ResultUC<TypeRepo>> // Flow<Training>
+    fun get(plan: Domain): Flow<ResultDomain<Domain>> //: Flow<Training>
+    fun gets(): Flow<ResultDomain<Domain>> //: Flow<List<Training>>
+    fun del(training: Domain): Flow<ResultDomain<Domain>> //: Flow<List<Training>>
+    fun copy(training: Domain): Flow<ResultDomain<Domain>> //: Flow<List<Training>>
+//    fun select(training: Domain): Flow<ResultUC<Domain>> //: Flow<List<Training>>
+    fun update(nameId: Domain): Flow<ResultDomain<Domain>> // Flow<Training>
 }

@@ -7,8 +7,6 @@ plugins {
     alias(libs.plugins.serialization)
     alias(libs.plugins.hilt)
     alias(libs.plugins.ksp)
-//    id ("kotlin-parcelize")
-//    alias(libs.plugins.firebase)
     }
 
 android {

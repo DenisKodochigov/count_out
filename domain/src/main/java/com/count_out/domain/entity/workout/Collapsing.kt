@@ -7,4 +7,4 @@ data class Collapsing(
     val exercises: List<Long> = emptyList(),
     val activities: List<Long> = emptyList(),
     var item: Domain? = null
-)
+): Domain

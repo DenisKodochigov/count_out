@@ -1,8 +1,9 @@
 package com.count_out.data.repository
 
+import com.count_out.data.models.Data.Companion.toData
 import com.count_out.data.source.room.PlanSource
-import com.count_out.domain.entity.TypeRepo
-import com.count_out.domain.entity.throwable.ResultUC
+import com.count_out.domain.entity.throwable.ResultDomain
+import com.count_out.domain.entity.workout.Domain
 import com.count_out.domain.repository.plans.PlanRepo
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
@@ -10,22 +11,22 @@ import javax.inject.Inject
 class PlanRepoImpl @Inject constructor(
     private val source: PlanSource): PlanRepo, PrimeRepo() {
 
-    override fun get(plan: TypeRepo): Flow<ResultUC<TypeRepo>> {
-        return source.get(toTypeSource(plan)).convertor()
+    override fun get(plan: Domain): Flow<ResultDomain<Domain>> {
+        return source.get(toData(plan)).convertorFlow()
     }
-    override fun gets(): Flow<ResultUC<TypeRepo>> {
-        return source.gets().convertor() }
+    override fun gets(): Flow<ResultDomain<Domain>> {
+        return source.gets().convertorFlow() }
 
-    override fun del(training: TypeRepo): Flow<ResultUC<TypeRepo>> {
-        return source.del(toTypeSource(training)).nextActionOk { source.gets() }
+    override fun del(training: Domain): Flow<ResultDomain<Domain>> {
+        return source.del(toData(training)).convertor()
     }
-    override fun copy(training: TypeRepo): Flow<ResultUC<TypeRepo>> {
-        return source.copy(toTypeSource(training)).wrapFlow() }
+    override fun copy(training: Domain): Flow<ResultDomain<Domain>> {
+        return source.copy(toData(training)).convertor() }
 
-    override fun update(nameId: TypeRepo): Flow<ResultUC<TypeRepo>> {
-        return source.update(toTypeSource(nameId)).wrapFlow() }
+    override fun update(nameId: Domain): Flow<ResultDomain<Domain>> {
+        return source.update(toData(nameId)).convertor() }
 }
-//override fun select(training: TypeRepo): Flow<ResultUC<TypeRepo>> {
+//override fun select(training: Domain): Flow<ResultUC<Domain>> {
 //        return source.copy(convertorType(training)).concatOk { source.gets() }
 //        source.update(convertorType(training))
 //        return source.gets()

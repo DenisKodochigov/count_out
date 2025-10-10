@@ -1,17 +1,27 @@
 package com.count_out.framework
 
-import com.count_out.data.models.throwable.ResultSource
-import com.count_out.data.models.throwable.ThrowableDS
-import com.count_out.data.models.throwable.TypeSource
-import com.count_out.framework.room.db.plan.PlanTb
+//import com.count_out.data.models.Data
+//import com.count_out.data.models.types_data.LongDb
+//import com.count_out.data.models.throwable.ResultData
+//import com.count_out.data.models.throwable.ThrowableDS
+//import com.count_out.data.models.types_data.BooleanDb
+//import com.count_out.framework.room.db.plan.PlanTb
 
-fun Long.result(): ResultSource<TypeSource.LongT> =
-    if (this > 0L) ResultSource.Success(TypeSource.LongT(this))
-    else ResultSource.Error(ThrowableDS.RequestFailed())
-fun Boolean.result(): ResultSource<TypeSource.BooleanT> =
-    if (this > true) ResultSource.Success(TypeSource.BooleanT(this))
-    else ResultSource.Error(ThrowableDS.RequestFailed())
-fun PlanTb.result(): ResultSource<TypeSource.PlanT> = ResultSource.Success(TypeSource.PlanT(this))
+//fun Long.result(): ResultData<Data> =
+//    if (this > 0L) ResultData.Success(LongDb(this))
+//    else ResultData.Error(ThrowableDS.RequestFailed())
+//fun Boolean.result(): ResultData<Data> =
+//    if (this > true) ResultData.Success(BooleanDb(this))
+//    else ResultData.Error(ThrowableDS.RequestFailed())
+//fun PlanTb.result(): ResultData<Data> = ResultData.Success(this)
+
+//fun Long.result(): ResultSource<TypeSource.LongT> =
+//    if (this > 0L) ResultSource.Success(TypeSource.LongT(this))
+//    else ResultSource.Error(ThrowableDS.RequestFailed())
+//fun Boolean.result(): ResultSource<TypeSource.BooleanT> =
+//    if (this > true) ResultSource.Success(TypeSource.BooleanT(this))
+//    else ResultSource.Error(ThrowableDS.RequestFailed())
+//fun PlanTb.result(): ResultSource<TypeSource.PlanT> = ResultSource.Success(TypeSource.PlanT(this))
 //inline fun <reified TS: TypeSource, DbT> copyEntity(
 //    source: TypeSource,
 //    speechKitSource: SpeechKitSourceImpl,

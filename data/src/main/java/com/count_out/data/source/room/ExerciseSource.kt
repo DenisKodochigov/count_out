@@ -1,6 +1,7 @@
 package com.count_out.data.source.room
 
-import com.count_out.data.models.throwable.ResultSource
+import com.count_out.data.models.Data
+import com.count_out.data.models.throwable.ResultData
 import com.count_out.data.models.throwable.TypeSource
 
 /**
@@ -20,8 +21,8 @@ import com.count_out.data.models.throwable.TypeSource
  *  setActivityIntoExerciseImplD - меняет ID Activity в ExerciseImplD
  */
 interface ExerciseSource {
-    fun copy(exercise: TypeSource): ResultSource<TypeSource>
-    fun del(exercise: TypeSource): ResultSource<TypeSource>
-    fun update(exercise: TypeSource): ResultSource<TypeSource>
-    fun changeSequenceExercise(setViewId: TypeSource): ResultSource<TypeSource>
+    fun copy(exercise: Data): ResultData<Data>
+    fun del(exercise: Data): ResultData<Data>
+    fun update(exercise: Data): ResultData<Data>
+    fun changeSequenceExercise(setViewId: Data): ResultData<Data>
 }

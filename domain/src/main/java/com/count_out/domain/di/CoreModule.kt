@@ -14,7 +14,7 @@ import com.count_out.domain.core.plans.RoundCore
 import com.count_out.domain.core.plans.SetCore
 import com.count_out.domain.core.plans.SettingsCore
 import com.count_out.domain.core.plans.SpeechCore
-import com.count_out.domain.core.plans.TrainingCore
+import com.count_out.domain.core.plans.PlanCore
 import com.count_out.domain.repository.BluetoothRepo
 import com.count_out.domain.repository.CountOutServiceRepo
 import com.count_out.domain.repository.ExecuteWorkOutRepo
@@ -79,7 +79,7 @@ class CoreModule {
 //    @Singleton @Provides
 //    fun provideSpeechKitCore(repo: SpeechKitRepo ): SpeechKitCore = SpeechKitCore(repo)
     @Singleton @Provides
-    fun provideTrainingCore(repo: PlanRepo ): TrainingCore = TrainingCore(repo)
+    fun provideTrainingCore(repo: PlanRepo ): PlanCore = PlanCore(repo)
     @Singleton @Provides
     fun provideBluetoothCore(repo: BluetoothRepo, repoSet: SettingsRepo ): BluetoothCore =
         BluetoothCore(repo, repoSet)

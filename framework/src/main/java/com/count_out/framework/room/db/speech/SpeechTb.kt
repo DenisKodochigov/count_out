@@ -63,4 +63,4 @@ data class SpeechTb(
     override var message: String = "",
     override var duration: Long = 0L,
     override var addMessage: String = "",
-): SpeechDb
+): SpeechDb()

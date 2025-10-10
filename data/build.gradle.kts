@@ -3,7 +3,6 @@ import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 plugins {
     alias(libs.plugins.androidLibrary)
     alias(libs.plugins.jetbrainsKotlinAndroid)
-//    alias(libs.plugins.mannodermaus)
     alias(libs.plugins.hilt)
     alias(libs.plugins.ksp)
 }
@@ -15,7 +14,6 @@ android {
     defaultConfig {
         minSdk = 28
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-//        consumerProguardFiles("consumer-rules.pro")
     }
     repositories {
         google()
@@ -37,17 +35,12 @@ android {
         viewBinding = true
     }
     buildToolsVersion = "35.0.0"
-    kotlin { compilerOptions{
-        jvmTarget = JvmTarget.JVM_17
-//        freeCompilerArgs = listOf("-XXLanguage:+PropertyParamAnnotationDefaultTargetMode")
-    } }
+    kotlin { compilerOptions{ jvmTarget = JvmTarget.JVM_17 } }
 }
 
 dependencies {
     implementation(project(":domain"))
-//    implementation(project(":app"))
     implementation(libs.core.ktx)
-    //Hilt
     implementation (libs.bundles.hilt)
     ksp (libs.bundles.hiltksp)
 

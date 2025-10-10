@@ -1,15 +1,15 @@
 package com.count_out.data.source.local
 
-import com.count_out.data.models.throwable.ResultSource
-import com.count_out.data.models.throwable.TypeSource
+import com.count_out.data.models.Data
+import com.count_out.data.models.throwable.ResultData
 import kotlinx.coroutines.flow.Flow
 
 interface SettingsSource {
-    fun getSettings(): Flow<ResultSource<TypeSource>>
-    fun getSettingSpeechDescr(): Flow<ResultSource<TypeSource>>
-    fun getBleAddress(): Flow<ResultSource<TypeSource>>
-    fun getBleName(): Flow<ResultSource<TypeSource>>
-    fun saveBleName(settings: TypeSource): Flow<ResultSource<TypeSource>>
-    fun saveBleAddress(settings: TypeSource): Flow<ResultSource<TypeSource>>
-    fun saveSettingSpeechDescr(settings: TypeSource): Flow<ResultSource<TypeSource>>
+    fun getSettings(): Flow<ResultData<Data>>
+    fun getSettingSpeechDescr(): Flow<ResultData<Data>>
+    fun getBleAddress(): Flow<ResultData<Data>>
+    fun getBleName(): Flow<ResultData<Data>>
+    fun saveBleName(settings: Data): Flow<ResultData<Data>>
+    fun saveBleAddress(settings: Data): Flow<ResultData<Data>>
+    fun saveSettingSpeechDescr(settings: Data): Flow<ResultData<Data>>
 }

@@ -1,9 +1,11 @@
 package com.count_out.data.repository
 
+import com.count_out.data.models.Data.Companion.toData
+import com.count_out.data.models.SettingsDb
 import com.count_out.data.source.local.SettingsSource
 import com.count_out.domain.entity.Settings
-import com.count_out.domain.entity.TypeRepo
-import com.count_out.domain.entity.throwable.ResultUC
+import com.count_out.domain.entity.throwable.ResultDomain
+import com.count_out.domain.entity.workout.Domain
 import com.count_out.domain.repository.plans.SettingsRepo
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
@@ -12,16 +14,16 @@ import javax.inject.Inject
 class SettingsRepoImpl @Inject constructor(
     private val settingsSource: SettingsSource): SettingsRepo, PrimeRepo() {
 
-    override fun getSettings(): Flow<ResultUC<TypeRepo>> = settingsSource.getSettings().convertor()
-    override fun saveSetting(setting: TypeRepo): Flow<ResultUC<TypeRepo>> {
-        return if (setting is TypeRepo.SettingsT){
-            when(setting.item){
+    override fun getSettings(): Flow<ResultDomain<Domain>> = settingsSource.getSettings().convertorFlow()
+    override fun saveSetting(setting: Domain): Flow<ResultDomain<Domain>> {
+        return if (setting is Settings){
+            when(setting){
                 is Settings.NameBle -> {
-                    settingsSource.saveBleName(toTypeSource(setting)).convertor()}
+                    settingsSource.saveBleName(toData(setting)).convertorFlow()}
                 is Settings.AddressBle -> {
-                    settingsSource.saveBleAddress(toTypeSource(setting)).convertor()}
+                    settingsSource.saveBleAddress(toData(setting)).convertorFlow()}
                 is Settings.SpeechDescription -> {
-                    settingsSource.saveSettingSpeechDescr(toTypeSource(setting)).convertor()}
+                    settingsSource.saveSettingSpeechDescr(toData(setting)).convertorFlow()}
             }
         } else flowOf(throwableNull)
     }

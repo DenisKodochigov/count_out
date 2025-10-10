@@ -13,5 +13,11 @@ interface SpeechKit: Domain {
             override val beforeEnd: Speech = Speech.EMPTY
             override val afterEnd: Speech = Speech.EMPTY
         }
+        fun fill(list: List<Speech>) = object: SpeechKit{
+            override val beforeStart: Speech = list[0]
+            override val afterStart: Speech = list[1]
+            override val beforeEnd: Speech = list[2]
+            override val afterEnd: Speech = list[3]
+        }
     }
 }

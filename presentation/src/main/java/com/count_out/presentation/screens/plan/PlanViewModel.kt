@@ -4,6 +4,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.count_out.domain.entity.SetViewId
 import com.count_out.domain.entity.supportive.NameId
+import com.count_out.domain.entity.types_domai.LongDm
 import com.count_out.domain.entity.workout.Collapsing
 import com.count_out.domain.entity.workout.Exercise
 import com.count_out.domain.entity.workout.Set
@@ -53,7 +54,6 @@ import javax.inject.Inject
 
     override fun routeEvent(event: Event) {
         when (event) {
-//            is PlanEvent.BackScreen -> { navigate.backStack()}
             is PlanEvent.UpdatePlanName -> { updatePlan(event.nameID)}
             is PlanEvent.CopyExercise -> { copyExercise(event.exercise) }
             is PlanEvent.DelExercise -> { deleteExercise(event.exercise) }
@@ -65,7 +65,6 @@ import javax.inject.Inject
             is PlanEvent.ShowBS -> { showBottomSheet(event.item) }
             is PlanEvent.SetCollapsing -> { collapsingSet(event.item) }
             is PlanEvent.UpdateSpeech -> { updateSpeech(event.item) }
-//            is PlanEvent.Init -> { init(event.item) }
         }
     }
     init{
@@ -77,7 +76,7 @@ import javax.inject.Inject
 
     fun getPlan(id: Long) {
         viewModelScope.launch(Dispatchers.IO) {
-            getPlanUC.execute( GetPlanUC.Request(idPlan = id))
+            getPlanUC.execute( GetPlanUC.Request(idPlan = LongDm(id)))
                  .collect { submitState( it ) }
         }
     }

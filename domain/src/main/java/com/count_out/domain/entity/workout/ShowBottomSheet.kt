@@ -12,4 +12,4 @@ data class ShowBottomSheet(
     val selectBleDevice: Boolean = false,
     val show: Boolean = false,
     val domain: Domain? = null
-)
+): Domain

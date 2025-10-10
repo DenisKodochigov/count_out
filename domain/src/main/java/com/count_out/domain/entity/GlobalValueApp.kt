@@ -2,7 +2,8 @@ package com.count_out.domain.entity
 
 import com.count_out.domain.entity.enums.Goal
 import com.count_out.domain.entity.enums.Units
-import com.count_out.domain.entity.throwable.ResultUC
+import com.count_out.domain.entity.throwable.ResultDomain
+import com.count_out.domain.entity.workout.Domain
 import com.count_out.domain.entity.workout.Exercise
 import com.count_out.domain.entity.workout.Part
 import com.count_out.domain.entity.workout.Plan
@@ -10,29 +11,28 @@ import com.count_out.domain.entity.workout.Set
 import kotlinx.coroutines.flow.MutableStateFlow
 
 object GlobalValueApp {
-    var planLast: MutableStateFlow<ResultUC<TypeRepo>?> = MutableStateFlow(null)
+    var planLast: MutableStateFlow<ResultDomain<Domain>?> = MutableStateFlow(null)
 
-    fun toStepPlan(plan: Plan): StepPlan{
+    fun toStepPlan(plan: Plan?): StepPlan{
         var numberExercise = 1
         var exerciseCount = 0
         val list: MutableList<StepPlan> = mutableListOf()
 
-        return plan.parts.forEach { part->
-
-            part.rings.forEachIndexed { indR, ring-> exerciseCount += ring.exercises.count() }
-            part.rings.forEachIndexed { indR, ring->
+        return plan?.let { it.parts.forEach { part ->
+            part.rings.forEachIndexed { indR, ring -> exerciseCount += ring.exercises.count() }
+            part.rings.forEachIndexed { indR, ring ->
                 ring.exercises.forEachIndexed { indE, exercise ->
-                    if (list.isNotEmpty()){
+                    if (list.isNotEmpty()) {
                         val nextExercise = nextExercise(exercise)
-                        for (ind in list.lastIndex downTo 0){
-                            if (list[ind].nextExercise == null){
+                        for (ind in list.lastIndex downTo 0) {
+                            if (list[ind].nextExercise == null) {
                                 list[ind].nextExercise = nextExercise
                             }
                         }
                     }
-                    exercise.sets.forEachIndexed { indS, set->
+                    exercise.sets.forEachIndexed { indS, set ->
                         list.add(
-                            object: StepPlan{
+                            object : StepPlan {
                                 override val idPlan: Long = plan.idPlan
                                 override val namePlan: String = plan.name
                                 override val part: Part? = part
@@ -45,10 +45,10 @@ object GlobalValueApp {
                                 override val quantitySet: Int = exercise.sets.count()
                             })
                     }
-                    numberExercise ++
+                    numberExercise++
                 }
             }
-        }.run { if (list.isNotEmpty()) list[0] else
+        } }.run { if (list.isNotEmpty()) list[0] else
             object: StepPlan{
                 override val idPlan: Long = 1
                 override val namePlan: String = ""

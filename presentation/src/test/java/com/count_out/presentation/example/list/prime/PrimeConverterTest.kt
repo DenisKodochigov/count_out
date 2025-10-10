@@ -1,6 +1,6 @@
 package com.count_out.presentation.example.list.prime
 
-import com.count_out.domain.entity.throwable.ResultUC
+import com.count_out.domain.entity.throwable.ResultDomain
 import com.count_out.domain.entity.throwable.ThrowableUC
 import com.count_out.presentation.screens.prime.PrimeConvertor
 import com.count_out.presentation.screens.prime.ScreenState
@@ -21,7 +21,7 @@ class PrimeConverterTest {
         val state = MutableStateFlow("state")
         val exception = mock<ThrowableUC.TrainingThrow>()
         whenever(exception.localizedMessage).thenReturn(errorMessage)
-        val errorResult = ResultUC.Error(exception)
+        val errorResult = ResultDomain.Error(exception)
         val result = converter.make(errorResult, state)
         Assert.assertEquals(ScreenState.Error(errorMessage), result)
     }
@@ -30,7 +30,7 @@ class PrimeConverterTest {
     fun testConvertSuccess() {
         val data = "data"
         val state = MutableStateFlow("state")
-        val successResult = ResultUC.Success(data)
+        val successResult = ResultDomain.Success(data)
         val result = converter.make(successResult, state)
         Assert.assertEquals(ScreenState.Success("result${data}"), result)
     }

@@ -1,18 +1,20 @@
 package com.count_out.framework.room.source
 
-import com.count_out.data.models.throwable.ResultSource
+import com.count_out.data.models.Data
+import com.count_out.data.models.SpeechDb
+import com.count_out.data.models.throwable.ResultData
 import com.count_out.data.models.throwable.ThrowableDS
 import com.count_out.data.models.throwable.TypeSource
+import com.count_out.data.models.types_data.LongDb
 import com.count_out.data.source.PrimeSource
 import com.count_out.data.source.room.SpeechSource
-import com.count_out.domain.entity.workout.Speech
 import com.count_out.framework.room.db.speech.SpeechDao
 import com.count_out.framework.room.db.speech.SpeechTb
 import javax.inject.Inject
 
 class SpeechSourceImpl @Inject constructor(private val dao: SpeechDao): SpeechSource, PrimeSource() {
 
-    override fun update(speech: TypeSource): ResultSource<TypeSource> {
+    override fun update(speech: Data): ResultData<Data> {
         return speech.use { item-> dao.update(item).toLong() }
     }
 
@@ -24,15 +26,15 @@ class SpeechSourceImpl @Inject constructor(private val dao: SpeechDao): SpeechSo
     fun insert(speeches: List<SpeechTb>): List<Long> = dao.insert(speeches)
     fun insert(speech: SpeechTb): Long = dao.insert(speech)
 
-    inline fun TypeSource.use(crossinline block: (SpeechTb) -> Long): ResultSource<TypeSource> =
-        if (this is TypeSource.SpeechT) {
+    inline fun Data.use(crossinline block: (SpeechTb) -> Long): ResultData<Data> =
+        if (this is SpeechDb) {
             try {
-                block(this.item as SpeechTb).let {
-                if (it > 0) ResultSource.Success(TypeSource.LongT(item = it))
-                else ResultSource.Error(ThrowableDS.RequestFailed())
+                block(this as SpeechTb).let {
+                if (it > 0) ResultData.Success(LongDb(item = it))
+                else ResultData.Error(ThrowableDS.RequestFailed())
             } }
-            catch (e: Exception) { ResultSource.Error(ThrowableDS.extract(e)) }
-        } else ResultSource.Error(ThrowableDS.NotValidType())
+            catch (e: Exception) { ResultData.Error(ThrowableDS.extract(e)) }
+        } else ResultData.Error(ThrowableDS.NotValidType())
 
     fun getListSpeech(
         setId: Long? = null, exerciseId: Long? = null, ringId: Long? = null, partId: Long? = null, planId: Long? = null

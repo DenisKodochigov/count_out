@@ -1,10 +1,10 @@
 package com.count_out.domain.repository
 
-import com.count_out.domain.entity.TypeRepo
-import com.count_out.domain.entity.throwable.ResultUC
+import com.count_out.domain.entity.throwable.ResultDomain
+import com.count_out.domain.entity.workout.Domain
 import kotlinx.coroutines.flow.Flow
 
 interface CountOutServiceRepo {
-    fun bind(): Flow<ResultUC<TypeRepo>>
-    fun unbind(): Flow<ResultUC<TypeRepo>>
+    fun bind(): Flow<ResultDomain<Domain>>
+    fun unbind(): Flow<ResultDomain<Domain>>
 }
