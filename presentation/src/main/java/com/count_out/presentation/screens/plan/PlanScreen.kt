@@ -31,27 +31,22 @@ import com.count_out.presentation.models.Dimen
 import com.count_out.presentation.models.TypeKeyboard
 import com.count_out.presentation.screens.prime.PrimeScreen
 import com.count_out.presentation.screens.plan.PlanEvent.ShowBS
-import com.count_out.presentation.screens.plan.round.Part
+import com.count_out.presentation.screens.plan.part.Part
 import com.count_out.presentation.view_element.TextFieldApp
 import com.count_out.presentation.view_element.bottom_sheet.ShowBottomSheetSpeech
 import com.count_out.presentation.view_element.icons.IconsGroup
 
-@Composable fun PlanScreen(viewModel: PlanViewModel, navigateEvent: NavigateEvent){
-//    LaunchedEffect(Unit) { viewModel.submitEvent(PlanEvent.Init(trainingId)) }
-    PlanScreenCreateView( viewModel = viewModel, navigateEvent )
-}
-
 @SuppressLint("StateFlowValueCalledInComposition")
-@Composable fun PlanScreenCreateView(viewModel: PlanViewModel, navigateEvent: NavigateEvent){
+@Composable fun PlanScreen(viewModel: PlanViewModel, navigateEvent: NavigateEvent){
     viewModel.screenState.collectAsState().value.let { screenState ->
         PrimeScreen(loader = screenState) { dataState ->
             ShowBottomSheetSpeech(dataState, dataState.showBS.plan,
                 R.string.training, dataState.plan)
-            PlanScreenLayout(dataState, navigateEvent)
+            PlanScreenLayout(dataState)
         }
     }
 }
-@Composable fun PlanScreenLayout(dataState: PlanState, navigateEvent: NavigateEvent){
+@Composable fun PlanScreenLayout(dataState: PlanState){
     val focusManager = LocalFocusManager.current
     val interactionSource = remember { MutableInteractionSource() }
     Column(
@@ -64,16 +59,14 @@ import com.count_out.presentation.view_element.icons.IconsGroup
             },
     ){
         Spacer(modifier = Modifier.height(Dimen.width8))
-        NamePlan(dataState = dataState, navigateEvent)
+        NamePlan(dataState = dataState)
         dataState.plan?.parts?.forEach { part ->
             Spacer(modifier = Modifier.height(Dimen.width8))
             Part(dataState = dataState, part = part)
         }
-
-
     }
 }
-@Composable fun NamePlan(dataState: PlanState, navigateEvent: NavigateEvent) {
+@Composable fun NamePlan(dataState: PlanState) {
     val enteredName: MutableState<String> = remember { mutableStateOf(dataState.plan?.name ?: "") }
     if (dataState.plan?.idPlan == 0L) return
     Row( verticalAlignment = Alignment.CenterVertically,

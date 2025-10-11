@@ -1,5 +1,6 @@
 package com.count_out.presentation.screens.plan
 
+import com.count_out.domain.entity.workout.Activity
 import com.count_out.domain.entity.workout.Collapsing
 import com.count_out.domain.entity.workout.Domain
 import com.count_out.domain.entity.workout.Plan
@@ -13,7 +14,7 @@ data class PlanState (
     val plan: Plan? = null,
     val showBS: ShowBottomSheet = ShowBottomSheet(),
     val collapsing: Collapsing = Collapsing(),
-    val activities: List<ActivityImplP> = emptyList(),
+    val activities: List<Activity> = emptyList(),
 
     override var nameSection: String = "",
     override var item: Domain? = null,

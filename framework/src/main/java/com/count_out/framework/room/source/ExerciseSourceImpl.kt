@@ -1,14 +1,11 @@
 package com.count_out.framework.room.source
 
 import com.count_out.data.models.Data
-import com.count_out.data.models.ExerciseDb
-import com.count_out.data.models.SetDb
-import com.count_out.data.models.SetIdViewDb
-import com.count_out.data.models.throwable.ResultData
-import com.count_out.data.models.throwable.ResultData.Companion.flatMap
+import com.count_out.data.models.entity.SetDb
+import com.count_out.data.models.types_data.SetIdViewDb
+import com.count_out.data.models.ResultData
 import com.count_out.data.models.throwable.ThrowableDS
 import com.count_out.data.models.types_data.LongDb
-import com.count_out.data.source.PrimeSource
 import com.count_out.data.source.room.ExerciseSource
 import com.count_out.data.source.room.SetSource
 import com.count_out.framework.room.db.exercise.ExerciseDao
@@ -22,27 +19,22 @@ class ExerciseSourceImpl @Inject constructor(
     private val speechSource: SpeechSourceImpl,
 ): ExerciseSource, PrimeSource() {
 
-    override fun copy(exercise: Data): ResultData<Data> =
-        exercise.safeUse<ExerciseTb, ResultData<Data>> { exerciseTb->
-            var idNew = LongDb(0L)
-            dao.insert(exerciseTb.copy(idExercise = 0L)).result()
-                .flatMap { ownerId->
-                    idNew = ownerId as LongDb
-                    val listSpeech = speechSource.getListSpeech(exerciseId = exerciseTb.idExercise)
-                        .map { it.apply { exerciseId = ownerId.item } }
-                    if (speechSource.insert(listSpeech).count() == listSpeech.count())
-                        ResultData.Success(LongDb(listSpeech.count().toLong()))
-                    else ResultData.Error(ThrowableDS.RequestFailed()) }
-                .flatMap { copySets(exerciseTb.sets, ownerId = idNew) }
-            }
+    override fun copy (exercise: Data): ResultData<Data> = runCatching {
+        copyWithDependencies(
+            original = (exercise as ExerciseTb),
+            originalId = exercise.idExercise,
+            insertMain = { dao.insert(it.copy(idExercise = 0L)) },
+            getSpeeches = { oldId -> speechSource.getListSpeech(exerciseId = oldId) },
+            insertSpeeches = { speechSource.insert(it) },
+            copyNested = { id -> copySets(exercise.sets,id)}
+        )
+    }.getOrElse { ResultData.Error(ThrowableDS.extract(it)) }
 
-    fun copySets(sets: List<SetDb>, ownerId: Data): ResultData<Data> =
+    fun copySets(sets: List<SetDb>, ownerId: Long): ResultData<LongDb> =
         if (sets.isEmpty()) { ResultData.Success(LongDb(0L)) }
         else {
-            sets.map {set-> setSource.copy(
-                (set as SetTb).copy(idSet = 0L, exerciseId = (ownerId as LongDb).item)) }
-                .firstOrNull {it is ResultData.Error}
-                ?: ResultData.Success(LongDb(sets.size.toLong()))
+            sets.map {set-> setSource.copy((set as SetTb).copy(idSet = 0L, exerciseId = ownerId)) }
+                ResultData.Success(LongDb(sets.size.toLong()))
         }
 
     override fun update(exercise: Data): ResultData<Data> =
@@ -68,3 +60,32 @@ class ExerciseSourceImpl @Inject constructor(
     override fun del(exercise: Data): ResultData<Data> =
         exercise.safeUse<ExerciseTb, Long>{ item -> dao.delete(item).toLong() }
 }
+//
+//        exercise.safeUse<ExerciseTb, ResultData<Data>> { exerciseTb->
+//            var idNew = LongDb(0L)
+//            dao.insert(exerciseTb.copy(idExercise = 0L)).longToResult()
+//                .flatMap { ownerId->
+//                    idNew = ownerId as LongDb
+//                    val listSpeech = speechSource.getListSpeech(exerciseId = exerciseTb.idExercise)
+//                        .map { it.apply { exerciseId = ownerId.item } }
+//                    if (speechSource.insert(listSpeech).count() == listSpeech.count())
+//                        ResultData.Success(LongDb(listSpeech.count().toLong()))
+//                    else ResultData.Error(ThrowableDS.RequestFailed()) }
+//                .flatMap { copySets(exerciseTb.sets, ownerId = idNew) }
+//            }
+//
+//    override fun copy(exercise: Data): ResultData<Data> =
+//        (exercise as? ExerciseTb)?.let { exerciseTb ->
+//            val newId = dao.insert(exerciseTb.copy(idExercise = 0L))
+//            newId.longToResult { LongDb(it) }
+//                .flatMapCondition<LongDb, SpeechesDb>({ it.item.isNotEmpty() }) { newId1 ->
+//                    speechSource.getListSpeech(ringId = exerciseTb.idExercise)
+//                        .map { it.apply { ringId = newId1.item } as SpeechTb }
+//                        .let { SpeechesDb(item = it).toResultData() }
+//                }
+//                .flatMapCondition({vl-> vl.item.isNotEmpty()}){speeches-> ///<SpeechesDb, LongesDb>
+//                    speechSource.insert(speeches.item.map { it as SpeechTb })
+//                        .listToResult({ LongesDb(it) })}
+//                .flatMapCondition({ vl -> vl.item > 0L }) {  //<LongesDb, LongDb>
+//                    copySets(exerciseTb.sets, ownerId = newId) }
+//        } ?: ResultData.Error(ThrowableDS.NotValidType())

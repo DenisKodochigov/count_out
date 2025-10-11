@@ -1,8 +1,8 @@
 package com.count_out.data.models.types_data
 
 import com.count_out.data.models.Data
-import com.count_out.data.models.PlanDb
-import com.count_out.data.models.throwable.ResultData
+import com.count_out.data.models.entity.PlanDb
+import com.count_out.data.models.ResultData
 import com.count_out.data.models.throwable.ThrowableDS
 import com.count_out.domain.entity.workout.Domain
 

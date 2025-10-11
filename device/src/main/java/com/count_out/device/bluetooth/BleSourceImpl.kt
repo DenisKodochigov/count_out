@@ -1,12 +1,11 @@
 package com.count_out.device.bluetooth
 
 import com.count_out.data.models.Data
-import com.count_out.data.models.throwable.ResultData
+import com.count_out.data.models.ResultData
 import com.count_out.data.models.throwable.ThrowableDS
 import com.count_out.data.models.types_data.BooleanDb
 import com.count_out.data.models.types_data.LongDb
 import com.count_out.data.models.types_data.MapDb
-import com.count_out.data.source.PrimeSource
 import com.count_out.data.source.framework.BleSource
 import com.count_out.device.bluetooth.models.ResultBle
 import com.count_out.domain.entity.router.DeviceBle
@@ -14,7 +13,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
-class BleSourceImpl @Inject constructor(private val ble: Bluetooth): BleSource, PrimeSource() {
+class BleSourceImpl @Inject constructor(private val ble: Bluetooth): BleSource {
     override fun startScanning(): Flow<ResultData<Data>> {
         val mapDevice: MutableMap<String,DeviceBle> = mutableMapOf()
         return ble.startScanning().map { devUI->

@@ -1,7 +1,8 @@
 package com.count_out.data.repository
 
 import com.count_out.data.models.Data.Companion.toData
-import com.count_out.data.models.throwable.ResultData.Companion.flatMapFlow
+import com.count_out.data.models.ResultData.Companion.convertorFlow
+import com.count_out.data.models.ResultData.Companion.flatMapFlow
 import com.count_out.data.source.local.LastPlanSource
 import com.count_out.data.source.room.PlanSource
 import com.count_out.domain.entity.throwable.ResultDomain
@@ -14,7 +15,7 @@ import javax.inject.Inject
 
 class LastPlanRepoImpl @Inject constructor(
     private val sourceTraining: PlanSource,
-    private val source: LastPlanSource): LastPlanRepo, PrimeRepo()
+    private val source: LastPlanSource): LastPlanRepo
 {
     @OptIn(ExperimentalCoroutinesApi::class)
     override fun getLastUsedPlan(): Flow<ResultDomain<Domain>> =

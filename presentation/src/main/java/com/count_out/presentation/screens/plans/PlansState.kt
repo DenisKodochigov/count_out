@@ -8,6 +8,6 @@ data class PlansState(
     val plans: List<Plan> = emptyList(),
     var selectedId: Long? = null,
     var goToScreenExecuteWorkout: ()->Unit = {},
-    var goToScreenTraining: (Long)->Unit = {},
+    var goToScreenPlan: (Long)->Unit = {},
     override val event:(Event) -> Unit,
 ): DataState

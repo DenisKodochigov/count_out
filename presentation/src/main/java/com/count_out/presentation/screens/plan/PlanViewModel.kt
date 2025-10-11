@@ -1,5 +1,6 @@
 package com.count_out.presentation.screens.plan
 
+import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.count_out.domain.entity.SetViewId
@@ -69,7 +70,7 @@ import javax.inject.Inject
     }
     init{
         val planId: Long? = savedStateHandle["arg1"]
-        planId?.let {  getPlan(it)}
+        planId?.let{ getPlan(it)}
         getActivities()
 //        subscribeSequenceExercise()
     }

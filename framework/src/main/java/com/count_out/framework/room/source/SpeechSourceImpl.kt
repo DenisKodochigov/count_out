@@ -1,12 +1,10 @@
 package com.count_out.framework.room.source
 
 import com.count_out.data.models.Data
-import com.count_out.data.models.SpeechDb
-import com.count_out.data.models.throwable.ResultData
+import com.count_out.data.models.entity.SpeechDb
+import com.count_out.data.models.ResultData
 import com.count_out.data.models.throwable.ThrowableDS
-import com.count_out.data.models.throwable.TypeSource
 import com.count_out.data.models.types_data.LongDb
-import com.count_out.data.source.PrimeSource
 import com.count_out.data.source.room.SpeechSource
 import com.count_out.framework.room.db.speech.SpeechDao
 import com.count_out.framework.room.db.speech.SpeechTb

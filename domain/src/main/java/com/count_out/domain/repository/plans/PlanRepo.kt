@@ -5,7 +5,7 @@ import com.count_out.domain.entity.workout.Domain
 import kotlinx.coroutines.flow.Flow
 
 interface PlanRepo {
-    fun get(plan: Domain): Flow<ResultDomain<Domain>> //: Flow<Training>
+    fun get(idPlan: Domain): Flow<ResultDomain<Domain>> //: Flow<Training>
     fun gets(): Flow<ResultDomain<Domain>> //: Flow<List<Training>>
     fun del(training: Domain): Flow<ResultDomain<Domain>> //: Flow<List<Training>>
     fun copy(training: Domain): Flow<ResultDomain<Domain>> //: Flow<List<Training>>

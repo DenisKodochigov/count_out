@@ -1,34 +1,34 @@
 package com.count_out.data.repository
 
-import com.count_out.data.models.Data
-import com.count_out.data.models.throwable.ResultData
-import com.count_out.data.models.throwable.ResultData.Success
-import com.count_out.domain.entity.throwable.ResultDomain
-import com.count_out.domain.entity.throwable.ThrowableUC
-import com.count_out.domain.entity.workout.Domain
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.filterNotNull
-import kotlinx.coroutines.flow.flowOf
-import kotlinx.coroutines.flow.map
+//import com.count_out.data.models.Data
+//import com.count_out.data.models.ResultData
+//import com.count_out.data.models.ResultData.Success
+//import com.count_out.domain.entity.throwable.ResultDomain
+//import com.count_out.domain.entity.throwable.ThrowableUC
+//import com.count_out.domain.entity.workout.Domain
+//import kotlinx.coroutines.flow.Flow
+//import kotlinx.coroutines.flow.filterNotNull
+//import kotlinx.coroutines.flow.flowOf
+//import kotlinx.coroutines.flow.map
+//
+//abstract class PrimeRepo {
+//    val throwableNull = ResultDomain.Error(ThrowableUC.extract(Exception("return null")))
 
-abstract class PrimeRepo {
-    val throwableNull = ResultDomain.Error(ThrowableUC.extract(Exception("return null")))
-
-    fun Flow<ResultData<Data>?>.convertorFlow(): Flow<ResultDomain<Domain>> {
-        return this.filterNotNull().map{ resultS->
-            when(resultS){
-                is ResultData.Error -> ResultDomain.Error(ThrowableUC.extract(resultS.throwable))
-                is Success -> ResultDomain.Success(resultS.data.toDomain())
-            }
-        }
-    }
-    fun ResultData<Data>.convertor(): Flow<ResultDomain<Domain>> {
-        return flowOf(
-            when (this) {
-                is ResultData.Error -> ResultDomain.Error(ThrowableUC.extract(this.throwable))
-                is Success -> ResultDomain.Success(this.data.toDomain())
-            }
-        ) }
+//    fun Flow<ResultData<Data>?>.convertorFlow(): Flow<ResultDomain<Domain>> {
+//        return this.filterNotNull().map{ resultS->
+//            when(resultS){
+//                is ResultData.Error -> ResultDomain.Error(ThrowableUC.extract(resultS.throwable))
+//                is Success -> ResultDomain.Success(resultS.data.toDomain())
+//            }
+//        }
+//    }
+//    fun ResultData<Data>.convertor(): Flow<ResultDomain<Domain>> {
+//        return flowOf(
+//            when (this) {
+//                is ResultData.Error -> ResultDomain.Error(ThrowableUC.extract(this.throwable))
+//                is Success -> ResultDomain.Success(this.data.toDomain())
+//            }
+//        ) }
 //    fun Flow<ResultSource1<Data>?>.convertor1(): Flow<ResultDomain<Domain>> {
 //        return this.filterNotNull().map{ resultS->
 //            when(resultS){
@@ -164,7 +164,7 @@ abstract class PrimeRepo {
 //            speechDb(kit.beforeEnd),
 //            speechDb(kit.afterEnd),)
 //    }
-}
+//}
 
 
 

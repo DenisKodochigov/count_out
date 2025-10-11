@@ -1,8 +1,8 @@
-package com.count_out.data.models
+package com.count_out.data.models.entity
 
-import com.count_out.data.models.throwable.ResultData
+import com.count_out.data.models.Data
+import com.count_out.data.models.ResultData
 import com.count_out.domain.entity.enums.Goal
-import com.count_out.domain.entity.enums.Units
 import com.count_out.domain.entity.enums.Zone
 import com.count_out.domain.entity.workout.Parameter
 import com.count_out.domain.entity.workout.Set

@@ -1,7 +1,7 @@
-package com.count_out.data.models
+package com.count_out.data.models.entity
 
-import com.count_out.data.models.throwable.ResultData
-import com.count_out.domain.entity.workout.Domain
+import com.count_out.data.models.Data
+import com.count_out.data.models.ResultData
 import com.count_out.domain.entity.workout.Speech
 
 abstract class SpeechDb: Data {

@@ -1,6 +1,6 @@
 package com.count_out.data.source.room
 
-//import com.count_out.data.models.throwable.ResultData
+//import com.count_out.data.models.ResultData
 //import com.count_out.data.models.throwable.TypeSource
 //
 //interface SpeechKitSource {

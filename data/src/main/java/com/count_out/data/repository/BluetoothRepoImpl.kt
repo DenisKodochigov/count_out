@@ -2,9 +2,9 @@ package com.count_out.data.repository
 
 import com.count_out.data.models.Data
 import com.count_out.data.models.Data.Companion.toData
-import com.count_out.data.models.DeviceBleDb
-import com.count_out.data.models.throwable.ResultData
-import com.count_out.data.models.throwable.ResultData.Companion.flatMap
+import com.count_out.data.models.types_data.DeviceBleDb
+import com.count_out.data.models.ResultData
+import com.count_out.data.models.ResultData.Companion.convertorFlow
 import com.count_out.data.models.throwable.ThrowableDS
 import com.count_out.data.models.types_data.BooleanDb
 import com.count_out.data.models.types_data.StringDb
@@ -20,7 +20,7 @@ import javax.inject.Inject
 class BluetoothRepoImpl @Inject constructor(
     private val bleSource: BleSource,
     private val storeDevice: SettingsSource
-): BluetoothRepo, PrimeRepo() {
+): BluetoothRepo {
     override fun startScanning(): Flow<ResultDomain<Domain>> {
         return bleSource.startScanning().convertorFlow() }
 

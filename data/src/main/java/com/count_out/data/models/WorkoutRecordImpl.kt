@@ -1,5 +1,7 @@
 package com.count_out.data.models
 
+import com.count_out.data.models.entity.PlanDb
+
 data class WorkoutRecordImpl(
     var idWorkout: Long = 0L,
     var trainingId: Long = 0,

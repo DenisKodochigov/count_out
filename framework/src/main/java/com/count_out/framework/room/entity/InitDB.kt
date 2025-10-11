@@ -26,7 +26,7 @@ private fun createPlanId0(db: AppDataBase) {
     val idExercise = db.exerciseDao().insert(ExerciseTb(ringId = idRing, activityId = 1, idView = 1))
     insertSpeeches(db, exerId = idExercise)
     val idSet = db.setDao().insert(SetTb(exerciseId = idExercise, name = "",
-        goal = GoalSet.DURATION.ordinal, durationV = 1440.0))
+        goal = 2, durationV = 1440.0))
     insertSpeeches(db, setId = idSet)
 //Заминка
     idPart = db.partDao().insert(PartTb(planId = idPlan))
@@ -110,7 +110,7 @@ private fun createTrainingPlansTesting( db: AppDataBase) {
     insertSpeeches(db, exerId = idExercise)
     var idSet = db.setDao().insert(SetTb(
             exerciseId = idExercise, name = "Set 2", reps = reps, distanceV = 10.0,
-            distanceU = Units.KM.ordinal, timeRestV = rest, goal = GoalSet.DISTANCE.ordinal,
+            distanceU = Units.KM.ordinal, timeRestV = rest, goal = 1,
             weightU = Units.GR.ordinal, durationU = Units.S.ordinal,
         ))
     insertSpeeches(db, setId = idSet, bs = "Старт", ae = "Конец")
@@ -121,7 +121,7 @@ private fun createTrainingPlansTesting( db: AppDataBase) {
             durationV = 15.0,
             durationU = Units.S.ordinal,
             timeRestV = rest,
-            goal = GoalSet.DURATION.ordinal,
+            goal = 2,
             weightU = Units.GR.ordinal,
             distanceU = Units.MT.ordinal,
         ))
@@ -136,7 +136,7 @@ private fun createTrainingPlansTesting( db: AppDataBase) {
             distanceV = 10.0,
             distanceU = Units.KM.ordinal,
             timeRestV = rest,
-            goal = GoalSet.DISTANCE.ordinal,
+            goal = 1,
             weightU = Units.GR.ordinal,
             durationU = Units.S.ordinal,
         ))
@@ -146,7 +146,7 @@ private fun createTrainingPlansTesting( db: AppDataBase) {
     insertSpeeches(db, exerId = idExercise)
     idSet = db.setDao().insert(SetTb(
             exerciseId = idExercise, name = "Set 3", reps = reps, intervalReps = 1.0,
-            timeRestV = rest, goal = GoalSet.COUNT.ordinal, weightU = Units.GR.ordinal,
+            timeRestV = rest, goal = 3, weightU = Units.GR.ordinal,
             distanceU = Units.MT.ordinal, durationU = Units.S.ordinal))
     insertSpeeches(db, setId = idSet, bs = "Старт", ae = "Конец")
     //Упражнение 4
@@ -154,7 +154,7 @@ private fun createTrainingPlansTesting( db: AppDataBase) {
     insertSpeeches(db, exerId = idExercise)
     idSet = db.setDao().insert(SetTb(
             exerciseId = idExercise, name = "Set 4", reps = reps, intervalReps = 1.0,
-            timeRestV = rest, goal = GoalSet.COUNT.ordinal, weightU = Units.GR.ordinal,
+            timeRestV = rest, goal = 3, weightU = Units.GR.ordinal,
             distanceU = Units.MT.ordinal, durationU = Units.S.ordinal))
     insertSpeeches(db, setId = idSet, bs = "Старт", ae = "Конец")
 
@@ -168,7 +168,7 @@ private fun createTrainingPlansTesting( db: AppDataBase) {
     insertSpeeches(db, exerId = idExercise)
     idSet = db.setDao().insert(SetTb(
             exerciseId = idExercise, name = "Set 3", reps = reps, intervalReps = 1.0,
-            timeRestV = rest, goal = GoalSet.COUNT.ordinal, weightU = Units.GR.ordinal,
+            timeRestV = rest, goal = 3, weightU = Units.GR.ordinal,
             distanceU = Units.MT.ordinal, durationU = Units.S.ordinal))
     insertSpeeches(db, setId = idSet, bs = "Старт", ae = "Конец")
 //Заминка
@@ -181,7 +181,7 @@ private fun createTrainingPlansTesting( db: AppDataBase) {
     insertSpeeches(db, exerId = idExercise)
     idSet = db.setDao().insert(SetTb(
             exerciseId = idExercise, name = "Set 4", reps = reps, intervalReps = 1.0,
-            timeRestV = rest, goal = GoalSet.COUNT.ordinal, weightU = Units.GR.ordinal,
+            timeRestV = rest, goal = 3, weightU = Units.GR.ordinal,
             distanceU = Units.MT.ordinal, durationU = Units.S.ordinal))
     insertSpeeches(db, setId = idSet, bs = "Старт", ae = "Конец")
     insertRecordWorkout(db)

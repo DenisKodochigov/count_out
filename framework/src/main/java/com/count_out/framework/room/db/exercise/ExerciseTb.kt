@@ -5,7 +5,7 @@ import androidx.room.ForeignKey
 import androidx.room.ForeignKey.Companion.NO_ACTION
 import androidx.room.Index
 import androidx.room.PrimaryKey
-import com.count_out.data.models.ExerciseDb
+import com.count_out.data.models.entity.ExerciseDb
 import com.count_out.framework.room.db.activity.ActivityTb
 import com.count_out.framework.room.db.ring.RingTb
 import com.count_out.framework.room.db.set.SetTb
@@ -35,12 +35,3 @@ data class ExerciseTb(
     override var sets: List<SetTb> = emptyList(),
     override var activity: ActivityTb? = null,
 ): ExerciseDb()
-//{
-//    constructor(item: ExerciseImplD, speechId: Long = item.speechId, idExercise: Long = item.idExercise): this(
-//        idExercise = idExercise,
-//        ringId = item.ringId,
-//        speechId = speechId,
-//        activityId = item.activityId,
-//        idView = item.idView,
-//    )
-//}

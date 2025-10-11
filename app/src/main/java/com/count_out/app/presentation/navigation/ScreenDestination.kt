@@ -84,7 +84,6 @@ object PlanDestination : ScreenDestination {
 
     @Composable override fun Show(vm: ViewModel, navigateEvent: NavigateEvent) {
         PlanScreen(vm as PlanViewModel, navigateEvent)
-//        PlanScreen(vm as PlanViewModel, arg[0].toLong())
     }
 
     const val ARG = "arg1"

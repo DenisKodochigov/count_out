@@ -32,43 +32,22 @@ class RoomModule {
     @Singleton
     @Provides
     fun provideAppDataBase(@ApplicationContext appContext: Context): AppDataBase {
-        when (mode) {
-            0 -> database = Room.inMemoryDatabaseBuilder( appContext, AppDataBase::class.java).build()
-            1 -> { database = Room.inMemoryDatabaseBuilder(appContext, AppDataBase::class.java)
-                .addCallback(object : RoomDatabase.Callback() {
-                    override fun onCreate(db: SupportSQLiteDatabase) {
-                        super.onCreate(db)
-                        Thread { prepopulateTestDb(database) }.start()
-                    }
-                })
-                .build()
-            }
-            2 -> { database = Room.databaseBuilder(appContext, AppDataBase::class.java, "count_out.db")
-                .addCallback( object: RoomDatabase.Callback(){
-                    override fun onCreate(db: SupportSQLiteDatabase) {
-                        super.onCreate(db)
-                        Thread { prepopulateRealDb(database) }.start()
-                    }
-                })
-                .build()
-            }
-            3 -> {
-                database = Room.inMemoryDatabaseBuilder(appContext, AppDataBase::class.java)
-                    .addCallback(object : RoomDatabase.Callback() {
-                        override fun onCreate(db: SupportSQLiteDatabase) {
-                            super.onCreate(db)
-                            Thread { prepopulateRealDb(database) }.start()
-                        }
-                    })
-                    .build()
-            }
-            else -> {
-                database = Room.databaseBuilder( appContext, AppDataBase::class.java, "count_out.db").build()
-            }
+        val builder = when (mode) {
+            0 -> Room.inMemoryDatabaseBuilder(appContext, AppDataBase::class.java)
+            1 -> Room.inMemoryDatabaseBuilder(appContext, AppDataBase::class.java)
+                .addPrepopulate { prepopulateTestDb(database) }
+            2 -> Room.databaseBuilder(appContext, AppDataBase::class.java, "count_out.db")
+                .addPrepopulate { prepopulateRealDb(database) }
+            3 -> Room.inMemoryDatabaseBuilder(appContext, AppDataBase::class.java)
+                .addPrepopulate { prepopulateRealDb(database) }
+            else -> Room.databaseBuilder(appContext, AppDataBase::class.java, "count_out.db")
         }
-        return database
+        return builder.build().also { database = it }
     }
-
+    private fun RoomDatabase.Builder<AppDataBase>.addPrepopulate(block: () -> Unit) =
+        addCallback(object : RoomDatabase.Callback() {
+            override fun onCreate(db: SupportSQLiteDatabase) { Thread(block).start() }
+        })
     @Singleton
     @Provides
     fun providePlanDao(appDatabase: AppDataBase): PlanDao = appDatabase.planDao()
@@ -97,3 +76,42 @@ class RoomModule {
     @Provides
     fun provideTrackingDao(appDatabase: AppDataBase): TrackingDao = appDatabase.trackingDao()
 }
+//    @Singleton
+//    @Provides
+//    fun provideAppDataBase(@ApplicationContext appContext: Context): AppDataBase {
+//        when (mode) {
+//            0 -> database = Room.inMemoryDatabaseBuilder( appContext, AppDataBase::class.java).build()
+//            1 -> { database = Room.inMemoryDatabaseBuilder(appContext, AppDataBase::class.java)
+//                .addCallback(object : RoomDatabase.Callback() {
+//                    override fun onCreate(db: SupportSQLiteDatabase) {
+//                        super.onCreate(db)
+//                        Thread { prepopulateTestDb(database) }.start()
+//                    }
+//                })
+//                .build()
+//            }
+//            2 -> { database = Room.databaseBuilder(appContext, AppDataBase::class.java, "count_out.db")
+//                .addCallback( object: RoomDatabase.Callback(){
+//                    override fun onCreate(db: SupportSQLiteDatabase) {
+//                        super.onCreate(db)
+//                        Thread { prepopulateRealDb(database) }.start()
+//                    }
+//                })
+//                .build()
+//            }
+//            3 -> {
+//                database = Room.inMemoryDatabaseBuilder(appContext, AppDataBase::class.java)
+//                    .addCallback(object : RoomDatabase.Callback() {
+//                        override fun onCreate(db: SupportSQLiteDatabase) {
+//                            super.onCreate(db)
+//                            Thread { prepopulateRealDb(database) }.start()
+//                        }
+//                    })
+//                    .build()
+//            }
+//            else -> {
+//                database = Room.databaseBuilder( appContext, AppDataBase::class.java, "count_out.db").build()
+//            }
+//        }
+//        return database
+//    }

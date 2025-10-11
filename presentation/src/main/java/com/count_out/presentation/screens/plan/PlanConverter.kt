@@ -1,6 +1,10 @@
 package com.count_out.presentation.screens.plan
 
 import com.count_out.domain.entity.TypeRepo
+import com.count_out.domain.entity.workout.Activities
+import com.count_out.domain.entity.workout.Collapsing
+import com.count_out.domain.entity.workout.Plan
+import com.count_out.domain.entity.workout.ShowBottomSheet
 import com.count_out.domain.use_case.UseCase
 import com.count_out.domain.use_case.other.CollapsingUC
 import com.count_out.domain.use_case.other.ShowBottomSheetUC
@@ -23,25 +27,24 @@ class PlanConverter @Inject constructor(): PrimeConvertor<UseCase.Response, Plan
     }
 
     private fun converterLocal(data: GetPlanUC.Response, state: MutableStateFlow<PlanState>): PlanState {
-        if (data.plan is TypeRepo.PlanT) {
-            state.value = state.value.copy(plan = (data.plan as TypeRepo.PlanT).item) }
+        if (data.plan is Plan) {
+            state.value = state.value.copy(plan = data.plan as Plan) }
         return state.value
     }
     private fun converterLocal(data: GetActivitiesUC.Response, state: MutableStateFlow<PlanState>): PlanState {
-        if (data.activity is TypeRepo.ActivitiesT) {
-            state.value = state.value.copy(
-                activities = (data.activity as TypeRepo.ActivitiesT).item.map { it as ActivityImplP}) }
+        if (data.activity is Activities) {
+            state.value = state.value.copy(activities = (data.activity as Activities).activities) }
         return state.value
     }
 
     private fun converterLocal(data: ShowBottomSheetUC.Response, state: MutableStateFlow<PlanState>): PlanState {
-        if (data.show is TypeRepo.ShowBottomSheetT)
-            state.value = state.value.copy(showBS = (data.show as TypeRepo.ShowBottomSheetT).item)
+        if (data.show is ShowBottomSheet)
+            state.value = state.value.copy(showBS = data.show as ShowBottomSheet)
         return state.value
     }
     private fun converterLocal(data: CollapsingUC.Response, state: MutableStateFlow<PlanState>): PlanState {
-        if (data.collaps is TypeRepo.CollapsingT)
-            state.value = state.value.copy( collapsing = (data.collaps as TypeRepo.CollapsingT).item)
+        if (data.collaps is Collapsing)
+            state.value = state.value.copy( collapsing = data.collaps as Collapsing)
         return state.value
     }
     private fun converterOther( state: MutableStateFlow<PlanState>): PlanState {

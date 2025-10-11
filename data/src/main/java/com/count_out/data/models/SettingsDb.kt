@@ -1,6 +1,5 @@
 package com.count_out.data.models
 
-import com.count_out.data.models.throwable.ResultData
 import com.count_out.domain.entity.workout.Domain
 
 sealed class SettingsDb: Data {

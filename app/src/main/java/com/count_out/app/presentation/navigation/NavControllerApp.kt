@@ -1,5 +1,6 @@
 package com.count_out.app.presentation.navigation
 
+import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
@@ -12,8 +13,8 @@ fun NavHostController.navigateToScreenExecuteWorkout() {
 fun NavHostController.navigateToScreenPlans() {
     this.navigateToScreen(PlansDestination.route)
 }
-fun NavHostController.navigateToScreenTraining(trainingId: Long) {
-    this.navigateToScreen("${PlanDestination.route}/$trainingId")
+fun NavHostController.navigateToScreenPlan(planId: Long) {
+    this.navigateToScreen("${PlanDestination.route}/$planId")
 }
 
 fun NavHostController.navigateToScreen(route: String) = this.navigate(route) { launchSingleTop = true }

@@ -19,8 +19,3 @@ interface PlanDao: PrimeDao<PlanTb> {
     @Query("UPDATE plan_tb SET name = :name WHERE idPlan =:id")
     fun updateName( name: String, id: Long): Int
 }
-//    @Transaction
-//    @Query("SELECT * FROM tb_trainings WHERE idTraining = :id")
-//    fun getPlanRel(id: Long): TrainingRel?
-//@Query("SELECT name FROM tb_trainings WHERE idTraining = :id")
-//fun getName(id: Long): Flow<String?>

@@ -3,9 +3,7 @@ package com.count_out.framework.room.db.plan
 import androidx.room.Entity
 import androidx.room.Index
 import androidx.room.PrimaryKey
-import com.count_out.data.models.Data
-import com.count_out.data.models.PlanDb
-import com.count_out.data.models.throwable.ResultData
+import com.count_out.data.models.entity.PlanDb
 import com.count_out.framework.room.db.part.PartTb
 import com.count_out.framework.room.db.speech.SpeechTb
 

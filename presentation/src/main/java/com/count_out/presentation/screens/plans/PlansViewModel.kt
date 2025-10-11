@@ -32,18 +32,16 @@ import javax.inject.Inject
 
     override fun routeEvent(event: Event) {
         when (event) {
-//            is PlansEvent.BackScreen -> { navigate.backStack()}
-//            is PlansEvent.Edit -> { navigate.goToScreenTraining(event.item) }
             is PlansEvent.Run -> { runTraining(event.item) }
-            is PlansEvent.Gets -> { getTrainings() }
-            is PlansEvent.Copy -> { copyTraining(event.item) }
-            is PlansEvent.Del -> { deleteTraining(event.item) }
+            is PlansEvent.Gets -> { getPlans() }
+            is PlansEvent.Copy -> { copyPlan(event.item) }
+            is PlansEvent.Del -> { deletePlan(event.item) }
             is PlansEvent.UpdateSpeech -> { updateSpeech(event.item) }
         }
     }
 
     init{
-        getTrainings()
+        getPlans()
     }
     private fun runTraining(plan: Plan){
         viewModelScope.launch(Dispatchers.IO) {
@@ -51,18 +49,17 @@ import javax.inject.Inject
                 SelectPlanUC.Request(plan = plan)).collect {
                     submitState( it ) }
         }
-//        navigate.goToScreenExecuteWorkout()
     }
-    private fun getTrainings(){
+    private fun getPlans(){
         viewModelScope.launch(Dispatchers.IO) {
             getPlansUC.execute(GetPlansUC.Request).collect { submitState( it ) }
         } }
-    private fun deleteTraining(plan: Plan){
+    private fun deletePlan(plan: Plan){
         viewModelScope.launch(Dispatchers.IO) {
             delPlanUC.execute( DeletePlanUC.Request(plan)).collect {
                 submitState( it ) }
         }}
-    private fun copyTraining(plan: Plan){
+    private fun copyPlan(plan: Plan){
         viewModelScope.launch(Dispatchers.IO) {
             copyPlanUC.execute( CopyPlanUC.Request(plan)).collect { submitState( it ) }
         } }

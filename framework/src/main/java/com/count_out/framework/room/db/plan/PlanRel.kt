@@ -2,7 +2,6 @@ package com.count_out.framework.room.db.plan
 
 import androidx.room.Embedded
 import androidx.room.Relation
-import com.count_out.data.models.PlanDb
 import com.count_out.framework.room.db.part.PartRel
 import com.count_out.framework.room.db.part.PartTb
 import com.count_out.framework.room.db.speech.SpeechTb

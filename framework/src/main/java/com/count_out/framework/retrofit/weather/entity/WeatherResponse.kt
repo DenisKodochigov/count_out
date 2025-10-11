@@ -1,6 +1,6 @@
 package com.count_out.framework.retrofit.weather.entity
 
-import com.count_out.data.models.WeatherDb
+import com.count_out.data.models.entity.WeatherDb
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 

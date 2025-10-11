@@ -1,4 +1,4 @@
-package com.count_out.presentation.screens.plan.round
+package com.count_out.presentation.screens.plan.part
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -14,34 +14,40 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.count_out.domain.entity.discard
+import com.count_out.domain.entity.enums.PartName
+import com.count_out.domain.entity.enums.RoundType
+import com.count_out.domain.entity.workout.Exercise
 import com.count_out.domain.entity.workout.Part
+import com.count_out.domain.entity.workout.Speech
 import com.count_out.presentation.R
 import com.count_out.presentation.models.Dimen.contourHor2
 import com.count_out.presentation.screens.plan.PlanEvent
 import com.count_out.presentation.screens.plan.PlanEvent.ShowBS
 import com.count_out.presentation.screens.plan.PlanState
+import com.count_out.presentation.view_element.EnumsTo
 import com.count_out.presentation.view_element.TextApp
+import com.count_out.presentation.view_element.bottom_sheet.ShowBottomSheetSpeech
 import com.count_out.presentation.view_element.custom_view.Frame
 import com.count_out.presentation.view_element.icons.IconsCollapsing
 import com.count_out.presentation.view_element.icons.IconsGroup
 
 @Composable fun Part(dataState: PlanState, part: Part){
-//    when(part.roundType){
-//        RoundType.WorkUp -> ShowBottomSheetSpeech(dataState, dataState.showBS.workUp,
-//            R.string.work_up1, part)
-//        RoundType.WorkOut -> ShowBottomSheetSpeech(dataState, dataState.showBS.workOut,
-//            R.string.work_out1, part)
-//        RoundType.WorkDown -> ShowBottomSheetSpeech(dataState, dataState.showBS.workDown,
-//            R.string.work_down1, part)
-//    }
+    when(part.name){
+        PartName.WorkUp -> ShowBottomSheetSpeech(dataState, dataState.showBS.workUp,
+            R.string.work_up1, part)
+        PartName.WorkOut -> ShowBottomSheetSpeech(dataState, dataState.showBS.workOut,
+            R.string.work_out1, part)
+        PartName.WorkDown -> ShowBottomSheetSpeech(dataState, dataState.showBS.workDown,
+            R.string.work_down1, part)
+    }
     Frame(colorAlpha = 0.8f, contour = contourHor2){
         Column( modifier = Modifier.padding(start = 6.dp, bottom = 4.dp, top = 4.dp)){
-            TitleRound(dataState = dataState, part = part)
+            TitlePart(dataState = dataState, part = part)
             ListExercise(dataState = dataState, part = part)
         }
     }
 }
-@Composable fun TitleRound(dataState: PlanState, part: Part){
+@Composable fun TitlePart(dataState: PlanState, part: Part){
     Row( verticalAlignment = Alignment.CenterVertically, modifier = Modifier.padding(end = 6.dp)){
         IconsCollapsing(
             onClick = { setCollapsing(dataState, part) },
@@ -49,7 +55,7 @@ import com.count_out.presentation.view_element.icons.IconsGroup
         Spacer(modifier = Modifier.width(2.dp))
         Column(modifier = Modifier.weight(1f)) {
             TextApp(
-                text = "roundType",//stringResource(id = EnumsTo(part.roundType).string()),
+                text = stringResource(id = EnumsTo(part.name).string()),
                 textAlign = TextAlign.Start,
                 style = MaterialTheme.typography.headlineSmall,)
             TextApp( style = MaterialTheme.typography.bodySmall, fontWeight = FontWeight.Light,
@@ -57,22 +63,7 @@ import com.count_out.presentation.view_element.icons.IconsGroup
                         " / ${part.duration.value.discard(2)} ${ stringResource(id = R.string.min)}",) }
         IconsGroup(
             onClickSpeech = { showSpeechRound(dataState, part) },
-            onClickAddExercise = {
-//                dataState.event(TrainingEvent.CopyExercise(exercise =
-//                    object: Exercise{
-//                        override val idExercise: Long = (exercise as Exercise).idExercise
-//                        override val ringId: Long = (exercise as Exercise).ringId
-//                        override val idView: Int = (exercise as Exercise).idView
-//                        override val activity: Activity? = (activity as Activity)
-//                        override val activityId: Long= (activity as Activity).idActivity
-//                        override val speechId: Long = (exercise as Exercise).speechId
-//                        override val speeches: List<Speech> = (exercise as Exercise).speeches
-//                        override val sets: List<Set> = (exercise as Exercise).sets
-//                        override val amountSet: Int = (exercise as Exercise).amountSet
-//                        override val duration: Parameter = (exercise as Exercise).duration
-//                    }))
-//                    ExerciseImplP(roundId = part.idPart)))
-            })
+            onClickAddRing = { })
         Spacer(modifier = Modifier.width(6.dp))
     }
 }

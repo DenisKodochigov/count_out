@@ -5,7 +5,7 @@ import androidx.room.ForeignKey
 import androidx.room.ForeignKey.Companion.NO_ACTION
 import androidx.room.Index
 import androidx.room.PrimaryKey
-import com.count_out.data.models.SpeechDb
+import com.count_out.data.models.entity.SpeechDb
 import com.count_out.framework.room.db.exercise.ExerciseTb
 import com.count_out.framework.room.db.part.PartTb
 import com.count_out.framework.room.db.plan.PlanTb

@@ -1,6 +1,8 @@
 package com.count_out.data.repository
 
 import com.count_out.data.models.Data.Companion.toData
+import com.count_out.data.models.ResultData.Companion.convertor
+import com.count_out.data.models.ResultData.Companion.convertorFlow
 import com.count_out.data.source.room.PlanSource
 import com.count_out.domain.entity.throwable.ResultDomain
 import com.count_out.domain.entity.workout.Domain
@@ -9,10 +11,10 @@ import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 class PlanRepoImpl @Inject constructor(
-    private val source: PlanSource): PlanRepo, PrimeRepo() {
+    private val source: PlanSource): PlanRepo {
 
-    override fun get(plan: Domain): Flow<ResultDomain<Domain>> {
-        return source.get(toData(plan)).convertorFlow()
+    override fun get(idPlan: Domain): Flow<ResultDomain<Domain>> {
+        return source.get(toData(idPlan)).convertorFlow()
     }
     override fun gets(): Flow<ResultDomain<Domain>> {
         return source.gets().convertorFlow() }

@@ -1,6 +1,11 @@
 package com.count_out.presentation.screens.execute
 
+import com.count_out.domain.entity.StepPlan
 import com.count_out.domain.entity.TypeRepo
+import com.count_out.domain.entity.enums.ConnectState
+import com.count_out.domain.entity.router.DeviceBle
+import com.count_out.domain.entity.types_domai.LongDm
+import com.count_out.domain.entity.workout.ShowBottomSheet
 import com.count_out.domain.use_case.UseCase
 import com.count_out.domain.use_case.bluetooth.GetConnectionStateUC
 import com.count_out.domain.use_case.bluetooth.GetHeartRateUC
@@ -55,28 +60,27 @@ class ExecuteConverter @Inject constructor(): PrimeConvertor<UseCase.Response, E
         return state.value
     }
     private fun makeLocal(data: GetStepPlanUC.Response, state: MutableStateFlow<ExecuteState>): ExecuteState {
-        if (data.step is TypeRepo.StepPlanT)
-            state.value = state.value.copy( stepTraining = (data.step as TypeRepo.StepPlanT).item)
+        state.value = state.value.copy( stepTraining = data.step as StepPlan?)
         return state.value
     }
     private fun makeLocal(data: ShowBottomSheetUC.Response, state: MutableStateFlow<ExecuteState>): ExecuteState {
-        if (data.show is TypeRepo.ShowBottomSheetT)
-            state.value = state.value.copy( showBS = (data.show as TypeRepo.ShowBottomSheetT).item)
+        if (data.show is ShowBottomSheet)
+            state.value = state.value.copy( showBS = data.show as ShowBottomSheet)
         return state.value
     }
     private fun converterLocal(data: GetConnectionStateUC.Response, state: MutableStateFlow<ExecuteState>): ExecuteState {
-        if (data.result is TypeRepo.BleConnectStateT)
-            state.value = state.value.copy( bleConnectState = (data.result as TypeRepo.BleConnectStateT).item)
+        if (data.result is ConnectState)
+            state.value = state.value.copy( bleConnectState = data.result as ConnectState)
         return state.value
     }
     private fun converterLocal(data: GetHeartRateUC.Response, state: MutableStateFlow<ExecuteState>): ExecuteState {
-        if (data.result is TypeRepo.IntT)
-            state.value = state.value.copy( heartRate = (data.result as TypeRepo.IntT).item)
+        if (data.result is LongDm)
+            state.value = state.value.copy( heartRate = (data.result as LongDm).item.toInt())
         return state.value
     }
     private fun converterLocal(data: LastBleDeviceUC.Response, state: MutableStateFlow<ExecuteState>): ExecuteState {
-        if (data.result is TypeRepo.DeviceUIT)
-            state.value = state.value.copy( lastConnectHearthRateDevice = (data.result as TypeRepo.DeviceUIT).item)
+        if (data.result is DeviceBle)
+            state.value = state.value.copy( lastConnectHearthRateDevice = data.result as DeviceBle)
         return state.value
     }
     private fun converterOther( state: MutableStateFlow<ExecuteState>): ExecuteState {

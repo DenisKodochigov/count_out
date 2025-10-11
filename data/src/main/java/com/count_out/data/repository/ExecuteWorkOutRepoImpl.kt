@@ -1,5 +1,6 @@
 package com.count_out.data.repository
 
+import com.count_out.data.models.ResultData.Companion.convertorFlow
 import com.count_out.data.models.types_data.LongDb
 import com.count_out.data.source.room.PlanSource
 import com.count_out.domain.entity.throwable.ResultDomain
@@ -11,7 +12,7 @@ import kotlinx.coroutines.flow.flowOf
 import javax.inject.Inject
 
 class ExecuteWorkOutRepoImpl @Inject constructor(
-    private val source: PlanSource,): ExecuteWorkOutRepo, PrimeRepo()
+    private val source: PlanSource,): ExecuteWorkOutRepo
 {
     override fun start(): Flow<ResultDomain<Domain>> {
         return flowOf(ResultDomain.Success(BooleanDm(item = true)) )}
