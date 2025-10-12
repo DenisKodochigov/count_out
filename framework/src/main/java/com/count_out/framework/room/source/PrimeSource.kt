@@ -1,16 +1,15 @@
 package com.count_out.framework.room.source
 
-import android.util.Log
-import com.count_out.data.models.entity.ActivityDb
 import com.count_out.data.models.Data
-import com.count_out.data.models.types_data.NameIdDb
-import com.count_out.data.models.entity.PlanDb
 import com.count_out.data.models.ResultData
 import com.count_out.data.models.ResultData.Companion.flatMapCondition
+import com.count_out.data.models.entity.ActivityDb
+import com.count_out.data.models.entity.PlanDb
 import com.count_out.data.models.throwable.ThrowableDS
 import com.count_out.data.models.types_data.BooleanDb
 import com.count_out.data.models.types_data.LongDb
 import com.count_out.data.models.types_data.LongesDb
+import com.count_out.data.models.types_data.NameIdDb
 import com.count_out.data.models.types_data.SpeechesDb
 import com.count_out.framework.room.db.speech.SpeechTb
 import kotlinx.coroutines.Dispatchers
@@ -20,7 +19,6 @@ import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
-import kotlin.collections.map
 
 abstract class PrimeSource {
 

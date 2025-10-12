@@ -12,19 +12,19 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.runtime.Composable
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.navigation.NamedNavArgument
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
-import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.count_out.app.presentation.Const.DEFAULT_SCREEN
 import com.count_out.app.presentation.Const.DELAY_SCREEN
 import com.count_out.app.presentation.Const.DURATION_SCREEN
 import com.count_out.presentation.screens.execute.ExecuteViewModel
 import com.count_out.presentation.screens.history.HistoryViewModel
+import com.count_out.presentation.screens.plan.PlanViewModel
 import com.count_out.presentation.screens.plans.PlansViewModel
 import com.count_out.presentation.screens.settings.SettingViewModel
-import com.count_out.presentation.screens.plan.PlanViewModel
 
 fun NavGraphBuilder.executeWorkout(navigateEvent: NavigateEventImpl) {
     template(

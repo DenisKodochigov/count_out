@@ -1,5 +1,6 @@
 package com.count_out.presentation.view_element
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -10,10 +11,13 @@ import androidx.compose.material.icons.automirrored.filled.ArrowBackIos
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.MaterialTheme.colorScheme
 import androidx.compose.material3.MaterialTheme.typography
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 
@@ -53,13 +57,13 @@ fun CollapsingToolbar(
     onClickText: ()->Unit = {},)
 {
     Row(
-        verticalAlignment = Alignment.CenterVertically,
-        modifier = Modifier.padding(top = 0.dp, bottom = 0.dp).fillMaxWidth()
+        verticalAlignment = Alignment.Bottom,
+        modifier = Modifier.padding(top = 0.dp, bottom = 0.dp).fillMaxWidth().background(colorScheme.surfaceContainer)
     ){
         TextAppEllipsis(
             text = text.replaceFirstChar { it.uppercase() },
             selected = selected,
-            style = typography.headlineMedium,
+            style = typography.titleMedium,
             modifier = Modifier.weight(1f).fillMaxWidth().clickable(enabled = true, onClick = { onClickText()})
         )
     }

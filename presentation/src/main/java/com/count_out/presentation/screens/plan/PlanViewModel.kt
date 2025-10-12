@@ -1,6 +1,5 @@
 package com.count_out.presentation.screens.plan
 
-import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.count_out.domain.entity.SetViewId

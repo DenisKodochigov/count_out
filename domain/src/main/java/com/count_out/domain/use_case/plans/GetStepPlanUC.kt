@@ -1,8 +1,6 @@
 package com.count_out.domain.use_case.plans
 
 import com.count_out.domain.entity.GlobalValueApp
-import com.count_out.domain.entity.StepPlan
-import com.count_out.domain.entity.TypeRepo.NullT.toStepPlan
 import com.count_out.domain.entity.throwable.ResultDomain
 import com.count_out.domain.entity.workout.Domain
 import com.count_out.domain.entity.workout.Plan

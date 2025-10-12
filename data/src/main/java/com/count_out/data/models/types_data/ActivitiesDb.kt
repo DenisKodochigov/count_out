@@ -1,8 +1,8 @@
 package com.count_out.data.models.types_data
 
-import com.count_out.data.models.entity.ActivityDb
 import com.count_out.data.models.Data
 import com.count_out.data.models.ResultData
+import com.count_out.data.models.entity.ActivityDb
 import com.count_out.domain.entity.workout.Activities
 import com.count_out.domain.entity.workout.Activity
 

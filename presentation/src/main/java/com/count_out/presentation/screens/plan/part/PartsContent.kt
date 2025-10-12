@@ -15,10 +15,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.count_out.domain.entity.discard
 import com.count_out.domain.entity.enums.PartName
-import com.count_out.domain.entity.enums.RoundType
-import com.count_out.domain.entity.workout.Exercise
 import com.count_out.domain.entity.workout.Part
-import com.count_out.domain.entity.workout.Speech
 import com.count_out.presentation.R
 import com.count_out.presentation.models.Dimen.contourHor2
 import com.count_out.presentation.screens.plan.PlanEvent

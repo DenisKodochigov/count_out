@@ -2,7 +2,6 @@ package com.count_out.framework.room.db.exercise
 
 import androidx.room.Embedded
 import androidx.room.Relation
-import androidx.room.TypeConverters
 import com.count_out.framework.room.db.activity.ActivityTb
 import com.count_out.framework.room.db.set.SetRel
 import com.count_out.framework.room.db.set.SetTb

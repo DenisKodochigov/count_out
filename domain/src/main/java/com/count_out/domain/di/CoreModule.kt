@@ -10,11 +10,11 @@ import com.count_out.domain.core.ShowBSCore
 import com.count_out.domain.core.WeatherCore
 import com.count_out.domain.core.plans.ActivityCore
 import com.count_out.domain.core.plans.ExerciseCore
+import com.count_out.domain.core.plans.PlanCore
 import com.count_out.domain.core.plans.RoundCore
 import com.count_out.domain.core.plans.SetCore
 import com.count_out.domain.core.plans.SettingsCore
 import com.count_out.domain.core.plans.SpeechCore
-import com.count_out.domain.core.plans.PlanCore
 import com.count_out.domain.repository.BluetoothRepo
 import com.count_out.domain.repository.CountOutServiceRepo
 import com.count_out.domain.repository.ExecuteWorkOutRepo
@@ -23,11 +23,11 @@ import com.count_out.domain.repository.LocationRepo
 import com.count_out.domain.repository.WeatherRepo
 import com.count_out.domain.repository.plans.ActivityRepo
 import com.count_out.domain.repository.plans.ExerciseRepo
+import com.count_out.domain.repository.plans.PlanRepo
 import com.count_out.domain.repository.plans.RoundRepo
 import com.count_out.domain.repository.plans.SetRepo
 import com.count_out.domain.repository.plans.SettingsRepo
 import com.count_out.domain.repository.plans.SpeechRepo
-import com.count_out.domain.repository.plans.PlanRepo
 import com.count_out.domain.use_case.UseCase
 import com.count_out.domain.use_case.other.CountOutServiceBindUC
 import com.count_out.domain.use_case.other.CountOutServiceUnBindUC
@@ -35,8 +35,8 @@ import com.count_out.domain.use_case.other.GetWeatherUC
 import com.count_out.domain.use_case.plans.CopyPlanUC
 import com.count_out.domain.use_case.plans.DeletePlanUC
 import com.count_out.domain.use_case.plans.GetPlanUC
-import com.count_out.domain.use_case.plans.GetStepPlanUC
 import com.count_out.domain.use_case.plans.GetPlansUC
+import com.count_out.domain.use_case.plans.GetStepPlanUC
 import com.count_out.domain.use_case.plans.SaveLastUsePlanUC
 import com.count_out.domain.use_case.plans.SelectPlanUC
 import com.count_out.domain.use_case.plans.UpdateNamePlanUC

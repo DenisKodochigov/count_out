@@ -1,7 +1,5 @@
 package com.count_out.presentation.screens.plans
 
-import android.util.Log
-import com.count_out.domain.entity.TypeRepo
 import com.count_out.domain.entity.types_domai.LongDm
 import com.count_out.domain.entity.types_domai.PlansDm
 import com.count_out.domain.use_case.UseCase

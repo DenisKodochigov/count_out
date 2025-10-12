@@ -3,9 +3,9 @@ package com.count_out.data.models.entity
 import com.count_out.data.models.Data
 import com.count_out.data.models.ResultData
 import com.count_out.domain.entity.enums.PartName
-import com.count_out.domain.entity.workout.Part
 import com.count_out.domain.entity.workout.Domain
 import com.count_out.domain.entity.workout.Parameter
+import com.count_out.domain.entity.workout.Part
 import com.count_out.domain.entity.workout.Ring
 import com.count_out.domain.entity.workout.SpeechKit
 

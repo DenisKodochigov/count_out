@@ -1,6 +1,5 @@
 package com.count_out.presentation.screens.plan
 
-import com.count_out.domain.entity.TypeRepo
 import com.count_out.domain.entity.workout.Activities
 import com.count_out.domain.entity.workout.Collapsing
 import com.count_out.domain.entity.workout.Plan
@@ -10,7 +9,6 @@ import com.count_out.domain.use_case.other.CollapsingUC
 import com.count_out.domain.use_case.other.ShowBottomSheetUC
 import com.count_out.domain.use_case.plans.GetPlanUC
 import com.count_out.domain.use_case.plans.activity.GetActivitiesUC
-import com.count_out.presentation.models.ActivityImplP
 import com.count_out.presentation.screens.prime.PrimeConvertor
 import kotlinx.coroutines.flow.MutableStateFlow
 import javax.inject.Inject

@@ -1,6 +1,5 @@
 package com.count_out.domain.usecase
 
-import com.count_out.domain.entity.TypeRepo
 import com.count_out.domain.entity.throwable.ResultDomain
 import com.count_out.domain.entity.throwable.ThrowableUC
 import com.count_out.domain.entity.workout.Domain

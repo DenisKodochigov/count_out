@@ -32,7 +32,9 @@ data class ExecuteState(
     val showBS: ShowBottomSheet = ShowBottomSheet(),
 
     @Stable var startTime: Long = 0L,
-    override val event: (Event) -> Unit,
+    override val event: (Event) -> Unit = {},
+
+    var goToScreenPlans: ()->Unit = {},
 ): DataState
 
 

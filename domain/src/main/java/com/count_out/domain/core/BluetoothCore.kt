@@ -1,7 +1,6 @@
 package com.count_out.domain.core
 
 import com.count_out.domain.entity.Settings
-import com.count_out.domain.entity.TypeRepo
 import com.count_out.domain.entity.router.DeviceBle
 import com.count_out.domain.entity.throwable.ResultDomain
 import com.count_out.domain.entity.throwable.ThrowableUC
@@ -15,7 +14,6 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flatMapConcat
-import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject

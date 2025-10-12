@@ -2,7 +2,6 @@ package com.count_out.presentation.view_element
 
 import com.count_out.domain.entity.enums.ConnectState
 import com.count_out.domain.entity.enums.PartName
-import com.count_out.domain.entity.enums.RoundType
 import com.count_out.presentation.R
 
 data class EnumsTo(val item: Any){

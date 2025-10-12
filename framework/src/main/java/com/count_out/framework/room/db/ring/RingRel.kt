@@ -2,7 +2,6 @@ package com.count_out.framework.room.db.ring
 
 import androidx.room.Embedded
 import androidx.room.Relation
-import androidx.room.TypeConverters
 import com.count_out.framework.room.db.exercise.ExerciseRel
 import com.count_out.framework.room.db.exercise.ExerciseTb
 import com.count_out.framework.room.db.speech.SpeechTb

@@ -1,10 +1,8 @@
 package com.count_out.framework.room.db.traking
 
 import androidx.room.Dao
-import androidx.room.Insert
 import androidx.room.Query
 import com.count_out.framework.room.db.PrimeDao
-import com.count_out.framework.room.db.speech.SpeechTb
 
 @Dao
 interface TrackingDao: PrimeDao<TemporaryTb> {

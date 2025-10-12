@@ -1,7 +1,6 @@
 package com.count_out.presentation.screens.execute
 
 import com.count_out.domain.entity.StepPlan
-import com.count_out.domain.entity.TypeRepo
 import com.count_out.domain.entity.enums.ConnectState
 import com.count_out.domain.entity.router.DeviceBle
 import com.count_out.domain.entity.types_domai.LongDm

@@ -1,6 +1,5 @@
 package com.count_out.presentation.screens.plans
 
-import android.util.Log
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -25,7 +24,6 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavHostController
 import com.count_out.domain.entity.NavigateEvent
 import com.count_out.domain.entity.workout.Plan
 import com.count_out.presentation.R
@@ -42,7 +40,6 @@ import com.count_out.presentation.view_element.icons.IconsGroup
 
 @Composable
 fun PlansScreen(vm: PlansViewModel, navigateEvent: NavigateEvent) {
-//    LaunchedEffect(Unit) { vm.submitEvent(PlansEvent.Gets) }
     PlansScreenCreateView(vm, navigateEvent)
 }
 

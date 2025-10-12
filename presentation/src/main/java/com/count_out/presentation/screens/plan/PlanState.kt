@@ -5,7 +5,6 @@ import com.count_out.domain.entity.workout.Collapsing
 import com.count_out.domain.entity.workout.Domain
 import com.count_out.domain.entity.workout.Plan
 import com.count_out.domain.entity.workout.ShowBottomSheet
-import com.count_out.presentation.models.ActivityImplP
 import com.count_out.presentation.models.BottomSheetInterface
 import com.count_out.presentation.screens.prime.DataState
 import com.count_out.presentation.screens.prime.Event

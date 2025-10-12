@@ -29,9 +29,9 @@ import com.count_out.domain.entity.supportive.NameId
 import com.count_out.presentation.R
 import com.count_out.presentation.models.Dimen
 import com.count_out.presentation.models.TypeKeyboard
-import com.count_out.presentation.screens.prime.PrimeScreen
 import com.count_out.presentation.screens.plan.PlanEvent.ShowBS
 import com.count_out.presentation.screens.plan.part.Part
+import com.count_out.presentation.screens.prime.PrimeScreen
 import com.count_out.presentation.view_element.TextFieldApp
 import com.count_out.presentation.view_element.bottom_sheet.ShowBottomSheetSpeech
 import com.count_out.presentation.view_element.icons.IconsGroup

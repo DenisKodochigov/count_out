@@ -1,7 +1,5 @@
 package com.count_out.domain.entity.workout
 
-import kotlin.collections.get
-
 interface SpeechKit: Domain {
     val beforeStart: Speech
     val afterStart: Speech

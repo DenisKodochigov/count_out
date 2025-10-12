@@ -1,5 +1,6 @@
 package com.count_out.domain.entity
 
+import android.util.Log
 import com.count_out.domain.entity.enums.Goal
 import com.count_out.domain.entity.enums.Units
 import com.count_out.domain.entity.throwable.ResultDomain
@@ -18,7 +19,7 @@ object GlobalValueApp {
         var exerciseCount = 0
         val list: MutableList<StepPlan> = mutableListOf()
 
-        return plan?.let { it.parts.forEach { part ->
+        val stepPlan = plan?.let { it.parts.forEach { part ->
             part.rings.forEachIndexed { indR, ring -> exerciseCount += ring.exercises.count() }
             part.rings.forEachIndexed { indR, ring ->
                 ring.exercises.forEachIndexed { indE, exercise ->
@@ -62,6 +63,8 @@ object GlobalValueApp {
                 override val quantitySet: Int = 1
             }
         }
+
+        return stepPlan
     }
 
     fun nextExercise(exercise: Exercise): NextExercise {

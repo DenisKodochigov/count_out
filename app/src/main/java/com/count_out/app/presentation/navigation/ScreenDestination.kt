@@ -8,7 +8,6 @@ import androidx.compose.material.icons.filled.Settings
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.lifecycle.ViewModel
-import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavType
 import androidx.navigation.navArgument
 import com.count_out.app.R

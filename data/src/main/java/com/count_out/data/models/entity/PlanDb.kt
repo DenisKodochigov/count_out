@@ -6,7 +6,6 @@ import com.count_out.domain.entity.workout.Domain
 import com.count_out.domain.entity.workout.Part
 import com.count_out.domain.entity.workout.Plan
 import com.count_out.domain.entity.workout.SpeechKit
-import kotlin.collections.map
 
 abstract class PlanDb : Data {
     abstract val idPlan: Long

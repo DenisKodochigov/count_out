@@ -1,7 +1,6 @@
 package com.count_out.domain.use_case.bluetooth
 
 import com.count_out.domain.core.BluetoothCore
-import com.count_out.domain.entity.TypeRepo
 import com.count_out.domain.entity.throwable.ResultDomain
 import com.count_out.domain.entity.workout.Domain
 import com.count_out.domain.use_case.UseCase

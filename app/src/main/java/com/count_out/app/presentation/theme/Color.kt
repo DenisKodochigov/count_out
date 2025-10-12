@@ -3,12 +3,12 @@ package com.count_out.app.presentation.theme
 import androidx.compose.ui.graphics.Color
 
 val primaryLight = Color(0xFFF8F9FE)
-val onPrimaryLight = Color(0xFF626262) // Text default color (TextApp)
+val onPrimaryLight = Color(0xFF09090B) // Text default color (TextApp)FF626262
 val primaryContainerLight = Color(0xFF2373A9)
 val onPrimaryContainerLight = Color(0xFFFFFFFF)
 val secondaryLight = Color(0xFF026398)
 val onSecondaryLight = Color(0xFFFFFFFF)  //Color backgound Unit
-val secondaryContainerLight = Color(0xFF5EA3DC)
+val secondaryContainerLight = Color(0xFFC95EDC) //LinearProgressIndicator  trackColor
 val onSecondaryContainerLight = Color(0xFF001B36)
 val tertiaryLight = Color(0xFF3E6281)
 val onTertiaryLight = Color(0xFFFFFFFF)
@@ -19,7 +19,7 @@ val onErrorLight = Color(0xFFFFFFFF)
 val errorContainerLight = Color(0xFFDB1F79)
 val onErrorContainerLight = Color(0xFFFFFFFF)
 val backgroundLight = Color(0xFFF8F9FE)  //Common background application
-val onBackgroundLight = Color(0xFF757474) //Common text
+val onBackgroundLight = Color(0xFF757474) //Common text ??????
 val surfaceLight = Color(0xFFF8F9FE)
 val onSurfaceLight = Color(0xFF8D67FF)
 val surfaceVariantLight = Color(0xFFDCE3ED)
