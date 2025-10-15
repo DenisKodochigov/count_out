@@ -21,7 +21,7 @@ data class ExecuteState(
     val currentDuration: Int = 0,
     val currentDistance: Int = 0,
     val enableChangeInterval: Boolean = false,
-    val stepTraining: StepPlan? = null,
+    val stepPlan: StepPlan? = null,
     val stateWorkOut: RunningState = RunningState.Binding,
 
     val heartRate: Int = 0,

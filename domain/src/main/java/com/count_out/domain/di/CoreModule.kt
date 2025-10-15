@@ -76,13 +76,10 @@ class CoreModule {
     fun provideSettingsCore(repo: SettingsRepo ): SettingsCore = SettingsCore(repo)
     @Singleton @Provides
     fun provideSpeechCore(repo: SpeechRepo ): SpeechCore = SpeechCore(repo)
-//    @Singleton @Provides
-//    fun provideSpeechKitCore(repo: SpeechKitRepo ): SpeechKitCore = SpeechKitCore(repo)
     @Singleton @Provides
     fun provideTrainingCore(repo: PlanRepo ): PlanCore = PlanCore(repo)
     @Singleton @Provides
-    fun provideBluetoothCore(repo: BluetoothRepo, repoSet: SettingsRepo ): BluetoothCore =
-        BluetoothCore(repo, repoSet)
+    fun provideBluetoothCore(repo: BluetoothRepo, repoSet: SettingsRepo ): BluetoothCore = BluetoothCore(repo, repoSet)
     @Singleton @Provides
     fun provideCountOutServiceCore(repo: CountOutServiceRepo ): CountOutServiceCore = CountOutServiceCore(repo)
     @Singleton @Provides
@@ -97,148 +94,58 @@ class CoreModule {
     fun provideCollapsingCore(): CollapsingCore = CollapsingCore()
     @Singleton @Provides
     fun provideShowBSCore(): ShowBSCore = ShowBSCore()
-
-
-    @Singleton
-    @Provides
+    @Singleton @Provides
     fun provideUseCaseConfiguration(): UseCase.Configuration = UseCase.Configuration(Dispatchers.IO)
-
-    @Singleton
-    @Provides
-    fun provideCopyTrainingUseCase(
-        configuration: UseCase.Configuration,
-        planRepo: PlanRepo
-    ): CopyPlanUC = CopyPlanUC(configuration, planRepo)
-    @Singleton
-    @Provides
-    fun provideDelTrainingUCUseCase(
-        configuration: UseCase.Configuration,
-        planRepo: PlanRepo
-    ): DeletePlanUC = DeletePlanUC(configuration, planRepo)
-    @Singleton
-    @Provides
-    fun provideGetTrainingsUseCase(
-        configuration: UseCase.Configuration,
-        planRepo: PlanRepo
-    ): GetPlansUC = GetPlansUC(configuration, planRepo)
-    @Singleton
-    @Provides
-    fun provideGetTrainingUseCase(
-        configuration: UseCase.Configuration,
-        planRepo: PlanRepo
-    ): GetPlanUC = GetPlanUC(configuration, planRepo)
-    @Singleton
-    @Provides
-    fun provideSelectTrainingUseCase(
-        configuration: UseCase.Configuration,
-        lastPlanRepo: LastPlanRepo
-    ): SelectPlanUC = SelectPlanUC(configuration, lastPlanRepo)
-    @Singleton
-    @Provides
-    fun provideUpdateTrainingUseCase(
-        configuration: UseCase.Configuration,
-        planRepo: PlanRepo
-    ): UpdateNamePlanUC = UpdateNamePlanUC(configuration, planRepo)
-
-    @Singleton
-    @Provides
-    fun provideCopyExerciseUseCase(
-        configuration: UseCase.Configuration,
-        repo: ExerciseRepo
-    ): CopyExerciseUC = CopyExerciseUC(configuration, repo)
-    @Singleton
-    @Provides
-    fun provideDeleteExerciseUseCase(
-        configuration: UseCase.Configuration,
-        repo: ExerciseRepo
-    ): DeleteExerciseUC = DeleteExerciseUC(configuration, repo)
-    @Singleton
-    @Provides
-    fun provideUpdateExerciseUseCase(
-        configuration: UseCase.Configuration,
-        repo: ExerciseRepo
-    ): UpdateExerciseUC = UpdateExerciseUC(configuration, repo)
-    @Singleton
-    @Provides
-    fun provideCopySetUseCase(
-        configuration: UseCase.Configuration,
-        repo: SetRepo
-    ): CopySetUC = CopySetUC(configuration, repo)
-    @Singleton
-    @Provides
-    fun provideDeleteSetUseCase(
-        configuration: UseCase.Configuration,
-        repo: SetRepo
-    ): DeleteSetUC = DeleteSetUC(configuration, repo)
-    @Singleton
-    @Provides
-    fun provideUpdateSetUseCase(
-        configuration: UseCase.Configuration,
-        repo: SetRepo
-    ): UpdateSetUC = UpdateSetUC(configuration, repo)
-    @Singleton
-    @Provides
-    fun provideGetSettingsUseCase(
-        configuration: UseCase.Configuration,
-        repo: SettingsRepo
-    ): GetSettingsUC = GetSettingsUC(configuration, repo)
-    @Singleton
-    @Provides
-    fun provideUpdateSettingUseCase(
-        configuration: UseCase.Configuration,
-        repo: SettingsRepo
-    ): UpdateSettingUC = UpdateSettingUC(configuration, repo)
-    @Singleton
-    @Provides
-    fun provideGetWeatherUseCase(
-        configuration: UseCase.Configuration,
-        repo: WeatherRepo
-    ): GetWeatherUC = GetWeatherUC(configuration, repo)
-    @Singleton
-    @Provides
-    fun provideCountOutServiceBindUseCase(
-        configuration: UseCase.Configuration,
-        repo: CountOutServiceRepo
-    ): CountOutServiceBindUC = CountOutServiceBindUC(configuration, repo)
-    @Singleton
-    @Provides
-    fun provideCountOutServiceUnBindUseCase(
-        configuration: UseCase.Configuration,
-        repo: CountOutServiceRepo
-    ): CountOutServiceUnBindUC = CountOutServiceUnBindUC(configuration, repo)
-    @Singleton
-    @Provides
-    fun provideDownIntervalUseCase(configuration: UseCase.Configuration, repo: ExecuteWorkOutRepo): DownIntervalUC =
-        DownIntervalUC(configuration, repo)
-    @Singleton
-    @Provides
-    fun provideGetStepPlanUseCase(configuration: UseCase.Configuration,
-                                  repo: ExecuteWorkOutRepo, repo1: LastPlanRepo): GetStepPlanUC =
-        GetStepPlanUC(configuration, repo, repo1)
-    @Singleton
-    @Provides
-    fun provideUpIntervalUseCase(configuration: UseCase.Configuration, repo: ExecuteWorkOutRepo): UpIntervalUC =
-        UpIntervalUC(configuration, repo)
-    @Singleton
-    @Provides
-    fun providePauseWorkoutUseCase(configuration: UseCase.Configuration, repo: ExecuteWorkOutRepo): PauseWorkoutUC =
-        PauseWorkoutUC(configuration, repo)
-    @Singleton
-    @Provides
-    fun provideSaveWorkoutUseCase(configuration: UseCase.Configuration, repo: ExecuteWorkOutRepo): SaveWorkoutUC =
-        SaveWorkoutUC(configuration, repo)
-    @Singleton
-    @Provides
-    fun provideStartWorkoutUseCase(configuration: UseCase.Configuration, repo: ExecuteWorkOutRepo): StartWorkoutUC =
-        StartWorkoutUC(configuration, repo)
-    @Singleton
-    @Provides
-    fun provideStopWorkoutUseCase(configuration: UseCase.Configuration, repo: ExecuteWorkOutRepo): StopWorkoutUC =
-        StopWorkoutUC(configuration, repo)
-    @Singleton
-    @Provides
-    fun provideSavePlanUseCase(configuration: UseCase.Configuration, repo: LastPlanRepo): SaveLastUsePlanUC =
-        SaveLastUsePlanUC(configuration, repo)
+    @Singleton @Provides
+    fun provideCopyTrainingUseCase(configuration: UseCase.Configuration, repo: PlanRepo): CopyPlanUC = CopyPlanUC(configuration, repo)
+    @Singleton @Provides
+    fun provideDelTrainingUCUseCase(configuration: UseCase.Configuration, repo: PlanRepo): DeletePlanUC = DeletePlanUC(configuration, repo)
+    @Singleton @Provides
+    fun provideGetTrainingsUseCase(configuration: UseCase.Configuration, repo: PlanRepo): GetPlansUC = GetPlansUC(configuration, repo)
+    @Singleton @Provides
+    fun provideGetTrainingUseCase(configuration: UseCase.Configuration, repo: PlanRepo): GetPlanUC = GetPlanUC(configuration, repo)
+    @Singleton @Provides
+    fun provideSelectTrainingUseCase(configuration: UseCase.Configuration, repo: LastPlanRepo): SelectPlanUC = SelectPlanUC(configuration, repo)
+    @Singleton @Provides
+    fun provideUpdateTrainingUseCase(configuration: UseCase.Configuration, planRepo: PlanRepo): UpdateNamePlanUC = UpdateNamePlanUC(configuration, planRepo)
+    @Singleton @Provides
+    fun provideCopyExerciseUseCase(configuration: UseCase.Configuration, repo: ExerciseRepo): CopyExerciseUC = CopyExerciseUC(configuration, repo)
+    @Singleton @Provides
+    fun provideDeleteExerciseUseCase(configuration: UseCase.Configuration, repo: ExerciseRepo): DeleteExerciseUC = DeleteExerciseUC(configuration, repo)
+    @Singleton @Provides
+    fun provideUpdateExerciseUseCase(configuration: UseCase.Configuration, repo: ExerciseRepo): UpdateExerciseUC = UpdateExerciseUC(configuration, repo)
+    @Singleton @Provides
+    fun provideCopySetUseCase(configuration: UseCase.Configuration, repo: SetRepo): CopySetUC = CopySetUC(configuration, repo)
+    @Singleton @Provides
+    fun provideDeleteSetUseCase(configuration: UseCase.Configuration, repo: SetRepo): DeleteSetUC = DeleteSetUC(configuration, repo)
+    @Singleton @Provides
+    fun provideUpdateSetUseCase(configuration: UseCase.Configuration, repo: SetRepo): UpdateSetUC = UpdateSetUC(configuration, repo)
+    @Singleton @Provides
+    fun provideGetSettingsUseCase(configuration: UseCase.Configuration, core: SettingsCore): GetSettingsUC = GetSettingsUC(configuration, core)
+    @Singleton @Provides
+    fun provideUpdateSettingUseCase(configuration: UseCase.Configuration, core: SettingsCore): UpdateSettingUC = UpdateSettingUC(configuration, core)
+    @Singleton @Provides
+    fun provideGetWeatherUseCase(configuration: UseCase.Configuration, repo: WeatherRepo): GetWeatherUC = GetWeatherUC(configuration, repo)
+    @Singleton @Provides
+    fun provideCountOutServiceBindUseCase(configuration: UseCase.Configuration, repo: CountOutServiceRepo): CountOutServiceBindUC = CountOutServiceBindUC(configuration, repo)
+    @Singleton @Provides
+    fun provideCountOutServiceUnBindUseCase(configuration: UseCase.Configuration, repo: CountOutServiceRepo): CountOutServiceUnBindUC = CountOutServiceUnBindUC(configuration, repo)
+    @Singleton @Provides
+    fun provideDownIntervalUseCase(configuration: UseCase.Configuration, repo: ExecuteWorkOutRepo): DownIntervalUC = DownIntervalUC(configuration, repo)
+    @Singleton @Provides
+    fun provideGetStepPlanUseCase(configuration: UseCase.Configuration, repo: ExecuteWorkOutRepo, repo1: LastPlanRepo): GetStepPlanUC = GetStepPlanUC(configuration, repo, repo1)
+    @Singleton @Provides
+    fun provideUpIntervalUseCase(configuration: UseCase.Configuration, repo: ExecuteWorkOutRepo): UpIntervalUC = UpIntervalUC(configuration, repo)
+    @Singleton @Provides
+    fun providePauseWorkoutUseCase(configuration: UseCase.Configuration, repo: ExecuteWorkOutRepo): PauseWorkoutUC = PauseWorkoutUC(configuration, repo)
+    @Singleton @Provides
+    fun provideSaveWorkoutUseCase(configuration: UseCase.Configuration, repo: ExecuteWorkOutRepo): SaveWorkoutUC = SaveWorkoutUC(configuration, repo)
+    @Singleton @Provides
+    fun provideStartWorkoutUseCase(configuration: UseCase.Configuration, repo: ExecuteWorkOutRepo): StartWorkoutUC = StartWorkoutUC(configuration, repo)
+    @Singleton @Provides
+    fun provideStopWorkoutUseCase(configuration: UseCase.Configuration, repo: ExecuteWorkOutRepo): StopWorkoutUC = StopWorkoutUC(configuration, repo)
+    @Singleton @Provides
+    fun provideSavePlanUseCase(configuration: UseCase.Configuration, repo: LastPlanRepo): SaveLastUsePlanUC = SaveLastUsePlanUC(configuration, repo)
 }
 
 //    @Singleton

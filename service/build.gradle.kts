@@ -28,6 +28,11 @@ android {
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
         }
+        debug {
+            isMinifyEnabled = false
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
+        }
     }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
@@ -36,7 +41,7 @@ android {
     buildFeatures {
         viewBinding = true
     }
-    buildToolsVersion = "35.0.0"
+    buildToolsVersion = "36.0.0"
     kotlin { compilerOptions{ jvmTarget = JvmTarget.JVM_17 } }
 }
 

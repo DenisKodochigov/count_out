@@ -10,14 +10,11 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBackIos
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.MaterialTheme.colorScheme
 import androidx.compose.material3.MaterialTheme.typography
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 
@@ -31,12 +28,11 @@ fun CollapsingToolbar(
     Row(
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier.padding(top = 35.dp, bottom = 12.dp, end = 30.dp).height(40.dp).fillMaxWidth()
-//            .background(color = MaterialTheme.colorScheme.surface, shape = topBarShape)
     ){
         IconButton( onClick = backScreen ) {
             Icon(imageVector = Icons.AutoMirrored.Filled.ArrowBackIos,
                 contentDescription = null,
-                tint = MaterialTheme.colorScheme.outline)
+                tint = colorScheme.outline)
         }
         TextAppEllipsis(
             text = text,
@@ -44,11 +40,6 @@ fun CollapsingToolbar(
             style = typography.headlineMedium,
             modifier = Modifier.weight(1f).fillMaxWidth().clickable(enabled = true, onClick = { onClickText()})
         )
-//        IconButton( onClick = moreHoriz) {
-//            Icon(imageVector = Icons.Default.MoreHoriz,
-//                contentDescription = null,
-//                tint = MaterialTheme.colorScheme.onSurface)
-//        }
     }
 }
 @Composable fun TopBarApp(

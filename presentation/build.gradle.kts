@@ -29,11 +29,11 @@ android {
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
         }
-//        debug {
-//            isMinifyEnabled = false
-//            proguardFiles(
-//                getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
-//        }
+        debug {
+            isMinifyEnabled = false
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
+        }
     }
     packaging {
         resources.excludes.addAll(listOf("META-INF/LICENSE.md", "META-INF/LICENSE-notice.md",))
@@ -42,7 +42,19 @@ android {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
     }
-    kotlin { compilerOptions{ jvmTarget = JvmTarget.JVM_17 } }
+    kotlin { compilerOptions{
+        jvmTarget = JvmTarget.JVM_17
+        val metricsDir = layout.buildDirectory.dir("compose_metrics").get().asFile.absolutePath
+        val reportsDir = layout.buildDirectory.dir("compose_reports").get().asFile.absolutePath
+
+        freeCompilerArgs.addAll(
+            listOf(
+                "-P",
+                "plugin:androidx.compose.compiler.plugins.kotlin:metricsDestination=$metricsDir",
+                "-P",
+                "plugin:androidx.compose.compiler.plugins.kotlin:reportsDestination=$reportsDir"
+            )
+        )    } }
     testOptions {
         unitTests.isReturnDefaultValues = true
         unitTests.isIncludeAndroidResources = true

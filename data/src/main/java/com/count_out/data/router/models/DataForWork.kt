@@ -43,8 +43,8 @@ data class DataForWork (
 //            else map[indexMap]
     }
 
-    fun createMapTraining(){
-        var numberExercise = 1
+//    fun createMapTraining(){
+//        var numberExercise = 1
 //        val list: MutableList<StepPlan> = mutableListOf()
 //        this.training.value?.let { tr->
 //            tr.rounds.forEachIndexed { indR, round-> exerciseCount += round.exercise.count() }
@@ -78,7 +78,7 @@ data class DataForWork (
 //            }
 //        }
 //        this.map = list
-    }
+//    }
 //    fun nextExercise(exercise: Exercise): NextExercise {
 //        val list: MutableList<Pair<String, Int>> = mutableListOf()
 //        exercise.sets.forEachIndexed { _, set ->

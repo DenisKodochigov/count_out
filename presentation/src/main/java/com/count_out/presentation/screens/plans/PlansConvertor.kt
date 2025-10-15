@@ -17,9 +17,6 @@ class PlansConvertor @Inject constructor(): PrimeConvertor<UseCase.Response, Pla
     override fun makeSuccess(resultData: UseCase.Response, state: MutableStateFlow<PlansState>): PlansState {
         return when(resultData){
             is GetPlansUC.Response-> converterGetTrainings(resultData, state)
-            is CopyPlanUC.Response-> converterCopyTraining(resultData, state)
-            is DeletePlanUC.Response-> converterDeleteTraining(resultData, state)
-            is UpdatesTrainingUC.Response-> converterUpdatesTraining(resultData, state)
             is SelectPlanUC.Response-> converterSelectTraining(resultData, state)
             else -> converterOther(state)
         }
@@ -29,21 +26,7 @@ class PlansConvertor @Inject constructor(): PrimeConvertor<UseCase.Response, Pla
             state.value = state.value.copy(plans = (data.plans as PlansDm).item) }
         return state.value
     }
-    private fun converterCopyTraining(data: CopyPlanUC.Response, state: MutableStateFlow<PlansState>): PlansState {
-//        if (data.plans is TypeRepo.PlansT)
-//            state.value = state.value.copy( plans = (data.plans as TypeRepo.PlansT).item)
-        return state.value
-    }
-    private fun converterDeleteTraining(data: DeletePlanUC.Response, state: MutableStateFlow<PlansState>): PlansState {
-//        if (data.plans is TypeRepo.PlansT)
-//            state.value = state.value.copy( plans = (data.plans as TypeRepo.PlansT).item)
-        return state.value
-    }
-    private fun converterUpdatesTraining(data: UpdatesTrainingUC.Response, state: MutableStateFlow<PlansState>): PlansState {
-//        if (data.plan is TypeRepo.PlansT)
-//            state.value = state.value.copy( plans = (data.plan as TypeRepo.PlansT).item)
-        return state.value
-    }
+
     private fun converterSelectTraining(data: SelectPlanUC.Response, state: MutableStateFlow<PlansState>): PlansState {
         if (data.selectedTraining is LongDm)
             state.value = state.value.copy( selectedId = (data.selectedTraining as LongDm).item)
@@ -53,3 +36,23 @@ class PlansConvertor @Inject constructor(): PrimeConvertor<UseCase.Response, Pla
         return state.value.copy(plans = emptyList())
     }
 }
+//            is CopyPlanUC.Response-> converterCopyTraining(resultData, state)
+//            is DeletePlanUC.Response-> converterDeleteTraining(resultData, state)
+//            is UpdatesTrainingUC.Response-> converterUpdatesTraining(resultData, state)
+
+
+//    private fun converterCopyTraining(data: CopyPlanUC.Response, state: MutableStateFlow<PlansState>): PlansState {
+////        if (data.plans is TypeRepo.PlansT)
+////            state.value = state.value.copy( plans = (data.plans as TypeRepo.PlansT).item)
+//        return state.value
+//    }
+//    private fun converterDeleteTraining(data: DeletePlanUC.Response, state: MutableStateFlow<PlansState>): PlansState {
+////        if (data.plans is TypeRepo.PlansT)
+////            state.value = state.value.copy( plans = (data.plans as TypeRepo.PlansT).item)
+//        return state.value
+//    }
+//    private fun converterUpdatesTraining(data: UpdatesTrainingUC.Response, state: MutableStateFlow<PlansState>): PlansState {
+////        if (data.plan is TypeRepo.PlansT)
+////            state.value = state.value.copy( plans = (data.plan as TypeRepo.PlansT).item)
+//        return state.value
+//    }

@@ -1,14 +1,14 @@
 package com.count_out.domain.use_case.settings
 
+import com.count_out.domain.core.plans.SettingsCore
 import com.count_out.domain.entity.throwable.ResultDomain
 import com.count_out.domain.entity.workout.Domain
-import com.count_out.domain.repository.plans.SettingsRepo
 import com.count_out.domain.use_case.UseCase
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 class GetSettingsUC @Inject constructor(
-    configuration: Configuration, private val repo: SettingsRepo
+    configuration: Configuration, private val repo: SettingsCore
 ): UseCase<GetSettingsUC.Request, GetSettingsUC.Response>(configuration)  {
 
     override fun method(request: Request): Flow<ResultDomain<Domain>> = repo.getSettings()

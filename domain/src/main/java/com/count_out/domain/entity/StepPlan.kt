@@ -11,9 +11,11 @@ interface StepPlan: Domain {
     val part: Part?
     val exercise: Exercise?
     var nextExercise: NextExercise?
+    val numberRing: Int
+    val quantityRing: Int
     val numberExercise: Int
     val quantityExercise: Int
-    var currentSet: Set?
     val numberSet: Int
     val quantitySet: Int
+    var currentSet: Set?
 }

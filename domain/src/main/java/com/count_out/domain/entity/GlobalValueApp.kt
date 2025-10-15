@@ -1,6 +1,5 @@
 package com.count_out.domain.entity
 
-import android.util.Log
 import com.count_out.domain.entity.enums.Goal
 import com.count_out.domain.entity.enums.Units
 import com.count_out.domain.entity.throwable.ResultDomain
@@ -20,7 +19,7 @@ object GlobalValueApp {
         val list: MutableList<StepPlan> = mutableListOf()
 
         val stepPlan = plan?.let { it.parts.forEach { part ->
-            part.rings.forEachIndexed { indR, ring -> exerciseCount += ring.exercises.count() }
+            part.rings.forEach { ring -> exerciseCount += ring.exercises.count() }
             part.rings.forEachIndexed { indR, ring ->
                 ring.exercises.forEachIndexed { indE, exercise ->
                     if (list.isNotEmpty()) {
@@ -39,8 +38,10 @@ object GlobalValueApp {
                                 override val part: Part? = part
                                 override val exercise: Exercise? = exercise
                                 override var nextExercise: NextExercise? = null
+                                override val numberRing: Int = indR + 1
+                                override val quantityRing: Int = part.rings.count()
                                 override val numberExercise: Int = numberExercise
-                                override val quantityExercise: Int = exerciseCount
+                                override val quantityExercise: Int = exerciseCount + 1
                                 override var currentSet: Set? = set
                                 override val numberSet: Int = indS + 1
                                 override val quantitySet: Int = exercise.sets.count()
@@ -56,6 +57,8 @@ object GlobalValueApp {
                 override val part: Part? = null
                 override val exercise: Exercise? = null
                 override var nextExercise: NextExercise? = null
+                override val numberRing: Int = 0
+                override val quantityRing: Int = 0
                 override val numberExercise: Int = numberExercise
                 override val quantityExercise: Int = exerciseCount
                 override var currentSet: Set? = null

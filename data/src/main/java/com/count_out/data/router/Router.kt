@@ -68,7 +68,7 @@ class Router(private val dataForServ: DataForServ) {
         )
     }
     private fun initDataForUI(buffer: Buffer): DataForUI {
-        dataForWork.createMapTraining()
+//        dataForWork.createMapTraining()
         dataForWork.initStepTraining()
         return DataForUI(
             runningState = buffer.runningState,
