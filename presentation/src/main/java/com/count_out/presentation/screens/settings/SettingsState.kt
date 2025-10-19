@@ -24,7 +24,7 @@ data class SettingsState(
     val scannedBle: Boolean = false,
     val connectingState: ConnectState = ConnectState.NOT_CONNECTED,
 
-    val activities: List<ActivityImplP> = emptyList(),
+    val activities: List<Activity> = emptyList(),
     val activityTmpl: Activity = ActivityImplP(1L),
     //for screen
 

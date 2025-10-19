@@ -2,7 +2,7 @@ package com.count_out.service.service_count_out
 
 import com.count_out.data.models.Data
 import com.count_out.data.models.ResultData
-import com.count_out.data.models.types_data.BooleanDb
+import com.count_out.data.models.entity.BooleanDb
 import com.count_out.data.source.services.CountOutServiceSource
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow

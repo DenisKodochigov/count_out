@@ -12,11 +12,13 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Bluetooth
@@ -91,6 +93,16 @@ import com.count_out.presentation.view_element.custom_view.IconQ
         }
     }
 }
+
+@Composable fun IconRingOrExercise(selected: Boolean, onClick:() -> Unit){
+    Row {
+        IconQ.RingExercise(selected, onClick = onClick)
+        Spacer(modifier = Modifier.width(sizeBetweenIcon))
+        IconQ.ExerciseRing(!selected, onClick = onClick)
+        Spacer(modifier = Modifier.width(sizeBetweenIcon))
+    }
+}
+
 @Composable fun AnimateIcon(
     initValue: Dp = sizeIcon,
     targetValue: Dp = 22.dp,

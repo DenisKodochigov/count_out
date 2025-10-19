@@ -34,17 +34,18 @@ import com.count_out.presentation.view_element.bottom_sheet.ShowBottomSheetSelec
 import com.count_out.presentation.view_element.bottom_sheet.ShowBottomSheetSpeech
 import com.count_out.presentation.view_element.custom_view.Frame
 import com.count_out.presentation.view_element.drag_drop_column.column.ColumnDragDrop
+import com.count_out.presentation.view_element.icons.IconRingOrExercise
 import com.count_out.presentation.view_element.icons.IconsCollapsing
 import com.count_out.presentation.view_element.icons.IconsGroup
 
 @Composable
-fun ListExercises(dataState: PlanState, ring: Ring, modifier: Modifier = Modifier,)
+fun ListExercises(dataState: PlanState, ring: Ring)
 {
     val listExercise = ring.exercises
     ColumnDragDrop(
         items = listExercise,
-        modifier = modifier,
-        content = { item -> ElementColum( item, dataState = dataState) },
+        modifier = Modifier.padding(end = 8.dp),
+        content = { item -> ElementColum( item, dataState = dataState, ring) },
         onMoveItem = { from, to->
             Log.d("KDS"," from=$from   to=$to")
             dataState.event(
@@ -54,18 +55,18 @@ fun ListExercises(dataState: PlanState, ring: Ring, modifier: Modifier = Modifie
     Spacer(modifier = Modifier.height(4.dp))
 }
 
-@Composable fun <T>ElementColum (item:T, dataState: PlanState,){
+@Composable fun <T>ElementColum (item:T, dataState: PlanState, ring: Ring){
     Spacer(modifier = Modifier.padding(top = 1.dp))
     Frame(contour = contourAll1) {
         Column (modifier = Modifier
             .fillMaxWidth()
             .padding(vertical = 4.dp),) {
-            Title(dataState, item as Exercise)
+            Title(dataState, ring, item as Exercise)
             BodyExercise(dataState, item as Exercise)
         }
     }
 }
-@Composable fun Title(dataState: PlanState, exercise: Exercise) {
+@Composable fun Title(dataState: PlanState, ring: Ring, exercise: Exercise) {
     ShowBottomSheetSpeech(dataState,dataState.showBS.exercise,R.string.exercise2,exercise)
     ShowBottomSheetSelectActivity(dataState, exercise)
 
@@ -85,9 +86,12 @@ fun ListExercises(dataState: PlanState, ring: Ring, modifier: Modifier = Modifie
             TextApp(
                 style = MaterialTheme.typography.bodySmall, fontWeight = FontWeight.Light,
                 text = "${stringResource(id = R.string.sets)}: ${exercise.amountSet}/" +
-                        "${exercise.duration} ${stringResource(id = R.string.min)}",
-            ) }
-        Spacer(modifier = Modifier.weight(1f))
+                        "${exercise.duration.value} ${stringResource(id = exercise.duration.unit.id)}",
+            )
+        }
+        IconRingOrExercise (ring.amount > 1){
+            dataState.event(PlanEvent.RingToExercise(ring))
+        }
         IconsGroup(
             onClickCopy = { dataState.event(PlanEvent.CopyExercise(exercise))},
             onClickDelete = { dataState.event(PlanEvent.DelExercise(exercise)) },

@@ -1,6 +1,6 @@
 package com.count_out.data.repository
 
-import com.count_out.data.models.Data.Companion.toData
+import com.count_out.data.models.Data.Companion.fromDomain
 import com.count_out.data.models.ResultData.Companion.convertorFlow
 import com.count_out.data.source.local.SettingsSource
 import com.count_out.domain.entity.Settings
@@ -20,11 +20,11 @@ class SettingsRepoImpl @Inject constructor(
         return if (setting is Settings){
             when(setting){
                 is Settings.NameBle -> {
-                    settingsSource.saveBleName(toData(setting)).convertorFlow()}
+                    settingsSource.saveBleName(setting.fromDomain()).convertorFlow()}
                 is Settings.AddressBle -> {
-                    settingsSource.saveBleAddress(toData(setting)).convertorFlow()}
+                    settingsSource.saveBleAddress(setting.fromDomain()).convertorFlow()}
                 is Settings.SpeechDescription -> {
-                    settingsSource.saveSettingSpeechDescr(toData(setting)).convertorFlow()}
+                    settingsSource.saveSettingSpeechDescr(setting.fromDomain()).convertorFlow()}
             }
         } else flowOf(ResultDomain.Error(ThrowableUC.extract(Exception("return null"))))
     }

@@ -169,7 +169,10 @@
     <string name="reps">Повтор</string>
     <string name="set2">подхода</string>
     <string name="next">Далее</string>
-    <string name="new_activity">New activity</string>
+    <string name="new_activity">Новое упражнение</string>
+    <string name="execute_ring">Количество кругов</string>
+    <string name="ring">Ring</string>
+    <string name="times">times</string>
 </resources>
 
 <!--<string name="error_1">Ошибка</string>-->

@@ -1,7 +1,12 @@
 package com.count_out.presentation.screens.execute
 
-import android.util.Log
+import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.ContentTransform
 import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -9,7 +14,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -22,27 +26,22 @@ import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material.icons.outlined.HeartBroken
 import androidx.compose.material.icons.outlined.LocationOn
-import androidx.compose.material3.Card
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
-import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.MaterialTheme.colorScheme
-import androidx.compose.material3.MaterialTheme.shapes
 import androidx.compose.material3.MaterialTheme.typography
 import androidx.compose.material3.ProgressIndicatorDefaults
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.rotate
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -65,11 +64,11 @@ import com.count_out.presentation.view_element.custom_view.Frame
 import com.count_out.presentation.view_element.custom_view.IconQ
 import java.math.RoundingMode
 
-@Composable fun ExecuteWorkoutScreen(viewModel: ExecuteViewModel, navigateEvent: NavigateEvent){
+@Composable fun ExecuteWorkoutScreen( viewModel: ExecuteViewModel, navigateEvent: NavigateEvent){
     viewModel.screenState.collectAsState().value.let { screenState ->
         PrimeScreen(loader = screenState) { dataState ->
             dataState.goToScreenPlans = { navigateEvent.goToScreenPlans() }
-            ExecuteWorkoutScreenLayout(dataState)
+            ExecuteWorkoutScreenLayout( dataState)
         }
     }
 }
@@ -83,6 +82,7 @@ import java.math.RoundingMode
             TopBar(dataState)
             SensorInfo(dataState)
             AdditionalInformation(dataState, modifier = Modifier.weight(1f))
+
             ExerciseInfoNew(dataState)
             DownPlace(dataState)
         }
@@ -125,66 +125,105 @@ import java.math.RoundingMode
     }
 }
 @Composable fun ExerciseInfoNew(dataState: ExecuteState) {
+
+    var showNext by remember { mutableStateOf(false) }
+
     dataState.stepPlan?.let { stepPlan ->
         Row(modifier = Modifier.height(IntrinsicSize.Min), verticalAlignment = Alignment.Top) {//
-            VerticalProgress(
-                stepPlan.numberExercise,
-                stepPlan.quantityExercise ,
-                modifier = Modifier.padding(start = 12.dp, end = 4.dp))
-            Column(modifier = Modifier.background(Color.LightGray)) {
-                Column(modifier = Modifier
-                    .padding(bottom = 4.dp)
-                    .background(color = Color.Transparent)
-                    .clip(shape = RoundedCornerShape(12.dp)))
-                {
-                    TextApp( style = typography.titleMedium, text = stepPlan.exercise?.activity?.name ?: "")
-                    Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceAround) {
-                        ProgressSet(stepPlan)
-                        ProgressCountDistanceDuration(dataState, stepPlan)
-                        ProgressRest(dataState,stepPlan)
-                        ShowWeight(stepPlan)
-                    }
+            VerticalProgress(stepPlan.numberExercise, stepPlan.quantityExercise)
+            AnimatedContent(
+                targetState = showNext,
+                transitionSpec = {
+                    ContentTransform(
+                        targetContentEnter = slideInVertically { fullHeight -> fullHeight } + fadeIn(),
+                        initialContentExit = slideOutVertically { fullHeight -> -fullHeight } + fadeOut()
+                    )},
+                label = "exercise-switch"
+            ) { isNext->
+                Column {
+                    ContextCurrentAndNext(!isNext, stepPlan, dataState)
+                    Spacer(Modifier.height(6.dp))
+                    ContextCurrentAndNext(isNext, stepPlan, dataState)
                 }
-                Row(modifier = Modifier.background(color = colorScheme.surfaceContainerLowest).clip(shape = RoundedCornerShape(12.dp))) {
-                    TextApp( style = typography.titleMedium, text = stepPlan.nextExercise?.nextActivityName ?: "") }
             }
         }
     }
 }
-@Composable fun ProgressSet(stepPlan: StepPlan) {
-    ProgressIndicator(number = stepPlan.numberSet, quantity =stepPlan.quantitySet, R.string.set)
+
+@Composable fun ContextCurrentAndNext(visible: Boolean, stepPlan: StepPlan, dataState: ExecuteState){
+
+    Column(modifier = Modifier
+        .fillMaxWidth()
+        .background(color = colorScheme.surfaceContainerHighest, shape = RoundedCornerShape(6.dp))
+        .padding(8.dp)
+    ) {
+        if (visible) {
+            ContextCurrentAndNextName(stepPlan.exercise?.activity?.name ?: "")
+            ContextCurrentAndNextInfo(stepPlan, dataState)
+        } else ContextCurrentAndNextName(stepPlan.nextExercise?.nextActivityName ?: "")
+    }
+}
+
+@Composable fun ContextCurrentAndNextName(name: String){
+    Text(text = name, style = typography.headlineMedium)
+}
+@Composable fun ContextCurrentAndNextInfo(stepPlan: StepPlan, dataState: ExecuteState){
+    Row(modifier = Modifier.fillMaxWidth().padding(top = 16.dp), horizontalArrangement = Arrangement.SpaceAround) {
+        ProgressSet(dataState, stepPlan)
+        ProgressCountDistanceDuration(dataState, stepPlan)
+        ProgressRest(dataState, stepPlan)
+        ShowWeight(stepPlan)
+    }
+}
+
+@Composable fun ProgressSet(dataState: ExecuteState,stepPlan: StepPlan) {
+    if (stepPlan.quantitySet > 1)
+        ProgressIndicator(dataState.stateWorkOut,
+            stepPlan.numberSet,
+            stepPlan.quantitySet,
+            R.string.set
+        )
 }
 @Composable fun ProgressCountDistanceDuration(dataState: ExecuteState, stepPlan: StepPlan) {
     stepPlan.currentSet?.let { set ->
+//        Log.d("KDS", "ProgressCountDistanceDuration ${set.goal}")
         when (set.goal ) {
-            Goal.Count -> ProgressIndicator(number = dataState.currentCount, set.reps,R.string.counts)
-            Goal.Distance -> ProgressIndicator(dataState.currentDistance, set.distance.value.toInt(), R.string.distance)
-            Goal.Duration -> ProgressIndicator(dataState.currentDuration, set.duration.value.toInt(), R.string.duration)
-            Goal.CountGroup -> ProgressIndicator(dataState.currentCount, set.reps, R.string.counts)
+            Goal.Count -> ProgressIndicator(dataState.stateWorkOut,
+                dataState.currentCount, set.reps,R.string.counts)
+            Goal.Distance -> ProgressIndicator(dataState.stateWorkOut,
+                dataState.currentDistance, set.distance.value.toInt(),
+                R.string.distance)
+            Goal.Duration -> ProgressIndicator(dataState.stateWorkOut,
+                dataState.currentDuration, set.duration.value.toInt(),
+                R.string.duration)
+            Goal.CountGroup -> ProgressIndicator(dataState.stateWorkOut,
+                dataState.currentCount, set.reps, R.string.counts)
         }
     }
 }
 @Composable fun ProgressRest(dataState: ExecuteState, stepPlan: StepPlan) {
     stepPlan.currentSet?.let { set ->
-        ProgressIndicator( dataState.currentRest,set.rest.value.toInt(), R.string.rest)
+        ProgressIndicator( dataState.stateWorkOut,
+            dataState.currentRest,set.rest.value.toInt(), R.string.rest)
     }
 }
 @Composable fun ShowWeight(stepPlan: StepPlan) {
     stepPlan.currentSet?.let { set ->
         Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.padding(top = 12.dp)) {
-            TextApp(text = set.weight.value.toString(), style = typography.titleLarge)
+            TextApp(text = set.weight.value.toString(), style = typography.displaySmall)
             TextApp(text = stringResource(set.weight.unit.id), style = typography.labelSmall)
         }
     }
 }
-@Composable fun ProgressIndicator(number: Int, quantity: Int, idTextIndicator: Int){
-    if (quantity>=number){
-        val progress by animateFloatAsState( targetValue = number/quantity.toFloat())
+@Composable fun ProgressIndicator(state: RunningState, number: Int, quantity: Int, idTextIndicator: Int){
+    val numberL = if (state == RunningState.Binding || state == RunningState.Stopped) 0.01 else number.toDouble()
+    if (quantity.toDouble() >= numberL){
+        val progress by animateFloatAsState( targetValue = (numberL/quantity).toFloat())
         Column (horizontalAlignment = Alignment.CenterHorizontally){
             Box(){
                 TextApp(modifier = Modifier.align(alignment = Alignment.Center),
                     text = "$number",
-                    style = typography.headlineMedium,)
+                    style = typography.displaySmall,)
                 CircularProgressIndicator(
                     progress = { progress },
                     modifier = Modifier.size(64.dp),
@@ -194,11 +233,10 @@ import java.math.RoundingMode
                     strokeCap = ProgressIndicatorDefaults.LinearStrokeCap,
                 )
             }
-            TextApp(text = stringResource(idTextIndicator), style = typography.labelSmall)
+            TextApp(text = stringResource(idTextIndicator), style = typography.labelMedium)
         }
     }
 }
-
 
 @Composable fun ExerciseInfo(dataState: ExecuteState) {
     Frame{
@@ -323,3 +361,18 @@ import java.math.RoundingMode
     }
 }
 
+//                Column(
+//                    modifier = Modifier
+//                        .fillMaxWidth().padding(top = 8.dp)
+//                        .padding(top = 8.dp)
+//                        .background(
+//                            color = colorScheme.surfaceContainerHighest,
+//                            shape = RoundedCornerShape(6.dp)
+//                        )
+//                ) {
+//                    TextApp(
+//                        modifier = Modifier.padding(start = 4.dp),
+//                        style = typography.headlineMedium,
+//                        text = stepPlan.nextExercise?.nextActivityName ?: ""
+//                    )
+//                }

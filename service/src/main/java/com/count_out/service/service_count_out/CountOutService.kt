@@ -5,7 +5,7 @@ import android.content.Intent
 import android.os.Binder
 import android.os.IBinder
 import android.os.SystemClock
-import com.count_out.data.models.WorkoutRecordImpl
+import com.count_out.data.models.entity.WorkoutRecordImpl
 import com.count_out.data.router.Router
 import com.count_out.data.router.models.DataForUI
 import com.count_out.domain.entity.enums.CommandService

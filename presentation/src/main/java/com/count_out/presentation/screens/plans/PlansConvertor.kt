@@ -3,11 +3,8 @@ package com.count_out.presentation.screens.plans
 import com.count_out.domain.entity.types_domai.LongDm
 import com.count_out.domain.entity.types_domai.PlansDm
 import com.count_out.domain.use_case.UseCase
-import com.count_out.domain.use_case.plans.CopyPlanUC
-import com.count_out.domain.use_case.plans.DeletePlanUC
 import com.count_out.domain.use_case.plans.GetPlansUC
 import com.count_out.domain.use_case.plans.SelectPlanUC
-import com.count_out.domain.use_case.plans.UpdatesTrainingUC
 import com.count_out.presentation.screens.prime.PrimeConvertor
 import kotlinx.coroutines.flow.MutableStateFlow
 import javax.inject.Inject
@@ -36,23 +33,3 @@ class PlansConvertor @Inject constructor(): PrimeConvertor<UseCase.Response, Pla
         return state.value.copy(plans = emptyList())
     }
 }
-//            is CopyPlanUC.Response-> converterCopyTraining(resultData, state)
-//            is DeletePlanUC.Response-> converterDeleteTraining(resultData, state)
-//            is UpdatesTrainingUC.Response-> converterUpdatesTraining(resultData, state)
-
-
-//    private fun converterCopyTraining(data: CopyPlanUC.Response, state: MutableStateFlow<PlansState>): PlansState {
-////        if (data.plans is TypeRepo.PlansT)
-////            state.value = state.value.copy( plans = (data.plans as TypeRepo.PlansT).item)
-//        return state.value
-//    }
-//    private fun converterDeleteTraining(data: DeletePlanUC.Response, state: MutableStateFlow<PlansState>): PlansState {
-////        if (data.plans is TypeRepo.PlansT)
-////            state.value = state.value.copy( plans = (data.plans as TypeRepo.PlansT).item)
-//        return state.value
-//    }
-//    private fun converterUpdatesTraining(data: UpdatesTrainingUC.Response, state: MutableStateFlow<PlansState>): PlansState {
-////        if (data.plan is TypeRepo.PlansT)
-////            state.value = state.value.copy( plans = (data.plan as TypeRepo.PlansT).item)
-//        return state.value
-//    }

@@ -2,10 +2,10 @@ package com.count_out.framework.room.source
 
 import com.count_out.data.models.Data
 import com.count_out.data.models.ResultData
+import com.count_out.data.models.entity.ActivitiesDb
 import com.count_out.data.models.entity.ActivityDb
+import com.count_out.data.models.entity.LongDb
 import com.count_out.data.models.throwable.ThrowableDS
-import com.count_out.data.models.types_data.ActivitiesDb
-import com.count_out.data.models.types_data.LongDb
 import com.count_out.data.source.room.ActivitySource
 import com.count_out.framework.room.db.activity.ActivityDao
 import com.count_out.framework.room.db.activity.ActivityTb

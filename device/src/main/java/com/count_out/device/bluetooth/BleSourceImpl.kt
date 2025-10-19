@@ -2,10 +2,10 @@ package com.count_out.device.bluetooth
 
 import com.count_out.data.models.Data
 import com.count_out.data.models.ResultData
+import com.count_out.data.models.entity.BleDataMapDb
+import com.count_out.data.models.entity.BooleanDb
+import com.count_out.data.models.entity.LongDb
 import com.count_out.data.models.throwable.ThrowableDS
-import com.count_out.data.models.types_data.BooleanDb
-import com.count_out.data.models.types_data.LongDb
-import com.count_out.data.models.types_data.MapDb
 import com.count_out.data.source.framework.BleSource
 import com.count_out.device.bluetooth.models.ResultBle
 import com.count_out.domain.entity.router.DeviceBle
@@ -22,7 +22,7 @@ class BleSourceImpl @Inject constructor(private val ble: Bluetooth): BleSource {
                 is ResultBle.Nothing -> ResultData.Success(LongDb(0L))
                 is ResultBle.Device -> {
                     mapDevice.put(devUI.device.address, devUI.device)
-                    ResultData.Success(MapDb(mapDevice ))
+                    ResultData.Success(BleDataMapDb(mapDevice ))
                 }
                 else -> ResultData.Error(throwable = ThrowableDS.NotValidType())
             }

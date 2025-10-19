@@ -1,8 +1,8 @@
 package com.count_out.data.repository
 
-import com.count_out.data.models.Data.Companion.toData
 import com.count_out.data.models.ResultData.Companion.convertorFlow
 import com.count_out.data.models.ResultData.Companion.flatMapFlow
+import com.count_out.data.models.entity.LongDb
 import com.count_out.data.source.local.LastPlanSource
 import com.count_out.data.source.room.PlanSource
 import com.count_out.domain.entity.throwable.ResultDomain
@@ -23,6 +23,5 @@ class LastPlanRepoImpl @Inject constructor(
             resultDS.flatMapFlow { res-> sourceTraining.get(res) }.convertorFlow() }
 
     override fun saveLastUsedPlan(id: Domain): Flow<ResultDomain<Domain>> =
-        source.saveLastPlan(toData( id)).convertorFlow()
-
+        source.saveLastPlan(LongDb.fromDomain( id)).convertorFlow()
 }

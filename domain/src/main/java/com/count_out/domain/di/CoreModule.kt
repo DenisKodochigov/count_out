@@ -10,8 +10,8 @@ import com.count_out.domain.core.ShowBSCore
 import com.count_out.domain.core.WeatherCore
 import com.count_out.domain.core.plans.ActivityCore
 import com.count_out.domain.core.plans.ExerciseCore
+import com.count_out.domain.core.plans.PartCore
 import com.count_out.domain.core.plans.PlanCore
-import com.count_out.domain.core.plans.RoundCore
 import com.count_out.domain.core.plans.SetCore
 import com.count_out.domain.core.plans.SettingsCore
 import com.count_out.domain.core.plans.SpeechCore
@@ -23,8 +23,9 @@ import com.count_out.domain.repository.LocationRepo
 import com.count_out.domain.repository.WeatherRepo
 import com.count_out.domain.repository.plans.ActivityRepo
 import com.count_out.domain.repository.plans.ExerciseRepo
+import com.count_out.domain.repository.plans.PartRepo
 import com.count_out.domain.repository.plans.PlanRepo
-import com.count_out.domain.repository.plans.RoundRepo
+import com.count_out.domain.repository.plans.RingRepo
 import com.count_out.domain.repository.plans.SetRepo
 import com.count_out.domain.repository.plans.SettingsRepo
 import com.count_out.domain.repository.plans.SpeechRepo
@@ -37,6 +38,7 @@ import com.count_out.domain.use_case.plans.DeletePlanUC
 import com.count_out.domain.use_case.plans.GetPlanUC
 import com.count_out.domain.use_case.plans.GetPlansUC
 import com.count_out.domain.use_case.plans.GetStepPlanUC
+import com.count_out.domain.use_case.plans.RingToExerciseUC
 import com.count_out.domain.use_case.plans.SaveLastUsePlanUC
 import com.count_out.domain.use_case.plans.SelectPlanUC
 import com.count_out.domain.use_case.plans.UpdateNamePlanUC
@@ -69,7 +71,7 @@ class CoreModule {
     @Singleton @Provides
     fun provideExerciseCoreCore(repo: ExerciseRepo ): ExerciseCore = ExerciseCore(repo)
     @Singleton @Provides
-    fun provideRoundCore(repo: RoundRepo ): RoundCore = RoundCore(repo)
+    fun provideRoundCore(repo: PartRepo ): PartCore = PartCore(repo)
     @Singleton @Provides
     fun provideSetCore(repo: SetRepo ): SetCore = SetCore(repo)
     @Singleton @Provides
@@ -146,6 +148,8 @@ class CoreModule {
     fun provideStopWorkoutUseCase(configuration: UseCase.Configuration, repo: ExecuteWorkOutRepo): StopWorkoutUC = StopWorkoutUC(configuration, repo)
     @Singleton @Provides
     fun provideSavePlanUseCase(configuration: UseCase.Configuration, repo: LastPlanRepo): SaveLastUsePlanUC = SaveLastUsePlanUC(configuration, repo)
+    @Singleton @Provides
+    fun provideRingToExerciseUCUseCase(configuration: UseCase.Configuration, repo: RingRepo): RingToExerciseUC = RingToExerciseUC(configuration, repo)
 }
 
 //    @Singleton

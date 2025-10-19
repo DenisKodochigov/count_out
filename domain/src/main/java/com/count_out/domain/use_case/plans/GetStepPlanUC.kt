@@ -41,27 +41,3 @@ class GetStepPlanUC @Inject constructor(
     data object Request : UseCase.Request
     data class Response(val step: Domain) : UseCase.Response
 }
-//            convertor4(repoLastPlan.getLastUsedPlan()){ tr->
-//                TypeRepo.StepPlanMy(item = toStepPlan(tr.))},
-//            convertor3(repoExecute.getPlan()){ tr-> toStepPlan(tr)})
-//
-//    override fun implementation(request: Request): Flow<ResultUC<Response>> {
-//
-//        val result = GlobalValueApp.planRun.map { plan ->
-//            plan?.let {
-//                ResultUC.Success( TypeRepo.StepPlanMy(item = toStepPlan1(it))) }
-//                ?: exceptionNull
-//        }
-//
-//        return combine(result,
-//            repoLastPlan.getLastUsedPlan().wrap{ it.toStepPlan() },
-//            repoExecute.getPlan1().wrap{ it.toStepPlan()}
-//        ){ r1, r2, r3 ->
-//            val result = r1.chek() ?: r2.chek() ?: r3.chek()
-//            when(result){
-//                is ResultUC.Error -> exceptionNull
-//                is ResultUC.Success -> ResultUC.Success(Response(result.data))
-//                null -> exceptionNull
-//            }
-//        }
-//    }

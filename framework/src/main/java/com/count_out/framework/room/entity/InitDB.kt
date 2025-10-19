@@ -110,7 +110,7 @@ private fun createTrainingPlansTesting( db: AppDataBase) {
     insertSpeeches(db, exerId = idExercise)
     var idSet = db.setDao().insert(SetTb(
             exerciseId = idExercise, name = "Set 2", reps = reps, distanceV = 10.0,
-            distanceU = Units.KM.ordinal, timeRestV = rest, goal = 1,
+            distanceU = Units.KM.ordinal, timeRestV = rest, goal = 0, weightV = 2.0,
             weightU = Units.GR.ordinal, durationU = Units.S.ordinal,
         ))
     insertSpeeches(db, setId = idSet, bs = "Старт", ae = "Конец")

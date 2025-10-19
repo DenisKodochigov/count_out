@@ -1,7 +1,7 @@
 package com.count_out.data.repository
 
 import com.count_out.data.models.ResultData.Companion.convertorFlow
-import com.count_out.data.models.types_data.LongDb
+import com.count_out.data.models.entity.LongDb
 import com.count_out.data.source.room.PlanSource
 import com.count_out.domain.entity.throwable.ResultDomain
 import com.count_out.domain.entity.types_domai.BooleanDm

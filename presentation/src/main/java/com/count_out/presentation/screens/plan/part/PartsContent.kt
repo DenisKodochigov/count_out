@@ -18,9 +18,11 @@ import com.count_out.domain.entity.enums.PartName
 import com.count_out.domain.entity.workout.Part
 import com.count_out.presentation.R
 import com.count_out.presentation.models.Dimen.contourHor2
-import com.count_out.presentation.screens.plan.PlanEvent
 import com.count_out.presentation.screens.plan.PlanEvent.ShowBS
 import com.count_out.presentation.screens.plan.PlanState
+import com.count_out.presentation.screens.plan.getCollapsing
+import com.count_out.presentation.screens.plan.ring.Rings
+import com.count_out.presentation.screens.plan.setCollapsing
 import com.count_out.presentation.view_element.EnumsTo
 import com.count_out.presentation.view_element.TextApp
 import com.count_out.presentation.view_element.bottom_sheet.ShowBottomSheetSpeech
@@ -40,7 +42,7 @@ import com.count_out.presentation.view_element.icons.IconsGroup
     Frame(colorAlpha = 0.8f, contour = contourHor2){
         Column( modifier = Modifier.padding(start = 6.dp, bottom = 4.dp, top = 4.dp)){
             TitlePart(dataState = dataState, part = part)
-            ListExercise(dataState = dataState, part = part)
+            ListRing(dataState = dataState, part = part)
         }
     }
 }
@@ -64,21 +66,11 @@ import com.count_out.presentation.view_element.icons.IconsGroup
         Spacer(modifier = Modifier.width(6.dp))
     }
 }
-@Composable fun ListExercise(dataState: PlanState, part: Part){
-    if (getCollapsing(dataState, part) && part.amount > 0){
-//        ListExercises(dataState = dataState, part = part, modifier = Modifier.padding(end = 8.dp))
-    }
+@Composable fun ListRing(dataState: PlanState, part: Part){
+    if (getCollapsing(dataState, part)) Rings(dataState, part)
 }
 fun showSpeechRound(dataState: PlanState, part: Part){
     dataState.item = part
     dataState.event(ShowBS(dataState.showBS.copy(domain = part)))
 }
 
-fun setCollapsing(dataState: PlanState, part: Part) {
-    if (part.amount > 0) {
-        dataState.event(PlanEvent.SetCollapsing(dataState.collapsing.copy(item = part)))
-    }
-}
-fun getCollapsing(dataState: PlanState, part: Part): Boolean {
-    return dataState.collapsing.rounds.find { it == part.idPart } != null
-}

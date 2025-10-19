@@ -11,6 +11,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.core.app.ActivityCompat
 import androidx.core.net.toUri
+import androidx.core.view.WindowCompat
 import androidx.lifecycle.lifecycleScope
 import com.count_out.app.permission.RequestPermissionsAll
 import com.count_out.app.presentation.StartApp
@@ -35,6 +36,7 @@ class MainActivity: ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         lifecycleScope.launch {
             countOutServiceBind.execute(CountOutServiceBindUC.Request).collect{
                 bindingWorkOut = it}
@@ -42,6 +44,7 @@ class MainActivity: ComponentActivity() {
                 connectedBleDevice = it}
         }
 //        enableEdgeToEdge()
+        WindowCompat.setDecorFitsSystemWindows(window, false)
         setContent {
             RequestPermissionsAll()
             StartApp()

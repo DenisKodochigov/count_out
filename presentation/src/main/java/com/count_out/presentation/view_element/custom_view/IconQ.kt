@@ -33,7 +33,7 @@ import androidx.compose.ui.unit.sp
 
 @Preview
 @Composable fun Preview() {
-    IconQ.Distance()
+    IconQ.ExerciseRing()
 }
 
 object IconQ{
@@ -571,6 +571,89 @@ object IconQ{
                         strokeWidth = thickPx * 2,
                         start = Offset(xPx / 2 - thickPx + 1, yPx * 3 / 4),
                         end = Offset(xPx * 3 / 4, yPx / 5)
+                    )
+                }
+            }
+        )
+    }
+    @Composable fun RingExercise(selected: Boolean = false, color: Color = color(), onClick: ()->Unit = {}){
+        val colorL = colorSelected(selected, color)
+        Spacer(modifier = Modifier
+            .width(width)
+            .height(height)
+            .clickable { onClick() }
+            .drawWithCache {
+                onDrawWithContent {
+                    val xPx = width.toPx()
+                    val yPx = height.toPx()
+                    val yPx1 = (height * 0.1f).toPx()
+                    val delta1 = xPx * 0.45f
+                    val thickPx = 1.dp.toPx()
+                    val startAngle = -85f
+                    val sweepAngle = 350f
+                    drawArc(
+                        color = colorL,
+                        startAngle = startAngle,
+                        sweepAngle = sweepAngle,
+                        useCenter = false,
+                        topLeft = Offset(x = thickPx * 4 / 2, y = thickPx * 3),
+                        size = Size(xPx - thickPx * 4, yPx - thickPx * 4),
+                        style = Stroke(width = thickPx)
+                    )
+                    drawLine(
+                        color = colorL, strokeWidth = thickPx * 2,
+                        start = Offset(delta1, yPx1 - thickPx * 4),
+                        end = Offset(delta1, yPx1)
+                    )
+                    drawLine(
+                        color = colorL, strokeWidth = thickPx * 2,
+                        start = Offset(xPx - delta1, yPx1 - thickPx * 4),
+                        end = Offset(xPx - delta1, yPx1)
+                    )
+                }
+            }
+        )
+    }
+    @Composable fun ExerciseRing(selected: Boolean = false, color: Color = color(), onClick: ()->Unit = {}){
+        val colorL = colorSelected(selected, color)
+//        val style = styleSelected (selected, color, fontSize)
+//        val textMeasurer = rememberTextMeasurer()
+        Spacer(modifier = Modifier
+            .width(width)
+            .height(height)
+            .clickable { onClick() }
+            .drawWithCache {
+                onDrawWithContent {
+                    val xPx = width.toPx()
+                    val yPx = height.toPx()
+                    val delta = yPx * 0.2f
+                    val thickPx = 1.dp.toPx()
+                    val strokeWidth = thickPx * if (selected) 3 else 2
+                    var koef = 0
+                    drawLine(
+                        color = colorL, strokeWidth = strokeWidth,
+                        start = Offset(0f, thickPx * 2 + delta * koef),
+                        end = Offset(xPx, thickPx * 2 + delta * koef++)
+                    )
+                    drawLine(
+                        color = colorL, strokeWidth = strokeWidth,
+                        start = Offset(0f, thickPx * 2 + delta * koef),
+                        end = Offset(xPx, thickPx * 2 + delta * koef++)
+                    )
+                    drawLine(
+                        color = colorL, strokeWidth = strokeWidth,
+                        start = Offset(0f, thickPx * 2 + delta * koef),
+                        end = Offset(xPx, thickPx * 2 + delta * koef++)
+                    )
+                    drawLine(
+                        color = colorL, strokeWidth = strokeWidth,
+                        start = Offset(0f, thickPx * 2 + delta * koef),
+                        end = Offset(xPx, thickPx * 2 + delta * koef++)
+                    )
+                    drawLine(
+                        color = colorL, strokeWidth = strokeWidth,
+                        start = Offset(0f, thickPx * 2 + delta * koef),
+                        end = Offset(xPx, thickPx * 2 + delta * koef++)
                     )
                 }
             }

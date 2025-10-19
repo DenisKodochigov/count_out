@@ -7,12 +7,14 @@ import com.count_out.domain.entity.supportive.NameId
 import com.count_out.domain.entity.types_domai.LongDm
 import com.count_out.domain.entity.workout.Collapsing
 import com.count_out.domain.entity.workout.Exercise
+import com.count_out.domain.entity.workout.Ring
 import com.count_out.domain.entity.workout.Set
 import com.count_out.domain.entity.workout.ShowBottomSheet
 import com.count_out.domain.entity.workout.Speech
 import com.count_out.domain.use_case.other.CollapsingUC
 import com.count_out.domain.use_case.other.ShowBottomSheetUC
 import com.count_out.domain.use_case.plans.GetPlanUC
+import com.count_out.domain.use_case.plans.RingToExerciseUC
 import com.count_out.domain.use_case.plans.UpdateNamePlanUC
 import com.count_out.domain.use_case.plans.activity.GetActivitiesUC
 import com.count_out.domain.use_case.plans.exercise.ChangeSequenceExerciseUC
@@ -46,6 +48,7 @@ import javax.inject.Inject
     private val showBottomSheetUC: ShowBottomSheetUC,
     private val collapsingSetUC: CollapsingUC,
     private val updateSpeechUC: UpdateSpeechUC,
+    private val ringToExercise: RingToExerciseUC,
 ): PrimeViewModel<PlanState, PlanConverter>() {
 
     override fun initScreenState(): ScreenState<PlanState> = ScreenState.Loading
@@ -65,8 +68,17 @@ import javax.inject.Inject
             is PlanEvent.ShowBS -> { showBottomSheet(event.item) }
             is PlanEvent.SetCollapsing -> { collapsingSet(event.item) }
             is PlanEvent.UpdateSpeech -> { updateSpeech(event.item) }
+            is PlanEvent.RingToExercise -> { ringToExercise(event.ring) }
         }
     }
+
+    private fun ringToExercise(item: Ring) {
+        viewModelScope.launch(Dispatchers.IO) {
+            ringToExercise.execute( RingToExerciseUC.Request(item))
+                .collect { submitState( it ) }
+        }
+    }
+
     init{
         val planId: Long? = savedStateHandle["arg1"]
         planId?.let{ getPlan(it)}

@@ -5,6 +5,7 @@ import com.count_out.domain.entity.supportive.NameId
 import com.count_out.domain.entity.workout.Collapsing
 import com.count_out.domain.entity.workout.Exercise
 import com.count_out.domain.entity.workout.Plan
+import com.count_out.domain.entity.workout.Ring
 import com.count_out.domain.entity.workout.Set
 import com.count_out.domain.entity.workout.ShowBottomSheet
 import com.count_out.domain.entity.workout.Speech
@@ -13,6 +14,12 @@ import com.count_out.presentation.screens.prime.Event
 sealed class PlanEvent: Event {
     data class DelPlan(val training: Plan) : PlanEvent()
     data class UpdatePlanName(val nameID: NameId) : PlanEvent()
+
+    data class CopyRing(val ring: Ring): PlanEvent()
+    data class DelRing(val ring: Ring): PlanEvent()
+    data class UpdateRing(val ring: Ring): PlanEvent()
+    data class ChangeSequenceRing(val item: SetViewId): PlanEvent()
+    data class RingToExercise(val ring: Ring): PlanEvent()
 
     data class CopyExercise(val exercise: Exercise): PlanEvent()
     data class DelExercise(val exercise: Exercise): PlanEvent()

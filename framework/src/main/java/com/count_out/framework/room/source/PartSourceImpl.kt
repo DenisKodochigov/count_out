@@ -3,9 +3,9 @@ package com.count_out.framework.room.source
 import com.count_out.data.models.Data
 import com.count_out.data.models.ResultData
 import com.count_out.data.models.ResultData.Success
+import com.count_out.data.models.entity.LongDb
 import com.count_out.data.models.entity.RingDb
 import com.count_out.data.models.throwable.ThrowableDS
-import com.count_out.data.models.types_data.LongDb
 import com.count_out.data.source.room.PartSource
 import com.count_out.data.source.room.RingSource
 import com.count_out.framework.room.db.part.PartDao
@@ -42,25 +42,9 @@ class PartSourceImpl @Inject constructor(
     //##############################################################################################
 
     fun copyRings(ringes: List<RingDb>, ownerId: Long): ResultData<LongDb> =
-        if (ringes.isEmpty()) {
-            Success(LongDb(0L))
-        }
+        if (ringes.isEmpty()) { Success(LongDb(0L)) }
         else {
-            ringes.map {rg-> source.copy((rg as RingTb).apply{ this.partId = ownerId}) }
+            ringes.map {rg-> source.insert((rg as RingTb).apply{ this.partId = ownerId}) }
             Success(LongDb(ringes.size.toLong()))
         }
 }
-//
-//    override fun copy1(part: Data): ResultData<Data> =
-//        part.safeUse<PartTb, ResultData<Data>> { partTb->
-//            var idNew = LongDb(0L)
-//            dao.insert(partTb.copy(idPart = 0L)).longToResult()
-//                .flatMap { ownerId->
-//                    idNew = ownerId as LongDb
-//                    val listSpeech = speechSource.getListSpeech(partId = partTb.idPart)
-//                        .map { it.apply { partId = ownerId.item } }
-//                    if (speechSource.insert(listSpeech).count() == listSpeech.count())
-//                        ResultData.Success(LongDb(listSpeech.count().toLong()))
-//                    else ResultData.Error(ThrowableDS.RequestFailed()) }
-//                .flatMap { copyRings(partTb.rings, ownerId = idNew) }
-//        }

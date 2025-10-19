@@ -5,7 +5,7 @@ interface SpeechKit: Domain {
     val afterStart: Speech
     val beforeEnd: Speech
     val afterEnd: Speech
-
+    fun toList() = listOf(beforeStart, afterStart, beforeEnd, afterEnd)
     companion object{
         val EMPTY = object: SpeechKit{
             override val beforeStart: Speech = Speech.EMPTY
@@ -22,5 +22,6 @@ interface SpeechKit: Domain {
                     override val afterEnd: Speech = list[3]
                 }
             } else EMPTY
+
     }
 }

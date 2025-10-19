@@ -26,49 +26,48 @@ import com.count_out.presentation.screens.plan.PlanViewModel
 import com.count_out.presentation.screens.plans.PlansViewModel
 import com.count_out.presentation.screens.settings.SettingViewModel
 
-fun NavGraphBuilder.executeWorkout(navigateEvent: NavigateEventImpl) {
+fun NavGraphBuilder.executeWorkout( navigateEvent: NavigateEventImpl) {
     template(
         routeTo = ExecuteDestination.route,
-        content = { navBackStackEntry ->
-            ExecuteDestination.Show( navigateEvent = navigateEvent,
-                vm =  hiltViewModel(navBackStackEntry) as ExecuteViewModel)
+        content = {navBackStackEntry ->
+            ExecuteDestination.Show( navigateEvent,
+                hiltViewModel(navBackStackEntry) as ExecuteViewModel)
         }
     )
 }
-fun NavGraphBuilder.plans(navigateEvent: NavigateEventImpl ) {
+fun NavGraphBuilder.plans( navigateEvent: NavigateEventImpl ) {
     template(
         routeTo = PlansDestination.route,
         content = {navBackStackEntry ->
             PlansDestination.Show(navigateEvent = navigateEvent,
-                vm =  hiltViewModel(navBackStackEntry) as PlansViewModel)
+                vm = hiltViewModel(navBackStackEntry) as PlansViewModel)
         }
     )
 }
-fun NavGraphBuilder.plan(navigateEvent: NavigateEventImpl) {
+fun NavGraphBuilder.plan( navigateEvent: NavigateEventImpl) {
     template(
         routeTo = PlanDestination.routeWithArgs,
         argument = PlanDestination.arguments,
-        content = { navBackStackEntry ->
-//            val arg = listOf((navBackStackEntry.arguments?.getLong(PlanDestination.ARG) ?: 0).toString())
+        content = {navBackStackEntry ->
             PlanDestination.Show(navigateEvent = navigateEvent,
-                vm =  hiltViewModel(navBackStackEntry) as PlanViewModel)
+                vm = hiltViewModel(navBackStackEntry) as PlanViewModel)
         }
     )
 }
-fun NavGraphBuilder.history(navigateEvent: NavigateEventImpl) {
+fun NavGraphBuilder.history( navigateEvent: NavigateEventImpl) {
     template(
         routeTo = HistoryDestination.route,
         content = {navBackStackEntry ->
             HistoryDestination.Show(navigateEvent = navigateEvent,
-                vm =  hiltViewModel(navBackStackEntry) as HistoryViewModel) }
+                vm = hiltViewModel(navBackStackEntry) as HistoryViewModel) }
     )
 }
-fun NavGraphBuilder.settings(navigateEvent: NavigateEventImpl) {
+fun NavGraphBuilder.settings( navigateEvent: NavigateEventImpl) {
     template(
         routeTo = SettingDestination.route,
         content = {navBackStackEntry ->
             SettingDestination.Show(navigateEvent = navigateEvent,
-                vm =  hiltViewModel(navBackStackEntry) as SettingViewModel)}
+                vm = hiltViewModel(navBackStackEntry) as SettingViewModel)}
     )
 }
 

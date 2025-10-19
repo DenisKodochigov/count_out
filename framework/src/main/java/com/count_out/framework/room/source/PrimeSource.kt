@@ -4,13 +4,13 @@ import com.count_out.data.models.Data
 import com.count_out.data.models.ResultData
 import com.count_out.data.models.ResultData.Companion.flatMapCondition
 import com.count_out.data.models.entity.ActivityDb
+import com.count_out.data.models.entity.BooleanDb
+import com.count_out.data.models.entity.LongDb
+import com.count_out.data.models.entity.LongsDb
+import com.count_out.data.models.entity.NameIdDb
 import com.count_out.data.models.entity.PlanDb
+import com.count_out.data.models.entity.SpeechesDb
 import com.count_out.data.models.throwable.ThrowableDS
-import com.count_out.data.models.types_data.BooleanDb
-import com.count_out.data.models.types_data.LongDb
-import com.count_out.data.models.types_data.LongesDb
-import com.count_out.data.models.types_data.NameIdDb
-import com.count_out.data.models.types_data.SpeechesDb
 import com.count_out.framework.room.db.speech.SpeechTb
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -91,9 +91,9 @@ abstract class PrimeSource {
             }
             .flatMapCondition({ vl -> vl.item.isNotEmpty() }) { speeches ->
                 insertSpeeches(speeches.item.map { it as SpeechTb })
-                    .listToResult { LongesDb(it) }
+                    .listToResult { LongsDb(it) }
             }
-            .flatMapCondition<LongesDb, LongDb>({vl -> vl.item > 0L }) {
+            .flatMapCondition<LongsDb, LongDb>({ vl -> vl.item > 0L }) {
                 copyNested(newId)
             }
     }

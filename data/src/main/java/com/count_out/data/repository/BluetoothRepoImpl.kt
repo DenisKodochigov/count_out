@@ -1,13 +1,10 @@
 package com.count_out.data.repository
 
-import com.count_out.data.models.Data
-import com.count_out.data.models.Data.Companion.toData
 import com.count_out.data.models.ResultData
 import com.count_out.data.models.ResultData.Companion.convertorFlow
+import com.count_out.data.models.entity.DeviceBleDb
+import com.count_out.data.models.entity.StringDb
 import com.count_out.data.models.throwable.ThrowableDS
-import com.count_out.data.models.types_data.BooleanDb
-import com.count_out.data.models.types_data.DeviceBleDb
-import com.count_out.data.models.types_data.StringDb
 import com.count_out.data.source.framework.BleSource
 import com.count_out.data.source.local.SettingsSource
 import com.count_out.domain.entity.throwable.ResultDomain
@@ -28,7 +25,7 @@ class BluetoothRepoImpl @Inject constructor(
         return bleSource.stopScanning().convertorFlow() }
 
     override fun connectDevice(address: Domain): Flow<ResultDomain<Domain>>{
-        return bleSource.connectDevice(toData(address)).convertorFlow() }
+        return bleSource.connectDevice(StringDb.fromDomain(address)).convertorFlow() }
 
     override fun lastDevice(): Flow<ResultDomain<Domain>> {
         return combine(
@@ -44,8 +41,8 @@ class BluetoothRepoImpl @Inject constructor(
                     object : DeviceBleDb {
                         override val name = f1.data.item
                         override val address = f2.data.item
-                        override fun toResultData(): ResultData<Data> =
-                            ResultData.Success(BooleanDb(true))
+//                        override fun toResultData(): ResultData<Data> =
+//                            ResultData.Success(BooleanDb(true))
                         override fun toDomain(ind: Int) = object : Domain {}
                     }
                 )

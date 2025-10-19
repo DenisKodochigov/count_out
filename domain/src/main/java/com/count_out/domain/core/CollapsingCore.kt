@@ -5,6 +5,7 @@ import com.count_out.domain.entity.workout.Activity
 import com.count_out.domain.entity.workout.Collapsing
 import com.count_out.domain.entity.workout.Domain
 import com.count_out.domain.entity.workout.Exercise
+import com.count_out.domain.entity.workout.Part
 import com.count_out.domain.entity.workout.Ring
 import com.count_out.domain.entity.workout.Set
 import kotlinx.coroutines.flow.Flow
@@ -20,12 +21,14 @@ class CollapsingCore: Core()  {
     }
     fun executeCollapsing(item: Collapsing): Collapsing{
         return when(item.item){
-            is Set -> {item.copy(sets =
-                editList(item.sets, (item.item as Set).idSet))}
-            is Ring -> {item.copy(rounds =
-                editList(item.rounds, (item.item as Ring).idRing))}
+            is Part -> {item.copy(parts =
+                editList(item.parts, (item.item as Part).idPart))}
+            is Ring -> {item.copy(rings =
+                editList(item.rings, (item.item as Ring).idRing))}
             is Exercise-> {item.copy(exercises =
                 editList(item.exercises, (item.item as Exercise).idExercise))}
+            is Set -> {item.copy(sets =
+                editList(item.sets, (item.item as Set).idSet))}
             is Activity -> {item.copy(activities =
                 editList(item.activities, (item.item as Activity).idActivity))}
             else -> {item}

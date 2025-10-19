@@ -1,7 +1,6 @@
 package com.count_out.data.models.entity
 
 import com.count_out.data.models.Data
-import com.count_out.data.models.ResultData
 import com.count_out.domain.entity.workout.Activity
 import com.count_out.domain.entity.workout.Domain
 import com.count_out.domain.entity.workout.Exercise
@@ -19,7 +18,7 @@ abstract class ExerciseDb: Data {
     abstract val sets: List<SetDb>
     abstract val amountSet: Int
     abstract val duration: Double
-    override fun toResultData(): ResultData<Data> = ResultData.Success(this)
+//    override fun toResultData(): ResultData<Data> = ResultData.Success(this)
     override fun toDomain(ind: Int): Domain = object: Exercise {
         override val idExercise: Long = this@ExerciseDb.idExercise
         override val ringId: Long = this@ExerciseDb.ringId
@@ -31,4 +30,25 @@ abstract class ExerciseDb: Data {
         override val amountSet: Int = this@ExerciseDb.amountSet
         override val duration: Parameter = Parameter.Companion.fill(this@ExerciseDb.duration, 2)
     }
+
+    companion object {
+        fun fromDomain(domain: Domain): ExerciseDb {
+            return when (domain) {
+                is Exercise -> object: ExerciseDb(){
+                    override val idExercise: Long = domain.idExercise
+                    override val ringId: Long = domain.ringId
+                    override val idView: Int = domain.idView
+                    override val activityId: Long = domain.activityId
+                    override val activity: ActivityDb? = domain.activity?.let { ActivityDb.fromDomain(it)}
+                    override val speeches: List<SpeechDb> = domain.speechKit.toList().map { SpeechDb.fromDomain(it) }
+                    override val sets: List<SetDb> = domain.sets.map { SetDb.fromDomain(it) }
+                    override val amountSet: Int = domain.amountSet
+                    override val duration: Double = domain.duration.value
+                }
+                else -> throw IllegalArgumentException("Unsupported domain type")
+            }
+        }
+    }
+
+
 }

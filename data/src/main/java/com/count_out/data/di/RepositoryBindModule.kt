@@ -8,6 +8,7 @@ import com.count_out.data.repository.ExerciseRepoImpl
 import com.count_out.data.repository.LastPlanRepoImpl
 import com.count_out.data.repository.LocationRepoImpl
 import com.count_out.data.repository.PlanRepoImpl
+import com.count_out.data.repository.RingRepoImpl
 import com.count_out.data.repository.SetRepoImpl
 import com.count_out.data.repository.SettingsRepoImpl
 import com.count_out.data.repository.SpeechRepoImpl
@@ -21,6 +22,7 @@ import com.count_out.domain.repository.WeatherRepo
 import com.count_out.domain.repository.plans.ActivityRepo
 import com.count_out.domain.repository.plans.ExerciseRepo
 import com.count_out.domain.repository.plans.PlanRepo
+import com.count_out.domain.repository.plans.RingRepo
 import com.count_out.domain.repository.plans.SetRepo
 import com.count_out.domain.repository.plans.SettingsRepo
 import com.count_out.domain.repository.plans.SpeechRepo
@@ -46,8 +48,6 @@ abstract class RepositoryBindModule {
     abstract fun bindExerciseRepo(exerciseRepoImpl: ExerciseRepoImpl): ExerciseRepo
     @Binds
     abstract fun bindSetRepo(setRepoImpl: SetRepoImpl): SetRepo
-//    @Binds
-//    abstract fun bindSpeechKitRepo(speechKitRepoImpl: SpeechKitRepoImpl): SpeechKitRepo
     @Binds
     abstract fun bindSpeechRepo(speechRepoImpl: SpeechRepoImpl): SpeechRepo
     @Binds
@@ -58,6 +58,6 @@ abstract class RepositoryBindModule {
     abstract fun bindExecuteWorkOutRepo(executeRepoImpl: ExecuteWorkOutRepoImpl): ExecuteWorkOutRepo
     @Binds
     abstract fun bindLastPlanRepo(lastPlanRepoImpl: LastPlanRepoImpl): LastPlanRepo
-//    @Binds
-//    abstract fun bindActive(activityImpl: ActivityImplD): Activity
+    @Binds
+    abstract fun bindRingRepo(lastPlanRepoImpl: RingRepoImpl): RingRepo
 }

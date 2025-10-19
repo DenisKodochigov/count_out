@@ -1,8 +1,10 @@
 package com.count_out.app.presentation
 
 import android.annotation.SuppressLint
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.TopAppBar
@@ -35,7 +37,7 @@ fun StartApp() {
         initUnits()
         initPartName()
         Scaffold(
-            modifier = Modifier.Companion.semantics { testTagsAsResourceId = true },
+            modifier = Modifier.semantics { testTagsAsResourceId = true },
             topBar = {
                 TopAppBar(
                     expandedHeight = 0.dp,
@@ -57,11 +59,9 @@ fun StartApp() {
 //            },
 //            floatingActionButtonPosition = FabPosition.Companion.End,
             content = {  innerPadding ->
-                NavHostApp(
-                    navController = navController,
-                    modifier = Modifier.Companion.padding(innerPadding)
-                )
-
+                Box(modifier = Modifier.statusBarsPadding().padding(innerPadding)) {
+                    NavHostApp(navController = navController)
+                }
             }
         )
     }

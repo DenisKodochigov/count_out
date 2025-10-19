@@ -10,7 +10,6 @@ interface BluetoothRepo {
     fun connectDevice(address: Domain): Flow<ResultDomain<Domain>>
     fun lastDevice(): Flow<ResultDomain<Domain>>
     fun clearCache(): Flow<ResultDomain<Domain>>
-//    fun selectDeice(device: TypeRepo): Flow<ResultUC<TypeRepo>>
     fun getStateBle(): Flow<ResultDomain<Domain>>
     fun getHeartRate(): Flow<ResultDomain<Domain>>
 }

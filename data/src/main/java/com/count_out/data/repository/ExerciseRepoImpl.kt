@@ -1,7 +1,7 @@
 package com.count_out.data.repository
 
-import com.count_out.data.models.Data.Companion.toData
 import com.count_out.data.models.ResultData.Companion.convertor
+import com.count_out.data.models.entity.ExerciseDb
 import com.count_out.data.source.room.ExerciseSource
 import com.count_out.domain.entity.throwable.ResultDomain
 import com.count_out.domain.entity.workout.Domain
@@ -13,15 +13,15 @@ class ExerciseRepoImpl @Inject constructor(
     private val source: ExerciseSource): ExerciseRepo {
 
     override fun del(exercise: Domain): Flow<ResultDomain<Domain>> {
-        return source.del(toData(exercise)).convertor()
+        return source.del( ExerciseDb.fromDomain(exercise)).convertor()
     }
     override fun copy(exercise: Domain): Flow<ResultDomain<Domain>> {
-        return source.copy(toData(exercise)).convertor()
+        return source.copy(ExerciseDb.fromDomain(exercise)).convertor()
     }
     override fun update(exercise: Domain): Flow<ResultDomain<Domain>> {
-        return source.update(toData(exercise)).convertor()
+        return source.update(ExerciseDb.fromDomain(exercise)).convertor()
     }
     override fun changeSequenceExercise(setViewId: Domain): Flow<ResultDomain<Domain>> {
-        return source.changeSequenceExercise(toData(setViewId)).convertor()
+        return source.changeSequenceExercise(ExerciseDb.fromDomain(setViewId)).convertor()
     }
 }

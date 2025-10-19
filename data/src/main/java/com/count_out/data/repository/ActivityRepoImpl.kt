@@ -1,6 +1,6 @@
 package com.count_out.data.repository
 
-import com.count_out.data.models.Data.Companion.toData
+import com.count_out.data.models.Data.Companion.fromDomain
 import com.count_out.data.models.ResultData.Companion.convertor
 import com.count_out.data.models.ResultData.Companion.convertorFlow
 import com.count_out.data.source.room.ActivitySource
@@ -13,14 +13,14 @@ import javax.inject.Inject
 class ActivityRepoImpl @Inject constructor( private val source: ActivitySource): ActivityRepo{
     override fun gets(): Flow<ResultDomain<Domain>> = source.gets().convertorFlow()
     override fun get(activity: Domain): Flow<ResultDomain<Domain>> =
-        source.get(toData(activity)).convertorFlow()
+        source.get(activity.fromDomain()).convertorFlow()
 
     override fun del(activity: Domain): Flow<ResultDomain<Domain>> =
-        source.del(toData(activity)).convertor()
+        source.del(activity.fromDomain()).convertor()
 
     override fun copy(activity: Domain): Flow<ResultDomain<Domain>> =
-        source.copy(toData(activity)).convertor()
+        source.copy(activity.fromDomain()).convertor()
 
     override fun update(activity: Domain): Flow<ResultDomain<Domain>> =
-        source.update(toData(activity)).convertor()
+        source.update(activity.fromDomain()).convertor()
 }

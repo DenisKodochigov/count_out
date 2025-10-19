@@ -12,7 +12,6 @@ class ConnectDeviceHrUC @Inject constructor(
 ): UseCase<ConnectDeviceHrUC.Request, ConnectDeviceHrUC.Response>(configuration)  {
 
     override fun method(request: Request): Flow<ResultDomain<Domain>> = core.connectDeviceHr()
-//    override fun methodDomain(result: ResultUC<TypeRepo>) = result
     override fun response(result: Domain): Response = Response(result)
     data object Request: UseCase.Request
     data class Response(val result: Domain): UseCase.Response

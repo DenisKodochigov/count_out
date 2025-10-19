@@ -1,8 +1,8 @@
 package com.count_out.data.models.entity
 
 import com.count_out.data.models.Data
-import com.count_out.data.models.ResultData
 import com.count_out.domain.entity.workout.Activity
+import com.count_out.domain.entity.workout.Domain
 
 abstract class ActivityDb: Data {
     abstract val idActivity: Long
@@ -12,7 +12,6 @@ abstract class ActivityDb: Data {
     abstract val color: Int
     abstract val videoClip: String
     abstract val audioTrack: String
-    override fun toResultData(): ResultData<Data> = ResultData.Success(this)
     override fun toDomain(ind: Int) = object: Activity {
         override val idActivity: Long = this@ActivityDb.idActivity
         override val name: String = this@ActivityDb.name
@@ -21,5 +20,23 @@ abstract class ActivityDb: Data {
         override val color: Int = this@ActivityDb.color
         override val videoClip: String = this@ActivityDb.videoClip
         override val audioTrack: String = this@ActivityDb.audioTrack
+    }
+
+    companion object {
+        fun fromDomain(domain: Domain): ActivityDb {
+            return when (domain) {
+                is Activity -> object: ActivityDb(){
+                    override val idActivity: Long = domain.idActivity
+                    override val name: String = domain.name
+                    override val description: String = domain.description
+                    override val icon: Int = domain.icon
+                    override val color: Int = domain.color
+                    override val videoClip: String = domain.videoClip
+                    override val audioTrack: String = domain.audioTrack
+
+                }
+                else -> throw IllegalArgumentException("Unsupported domain type")
+            }
+        }
     }
 }

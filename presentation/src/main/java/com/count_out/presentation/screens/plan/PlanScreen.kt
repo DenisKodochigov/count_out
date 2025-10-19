@@ -26,6 +26,9 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.count_out.domain.entity.NavigateEvent
 import com.count_out.domain.entity.supportive.NameId
+import com.count_out.domain.entity.workout.Domain
+import com.count_out.domain.entity.workout.Part
+import com.count_out.domain.entity.workout.Ring
 import com.count_out.presentation.R
 import com.count_out.presentation.models.Dimen
 import com.count_out.presentation.models.TypeKeyboard
@@ -99,5 +102,15 @@ import com.count_out.presentation.view_element.icons.IconsGroup
             }
         )
         Spacer(modifier = Modifier.width(7.dp))
+    }
+}
+fun setCollapsing(dataState: PlanState, item: Domain) {
+    dataState.event(PlanEvent.SetCollapsing(dataState.collapsing.copy(item = item)))
+}
+fun getCollapsing(dataState: PlanState, item: Domain): Boolean {
+    return when(item) {
+        is Part -> dataState.collapsing.parts.find { it == item.idPart } != null
+        is Ring->dataState.collapsing.rings.find { it == item.idRing } != null
+        else -> false
     }
 }

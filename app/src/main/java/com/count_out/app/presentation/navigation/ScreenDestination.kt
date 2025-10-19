@@ -35,7 +35,7 @@ interface ScreenDestination {
     val showFab: Boolean
     var textFABId: Int
     var onClickFAB: () -> Unit
-    @Composable fun Show (vm: ViewModel, navigateEvent: NavigateEvent)
+    @Composable fun Show( navigateEvent: NavigateEvent, vm: ViewModel)
 }
 /*** App app navigation destinations*/
 object ExecuteDestination : ScreenDestination {
@@ -50,7 +50,7 @@ object ExecuteDestination : ScreenDestination {
     override var textFABId = R.string.screen_execute
     override var onClickFAB: () -> Unit = {}
 
-    @Composable override fun Show(vm: ViewModel, navigateEvent: NavigateEvent) {
+    @Composable override fun Show(navigateEvent: NavigateEvent, vm: ViewModel) {
         ExecuteWorkoutScreen(vm as ExecuteViewModel, navigateEvent)
     }
 }
@@ -66,7 +66,7 @@ object PlansDestination : ScreenDestination {
     override var textFABId = R.string.plans
     override var onClickFAB: () -> Unit = {}
     @Composable
-    override fun Show (vm: ViewModel, navigateEvent: NavigateEvent) {
+    override fun Show (navigateEvent: NavigateEvent, vm: ViewModel) {
         PlansScreen(vm as PlansViewModel, navigateEvent)
     }
 }
@@ -81,7 +81,7 @@ object PlanDestination : ScreenDestination {
     override var textFABId = R.string.training
     override var onClickFAB: () -> Unit = {}
 
-    @Composable override fun Show(vm: ViewModel, navigateEvent: NavigateEvent) {
+    @Composable override fun Show(navigateEvent: NavigateEvent, vm: ViewModel) {
         PlanScreen(vm as PlanViewModel, navigateEvent)
     }
 
@@ -101,7 +101,7 @@ object HistoryDestination : ScreenDestination {
     override var textFABId = R.string.history
     override var onClickFAB: () -> Unit = {}
 
-    @Composable override fun Show(vm: ViewModel, navigateEvent: NavigateEvent) {
+    @Composable override fun Show(navigateEvent: NavigateEvent, vm: ViewModel) {
         HistoryScreen(vm as HistoryViewModel, navigateEvent) }
 }
 object SettingDestination : ScreenDestination {
@@ -117,7 +117,7 @@ object SettingDestination : ScreenDestination {
     override var onClickFAB: () -> Unit = {}
 
     @Composable
-    override fun Show(vm: ViewModel, navigateEvent: NavigateEvent) {
+    override fun Show(navigateEvent: NavigateEvent, vm: ViewModel) {
         SettingScreen(vm as SettingViewModel)
     }
 }
