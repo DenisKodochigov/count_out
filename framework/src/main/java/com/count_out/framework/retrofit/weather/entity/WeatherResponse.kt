@@ -24,7 +24,7 @@ data class WeatherResponse(
     @param:Json(name = "wind_direction_10m")  val windDirection10m: Int = 0,
     @param:Json(name = "wind_gusts_10m")  val windGusts10m: Double = 0.0,
 ){
-    fun toWeatherSource() = object: WeatherDb() {
+    fun toWeatherSource() = object: WeatherDb {
         override val time: Long = this@WeatherResponse.time.toLong()
         override val interval: Int = this@WeatherResponse.interval
         override val temperature2m: Double = this@WeatherResponse.temperature2m

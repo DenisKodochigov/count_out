@@ -7,9 +7,12 @@ import androidx.room.Index
 import androidx.room.PrimaryKey
 import com.count_out.data.models.entity.ExerciseDb
 import com.count_out.framework.room.db.activity.ActivityTb
+import com.count_out.framework.room.db.activity.ActivityTb.Companion.toTb
 import com.count_out.framework.room.db.ring.RingTb
 import com.count_out.framework.room.db.set.SetTb
+import com.count_out.framework.room.db.set.SetTb.Companion.toTb
 import com.count_out.framework.room.db.speech.SpeechTb
+import com.count_out.framework.room.db.speech.SpeechTb.Companion.toTb
 
 @Entity(
     tableName = "exercise_tb",
@@ -34,4 +37,18 @@ data class ExerciseTb(
     override var speeches: List<SpeechTb> = emptyList(),
     override var sets: List<SetTb> = emptyList(),
     override var activity: ActivityTb? = null,
-): ExerciseDb()
+): ExerciseDb{
+    companion object{
+        fun ExerciseDb.toTb() = ExerciseTb(
+            idExercise = this.idExercise,
+            ringId = this.ringId,
+            activityId = this.activityId,
+            idView = this.idView,
+            amountSet = this.amountSet,
+            duration = this.duration,
+            speeches = this.speeches.map { it.toTb() },
+            sets = this.sets.map{ it.toTb()},
+            activity = this.activity!!.toTb(),
+        )
+    }
+}

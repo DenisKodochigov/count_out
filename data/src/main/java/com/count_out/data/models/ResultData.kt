@@ -1,5 +1,6 @@
 package com.count_out.data.models
 
+import android.util.Log
 import com.count_out.data.models.throwable.ThrowableDS
 import com.count_out.domain.entity.throwable.ResultDomain
 import com.count_out.domain.entity.throwable.ThrowableUC
@@ -24,7 +25,8 @@ sealed class ResultData< out T: Data> {
             return this.filterNotNull().map { resultS->
                 when(resultS){
                     is Error -> ResultDomain.Error(ThrowableUC.Companion.extract(resultS.throwable))
-                    is Success -> ResultDomain.Success(resultS.data.toDomain())
+                    is Success -> { ResultDomain.Success(resultS.data.toDomain())
+                    }
                 }
             }
         }

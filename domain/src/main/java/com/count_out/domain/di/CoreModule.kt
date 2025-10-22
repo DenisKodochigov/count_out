@@ -6,6 +6,7 @@ import com.count_out.domain.core.CountOutServiceCore
 import com.count_out.domain.core.ExecuteWorkOutCore
 import com.count_out.domain.core.LastPlanCore
 import com.count_out.domain.core.LocationCore
+import com.count_out.domain.core.RingOrExerciseCore
 import com.count_out.domain.core.ShowBSCore
 import com.count_out.domain.core.WeatherCore
 import com.count_out.domain.core.plans.ActivityCore
@@ -38,7 +39,7 @@ import com.count_out.domain.use_case.plans.DeletePlanUC
 import com.count_out.domain.use_case.plans.GetPlanUC
 import com.count_out.domain.use_case.plans.GetPlansUC
 import com.count_out.domain.use_case.plans.GetStepPlanUC
-import com.count_out.domain.use_case.plans.RingToExerciseUC
+import com.count_out.domain.use_case.plans.RingOrExerciseUC
 import com.count_out.domain.use_case.plans.SaveLastUsePlanUC
 import com.count_out.domain.use_case.plans.SelectPlanUC
 import com.count_out.domain.use_case.plans.UpdateNamePlanUC
@@ -97,6 +98,10 @@ class CoreModule {
     @Singleton @Provides
     fun provideShowBSCore(): ShowBSCore = ShowBSCore()
     @Singleton @Provides
+    fun provideRingOrExerciseCore(repo: RingRepo): RingOrExerciseCore = RingOrExerciseCore(repo)
+
+
+    @Singleton @Provides
     fun provideUseCaseConfiguration(): UseCase.Configuration = UseCase.Configuration(Dispatchers.IO)
     @Singleton @Provides
     fun provideCopyTrainingUseCase(configuration: UseCase.Configuration, repo: PlanRepo): CopyPlanUC = CopyPlanUC(configuration, repo)
@@ -149,7 +154,7 @@ class CoreModule {
     @Singleton @Provides
     fun provideSavePlanUseCase(configuration: UseCase.Configuration, repo: LastPlanRepo): SaveLastUsePlanUC = SaveLastUsePlanUC(configuration, repo)
     @Singleton @Provides
-    fun provideRingToExerciseUCUseCase(configuration: UseCase.Configuration, repo: RingRepo): RingToExerciseUC = RingToExerciseUC(configuration, repo)
+    fun provideRingOrExerciseUCUseCase(configuration: UseCase.Configuration, repo: RingOrExerciseCore): RingOrExerciseUC = RingOrExerciseUC(configuration, repo)
 }
 
 //    @Singleton

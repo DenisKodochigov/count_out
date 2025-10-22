@@ -21,7 +21,6 @@ interface SpeechKit: Domain {
                     override val beforeEnd: Speech = list[2]
                     override val afterEnd: Speech = list[3]
                 }
-            } else EMPTY
-
+            } else { EMPTY }
     }
 }

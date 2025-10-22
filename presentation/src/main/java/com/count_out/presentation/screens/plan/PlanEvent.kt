@@ -19,7 +19,7 @@ sealed class PlanEvent: Event {
     data class DelRing(val ring: Ring): PlanEvent()
     data class UpdateRing(val ring: Ring): PlanEvent()
     data class ChangeSequenceRing(val item: SetViewId): PlanEvent()
-    data class RingToExercise(val ring: Ring): PlanEvent()
+    data class RingOrExercise(val ring: Ring): PlanEvent()
 
     data class CopyExercise(val exercise: Exercise): PlanEvent()
     data class DelExercise(val exercise: Exercise): PlanEvent()

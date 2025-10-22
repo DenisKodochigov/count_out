@@ -7,14 +7,14 @@ import com.count_out.domain.entity.workout.Parameter
 import com.count_out.domain.entity.workout.Ring
 import com.count_out.domain.entity.workout.SpeechKit
 
-abstract class RingDb: Data {
-    abstract val idRing: Long
-    abstract val partId: Long
-    abstract val speeches: List<SpeechDb>
-    abstract val exercises: List<ExerciseDb>
-    abstract val amount: Int
-    abstract val duration: Double
-    abstract val numberLaps: Int
+interface RingDb: Data {
+    val idRing: Long
+    val partId: Long
+    val speeches: List<SpeechDb>
+    val exercises: List<ExerciseDb>
+    val amount: Int
+    val duration: Double
+    val numberLaps: Int
 //    override fun toResultData(): ResultData<Data> = ResultData.Success(this)
     override fun toDomain(ind: Int): Domain = object: Ring {
         override val idRing: Long = this@RingDb.idRing
@@ -28,7 +28,7 @@ abstract class RingDb: Data {
     companion object{
         fun fromDomain(domain: Domain): RingDb {
             return when (domain) {
-                is Ring -> object: RingDb(){
+                is Ring -> object: RingDb{
                     override val idRing: Long = domain.idRing
                     override val partId: Long = domain.partId
                     override val speeches: List<SpeechDb> = domain.speechKit.toList().map { SpeechDb.fromDomain(it) }
@@ -37,8 +37,17 @@ abstract class RingDb: Data {
                     override val duration: Double = domain.duration.value
                     override val numberLaps: Int = domain.numberLaps
                 }
-                else -> throw IllegalArgumentException("Unsupported domain type")
+                else -> EMPTY
             }
+        }
+        val EMPTY = object: RingDb{
+            override val idRing: Long = 0
+            override val partId: Long = 0
+            override val speeches: List<SpeechDb> = emptyList()
+            override val exercises: List<ExerciseDb> = emptyList()
+            override val amount: Int = 0
+            override val duration: Double = 0.0
+            override val numberLaps: Int = 0
         }
     }
 }

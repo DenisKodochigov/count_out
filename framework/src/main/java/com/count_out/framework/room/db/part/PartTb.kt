@@ -8,7 +8,9 @@ import androidx.room.PrimaryKey
 import com.count_out.data.models.entity.PartDb
 import com.count_out.framework.room.db.plan.PlanTb
 import com.count_out.framework.room.db.ring.RingTb
+import com.count_out.framework.room.db.ring.RingTb.Companion.toTb
 import com.count_out.framework.room.db.speech.SpeechTb
+import com.count_out.framework.room.db.speech.SpeechTb.Companion.toTb
 
 @Entity(
     tableName = "part_tb",
@@ -28,4 +30,15 @@ data class PartTb(
     override var duration: Double = 0.0,
     override var speeches: List<SpeechTb> = emptyList(),
     override var rings: List<RingTb> = emptyList(),
-): PartDb()
+): PartDb{
+    companion object{
+        fun PartDb.toTb() = PartTb(
+            idPart = this.idPart,
+            planId = this.planId,
+            amount = this.amount,
+            duration = this.duration,
+            speeches = this.speeches.map { it.toTb() },
+            rings = this.rings.map { it.toTb() },
+        )
+    }
+}

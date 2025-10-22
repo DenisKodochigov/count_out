@@ -48,6 +48,7 @@ interface Data {
             }
         val EMPTY = object: Data{
             override fun toDomain(ind: Int): Domain = Domain.EMPTY
+
         }
     }
 }

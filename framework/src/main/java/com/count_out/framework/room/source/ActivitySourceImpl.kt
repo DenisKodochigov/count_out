@@ -17,7 +17,7 @@ class ActivitySourceImpl @Inject constructor(private val dao: ActivityDao): Acti
 
     override fun gets(): Flow<ResultData<Data>> =
         dao.gets().map { list->
-            if(list.isNotEmpty()) ResultData.Success(object: ActivitiesDb() {
+            if(list.isNotEmpty()) ResultData.Success(object: ActivitiesDb{
                 override val activities: List<ActivityDb> = list})
             else ResultData.Error(ThrowableDS.RequestFailed())
         }

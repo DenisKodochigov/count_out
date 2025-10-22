@@ -5,13 +5,15 @@ import com.count_out.data.models.ResultData
 import com.count_out.data.models.entity.LongDb
 import com.count_out.data.models.entity.NameIdDb
 import com.count_out.data.models.entity.PartDb
+import com.count_out.data.models.entity.PlanDb
 import com.count_out.data.models.entity.PlansDb
 import com.count_out.data.models.throwable.ThrowableDS
 import com.count_out.data.source.room.PartSource
 import com.count_out.data.source.room.PlanSource
-import com.count_out.framework.room.db.part.PartTb
+import com.count_out.framework.room.db.part.PartTb.Companion.toTb
 import com.count_out.framework.room.db.plan.PlanDao
 import com.count_out.framework.room.db.plan.PlanTb
+import com.count_out.framework.room.db.plan.PlanTb.Companion.toTb
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
@@ -36,21 +38,22 @@ class PlanSourceImpl @Inject constructor(
 
     override fun get(idPlan: Data): Flow<ResultData<Data>> =
         idPlan.safeUseFlow<LongDb, PlanTb>{ planId->
-            dao.getPlan(planId.item).filterNotNull().map { it.toTable() } }
+            dao.getPlan(planId.item).filterNotNull().map { it.toTable()} }
 
     override fun getId(idPlan: Data): Flow<ResultData<Data>> =
         idPlan.safeUseFlow<LongDb, PlanTb> {
             id-> dao.getPlan(id.item).filterNotNull().map{ it.toTable() } }
 
     override fun copy (plan: Data): ResultData<Data> = runCatching {
-        copyWithDependencies(
-            original = (plan as PlanTb),
-            originalId = plan.idPlan,
-            insertMain = { dao.insert(it.copy(idPlan = 0L)) },
-            getSpeeches = { oldId -> speechSource.getListSpeech(ringId = oldId) },
-            insertSpeeches = { speechSource.insert(it) },
-            copyNested = { id -> copyParts(plan.parts, id)}
-        )
+        if (plan is PlanDb){
+            copyWithDependencies(
+                original = plan.toTb(),
+                insertMain = { dao.insert(it.copy(idPlan = 0L)) },
+                getSpeeches = { speechSource.getListSpeech(ringId = plan.idPlan) },
+                insertSpeeches = { speechSource.insert(it) },
+                copyNested = { id -> copyParts(plan.parts, id)}
+            )
+        } else ResultData.Error(ThrowableDS.NotValidType())
     }.getOrElse { ResultData.Error(ThrowableDS.extract(it)) }
 
     override fun del(plan: Data): ResultData<Data> =
@@ -63,7 +66,7 @@ class PlanSourceImpl @Inject constructor(
     fun copyParts(parts: List<PartDb>, id: Long): ResultData<LongDb> =
         if (parts.isEmpty()) { ResultData.Success(LongDb(0L)) }
         else {
-            parts.map { pr-> partSource.copy((pr as PartTb).apply{ this.planId = id}) }
+            parts.map { pr-> partSource.copy((pr.toTb()).apply{ this.planId = id}) }
             ResultData.Success(LongDb(parts.size.toLong()))
         }
 }

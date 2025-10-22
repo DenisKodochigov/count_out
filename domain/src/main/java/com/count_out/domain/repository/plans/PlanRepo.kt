@@ -7,8 +7,8 @@ import kotlinx.coroutines.flow.Flow
 interface PlanRepo {
     fun get(idPlan: Domain): Flow<ResultDomain<Domain>> //: Flow<Training>
     fun gets(): Flow<ResultDomain<Domain>> //: Flow<List<Training>>
-    fun del(training: Domain): Flow<ResultDomain<Domain>> //: Flow<List<Training>>
-    fun copy(training: Domain): Flow<ResultDomain<Domain>> //: Flow<List<Training>>
+    fun del(plan: Domain): Flow<ResultDomain<Domain>> //: Flow<List<Training>>
+    fun copy(plan: Domain): Flow<ResultDomain<Domain>> //: Flow<List<Training>>
 //    fun select(training: Domain): Flow<ResultUC<Domain>> //: Flow<List<Training>>
     fun update(nameId: Domain): Flow<ResultDomain<Domain>> // Flow<Training>
 }

@@ -1,5 +1,6 @@
 package com.count_out.framework.room.entity
 
+import android.util.Log
 import com.count_out.domain.entity.enums.Units
 import com.count_out.framework.R
 import com.count_out.framework.room.AppDataBase
@@ -189,7 +190,8 @@ private fun createTrainingPlansTesting( db: AppDataBase) {
 }
 private fun insertSpeeches(
     db: AppDataBase, planId: Long? = null, partId: Long? = null,ringId: Long? = null,exerId: Long? = null,setId: Long? = null,
-    bs: String = "", ast: String = "", be: String = "", ae: String = "" ){
+    bs: String = "", ast: String = "", be: String = "", ae: String = ""
+){
     db.speechDao().insert(SpeechTb(0L, setId, exerId, ringId, partId, planId, message = bs))
     db.speechDao().insert(SpeechTb(0L, setId, exerId, ringId, partId, planId, message = ast))
     db.speechDao().insert(SpeechTb(0L, setId, exerId, ringId, partId, planId, message = be))

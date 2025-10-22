@@ -1,5 +1,6 @@
 package com.count_out.presentation.screens.plan.ring
 
+import android.util.Log
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -101,12 +102,14 @@ import com.count_out.presentation.view_element.icons.IconsGroup
             text = stringResource(id = R.string.times),
             textAlign = TextAlign.Start,
             style = MaterialTheme.typography.headlineMedium,)
-        IconRingOrExercise (ring.amount > 1){}
         IconsGroup(
             onClickSpeech = { showSpeechRound(dataState, ring) },
             onClickAddExercise = {
-                dataState.event(PlanEvent.CopyRing(ring = Ring.default(ring.partId)))
-            })
+                dataState.event(PlanEvent.CopyRing(ring = Ring.default(ring.partId))) },
+            onClickRingExercise = { dataState.event(PlanEvent.RingOrExercise(ring)) },
+            selected = ring.amount > 1
+        )
+
         Spacer(modifier = Modifier.width(6.dp))
     }
 }
@@ -129,12 +132,14 @@ import com.count_out.presentation.view_element.icons.IconsGroup
             text = stringResource(id = R.string.times),
             textAlign = TextAlign.Start,
             style = MaterialTheme.typography.headlineMedium,)
-        IconRingOrExercise (ring.amount > 1){}
+        Spacer(modifier = Modifier.weight(1f))
         IconsGroup(
             onClickSpeech = { showSpeechRound(dataState, ring) },
             onClickAddExercise = {
-                dataState.event(PlanEvent.CopyRing(ring = Ring.default(ring.partId)))
-            })
+                dataState.event(PlanEvent.CopyRing(ring = Ring.default(ring.partId))) },
+            onClickRingExercise = { dataState.event(PlanEvent.RingOrExercise(ring)) },
+            selected = ring.amount > 1
+        )
         Spacer(modifier = Modifier.width(6.dp))
     }
 }

@@ -7,8 +7,10 @@ import androidx.room.Index
 import androidx.room.PrimaryKey
 import com.count_out.data.models.entity.RingDb
 import com.count_out.framework.room.db.exercise.ExerciseTb
+import com.count_out.framework.room.db.exercise.ExerciseTb.Companion.toTb
 import com.count_out.framework.room.db.part.PartTb
 import com.count_out.framework.room.db.speech.SpeechTb
+import com.count_out.framework.room.db.speech.SpeechTb.Companion.toTb
 
 @Entity(
     tableName = "tb_ring",
@@ -29,4 +31,16 @@ data class RingTb(
     override var duration: Double = 0.0,
     override var speeches: List<SpeechTb> = emptyList(),
     override var exercises: List<ExerciseTb> = emptyList(),
-): RingDb()
+): RingDb{
+    companion object{
+        fun RingDb.toTb() = RingTb(
+            idRing = this.idRing,
+            partId = this.partId,
+            numberLaps = this.numberLaps,
+            amount = this.amount,
+            duration = this.duration,
+            speeches = this.speeches.map { it.toTb() },
+            exercises = this.exercises.map{it.toTb()},
+        )
+    }
+}

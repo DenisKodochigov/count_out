@@ -14,7 +14,7 @@ import com.count_out.domain.entity.workout.Speech
 import com.count_out.domain.use_case.other.CollapsingUC
 import com.count_out.domain.use_case.other.ShowBottomSheetUC
 import com.count_out.domain.use_case.plans.GetPlanUC
-import com.count_out.domain.use_case.plans.RingToExerciseUC
+import com.count_out.domain.use_case.plans.RingOrExerciseUC
 import com.count_out.domain.use_case.plans.UpdateNamePlanUC
 import com.count_out.domain.use_case.plans.activity.GetActivitiesUC
 import com.count_out.domain.use_case.plans.exercise.ChangeSequenceExerciseUC
@@ -48,7 +48,7 @@ import javax.inject.Inject
     private val showBottomSheetUC: ShowBottomSheetUC,
     private val collapsingSetUC: CollapsingUC,
     private val updateSpeechUC: UpdateSpeechUC,
-    private val ringToExercise: RingToExerciseUC,
+    private val ringOrExercise: RingOrExerciseUC,
 ): PrimeViewModel<PlanState, PlanConverter>() {
 
     override fun initScreenState(): ScreenState<PlanState> = ScreenState.Loading
@@ -68,13 +68,13 @@ import javax.inject.Inject
             is PlanEvent.ShowBS -> { showBottomSheet(event.item) }
             is PlanEvent.SetCollapsing -> { collapsingSet(event.item) }
             is PlanEvent.UpdateSpeech -> { updateSpeech(event.item) }
-            is PlanEvent.RingToExercise -> { ringToExercise(event.ring) }
+            is PlanEvent.RingOrExercise -> { ringOrExercise(event.ring) }
         }
     }
 
-    private fun ringToExercise(item: Ring) {
+    private fun ringOrExercise(item: Ring) {
         viewModelScope.launch(Dispatchers.IO) {
-            ringToExercise.execute( RingToExerciseUC.Request(item))
+            ringOrExercise.execute( RingOrExerciseUC.Request(item))
                 .collect { submitState( it ) }
         }
     }
@@ -83,7 +83,6 @@ import javax.inject.Inject
         val planId: Long? = savedStateHandle["arg1"]
         planId?.let{ getPlan(it)}
         getActivities()
-//        subscribeSequenceExercise()
     }
 
     fun getPlan(id: Long) {

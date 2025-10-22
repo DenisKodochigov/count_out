@@ -9,25 +9,25 @@ import com.count_out.domain.entity.workout.Set
 import com.count_out.domain.entity.workout.Speech
 import com.count_out.domain.entity.workout.SpeechKit
 
-abstract class SetDb: Data {
-    abstract val idSet: Long
-    abstract val name: String
-    abstract val exerciseId: Long
-    abstract val speeches: List<SpeechDb>
-    abstract val goal: Int
-    abstract val weightV: Double
-    abstract val weightU: Int
-    abstract val distanceV: Double
-    abstract val distanceU: Int
-    abstract val durationV: Double
-    abstract val durationU: Int
-    abstract val reps: Int
-    abstract val intensity: Int
-    abstract val intervalReps: Double
-    abstract val intervalDown: Int
-    abstract val groupCount: String
-    abstract val timeRestV: Double
-    abstract val timeRestU: Int
+interface SetDb: Data {
+    val idSet: Long
+    val name: String
+    val exerciseId: Long
+    val speeches: List<SpeechDb>
+    val goal: Int
+    val weightV: Double
+    val weightU: Int
+    val distanceV: Double
+    val distanceU: Int
+    val durationV: Double
+    val durationU: Int
+    val reps: Int
+    val intensity: Int
+    val intervalReps: Double
+    val intervalDown: Int
+    val groupCount: String
+    val timeRestV: Double
+    val timeRestU: Int
 //    override fun toResultData(): ResultData<Data> = ResultData.Success(this)
     override fun toDomain(ind: Int) = object: Set{
         override val idSet: Long = this@SetDb.idSet
@@ -48,29 +48,49 @@ abstract class SetDb: Data {
     companion object{
         fun fromDomain(domain: Domain): SetDb {
             return when (domain) {
-                is Speech -> object: SetDb(){
-                    override val idSet: Long = (domain as Set).idSet
-                    override val name: String = (domain as Set).name
-                    override val exerciseId: Long = (domain as Set).exerciseId
+                is Set -> object: SetDb{
+                    override val idSet: Long = domain.idSet
+                    override val name: String = domain.name
+                    override val exerciseId: Long = domain.exerciseId
                     override val speeches: List<SpeechDb> =
-                        (domain as Set).speechKit.toList().map { SpeechDb.fromDomain(it) }
-                    override val goal: Int = (domain as Set).goal.ordinal
-                    override val weightV: Double = (domain as Set).weight.value
-                    override val weightU: Int = (domain as Set).weight.unit.ordinal
-                    override val distanceV: Double = (domain as Set).distance.value
-                    override val distanceU: Int = (domain as Set).distance.unit.ordinal
-                    override val durationV: Double = (domain as Set).duration.value
-                    override val durationU: Int = (domain as Set).duration.unit.ordinal
-                    override val reps: Int = (domain as Set).reps
-                    override val intensity: Int = (domain as Set).intensity.ordinal
-                    override val intervalReps: Double = (domain as Set).intervalReps
-                    override val intervalDown: Int = (domain as Set).intervalDown
-                    override val groupCount: String = (domain as Set).groupCount
-                    override val timeRestV: Double = (domain as Set).rest.value
-                    override val timeRestU: Int = (domain as Set).rest.unit.ordinal
+                        domain.speechKit.toList().map { SpeechDb.fromDomain(it) }
+                    override val goal: Int = domain.goal.ordinal
+                    override val weightV: Double = domain.weight.value
+                    override val weightU: Int = domain.weight.unit.ordinal
+                    override val distanceV: Double = domain.distance.value
+                    override val distanceU: Int = domain.distance.unit.ordinal
+                    override val durationV: Double = domain.duration.value
+                    override val durationU: Int = domain.duration.unit.ordinal
+                    override val reps: Int = domain.reps
+                    override val intensity: Int = domain.intensity.ordinal
+                    override val intervalReps: Double = domain.intervalReps
+                    override val intervalDown: Int = domain.intervalDown
+                    override val groupCount: String = domain.groupCount
+                    override val timeRestV: Double = domain.rest.value
+                    override val timeRestU: Int = domain.rest.unit.ordinal
                 }
-                else -> throw IllegalArgumentException("Unsupported domain type")
+                else -> EMPTY
             }
+        }
+        val EMPTY = object: SetDb{
+            override val idSet: Long = 0
+            override val name: String = ""
+            override val exerciseId: Long = 0
+            override val speeches: List<SpeechDb> = emptyList()
+            override val goal: Int = 0
+            override val weightV: Double = 0.0
+            override val weightU: Int = 0
+            override val distanceV: Double = 0.0
+            override val distanceU: Int = 0
+            override val durationV: Double = 0.0
+            override val durationU: Int = 0
+            override val reps: Int = 0
+            override val intensity: Int = 0
+            override val intervalReps: Double = 0.0
+            override val intervalDown: Int = 0
+            override val groupCount: String = ""
+            override val timeRestV: Double = 0.0
+            override val timeRestU: Int = 0
         }
     }
 }

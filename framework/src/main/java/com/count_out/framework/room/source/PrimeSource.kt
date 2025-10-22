@@ -1,5 +1,6 @@
 package com.count_out.framework.room.source
 
+import android.util.Log
 import com.count_out.data.models.Data
 import com.count_out.data.models.ResultData
 import com.count_out.data.models.ResultData.Companion.flatMapCondition
@@ -77,21 +78,19 @@ abstract class PrimeSource {
 
     inline fun <T : Data> copyWithDependencies(
         original: T,
-        originalId: Long,
         insertMain: (T) -> Long,
-        getSpeeches: (oldId: Long) -> List<SpeechTb>,
+        getSpeeches: () -> List<SpeechTb>,
         insertSpeeches: (List<SpeechTb>) -> List<Long>,
         copyNested: (id: Long) -> ResultData<LongDb>
     ): ResultData<Data> {
         val newId = insertMain(original)
         return newId.longToResult { LongDb(it) }
-            .flatMapCondition<LongDb, SpeechesDb>({ it.item.count() > 0L }) { newId1 ->
-                getSpeeches(originalId).map { it.apply { ringId = newId1.item } }
+            .flatMapCondition({ it.item.count() > 0L }) { newId1 ->
+                getSpeeches().map { it.apply { ringId = newId1.item } }
                     .let { SpeechesDb(item = it).toResultData() }
             }
             .flatMapCondition({ vl -> vl.item.isNotEmpty() }) { speeches ->
-                insertSpeeches(speeches.item.map { it as SpeechTb })
-                    .listToResult { LongsDb(it) }
+                insertSpeeches(speeches.item.map { it as SpeechTb }).listToResult { LongsDb(it) }
             }
             .flatMapCondition<LongsDb, LongDb>({ vl -> vl.item > 0L }) {
                 copyNested(newId)

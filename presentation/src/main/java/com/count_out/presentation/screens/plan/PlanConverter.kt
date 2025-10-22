@@ -1,5 +1,6 @@
 package com.count_out.presentation.screens.plan
 
+import android.util.Log
 import com.count_out.domain.entity.workout.Activities
 import com.count_out.domain.entity.workout.Collapsing
 import com.count_out.domain.entity.workout.Plan
@@ -25,8 +26,7 @@ class PlanConverter @Inject constructor(): PrimeConvertor<UseCase.Response, Plan
     }
 
     private fun converterLocal(data: GetPlanUC.Response, state: MutableStateFlow<PlanState>): PlanState {
-        if (data.plan is Plan) {
-            state.value = state.value.copy(plan = data.plan as Plan) }
+        if (data.plan is Plan) { state.value = state.value.copy(plan = data.plan as Plan) }
         return state.value
     }
     private fun converterLocal(data: GetActivitiesUC.Response, state: MutableStateFlow<PlanState>): PlanState {

@@ -68,6 +68,8 @@ import com.count_out.presentation.view_element.custom_view.IconQ
     onClickAddRing: (() -> Unit)? = null,
     onClickAddExercise: (() -> Unit)? = null,
     onClickAddPlan: (() -> Unit)? = null,
+    onClickRingExercise: (() -> Unit)? = null,
+    selected: Boolean = true,
 ){
     var expanded by remember { mutableStateOf(false) }
     Box {
@@ -87,19 +89,12 @@ import com.count_out.presentation.view_element.custom_view.IconQ
                     onClickAddSet,
                     onClickAddRing,
                     onClickAddExercise,
-                    onClickAddPlan
+                    onClickAddPlan,
+                    onClickRingExercise,
+                    selected,
                 ) { expanded = false }
             }
         }
-    }
-}
-
-@Composable fun IconRingOrExercise(selected: Boolean, onClick:() -> Unit){
-    Row {
-        IconQ.RingExercise(selected, onClick = onClick)
-        Spacer(modifier = Modifier.width(sizeBetweenIcon))
-        IconQ.ExerciseRing(!selected, onClick = onClick)
-        Spacer(modifier = Modifier.width(sizeBetweenIcon))
     }
 }
 
@@ -140,7 +135,9 @@ import com.count_out.presentation.view_element.custom_view.IconQ
     onClickAddRing: (() -> Unit)? = null,
     onClickAddExercise: (() -> Unit)? = null,
     onClickAddPlan: (() -> Unit)? = null,
-    expanded: ()->Unit
+    onClickRingExercise: (() -> Unit)? = null,
+    selected: Boolean,
+    expanded: ()->Unit,
 ){
     Column( verticalArrangement = Arrangement.SpaceBetween){
 //        Spacer(modifier = Modifier.height(sizeBetweenIcon))
@@ -167,10 +164,13 @@ import com.count_out.presentation.view_element.custom_view.IconQ
             Spacer(modifier = Modifier.height(sizeBetweenIcon)) }
         onClickDelete?.let {
             IconSingle(image = Icons.Default.DeleteOutline, onClick = { it(); expanded()} )
-            Spacer(modifier = Modifier.height(sizeBetweenIcon))
-        }
+            Spacer(modifier = Modifier.height(sizeBetweenIcon)) }
+        onClickRingExercise?.let {
+            IconRingOrExercise(selected, onClick = { it(); expanded()} )
+            Spacer(modifier = Modifier.height(sizeBetweenIcon)) }
     }
 }
+
 @Composable fun IconSingle(image: ImageVector, onClick:()->Unit = {}, idDescription: Int = 0){
     Icon(imageVector = image,
         tint = MaterialTheme.colorScheme.outline,
@@ -192,12 +192,14 @@ import com.count_out.presentation.view_element.custom_view.IconQ
 @Composable fun IconsCollapsing(onClick: ()->Unit, wrap: Boolean) {
     if (wrap) IconQ.Collapsing( onClick = onClick) else IconQ.UnCollapsing( onClick = onClick)
 }
+@Composable fun IconRingOrExercise(selected: Boolean, onClick:() -> Unit){
+        IconQ.RingExercise(selected, onClick = onClick)
+}
 @Composable fun IconAddSet(onClick:()->Unit) = IconAdd(onClick = onClick, text = "S+" )
 @Composable fun IconAddRing(onClick:()->Unit) = IconAdd(onClick = onClick, text = "R+" )
 @Composable fun IconAddExercise(onClick:()->Unit) = IconAdd(onClick = onClick, text = "E+" )
 @Composable fun IconAddPlan(onClick:()->Unit) = IconAdd(onClick = onClick, text = "P+" )
 //@Composable fun IconAddActivity(onClick:()->Unit) = IconAdd(onClick = onClick, text = "A+" )
-
 @Composable fun IconAdd(onClick:()->Unit, text: String = "+") {
     Box(modifier = Modifier){
         Spacer(modifier = Modifier.align(alignment = Alignment.Center)

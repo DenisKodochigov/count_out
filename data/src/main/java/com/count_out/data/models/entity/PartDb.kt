@@ -8,13 +8,13 @@ import com.count_out.domain.entity.workout.Part
 import com.count_out.domain.entity.workout.Ring
 import com.count_out.domain.entity.workout.SpeechKit
 
-abstract class PartDb: Data {
-    abstract val idPart: Long
-    abstract val planId: Long
-    abstract val speeches: List<SpeechDb>
-    abstract val rings: List<RingDb>
-    abstract val amount: Int
-    abstract val duration: Double
+interface PartDb: Data {
+    val idPart: Long
+    val planId: Long
+    val speeches: List<SpeechDb>
+    val rings: List<RingDb>
+    val amount: Int
+    val duration: Double
 //    override fun toResultData(): ResultData<Data> = ResultData.Success(this)
     override fun toDomain(ind: Int): Domain = object: Part{
         override val idPart: Long = this@PartDb.idPart
@@ -29,7 +29,7 @@ abstract class PartDb: Data {
     companion object {
         fun fromDomain(domain: Domain): PartDb {
             return when (domain) {
-                is Part -> object: PartDb(){
+                is Part -> object: PartDb{
                     override val idPart: Long = domain.idPart
                     override val planId: Long = domain.planId
                     override val speeches: List<SpeechDb> = domain.speechKit.toList().map { SpeechDb.fromDomain(it) }
@@ -37,8 +37,16 @@ abstract class PartDb: Data {
                     override val amount: Int = domain.amount
                     override val duration: Double = domain.duration.value
                 }
-                else -> throw IllegalArgumentException("Unsupported domain type")
+                else -> EMPTY
             }
+        }
+        val EMPTY = object: PartDb{
+            override val idPart: Long = 0
+            override val planId: Long = 0
+            override val speeches: List<SpeechDb> = emptyList()
+            override val rings: List<RingDb> = emptyList()
+            override val amount: Int = 0
+            override val duration: Double = 0.0
         }
     }
 }

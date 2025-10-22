@@ -89,9 +89,7 @@ fun ListExercises(dataState: PlanState, ring: Ring)
                         "${exercise.duration.value} ${stringResource(id = exercise.duration.unit.id)}",
             )
         }
-        IconRingOrExercise (ring.amount > 1){
-            dataState.event(PlanEvent.RingToExercise(ring))
-        }
+        Spacer(modifier = Modifier.weight(1f))
         IconsGroup(
             onClickCopy = { dataState.event(PlanEvent.CopyExercise(exercise))},
             onClickDelete = { dataState.event(PlanEvent.DelExercise(exercise)) },
@@ -103,6 +101,8 @@ fun ListExercises(dataState: PlanState, ring: Ring)
                 dataState.event(ShowBS(dataState.showBS.copy(domain = exercise))) },
             onClickAddSet = { dataState.event( PlanEvent.CopySet(
                     SetImplP(name = nameNewSet, exerciseId = exercise.idExercise)))},
+            onClickRingExercise = { dataState.event(PlanEvent.RingOrExercise(ring)) },
+            selected = ring.amount > 1
         )
     }
 }

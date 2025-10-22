@@ -13,4 +13,16 @@ data class ActivityTb(
     override var color: Int = 0,
     override var videoClip: String = "",
     override var audioTrack: String = ""
-): ActivityDb()
+): ActivityDb{
+    companion object{
+        fun ActivityDb.toTb() = ActivityTb(
+            idActivity = this.idActivity,
+            name = this.name,
+            description = this.description,
+            icon = this.icon,
+            color = this.color,
+            videoClip = this.videoClip,
+            audioTrack = this.audioTrack,
+        )
+    }
+}

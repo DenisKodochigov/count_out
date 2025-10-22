@@ -16,11 +16,11 @@ import com.count_out.framework.room.db.set.SetTb
     ignoredColumns = ["addMessage"],
     indices = [
         Index(value = ["idSpeech"], unique = true),
-        Index(value = ["planId"], unique = true),
-        Index(value = ["partId"], unique = true),
-        Index(value = ["ringId"], unique = true),
-        Index(value = ["exerciseId"], unique = true),
-        Index(value = ["setId"], unique = true), ],
+        Index(value = ["planId"]),
+        Index(value = ["partId"]),
+        Index(value = ["ringId"]),
+        Index(value = ["exerciseId"]),
+        Index(value = ["setId"]), ],
     foreignKeys = [
         ForeignKey(
             entity = PlanTb::class,
@@ -63,4 +63,18 @@ data class SpeechTb(
     override var message: String = "",
     override var duration: Long = 0L,
     override var addMessage: String = "",
-): SpeechDb()
+): SpeechDb{
+    companion object{
+        fun SpeechDb.toTb() = SpeechTb(
+            idSpeech = this.idSpeech,
+            setId = this.setId,
+            exerciseId = this.exerciseId,
+            ringId = this.ringId,
+            partId = this.partId,
+            planId = this.planId,
+            message = this.message,
+            duration = this.duration,
+            addMessage = this.addMessage,
+        )
+    }
+}

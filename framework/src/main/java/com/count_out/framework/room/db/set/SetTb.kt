@@ -8,6 +8,7 @@ import androidx.room.PrimaryKey
 import com.count_out.data.models.entity.SetDb
 import com.count_out.framework.room.db.exercise.ExerciseTb
 import com.count_out.framework.room.db.speech.SpeechTb
+import com.count_out.framework.room.db.speech.SpeechTb.Companion.toTb
 
 @Entity(tableName = "set_tb",
     ignoredColumns = ["speeches"],
@@ -40,4 +41,26 @@ data class SetTb (
     override var timeRestV: Double = 0.0,
     override var timeRestU: Int = 1,
     override var speeches: List<SpeechTb> = emptyList(),
-): SetDb()
+): SetDb{
+    companion object{
+        fun SetDb.toTb() = SetTb(
+            idSet = this.idSet,
+            exerciseId = this.exerciseId,
+            name = this.name,
+            goal = this.goal,
+            durationV = this.durationV,
+            durationU = this.durationU,
+            distanceV = this.distanceV,
+            distanceU = this.distanceU,
+            weightV = this.weightV,
+            weightU = this.weightU,
+            intervalReps = this.intervalReps,
+            intensity = this.intensity,
+            intervalDown = this.intervalDown,
+            groupCount = this.groupCount,
+            timeRestV = this.timeRestV,
+            timeRestU = this.timeRestU,
+            speeches = this.speeches.map { it.toTb() },
+        )
+    }
+}
