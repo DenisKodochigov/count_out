@@ -13,7 +13,7 @@ import javax.inject.Inject
 class RingOrExerciseCore @Inject constructor(private val repo: RingRepo): Core()  {
     fun setRingOrExercise(ring: Domain): Flow<ResultDomain<Domain>>{
         return (ring as? Ring)?.let {
-            repo.insert (if (ring.amount > 1) ring.amount(1) else ring.amount(2)) } ?:
+            repo.update (if (ring.amount > 1) ring.amount(1) else ring.amount(2)) } ?:
                 flowOf(ResultDomain.Error(ThrowableUC.NotValidType()))
     }
 }

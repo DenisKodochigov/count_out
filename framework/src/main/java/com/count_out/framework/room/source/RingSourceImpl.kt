@@ -10,7 +10,6 @@ import com.count_out.data.source.room.ExerciseSource
 import com.count_out.data.source.room.RingSource
 import com.count_out.framework.room.db.exercise.ExerciseTb.Companion.toTb
 import com.count_out.framework.room.db.ring.RingDao
-import com.count_out.framework.room.db.ring.RingTb
 import com.count_out.framework.room.db.ring.RingTb.Companion.toTb
 import javax.inject.Inject
 
@@ -37,10 +36,10 @@ class RingSourceImpl @Inject constructor(
     }.getOrElse { ResultData.Error(ThrowableDS.extract(it)) }
 
     override fun del(ring: Data): ResultData<Data> =
-        ring.safeUse<RingTb, Long> { dao.delete( it).toLong() }
+        ring.safeUse<RingDb, Long> { dao.delete( it.toTb()).toLong() }
 
     override fun update(ring: Data): ResultData<Data> =
-        ring.safeUse<RingTb, Long> { dao.update(it).toLong() }
+        ring.safeUse<RingDb, Long> { dao.update(it.toTb()).toLong() }
 
 //##############################################################################################
     fun copyExercises(exercises: List<ExerciseDb>, id: Long): ResultData<LongDb> =

@@ -173,6 +173,7 @@
     <string name="execute_ring">Количество кругов</string>
     <string name="ring">Ring</string>
     <string name="times">times</string>
+    <string name="circles">circles</string>
 </resources>
 
 <!--<string name="error_1">Ошибка</string>-->

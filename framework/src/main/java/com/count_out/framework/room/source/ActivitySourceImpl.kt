@@ -9,6 +9,7 @@ import com.count_out.data.models.throwable.ThrowableDS
 import com.count_out.data.source.room.ActivitySource
 import com.count_out.framework.room.db.activity.ActivityDao
 import com.count_out.framework.room.db.activity.ActivityTb
+import com.count_out.framework.room.db.activity.ActivityTb.Companion.toTb
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
@@ -26,10 +27,10 @@ class ActivitySourceImpl @Inject constructor(private val dao: ActivityDao): Acti
         return activity.safeUseFlow<ActivityDb, ActivityDb> { dao.get(it.idActivity) } }
 
     override fun copy(activity: Data): ResultData<Data> =
-        activity.safeUse<ActivityTb, Long> { item-> dao.insert(item) }
+        activity.safeUse<ActivityDb, Long> { item-> dao.insert(item.toTb()) }
 
     override fun update(activity: Data): ResultData<Data> =
-        activity.safeUse<ActivityTb, Long> { item-> dao.update(item).toLong() }
+        activity.safeUse<ActivityDb, Long> { item-> dao.update(item.toTb()).toLong() }
 
     override fun del(idActivity: Data): ResultData<Data>{
         return idActivity.safeUse<LongDb, Long> { id->

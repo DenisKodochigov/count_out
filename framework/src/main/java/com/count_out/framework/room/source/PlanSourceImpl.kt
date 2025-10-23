@@ -57,7 +57,7 @@ class PlanSourceImpl @Inject constructor(
     }.getOrElse { ResultData.Error(ThrowableDS.extract(it)) }
 
     override fun del(plan: Data): ResultData<Data> =
-        plan.safeUse<PlanTb, Long> { dao.delete( it).toLong() }
+        plan.safeUse<PlanDb, Long> { dao.delete( it.toTb()).toLong() }
 
     override fun update(nameId: Data): ResultData<Data> =
         nameId.safeUse<NameIdDb, Long> { dao.updateName(it.name, it.id).toLong() }

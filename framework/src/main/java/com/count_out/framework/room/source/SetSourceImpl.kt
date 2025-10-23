@@ -29,8 +29,8 @@ class SetSourceImpl @Inject constructor(
     }.getOrElse { ResultData.Error(ThrowableDS.extract(it)) }
 
     override fun del(set: Data): ResultData<Data> =
-        set.safeUse<SetTb, Long> { item -> dao.delete(item).toLong() }
+        set.safeUse<SetDb, Long> { item -> dao.delete(item.toTb()).toLong() }
 
     override fun update(set: Data): ResultData<Data> =
-        set.safeUse<SetTb, Long> { setTb -> dao.update(setTb).toLong() }
+        set.safeUse<SetDb, Long> { setTb -> dao.update(setTb.toTb()).toLong() }
 }

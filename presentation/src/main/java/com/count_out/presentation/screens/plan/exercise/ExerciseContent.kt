@@ -34,13 +34,12 @@ import com.count_out.presentation.view_element.bottom_sheet.ShowBottomSheetSelec
 import com.count_out.presentation.view_element.bottom_sheet.ShowBottomSheetSpeech
 import com.count_out.presentation.view_element.custom_view.Frame
 import com.count_out.presentation.view_element.drag_drop_column.column.ColumnDragDrop
-import com.count_out.presentation.view_element.icons.IconRingOrExercise
 import com.count_out.presentation.view_element.icons.IconsCollapsing
 import com.count_out.presentation.view_element.icons.IconsGroup
 
 @Composable
-fun ListExercises(dataState: PlanState, ring: Ring)
-{
+fun ListExercises(dataState: PlanState, ring: Ring) {
+//    lg("  ListExercises")
     val listExercise = ring.exercises
     ColumnDragDrop(
         items = listExercise,

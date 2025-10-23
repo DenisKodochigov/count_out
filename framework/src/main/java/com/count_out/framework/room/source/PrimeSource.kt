@@ -12,6 +12,7 @@ import com.count_out.data.models.entity.NameIdDb
 import com.count_out.data.models.entity.PlanDb
 import com.count_out.data.models.entity.SpeechesDb
 import com.count_out.data.models.throwable.ThrowableDS
+import com.count_out.framework.di.lg
 import com.count_out.framework.room.db.speech.SpeechTb
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow

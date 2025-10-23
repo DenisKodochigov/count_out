@@ -61,7 +61,7 @@ class ExerciseSourceImpl @Inject constructor(
     }
 
     override fun del(exercise: Data): ResultData<Data> =
-        exercise.safeUse<ExerciseTb, Long>{ item -> dao.delete(item).toLong() }
+        exercise.safeUse<ExerciseDb, Long>{ item -> dao.delete(item.toTb()).toLong() }
 }
 //
 //        exercise.safeUse<ExerciseTb, ResultData<Data>> { exerciseTb->

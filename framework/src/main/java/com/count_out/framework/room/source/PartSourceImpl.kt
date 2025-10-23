@@ -37,10 +37,10 @@ class PartSourceImpl @Inject constructor(
     }.getOrElse { ResultData.Error(ThrowableDS.extract(it)) }
 
     override fun del(part: Data): ResultData<Data> =
-        part.safeUse<PartTb, Long> { dao.delete( it).toLong() }
+        part.safeUse<PartDb, Long> { dao.delete( it.toTb()).toLong() }
 
     override fun update(part: Data): ResultData<Data> =
-        part.safeUse<PartTb, Long> { dao.update(it).toLong() }
+        part.safeUse<PartDb, Long> { dao.update(it.toTb()).toLong() }
 
     //##############################################################################################
 
