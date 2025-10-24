@@ -17,5 +17,3 @@ class CollapsingUC @Inject constructor(
     data class Request(val collaps: Domain) : UseCase.Request
     data class Response(val collaps: Domain) : UseCase.Response
 }
-//    override fun implementation(request: Request): Flow<ResultUC<Response>> =
-//        flow { emit( ResultUC.Success(Response(executeCollapsing(request.collaps)))) }

@@ -8,6 +8,7 @@ import com.count_out.domain.entity.types_domai.LongDm
 import com.count_out.domain.entity.workout.Collapsing
 import com.count_out.domain.entity.workout.Exercise
 import com.count_out.domain.entity.workout.Ring
+import com.count_out.domain.entity.workout.Selecting
 import com.count_out.domain.entity.workout.Set
 import com.count_out.domain.entity.workout.ShowBottomSheet
 import com.count_out.domain.entity.workout.Speech
@@ -15,7 +16,7 @@ import com.count_out.domain.use_case.other.CollapsingUC
 import com.count_out.domain.use_case.other.ShowBottomSheetUC
 import com.count_out.domain.use_case.plans.GetPlanUC
 import com.count_out.domain.use_case.plans.RingOrExerciseUC
-import com.count_out.domain.use_case.plans.SelectedExerciseUC
+import com.count_out.domain.use_case.plans.SelectingUC
 import com.count_out.domain.use_case.plans.UpdateNamePlanUC
 import com.count_out.domain.use_case.plans.activity.GetActivitiesUC
 import com.count_out.domain.use_case.plans.exercise.ChangeSequenceExerciseUC
@@ -50,7 +51,7 @@ import javax.inject.Inject
     private val collapsingSetUC: CollapsingUC,
     private val updateSpeechUC: UpdateSpeechUC,
     private val ringOrExercise: RingOrExerciseUC,
-    private val selectedExercise: SelectedExerciseUC,
+    private val selectingUC: SelectingUC,
 ): PrimeViewModel<PlanState, PlanConverter>() {
 
     override fun initScreenState(): ScreenState<PlanState> = ScreenState.Loading
@@ -71,7 +72,7 @@ import javax.inject.Inject
             is PlanEvent.SetCollapsing -> { collapsingSet(event.item) }
             is PlanEvent.UpdateSpeech -> { updateSpeech(event.item) }
             is PlanEvent.RingOrExercise -> { ringOrExercise(event.ring) }
-            is PlanEvent.SelectedExercise -> { selectedExercise(event.item) }
+            is PlanEvent.SetSelecting -> { selectingSet(event.item) }
         }
     }
 
@@ -81,9 +82,9 @@ import javax.inject.Inject
                 .collect { submitState( it ) }
         }
     }
-    private fun selectedExercise(item: Ring) {
+    private fun selectingSet(item: Selecting) {
         viewModelScope.launch(Dispatchers.IO) {
-            ringOrExercise.execute( RingOrExerciseUC.Request(item))
+            selectingUC.execute( SelectingUC.Request(item))
                 .collect { submitState( it ) }
         }
     }

@@ -1,14 +1,15 @@
 package com.count_out.presentation.screens.plan
 
-import android.util.Log
 import com.count_out.domain.entity.workout.Activities
 import com.count_out.domain.entity.workout.Collapsing
 import com.count_out.domain.entity.workout.Plan
+import com.count_out.domain.entity.workout.Selecting
 import com.count_out.domain.entity.workout.ShowBottomSheet
 import com.count_out.domain.use_case.UseCase
 import com.count_out.domain.use_case.other.CollapsingUC
 import com.count_out.domain.use_case.other.ShowBottomSheetUC
 import com.count_out.domain.use_case.plans.GetPlanUC
+import com.count_out.domain.use_case.plans.SelectingUC
 import com.count_out.domain.use_case.plans.activity.GetActivitiesUC
 import com.count_out.presentation.screens.prime.PrimeConvertor
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -21,6 +22,7 @@ class PlanConverter @Inject constructor(): PrimeConvertor<UseCase.Response, Plan
             is GetActivitiesUC.Response-> converterLocal(resultData, state)
             is ShowBottomSheetUC.Response-> converterLocal(resultData, state)
             is CollapsingUC.Response-> converterLocal(resultData, state)
+            is SelectingUC.Response-> converterLocal(resultData, state)
             else -> converterOther(state)
         }
     }
@@ -43,6 +45,10 @@ class PlanConverter @Inject constructor(): PrimeConvertor<UseCase.Response, Plan
     private fun converterLocal(data: CollapsingUC.Response, state: MutableStateFlow<PlanState>): PlanState {
         if (data.collaps is Collapsing)
             state.value = state.value.copy( collapsing = data.collaps as Collapsing)
+        return state.value
+    }
+    private fun converterLocal(data: SelectingUC.Response, state: MutableStateFlow<PlanState>): PlanState {
+        if (data.item is Selecting) state.value = state.value.copy( selecting = data.item as Selecting)
         return state.value
     }
     private fun converterOther( state: MutableStateFlow<PlanState>): PlanState {

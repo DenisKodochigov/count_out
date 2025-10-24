@@ -6,6 +6,7 @@ import com.count_out.domain.entity.workout.Collapsing
 import com.count_out.domain.entity.workout.Exercise
 import com.count_out.domain.entity.workout.Plan
 import com.count_out.domain.entity.workout.Ring
+import com.count_out.domain.entity.workout.Selecting
 import com.count_out.domain.entity.workout.Set
 import com.count_out.domain.entity.workout.ShowBottomSheet
 import com.count_out.domain.entity.workout.Speech
@@ -25,13 +26,13 @@ sealed class PlanEvent: Event {
     data class DelExercise(val exercise: Exercise): PlanEvent()
     data class UpdateExercise(val exercise: Exercise): PlanEvent()
     data class ChangeSequenceExercise(val item: SetViewId): PlanEvent()
-    data class SelectedExercise(val item: Long): PlanEvent()
     data class CopySet(val item: Set): PlanEvent()
     data class DeleteSet(val item: Set): PlanEvent()
     data class UpdateSet(val item: Set): PlanEvent()
 
     data class ShowBS(val item: ShowBottomSheet): PlanEvent()
     data class SetCollapsing(val item: Collapsing): PlanEvent()
+    data class SetSelecting(val item: Selecting): PlanEvent()
 
     data class UpdateSpeech(val item: Speech): PlanEvent()
     data object BackScreen : PlanEvent()

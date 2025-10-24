@@ -22,9 +22,9 @@ import androidx.compose.ui.unit.dp
 import com.count_out.domain.entity.SetViewId
 import com.count_out.domain.entity.workout.Exercise
 import com.count_out.domain.entity.workout.Ring
+import com.count_out.domain.entity.workout.Set
 import com.count_out.presentation.R
 import com.count_out.presentation.models.Dimen.contourAll1
-import com.count_out.presentation.models.SetImplP
 import com.count_out.presentation.screens.plan.PlanEvent
 import com.count_out.presentation.screens.plan.PlanEvent.ShowBS
 import com.count_out.presentation.screens.plan.PlanState
@@ -99,7 +99,7 @@ fun ListExercises(dataState: PlanState, ring: Ring) {
                 dataState.item = exercise
                 dataState.event(ShowBS(dataState.showBS.copy(domain = exercise))) },
             onClickAddSet = { dataState.event( PlanEvent.CopySet(
-                    SetImplP(name = nameNewSet, exerciseId = exercise.idExercise)))},
+                    Set.default(name = nameNewSet, exerciseId = exercise.idExercise)))},
             onClickRingExercise = { dataState.event(PlanEvent.RingOrExercise(ring)) },
             selected = ring.amount > 1
         )
@@ -119,8 +119,9 @@ fun ListExercises(dataState: PlanState, ring: Ring) {
                     color = MaterialTheme.colorScheme.surface,
                     shape = MaterialTheme.shapes.extraSmall
                 ),
-                content = { SetContent(dataState,
-                    SetImplP(set, Pair(ind, exercise.sets.count())) )}
+                content = { SetContent(dataState,set
+//                    SetImplP(set, Pair(ind, exercise.sets.count()))
+                )}
             )
             Spacer(modifier = Modifier.height(1.dp))
         }

@@ -1,0 +1,11 @@
+package com.count_out.domain.entity.workout
+
+data class Selecting(
+    val sets: List<Long> = emptyList(),
+    val parts: List<Long> = emptyList(),
+    val rings: List<Long> = emptyList(),
+    val exercises: List<Long> = emptyList(),
+    val activities: List<Long> = emptyList(),
+    var item: Domain? = null,
+    var listOwner: List<Domain> = emptyList()
+): Domain

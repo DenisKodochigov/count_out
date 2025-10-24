@@ -4,6 +4,7 @@ import com.count_out.domain.entity.workout.Activity
 import com.count_out.domain.entity.workout.Collapsing
 import com.count_out.domain.entity.workout.Domain
 import com.count_out.domain.entity.workout.Plan
+import com.count_out.domain.entity.workout.Selecting
 import com.count_out.domain.entity.workout.ShowBottomSheet
 import com.count_out.presentation.models.BottomSheetInterface
 import com.count_out.presentation.screens.prime.DataState
@@ -14,7 +15,7 @@ data class PlanState (
     val showBS: ShowBottomSheet = ShowBottomSheet(),
     val collapsing: Collapsing = Collapsing(),
     val activities: List<Activity> = emptyList(),
-    var selectedExercises: List<Long> = emptyList(),
+    var selecting: Selecting = Selecting(),
 
     override var nameSection: String = "",
     override var item: Domain? = null,

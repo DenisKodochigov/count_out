@@ -25,9 +25,11 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.count_out.domain.entity.SetViewId
+import com.count_out.domain.entity.types_domai.LongDm
 import com.count_out.domain.entity.workout.Exercise
 import com.count_out.domain.entity.workout.Part
 import com.count_out.domain.entity.workout.Ring
+import com.count_out.domain.entity.workout.Set
 import com.count_out.domain.entity.workout.Ring.Companion.amount
 import com.count_out.presentation.R
 import com.count_out.presentation.models.Dimen.contourAll1
@@ -40,7 +42,10 @@ import com.count_out.presentation.screens.plan.PlanState
 import com.count_out.presentation.screens.plan.exercise.BodyExercise
 import com.count_out.presentation.screens.plan.exercise.ListExercises
 import com.count_out.presentation.screens.plan.getCollapsing
+import com.count_out.presentation.screens.plan.getSelecting
+import com.count_out.presentation.screens.plan.set.SetContent
 import com.count_out.presentation.screens.plan.setCollapsing
+import com.count_out.presentation.screens.plan.setSelecting
 import com.count_out.presentation.view_element.TextApp
 import com.count_out.presentation.view_element.TextFieldApp
 import com.count_out.presentation.view_element.custom_view.Frame
@@ -119,9 +124,16 @@ import com.count_out.presentation.view_element.icons.IconsGroup
     }
 }
 @Composable fun CardRingBody(dataState: PlanState, ring: Ring){
-//    Row() {
+    Row() {
         Exercises(dataState, ring)
-//    }
+        ExerciseBody(dataState, ring)
+    }
+}
+
+@Composable
+fun ExerciseBody(dataState: PlanState, ring: Ring) {
+    val selectedExercise = ring.exercises.find { it.idExercise in dataState.selecting.exercises } ?: ring.exercises[0]
+    SetContent(dataState,selectedExercise.sets[0])
 }
 
 @Composable fun Exercises(dataState: PlanState, ring: Ring) {
@@ -137,12 +149,12 @@ import com.count_out.presentation.view_element.icons.IconsGroup
         },)
 }
 @Composable fun ExerciseElementColum(exercise: Exercise, dataState: PlanState, ring: Ring) {
-    lg("ExerciseElementColum")
-    val modifier = if (dataState.selectedExercises.find { it == exercise.idExercise } != null)
-        Modifier.background(color = colorScheme.surfaceContainer) else Modifier
+    val selected = getSelecting(dataState, exercise)
+    lg("ExerciseElementColum $selected")
+    val modifier = if (selected) Modifier.background(color = colorScheme.surfaceContainer) else Modifier
     Row(horizontalArrangement = Arrangement.Start,
         modifier= modifier.padding(vertical = 3.dp)
-            .clickable{ dataState.event(PlanEvent.SelectedExercise(exercise.idExercise))}
+            .clickable{ setSelecting(dataState, exercise, ring.exercises.map { LongDm( it.idExercise) })}
             .border(width = 1.dp, shape = MaterialTheme.shapes.small, color = Color.LightGray))
     {
         TextApp(modifier = Modifier.width(80.dp).padding(horizontal = 4.dp),
@@ -206,11 +218,4 @@ fun showSpeechRound(dataState: PlanState, ring: Ring){
     dataState.item = ring
     dataState.event(ShowBS(dataState.showBS.copy(domain = ring)))
 }
-//fun setCollapsing(dataState: PlanState, part: Ring) {
-//    if (part.amount > 0) {
-//        dataState.event(PlanEvent.SetCollapsing(dataState.collapsing.copy(item = part)))
-//    }
-//}
-//fun getCollapsing(dataState: PlanState, ring: Ring): Boolean {
-//    return dataState.collapsing.rings.find { it == ring.idRing } != null
-//}
+

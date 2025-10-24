@@ -27,8 +27,10 @@ import androidx.compose.ui.unit.dp
 import com.count_out.domain.entity.NavigateEvent
 import com.count_out.domain.entity.supportive.NameId
 import com.count_out.domain.entity.workout.Domain
+import com.count_out.domain.entity.workout.Exercise
 import com.count_out.domain.entity.workout.Part
 import com.count_out.domain.entity.workout.Ring
+import com.count_out.domain.entity.workout.Set
 import com.count_out.presentation.R
 import com.count_out.presentation.models.Dimen
 import com.count_out.presentation.models.TypeKeyboard
@@ -111,6 +113,20 @@ fun getCollapsing(dataState: PlanState, item: Domain): Boolean {
     return when(item) {
         is Part -> dataState.collapsing.parts.find { it == item.idPart } != null
         is Ring->dataState.collapsing.rings.find { it == item.idRing } != null
+        else -> false
+    }
+}
+
+fun setSelecting(dataState: PlanState, item: Domain, list: List<Domain>) {
+    dataState.event(PlanEvent.SetSelecting(
+        dataState.selecting.copy(item = item, listOwner = list)))
+}
+fun getSelecting(dataState: PlanState, item: Domain): Boolean {
+    return when(item) {
+        is Part -> dataState.selecting.parts.find { it == item.idPart } != null
+        is Ring->dataState.selecting.rings.find { it == item.idRing } != null
+        is Exercise ->dataState.selecting.exercises.find { it == item.idExercise } != null
+        is Set ->dataState.selecting.sets.find { it == item.idSet } != null
         else -> false
     }
 }

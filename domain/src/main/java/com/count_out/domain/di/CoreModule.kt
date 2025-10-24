@@ -7,6 +7,7 @@ import com.count_out.domain.core.ExecuteWorkOutCore
 import com.count_out.domain.core.LastPlanCore
 import com.count_out.domain.core.LocationCore
 import com.count_out.domain.core.RingOrExerciseCore
+import com.count_out.domain.core.SelectingCore
 import com.count_out.domain.core.ShowBSCore
 import com.count_out.domain.core.WeatherCore
 import com.count_out.domain.core.plans.ActivityCore
@@ -95,6 +96,8 @@ class CoreModule {
     fun provideWeatherCore(repo: WeatherRepo ): WeatherCore = WeatherCore(repo)
     @Singleton @Provides
     fun provideCollapsingCore(): CollapsingCore = CollapsingCore()
+    @Singleton @Provides
+    fun provideSelectingCore(): SelectingCore = SelectingCore()
     @Singleton @Provides
     fun provideShowBSCore(): ShowBSCore = ShowBSCore()
     @Singleton @Provides
