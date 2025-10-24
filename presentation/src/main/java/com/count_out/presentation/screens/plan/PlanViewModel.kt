@@ -15,6 +15,7 @@ import com.count_out.domain.use_case.other.CollapsingUC
 import com.count_out.domain.use_case.other.ShowBottomSheetUC
 import com.count_out.domain.use_case.plans.GetPlanUC
 import com.count_out.domain.use_case.plans.RingOrExerciseUC
+import com.count_out.domain.use_case.plans.SelectedExerciseUC
 import com.count_out.domain.use_case.plans.UpdateNamePlanUC
 import com.count_out.domain.use_case.plans.activity.GetActivitiesUC
 import com.count_out.domain.use_case.plans.exercise.ChangeSequenceExerciseUC
@@ -32,7 +33,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import javax.inject.Inject
-
+//SelectedExercise
 @HiltViewModel class PlanViewModel @Inject constructor(
     private val savedStateHandle: SavedStateHandle,
     private val getPlanUC: GetPlanUC,
@@ -49,6 +50,7 @@ import javax.inject.Inject
     private val collapsingSetUC: CollapsingUC,
     private val updateSpeechUC: UpdateSpeechUC,
     private val ringOrExercise: RingOrExerciseUC,
+    private val selectedExercise: SelectedExerciseUC,
 ): PrimeViewModel<PlanState, PlanConverter>() {
 
     override fun initScreenState(): ScreenState<PlanState> = ScreenState.Loading
@@ -69,6 +71,7 @@ import javax.inject.Inject
             is PlanEvent.SetCollapsing -> { collapsingSet(event.item) }
             is PlanEvent.UpdateSpeech -> { updateSpeech(event.item) }
             is PlanEvent.RingOrExercise -> { ringOrExercise(event.ring) }
+            is PlanEvent.SelectedExercise -> { selectedExercise(event.item) }
         }
     }
 
@@ -78,7 +81,12 @@ import javax.inject.Inject
                 .collect { submitState( it ) }
         }
     }
-
+    private fun selectedExercise(item: Ring) {
+        viewModelScope.launch(Dispatchers.IO) {
+            ringOrExercise.execute( RingOrExerciseUC.Request(item))
+                .collect { submitState( it ) }
+        }
+    }
     init{
         val planId: Long? = savedStateHandle["arg1"]
         planId?.let{ getPlan(it)}

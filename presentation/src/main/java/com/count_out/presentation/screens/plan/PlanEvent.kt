@@ -25,7 +25,7 @@ sealed class PlanEvent: Event {
     data class DelExercise(val exercise: Exercise): PlanEvent()
     data class UpdateExercise(val exercise: Exercise): PlanEvent()
     data class ChangeSequenceExercise(val item: SetViewId): PlanEvent()
-
+    data class SelectedExercise(val item: Long): PlanEvent()
     data class CopySet(val item: Set): PlanEvent()
     data class DeleteSet(val item: Set): PlanEvent()
     data class UpdateSet(val item: Set): PlanEvent()

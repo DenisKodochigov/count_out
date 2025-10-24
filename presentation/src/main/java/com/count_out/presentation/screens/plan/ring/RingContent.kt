@@ -1,7 +1,10 @@
 package com.count_out.presentation.screens.plan.ring
 
 import android.util.Log
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -9,8 +12,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.material3.AssistChip
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.MaterialTheme.colorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
@@ -30,6 +33,7 @@ import com.count_out.presentation.R
 import com.count_out.presentation.models.Dimen.contourAll1
 import com.count_out.presentation.models.Dimen.contourHor2
 import com.count_out.presentation.models.TypeKeyboard
+import com.count_out.presentation.models.lg
 import com.count_out.presentation.screens.plan.PlanEvent
 import com.count_out.presentation.screens.plan.PlanEvent.ShowBS
 import com.count_out.presentation.screens.plan.PlanState
@@ -45,17 +49,12 @@ import com.count_out.presentation.view_element.icons.IconsCollapsing
 import com.count_out.presentation.view_element.icons.IconsGroup
 
 @Composable fun Rings(dataState: PlanState, part: Part, modifier: Modifier = Modifier){
-    Column( modifier = Modifier.padding(start = 6.dp, bottom = 4.dp, top = 4.dp)){
-//        TitleRing(dataState = dataState, ring = ring)
-        Frame(colorAlpha = 0.8f, contour = contourHor2){
-            part.rings.forEachIndexed { ind,ring ->
-                if (ring.amount > 1){
-//                    lg("amount=${ring.amount} CardRing      id=${ring.idRing} ind=$ind")
-                    CardRing(dataState, ring, ind)
-                } else {
-//                    lg("amount=${ring.amount} ListExercises id=${ring.idRing} ind=$ind")
-                    ListExercises(dataState, ring) }
-            }
+    Frame(colorAlpha = 0.8f, contour = contourHor2,
+        modifier = Modifier.padding(start = 6.dp, bottom = 4.dp, top = 4.dp)){
+        part.rings.forEachIndexed { ind,ring ->
+            if (ring.amount > 1){CardRing(dataState, ring, ind)
+            } else { ListExercises(dataState, ring) }
+        }
 //            ColumnDragDrop(
 //                items = part.rings,
 //                modifier = modifier,
@@ -66,14 +65,15 @@ import com.count_out.presentation.view_element.icons.IconsGroup
 //                        PlanEvent.ChangeSequenceExercise(
 //                            item = SetViewId(ringId = part.idPart, from = from, to = to)))
 //                },)
-            Spacer(modifier = Modifier.height(4.dp))
-        }
+        Spacer(modifier = Modifier.height(4.dp))
     }
 }
 
 @Composable fun CardRing(dataState: PlanState, ring: Ring, index: Int){
-    CardRingTitle(dataState, ring, index)
-    CardRingBody(dataState, ring)
+    Column {
+        CardRingTitle(dataState, ring, index)
+        CardRingBody(dataState, ring)
+    }
 }
 @Composable fun CardRingTitle(dataState: PlanState, ring: Ring, index: Int){
     val enteredName: MutableState<String> = remember { mutableStateOf(ring.amount.toString() ) }
@@ -119,16 +119,16 @@ import com.count_out.presentation.view_element.icons.IconsGroup
     }
 }
 @Composable fun CardRingBody(dataState: PlanState, ring: Ring){
-    Row {
+//    Row() {
         Exercises(dataState, ring)
-    }
+//    }
 }
 
 @Composable fun Exercises(dataState: PlanState, ring: Ring) {
     ColumnDragDrop(
         items = ring.exercises,
         modifier = Modifier.padding(end = 4.dp),
-        content = { item -> ElementColum(item, dataState, ring) },
+        content = { item -> ExerciseElementColum(item, dataState, ring) },
         onMoveItem = { from, to->
             Log.d("KDS"," from=$from   to=$to")
             dataState.event(
@@ -136,22 +136,20 @@ import com.count_out.presentation.view_element.icons.IconsGroup
                     item = SetViewId(ringId = ring.idRing, from = from, to = to)))
         },)
 }
-@Composable fun ElementColum(exercise: Exercise, dataState: PlanState, ring: Ring){
-    Row(modifier= Modifier.padding(vertical = 1.dp).border(
-        width = 1.dp, shape = MaterialTheme.shapes.small,
-        color = Color.LightGray ))
+@Composable fun ExerciseElementColum(exercise: Exercise, dataState: PlanState, ring: Ring) {
+    lg("ExerciseElementColum")
+    val modifier = if (dataState.selectedExercises.find { it == exercise.idExercise } != null)
+        Modifier.background(color = colorScheme.surfaceContainer) else Modifier
+    Row(horizontalArrangement = Arrangement.Start,
+        modifier= modifier.padding(vertical = 3.dp)
+            .clickable{ dataState.event(PlanEvent.SelectedExercise(exercise.idExercise))}
+            .border(width = 1.dp, shape = MaterialTheme.shapes.small, color = Color.LightGray))
     {
-        TextApp(modifier = Modifier.width(80.dp).padding(2.dp),
+        TextApp(modifier = Modifier.width(80.dp).padding(horizontal = 4.dp),
+            textAlign = TextAlign.Start,
             text = exercise.activity?.name ?: stringResource(R.string.exercise2),
             style = MaterialTheme.typography.labelSmall)
     }
-
-//    AssistChip(
-//        onClick = {},
-//        label = { TextApp(modifier = Modifier.width(60.dp),
-//            text = exercise.activity?.name ?: stringResource(R.string.exercise2),
-//            style = MaterialTheme.typography.labelSmall)}
-//    )
 }
 @Composable fun CardExercise(dataState: PlanState, ring: Ring){
     CardExerciseTitle(dataState, ring)

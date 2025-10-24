@@ -14,6 +14,7 @@ data class PlanState (
     val showBS: ShowBottomSheet = ShowBottomSheet(),
     val collapsing: Collapsing = Collapsing(),
     val activities: List<Activity> = emptyList(),
+    var selectedExercises: List<Long> = emptyList(),
 
     override var nameSection: String = "",
     override var item: Domain? = null,
