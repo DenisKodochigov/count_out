@@ -21,5 +21,5 @@ data class PlanState (
     override var item: Domain? = null,
     override var onConfirmation: (Domain, Domain?) -> Unit = { _, _ ->},
     override var onDismiss: () -> Unit = {},
-    override val event: (Event) -> Unit,
+    override val event: (Event) -> Unit ={},
 ): BottomSheetInterface, DataState

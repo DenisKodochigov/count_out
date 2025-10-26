@@ -161,11 +161,11 @@
     <string name="save_traning">Save training?</string>
     <string name="no">NO</string>
     <string name="yes">YES</string>
-    <string name="zone1">ZONE I  </string>
-    <string name="zone2">ZONE II </string>
-    <string name="zone3">ZONE III</string>
-    <string name="zone4">ZONE IV </string>
-    <string name="zone5">ZONE V </string>
+    <string name="zone1">  I  </string>
+    <string name="zone2">  II </string>
+    <string name="zone3"> III </string>
+    <string name="zone4">  IV </string>
+    <string name="zone5">  V  </string>
     <string name="gr">gr</string>
     <string name="interval">Интервал</string>
     <string name="reps">Reps</string>
@@ -176,4 +176,6 @@
     <string name="ring">Ring</string>
     <string name="times">times</string>
     <string name="circles">circles</string>
+    <string name="exer">Exer.</string>
+    <string name="zone">Zone</string>
 </resources>

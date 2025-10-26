@@ -289,8 +289,11 @@ val interval_between_pole = 4.dp
 @Composable fun ZonePulseSwitch(dataState: PlanState, set: Set){
     Row(horizontalArrangement = Arrangement.Center,
         verticalAlignment = Alignment.CenterVertically,
-        modifier = Modifier.fillMaxWidth()){
-        Spacer(modifier = Modifier.weight(1f))
+        modifier = Modifier.fillMaxWidth()
+    ){
+        Spacer(modifier = Modifier.width(16.dp))
+        TextApp(text = stringResource(R.string.zone), style = alumBodyMedium)
+        Spacer(modifier = Modifier.weight(2f))
         ButtonSwitchPulse(selected = set.intensity == Zone.Low, idString = R.string.zone1,
             onClick = { dataState.event(PlanEvent.UpdateSet(set.copy(intensity = Zone.Low)))})
         Spacer(modifier = Modifier.weight(1f))
@@ -305,20 +308,20 @@ val interval_between_pole = 4.dp
         Spacer(modifier = Modifier.weight(1f))
         ButtonSwitchPulse(selected = set.intensity == Zone.Max, idString = R.string.zone5,
             onClick = { dataState.event(PlanEvent.UpdateSet( set.copy(intensity = Zone.Max)))})
-        Spacer(modifier = Modifier.weight(1f))
+        Spacer(modifier = Modifier.weight(2f))
     }
 }
 @Composable fun ButtonSwitchPulse(selected: Boolean, onClick: () -> Unit, idString: Int,){
     ButtonSwitch(selected = selected, idString = idString, onClick = onClick,
-        style = alumBodyMedium, modifier = Modifier.width(55.dp))
+        style = alumBodyMedium, modifier = Modifier.width(35.dp))
 }
 
 @Composable fun ButtonSwitch(
+    modifier: Modifier = Modifier.width(35.dp).padding(vertical = 2.dp, horizontal = 2.dp),
     color: Color = colorScheme.outline,
     background: Color = colorScheme.background,
     selected: Boolean = false,
     onClick: () -> Unit = {},
-    modifier: Modifier = Modifier.width(35.dp).padding(vertical = 2.dp, horizontal = 2.dp),
     idString: Int,
     style: TextStyle = typography.bodySmall)
 {
