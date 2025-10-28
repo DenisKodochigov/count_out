@@ -27,7 +27,9 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.count_out.domain.entity.SetViewId
+import com.count_out.domain.entity.enums.Goal
 import com.count_out.domain.entity.enums.PartName
+import com.count_out.domain.entity.enums.Zone
 import com.count_out.domain.entity.types_domai.LongDm
 import com.count_out.domain.entity.workout.Exercise
 import com.count_out.domain.entity.workout.Parameter
@@ -35,6 +37,7 @@ import com.count_out.domain.entity.workout.Part
 import com.count_out.domain.entity.workout.Ring
 import com.count_out.domain.entity.workout.Ring.Companion.amount
 import com.count_out.domain.entity.workout.Set
+import com.count_out.domain.entity.workout.Set.Companion.copy
 import com.count_out.domain.entity.workout.SpeechKit
 import com.count_out.presentation.R
 import com.count_out.presentation.models.Dimen.contourAll1
@@ -48,6 +51,7 @@ import com.count_out.presentation.screens.plan.exercise.ListExercises
 import com.count_out.presentation.screens.plan.getCollapsing
 import com.count_out.presentation.screens.plan.getSelecting
 import com.count_out.presentation.screens.plan.set.BodySet
+import com.count_out.presentation.screens.plan.set.IconGroupContent
 import com.count_out.presentation.screens.plan.set.TaskSwitch
 import com.count_out.presentation.screens.plan.set.ZonePulseSwitch
 import com.count_out.presentation.screens.plan.setCollapsing
@@ -55,13 +59,20 @@ import com.count_out.presentation.screens.plan.setSelecting
 import com.count_out.presentation.view_element.TextApp
 import com.count_out.presentation.view_element.TextFieldApp
 import com.count_out.presentation.view_element.custom_view.Frame
+import com.count_out.presentation.view_element.custom_view.IconQ
 import com.count_out.presentation.view_element.drag_drop_column.column.ColumnDragDrop
+import com.count_out.presentation.view_element.icons.IconCount
+import com.count_out.presentation.view_element.icons.IconDistance
+import com.count_out.presentation.view_element.icons.IconDuration
+import com.count_out.presentation.view_element.icons.IconGoal
+import com.count_out.presentation.view_element.icons.IconZone
+import com.count_out.presentation.view_element.icons.IconZoneNew
 import com.count_out.presentation.view_element.icons.IconsCollapsing
 import com.count_out.presentation.view_element.icons.IconsGroup
 
 @Composable fun Rings(dataState: PlanState, part: Part){
     Frame(colorAlpha = 0.8f, contour = contourHor2,
-        modifier = Modifier.padding(start = 6.dp, bottom = 4.dp, top = 4.dp)){
+        modifier = Modifier.padding(start = 0.dp, bottom = 4.dp, top = 4.dp)){
         part.rings.forEachIndexed { ind,ring ->
             if (ring.amount > 1){CardRing(dataState, ring, ind)
             } else { ListExercises(dataState, ring) }
@@ -91,14 +102,14 @@ import com.count_out.presentation.view_element.icons.IconsGroup
         IconsCollapsing(
             onClick = { setCollapsing(dataState, ring) },
             wrap = getCollapsing(dataState, ring) )
-        Spacer(modifier = Modifier.width(2.dp))
+        Spacer(modifier = Modifier.width(4.dp))
         TextApp(
             text = stringResource(id = R.string.ring) + " ${index + 1}: ",
             textAlign = TextAlign.Start,
-            style = MaterialTheme.typography.headlineMedium,
+            style = MaterialTheme.typography.headlineSmall,
         )
         TextFieldApp(
-            modifier = Modifier.padding(start = 4.dp),
+            modifier = Modifier.padding(start = 4.dp, end =4.dp),
             edit = true,
             typeKeyboard = TypeKeyboard.DIGIT,
             contentAlignment = Alignment.CenterStart,
@@ -116,7 +127,7 @@ import com.count_out.presentation.view_element.icons.IconsGroup
         TextApp(
             text = " ${stringResource(id = R.string.circles)}",
             textAlign = TextAlign.Start,
-            style = MaterialTheme.typography.headlineMedium,
+            style = MaterialTheme.typography.headlineSmall,
         )
         Spacer(modifier = Modifier.weight(1f))
         IconsGroup(
@@ -145,20 +156,43 @@ fun ExerciseBody(dataState: PlanState, ring: Ring) {
 
 @Composable fun ExerciseContent(dataState: PlanState, exercise: Exercise){
     Frame(colorAlpha = 0.5f, contour = contourAll1) {
-        Column (horizontalAlignment = Alignment.CenterHorizontally,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(vertical = 3.dp)) {
-            TextApp(text = exercise.activity?.name ?: "",
-                textAlign = TextAlign.Start,
-                modifier = Modifier.padding(bottom = 6.dp),
-                style = MaterialTheme.typography.headlineSmall)
-            TaskSwitch( dataState, exercise.sets[0] )
+        Column (modifier = Modifier.fillMaxWidth().padding(vertical = 3.dp)) {
+            ShowName( dataState, exercise )
             BodySet( dataState, exercise.sets[0] )
-            ZonePulseSwitch( dataState, exercise.sets[0] )
+            ControlExercise( dataState, exercise.sets[0] )
         }
     }
 }
+@Composable fun ShowName(dataState: PlanState, exercise: Exercise){
+    Row(verticalAlignment = Alignment.CenterVertically){
+        TextApp(text = exercise.activity?.name ?: "",
+            textAlign = TextAlign.Start,
+            modifier = Modifier.padding(bottom = 0.dp, start = 6.dp),
+            style = MaterialTheme.typography.titleLarge)
+        Spacer(modifier = Modifier.weight(1f))
+        IconsGroup(
+            onClickCopy = { dataState.event(PlanEvent.CopyExercise(exercise))},
+            onClickDelete = { dataState.event(PlanEvent.DelExercise(exercise)) },
+            onClickEdit = {
+                dataState.item = exercise
+                dataState.event(ShowBS(dataState.showBS.copy(domain = exercise.activity)))},
+            onClickSpeech = {
+                dataState.item = exercise
+                dataState.event(ShowBS(dataState.showBS.copy(domain = exercise))) },
+        )
+    }
+
+}
+@Composable fun ControlExercise(dataState: PlanState, set: Set){
+    Row(verticalAlignment = Alignment.CenterVertically, modifier= Modifier.fillMaxWidth()){
+        Spacer(modifier = Modifier.weight(1f))
+        IconGoal(set.goal){dataState.event(PlanEvent.ChangeGoal( set))}
+        Spacer(modifier = Modifier.weight(1f))
+        IconZoneNew(set.intensity.ordinal, onClick = {dataState.event(PlanEvent.ZoneClick(set.intensity.ordinal))})
+        Spacer(modifier = Modifier.weight(1f))
+    }
+}
+
 @Composable fun Exercises(dataState: PlanState, ring: Ring) {
     ColumnDragDrop(
         items = ring.exercises,
@@ -190,7 +224,7 @@ fun ExerciseBody(dataState: PlanState, ring: Ring) {
             .width(50.dp)
             .padding(horizontal = 4.dp),
             textAlign = TextAlign.Center,
-            text = "${exercise.idView} ${stringResource(R.string.exer)}",
+            text = "${stringResource(R.string.exer)} ${exercise.idView}",
             style = MaterialTheme.typography.bodyLarge)
     }
 }

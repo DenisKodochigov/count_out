@@ -128,7 +128,6 @@ val interval_between_pole = 4.dp
         onClickCopy = { dataState.event(PlanEvent.CopySet( set )) },
         onClickDelete = {  dataState.event(PlanEvent.DeleteSet(set)) },
         onClickSpeech = {
-//            dataState.set = set
             dataState.item = set
             dataState.event(ShowBS(dataState.showBS.copy(domain = set)))   },)
 }

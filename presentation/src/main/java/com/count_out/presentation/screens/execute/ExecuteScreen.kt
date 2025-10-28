@@ -51,6 +51,7 @@ import com.count_out.domain.entity.StepPlan
 import com.count_out.domain.entity.enums.ConnectState
 import com.count_out.domain.entity.enums.Goal
 import com.count_out.domain.entity.enums.RunningState
+import com.count_out.domain.entity.enums.Zone
 import com.count_out.domain.entity.workout.Set
 import com.count_out.presentation.R
 import com.count_out.presentation.models.ParameterImplP
@@ -62,6 +63,7 @@ import com.count_out.presentation.view_element.VerticalProgress
 import com.count_out.presentation.view_element.bottom_sheet.BottomSheetSaveTraining
 import com.count_out.presentation.view_element.custom_view.Frame
 import com.count_out.presentation.view_element.custom_view.IconQ
+import com.count_out.presentation.view_element.icons.IconZone
 import java.math.RoundingMode
 
 @Composable fun ExecuteWorkoutScreen( viewModel: ExecuteViewModel, navigateEvent: NavigateEvent){
@@ -121,7 +123,6 @@ import java.math.RoundingMode
 }
 @Composable fun AdditionalInformation(dataState: ExecuteState, modifier: Modifier = Modifier){
     Column (modifier = modifier.fillMaxWidth()) {
-
     }
 }
 @Composable fun ExerciseInfoNew(dataState: ExecuteState) {

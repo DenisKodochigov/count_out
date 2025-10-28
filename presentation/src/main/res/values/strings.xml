@@ -176,6 +176,7 @@
     <string name="ring">Ring</string>
     <string name="times">times</string>
     <string name="circles">circles</string>
-    <string name="exer">Exer.</string>
+    <string name="exer">Exer</string>
     <string name="zone">Zone</string>
+    <string name="goal">Goal</string>
 </resources>

@@ -34,13 +34,13 @@ import androidx.compose.ui.unit.sp
 @Preview
 @Composable fun Preview() {
     val selected = false
-    IconQ.RingExercise(selected = !selected)
+    IconQ.CountOnly()
 }
 
 object IconQ{
     private val fontSize = 9.sp
-    private val width = 39.dp
-    private val height = 39.dp
+    private val width = 35.dp
+    private val height = 35.dp
     private val thick = 1.dp
     private const val STROKE_WIDTH = 3f
     private const val ARROW_WIDTH_HOR = 2f
@@ -207,7 +207,7 @@ object IconQ{
             }
         )
     }
-    @Composable fun Faster(color: Color = color(), modifier: Modifier = Modifier, onClick: ()->Unit = {}){
+    @Composable fun Faster(modifier: Modifier = Modifier, color: Color = color(), onClick: ()->Unit = {}){
         val textMeasurer = rememberTextMeasurer()
         Spacer(modifier = modifier
             .width(width)
@@ -220,6 +220,13 @@ object IconQ{
                     val heightText = 5.sp
                     val radius = 3
                     val thickPx = thick.toPx()
+                    drawRoundRect(
+                        color = color,
+                        topLeft = Offset(x = thickPx / 2, y = thickPx / 2),
+                        size = Size(xPx - thickPx, yPx - thickPx),
+                        cornerRadius = CornerRadius(8f, 8f),
+                        style = Stroke(width = thickPx),
+                    )
                     drawArc(
                         color = color,
                         startAngle = 0f, sweepAngle = -180f, useCenter = true,
@@ -272,7 +279,7 @@ object IconQ{
             }
         )
     }
-    @Composable fun Slower(color: Color = color(), modifier: Modifier = Modifier, onClick: ()->Unit = {}){
+    @Composable fun Slower(modifier: Modifier = Modifier, color: Color = color(), onClick: ()->Unit = {}){
         val textMeasurer = rememberTextMeasurer()
         Spacer(modifier = modifier
             .width(width)
@@ -285,6 +292,13 @@ object IconQ{
                     val heightText = 5.sp
                     val radius = 3
                     val thickPx = thick.toPx()
+                    drawRoundRect(
+                        color = color,
+                        topLeft = Offset(x = thickPx / 2, y = thickPx / 2),
+                        size = Size(xPx - thickPx, yPx - thickPx),
+                        cornerRadius = CornerRadius(8f, 8f),
+                        style = Stroke(width = thickPx),
+                    )
                     drawArc(
                         color = color,
                         startAngle = 0f, sweepAngle = -180f, useCenter = true,
@@ -347,12 +361,19 @@ object IconQ{
                     val xPx = width.toPx()
                     val yPx = height.toPx()
                     val thickPx = thick.toPx()
-                    drawOval(
+                    drawRoundRect(
                         color = color,
-                        style = Stroke(width = thickPx),
                         topLeft = Offset(x = thickPx / 2, y = thickPx / 2),
-                        size = Size(xPx - thickPx, yPx - thickPx)
+                        size = Size(xPx - thickPx, yPx - thickPx),
+                        cornerRadius = CornerRadius(8f, 8f),
+                        style = Stroke(width = thickPx),
                     )
+//                    drawOval(
+//                        color = color,
+//                        style = Stroke(width = thickPx),
+//                        topLeft = Offset(x = thickPx / 2, y = thickPx / 2),
+//                        size = Size(xPx - thickPx, yPx - thickPx)
+//                    )
                     drawLine(
                         color = color,
                         strokeWidth = thickPx * 2,
@@ -387,12 +408,19 @@ object IconQ{
                         lineTo(xPx * 0.3f + offsetX, yPx / 3)
                         close()
                     }
-                    drawOval(
+                    drawRoundRect(
                         color = color,
-                        style = Stroke(width = thickPx),
                         topLeft = Offset(x = thickPx / 2, y = thickPx / 2),
-                        size = Size(xPx - thickPx, yPx - thickPx)
+                        size = Size(xPx - thickPx, yPx - thickPx),
+                        cornerRadius = CornerRadius(8f, 8f),
+                        style = Stroke(width = thickPx),
                     )
+//                    drawOval(
+//                        color = color,
+//                        style = Stroke(width = thickPx),
+//                        topLeft = Offset(x = thickPx / 2, y = thickPx / 2),
+//                        size = Size(xPx - thickPx, yPx - thickPx)
+//                    )
                     drawPath(color = color, path = triangle, style = Stroke(width = thickPx))
                 }
             }
@@ -408,12 +436,19 @@ object IconQ{
                     val xPx = width.toPx()
                     val yPx = height.toPx()
                     val thickPx = thick.toPx()
-                    drawOval(
+                    drawRoundRect(
                         color = color,
-                        style = Stroke(width = thickPx),
                         topLeft = Offset(x = thickPx / 2, y = thickPx / 2),
-                        size = Size(xPx - thickPx, yPx - thickPx)
+                        size = Size(xPx - thickPx, yPx - thickPx),
+                        cornerRadius = CornerRadius(8f, 8f),
+                        style = Stroke(width = thickPx),
                     )
+//                    drawOval(
+//                        color = color,
+//                        style = Stroke(width = thickPx),
+//                        topLeft = Offset(x = thickPx / 2, y = thickPx / 2),
+//                        size = Size(xPx - thickPx, yPx - thickPx)
+//                    )
                     drawRect(
                         color = color,
                         topLeft = Offset(xPx / 4, yPx / 4),
@@ -438,6 +473,13 @@ object IconQ{
                     val x0 = xPx / 2 - thickPx * diameter / 2
                     val y0 = yPx / 2 - thickPx * diameter / 2
                     val delta1 = yPx * 0.2f
+//                    drawRoundRect(
+//                        color = color,
+//                        topLeft = Offset(x = thickPx / 2, y = thickPx / 2),
+//                        size = Size(xPx - thickPx, yPx - thickPx),
+//                        cornerRadius = CornerRadius(8f, 8f),
+//                        style = Stroke(width = thickPx),
+//                    )
                     drawOval(
                         color = color, topLeft = Offset(x = x0, y = y0 - delta1),
                         size = Size(thickPx * diameter, thickPx * diameter)
@@ -454,6 +496,7 @@ object IconQ{
             }
         )
     }
+
     @Composable fun Collapsing(color: Color = color(), onClick: ()->Unit = {}){
         Spacer(modifier = Modifier
             .width(width)
@@ -464,6 +507,13 @@ object IconQ{
                     val xPx = width.toPx()
                     val yPx = height.toPx()
                     val thickPx = thick.toPx()
+//                    drawRoundRect(
+//                        color = color,
+//                        topLeft = Offset(x = thickPx / 2, y = thickPx / 2),
+//                        size = Size(xPx - thickPx, yPx - thickPx),
+//                        cornerRadius = CornerRadius(8f, 8f),
+//                        style = Stroke(width = thickPx),
+//                    )
                     drawPath(color = color, path = Path().apply {
                         moveTo(xPx / 2, yPx * 0.4f)
                         lineTo(thickPx * 9, yPx * 0.6f)
@@ -484,6 +534,13 @@ object IconQ{
                     val xPx = width.toPx()
                     val yPx = height.toPx()
                     val thickPx = thick.toPx()
+//                    drawRoundRect(
+//                        color = color,
+//                        topLeft = Offset(x = thickPx / 2, y = thickPx / 2),
+//                        size = Size(xPx - thickPx, yPx - thickPx),
+//                        cornerRadius = CornerRadius(8f, 8f),
+//                        style = Stroke(width = thickPx),
+//                    )
                     drawPath(color = color, path = Path().apply {
                         moveTo(xPx / 2, yPx * 0.6f)
                         lineTo(thickPx * 9, yPx * 0.4f)
@@ -663,11 +720,18 @@ object IconQ{
                     val yPx0 = (height).toPx()
                     val delta1 = xPx * 0.18f
                     val thickPx = 1.dp.toPx()
-                    drawOval(
-                        color = colorL, style = Stroke(width = thickPx),
+                    drawRoundRect(
+                        color = color,
                         topLeft = Offset(x = thickPx / 2, y = thickPx / 2),
-                        size = Size(xPx - thickPx, yPx0 - thickPx)
+                        size = Size(xPx - thickPx, yPx - thickPx),
+                        cornerRadius = CornerRadius(8f, 8f),
+                        style = Stroke(width = thickPx),
                     )
+//                    drawOval(
+//                        color = colorL, style = Stroke(width = thickPx),
+//                        topLeft = Offset(x = thickPx / 2, y = thickPx / 2),
+//                        size = Size(xPx - thickPx, yPx0 - thickPx)
+//                    )
                     drawLine(
                         color = colorL, strokeWidth = thickPx,
                         start = Offset(delta1, yPx), end = Offset(xPx - delta1, yPx)
@@ -712,11 +776,18 @@ object IconQ{
                     val thickPx = 1.dp.toPx()
                     val xPx = width.toPx()
                     val yPx = height.toPx()
-                    drawOval(
-                        color = colorL, style = Stroke(width = thickPx),
+                    drawRoundRect(
+                        color = colorL,
                         topLeft = Offset(x = thickPx / 2, y = thickPx / 2),
-                        size = Size(xPx - thickPx, yPx - thickPx)
+                        size = Size(xPx - thickPx, yPx - thickPx),
+                        cornerRadius = CornerRadius(8f, 8f),
+                        style = Stroke(width = thickPx),
                     )
+//                    drawOval(
+//                        color = colorL, style = Stroke(width = thickPx),
+//                        topLeft = Offset(x = thickPx / 2, y = thickPx / 2),
+//                        size = Size(xPx - thickPx, yPx - thickPx)
+//                    )
                     val textLayout: TextLayoutResult =
                         textMeasurer.measure(text = AnnotatedString("1.2.3"), style = style)
                     drawText(
@@ -729,9 +800,9 @@ object IconQ{
             }
         )
     }
-    @Composable fun Duration(selected: Boolean = false, onClick: ()->Unit = {},
-                             color: Color = color(),) {
+    @Composable fun Duration(selected: Boolean = false, onClick: ()->Unit = {}, color: Color = color(),) {
         val colorL = colorSelected(selected, color)
+
         Spacer(modifier = Modifier
             .width(width)
             .height(height)
@@ -755,11 +826,18 @@ object IconQ{
                     val x2 = diameter / 4
                     val y2 = diameter / 3
                     val y21 = diameter / 10
-                    drawOval(
-                        color = colorL, style = Stroke(width = thickPx),
+                    drawRoundRect(
+                        color = colorL,
                         topLeft = Offset(x = thickPx / 2, y = thickPx / 2),
-                        size = Size(xPx - thickPx, yPx0 - thickPx)
+                        size = Size(xPx - thickPx, yPx - thickPx),
+                        cornerRadius = CornerRadius(8f, 8f),
+                        style = Stroke(width = thickPx),
                     )
+//                    drawOval(
+//                        color = colorL, style = Stroke(width = thickPx),
+//                        topLeft = Offset(x = thickPx / 2, y = thickPx / 2),
+//                        size = Size(xPx - thickPx, yPx0 - thickPx)
+//                    )
                     drawOval(
                         color = colorL, style = Stroke(width = widthPx2),
                         topLeft = Offset(x = x0, y = y0),
@@ -820,6 +898,178 @@ object IconQ{
                     )
                     drawLine(
                         color = colorL, strokeWidth = widthPx2,
+                        start = Offset(x0 + diameter / 2 - x2, y0 - y2),
+                        end = Offset(x0 + diameter / 2 + x2, y0 - y2)
+                    )
+                }
+            }
+        )
+    }
+    @Composable fun DistanceOnly(color: Color = color()){
+        val style = TextStyle(fontSize = fontSize, color = color, fontWeight = FontWeight.Bold)
+        val textMeasurer = rememberTextMeasurer()
+        val width = 30.dp
+        val height = 30.dp
+        Spacer(modifier = Modifier
+            .width(width)
+            .height(height)
+            .drawWithCache {
+                onDrawWithContent {
+                    val xPx = width.toPx()
+                    val yPx = (height * 0.6f).toPx()
+                    val delta1 = xPx * 0.18f
+                    val thickPx = 1.dp.toPx()
+                    drawLine(
+                        color = color, strokeWidth = thickPx,
+                        start = Offset(delta1, yPx), end = Offset(xPx - delta1, yPx)
+                    )
+                    drawLine(
+                        color = color, strokeWidth = thickPx * 2,
+                        start = Offset(delta1, yPx - thickPx * 4),
+                        end = Offset(delta1, yPx)
+                    )
+                    drawLine(
+                        color = color, strokeWidth = thickPx,
+                        start = Offset(xPx / 2, yPx - thickPx * 3),
+                        end = Offset(xPx / 2, yPx)
+                    )
+                    drawLine(
+                        color = color, strokeWidth = thickPx * 2,
+                        start = Offset(xPx - delta1, yPx - thickPx * 4),
+                        end = Offset(xPx - delta1, yPx)
+                    )
+                    val textLayout: TextLayoutResult =
+                        textMeasurer.measure(text = AnnotatedString("km"), style = style)
+                    drawText(
+                        textLayout, topLeft = Offset(
+                            (xPx - textLayout.size.width)/2,
+                            yPx - textLayout.size.height * 1.3f
+                        )
+                    )
+                }
+            }
+        )
+    }
+    @Composable fun CountOnly(color: Color = color()){
+        val fontSize = 14.sp
+        val width = 30.dp
+        val height = 30.dp
+        val textMeasurer = rememberTextMeasurer()
+        Spacer(modifier = Modifier
+            .width(width)
+            .height(height)
+            .drawWithCache {
+                onDrawWithContent {
+                    val xPx = width.toPx()
+                    val yPx = height.toPx()
+
+                    val one = textMeasurer.measure(text = AnnotatedString("1"),
+                        style = TextStyle(fontSize = fontSize,color = color))
+                    val to = textMeasurer.measure(text = AnnotatedString("2"),
+                        style = TextStyle(fontSize = fontSize,color = color))
+                    val three = textMeasurer.measure(text = AnnotatedString("3"),
+                        style = TextStyle(fontSize = fontSize,color = color))
+                    val point = textMeasurer.measure(text = AnnotatedString("."),
+                        style = TextStyle(fontSize = fontSize,color = color))
+
+                    drawText(one, topLeft = Offset(3f, (yPx - one.size.height) * 0.5f))
+                    drawText(point, topLeft = Offset((xPx - to.size.width/2f - to.size.width)/2f - 7f, (yPx - point.size.height) * 0.5f))
+                    drawText(to, topLeft = Offset((xPx - to.size.width)/2f-2f, (yPx - to.size.height) * 0.5f))
+                    drawText(point, topLeft = Offset((xPx - to.size.width/2f + to.size.width)/2f + 3f, (yPx - point.size.height) * 0.5f))
+                    drawText(three, topLeft = Offset((xPx - three.size.width-3f) / 1f, (yPx - three.size.height) * 0.5f))
+                }
+            }
+        )
+    }
+    @Composable fun DurationOnly(color: Color = color(),) {
+        val width = 30.dp
+        val height = 30.dp
+        Spacer(modifier = Modifier
+            .width(width)
+            .height(height)
+            .drawWithCache {
+                onDrawWithContent {
+                    val xPx = width.toPx()
+                    val yPx = height.toPx() * 0.67f
+                    val thickPx = 1.dp.toPx()
+                    val widthPx2 = 2.dp.toPx()
+
+                    val diameter = yPx * 0.7f
+                    val diameter1 = diameter * 0.15f
+                    val x0 = xPx / 2 - diameter / 2
+                    val y0 = yPx - diameter * 0.7f
+                    val metka = diameter / 8
+                    val arrow = diameter / 4
+                    val x1 = diameter / 8
+                    val y1 = diameter / 5
+                    val x2 = diameter / 4
+                    val y2 = diameter / 3
+                    val y21 = diameter / 10
+//                    drawOval(
+//                        color = colorL, style = Stroke(width = thickPx),
+//                        topLeft = Offset(x = thickPx / 2, y = thickPx / 2),
+//                        size = Size(xPx - thickPx, yPx0 - thickPx)
+//                    )
+                    drawOval(
+                        color = color, style = Stroke(width = widthPx2),
+                        topLeft = Offset(x = x0, y = y0),
+                        size = Size(diameter, diameter)
+                    )
+                    drawLine(
+                        color = color, strokeWidth = thickPx,
+                        start = Offset(x0 + diameter / 2, y0 + diameter - metka),
+                        end = Offset(x0 + diameter / 2, y0 + diameter)
+                    )
+                    drawLine(
+                        color = color, strokeWidth = thickPx,
+                        start = Offset(x0 + diameter / 2, y0),
+                        end = Offset(x0 + diameter / 2, y0 + metka)
+                    )
+                    drawLine(
+                        color = color, strokeWidth = thickPx,
+                        start = Offset(x0, y0 + diameter / 2),
+                        end = Offset(x0 + metka, y0 + diameter / 2)
+                    )
+                    drawLine(
+                        color = color, strokeWidth = thickPx,
+                        start = Offset(x0 + diameter, y0 + diameter / 2),
+                        end = Offset(x0 + diameter - metka, y0 + diameter / 2)
+                    )
+                    drawLine(
+                        color = color, strokeWidth = thickPx,
+                        start = Offset(x0 + diameter / 2, y0 + diameter / 2),
+                        end = Offset(x0 + diameter / 2 + arrow, y0 + diameter / 2 - arrow)
+                    )
+                    drawOval(
+                        color = color,
+                        topLeft = Offset(
+                            x0 + (diameter - diameter1) / 2,
+                            y0 + (diameter - diameter1) / 2
+                        ),
+                        size = Size(diameter1, diameter1)
+                    )
+                    drawLine(
+                        color = color, strokeWidth = thickPx,
+                        start = Offset(x0 + diameter / 2 - x1, y0),
+                        end = Offset(x0 + diameter / 2 - x1, y0 - y1)
+                    )
+                    drawLine(
+                        color = color, strokeWidth = thickPx,
+                        start = Offset(x0 + diameter / 2 + x1, y0),
+                        end = Offset(x0 + diameter / 2 + x1, y0 - y1)
+                    )
+                    drawLine(
+                        color = color, strokeWidth = widthPx2,
+                        start = Offset(x0 + diameter / 2 - x2, y0 - y2),
+                        end = Offset(x0 + diameter / 2 - x2, y0 - y21)
+                    )
+                    drawLine(
+                        color = color, strokeWidth = widthPx2,
+                        start = Offset(x0 + diameter / 2 + x2, y0 - y2),
+                        end = Offset(x0 + diameter / 2 + x2, y0 - y21)
+                    )
+                    drawLine(
+                        color = color, strokeWidth = widthPx2,
                         start = Offset(x0 + diameter / 2 - x2, y0 - y2),
                         end = Offset(x0 + diameter / 2 + x2, y0 - y2)
                     )
