@@ -7,7 +7,6 @@ import com.count_out.data.models.entity.SetDb
 import com.count_out.data.models.throwable.ThrowableDS
 import com.count_out.data.source.room.SetSource
 import com.count_out.framework.room.db.set.SetDao
-import com.count_out.framework.room.db.set.SetTb
 import com.count_out.framework.room.db.set.SetTb.Companion.toTb
 import javax.inject.Inject
 

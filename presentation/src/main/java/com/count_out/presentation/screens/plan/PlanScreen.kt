@@ -32,10 +32,9 @@ import com.count_out.domain.entity.workout.Part
 import com.count_out.domain.entity.workout.Ring
 import com.count_out.domain.entity.workout.Set
 import com.count_out.presentation.R
-import com.count_out.presentation.models.Dimen
 import com.count_out.presentation.models.TypeKeyboard
 import com.count_out.presentation.screens.plan.PlanEvent.ShowBS
-import com.count_out.presentation.screens.plan.part.Part
+import com.count_out.presentation.screens.plan.part.PartsContent
 import com.count_out.presentation.screens.prime.PrimeScreen
 import com.count_out.presentation.view_element.TextFieldApp
 import com.count_out.presentation.view_element.bottom_sheet.ShowBottomSheetSpeech
@@ -58,16 +57,15 @@ import com.count_out.presentation.view_element.icons.IconsGroup
         modifier = Modifier
             .fillMaxHeight()
             .verticalScroll(rememberScrollState())
-            .padding(horizontal = Dimen.paddingAppHor)
+            .padding(horizontal = 4.dp)
             .clickable(interactionSource = interactionSource, indication = null) {
                 focusManager.clearFocus(true)
             },
     ){
-        Spacer(modifier = Modifier.height(Dimen.width8))
         NamePlan(dataState = dataState)
         dataState.plan?.parts?.forEach { part ->
-            Spacer(modifier = Modifier.height(Dimen.width8))
-            Part(dataState = dataState, part = part)
+            Spacer(modifier = Modifier.height(8.dp))
+            PartsContent(dataState = dataState, part = part)
         }
     }
 }
@@ -116,7 +114,6 @@ fun getCollapsing(dataState: PlanState, item: Domain): Boolean {
         else -> false
     }
 }
-
 fun setSelecting(dataState: PlanState, item: Domain, list: List<Domain>) {
     dataState.event(PlanEvent.SetSelecting(
         dataState.selecting.copy(item = item, listOwner = list)))

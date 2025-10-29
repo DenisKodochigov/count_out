@@ -30,13 +30,11 @@ sealed class PlanEvent: Event {
     data class DeleteSet(val item: Set): PlanEvent()
     data class UpdateSet(val item: Set): PlanEvent()
     data class ChangeGoal(val item: Set): PlanEvent()
+    data class ChangeZone(val item: Set): PlanEvent()
 
     data class ShowBS(val item: ShowBottomSheet): PlanEvent()
     data class SetCollapsing(val item: Collapsing): PlanEvent()
     data class SetSelecting(val item: Selecting): PlanEvent()
-
-    data class ZoneClick(val item: Int): PlanEvent()
-
     data class UpdateSpeech(val item: Speech): PlanEvent()
     data object BackScreen : PlanEvent()
     data class Init(val item: Long): PlanEvent()

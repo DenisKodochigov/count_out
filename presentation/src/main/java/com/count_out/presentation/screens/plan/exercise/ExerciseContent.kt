@@ -38,20 +38,19 @@ import com.count_out.presentation.view_element.icons.IconsCollapsing
 import com.count_out.presentation.view_element.icons.IconsGroup
 
 @Composable
-fun ListExercises(dataState: PlanState, ring: Ring) {
-//    lg("  ListExercises")
+fun ExercisesList(dataState: PlanState, ring: Ring) {
     val listExercise = ring.exercises
     ColumnDragDrop(
         items = listExercise,
-        modifier = Modifier.padding(end = 8.dp),
+        modifier = Modifier.padding(end = 0.dp),
         content = { item -> ElementColum( item, dataState = dataState, ring) },
         onMoveItem = { from, to->
             Log.d("KDS"," from=$from   to=$to")
             dataState.event(
                 PlanEvent.ChangeSequenceExercise(
-                    item = SetViewId(ringId = ring.idRing, from = from, to = to)))
+                    item = SetViewId(idOwner = ring.idRing, from = from, to = to)))
         },)
-    Spacer(modifier = Modifier.height(4.dp))
+    Spacer(modifier = Modifier.height(0.dp))
 }
 
 @Composable fun <T>ElementColum (item:T, dataState: PlanState, ring: Ring){

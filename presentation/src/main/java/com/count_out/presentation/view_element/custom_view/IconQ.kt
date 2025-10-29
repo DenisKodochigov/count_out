@@ -33,7 +33,6 @@ import androidx.compose.ui.unit.sp
 
 @Preview
 @Composable fun Preview() {
-    val selected = false
     IconQ.CountOnly()
 }
 
@@ -916,7 +915,7 @@ object IconQ{
             .drawWithCache {
                 onDrawWithContent {
                     val xPx = width.toPx()
-                    val yPx = (height * 0.6f).toPx()
+                    val yPx = (height * 0.7f).toPx()
                     val delta1 = xPx * 0.18f
                     val thickPx = 1.dp.toPx()
                     drawLine(
@@ -951,7 +950,7 @@ object IconQ{
         )
     }
     @Composable fun CountOnly(color: Color = color()){
-        val fontSize = 14.sp
+        val fontSize = 12.sp
         val width = 30.dp
         val height = 30.dp
         val textMeasurer = rememberTextMeasurer()
@@ -963,20 +962,10 @@ object IconQ{
                     val xPx = width.toPx()
                     val yPx = height.toPx()
 
-                    val one = textMeasurer.measure(text = AnnotatedString("1"),
-                        style = TextStyle(fontSize = fontSize,color = color))
-                    val to = textMeasurer.measure(text = AnnotatedString("2"),
-                        style = TextStyle(fontSize = fontSize,color = color))
-                    val three = textMeasurer.measure(text = AnnotatedString("3"),
-                        style = TextStyle(fontSize = fontSize,color = color))
-                    val point = textMeasurer.measure(text = AnnotatedString("."),
-                        style = TextStyle(fontSize = fontSize,color = color))
-
+                    val one = textMeasurer.measure(text = AnnotatedString("1.2.3"),
+                        style = TextStyle(fontSize = fontSize,color = color, fontWeight = FontWeight.Bold))
                     drawText(one, topLeft = Offset(3f, (yPx - one.size.height) * 0.5f))
-                    drawText(point, topLeft = Offset((xPx - to.size.width/2f - to.size.width)/2f - 7f, (yPx - point.size.height) * 0.5f))
-                    drawText(to, topLeft = Offset((xPx - to.size.width)/2f-2f, (yPx - to.size.height) * 0.5f))
-                    drawText(point, topLeft = Offset((xPx - to.size.width/2f + to.size.width)/2f + 3f, (yPx - point.size.height) * 0.5f))
-                    drawText(three, topLeft = Offset((xPx - three.size.width-3f) / 1f, (yPx - three.size.height) * 0.5f))
+
                 }
             }
         )

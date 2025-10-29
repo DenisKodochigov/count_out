@@ -51,7 +51,6 @@ import com.count_out.domain.entity.StepPlan
 import com.count_out.domain.entity.enums.ConnectState
 import com.count_out.domain.entity.enums.Goal
 import com.count_out.domain.entity.enums.RunningState
-import com.count_out.domain.entity.enums.Zone
 import com.count_out.domain.entity.workout.Set
 import com.count_out.presentation.R
 import com.count_out.presentation.models.ParameterImplP
@@ -63,7 +62,6 @@ import com.count_out.presentation.view_element.VerticalProgress
 import com.count_out.presentation.view_element.bottom_sheet.BottomSheetSaveTraining
 import com.count_out.presentation.view_element.custom_view.Frame
 import com.count_out.presentation.view_element.custom_view.IconQ
-import com.count_out.presentation.view_element.icons.IconZone
 import java.math.RoundingMode
 
 @Composable fun ExecuteWorkoutScreen( viewModel: ExecuteViewModel, navigateEvent: NavigateEvent){
@@ -84,7 +82,6 @@ import java.math.RoundingMode
             TopBar(dataState)
             SensorInfo(dataState)
             AdditionalInformation(dataState, modifier = Modifier.weight(1f))
-
             ExerciseInfoNew(dataState)
             DownPlace(dataState)
         }
@@ -122,7 +119,22 @@ import java.math.RoundingMode
     HorizontalDivider(thickness = 2.dp, color = MaterialTheme.colorScheme.surfaceContainerLow)
 }
 @Composable fun AdditionalInformation(dataState: ExecuteState, modifier: Modifier = Modifier){
-    Column (modifier = modifier.fillMaxWidth()) {
+    Column (modifier = modifier.fillMaxSize()) {
+//        TextApp(text = "displayLarge ${typography.displayLarge.fontSize} ", style = typography.displayLarge)
+//        TextApp(text = "displayMedium ${typography.displayMedium.fontSize} ", style = typography.displayMedium)
+//        TextApp(text = "displaySmall ${typography.displaySmall.fontSize} ", style = typography.displaySmall)
+//        TextApp(text = "headlineLarge ${typography.headlineLarge.fontSize} ", style = typography.headlineLarge)
+//        TextApp(text = "headlineMedium ${typography.headlineMedium.fontSize} ", style = typography.headlineMedium)
+//        TextApp(text = "headlineSmall ${typography.headlineSmall.fontSize} ", style = typography.headlineSmall)
+//        TextApp(text = "titleLarge ${typography.titleLarge.fontSize} ", style = typography.titleLarge)
+//        TextApp(text = "titleMedium ${typography.titleMedium.fontSize} ", style = typography.titleMedium)
+//        TextApp(text = "titleSmall ${typography.titleSmall.fontSize} ", style = typography.titleSmall)
+//        TextApp(text = "labelLarge ${typography.labelLarge.fontSize} ", style = typography.labelLarge)
+//        TextApp(text = "labelMedium ${typography.labelMedium.fontSize} ", style = typography.labelMedium)
+//        TextApp(text = "labelSmall ${typography.labelSmall.fontSize} ", style = typography.labelSmall)
+//        TextApp(text = "bodyLarge ${typography.bodyLarge.fontSize} ", style = typography.bodyLarge)
+//        TextApp(text = "bodyMedium ${typography.bodyMedium.fontSize} ", style = typography.bodyMedium)
+//        TextApp(text = "bodySmall ${typography.bodySmall.fontSize} ", style = typography.bodySmall)
     }
 }
 @Composable fun ExerciseInfoNew(dataState: ExecuteState) {

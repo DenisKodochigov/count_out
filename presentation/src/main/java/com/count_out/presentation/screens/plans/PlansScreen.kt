@@ -63,10 +63,8 @@ fun PlansScreen(vm: PlansViewModel, navigateEvent: NavigateEvent) {
 @Composable fun TopBar(){
     TopBarApp(text = stringResource(R.string.plans_workout), selected = false, onClickText = {})
 }
-
 @Composable fun PlanList(dataState: PlansState, modifier: Modifier = Modifier) {
     Spacer(modifier = Modifier.fillMaxWidth())
-//    Log.d("KDS", "list ${dataState.trainings}")
     LazyColumn(
         state = rememberLazyListState(),
         contentPadding = PaddingValues(horizontal = Dimen.paddingAppHor),

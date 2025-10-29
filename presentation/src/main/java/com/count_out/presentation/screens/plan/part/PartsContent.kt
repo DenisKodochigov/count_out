@@ -30,7 +30,7 @@ import com.count_out.presentation.view_element.custom_view.Frame
 import com.count_out.presentation.view_element.icons.IconsCollapsing
 import com.count_out.presentation.view_element.icons.IconsGroup
 
-@Composable fun Part(dataState: PlanState, part: Part){
+@Composable fun PartsContent(dataState: PlanState, part: Part){
     when(part.name){
         PartName.WorkUp -> ShowBottomSheetSpeech(dataState, dataState.showBS.workUp,
             R.string.work_up1, part)
@@ -40,7 +40,7 @@ import com.count_out.presentation.view_element.icons.IconsGroup
             R.string.work_down1, part)
     }
     Frame(colorAlpha = 0.8f, contour = contourHor2){
-        Column( modifier = Modifier.padding(start = 6.dp, bottom = 4.dp, top = 4.dp)){
+        Column( modifier = Modifier.padding(start = 0.dp, bottom = 2.dp, top = 4.dp)){
             TitlePart(dataState = dataState, part = part)
             ListRing(dataState = dataState, part = part)
         }

@@ -24,79 +24,52 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.count_out.domain.entity.SetViewId
-import com.count_out.domain.entity.enums.Goal
-import com.count_out.domain.entity.enums.PartName
-import com.count_out.domain.entity.enums.Zone
 import com.count_out.domain.entity.types_domai.LongDm
 import com.count_out.domain.entity.workout.Exercise
-import com.count_out.domain.entity.workout.Parameter
 import com.count_out.domain.entity.workout.Part
 import com.count_out.domain.entity.workout.Ring
 import com.count_out.domain.entity.workout.Ring.Companion.amount
 import com.count_out.domain.entity.workout.Set
-import com.count_out.domain.entity.workout.Set.Companion.copy
-import com.count_out.domain.entity.workout.SpeechKit
 import com.count_out.presentation.R
 import com.count_out.presentation.models.Dimen.contourAll1
-import com.count_out.presentation.models.Dimen.contourHor2
 import com.count_out.presentation.models.TypeKeyboard
-import com.count_out.presentation.models.lg
 import com.count_out.presentation.screens.plan.PlanEvent
 import com.count_out.presentation.screens.plan.PlanEvent.ShowBS
 import com.count_out.presentation.screens.plan.PlanState
-import com.count_out.presentation.screens.plan.exercise.ListExercises
+import com.count_out.presentation.screens.plan.exercise.ExercisesList
 import com.count_out.presentation.screens.plan.getCollapsing
 import com.count_out.presentation.screens.plan.getSelecting
-import com.count_out.presentation.screens.plan.set.BodySet
-import com.count_out.presentation.screens.plan.set.IconGroupContent
-import com.count_out.presentation.screens.plan.set.TaskSwitch
-import com.count_out.presentation.screens.plan.set.ZonePulseSwitch
+import com.count_out.presentation.screens.plan.set.SetBody
 import com.count_out.presentation.screens.plan.setCollapsing
 import com.count_out.presentation.screens.plan.setSelecting
 import com.count_out.presentation.view_element.TextApp
 import com.count_out.presentation.view_element.TextFieldApp
 import com.count_out.presentation.view_element.custom_view.Frame
-import com.count_out.presentation.view_element.custom_view.IconQ
 import com.count_out.presentation.view_element.drag_drop_column.column.ColumnDragDrop
-import com.count_out.presentation.view_element.icons.IconCount
-import com.count_out.presentation.view_element.icons.IconDistance
-import com.count_out.presentation.view_element.icons.IconDuration
 import com.count_out.presentation.view_element.icons.IconGoal
-import com.count_out.presentation.view_element.icons.IconZone
 import com.count_out.presentation.view_element.icons.IconZoneNew
 import com.count_out.presentation.view_element.icons.IconsCollapsing
 import com.count_out.presentation.view_element.icons.IconsGroup
 
 @Composable fun Rings(dataState: PlanState, part: Part){
-    Frame(colorAlpha = 0.8f, contour = contourHor2,
-        modifier = Modifier.padding(start = 0.dp, bottom = 4.dp, top = 4.dp)){
-        part.rings.forEachIndexed { ind,ring ->
-            if (ring.amount > 1){CardRing(dataState, ring, ind)
-            } else { ListExercises(dataState, ring) }
+    part.rings.forEachIndexed { ind,ring ->
+        if (ring.amount > 1){ RingCard(dataState, ring, ind)
+        } else { ExercisesList(dataState, ring) }
+    }
+    Spacer(modifier = Modifier.height(4.dp))
+}
+@Composable fun RingCard(dataState: PlanState, ring: Ring, index: Int){
+    Frame(colorAlpha = 0.8f, contour = contourAll1,
+        modifier = Modifier.padding(top = 4.dp)){
+        Column {
+            RingCardTitle(dataState, ring, index)
+            RingCardBody(dataState, ring, getCollapsing(dataState, ring))
         }
-//            ColumnDragDrop(
-//                items = part.rings,
-//                modifier = modifier,
-//                content = { item -> ElementColum( item, dataState = dataState) },
-//                onMoveItem = { from, to->
-//                    Log.d("KDS"," from=$from   to=$to")
-//                    dataState.event(
-//                        PlanEvent.ChangeSequenceExercise(
-//                            item = SetViewId(ringId = part.idPart, from = from, to = to)))
-//                },)
-        Spacer(modifier = Modifier.height(4.dp))
     }
 }
-@Composable fun CardRing(dataState: PlanState, ring: Ring, index: Int){
-    Column {
-        CardRingTitle(dataState, ring, index)
-        CardRingBody(dataState, ring, getCollapsing(dataState, ring))
-    }
-}
-@Composable fun CardRingTitle(dataState: PlanState, ring: Ring, index: Int){
+@Composable fun RingCardTitle(dataState: PlanState, ring: Ring, index: Int){
     val enteredName: MutableState<String> = remember { mutableStateOf(ring.amount.toString() ) }
     Row( verticalAlignment = Alignment.CenterVertically, modifier = Modifier.padding(end = 6.dp)){
         IconsCollapsing(
@@ -140,30 +113,41 @@ import com.count_out.presentation.view_element.icons.IconsGroup
         Spacer(modifier = Modifier.width(6.dp))
     }
 }
-@Composable fun CardRingBody(dataState: PlanState, ring: Ring, visible: Boolean ){
+@Composable fun RingCardBody(dataState: PlanState, ring: Ring, visible: Boolean ){
     AnimatedVisibility(modifier = Modifier.padding(horizontal = 4.dp, vertical = 1.dp), visible = visible) {
         Row {
-            Exercises(dataState, ring)
-            ExerciseBody(dataState, ring)
+            RingCardBodyExercises(dataState, ring)
+            RingCardBodyExerciseBody(dataState, ring)
         }
     }
 }
-@Composable
-fun ExerciseBody(dataState: PlanState, ring: Ring) {
-    val selectedExercise = ring.exercises.find { it.idExercise in dataState.selecting.exercises } ?: ring.exercises[0]
-    ExerciseContent(dataState,selectedExercise)
+@Composable fun RingCardBodyExercises(dataState: PlanState, ring: Ring) {
+    ColumnDragDrop(
+        items = ring.exercises,
+        modifier = Modifier.padding(end = 4.dp),
+        content = { item -> RingCardBodyExerciseElementColum(item, dataState, ring) },
+        onMoveItem = { from, to->
+            Log.d("KDS"," from=$from   to=$to")
+            dataState.event(
+                PlanEvent.ChangeSequenceExercise(
+                    item = SetViewId(idOwner = ring.idRing, from = from, to = to)))
+        },)
 }
-
-@Composable fun ExerciseContent(dataState: PlanState, exercise: Exercise){
+@Composable
+fun RingCardBodyExerciseBody(dataState: PlanState, ring: Ring) {
+    val selectedExercise = ring.exercises.find { it.idExercise in dataState.selecting.exercises } ?: ring.exercises[0]
+    RingCardBodyExerciseBodyContent(dataState,selectedExercise)
+}
+@Composable fun RingCardBodyExerciseBodyContent(dataState: PlanState, exercise: Exercise){
     Frame(colorAlpha = 0.5f, contour = contourAll1) {
         Column (modifier = Modifier.fillMaxWidth().padding(vertical = 3.dp)) {
-            ShowName( dataState, exercise )
-            BodySet( dataState, exercise.sets[0] )
+            RingCardBodyExerciseName( dataState, exercise )
+            SetBody( dataState, exercise.sets[0] )
             ControlExercise( dataState, exercise.sets[0] )
         }
     }
 }
-@Composable fun ShowName(dataState: PlanState, exercise: Exercise){
+@Composable fun RingCardBodyExerciseName(dataState: PlanState, exercise: Exercise){
     Row(verticalAlignment = Alignment.CenterVertically){
         TextApp(text = exercise.activity?.name ?: "",
             textAlign = TextAlign.Start,
@@ -188,44 +172,26 @@ fun ExerciseBody(dataState: PlanState, ring: Ring) {
         Spacer(modifier = Modifier.weight(1f))
         IconGoal(set.goal){dataState.event(PlanEvent.ChangeGoal( set))}
         Spacer(modifier = Modifier.weight(1f))
-        IconZoneNew(set.intensity.ordinal, onClick = {dataState.event(PlanEvent.ZoneClick(set.intensity.ordinal))})
+        IconZoneNew(set.intensity.ordinal + 1, onClick = {dataState.event(PlanEvent.ChangeZone(set))})
         Spacer(modifier = Modifier.weight(1f))
     }
 }
-
-@Composable fun Exercises(dataState: PlanState, ring: Ring) {
-    ColumnDragDrop(
-        items = ring.exercises,
-        modifier = Modifier.padding(end = 4.dp),
-        content = { item -> ExerciseElementColum(item, dataState, ring) },
-        onMoveItem = { from, to->
-            Log.d("KDS"," from=$from   to=$to")
-            dataState.event(
-                PlanEvent.ChangeSequenceExercise(
-                    item = SetViewId(ringId = ring.idRing, from = from, to = to)))
-        },)
-}
-@Composable fun ExerciseElementColum(exercise: Exercise, dataState: PlanState, ring: Ring) {
+@Composable fun RingCardBodyExerciseElementColum(exercise: Exercise, dataState: PlanState, ring: Ring) {
     val selected = getSelecting(dataState, exercise)
-    lg("ExerciseElementColum $selected")
     val modifier = if (selected) Modifier.background(color = colorScheme.surfaceContainer) else Modifier
     Row(horizontalArrangement = Arrangement.Start,
         modifier= modifier
             .padding(vertical = 3.dp)
+            .border(width = 1.dp, shape = MaterialTheme.shapes.small, color = Color.LightGray)
             .clickable {
-                setSelecting(
-                    dataState,
-                    exercise,
-                    ring.exercises.map { LongDm(it.idExercise) })
-            }
-            .border(width = 1.dp, shape = MaterialTheme.shapes.small, color = Color.LightGray))
-    {
+                setSelecting(dataState, exercise, ring.exercises.map { LongDm(it.idExercise) }) }
+    ) {
         TextApp(modifier = Modifier
             .width(50.dp)
             .padding(horizontal = 4.dp),
             textAlign = TextAlign.Center,
             text = "${stringResource(R.string.exer)} ${exercise.idView}",
-            style = MaterialTheme.typography.bodyLarge)
+            style = MaterialTheme.typography.titleMedium)
     }
 }
 //@Composable fun CardExercise(dataState: PlanState, ring: Ring){

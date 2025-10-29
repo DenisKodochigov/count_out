@@ -23,6 +23,8 @@ import com.count_out.domain.use_case.plans.exercise.ChangeSequenceExerciseUC
 import com.count_out.domain.use_case.plans.exercise.CopyExerciseUC
 import com.count_out.domain.use_case.plans.exercise.DeleteExerciseUC
 import com.count_out.domain.use_case.plans.exercise.UpdateExerciseUC
+import com.count_out.domain.use_case.plans.set.ChangeGoalUC
+import com.count_out.domain.use_case.plans.set.ChangeZoneUC
 import com.count_out.domain.use_case.plans.set.CopySetUC
 import com.count_out.domain.use_case.plans.set.DeleteSetUC
 import com.count_out.domain.use_case.plans.set.UpdateSetUC
@@ -34,7 +36,6 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import javax.inject.Inject
-//SelectedExercise
 @HiltViewModel class PlanViewModel @Inject constructor(
     private val savedStateHandle: SavedStateHandle,
     private val getPlanUC: GetPlanUC,
@@ -52,6 +53,8 @@ import javax.inject.Inject
     private val updateSpeechUC: UpdateSpeechUC,
     private val ringOrExercise: RingOrExerciseUC,
     private val selectingUC: SelectingUC,
+    private val changeZoneUC: ChangeZoneUC,
+    private val changeGoalUC: ChangeGoalUC,
 ): PrimeViewModel<PlanState, PlanConverter>() {
 
     override fun initScreenState(): ScreenState<PlanState> = ScreenState.Loading
@@ -73,9 +76,23 @@ import javax.inject.Inject
             is PlanEvent.UpdateSpeech -> { updateSpeech(event.item) }
             is PlanEvent.RingOrExercise -> { ringOrExercise(event.ring) }
             is PlanEvent.SetSelecting -> { selectingSet(event.item) }
+            is PlanEvent.ChangeZone -> { changeZoneUC(event.item) }
+            is PlanEvent.ChangeGoal -> { changeGoalUC(event.item) }
         }
     }
 
+    private fun changeZoneUC(item: Set) {
+        viewModelScope.launch(Dispatchers.IO) {
+            changeZoneUC.execute( ChangeZoneUC.Request(item))
+                .collect { submitState( it ) }
+        }
+    }
+    private fun changeGoalUC(item: Set) {
+        viewModelScope.launch(Dispatchers.IO) {
+            changeGoalUC.execute( ChangeGoalUC.Request(item))
+                .collect { submitState( it ) }
+        }
+    }
     private fun ringOrExercise(item: Ring) {
         viewModelScope.launch(Dispatchers.IO) {
             ringOrExercise.execute( RingOrExerciseUC.Request(item))

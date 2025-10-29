@@ -1,6 +1,5 @@
 package com.count_out.presentation.view_element.icons
 
-import android.R.attr.onClick
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.LinearEasing
@@ -50,16 +49,12 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.semantics.contentDescription
-import androidx.compose.ui.text.PlatformTextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.count_out.domain.entity.enums.Goal
-import com.count_out.domain.entity.enums.Zone
-import com.count_out.domain.entity.workout.Set.Companion.copy
 import com.count_out.presentation.R
 import com.count_out.presentation.models.Dimen
 import com.count_out.presentation.models.Dimen.TAB_FADE_IN_ANIMATION_DELAY
@@ -67,8 +62,6 @@ import com.count_out.presentation.models.Dimen.TAB_FADE_IN_ANIMATION_DURATION
 import com.count_out.presentation.models.Dimen.TAB_FADE_OUT_ANIMATION_DURATION
 import com.count_out.presentation.models.Dimen.sizeBetweenIcon
 import com.count_out.presentation.models.Dimen.sizeIcon
-import com.count_out.presentation.models.lg
-import com.count_out.presentation.screens.plan.PlanEvent
 import com.count_out.presentation.view_element.TextApp
 import com.count_out.presentation.view_element.custom_view.IconQ
 
@@ -356,7 +349,6 @@ import com.count_out.presentation.view_element.custom_view.IconQ
     val shape =  shapes.extraSmall
     val color = colorScheme.outline
     val background = colorScheme.primary
-    val typography = MaterialTheme.typography.headlineSmall
 
     val color1 = Color(color.red, color.green, color.blue, color.alpha * 0.6f)
     val color2 = Color(color.red, color.green, color.blue, color.alpha * 0.3f)
@@ -377,12 +369,12 @@ import com.count_out.presentation.view_element.custom_view.IconQ
                 .width(xBaseIcon).height(yBaseIcon),
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.Center
-            ){ TextApp(text = "$value", color = color, style = typography)}
+            ){ TextApp(text = "$value", color = color, style = MaterialTheme.typography.titleLarge)}
         }
         TextApp(
             text = "${ stringResource(R.string.zone) } ",
             textAlign = TextAlign.Start,
-            style = MaterialTheme.typography.bodyMedium)
+            style = MaterialTheme.typography.labelLarge)
     }
 }
 @Composable fun IconGoal(goal: Goal, onClick: ()->Unit){

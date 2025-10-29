@@ -53,7 +53,6 @@ import com.count_out.presentation.view_element.TextFieldApp
 import com.count_out.presentation.view_element.bottom_sheet.ShowBottomSheetSpeech
 import com.count_out.presentation.view_element.custom_view.Frame
 import com.count_out.presentation.view_element.custom_view.IconQ
-import com.count_out.presentation.view_element.icons.IconsCollapsing
 import com.count_out.presentation.view_element.icons.IconsGroup
 
 val interval_between_pole = 4.dp
@@ -67,7 +66,7 @@ val interval_between_pole = 4.dp
 //                    FirstLine(dataState, set )
 //                else {
                     TaskSwitch( dataState, set )
-                    BodySet( dataState, set )
+                    SetBody( dataState, set )
                     ZonePulseSwitch( dataState, set )
 //                }
             }
@@ -132,7 +131,7 @@ val interval_between_pole = 4.dp
             dataState.event(ShowBS(dataState.showBS.copy(domain = set)))   },)
 }
 
-@Composable fun BodySet(dataState: PlanState, set: Set){
+@Composable fun SetBody(dataState: PlanState, set: Set){
     ShowBottomSheetSpeech(dataState,dataState.showBS.set,R.string.set2,set)
     when (set.goal){
         Goal.Distance -> Distance( dataState, set)
