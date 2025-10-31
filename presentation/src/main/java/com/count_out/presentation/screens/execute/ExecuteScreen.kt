@@ -8,6 +8,7 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -42,6 +43,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -74,10 +76,7 @@ import java.math.RoundingMode
 }
 @Composable fun ExecuteWorkoutScreenLayout(dataState: ExecuteState){
     if (dataState.showBS.plan) BottomSheetSaveTraining(dataState)
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(horizontal = 4.dp),
+    Column(modifier = Modifier.fillMaxSize().padding(horizontal = 4.dp),
         content = {
             TopBar(dataState)
             SensorInfo(dataState)
@@ -119,7 +118,10 @@ import java.math.RoundingMode
     HorizontalDivider(thickness = 2.dp, color = MaterialTheme.colorScheme.surfaceContainerLow)
 }
 @Composable fun AdditionalInformation(dataState: ExecuteState, modifier: Modifier = Modifier){
-    Column (modifier = modifier.fillMaxSize()) {
+    Column (modifier = modifier.border(width = 1.dp, color = Color.LightGray)) {
+
+
+    }
 //        TextApp(text = "displayLarge ${typography.displayLarge.fontSize} ", style = typography.displayLarge)
 //        TextApp(text = "displayMedium ${typography.displayMedium.fontSize} ", style = typography.displayMedium)
 //        TextApp(text = "displaySmall ${typography.displaySmall.fontSize} ", style = typography.displaySmall)
@@ -135,7 +137,7 @@ import java.math.RoundingMode
 //        TextApp(text = "bodyLarge ${typography.bodyLarge.fontSize} ", style = typography.bodyLarge)
 //        TextApp(text = "bodyMedium ${typography.bodyMedium.fontSize} ", style = typography.bodyMedium)
 //        TextApp(text = "bodySmall ${typography.bodySmall.fontSize} ", style = typography.bodySmall)
-    }
+//    }
 }
 @Composable fun ExerciseInfoNew(dataState: ExecuteState) {
 

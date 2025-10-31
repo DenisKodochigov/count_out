@@ -2,7 +2,9 @@ package com.count_out.presentation.view_element.custom_view
 
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.MaterialTheme
@@ -30,10 +32,14 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import kotlin.math.PI
+import kotlin.math.cos
+import kotlin.math.sin
+import kotlin.math.sqrt
 
 @Preview
 @Composable fun Preview() {
-    IconQ.CountOnly()
+    IconQ.ArrowChordCanvas()
 }
 
 object IconQ{
@@ -489,6 +495,48 @@ object IconQ{
                     )
                     drawOval(
                         color = color, topLeft = Offset(x = x0, y = y0 + delta1),
+                        size = Size(thickPx * diameter, thickPx * diameter)
+                    )
+                }
+            }
+        )
+    }
+    @Composable fun Multi1(color: Color = color(), onClick: ()->Unit = {}){
+        val width = 30.dp
+        val height = 30.dp
+        Spacer(modifier = Modifier
+            .width(width)
+            .height(height)
+            .clickable { onClick() }
+            .drawWithCache {
+                onDrawWithContent {
+                    val xPx = width.toPx()
+                    val yPx = height.toPx()
+                    val thickPx = thick.toPx()
+                    val diameter = 5f
+                    val x0 = xPx / 2 - thickPx * diameter / 2
+                    val y0 = yPx / 2 - thickPx * diameter / 2
+                    val delta1 = yPx * 0.2f
+                    drawRoundRect(
+                        color = color,
+                        topLeft = Offset(x = thickPx / 2, y = thickPx / 2),
+                        size = Size(xPx - thickPx, yPx - thickPx),
+                        cornerRadius = CornerRadius(8f, 8f),
+                        style = Stroke(width = thickPx),
+                    )
+                    drawOval(
+                        color = color,
+                        topLeft = Offset(x = x0 - delta1, y = y0),
+                        size = Size(thickPx * diameter, thickPx * diameter)
+                    )
+                    drawOval(
+                        color = color,
+                        topLeft = Offset(x = x0, y = y0),
+                        size = Size(thickPx * diameter, thickPx * diameter)
+                    )
+                    drawOval(
+                        color = color,
+                        topLeft = Offset(x = x0 + delta1, y = y0),
                         size = Size(thickPx * diameter, thickPx * diameter)
                     )
                 }
@@ -1066,9 +1114,196 @@ object IconQ{
             }
         )
     }
+
+    @Composable fun ArrowChordCanvas(progress: Float = 0f, onClick: ()->Unit = {}) {
+        val radius: Dp = width/2 - 5.dp
+        val arrowCount = 4
+        val shaftLength = 4f
+        val arrowHeadSize = 18f
+        val chordAngleOffset: Float = (2 * PI / 30).toFloat()
+        val color: Color =  color()
+
+        Box(modifier = Modifier.width(width).height(height).clickable { onClick() }) {
+            Canvas(modifier = Modifier.fillMaxSize()) {
+                val canvasWidth = width.toPx()
+                val canvasHeight = height.toPx()
+
+                val cx = canvasWidth / 2
+                val cy = canvasHeight / 2
+                val r = radius.toPx()
+                val strokeWidth: Float = 2.dp.toPx()
+                // Длина линии (равна длине окружности)
+
+                val lineLength = 2 * r
+                val lineStartX = cx - lineLength / 2
+                val lineEndX = cx + lineLength / 2
+                val thickPx = thick.toPx()
+
+                drawRoundRect(
+                    color = color,
+                    topLeft = Offset(x = thickPx / 2, y = thickPx / 2),
+                    size = Size(canvasWidth - thickPx, canvasHeight - thickPx),
+                    cornerRadius = CornerRadius(8f, 8f),
+                    style = Stroke(width = thickPx),
+                )
+                for (i in 0 until arrowCount) {
+                    val angleStart = (2 * PI * i / arrowCount).toFloat()
+                    val angleEnd = angleStart + chordAngleOffset
+
+                    // Точки на окружности
+                    val circleStartX = cx + r * cos(angleStart)
+                    val circleStartY = cy + r * sin(angleStart)
+                    val circleTipX = cx + r * cos(angleEnd)
+                    val circleTipY = cy + r * sin(angleEnd)
+
+                    // Точки на прямой (равномерно по длине линии)
+                    val t = i.toFloat() / (arrowCount - 1)
+                    val lineStartXPos = lineStartX + t * lineLength/PI
+                    val lineTipXPos = lineStartX + (t + chordAngleOffset / (2 * PI)) * lineLength
+                    val lineY = cy
+
+                    // Интерполяция точек
+                    val startX = lerp(circleStartX, lineStartXPos.toFloat(), progress)
+                    val startY = lerp(circleStartY, lineY, progress)
+                    val tipX = lerp(circleTipX, lineTipXPos.toFloat(), progress)
+                    val tipY = lerp(circleTipY, lineY, progress)
+
+                    val dx = tipX - startX
+                    val dy = tipY - startY
+                    val chordLength = sqrt(dx * dx + dy * dy)
+
+                    if (chordLength < shaftLength) continue
+
+                    val nx = dx / chordLength
+                    val ny = dy / chordLength
+
+                    // Наконечник стрелки
+                    val k1 = 0.8f
+                    val an1 = 0.5f
+
+                    drawLine(
+                        color = color,
+                        start = Offset(tipX, tipY),
+                        end = Offset(
+                            tipX - arrowHeadSize * (nx * k1 + ny * an1),
+                            tipY - arrowHeadSize * (ny * k1 - nx * an1)
+                        ),
+                        strokeWidth = strokeWidth,
+                    )
+                    drawLine(
+                        color = color,
+                        start = Offset(tipX, tipY),
+                        end = Offset(
+                            tipX - arrowHeadSize * (nx * k1 - ny * an1),
+                            tipY - arrowHeadSize * (ny * k1 + nx * an1)
+                        ),
+                        strokeWidth = strokeWidth,
+                    )
+                }
+
+                // Рисуем контур: окружность → линия
+                if (progress < 1f) {
+                    drawCircle(
+                        color = color,
+                        center = Offset(cx, cy),
+                        radius = r * (1 - progress),
+                        style = Stroke(strokeWidth)
+                    )
+                } else {
+                    drawLine(
+                        color = color,
+                        start = Offset(lineStartX.toFloat(), cy),
+                        end = Offset(lineEndX.toFloat(), cy),
+                        strokeWidth = strokeWidth
+                    )
+                }
+            }
+        }
+    }
+
+    // Линейная интерполяция
+    fun lerp(a: Float, b: Float, t: Float): Float = a + (b - a) * t
     @Composable fun colorSelected(selected: Boolean, color: Color) =
         if (selected) color else Color(color.red, color.green, color.blue, color.alpha * 0.5f)
     @Composable fun styleSelected(selected: Boolean, color: Color, height: TextUnit) =
         if (selected) TextStyle(fontSize = height, color = color, fontWeight = FontWeight.Bold)
         else TextStyle(fontSize = height, color = Color(color.red, color.green, color.blue, color.alpha * 0.5f))
+
 }
+
+
+//    @Composable fun ArrowChordCanvas(selected: Boolean = false) {
+//        val radius: Dp = 30.dp
+//        val arrowCount: Int = 5
+//        val shaftLength: Float = 4f
+//        val arrowHeadSize: Float = 18f
+//        val arrowStrokeWidth = 2f
+//        val chordAngleOffset: Float = (2 * PI / 30).toFloat() // Δθ для хорды (в радианах)
+//        val color: Color = colorSelected(selected, color())
+//        Box(modifier = Modifier.fillMaxSize()) {
+//            Canvas(modifier = Modifier.fillMaxSize()) {
+//                val canvasWidth = size.width
+//                val canvasHeight = size.height
+//
+//                val cx = canvasWidth / 2
+//                val cy = canvasHeight / 2
+//                val r = radius.toPx()
+//
+//                // Рисуем окружность
+//                drawCircle(
+//                    color = color,
+//                    center = Offset(cx, cy),
+//                    radius = r,
+//                    style = Stroke(2f)
+//                )
+//
+//                // Рисуем стрелки по хордам
+//                for (i in 0 until arrowCount) {
+//                    val angleStart = (2 * PI * i / arrowCount).toFloat() // начальный угол
+//                    val angleEnd = angleStart + chordAngleOffset // конечный угол (по хорде)
+//
+//                    // Начальная точка хорды (основание стрелки после смещения)
+//                    val startX = cx + r * cos(angleStart)
+//                    val startY = cy + r * sin(angleStart)
+//
+//                    // Конечная точка хорды (наконечник стрелки)
+//                    val tipX = cx + r * cos(angleEnd)
+//                    val tipY = cy + r * sin(angleEnd)
+//
+//                    // Вектор хорды (от начала к наконечнику)
+//                    val dx = tipX - startX
+//                    val dy = tipY - startY
+//                    val chordLength = sqrt(dx * dx + dy * dy)
+//
+//                    // Если хорда слишком короткая, пропускаем (чтобы не было артефактов)
+//                    if (chordLength < shaftLength) continue
+//
+//                    // Нормализованный вектор хорды
+//                    val nx = dx / chordLength
+//                    val ny = dy / chordLength
+//
+//                    // Рисуем наконечник (треугольник)
+//                    val k1 = 0.8f
+//                    val an1 = 0.5f
+//                    drawLine(
+//                        color = color,
+//                        start = Offset(tipX, tipY),
+//                        end = Offset(
+//                            tipX - arrowHeadSize * (nx * k1 + ny * an1),
+//                            tipY - arrowHeadSize * (ny * k1 - nx * an1)
+//                        ),
+//                        strokeWidth = arrowStrokeWidth,
+//                    )
+//                    drawLine(
+//                        color = color,
+//                        start = Offset(tipX, tipY),
+//                        end = Offset(
+//                            tipX - arrowHeadSize * (nx * k1 - ny * an1),
+//                            tipY - arrowHeadSize * (ny * k1 + nx * an1)
+//                        ),
+//                        strokeWidth = arrowStrokeWidth,
+//                    )
+//                }
+//            }
+//        }
+//    }

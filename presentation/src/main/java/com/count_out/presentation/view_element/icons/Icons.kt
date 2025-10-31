@@ -2,9 +2,11 @@ package com.count_out.presentation.view_element.icons
 
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.animateContentSize
+import androidx.compose.animation.core.EaseInOut
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.RepeatMode
 import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.repeatable
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
@@ -64,6 +66,7 @@ import com.count_out.presentation.models.Dimen.sizeBetweenIcon
 import com.count_out.presentation.models.Dimen.sizeIcon
 import com.count_out.presentation.view_element.TextApp
 import com.count_out.presentation.view_element.custom_view.IconQ
+import com.count_out.presentation.view_element.custom_view.IconQ.ArrowChordCanvas
 
 @Composable fun IconsGroup(
     onClickEdit: (() -> Unit)? = null,
@@ -76,10 +79,11 @@ import com.count_out.presentation.view_element.custom_view.IconQ
     onClickAddPlan: (() -> Unit)? = null,
     onClickRingExercise: (() -> Unit)? = null,
     selected: Boolean = true,
+    type: Boolean = true,
 ){
     var expanded by remember { mutableStateOf(false) }
     Box {
-        IconQ.Multi(onClick = { expanded = true })
+        if(type) IconQ.Multi(onClick = { expanded = true }) else IconQ.Multi1(onClick = { expanded = true })
         MaterialTheme( shapes = shapes.copy(extraSmall = shapes.large)) {
             DropdownMenu(
                 modifier = Modifier.padding(8.dp),
@@ -129,7 +133,10 @@ import com.count_out.presentation.view_element.custom_view.IconQ
     Box(modifier = Modifier.size( sizeIcon)){
         Icon(imageVector = icon, contentDescription = "",
             tint = MaterialTheme.colorScheme.outline,
-            modifier = Modifier.align(Alignment.Center).size(size).clickable { onClick() })
+            modifier = Modifier
+                .align(Alignment.Center)
+                .size(size)
+                .clickable { onClick() })
     }
 }
 @Composable fun VerIcons(
@@ -181,13 +188,17 @@ import com.count_out.presentation.view_element.custom_view.IconQ
     Icon(imageVector = image,
         tint = MaterialTheme.colorScheme.outline,
         contentDescription = if ( idDescription == 0) "" else stringResource(id = idDescription),
-        modifier = Modifier.size(sizeIcon).clickable { onClick() })
+        modifier = Modifier
+            .size(sizeIcon)
+            .clickable { onClick() })
 }
 @Composable fun IconSingleLarge(image: ImageVector, onClick:()->Unit){
     Icon(imageVector = image,
         contentDescription = "",
         tint = MaterialTheme.colorScheme.tertiary,
-        modifier = Modifier.size(Dimen.sizeIconLarge).clickable { onClick() })
+        modifier = Modifier
+            .size(Dimen.sizeIconLarge)
+            .clickable { onClick() })
 }
 @Composable fun IconSingleLarge(image: ImageVector){
     Icon(imageVector = image, contentDescription = "",
@@ -199,7 +210,11 @@ import com.count_out.presentation.view_element.custom_view.IconQ
     if (wrap) IconQ.Collapsing( onClick = onClick) else IconQ.UnCollapsing( onClick = onClick)
 }
 @Composable fun IconRingOrExercise(selected: Boolean, onClick:() -> Unit){
-        IconQ.RingExercise(selected, onClick = onClick)
+    val progress: Float by animateFloatAsState(
+        targetValue = if (selected) 1f else 0f,
+        animationSpec = tween(durationMillis = 800, easing = EaseInOut),
+        label = "straightAnimation")
+    ArrowChordCanvas(progress = progress, onClick)
 }
 @Composable fun IconAddSet(onClick:()->Unit) = IconAdd(onClick = onClick, text = "S+" )
 @Composable fun IconAddRing(onClick:()->Unit) = IconAdd(onClick = onClick, text = "R+" )
@@ -208,7 +223,8 @@ import com.count_out.presentation.view_element.custom_view.IconQ
 //@Composable fun IconAddActivity(onClick:()->Unit) = IconAdd(onClick = onClick, text = "A+" )
 @Composable fun IconAdd(onClick:()->Unit, text: String = "+") {
     Box(modifier = Modifier){
-        Spacer(modifier = Modifier.align(alignment = Alignment.Center)
+        Spacer(modifier = Modifier
+            .align(alignment = Alignment.Center)
             .size(size = sizeIcon)
             .clickable { onClick() }
             .clip(shape = CircleShape)
@@ -248,7 +264,9 @@ import com.count_out.presentation.view_element.custom_view.IconQ
                 imageVector = icon,
                 contentDescription = text,
                 tint = iconColor,
-                modifier = Modifier.fillMaxSize().animateContentSize()
+                modifier = Modifier
+                    .fillMaxSize()
+                    .animateContentSize()
                     .clearAndSetSemantics { contentDescription = text })
         }
         TextApp(text = text.replaceFirstChar{it.uppercase()}, style = MaterialTheme.typography.labelSmall) // alumBodySmall)
@@ -281,66 +299,8 @@ import com.count_out.presentation.view_element.custom_view.IconQ
             style = MaterialTheme.typography.bodyMedium)
     }
 }
-@Composable fun IconZone(value: Int,onClick: ()->Unit){
-    val xBaseIcon = 25.dp
-    val yBaseIcon = 28.dp
-    val xDelta = 32.dp
-    val yDelta = 3.dp
-    val horPadding = 6.dp
-    val border = 2.dp
-    val shape =  shapes.extraSmall
-    val list = masValue(value)
-    val color = colorScheme.outline
-    val background = colorScheme.primary
-    val typography = MaterialTheme.typography.titleLarge
-    val typography1 = MaterialTheme.typography.titleMedium
-    val typography2 = MaterialTheme.typography.titleSmall
-    val color1 = Color(color.red, color.green, color.blue, color.alpha * 0.6f)
-    val color2 = Color(color.red, color.green, color.blue, color.alpha * 0.3f)
-    Column(horizontalAlignment = Alignment.CenterHorizontally) {
-        Box(
-            modifier = Modifier.clickable { onClick() },
-            contentAlignment = Alignment.Center,
-            propagateMinConstraints = true
-        ){
-            Row(modifier = Modifier.border(border, color = color2, shape = shape)
-                .background(color = background, shape = shape)
-                .width(xBaseIcon + xDelta*2).height(yBaseIcon - yDelta*2),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.Center
-            ){
-                TextApp(text = "${list[0]}", style = typography2, color = color2,
-                    modifier = Modifier.padding(start = horPadding))
-                Spacer(modifier = Modifier.weight(1f))
-                TextApp(text = "${list[4]}", style = typography2, color = color2,
-                    modifier = Modifier.padding(end = horPadding))
-            }
-            Row(
-                modifier = Modifier.border(border, color = color1, shape = shape)
-                    .background(color = background, shape = shape)
-                    .width(xBaseIcon + xDelta).height(yBaseIcon - yDelta),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.Center
-            ){
-                TextApp(text = "${list[1]}", color = color1, style = typography1,
-                    modifier = Modifier.padding(start = horPadding))
-                Spacer(modifier = Modifier.weight(1f))
-                TextApp(text = "${list[3]}", color = color1, style = typography1,
-                    modifier = Modifier.padding(end = horPadding)) }
-            Row(modifier = Modifier.border(border, color = color, shape = shape)
-                .background(color = background, shape = shape)
-                .width(xBaseIcon).height(yBaseIcon),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.Center
-            ){ TextApp(text = "${list[2]}", color = color, style = typography)}
-        }
-        TextApp(
-            text = "${ stringResource(R.string.zone) } ",
-            textAlign = TextAlign.Start,
-            style = MaterialTheme.typography.bodyMedium)
-    }
-}
-@Composable fun IconZoneNew(value: Int,onClick: ()->Unit = {}){
+
+@Composable fun IconZone(value: Int, onClick: ()->Unit = {}){
     val xBaseIcon = 25.dp
     val yBaseIcon = 30.dp
     val xDelta = 10.dp
@@ -358,23 +318,38 @@ import com.count_out.presentation.view_element.custom_view.IconQ
             contentAlignment = Alignment.Center,
             propagateMinConstraints = true
         ){
-            Row(modifier = Modifier.border(border, color = color2, shape = shape)
+            Row(modifier = Modifier
+                .border(border, color = color2, shape = shape)
                 .background(color = background, shape = shape)
-                .width(xBaseIcon + xDelta*2).height(yBaseIcon - yDelta*2),){}
-            Row(modifier = Modifier.border(border, color = color1, shape = shape)
-                    .background(color = background, shape = shape)
-                    .width(xBaseIcon + xDelta).height(yBaseIcon - yDelta),){}
-            Row(modifier = Modifier.border(border, color = color, shape = shape)
+                .width(xBaseIcon + xDelta * 2)
+                .height(yBaseIcon - yDelta * 2),){}
+            Row(modifier = Modifier
+                .border(border, color = color1, shape = shape)
                 .background(color = background, shape = shape)
-                .width(xBaseIcon).height(yBaseIcon),
+                .width(xBaseIcon + xDelta)
+                .height(yBaseIcon - yDelta),){}
+            Row(modifier = Modifier
+                .border(border, color = color, shape = shape)
+                .background(color = background, shape = shape)
+                .width(xBaseIcon)
+                .height(yBaseIcon),
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.Center
-            ){ TextApp(text = "$value", color = color, style = MaterialTheme.typography.titleLarge)}
+            ){ TextApp(color = color, style = MaterialTheme.typography.titleLarge,
+                text = when(value){
+                    1->"I"
+                    2->"II"
+                    3->"III"
+                    4->"IV"
+                    5->"V"
+                    else->""
+                }
+            )}
         }
         TextApp(
             text = "${ stringResource(R.string.zone) } ",
             textAlign = TextAlign.Start,
-            style = MaterialTheme.typography.labelLarge)
+            style = MaterialTheme.typography.titleMedium)
     }
 }
 @Composable fun IconGoal(goal: Goal, onClick: ()->Unit){
@@ -386,16 +361,20 @@ import com.count_out.presentation.view_element.custom_view.IconQ
     val shape =  shapes.extraSmall
     val color = colorScheme.outline
     val background = colorScheme.primary
-
     val color1 = Color(color.red, color.green, color.blue, color.alpha * 0.6f)
+
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
         Box(modifier = Modifier.clickable { onClick() }, contentAlignment = Alignment.Center){
-            Row(modifier = Modifier.border(border, color = color1, shape = shape)
+            Row(modifier = Modifier
+                .border(border, color = color1, shape = shape)
                 .background(color = background, shape = shape)
-                .width(xBaseIcon + xDelta).height(yBaseIcon - yDelta),){}
-            Row(modifier = Modifier.border(border, color = color, shape = shape)
+                .width(xBaseIcon + xDelta)
+                .height(yBaseIcon - yDelta),){}
+            Row(modifier = Modifier
+                .border(border, color = color, shape = shape)
                 .background(color = background, shape = shape)
-                .width(xBaseIcon).height(yBaseIcon),
+                .width(xBaseIcon)
+                .height(yBaseIcon),
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.Center
             ){
@@ -407,9 +386,10 @@ import com.count_out.presentation.view_element.custom_view.IconQ
                 }
             }
         }
-        TextApp(text = stringResource(R.string.goal), style = MaterialTheme.typography.titleSmall )
+        TextApp(text = stringResource(R.string.goal), style = MaterialTheme.typography.titleMedium )
     }
 }
+
 fun masValue(current: Int): List<Int> {
     return listOf(0, 1, 2, 3, 4).map { ((it + current + 3) % 5) + 1}
 }

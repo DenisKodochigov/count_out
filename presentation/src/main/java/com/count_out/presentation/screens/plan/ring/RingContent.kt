@@ -24,6 +24,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import com.count_out.domain.entity.SetViewId
 import com.count_out.domain.entity.types_domai.LongDm
@@ -31,7 +32,6 @@ import com.count_out.domain.entity.workout.Exercise
 import com.count_out.domain.entity.workout.Part
 import com.count_out.domain.entity.workout.Ring
 import com.count_out.domain.entity.workout.Ring.Companion.amount
-import com.count_out.domain.entity.workout.Set
 import com.count_out.presentation.R
 import com.count_out.presentation.models.Dimen.contourAll1
 import com.count_out.presentation.models.TypeKeyboard
@@ -49,7 +49,7 @@ import com.count_out.presentation.view_element.TextFieldApp
 import com.count_out.presentation.view_element.custom_view.Frame
 import com.count_out.presentation.view_element.drag_drop_column.column.ColumnDragDrop
 import com.count_out.presentation.view_element.icons.IconGoal
-import com.count_out.presentation.view_element.icons.IconZoneNew
+import com.count_out.presentation.view_element.icons.IconZone
 import com.count_out.presentation.view_element.icons.IconsCollapsing
 import com.count_out.presentation.view_element.icons.IconsGroup
 
@@ -143,7 +143,7 @@ fun RingCardBodyExerciseBody(dataState: PlanState, ring: Ring) {
         Column (modifier = Modifier.fillMaxWidth().padding(vertical = 3.dp)) {
             RingCardBodyExerciseName( dataState, exercise )
             SetBody( dataState, exercise.sets[0] )
-            ControlExercise( dataState, exercise.sets[0] )
+            ControlExercise( dataState, exercise)
         }
     }
 }
@@ -151,28 +151,38 @@ fun RingCardBodyExerciseBody(dataState: PlanState, ring: Ring) {
     Row(verticalAlignment = Alignment.CenterVertically){
         TextApp(text = exercise.activity?.name ?: "",
             textAlign = TextAlign.Start,
-            modifier = Modifier.padding(bottom = 0.dp, start = 6.dp),
+            textDecoration = TextDecoration.Underline,
+            modifier = Modifier.padding(bottom = 0.dp, start = 6.dp)
+                .clickable{
+                    dataState.item = exercise
+                    dataState.event(ShowBS(dataState.showBS.copy(domain = exercise.activity)))
+                },
             style = MaterialTheme.typography.titleLarge)
         Spacer(modifier = Modifier.weight(1f))
-        IconsGroup(
-            onClickCopy = { dataState.event(PlanEvent.CopyExercise(exercise))},
-            onClickDelete = { dataState.event(PlanEvent.DelExercise(exercise)) },
-            onClickEdit = {
-                dataState.item = exercise
-                dataState.event(ShowBS(dataState.showBS.copy(domain = exercise.activity)))},
-            onClickSpeech = {
-                dataState.item = exercise
-                dataState.event(ShowBS(dataState.showBS.copy(domain = exercise))) },
-        )
     }
-
 }
-@Composable fun ControlExercise(dataState: PlanState, set: Set){
+@Composable fun ControlExercise(dataState: PlanState, exercise: Exercise){
+    val set = exercise.sets[0]
     Row(verticalAlignment = Alignment.CenterVertically, modifier= Modifier.fillMaxWidth()){
         Spacer(modifier = Modifier.weight(1f))
         IconGoal(set.goal){dataState.event(PlanEvent.ChangeGoal( set))}
         Spacer(modifier = Modifier.weight(1f))
-        IconZoneNew(set.intensity.ordinal + 1, onClick = {dataState.event(PlanEvent.ChangeZone(set))})
+        IconZone(set.intensity.ordinal + 1, onClick = {dataState.event(PlanEvent.ChangeZone(set))})
+        Spacer(modifier = Modifier.weight(1f))
+        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+            IconsGroup(
+                type = false,
+                onClickCopy = { dataState.event(PlanEvent.CopyExercise(exercise))},
+                onClickDelete = { dataState.event(PlanEvent.DelExercise(exercise)) },
+//                onClickEdit = {
+//                    dataState.item = exercise
+//                    dataState.event(ShowBS(dataState.showBS.copy(domain = exercise.activity)))},
+                onClickSpeech = {
+                    dataState.item = exercise
+                    dataState.event(ShowBS(dataState.showBS.copy(domain = exercise))) },
+            )
+            TextApp(text = stringResource(R.string.other), style = MaterialTheme.typography.titleMedium )
+        }
         Spacer(modifier = Modifier.weight(1f))
     }
 }

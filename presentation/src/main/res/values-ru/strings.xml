@@ -177,6 +177,7 @@
     <string name="exer">Упр</string>
     <string name="zone">Zone</string>
     <string name="goal">Тип</string>
+    <string name="other">Other</string>
 </resources>
 
 <!--<string name="error_1">Ошибка</string>-->
