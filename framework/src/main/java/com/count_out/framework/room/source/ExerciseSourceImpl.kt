@@ -1,5 +1,6 @@
 package com.count_out.framework.room.source
 
+import android.util.Log
 import com.count_out.data.models.Data
 import com.count_out.data.models.ResultData
 import com.count_out.data.models.entity.ExerciseDb
@@ -12,6 +13,7 @@ import com.count_out.data.source.room.SetSource
 import com.count_out.framework.room.db.exercise.ExerciseDao
 import com.count_out.framework.room.db.exercise.ExerciseTb
 import com.count_out.framework.room.db.exercise.ExerciseTb.Companion.toTb
+import com.count_out.framework.room.db.set.SetTb
 import com.count_out.framework.room.db.set.SetTb.Companion.toTb
 import javax.inject.Inject
 
@@ -21,23 +23,27 @@ class ExerciseSourceImpl @Inject constructor(
     private val speechSource: SpeechSourceImpl,
 ): ExerciseSource, PrimeSource() {
 
-    override fun copy (exercise: Data): ResultData<Data> = runCatching {
+    override fun insert (exercise: Data): ResultData<Data> = runCatching {
         if (exercise is ExerciseDb){
             copyWithDependencies(
-                original = exercise,
-                insertMain = { dao.insert((it.toTb()).apply { this.idExercise = 0L }) },
-                getSpeeches = {speechSource.getListSpeech(exerciseId = exercise.idExercise) },
+                insertMain = { dao.insert(exercise.toTb(idExercise = 0L)) },
+                getSpeeches = { idNew-> speechSource.getListSpeech(exerciseId = exercise.idExercise)
+                    .map{ item-> item.apply{ exerciseId = idNew} }},
                 insertSpeeches = { speechSource.insert(it) },
-                copyNested = { id -> copySets(exercise.sets,id)}
+                copyNested = { id ->  copySets(exercise.sets,id)}
             )
         } else ResultData.Error(ThrowableDS.NotValidType())
     }.getOrElse { ResultData.Error(ThrowableDS.extract(it)) }
 
     fun copySets(sets: List<SetDb>, ownerId: Long): ResultData<LongDb> =
-        if (sets.isEmpty()) { ResultData.Success(LongDb(0L)) }
+        if (sets.isEmpty()) {
+            Log.d("KDS","ExerciseSourceImpl.copySets")
+            setSource.insert( SetTb().copy(exerciseId = ownerId))
+            ResultData.Success(LongDb(0L)) }
         else {
-            sets.map {set-> setSource.copy((set.toTb()).copy(idSet = 0L, exerciseId = ownerId)) }
-                ResultData.Success(LongDb(sets.size.toLong()))
+            Log.d("KDS","ExerciseSourceImpl.copySets")
+            sets.map {set-> setSource.insert((set.toTb()).copy(idSet = 0L, exerciseId = ownerId)) }
+            ResultData.Success(LongDb(sets.size.toLong()))
         }
 
     override fun update(exercise: Data): ResultData<Data> =

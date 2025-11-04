@@ -1,15 +1,9 @@
 package com.count_out.presentation.screens.plan.ring
 
-import android.util.Log
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.foundation.background
-import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
@@ -21,56 +15,53 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
-import com.count_out.domain.entity.SetViewId
 import com.count_out.domain.entity.types_domai.LongDm
-import com.count_out.domain.entity.workout.Exercise
 import com.count_out.domain.entity.workout.Part
 import com.count_out.domain.entity.workout.Ring
 import com.count_out.domain.entity.workout.Ring.Companion.amount
 import com.count_out.presentation.R
-import com.count_out.presentation.models.Dimen.contourAll1
+import com.count_out.presentation.models.Dimen.contourHor2
 import com.count_out.presentation.models.TypeKeyboard
 import com.count_out.presentation.screens.plan.PlanEvent
 import com.count_out.presentation.screens.plan.PlanEvent.ShowBS
 import com.count_out.presentation.screens.plan.PlanState
 import com.count_out.presentation.screens.plan.exercise.ExercisesList
+import com.count_out.presentation.screens.plan.exercise.RingCardBodyExerciseBody
+import com.count_out.presentation.screens.plan.exercise.RingCardBodyExerciseList
+import com.count_out.presentation.screens.plan.exercise.RingCardBodyExerciseListButtonAdd
 import com.count_out.presentation.screens.plan.getCollapsing
-import com.count_out.presentation.screens.plan.getSelecting
-import com.count_out.presentation.screens.plan.set.SetBody
 import com.count_out.presentation.screens.plan.setCollapsing
 import com.count_out.presentation.screens.plan.setSelecting
+import com.count_out.presentation.view_element.TemplateList1
 import com.count_out.presentation.view_element.TextApp
 import com.count_out.presentation.view_element.TextFieldApp
+import com.count_out.presentation.view_element.bottom_sheet.ShowBottomSheetSpeech
 import com.count_out.presentation.view_element.custom_view.Frame
-import com.count_out.presentation.view_element.drag_drop_column.column.ColumnDragDrop
-import com.count_out.presentation.view_element.icons.IconGoal
-import com.count_out.presentation.view_element.icons.IconZone
 import com.count_out.presentation.view_element.icons.IconsCollapsing
 import com.count_out.presentation.view_element.icons.IconsGroup
 
 @Composable fun Rings(dataState: PlanState, part: Part){
     part.rings.forEachIndexed { ind,ring ->
-        if (ring.amount > 1){ RingCard(dataState, ring, ind)
-        } else { ExercisesList(dataState, ring) }
+        if (ring.amount > 1) { RingCard(dataState, ring, ind) }
+        else { ExercisesList(dataState, ring) }
     }
     Spacer(modifier = Modifier.height(4.dp))
 }
 @Composable fun RingCard(dataState: PlanState, ring: Ring, index: Int){
-    Frame(colorAlpha = 0.8f, contour = contourAll1,
-        modifier = Modifier.padding(top = 4.dp)){
-        Column {
+    Frame(colorAlpha = 0.4f, contour = contourHor2, modifier = Modifier.padding(top = 4.dp)){
+        Column{
             RingCardTitle(dataState, ring, index)
-            RingCardBody(dataState, ring, getCollapsing(dataState, ring))
+            RingCardBody( dataState, ring )
         }
     }
 }
 @Composable fun RingCardTitle(dataState: PlanState, ring: Ring, index: Int){
     val enteredName: MutableState<String> = remember { mutableStateOf(ring.amount.toString() ) }
+
+    ShowBottomSheetSpeech(dataState,dataState.showBS.ring,ring)
     Row( verticalAlignment = Alignment.CenterVertically, modifier = Modifier.padding(end = 6.dp)){
         IconsCollapsing(
             onClick = { setCollapsing(dataState, ring) },
@@ -79,7 +70,7 @@ import com.count_out.presentation.view_element.icons.IconsGroup
         TextApp(
             text = stringResource(id = R.string.ring) + " ${index + 1}: ",
             textAlign = TextAlign.Start,
-            style = MaterialTheme.typography.headlineSmall,
+            style = MaterialTheme.typography.titleLarge,
         )
         TextFieldApp(
             modifier = Modifier.padding(start = 4.dp, end =4.dp),
@@ -100,110 +91,35 @@ import com.count_out.presentation.view_element.icons.IconsGroup
         TextApp(
             text = " ${stringResource(id = R.string.circles)}",
             textAlign = TextAlign.Start,
-            style = MaterialTheme.typography.headlineSmall,
+            style = MaterialTheme.typography.titleLarge,
         )
         Spacer(modifier = Modifier.weight(1f))
         IconsGroup(
             onClickSpeech = { showSpeechRound(dataState, ring) },
-            onClickAddExercise = {
-                dataState.event(PlanEvent.CopyRing(ring = Ring.default(ring.partId))) },
+            onClickAddRing = { dataState.event(PlanEvent.CopyRing(ring = Ring.default(ring.partId))) },
             onClickRingExercise = { dataState.event(PlanEvent.RingOrExercise(ring)) },
             selected = ring.amount > 1
         )
         Spacer(modifier = Modifier.width(6.dp))
     }
 }
-@Composable fun RingCardBody(dataState: PlanState, ring: Ring, visible: Boolean ){
-    AnimatedVisibility(modifier = Modifier.padding(horizontal = 4.dp, vertical = 1.dp), visible = visible) {
-        Row {
-            RingCardBodyExercises(dataState, ring)
-            RingCardBodyExerciseBody(dataState, ring)
-        }
-    }
-}
-@Composable fun RingCardBodyExercises(dataState: PlanState, ring: Ring) {
-    ColumnDragDrop(
-        items = ring.exercises,
-        modifier = Modifier.padding(end = 4.dp),
-        content = { item -> RingCardBodyExerciseElementColum(item, dataState, ring) },
-        onMoveItem = { from, to->
-            Log.d("KDS"," from=$from   to=$to")
-            dataState.event(
-                PlanEvent.ChangeSequenceExercise(
-                    item = SetViewId(idOwner = ring.idRing, from = from, to = to)))
-        },)
-}
-@Composable
-fun RingCardBodyExerciseBody(dataState: PlanState, ring: Ring) {
-    val selectedExercise = ring.exercises.find { it.idExercise in dataState.selecting.exercises } ?: ring.exercises[0]
-    RingCardBodyExerciseBodyContent(dataState,selectedExercise)
-}
-@Composable fun RingCardBodyExerciseBodyContent(dataState: PlanState, exercise: Exercise){
-    Frame(colorAlpha = 0.5f, contour = contourAll1) {
-        Column (modifier = Modifier.fillMaxWidth().padding(vertical = 3.dp)) {
-            RingCardBodyExerciseName( dataState, exercise )
-            SetBody( dataState, exercise.sets[0] )
-            ControlExercise( dataState, exercise)
-        }
-    }
-}
-@Composable fun RingCardBodyExerciseName(dataState: PlanState, exercise: Exercise){
-    Row(verticalAlignment = Alignment.CenterVertically){
-        TextApp(text = exercise.activity?.name ?: "",
-            textAlign = TextAlign.Start,
-            textDecoration = TextDecoration.Underline,
-            modifier = Modifier.padding(bottom = 0.dp, start = 6.dp)
-                .clickable{
-                    dataState.item = exercise
-                    dataState.event(ShowBS(dataState.showBS.copy(domain = exercise.activity)))
-                },
-            style = MaterialTheme.typography.titleLarge)
-        Spacer(modifier = Modifier.weight(1f))
-    }
-}
-@Composable fun ControlExercise(dataState: PlanState, exercise: Exercise){
-    val set = exercise.sets[0]
-    Row(verticalAlignment = Alignment.CenterVertically, modifier= Modifier.fillMaxWidth()){
-        Spacer(modifier = Modifier.weight(1f))
-        IconGoal(set.goal){dataState.event(PlanEvent.ChangeGoal( set))}
-        Spacer(modifier = Modifier.weight(1f))
-        IconZone(set.intensity.ordinal + 1, onClick = {dataState.event(PlanEvent.ChangeZone(set))})
-        Spacer(modifier = Modifier.weight(1f))
-        Column(horizontalAlignment = Alignment.CenterHorizontally) {
-            IconsGroup(
-                type = false,
-                onClickCopy = { dataState.event(PlanEvent.CopyExercise(exercise))},
-                onClickDelete = { dataState.event(PlanEvent.DelExercise(exercise)) },
-//                onClickEdit = {
-//                    dataState.item = exercise
-//                    dataState.event(ShowBS(dataState.showBS.copy(domain = exercise.activity)))},
-                onClickSpeech = {
-                    dataState.item = exercise
-                    dataState.event(ShowBS(dataState.showBS.copy(domain = exercise))) },
+@Composable fun RingCardBody(dataState: PlanState, ring: Ring){
+    val visible = getCollapsing(dataState, ring)
+    AnimatedVisibility(modifier = Modifier.padding(horizontal = 4.dp), visible = visible) {
+        if (ring.exercises.isNotEmpty()) {
+            if (ring.exercises.find{ it.idExercise in dataState.selecting.exercises } == null) {
+                setSelecting(dataState, ring.exercises[0],
+                    ring.exercises.map { LongDm(it.idExercise) })
+            }
+            TemplateList1(
+                columnLeft = { RingCardBodyExerciseList( dataState, ring)},
+                columnRight = { RingCardBodyExerciseBody( dataState, ring)},
+                button = {RingCardBodyExerciseListButtonAdd(dataState, ring.exercises[0])}
             )
-            TextApp(text = stringResource(R.string.other), style = MaterialTheme.typography.titleMedium )
         }
-        Spacer(modifier = Modifier.weight(1f))
     }
 }
-@Composable fun RingCardBodyExerciseElementColum(exercise: Exercise, dataState: PlanState, ring: Ring) {
-    val selected = getSelecting(dataState, exercise)
-    val modifier = if (selected) Modifier.background(color = colorScheme.surfaceContainer) else Modifier
-    Row(horizontalArrangement = Arrangement.Start,
-        modifier= modifier
-            .padding(vertical = 3.dp)
-            .border(width = 1.dp, shape = MaterialTheme.shapes.small, color = Color.LightGray)
-            .clickable {
-                setSelecting(dataState, exercise, ring.exercises.map { LongDm(it.idExercise) }) }
-    ) {
-        TextApp(modifier = Modifier
-            .width(50.dp)
-            .padding(horizontal = 4.dp),
-            textAlign = TextAlign.Center,
-            text = "${stringResource(R.string.exer)} ${exercise.idView}",
-            style = MaterialTheme.typography.titleMedium)
-    }
-}
+
 //@Composable fun CardExercise(dataState: PlanState, ring: Ring){
 //    CardExerciseTitle(dataState, ring)
 ////    CardExerciseBody(dataState, ring)

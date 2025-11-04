@@ -1,6 +1,5 @@
 package com.count_out.framework.room.source
 
-import android.util.Log
 import com.count_out.data.models.Data
 import com.count_out.data.models.ResultData
 import com.count_out.data.models.ResultData.Companion.flatMapCondition
@@ -12,7 +11,6 @@ import com.count_out.data.models.entity.NameIdDb
 import com.count_out.data.models.entity.PlanDb
 import com.count_out.data.models.entity.SpeechesDb
 import com.count_out.data.models.throwable.ThrowableDS
-import com.count_out.framework.di.lg
 import com.count_out.framework.room.db.speech.SpeechTb
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -23,14 +21,11 @@ import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 
 abstract class PrimeSource {
-
     fun <T : Data>Long.longToResult(number: Long = 0L, success: (Long) -> T): ResultData<T> =
         if (this > number) ResultData.Success(success(this))
         else ResultData.Error(ThrowableDS.RequestFailed())
-
     fun <T: Data> List<Long>.listToResult(success: (List<Long>) -> T): ResultData<T> =
         ResultData.Success(success(this))
-
     inline fun <reified D: Data, R> Data.safeUse(crossinline block: (D) -> R): ResultData<Data> =
         runCatching  {
             if (this is D) block(this).let { result->
@@ -50,7 +45,6 @@ abstract class PrimeSource {
             }
             else ResultData.Error(ThrowableDS.NotValidType())
         }.getOrElse  { ResultData.Error(ThrowableDS.Companion.extract(it)) }
-
     inline fun <reified D: Data, R> Data.safeUseFlow(crossinline block: (D) -> Flow<R>): Flow<ResultData<Data>> {
         return if (this is D) {
             block(this)
@@ -76,19 +70,16 @@ abstract class PrimeSource {
                 .catch { ResultData.Error(ThrowableDS.Companion.extract(it)) }
         }
         else flowOf(ResultData.Error(ThrowableDS.NotValidType()))}
-
-    inline fun <T : Data> copyWithDependencies(
-        original: T,
-        insertMain: (T) -> Long,
-        getSpeeches: () -> List<SpeechTb>,
+    inline fun copyWithDependencies(
+        insertMain: () -> Long,
+        getSpeeches: (Long) -> List<SpeechTb>,
         insertSpeeches: (List<SpeechTb>) -> List<Long>,
         copyNested: (id: Long) -> ResultData<LongDb>
     ): ResultData<Data> {
-        val newId = insertMain(original)
+        val newId = insertMain()
         return newId.longToResult { LongDb(it) }
             .flatMapCondition({ it.item.count() > 0L }) { newId1 ->
-                getSpeeches().map { it.apply { ringId = newId1.item } }
-                    .let { SpeechesDb(item = it).toResultData() }
+                getSpeeches(newId).let { SpeechesDb(item = it).toResultData() }
             }
             .flatMapCondition({ vl -> vl.item.isNotEmpty() }) { speeches ->
                 insertSpeeches(speeches.item.map { it as SpeechTb }).listToResult { LongsDb(it) }

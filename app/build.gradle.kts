@@ -23,27 +23,9 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables { useSupportLibrary = true }
     }
-    repositories {
-        google()
-        mavenLocal()
-        mavenCentral()
-    }
     buildTypes {
+        debug { isMinifyEnabled = false }
         release {
-            // Enables code shrinking, obfuscation, and optimization for only
-            // your project's release build type. Make sure to use a build
-            // variant with `isDebuggable=false`.
-            isMinifyEnabled = false
-            // Enables resource shrinking, which is performed by the
-            // Android Gradle plugin.
-//            isShrinkResources = true
-            // Includes the default ProGuard rules files that are packaged with
-            // the Android Gradle plugin. To learn more, go to the section about
-            // R8 configuration files.
-            proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
-        }
-        debug {
             isMinifyEnabled = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
@@ -53,28 +35,20 @@ android {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
     }
-    kotlin { compilerOptions{
-        jvmTarget = JvmTarget.JVM_17
-        val metricsDir = layout.buildDirectory.dir("compose_metrics").get().asFile.absolutePath
-        val reportsDir = layout.buildDirectory.dir("compose_reports").get().asFile.absolutePath
-
-        freeCompilerArgs.addAll(
-            listOf(
-                "-P",
-                "plugin:androidx.compose.compiler.plugins.kotlin:metricsDestination=$metricsDir",
-                "-P",
-                "plugin:androidx.compose.compiler.plugins.kotlin:reportsDestination=$reportsDir"
-            )
-        )    } }
     buildFeatures {
         compose = true
         buildConfig = true
-        viewBinding = true
     }
-    packaging {
-        resources {
-            excludes.add("/META-INF/{AL2.0,LGPL2.1}")
-        }
+    packaging { resources.excludes.addAll(
+        listOf("META-INF/LICENSE.md", "META-INF/LICENSE-notice.md", "/META-INF/{AL2.0,LGPL2.1}")) }
+    composeOptions { kotlinCompilerExtensionVersion = "2.2.21" }
+    repositories {
+        google()
+        mavenLocal()
+        mavenCentral()
+    }
+    kotlin {
+        compilerOptions{ jvmTarget = JvmTarget.JVM_17 }
     }
 }
 

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">count_out</string>
+    <string name="part">Pars</string>
     <string name="exercises">Activities</string>
     <string name="exercise2">activity</string>
     <string name="list_activity">ACTIVITIES</string>

@@ -3,6 +3,7 @@ package com.count_out.data.repository
 import com.count_out.data.models.ResultData.Companion.convertor
 import com.count_out.data.models.ResultData.Companion.convertorFlow
 import com.count_out.data.models.entity.LongDb
+import com.count_out.data.models.entity.NameIdDb
 import com.count_out.data.models.entity.PlanDb
 import com.count_out.data.source.room.PlanSource
 import com.count_out.domain.entity.throwable.ResultDomain
@@ -27,5 +28,5 @@ class PlanRepoImpl @Inject constructor(
         return source.copy(PlanDb.fromDomain(plan)).convertor() }
 
     override fun update(nameId: Domain): Flow<ResultDomain<Domain>> {
-        return source.update(PlanDb.fromDomain(nameId)).convertor() }
+        return source.update( NameIdDb.fromDomain(nameId)).convertor() }
 }

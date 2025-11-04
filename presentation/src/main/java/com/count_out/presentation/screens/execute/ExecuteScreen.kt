@@ -30,7 +30,6 @@ import androidx.compose.material.icons.outlined.LocationOn
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.MaterialTheme.colorScheme
 import androidx.compose.material3.MaterialTheme.typography
 import androidx.compose.material3.ProgressIndicatorDefaults
@@ -57,7 +56,9 @@ import com.count_out.domain.entity.workout.Set
 import com.count_out.presentation.R
 import com.count_out.presentation.models.ParameterImplP
 import com.count_out.presentation.screens.prime.PrimeScreen
+import com.count_out.presentation.view_element.Border
 import com.count_out.presentation.view_element.ProgressBar
+import com.count_out.presentation.view_element.TemplateList1
 import com.count_out.presentation.view_element.TextApp
 import com.count_out.presentation.view_element.TopBarApp
 import com.count_out.presentation.view_element.VerticalProgress
@@ -66,7 +67,7 @@ import com.count_out.presentation.view_element.custom_view.Frame
 import com.count_out.presentation.view_element.custom_view.IconQ
 import java.math.RoundingMode
 
-@Composable fun ExecuteWorkoutScreen( viewModel: ExecuteViewModel, navigateEvent: NavigateEvent){
+@Composable fun ExecuteWorkoutScreen(viewModel: ExecuteViewModel, navigateEvent: NavigateEvent){
     viewModel.screenState.collectAsState().value.let { screenState ->
         PrimeScreen(loader = screenState) { dataState ->
             dataState.goToScreenPlans = { navigateEvent.goToScreenPlans() }
@@ -76,7 +77,9 @@ import java.math.RoundingMode
 }
 @Composable fun ExecuteWorkoutScreenLayout(dataState: ExecuteState){
     if (dataState.showBS.plan) BottomSheetSaveTraining(dataState)
-    Column(modifier = Modifier.fillMaxSize().padding(horizontal = 4.dp),
+    Column(modifier = Modifier
+        .fillMaxSize()
+        .padding(horizontal = 4.dp),
         content = {
             TopBar(dataState)
             SensorInfo(dataState)
@@ -115,34 +118,15 @@ import java.math.RoundingMode
             text = if(dataState.bleConnectState != ConnectState.CONNECTED) "---"
             else dataState.heartRate.toString() )
     }
-    HorizontalDivider(thickness = 2.dp, color = MaterialTheme.colorScheme.surfaceContainerLow)
+    HorizontalDivider(thickness = 2.dp, color = colorScheme.surfaceContainerLow)
 }
 @Composable fun AdditionalInformation(dataState: ExecuteState, modifier: Modifier = Modifier){
     Column (modifier = modifier.border(width = 1.dp, color = Color.LightGray)) {
-
-
+//        Test1()
     }
-//        TextApp(text = "displayLarge ${typography.displayLarge.fontSize} ", style = typography.displayLarge)
-//        TextApp(text = "displayMedium ${typography.displayMedium.fontSize} ", style = typography.displayMedium)
-//        TextApp(text = "displaySmall ${typography.displaySmall.fontSize} ", style = typography.displaySmall)
-//        TextApp(text = "headlineLarge ${typography.headlineLarge.fontSize} ", style = typography.headlineLarge)
-//        TextApp(text = "headlineMedium ${typography.headlineMedium.fontSize} ", style = typography.headlineMedium)
-//        TextApp(text = "headlineSmall ${typography.headlineSmall.fontSize} ", style = typography.headlineSmall)
-//        TextApp(text = "titleLarge ${typography.titleLarge.fontSize} ", style = typography.titleLarge)
-//        TextApp(text = "titleMedium ${typography.titleMedium.fontSize} ", style = typography.titleMedium)
-//        TextApp(text = "titleSmall ${typography.titleSmall.fontSize} ", style = typography.titleSmall)
-//        TextApp(text = "labelLarge ${typography.labelLarge.fontSize} ", style = typography.labelLarge)
-//        TextApp(text = "labelMedium ${typography.labelMedium.fontSize} ", style = typography.labelMedium)
-//        TextApp(text = "labelSmall ${typography.labelSmall.fontSize} ", style = typography.labelSmall)
-//        TextApp(text = "bodyLarge ${typography.bodyLarge.fontSize} ", style = typography.bodyLarge)
-//        TextApp(text = "bodyMedium ${typography.bodyMedium.fontSize} ", style = typography.bodyMedium)
-//        TextApp(text = "bodySmall ${typography.bodySmall.fontSize} ", style = typography.bodySmall)
-//    }
 }
 @Composable fun ExerciseInfoNew(dataState: ExecuteState) {
-
     var showNext by remember { mutableStateOf(false) }
-
     dataState.stepPlan?.let { stepPlan ->
         Row(modifier = Modifier.height(IntrinsicSize.Min), verticalAlignment = Alignment.Top) {//
             VerticalProgress(stepPlan.numberExercise, stepPlan.quantityExercise)
@@ -164,7 +148,6 @@ import java.math.RoundingMode
         }
     }
 }
-
 @Composable fun ContextCurrentAndNext(visible: Boolean, stepPlan: StepPlan, dataState: ExecuteState){
 
     Column(modifier = Modifier
@@ -178,20 +161,20 @@ import java.math.RoundingMode
         } else ContextCurrentAndNextName(stepPlan.nextExercise?.nextActivityName ?: "")
     }
 }
-
 @Composable fun ContextCurrentAndNextName(name: String){
     Text(text = name, style = typography.headlineMedium)
 }
 @Composable fun ContextCurrentAndNextInfo(stepPlan: StepPlan, dataState: ExecuteState){
-    Row(modifier = Modifier.fillMaxWidth().padding(top = 16.dp), horizontalArrangement = Arrangement.SpaceAround) {
+    Row(modifier = Modifier
+        .fillMaxWidth()
+        .padding(top = 16.dp), horizontalArrangement = Arrangement.SpaceAround) {
         ProgressSet(dataState, stepPlan)
         ProgressCountDistanceDuration(dataState, stepPlan)
         ProgressRest(dataState, stepPlan)
         ShowWeight(stepPlan)
     }
 }
-
-@Composable fun ProgressSet(dataState: ExecuteState,stepPlan: StepPlan) {
+@Composable fun ProgressSet(dataState: ExecuteState, stepPlan: StepPlan) {
     if (stepPlan.quantitySet > 1)
         ProgressIndicator(dataState.stateWorkOut,
             stepPlan.numberSet,
@@ -353,7 +336,7 @@ import java.math.RoundingMode
     }
 }
 @Composable fun ChangeInterval(dataState: ExecuteState, modifier:Modifier, set: Set){
-    val color = with(MaterialTheme.colorScheme){
+    val color = with(colorScheme){
         if(dataState.enableChangeInterval) outline else surfaceContainerLow }
     Row(modifier = modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.Center,
@@ -376,18 +359,50 @@ import java.math.RoundingMode
     }
 }
 
-//                Column(
-//                    modifier = Modifier
-//                        .fillMaxWidth().padding(top = 8.dp)
-//                        .padding(top = 8.dp)
-//                        .background(
-//                            color = colorScheme.surfaceContainerHighest,
-//                            shape = RoundedCornerShape(6.dp)
-//                        )
-//                ) {
-//                    TextApp(
-//                        modifier = Modifier.padding(start = 4.dp),
-//                        style = typography.headlineMedium,
-//                        text = stepPlan.nextExercise?.nextActivityName ?: ""
-//                    )
-//                }
+@Composable fun ShowTypography(){
+    TextApp(text = "displayLarge ${typography.displayLarge.fontSize} ", style = typography.displayLarge)
+    TextApp(text = "displayMedium ${typography.displayMedium.fontSize} ", style = typography.displayMedium)
+    TextApp(text = "displaySmall ${typography.displaySmall.fontSize} ", style = typography.displaySmall)
+    TextApp(text = "headlineLarge ${typography.headlineLarge.fontSize} ", style = typography.headlineLarge)
+    TextApp(text = "headlineMedium ${typography.headlineMedium.fontSize} ", style = typography.headlineMedium)
+    TextApp(text = "headlineSmall ${typography.headlineSmall.fontSize} ", style = typography.headlineSmall)
+    TextApp(text = "titleLarge ${typography.titleLarge.fontSize} ", style = typography.titleLarge)
+    TextApp(text = "titleMedium ${typography.titleMedium.fontSize} ", style = typography.titleMedium)
+    TextApp(text = "titleSmall ${typography.titleSmall.fontSize} ", style = typography.titleSmall)
+    TextApp(text = "labelLarge ${typography.labelLarge.fontSize} ", style = typography.labelLarge)
+    TextApp(text = "labelMedium ${typography.labelMedium.fontSize} ", style = typography.labelMedium)
+    TextApp(text = "labelSmall ${typography.labelSmall.fontSize} ", style = typography.labelSmall)
+    TextApp(text = "bodyLarge ${typography.bodyLarge.fontSize} ", style = typography.bodyLarge)
+    TextApp(text = "bodyMedium ${typography.bodyMedium.fontSize} ", style = typography.bodyMedium)
+    TextApp(text = "bodySmall ${typography.bodySmall.fontSize} ", style = typography.bodySmall)
+}
+
+@Composable fun Test1(){
+    TemplateList1(
+        columnLeft = {
+            val modifier1 = Modifier.width(50.dp).padding(horizontal = 2.dp)
+            Border(open = false) { Text("text2-0", modifier = modifier1) }
+            Border(open = false) { Text("text2-1", modifier = modifier1) }
+            Border(open = true) { Text("text2-2", modifier = modifier1) }
+            Border(open = false) { Text("text2-3", modifier = modifier1) }
+            Border(open = false) { Text("text2-4", modifier = modifier1) }
+        },
+        columnRight = {
+            val modifier2 = Modifier.fillMaxWidth().padding(horizontal = 2.dp)
+            Text("text 3", modifier = modifier2)
+            Text("text 4, text 4, text 4, text", modifier = modifier2.background(Color.Gray))
+            Text("text 5", modifier = modifier2)
+            Text("text 6", modifier = modifier2)
+//            Text("text 7", modifier = modifier2)
+//            Text("text 8", modifier = modifier2)
+//            Text("text 8", modifier = modifier2)
+//            Text("text 8", modifier = modifier2)
+//            Text("text 8", modifier = modifier2)
+//            Text("text 8", modifier = modifier2)
+        },
+        button = {
+            Text("text1")
+        }
+    )
+}
+

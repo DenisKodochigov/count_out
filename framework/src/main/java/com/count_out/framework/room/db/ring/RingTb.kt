@@ -33,14 +33,22 @@ data class RingTb(
     override var exercises: List<ExerciseTb> = emptyList(),
 ): RingDb{
     companion object{
-        fun RingDb.toTb() = RingTb(
-            idRing = this.idRing,
-            partId = this.partId,
-            numberLaps = this.numberLaps,
-            amount = this.amount,
-            duration = this.duration,
-            speeches = this.speeches.map { it.toTb() },
-            exercises = this.exercises.map{it.toTb()},
+        fun RingDb.toTb(
+            idRing: Long = this.idRing,
+            partId: Long = this.partId,
+            numberLaps: Int = this.numberLaps,
+            amount: Int = this.amount,
+            duration: Double = this.duration,
+            speeches: List<SpeechTb> = this.speeches.map { it.toTb() },
+            exercises: List<ExerciseTb> = this.exercises.map{ it.toTb()},
+        ) = RingTb(
+            idRing = idRing,
+            partId = partId,
+            numberLaps = numberLaps,
+            amount = amount,
+            duration = duration,
+            speeches = speeches,
+            exercises = exercises,
         )
     }
 }

@@ -31,7 +31,6 @@ import com.count_out.domain.entity.workout.Exercise
 import com.count_out.domain.entity.workout.Part
 import com.count_out.domain.entity.workout.Ring
 import com.count_out.domain.entity.workout.Set
-import com.count_out.presentation.R
 import com.count_out.presentation.models.TypeKeyboard
 import com.count_out.presentation.screens.plan.PlanEvent.ShowBS
 import com.count_out.presentation.screens.plan.part.PartsContent
@@ -44,8 +43,8 @@ import com.count_out.presentation.view_element.icons.IconsGroup
 @Composable fun PlanScreen(viewModel: PlanViewModel, navigateEvent: NavigateEvent){
     viewModel.screenState.collectAsState().value.let { screenState ->
         PrimeScreen(loader = screenState) { dataState ->
-            ShowBottomSheetSpeech(dataState, dataState.showBS.plan,
-                R.string.training, dataState.plan)
+            dataState.goToScreenPlans = { navigateEvent.goToScreenPlans() }
+            ShowBottomSheetSpeech(dataState,dataState.showBS.plan,dataState.plan as Domain?)
             PlanScreenLayout(dataState)
         }
     }
@@ -59,8 +58,7 @@ import com.count_out.presentation.view_element.icons.IconsGroup
             .verticalScroll(rememberScrollState())
             .padding(horizontal = 4.dp)
             .clickable(interactionSource = interactionSource, indication = null) {
-                focusManager.clearFocus(true)
-            },
+                focusManager.clearFocus(true) },
     ){
         NamePlan(dataState = dataState)
         dataState.plan?.parts?.forEach { part ->
@@ -97,8 +95,8 @@ import com.count_out.presentation.view_element.icons.IconsGroup
                 dataState.item = dataState.plan
                 dataState.event(ShowBS(dataState.showBS.copy(domain = dataState.plan))) },
             onClickDelete = {
-                dataState.plan?.let { dataState.event(PlanEvent.DelPlan(dataState.plan))}
-                dataState.plan?.let { dataState.event(PlanEvent.BackScreen)}
+                dataState.plan?.let { dataState.event(PlanEvent.DelPlan(it))}
+                dataState.goToScreenPlans()
             }
         )
         Spacer(modifier = Modifier.width(7.dp))

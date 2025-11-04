@@ -36,19 +36,29 @@ data class ExerciseTb(
     override var duration: Double = 0.0,
     override var speeches: List<SpeechTb> = emptyList(),
     override var sets: List<SetTb> = emptyList(),
-    override var activity: ActivityTb? = null,
+    override var activity: ActivityTb = ActivityTb(),
 ): ExerciseDb{
     companion object{
-        fun ExerciseDb.toTb() = ExerciseTb(
-            idExercise = this.idExercise,
-            ringId = this.ringId,
-            activityId = this.activityId,
-            idView = this.idView,
-            amountSet = this.amountSet,
-            duration = this.duration,
-            speeches = this.speeches.map { it.toTb() },
-            sets = this.sets.map{ it.toTb()},
-            activity = this.activity!!.toTb(),
+        fun ExerciseDb.toTb(
+            idExercise: Long = this.idExercise,
+            ringId: Long = this.ringId,
+            activityId: Long = this.activityId,
+            idView: Int = this.idView,
+            amountSet: Int = this.amountSet,
+            duration: Double = this.duration,
+            speeches: List<SpeechTb> = this.speeches.map { it.toTb() },
+            sets: List<SetTb> = this.sets.map{ it.toTb()},
+            activity: ActivityTb = this.activity.toTb(),
+        ) = ExerciseTb (
+            idExercise = idExercise,
+            ringId = ringId,
+            activityId = activityId,
+            idView = idView,
+            amountSet = amountSet,
+            duration = duration,
+            speeches = speeches.map { it.toTb() },
+            sets = sets.map{ it.toTb()},
+            activity = activity.toTb(),
         )
     }
 }

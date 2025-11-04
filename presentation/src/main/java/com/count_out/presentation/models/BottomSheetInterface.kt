@@ -5,6 +5,6 @@ import com.count_out.domain.entity.workout.Domain
 interface BottomSheetInterface {
     var item: Domain?
     val nameSection: String
-    var onConfirmation: (Domain, Domain?) -> Unit
+    var onConfirmation: (Domain) -> Unit
     var onDismiss: () -> Unit
 }

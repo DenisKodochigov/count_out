@@ -39,14 +39,14 @@ import com.count_out.presentation.view_element.ModalBottomSheetApp
         dataState.nameSection = stringResource(id = R.string.list_activity)
         dataState.onDismiss =
             { dataState.event(ShowBS(dataState.showBS.copy(domain = item.activity))) }
-        dataState.onConfirmation = { exercise, activity ->
+        dataState.onConfirmation = { exercise ->
             dataState.event(
                 PlanEvent.UpdateExercise(
                     object: Exercise{
                         override val idExercise: Long = (exercise as Exercise).idExercise
                         override val ringId: Long = (exercise as Exercise).ringId
                         override val idView: Int = (exercise as Exercise).idView
-                        override val activity: Activity? = (activity as Activity)
+                        override val activity: Activity = (exercise as Exercise).activity
                         override val activityId: Long= (activity as Activity).idActivity
                         override val speechKit: SpeechKit = (exercise as Exercise).speechKit
                         override val sets: List<Set> = (exercise as Exercise).sets
@@ -94,7 +94,7 @@ fun BottomSheetSelectActivity(dataState: PlanState)
         items(items = dataState.activities) {item ->
             ActivityTitle(
                 activity = remember{ mutableStateOf(ActivityImplP(item))},
-                onSelect = { dataState.item?.let { dataState.onConfirmation(it, item)}},
+                onSelect = { dataState.item?.let { dataState.onConfirmation(it)}},
             )
         }
     }

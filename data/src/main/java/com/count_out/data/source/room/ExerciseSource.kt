@@ -20,7 +20,7 @@ import com.count_out.data.models.ResultData
  *  setActivityIntoExerciseImplD - меняет ID Activity в ExerciseImplD
  */
 interface ExerciseSource {
-    fun copy(exercise: Data): ResultData<Data>
+    fun insert(exercise: Data): ResultData<Data>
     fun del(exercise: Data): ResultData<Data>
     fun update(exercise: Data): ResultData<Data>
     fun changeSequenceExercise(setViewId: Data): ResultData<Data>

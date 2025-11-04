@@ -16,10 +16,11 @@ data class PlanState (
     val collapsing: Collapsing = Collapsing(),
     val activities: List<Activity> = emptyList(),
     var selecting: Selecting = Selecting(),
+    var goToScreenPlans: ()->Unit = {},
 
     override var nameSection: String = "",
     override var item: Domain? = null,
-    override var onConfirmation: (Domain, Domain?) -> Unit = { _, _ ->},
+    override var onConfirmation: (Domain) -> Unit = {},
     override var onDismiss: () -> Unit = {},
     override val event: (Event) -> Unit ={},
 ): BottomSheetInterface, DataState

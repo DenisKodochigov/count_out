@@ -47,9 +47,9 @@ class PlanSourceImpl @Inject constructor(
     override fun copy (plan: Data): ResultData<Data> = runCatching {
         if (plan is PlanDb){
             copyWithDependencies(
-                original = plan.toTb(),
-                insertMain = { dao.insert(it.copy(idPlan = 0L)) },
-                getSpeeches = { speechSource.getListSpeech(ringId = plan.idPlan) },
+                insertMain = { dao.insert(plan.toTb().copy(idPlan = 0L)) },
+                getSpeeches = {idNew-> speechSource.getListSpeech(planId = plan.idPlan)
+                    .map{ item-> item.apply{ planId = idNew} }},
                 insertSpeeches = { speechSource.insert(it) },
                 copyNested = { id -> copyParts(plan.parts, id)}
             )
@@ -61,8 +61,6 @@ class PlanSourceImpl @Inject constructor(
 
     override fun update(nameId: Data): ResultData<Data> =
         nameId.safeUse<NameIdDb, Long> { dao.updateName(it.name, it.id).toLong() }
-
-
     fun copyParts(parts: List<PartDb>, id: Long): ResultData<LongDb> =
         if (parts.isEmpty()) { ResultData.Success(LongDb(0L)) }
         else {

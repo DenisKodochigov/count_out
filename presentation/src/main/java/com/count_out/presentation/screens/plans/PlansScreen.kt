@@ -31,7 +31,6 @@ import com.count_out.presentation.models.Dimen
 import com.count_out.presentation.models.Dimen.contourAll2
 import com.count_out.presentation.models.Dimen.contourHor2
 import com.count_out.presentation.screens.prime.PrimeScreen
-import com.count_out.presentation.view_element.ItemSwipe
 import com.count_out.presentation.view_element.TextApp
 import com.count_out.presentation.view_element.TopBarApp
 import com.count_out.presentation.view_element.custom_view.Frame
@@ -72,12 +71,7 @@ fun PlansScreen(vm: PlansViewModel, navigateEvent: NavigateEvent) {
     ) {
         items(dataState.plans) { item ->
             Spacer(modifier = Modifier.height(Dimen.width4))
-            ItemSwipe(
-                frontView = {
-                    PlanCard(dataState, item, Modifier.animateItem())},
-                actionDragLeft = { dataState.event(PlansEvent.Del(item)) },
-                actionDragRight = { dataState.goToScreenPlan(item.idPlan) },
-            )
+            PlanCard(dataState, item, Modifier.animateItem())
         }
     }
 }
@@ -94,12 +88,9 @@ fun PlansScreen(vm: PlansViewModel, navigateEvent: NavigateEvent) {
             Spacer(modifier = Modifier.width(16.dp))
             PlanInformation(dataState, item, Modifier.weight(1f))
             Spacer(modifier = Modifier.width(Dimen.width6))
-//            IconCopy(training = item )
             IconsGroup(
                 onClickCopy = {dataState.event(PlansEvent.Copy(item))},
-                onClickAddPlan = {dataState.event(PlansEvent.Add)},
-                onClickDelete = { dataState.event(PlansEvent.Del(item))}
-            )
+                onClickDelete = { dataState.event(PlansEvent.Del(item))})
             Spacer(modifier = Modifier.width(Dimen.width6))
         }
     }
@@ -113,8 +104,7 @@ fun PlansScreen(vm: PlansViewModel, navigateEvent: NavigateEvent) {
 }
 
 @Composable fun PlanInformation(dataState: PlansState, item: Plan, modifier: Modifier = Modifier) {
-
-    Column(modifier = modifier.clickable { dataState.event(PlansEvent.Edit(item.idPlan))}) {
+    Column(modifier = modifier.clickable { dataState.goToScreenPlan(item.idPlan)}) {
         TextApp(text = item.name, style = MaterialTheme.typography.titleLarge)
         Spacer(modifier = Modifier.height(Dimen.height4))
         TextApp(

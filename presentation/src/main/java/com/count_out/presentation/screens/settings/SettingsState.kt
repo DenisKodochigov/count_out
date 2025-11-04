@@ -34,5 +34,5 @@ data class SettingsState(
     override var item: Domain? = null,
     override val nameSection: String = "",
     override var onDismiss: () -> Unit= {},
-    override var onConfirmation: (Domain, Domain?) -> Unit = { _, _ ->},
+    override var onConfirmation: (Domain) -> Unit = {},
 ): BottomSheetInterface, DataState

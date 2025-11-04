@@ -67,7 +67,6 @@ import com.count_out.presentation.models.Dimen.sizeIcon
 import com.count_out.presentation.view_element.TextApp
 import com.count_out.presentation.view_element.custom_view.IconQ
 import com.count_out.presentation.view_element.custom_view.IconQ.ArrowChordCanvas
-
 @Composable fun IconsGroup(
     onClickEdit: (() -> Unit)? = null,
     onClickCopy: (() -> Unit)? = null,
@@ -131,12 +130,8 @@ import com.count_out.presentation.view_element.custom_view.IconQ.ArrowChordCanva
         )
     )
     Box(modifier = Modifier.size( sizeIcon)){
-        Icon(imageVector = icon, contentDescription = "",
-            tint = MaterialTheme.colorScheme.outline,
-            modifier = Modifier
-                .align(Alignment.Center)
-                .size(size)
-                .clickable { onClick() })
+        Icon( imageVector = icon, contentDescription = "", tint = colorScheme.outline,
+            modifier = Modifier.align(Alignment.Center).size(size).clickable { onClick() })
     }
 }
 @Composable fun VerIcons(
@@ -186,25 +181,11 @@ import com.count_out.presentation.view_element.custom_view.IconQ.ArrowChordCanva
 
 @Composable fun IconSingle(image: ImageVector, onClick:()->Unit = {}, idDescription: Int = 0){
     Icon(imageVector = image,
-        tint = MaterialTheme.colorScheme.outline,
+        tint = colorScheme.outline,
         contentDescription = if ( idDescription == 0) "" else stringResource(id = idDescription),
         modifier = Modifier
             .size(sizeIcon)
             .clickable { onClick() })
-}
-@Composable fun IconSingleLarge(image: ImageVector, onClick:()->Unit){
-    Icon(imageVector = image,
-        contentDescription = "",
-        tint = MaterialTheme.colorScheme.tertiary,
-        modifier = Modifier
-            .size(Dimen.sizeIconLarge)
-            .clickable { onClick() })
-}
-@Composable fun IconSingleLarge(image: ImageVector){
-    Icon(imageVector = image, contentDescription = "",
-        tint = MaterialTheme.colorScheme.tertiary,
-        modifier = Modifier.size(Dimen.sizeIconLarge)
-    )
 }
 @Composable fun IconsCollapsing(onClick: ()->Unit, wrap: Boolean) {
     if (wrap) IconQ.Collapsing( onClick = onClick) else IconQ.UnCollapsing( onClick = onClick)
@@ -220,7 +201,8 @@ import com.count_out.presentation.view_element.custom_view.IconQ.ArrowChordCanva
 @Composable fun IconAddRing(onClick:()->Unit) = IconAdd(onClick = onClick, text = "R+" )
 @Composable fun IconAddExercise(onClick:()->Unit) = IconAdd(onClick = onClick, text = "E+" )
 @Composable fun IconAddPlan(onClick:()->Unit) = IconAdd(onClick = onClick, text = "P+" )
-//@Composable fun IconAddActivity(onClick:()->Unit) = IconAdd(onClick = onClick, text = "A+" )
+
+@Composable fun IconAddActivity(onClick:()->Unit) = IconAdd(onClick = onClick, text = "A+" )
 @Composable fun IconAdd(onClick:()->Unit, text: String = "+") {
     Box(modifier = Modifier){
         Spacer(modifier = Modifier
@@ -228,7 +210,7 @@ import com.count_out.presentation.view_element.custom_view.IconQ.ArrowChordCanva
             .size(size = sizeIcon)
             .clickable { onClick() }
             .clip(shape = CircleShape)
-            .border(width = 1.dp, color = MaterialTheme.colorScheme.outline, shape = CircleShape)
+            .border(width = 1.dp, color = colorScheme.outline, shape = CircleShape)
         )
         TextApp(text = text, style = MaterialTheme.typography.titleMedium, modifier = Modifier.align(alignment = Alignment.Center))
     }
@@ -247,7 +229,7 @@ import com.count_out.presentation.view_element.custom_view.IconQ.ArrowChordCanva
             else TAB_FADE_OUT_ANIMATION_DURATION
         )
     }
-    val colorIcon = MaterialTheme.colorScheme.outline
+    val colorIcon = colorScheme.outline
     val colorUnselected = Color(colorIcon.red, colorIcon.green, colorIcon.blue, colorIcon.alpha * 0.4f)
     val iconColor by animateColorAsState(
         label = "",
@@ -272,34 +254,6 @@ import com.count_out.presentation.view_element.custom_view.IconQ.ArrowChordCanva
         TextApp(text = text.replaceFirstChar{it.uppercase()}, style = MaterialTheme.typography.labelSmall) // alumBodySmall)
     }
 }
-@Composable fun IconCount(selected: Boolean, onClick: ()->Unit){
-    Column(verticalArrangement = Arrangement.Center){
-        IconQ.Count(selected = selected, onClick = onClick)
-        TextApp(
-            text = "${ stringResource(R.string.counts) } ",
-            textAlign = TextAlign.Center,
-            style = MaterialTheme.typography.bodyMedium)
-    }
-}
-@Composable fun IconDuration(selected: Boolean, onClick: ()->Unit){
-    Column(verticalArrangement = Arrangement.Center){
-        IconQ.Count(selected = selected, onClick = onClick)
-        TextApp(
-            text = "${ stringResource(R.string.duration) } ",
-            textAlign = TextAlign.Center,
-            style = MaterialTheme.typography.bodyMedium)
-    }
-}
-@Composable fun IconDistance(selected: Boolean, onClick: ()->Unit){
-    Column(verticalArrangement = Arrangement.Center){
-        IconQ.Count(selected = selected, onClick = onClick)
-        TextApp(
-            text = "${ stringResource(R.string.distance) } ",
-            textAlign = TextAlign.Center,
-            style = MaterialTheme.typography.bodyMedium)
-    }
-}
-
 @Composable fun IconZone(value: Int, onClick: ()->Unit = {}){
     val xBaseIcon = 25.dp
     val yBaseIcon = 30.dp
@@ -390,9 +344,50 @@ import com.count_out.presentation.view_element.custom_view.IconQ.ArrowChordCanva
     }
 }
 
-fun masValue(current: Int): List<Int> {
-    return listOf(0, 1, 2, 3, 4).map { ((it + current + 3) % 5) + 1}
+@Composable fun IconCount(selected: Boolean, onClick: ()->Unit){
+    Column(verticalArrangement = Arrangement.Center){
+        IconQ.Count(selected = selected, onClick = onClick)
+        TextApp(
+            text = "${ stringResource(R.string.counts) } ",
+            textAlign = TextAlign.Center,
+            style = MaterialTheme.typography.bodyMedium)
+    }
 }
+@Composable fun IconDuration(selected: Boolean, onClick: ()->Unit){
+    Column(verticalArrangement = Arrangement.Center){
+        IconQ.Count(selected = selected, onClick = onClick)
+        TextApp(
+            text = "${ stringResource(R.string.duration) } ",
+            textAlign = TextAlign.Center,
+            style = MaterialTheme.typography.bodyMedium)
+    }
+}
+@Composable fun IconDistance(selected: Boolean, onClick: ()->Unit){
+    Column(verticalArrangement = Arrangement.Center){
+        IconQ.Count(selected = selected, onClick = onClick)
+        TextApp(
+            text = "${ stringResource(R.string.distance) } ",
+            textAlign = TextAlign.Center,
+            style = MaterialTheme.typography.bodyMedium)
+    }
+}
+@Composable fun IconSingleLarge(image: ImageVector, onClick:()->Unit){
+    Icon(imageVector = image,
+        contentDescription = "",
+        tint = colorScheme.tertiary,
+        modifier = Modifier
+            .size(Dimen.sizeIconLarge)
+            .clickable { onClick() })
+}
+@Composable fun IconSingleLarge(image: ImageVector){
+    Icon(imageVector = image, contentDescription = "",
+        tint = colorScheme.tertiary,
+        modifier = Modifier.size(Dimen.sizeIconLarge)
+    )
+}
+
+fun masValue(current: Int): List<Int> = listOf(0, 1, 2, 3, 4).map { ((it + current + 3) % 5) + 1}
+
 @Composable
 @Preview(backgroundColor = 0xFF9FA1AF)
 fun Preview(){

@@ -16,7 +16,7 @@ class ExerciseRepoImpl @Inject constructor(
         return source.del( ExerciseDb.fromDomain(exercise)).convertor()
     }
     override fun copy(exercise: Domain): Flow<ResultDomain<Domain>> {
-        return source.copy(ExerciseDb.fromDomain(exercise)).convertor()
+        return source.insert(ExerciseDb.fromDomain(exercise)).convertor()
     }
     override fun update(exercise: Domain): Flow<ResultDomain<Domain>> {
         return source.update(ExerciseDb.fromDomain(exercise)).convertor()

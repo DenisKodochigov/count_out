@@ -7,22 +7,22 @@ import com.count_out.domain.entity.workout.Exercise
 import com.count_out.domain.entity.workout.Parameter
 import com.count_out.domain.entity.workout.Set
 import com.count_out.domain.entity.workout.SpeechKit
+
 interface ExerciseDb: Data {
     val idExercise: Long
     val ringId: Long
     val idView: Int
     val activityId: Long
-    val activity: ActivityDb?
+    val activity: ActivityDb
     val speeches: List<SpeechDb>
     val sets: List<SetDb>
     val amountSet: Int
     val duration: Double
-    //    override fun toResultData(): ResultData<Data> = ResultData.Success(this)
     override fun toDomain(ind: Int): Domain = object: Exercise {
         override val idExercise: Long = this@ExerciseDb.idExercise
         override val ringId: Long = this@ExerciseDb.ringId
         override val idView: Int = this@ExerciseDb.idView
-        override val activity: Activity? = this@ExerciseDb.activity?.toDomain()
+        override val activity: Activity = this@ExerciseDb.activity.toDomain()
         override val activityId: Long = this@ExerciseDb.activityId
         override val speechKit: SpeechKit = SpeechKit.Companion.fill(this@ExerciseDb.speeches.map{it.toDomain()})
         override val sets: List<Set> = this@ExerciseDb.sets.map { it.toDomain() }
@@ -38,7 +38,7 @@ interface ExerciseDb: Data {
                     override val ringId: Long = domain.ringId
                     override val idView: Int = domain.idView
                     override val activityId: Long = domain.activityId
-                    override val activity: ActivityDb? = domain.activity?.let { ActivityDb.fromDomain(it)}
+                    override val activity: ActivityDb = ActivityDb.fromDomain(domain.activity)
                     override val speeches: List<SpeechDb> = domain.speechKit.toList().map { SpeechDb.fromDomain(it) }
                     override val sets: List<SetDb> = domain.sets.map { SetDb.fromDomain(it) }
                     override val amountSet: Int = domain.amountSet
@@ -52,7 +52,18 @@ interface ExerciseDb: Data {
             override val ringId: Long = 0
             override val idView: Int = 0
             override val activityId: Long = 0
-            override val activity: ActivityDb? = null
+            override val activity: ActivityDb = ActivityDb.EMPTY
+            override val speeches: List<SpeechDb> = emptyList()
+            override val sets: List<SetDb> = emptyList()
+            override val amountSet: Int = 0
+            override val duration: Double = 0.0
+        }
+        fun new(ringID: Long = 0L) = object: ExerciseDb{
+            override val idExercise: Long = 0
+            override val ringId: Long = ringID
+            override val idView: Int = 0
+            override val activityId: Long = 0
+            override val activity: ActivityDb = ActivityDb.EMPTY
             override val speeches: List<SpeechDb> = emptyList()
             override val sets: List<SetDb> = emptyList()
             override val amountSet: Int = 0
@@ -60,6 +71,7 @@ interface ExerciseDb: Data {
         }
     }
 }
+
 //abstract class ExerciseDb: Data {
 //    abstract val idExercise: Long
 //    abstract val ringId: Long

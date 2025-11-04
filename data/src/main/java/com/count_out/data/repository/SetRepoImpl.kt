@@ -13,7 +13,7 @@ class SetRepoImpl @Inject constructor(
     private val source: SetSource): SetRepo {
 
     override fun copy(set: Domain): Flow<ResultDomain<Domain>> {
-        return source.copy(SetDb.fromDomain(set)).convertor()
+        return source.insert(SetDb.fromDomain(set)).convertor()
     }
 
     override fun del(set: Domain): Flow<ResultDomain<Domain>> {

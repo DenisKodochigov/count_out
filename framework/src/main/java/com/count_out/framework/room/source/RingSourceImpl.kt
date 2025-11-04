@@ -1,5 +1,6 @@
 package com.count_out.framework.room.source
 
+import android.util.Log
 import com.count_out.data.models.Data
 import com.count_out.data.models.ResultData
 import com.count_out.data.models.entity.ExerciseDb
@@ -26,9 +27,9 @@ class RingSourceImpl @Inject constructor(
     override fun insert (ring: Data): ResultData<Data> = runCatching {
         if (ring is RingDb){
             copyWithDependencies(
-                original = (ring.toTb()),
-                insertMain = { dao.insert(it.copy(idRing = 0L)) },
-                getSpeeches = { speechSource.getListSpeech(ringId = ring.idRing) },
+                insertMain = { dao.insert(ring.toTb(idRing = 0L)) },
+                getSpeeches = { idNew ->  speechSource.getListSpeech(ringId = ring.idRing)
+                    .map{ item-> item.apply{ ringId = idNew} }},
                 insertSpeeches = { speechSource.insert(it) },
                 copyNested = { id -> copyExercises(ring.exercises,id)}
             )
@@ -43,11 +44,12 @@ class RingSourceImpl @Inject constructor(
 
 //##############################################################################################
     fun copyExercises(exercises: List<ExerciseDb>, id: Long): ResultData<LongDb> =
-        if (exercises.isEmpty()) { ResultData.Success(LongDb(0L)) }
+        if (exercises.isEmpty()) {
+            Log.d("KDS","RingSourceImpl.copyExercises")
+            source.insert( ExerciseDb.new(id) )
+            ResultData.Success(LongDb(0L)) }
         else {
-            exercises.map{ex-> source.copy(
-                (ex.toTb()).apply{this.ringId = id}) }
-//                (ex.convert()).apply{this.ringId = id}) }
-                ResultData.Success(LongDb(exercises.size.toLong()))
+            exercises.map{ex-> source.insert((ex.toTb()).apply{this.ringId = id}) }
+            ResultData.Success(LongDb(exercises.size.toLong()))
         }
 }

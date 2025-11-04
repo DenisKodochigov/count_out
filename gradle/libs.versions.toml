@@ -31,11 +31,11 @@ serialization = "1.9.0"
 kotlinx-coroutines = "1.10.2"
 gmsV = "21.3.0"
 retrofit = "3.0.0"
-okhttp3 = "5.2.1"
+okhttp3 = "5.3.0"
 paletteKtx = "1.0.0"
 
 junit = "4.13.2"
-jupiter = "6.0.0"
+jupiter = "6.0.1"
 #junit-platform = "1.11.1"
 #junitVersion = "1.2.1"
 
@@ -56,6 +56,7 @@ ui-test = "1.9.4"
 activity = "1.11.0"
 activityKtx = "1.11.0"
 composeMaterial = "1.5.4"
+composeCompiler = "2.2.21"
 #storage = "1.5.0"
 #androidMapsUtils = "2.3.0"
 #firebase_crashlytics = "3.0.2"
@@ -106,7 +107,8 @@ compose-ui = { module = "androidx.compose.ui:ui", version.ref = "composeV" }
 compose-ui-graphics = { module = "androidx.compose.ui:ui-graphics", version.ref = "composeV" }
 compose-ui-tooling = { module = "androidx.compose.ui:ui-tooling", version.ref = "composeV" }
 compose-ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview", version.ref = "composeV" }
-compose-lifecycle-runtime = { module = "androidx.lifecycle:lifecycle-runtime-compose-android", version.ref = "lifecycle" }
+compose-lifecycle-runtime = { module = "androidx.lifecycle:lifecycle-runtime-compose", version.ref = "lifecycle" }
+compose-lifecycle-runtime-android = { module = "androidx.lifecycle:lifecycle-runtime-compose-android", version.ref = "lifecycle" }
 compose-ui-text-google-fonts = { module = "androidx.compose.ui:ui-text-google-fonts", version.ref = "composeV" }
 compose-animation = { module = "androidx.compose.animation:animation-graphics-android", version.ref = "composeV" }
 #ccompose-constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout-compose", version.ref = "constraintlayout" }
@@ -201,12 +203,12 @@ compose-material = { group = "androidx.wear.compose", name = "compose-material",
 
 
 [plugins]
-androidApplication = { id = "com.android.application", version.ref = "agp" }
-androidLibrary = { id = "com.android.library", version.ref = "agp"}
+androidApplication =     { id = "com.android.application", version.ref = "agp" }
+androidLibrary =         { id = "com.android.library", version.ref = "agp"}
 jetbrainsKotlinAndroid = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
-compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
-ksp = { id = "com.google.devtools.ksp", version.ref = "kspVersion"}
-hilt = { id = "com.google.dagger.hilt.android", version.ref = "hiltAndroid"}
+compose-compiler =       { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "composeCompiler" }
+ksp =                    { id = "com.google.devtools.ksp", version.ref = "kspVersion"}
+hilt =                   { id = "com.google.dagger.hilt.android", version.ref = "hiltAndroid"}
 serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "serialization_plugin"}
 #firebase = { id = "com.google.firebase.crashlytics", version.ref = "firebase_crashlytics"}
 #mannodermaus = { id = "de.mannodermaus.android-junit5", version.ref = "mannodermaus-plug" }
@@ -232,11 +234,13 @@ serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref 
         "compose-foundation",
         "compose-foundation-layout",
         "compose-lifecycle-runtime",
+        "compose-lifecycle-runtime-android",
         "compose-animation",
         "compose-ui",
         "compose-ui-graphics",
         "compose-ui-tooling",
-        "compose-ui-tooling-preview", ]
+        "compose-ui-tooling-preview",
+        ]
 #    graphics = ["graphics-core", "graphics-path", "graphics-shapes"]
     moshi =["moshi", "moshi-kotlin", ]
     retrofit = ["retrofit", "retrofit-moshi", "okhttp3"]

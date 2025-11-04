@@ -26,7 +26,7 @@ import com.count_out.domain.entity.workout.Part
 import com.count_out.domain.entity.workout.Plan
 import com.count_out.domain.entity.workout.Ring
 import com.count_out.domain.entity.workout.Set
-import com.count_out.domain.entity.workout.Speech
+import com.count_out.domain.entity.workout.SpeechKit
 import com.count_out.presentation.R
 import com.count_out.presentation.models.BottomSheetInterface
 import com.count_out.presentation.models.Dimen
@@ -39,16 +39,18 @@ import com.count_out.presentation.view_element.ModalBottomSheetApp
 import com.count_out.presentation.view_element.TextApp
 import com.count_out.presentation.view_element.TextFieldApp
 
-@Composable fun ShowBottomSheetSpeech(
-    dataState: PlanState, showBS: Boolean, idString: Int, item: Domain? = null
-){
+@Composable fun ShowBottomSheetSpeech(dataState: PlanState, showBS: Boolean, item: Domain?){
     if (showBS && dataState.item == item) {
-        dataState.nameSection = stringResource(id = idString)
-        dataState.onDismiss =
-            { dataState.event(ShowBS(dataState.showBS.copy(domain = item)))}
-        dataState.onConfirmation = { speech, item1 ->
-            dataState.event(PlanEvent.UpdateSpeech(speech as Speech))
-            dataState.event(ShowBS(dataState.showBS.copy(domain = item)))
+        dataState.nameSection = nameSection(item)
+        dataState.onDismiss = { dataState.event(ShowBS(dataState.showBS.copy(domain = item)))}
+        dataState.onConfirmation = { speechKit ->
+            if (speechKit is SpeechKit) {
+                dataState.event(PlanEvent.UpdateSpeech(speechKit.beforeStart))
+                dataState.event(PlanEvent.UpdateSpeech(speechKit.afterStart))
+                dataState.event(PlanEvent.UpdateSpeech(speechKit.beforeEnd))
+                dataState.event(PlanEvent.UpdateSpeech(speechKit.afterEnd))
+                dataState.event(ShowBS(dataState.showBS.copy(domain = item)))
+            }
         }
         BottomSheetSpeech(dataState)
     }
@@ -66,9 +68,8 @@ import com.count_out.presentation.view_element.TextFieldApp
         content = { BottomSheetSpeechContent(uiState) }
     )
 }
-
 fun bottomSheetStateNew(itemSpeech: BottomSheetInterface): BottomSheetState {
-    val speech = when (itemSpeech.item) {
+    val speechKit = when (itemSpeech.item) {
         is Plan -> (itemSpeech.item as Plan).speechKit
         is Part -> (itemSpeech.item as Part).speechKit
         is Ring -> (itemSpeech.item as Ring).speechKit
@@ -77,12 +78,11 @@ fun bottomSheetStateNew(itemSpeech: BottomSheetInterface): BottomSheetState {
         else -> null
     }
     return BottomSheetState(
-        enteredBeforeStart = mutableStateOf( speech?.beforeStart?.message ?: ""),
-        enteredBeforeEnd = mutableStateOf( speech?.afterStart?.message ?: ""),
-        enteredAfterStart = mutableStateOf( speech?.beforeEnd?.message ?: ""),
-        enteredAfterEnd = mutableStateOf( speech?.afterEnd?.message ?: ""),
-        speechKit= speech,
-//        listSpeech = itemSpeech.listSpeech,
+        enteredBeforeStart = mutableStateOf( speechKit?.beforeStart?.message ?: ""),
+        enteredBeforeEnd = mutableStateOf( speechKit?.afterStart?.message ?: ""),
+        enteredAfterStart = mutableStateOf( speechKit?.beforeEnd?.message ?: ""),
+        enteredAfterEnd = mutableStateOf( speechKit?.afterEnd?.message ?: ""),
+        speechKit= speechKit,
         nameSection = itemSpeech.nameSection,
         item = itemSpeech.item,
         onConfirmation = itemSpeech.onConfirmation,
@@ -90,10 +90,18 @@ fun bottomSheetStateNew(itemSpeech: BottomSheetInterface): BottomSheetState {
     )
 }
 
+fun itemLogo(item: Domain): String {
+    return when (item) {
+        is Exercise -> "Exercise ${item.idExercise}"
+        is Plan -> "Plan ${item.idPlan}"
+        is Part -> "Part ${item.idPart}"
+        is Ring -> "Ring ${item.idRing}"
+        is Set -> "Set ${item.idSet}"
+        else -> ""
+    }
+}
 @Composable fun BottomSheetSpeechContent(uiState: BottomSheetState) {
-    Column( horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = Modifier.padding(Dimen.bsItemPaddingHor)
-    ) {
+    Column( horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.padding(6.dp)) {
 //        SelectOtherSpeech(uiState)
         Spacer(Modifier.height(Dimen.bsSpacerHeight))
         FieldTextForSpeech( enterValue = uiState.enteredBeforeStart,
@@ -113,14 +121,12 @@ fun bottomSheetStateNew(itemSpeech: BottomSheetInterface): BottomSheetState {
         Spacer(Modifier.height(Dimen.bsSpacerBottomHeight))
     }
 }
-
-
 @Composable fun FieldTextForSpeech(enterValue: MutableState<String>, nameSection: String){
     Column(modifier = Modifier.padding(horizontal = 12.dp)) {
         TextFieldApp(
             modifier = Modifier.fillMaxWidth(),
             typeKeyboard = TypeKeyboard.TEXT,
-            textStyle = MaterialTheme.typography.bodyLarge,
+            textStyle = MaterialTheme.typography.titleLarge,
             contentAlignment = Alignment.CenterStart,
             placeholder = enterValue.value,
             showLine = true,
@@ -128,17 +134,33 @@ fun bottomSheetStateNew(itemSpeech: BottomSheetInterface): BottomSheetState {
             edit = true,
             onChangeValue = { enterValue.value = it}
         )
-        TextApp(text = nameSection, style = MaterialTheme.typography.bodySmall.copy(fontWeight = FontWeight.ExtraLight),
-            modifier = Modifier.padding(start = Dimen.bsItemPaddingHor))
+        TextApp(text = nameSection, modifier = Modifier.padding(start = 6.dp),
+            style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Light))
     }
 }
 @Composable fun ButtonOK(uiState: BottomSheetState) {
-    ButtonConfirm(onConfirm = {
-        uiState.speechKit?.let { uiState.onConfirmation( it, uiState.item)}
+    ButtonConfirm( onConfirm = {
+        uiState.speechKit?.let {
+            uiState.onConfirmation( SpeechKit.fill( listOf(
+                it.beforeStart.copy(message = uiState.enteredBeforeStart.value),
+                it.beforeEnd.copy(message = uiState.enteredBeforeEnd.value),
+                it.afterStart.copy(message = uiState.enteredAfterStart.value),
+                it.afterEnd.copy(message = uiState.enteredAfterEnd.value) )))
+        }
     })
 }
 
 @Preview(showBackground = true)
 @Composable fun BottomSheetSpeechContentPreview() {
     BottomSheetSpeechContent(BottomSheetState())
+}
+@Composable fun nameSection(item: Domain? = null): String {
+    return when (item) {
+        is Plan -> stringResource(id = R.string.training,)
+        is Part -> stringResource(id = R.string.part,)
+        is Ring -> stringResource(id = R.string.ring,)
+        is Exercise -> stringResource(id = R.string.exercise2,)
+        is Set -> stringResource(id = R.string.set,)
+        else -> ""
+    }
 }

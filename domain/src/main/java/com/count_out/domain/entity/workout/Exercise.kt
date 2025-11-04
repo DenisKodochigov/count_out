@@ -4,7 +4,7 @@ interface Exercise: Domain {
      val idExercise: Long
      val ringId: Long
      val idView: Int
-     val activity: Activity?
+     val activity: Activity
      val activityId: Long
      val speechKit: SpeechKit
      val sets: List<Set>
@@ -15,7 +15,7 @@ interface Exercise: Domain {
                override val idExercise: Long = 0
                override val ringId: Long = ringId
                override val idView: Int = 0
-               override val activity: Activity? = null
+               override val activity: Activity = Activity.EMPTY
                override val activityId: Long = 0
                override val speechKit: SpeechKit = SpeechKit.EMPTY
                override val sets: List<Set> = emptyList()

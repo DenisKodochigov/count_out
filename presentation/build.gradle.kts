@@ -5,7 +5,6 @@ plugins {
     alias(libs.plugins.jetbrainsKotlinAndroid)
     alias(libs.plugins.compose.compiler)
     alias(libs.plugins.serialization)
-//    alias(libs.plugins.mannodermaus)
     alias(libs.plugins.hilt)
     alias(libs.plugins.ksp)
 }
@@ -13,63 +12,43 @@ plugins {
 android {
     namespace = "com.count_out.presentation"
     compileSdk = 36
+    buildToolsVersion = "35.0.0"
 
     defaultConfig {
         minSdk = 28
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+    }
+    buildTypes {
+        release { isMinifyEnabled = false }
+        debug { isMinifyEnabled = false }
+    }
+    buildFeatures {
+        compose = true
+        buildConfig = true
+    }
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
+    }
+    composeOptions { kotlinCompilerExtensionVersion = "2.2.21" }
+    testOptions {
+        unitTests.isReturnDefaultValues = true
+        unitTests.isIncludeAndroidResources = true
+    }
+    packaging {
+        resources.excludes.addAll(listOf("META-INF/LICENSE.md", "META-INF/LICENSE-notice.md", "/META-INF/{AL2.0,LGPL2.1}"))
+    }
+    kotlin {
+        compilerOptions{ jvmTarget = JvmTarget.JVM_17 }
     }
     repositories {
         google()
         mavenLocal()
         mavenCentral()
     }
-    buildTypes {
-        release {
-            isMinifyEnabled = false
-            proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
-        }
-        debug {
-            isMinifyEnabled = false
-            proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
-        }
-    }
-    packaging {
-        resources.excludes.addAll(listOf("META-INF/LICENSE.md", "META-INF/LICENSE-notice.md",))
-    }
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_17
-        targetCompatibility = JavaVersion.VERSION_17
-    }
-    kotlin { compilerOptions{
-        jvmTarget = JvmTarget.JVM_17
-        val metricsDir = layout.buildDirectory.dir("compose_metrics").get().asFile.absolutePath
-        val reportsDir = layout.buildDirectory.dir("compose_reports").get().asFile.absolutePath
-
-        freeCompilerArgs.addAll(
-            listOf(
-                "-P",
-                "plugin:androidx.compose.compiler.plugins.kotlin:metricsDestination=$metricsDir",
-                "-P",
-                "plugin:androidx.compose.compiler.plugins.kotlin:reportsDestination=$reportsDir"
-            )
-        )    } }
-    testOptions {
-        unitTests.isReturnDefaultValues = true
-        unitTests.isIncludeAndroidResources = true
-    }
-    buildFeatures {
-        viewBinding = true
-    }
-    buildToolsVersion = "35.0.0"
 }
 
 dependencies {
-
-//    implementation(libs.core.ktx)
-//    implementation(libs.appcompat)
-//    implementation(libs.material)
     implementation(project(":domain"))
     implementation(libs.bundles.core)
     implementation(libs.bundles.lifecycle)

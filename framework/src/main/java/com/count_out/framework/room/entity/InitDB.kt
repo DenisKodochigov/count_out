@@ -1,6 +1,5 @@
 package com.count_out.framework.room.entity
 
-import android.util.Log
 import com.count_out.domain.entity.enums.Units
 import com.count_out.framework.R
 import com.count_out.framework.room.AppDataBase
@@ -104,7 +103,7 @@ private fun createTrainingPlansTesting( db: AppDataBase) {
 //Разминка
     var idPart = db.partDao().insert(PartTb( planId = idPlan ))
     insertSpeeches(db, partId = idPart, bs = "Разминка")
-    var idRing = db.ringDao().insert(RingTb(partId = idPart))
+    var idRing = db.ringDao().insert(RingTb(partId = idPart, amount = 2))
     insertSpeeches(db, ringId = idRing)
     //Упражнение 1
     var idExercise = db.exerciseDao().insert(ExerciseTb(ringId = idRing, activityId = 4, idView = 0)) //"Растереть уши"

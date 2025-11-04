@@ -13,7 +13,7 @@ import com.count_out.domain.entity.workout.Speech
 import com.count_out.presentation.screens.prime.Event
 
 sealed class PlanEvent: Event {
-    data class DelPlan(val training: Plan) : PlanEvent()
+    data class DelPlan(val plan: Plan) : PlanEvent()
     data class UpdatePlanName(val nameID: NameId) : PlanEvent()
 
     data class CopyRing(val ring: Ring): PlanEvent()
@@ -23,6 +23,7 @@ sealed class PlanEvent: Event {
     data class RingOrExercise(val ring: Ring): PlanEvent()
 
     data class CopyExercise(val exercise: Exercise): PlanEvent()
+    data class AddExercise(val exercise: Exercise): PlanEvent()
     data class DelExercise(val exercise: Exercise): PlanEvent()
     data class UpdateExercise(val exercise: Exercise): PlanEvent()
     data class ChangeSequenceExercise(val item: SetViewId): PlanEvent()

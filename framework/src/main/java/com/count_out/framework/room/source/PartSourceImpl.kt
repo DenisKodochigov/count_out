@@ -10,7 +10,6 @@ import com.count_out.data.models.throwable.ThrowableDS
 import com.count_out.data.source.room.PartSource
 import com.count_out.data.source.room.RingSource
 import com.count_out.framework.room.db.part.PartDao
-import com.count_out.framework.room.db.part.PartTb
 import com.count_out.framework.room.db.part.PartTb.Companion.toTb
 import com.count_out.framework.room.db.ring.RingTb.Companion.toTb
 import javax.inject.Inject
@@ -28,9 +27,9 @@ class PartSourceImpl @Inject constructor(
     override fun copy (part: Data): ResultData<Data> = runCatching {
         if (part is PartDb){
         copyWithDependencies(
-            original = part.toTb(),
-            insertMain = { dao.insert(it.copy(idPart = 0L)) },
-            getSpeeches = { speechSource.getListSpeech(partId = part.idPart) },
+            insertMain = { dao.insert(part.toTb().copy(idPart = 0L)) },
+            getSpeeches = { idNew-> speechSource.getListSpeech(partId = part.idPart)
+                .map{ item-> item.apply{ partId = idNew} }},
             insertSpeeches = { speechSource.insert(it) },
             copyNested = { id -> copyRings(part.rings,id)})}
         else ResultData.Error(ThrowableDS.NotValidType())

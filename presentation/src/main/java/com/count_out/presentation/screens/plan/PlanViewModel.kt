@@ -7,6 +7,7 @@ import com.count_out.domain.entity.supportive.NameId
 import com.count_out.domain.entity.types_domai.LongDm
 import com.count_out.domain.entity.workout.Collapsing
 import com.count_out.domain.entity.workout.Exercise
+import com.count_out.domain.entity.workout.Plan
 import com.count_out.domain.entity.workout.Ring
 import com.count_out.domain.entity.workout.Selecting
 import com.count_out.domain.entity.workout.Set
@@ -14,6 +15,7 @@ import com.count_out.domain.entity.workout.ShowBottomSheet
 import com.count_out.domain.entity.workout.Speech
 import com.count_out.domain.use_case.other.CollapsingUC
 import com.count_out.domain.use_case.other.ShowBottomSheetUC
+import com.count_out.domain.use_case.plans.DeletePlanUC
 import com.count_out.domain.use_case.plans.GetPlanUC
 import com.count_out.domain.use_case.plans.RingOrExerciseUC
 import com.count_out.domain.use_case.plans.SelectingUC
@@ -23,6 +25,7 @@ import com.count_out.domain.use_case.plans.exercise.ChangeSequenceExerciseUC
 import com.count_out.domain.use_case.plans.exercise.CopyExerciseUC
 import com.count_out.domain.use_case.plans.exercise.DeleteExerciseUC
 import com.count_out.domain.use_case.plans.exercise.UpdateExerciseUC
+import com.count_out.domain.use_case.plans.ring.CopyRingUC
 import com.count_out.domain.use_case.plans.set.ChangeGoalUC
 import com.count_out.domain.use_case.plans.set.ChangeZoneUC
 import com.count_out.domain.use_case.plans.set.CopySetUC
@@ -39,8 +42,10 @@ import javax.inject.Inject
 @HiltViewModel class PlanViewModel @Inject constructor(
     private val savedStateHandle: SavedStateHandle,
     private val getPlanUC: GetPlanUC,
+    private val delPlanUC: DeletePlanUC,
     private val getActivitiesUC: GetActivitiesUC,
     private val updateNamePlanUC: UpdateNamePlanUC,
+    private val copyRingUC: CopyRingUC,
     private val copyExerciseUC: CopyExerciseUC,
     private val delExerciseUC: DeleteExerciseUC,
     private val updateExerciseUC: UpdateExerciseUC,
@@ -64,7 +69,9 @@ import javax.inject.Inject
     override fun routeEvent(event: Event) {
         when (event) {
             is PlanEvent.UpdatePlanName -> { updatePlan(event.nameID)}
+            is PlanEvent.DelPlan -> { deletePlan(event.plan)}
             is PlanEvent.CopyExercise -> { copyExercise(event.exercise) }
+            is PlanEvent.CopyRing -> { copyRing(event.ring) }
             is PlanEvent.DelExercise -> { deleteExercise(event.exercise) }
             is PlanEvent.UpdateExercise -> { updateExercise(event.exercise) }
             is PlanEvent.ChangeSequenceExercise -> { changeSequenceExercise(event.item) }
@@ -80,7 +87,16 @@ import javax.inject.Inject
             is PlanEvent.ChangeGoal -> { changeGoalUC(event.item) }
         }
     }
-
+    init{
+        val planId: Long? = savedStateHandle["arg1"]
+        planId?.let{ getPlan(it)}
+        getActivities()
+    }
+    private fun deletePlan(plan: Plan){
+        viewModelScope.launch(Dispatchers.IO) {
+            delPlanUC.execute( DeletePlanUC.Request(plan)).collect {
+                submitState( it ) }
+        }}
     private fun changeZoneUC(item: Set) {
         viewModelScope.launch(Dispatchers.IO) {
             changeZoneUC.execute( ChangeZoneUC.Request(item))
@@ -105,12 +121,6 @@ import javax.inject.Inject
                 .collect { submitState( it ) }
         }
     }
-    init{
-        val planId: Long? = savedStateHandle["arg1"]
-        planId?.let{ getPlan(it)}
-        getActivities()
-    }
-
     fun getPlan(id: Long) {
         viewModelScope.launch(Dispatchers.IO) {
             getPlanUC.execute( GetPlanUC.Request(idPlan = LongDm(id)))
@@ -131,6 +141,11 @@ import javax.inject.Inject
     private fun changeSequenceExercise(item: SetViewId){
         viewModelScope.launch(Dispatchers.IO) {
             changeSequenceExerciseUC.execute( ChangeSequenceExerciseUC.Request(item)).collect { submitState( it ) }
+        }
+    }
+    private fun copyRing(ring: Ring){
+        viewModelScope.launch(Dispatchers.IO) {
+            copyRingUC.execute( CopyRingUC.Request(ring)).collect { submitState( it ) }
         }
     }
     private fun copyExercise(exercise: Exercise){

@@ -44,7 +44,6 @@ import com.count_out.presentation.models.ParameterImplP
 import com.count_out.presentation.models.TypeKeyboard
 import com.count_out.presentation.models.alumBodyLarge
 import com.count_out.presentation.models.alumBodyMedium
-import com.count_out.presentation.models.alumBodySmall
 import com.count_out.presentation.screens.plan.PlanEvent
 import com.count_out.presentation.screens.plan.PlanEvent.ShowBS
 import com.count_out.presentation.screens.plan.PlanState
@@ -132,7 +131,7 @@ val interval_between_pole = 4.dp
 }
 
 @Composable fun SetBody(dataState: PlanState, set: Set){
-    ShowBottomSheetSpeech(dataState,dataState.showBS.set,R.string.set2,set)
+    ShowBottomSheetSpeech(dataState,dataState.showBS.set,set)
     when (set.goal){
         Goal.Distance -> Distance( dataState, set)
         Goal.Duration -> Duration( dataState, set)
@@ -143,27 +142,25 @@ val interval_between_pole = 4.dp
 @Composable fun Distance(dataState: PlanState, set: Set) {
     Row( horizontalArrangement = Arrangement.Center, verticalAlignment = Alignment.Top,
         modifier = Modifier.fillMaxWidth().padding(vertical = 12.dp)){
-        DistancePole(dataState, set, Modifier.weight(1f))
-        RestPole(dataState, set, Modifier.weight(1f))
+        DistancePole(dataState, set, Modifier.width(80.dp))
+        RestPole(dataState, set, Modifier.width(80.dp))
     }
 }
 @Composable fun Duration(dataState: PlanState, set: Set) {
     Row( horizontalArrangement = Arrangement.Center,
         verticalAlignment = Alignment.Top,
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(vertical = 12.dp)){
-        DurationPole(dataState, set, Modifier.weight(1f))
-        WeightPole(dataState, set, Modifier.weight(0.9f))
-        RestPole(dataState, set, Modifier.weight(1f))
+        modifier = Modifier.fillMaxWidth().padding(vertical = 12.dp)){
+        DurationPole(dataState, set, Modifier.width(80.dp))
+        WeightPole(dataState, set, Modifier.width(80.dp))
+        RestPole(dataState, set, Modifier.width(80.dp))
     }
 }
 @Composable fun Count(dataState: PlanState, set: Set) {
     Row( horizontalArrangement = Arrangement.Center, verticalAlignment = Alignment.Top,
         modifier = Modifier.fillMaxWidth().padding(vertical = 12.dp)){
-        IntervalPole(dataState, set, Modifier.weight(1f))
-        WeightPole(dataState, set, Modifier.weight(0.8f))
-        RestPole(dataState, set, Modifier.weight(1f))
+        IntervalPole(dataState, set, Modifier.width(80.dp))
+        WeightPole(dataState, set, Modifier.width(80.dp))
+        RestPole(dataState, set, Modifier.width(80.dp))
     }
     Row( horizontalArrangement = Arrangement.Center, verticalAlignment = Alignment.Top,
         modifier = Modifier.fillMaxWidth().padding(bottom = 12.dp)){
@@ -171,7 +168,7 @@ val interval_between_pole = 4.dp
         CountGroupFieldText(dataState, set)
     }
 }
-@Composable fun DistancePole(dataState: PlanState, set: Set, modifier: Modifier = Modifier,){   //B7B7B7
+@Composable fun DistancePole(dataState: PlanState, set: Set, modifier: Modifier = Modifier,){
     PoleInputWithUnit(
         unitId1 = R.string.m,
         unitId2 = R.string.km,
@@ -350,14 +347,14 @@ val interval_between_pole = 4.dp
             .background(color = colorScheme.onSecondary, shape = shapes.small)
             .padding(top = 2.dp, bottom = 6.dp, start = 4.dp, end = 4.dp)
     ) {
-        TextApp(text = stringResource(headId), textAlign = TextAlign.Center, style = alumBodySmall)
+        TextApp(text = stringResource(headId), textAlign = TextAlign.Center, style = alumBodyMedium)
         TextFieldApp(
             modifier = Modifier.fillMaxWidth().padding(horizontal = 4.dp),
             edit = true,
             beginValueEmpty = true,
             typeKeyboard = typeKey,
             contentAlignment = Alignment.Center,
-            textStyle = typography.bodyLarge.copy(textAlign = TextAlign.Center),
+            textStyle = typography.titleLarge.copy(textAlign = TextAlign.Center),
             onChangeFocus = { onChangeValue(it) },
             placeholder = placeholder,
         )
@@ -415,12 +412,12 @@ val interval_between_pole = 4.dp
             beginValueEmpty = beginValueEmpty,
             typeKeyboard = typeKey,
             contentAlignment = Alignment.Center,
-            textStyle = typography.bodyLarge.copy(textAlign = TextAlign.Center),
+            textStyle = typography.titleLarge.copy(textAlign = TextAlign.Center),
             onChangeFocus = { onChangeValue(it) },
             placeholder = placeholder,
         )
         TextApp(
-            text = stringResource(headId), textAlign = TextAlign.Center, style = alumBodySmall,
+            text = stringResource(headId), textAlign = TextAlign.Center, style = alumBodyMedium,
             maxLines = 2
         )
     }

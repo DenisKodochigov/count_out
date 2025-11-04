@@ -5,6 +5,8 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.GraphicEq
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -27,17 +29,14 @@ import com.count_out.presentation.view_element.EnumsTo
 import com.count_out.presentation.view_element.TextApp
 import com.count_out.presentation.view_element.bottom_sheet.ShowBottomSheetSpeech
 import com.count_out.presentation.view_element.custom_view.Frame
+import com.count_out.presentation.view_element.icons.IconSingle
 import com.count_out.presentation.view_element.icons.IconsCollapsing
-import com.count_out.presentation.view_element.icons.IconsGroup
 
 @Composable fun PartsContent(dataState: PlanState, part: Part){
     when(part.name){
-        PartName.WorkUp -> ShowBottomSheetSpeech(dataState, dataState.showBS.workUp,
-            R.string.work_up1, part)
-        PartName.WorkOut -> ShowBottomSheetSpeech(dataState, dataState.showBS.workOut,
-            R.string.work_out1, part)
-        PartName.WorkDown -> ShowBottomSheetSpeech(dataState, dataState.showBS.workDown,
-            R.string.work_down1, part)
+        PartName.WorkUp -> ShowBottomSheetSpeech(dataState, dataState.showBS.workUp,part)
+        PartName.WorkOut -> ShowBottomSheetSpeech(dataState, dataState.showBS.workOut,part)
+        PartName.WorkDown -> ShowBottomSheetSpeech(dataState, dataState.showBS.workDown,part)
     }
     Frame(colorAlpha = 0.8f, contour = contourHor2){
         Column( modifier = Modifier.padding(start = 0.dp, bottom = 2.dp, top = 4.dp)){
@@ -60,9 +59,8 @@ import com.count_out.presentation.view_element.icons.IconsGroup
             TextApp( style = MaterialTheme.typography.bodySmall, fontWeight = FontWeight.Light,
                 text = "${ stringResource(id = R.string.exercises) }: ${part.amount}" +
                         " / ${part.duration.value.discard(2)} ${ stringResource(id = R.string.min)}",) }
-        IconsGroup(
-            onClickSpeech = { showSpeechRound(dataState, part) },
-            onClickAddRing = { })
+        IconSingle(image = Icons.Default.GraphicEq, onClick = { showSpeechRound(dataState, part) } )
+//        IconsGroup( onClickSpeech = { showSpeechRound(dataState, part) })
         Spacer(modifier = Modifier.width(6.dp))
     }
 }

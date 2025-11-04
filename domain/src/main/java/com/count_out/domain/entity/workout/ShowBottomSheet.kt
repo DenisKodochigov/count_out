@@ -2,10 +2,10 @@ package com.count_out.domain.entity.workout
 
 data class ShowBottomSheet(
     val plan: Boolean = false,
+    val ring: Boolean = false,
     val workUp: Boolean = false,
     val workOut: Boolean = false,
     val workDown: Boolean = false,
-    val ring: Boolean = false,
     val exercise: Boolean = false,
     val set: Boolean = false,
     val activity: Boolean = false,
