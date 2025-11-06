@@ -25,12 +25,13 @@ class SpeechSourceImpl @Inject constructor(private val dao: SpeechDao) : SpeechS
 
     fun insert(speeches: List<SpeechTb>): List<Long> = dao.insert(speeches)
     fun insert(speech: SpeechTb): Long = dao.insert(speech)
+
     inline fun Data.use(crossinline block: (SpeechTb) -> Long): ResultData<Data> =
         if (this is SpeechDb) {
             try {
                 block(this.toTb()).let {
                     if (it > 0) ResultData.Success(LongDb(item = it))
-                    else ResultData.Error(ThrowableDS.RequestFailed())
+                    else ResultData.Error(ThrowableDS.ErrorUpdate())
                 }
             } catch (e: Exception) {
                 ResultData.Error(ThrowableDS.extract(e))

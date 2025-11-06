@@ -19,7 +19,8 @@ import androidx.compose.ui.text.style.TextOverflow
     style: TextStyle,
     maxLines:Int = 1,
     fontWeight: FontWeight = FontWeight.Normal,
-    color: Color = MaterialTheme.colorScheme.onPrimary
+    color: Color = MaterialTheme.colorScheme.onPrimary,
+    overflow:TextOverflow = TextOverflow.Ellipsis,
 ) {
     Text(
         text = text,
@@ -27,7 +28,7 @@ import androidx.compose.ui.text.style.TextOverflow
         maxLines = maxLines,
         textDecoration = textDecoration,
         fontWeight = fontWeight,
-        overflow = TextOverflow.Ellipsis,
+        overflow = overflow,
         textAlign = textAlign,
         modifier = modifier,
         color = color

@@ -31,7 +31,7 @@ class PlanSourceImpl @Inject constructor(
     override fun gets(): Flow<ResultData<Data>> = dao.getPlans()
         .filterNotNull()
         .map { list ->
-            if (list.isEmpty()) ResultData.Error(ThrowableDS.RequestFailed())
+            if (list.isEmpty()) ResultData.Error(ThrowableDS.ErrorPlans())
             else ResultData.Success(PlansDb(list.map { it.toTable() }))}
         .flowOn(Dispatchers.Default)
         .catch { emit(ResultData.Error(ThrowableDS.extract(it))) }

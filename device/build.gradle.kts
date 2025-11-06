@@ -3,7 +3,6 @@ import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 plugins {
     alias(libs.plugins.androidLibrary)
     alias(libs.plugins.jetbrainsKotlinAndroid)
-//    alias(libs.plugins.mannodermaus)
     alias(libs.plugins.hilt)
     alias(libs.plugins.ksp)
 }
@@ -12,35 +11,19 @@ android {
     namespace = "com.count_out.device"
     compileSdk = 36
 
-    defaultConfig {
-        minSdk = 28
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-    }
-    repositories {
-        google()
-        mavenLocal()
-        mavenCentral()
-    }
+    defaultConfig { minSdk = 28 }
     buildTypes {
-        release {
-            isMinifyEnabled = false
-            proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
-        }
-        debug {
-            isMinifyEnabled = false
-            proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
-        }
+        release { isMinifyEnabled = true }
+        debug { isMinifyEnabled = false }
      }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
     }
-    buildFeatures {
-        viewBinding = true
+    testOptions {
+        unitTests.isReturnDefaultValues = true
+        unitTests.isIncludeAndroidResources = true
     }
-    buildToolsVersion = "35.0.0"
     kotlin { compilerOptions{ jvmTarget = JvmTarget.JVM_17 } }
 }
 
@@ -56,6 +39,6 @@ dependencies {
 
     debugImplementation(libs.ui.test.manifest)
     testImplementation (libs.bundles.testImpl)
-    androidTestImplementation (platform(libs.compose.bom))
+//    androidTestImplementation (platform(libs.compose.bom))
     androidTestImplementation (libs.bundles.androidTestImpl)
 }

@@ -23,7 +23,7 @@ import kotlinx.coroutines.flow.map
 abstract class PrimeSource {
     fun <T : Data>Long.longToResult(number: Long = 0L, success: (Long) -> T): ResultData<T> =
         if (this > number) ResultData.Success(success(this))
-        else ResultData.Error(ThrowableDS.RequestFailed())
+        else ResultData.Error(ThrowableDS.ErrorLong())
     fun <T: Data> List<Long>.listToResult(success: (List<Long>) -> T): ResultData<T> =
         ResultData.Success(success(this))
     inline fun <reified D: Data, R> Data.safeUse(crossinline block: (D) -> R): ResultData<Data> =
@@ -74,18 +74,14 @@ abstract class PrimeSource {
         insertMain: () -> Long,
         getSpeeches: (Long) -> List<SpeechTb>,
         insertSpeeches: (List<SpeechTb>) -> List<Long>,
-        copyNested: (id: Long) -> ResultData<LongDb>
+        copyNested: (id: Long) -> ResultData<Data>
     ): ResultData<Data> {
         val newId = insertMain()
         return newId.longToResult { LongDb(it) }
             .flatMapCondition({ it.item.count() > 0L }) { newId1 ->
-                getSpeeches(newId).let { SpeechesDb(item = it).toResultData() }
-            }
-            .flatMapCondition({ vl -> vl.item.isNotEmpty() }) { speeches ->
-                insertSpeeches(speeches.item.map { it as SpeechTb }).listToResult { LongsDb(it) }
-            }
-            .flatMapCondition<LongsDb, LongDb>({ vl -> vl.item > 0L }) {
-                copyNested(newId)
-            }
+                getSpeeches(newId).let { SpeechesDb(item = it).toResultData() } }
+            .flatMapCondition({ it.item.isNotEmpty() }) { speeches ->
+                insertSpeeches(speeches.item.map { it as SpeechTb }).listToResult { LongsDb(it) } }
+            .flatMapCondition({ vl -> if (vl is LongDb) vl.item > 0L else false}) { copyNested(newId) }
     }
 }

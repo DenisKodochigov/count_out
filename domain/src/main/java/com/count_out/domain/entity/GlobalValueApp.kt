@@ -81,7 +81,7 @@ object GlobalValueApp {
             )
         }
         return object: NextExercise{
-            override val nextActivityName: String = exercise.activity?.name.toString()
+            override val nextActivityName: String = exercise.activity.name.toString()
             override val nextExerciseId: Long = exercise.idExercise
             override val nextExerciseQuantitySet: Int = exercise.sets.count()
             override val nextExerciseSummarizeSet: List<Pair<String, Int>> = list

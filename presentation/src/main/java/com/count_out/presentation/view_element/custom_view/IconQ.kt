@@ -24,6 +24,8 @@ import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.TextLayoutResult
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.drawText
+import androidx.compose.ui.text.font.Font
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.rememberTextMeasurer
 import androidx.compose.ui.tooling.preview.Preview
@@ -998,21 +1000,19 @@ object IconQ{
         )
     }
     @Composable fun CountOnly(color: Color = color()){
-        val fontSize = 12.sp
+        val fontSize = 10.sp
         val width = 30.dp
         val height = 30.dp
         val textMeasurer = rememberTextMeasurer()
+        val condensed = FontFamily( Font(com.count_out.presentation.R.font.robotocondensed_regular))
         Spacer(modifier = Modifier
             .width(width)
             .height(height)
             .drawWithCache {
                 onDrawWithContent {
-                    val xPx = width.toPx()
-                    val yPx = height.toPx()
-
                     val one = textMeasurer.measure(text = AnnotatedString("1.2.3"),
-                        style = TextStyle(fontSize = fontSize,color = color, fontWeight = FontWeight.Bold))
-                    drawText(one, topLeft = Offset(3f, (yPx - one.size.height) * 0.5f))
+                        style = TextStyle(fontSize = fontSize,color = color, fontFamily = condensed, letterSpacing = (-0.5).sp))
+                    drawText(one, topLeft = Offset(3f, (height.toPx() - one.size.height) * 0.5f))
 
                 }
             }
@@ -1114,7 +1114,6 @@ object IconQ{
             }
         )
     }
-
     @Composable fun ArrowChordCanvas(progress: Float = 0f, onClick: ()->Unit = {}) {
         val radius: Dp = width/2 - 5.dp
         val arrowCount = 4

@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.MaterialTheme.colorScheme
 import androidx.compose.material3.MaterialTheme.shapes
 import androidx.compose.material3.MaterialTheme.typography
@@ -38,12 +39,11 @@ import com.count_out.domain.entity.workout.Parameter
 import com.count_out.domain.entity.workout.Set
 import com.count_out.domain.entity.workout.Set.Companion.copy
 import com.count_out.presentation.R
+import com.count_out.presentation.models.Dimen
 import com.count_out.presentation.models.Dimen.contourAll1
 import com.count_out.presentation.models.Dimen.contourBot1
 import com.count_out.presentation.models.ParameterImplP
 import com.count_out.presentation.models.TypeKeyboard
-import com.count_out.presentation.models.alumBodyLarge
-import com.count_out.presentation.models.alumBodyMedium
 import com.count_out.presentation.screens.plan.PlanEvent
 import com.count_out.presentation.screens.plan.PlanEvent.ShowBS
 import com.count_out.presentation.screens.plan.PlanState
@@ -54,7 +54,7 @@ import com.count_out.presentation.view_element.custom_view.Frame
 import com.count_out.presentation.view_element.custom_view.IconQ
 import com.count_out.presentation.view_element.icons.IconsGroup
 
-val interval_between_pole = 4.dp
+val interval_between_pole = 8.dp
 
 @Composable fun SetContent(dataState: PlanState, set: Set){
     AnimatedVisibility(modifier = Modifier.padding(horizontal = 4.dp, vertical = 1.dp), visible = true) {
@@ -129,7 +129,6 @@ val interval_between_pole = 4.dp
             dataState.item = set
             dataState.event(ShowBS(dataState.showBS.copy(domain = set)))   },)
 }
-
 @Composable fun SetBody(dataState: PlanState, set: Set){
     ShowBottomSheetSpeech(dataState,dataState.showBS.set,set)
     when (set.goal){
@@ -142,25 +141,25 @@ val interval_between_pole = 4.dp
 @Composable fun Distance(dataState: PlanState, set: Set) {
     Row( horizontalArrangement = Arrangement.Center, verticalAlignment = Alignment.Top,
         modifier = Modifier.fillMaxWidth().padding(vertical = 12.dp)){
-        DistancePole(dataState, set, Modifier.width(80.dp))
-        RestPole(dataState, set, Modifier.width(80.dp))
+        DistancePole(dataState, set, Modifier.width(Dimen.widthParameter))
+        RestPole(dataState, set, Modifier.width(Dimen.widthParameter))
     }
 }
 @Composable fun Duration(dataState: PlanState, set: Set) {
     Row( horizontalArrangement = Arrangement.Center,
         verticalAlignment = Alignment.Top,
         modifier = Modifier.fillMaxWidth().padding(vertical = 12.dp)){
-        DurationPole(dataState, set, Modifier.width(80.dp))
-        WeightPole(dataState, set, Modifier.width(80.dp))
-        RestPole(dataState, set, Modifier.width(80.dp))
+        DurationPole(dataState, set, Modifier.width(Dimen.widthParameter))
+        WeightPole(dataState, set, Modifier.width(Dimen.widthParameter))
+        RestPole(dataState, set, Modifier.width(Dimen.widthParameter))
     }
 }
 @Composable fun Count(dataState: PlanState, set: Set) {
     Row( horizontalArrangement = Arrangement.Center, verticalAlignment = Alignment.Top,
         modifier = Modifier.fillMaxWidth().padding(vertical = 12.dp)){
-        IntervalPole(dataState, set, Modifier.width(80.dp))
-        WeightPole(dataState, set, Modifier.width(80.dp))
-        RestPole(dataState, set, Modifier.width(80.dp))
+        IntervalPole(dataState, set, Modifier.width(Dimen.widthParameter))
+        WeightPole(dataState, set, Modifier.width(Dimen.widthParameter))
+        RestPole(dataState, set, Modifier.width(Dimen.widthParameter))
     }
     Row( horizontalArrangement = Arrangement.Center, verticalAlignment = Alignment.Top,
         modifier = Modifier.fillMaxWidth().padding(bottom = 12.dp)){
@@ -179,16 +178,13 @@ val interval_between_pole = 4.dp
         typeKey = TypeKeyboard.DIGIT,
         onChangeValue = { dataState.event(
             PlanEvent.UpdateSet( set.copy(
-                    distance = ParameterImplP(value = it.toDoubleMy(), unit = set.distance.unit)))
-            ) },
+                    distance = ParameterImplP(value = it.toDoubleMy(), unit = set.distance.unit)))) },
         onChangeUnit = { dataState.event(
             PlanEvent.UpdateSet( set.copy(
                     distance = ParameterImplP(
                         value = bringingDist(set.distance),
-                        unit = if (set.distance.unit == Units.MT) Units.KM else Units.MT
-                    )
-                ))
-            ) }
+                        unit = if (set.distance.unit == Units.MT) Units.KM else Units.MT))))
+        }
     )
 }
 @Composable fun DurationPole(dataState: PlanState, set: Set, modifier: Modifier = Modifier){   //B7B7B7
@@ -264,7 +260,6 @@ val interval_between_pole = 4.dp
                     unit = if (set.rest.unit == Units.S) Units.M else Units.S))))}
     )
 }
-
 @Composable fun CountFieldText(dataState: PlanState, set: Set){
     PoleInput(
         headId = R.string.counts,
@@ -280,14 +275,13 @@ val interval_between_pole = 4.dp
         placeholder = set.groupCount,
         onChangeValue ={ dataState.event(PlanEvent.UpdateSet( set.copy(groupCount = it))) })
 }
-
 @Composable fun ZonePulseSwitch(dataState: PlanState, set: Set){
     Row(horizontalArrangement = Arrangement.Center,
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier.fillMaxWidth()
     ){
         Spacer(modifier = Modifier.width(16.dp))
-        TextApp(text = stringResource(R.string.zone), style = alumBodyMedium)
+        TextApp(text = stringResource(R.string.zone), style = MaterialTheme.typography.bodyMedium)
         Spacer(modifier = Modifier.weight(2f))
         ButtonSwitchPulse(selected = set.intensity == Zone.Low, idString = R.string.zone1,
             onClick = { dataState.event(PlanEvent.UpdateSet(set.copy(intensity = Zone.Low)))})
@@ -308,7 +302,7 @@ val interval_between_pole = 4.dp
 }
 @Composable fun ButtonSwitchPulse(selected: Boolean, onClick: () -> Unit, idString: Int,){
     ButtonSwitch(selected = selected, idString = idString, onClick = onClick,
-        style = alumBodyMedium, modifier = Modifier.width(35.dp))
+        style = typography.bodyMedium, modifier = Modifier.width(35.dp))
 }
 
 @Composable fun ButtonSwitch(
@@ -347,7 +341,7 @@ val interval_between_pole = 4.dp
             .background(color = colorScheme.onSecondary, shape = shapes.small)
             .padding(top = 2.dp, bottom = 6.dp, start = 4.dp, end = 4.dp)
     ) {
-        TextApp(text = stringResource(headId), textAlign = TextAlign.Center, style = alumBodyMedium)
+        TextApp(text = stringResource(headId), textAlign = TextAlign.Center, style = Dimen.typeLabel())
         TextFieldApp(
             modifier = Modifier.fillMaxWidth().padding(horizontal = 4.dp),
             edit = true,
@@ -373,20 +367,18 @@ val interval_between_pole = 4.dp
                     }
                     append(")")},
                 modifier = Modifier.padding(start = 2.dp, top = 2.dp).clickable { onChangeUnit() },
-                style = alumBodyLarge,
+                style = Dimen.typeUnit(),
                 color = colorScheme.outline
             )
-        }else {
+        } else {
             Text(
                 text = buildAnnotatedString {
                     append("(")
                     withStyle(style = SpanStyle(fontWeight = FontWeight.Normal)) { append(stringResource(unitId1)) }
                     append(")")},
                 modifier = Modifier.padding(start = 2.dp, top = 2.dp).clickable { onChangeUnit() },
-                style = alumBodyLarge,
-//                color = colorScheme.outline
+                style = Dimen.typeUnit(),
             )
-
         }
     }
 }
@@ -407,7 +399,7 @@ val interval_between_pole = 4.dp
             .padding(top = 2.dp, bottom = 6.dp, start = 4.dp, end = 4.dp)
     ) {
         TextFieldApp(
-            modifier = Modifier.fillMaxWidth(),//.weight(1f),
+            modifier = Modifier.fillMaxWidth(),
             edit = true,
             beginValueEmpty = beginValueEmpty,
             typeKeyboard = typeKey,
@@ -417,7 +409,7 @@ val interval_between_pole = 4.dp
             placeholder = placeholder,
         )
         TextApp(
-            text = stringResource(headId), textAlign = TextAlign.Center, style = alumBodyMedium,
+            text = stringResource(headId), textAlign = TextAlign.Center, style = Dimen.typeLabel(),
             maxLines = 2
         )
     }
@@ -436,3 +428,33 @@ fun bringingDist(dist: Parameter): Double{
 fun bringingWeight(weight: Parameter): Double{
     return (weight.value * (if (weight.unit == Units.GR) 0.001 else 1000.0)).discard(2)
 }
+//        if (unitId2 != R.string.no){
+//            Text(
+//                text = buildAnnotatedString {
+//                    append("(")
+//                    withStyle(style = SpanStyle(
+//                        fontWeight = if (term) FontWeight.ExtraBold else FontWeight.Normal))
+//                    { append(stringResource(unitId1)) }
+//                    if (unitId2 != R.string.no) {
+//                        append("/")
+//                        withStyle(style = SpanStyle(
+//                            fontWeight = if (term) FontWeight.Normal else FontWeight.ExtraBold))
+//                        { append(stringResource(unitId2)) }
+//                    }
+//                    append(")")},
+//                modifier = Modifier.padding(start = 2.dp, top = 2.dp).clickable { onChangeUnit() },
+//                style = typography.bodyLarge,
+//                color = colorScheme.outline
+//            )
+//        }else {
+//            Text(
+//                text = buildAnnotatedString {
+//                    append("(")
+//                    withStyle(style = SpanStyle(fontWeight = FontWeight.Normal)) { append(stringResource(unitId1)) }
+//                    append(")")},
+//                modifier = Modifier.padding(start = 2.dp, top = 2.dp).clickable { onChangeUnit() },
+//                style = typography.bodyLarge,
+////                color = colorScheme.outline
+//            )
+//
+//        }

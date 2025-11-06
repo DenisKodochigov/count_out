@@ -1,23 +1,20 @@
 package com.count_out.presentation.models
 
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.material3.Typography
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.font.Font
-import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.dp
-import com.count_out.presentation.R
-
-val alumBodySmall = Typography().bodySmall.copy(fontFamily = FontFamily(Font(R.font.alumnisans_regular)))
-val alumBodyMedium = Typography().bodyMedium.copy(fontFamily = FontFamily(Font(R.font.alumnisans_regular)))
-val alumBodyLarge = Typography().bodyLarge.copy(fontFamily = FontFamily(Font(R.font.alumnisans_regular)))
 
 object Dimen {
+// settings view parameters
+    val widthParameter = 100.dp
+    @Composable fun typeLabel() = MaterialTheme.typography.bodySmall
+    @Composable fun typeUnit() = MaterialTheme.typography.bodyMedium
 
     val width6 = 6.dp
     val paddingAppHor = 8.dp
 //    val paddingAppVer = 12.dp
-
     val bsPaddingHor1 = 12.dp
     val bsSpacerHeight = 14.dp
 //    val bsSpacerHeight1 = 8.dp

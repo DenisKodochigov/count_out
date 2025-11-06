@@ -13,7 +13,7 @@ interface Ring: Domain {
             override val idRing: Long = 0
             override val partId: Long = partId
             override val numberLaps: Int = 0
-            override val amount: Int = 0
+            override val amount: Int = 2
             override val duration: Parameter = Parameter.EMPTY
             override val speechKit: SpeechKit = SpeechKit.EMPTY
             override val exercises: List<Exercise> = emptyList()

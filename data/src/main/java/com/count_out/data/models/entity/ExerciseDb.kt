@@ -51,7 +51,7 @@ interface ExerciseDb: Data {
             override val idExercise: Long = 0
             override val ringId: Long = 0
             override val idView: Int = 0
-            override val activityId: Long = 0
+            override val activityId: Long = 1
             override val activity: ActivityDb = ActivityDb.EMPTY
             override val speeches: List<SpeechDb> = emptyList()
             override val sets: List<SetDb> = emptyList()
@@ -62,7 +62,7 @@ interface ExerciseDb: Data {
             override val idExercise: Long = 0
             override val ringId: Long = ringID
             override val idView: Int = 0
-            override val activityId: Long = 0
+            override val activityId: Long = 1
             override val activity: ActivityDb = ActivityDb.EMPTY
             override val speeches: List<SpeechDb> = emptyList()
             override val sets: List<SetDb> = emptyList()

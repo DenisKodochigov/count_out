@@ -1,6 +1,5 @@
 package com.count_out.framework.room.source
 
-import android.util.Log
 import com.count_out.data.models.Data
 import com.count_out.data.models.ResultData
 import com.count_out.data.models.entity.LongDb
@@ -16,16 +15,15 @@ class SetSourceImpl @Inject constructor(
     private val dao: SetDao
 ): SetSource, PrimeSource() {
     override fun insert (set: Data): ResultData<Data> = runCatching {
-        if (set is SetDb){
+        return if (set is SetDb){
             copyWithDependencies(
                 insertMain = { dao.insert( set.toTb(idSet = 0L)) },
                 getSpeeches = { idNew-> speechSource.getListSpeech(setId = set.idSet)
                     .map{ item-> item.apply{ setId = idNew} }},
                 insertSpeeches = { speechSource.insert(it) },
-                copyNested = { id -> ResultData.Success(LongDb(1))}
+                copyNested = { ResultData.Success(LongDb(1L)) }
             )
         } else ResultData.Error(ThrowableDS.NotValidType())
-
     }.getOrElse { ResultData.Error(ThrowableDS.extract(it)) }
 
     override fun del(set: Data): ResultData<Data> =

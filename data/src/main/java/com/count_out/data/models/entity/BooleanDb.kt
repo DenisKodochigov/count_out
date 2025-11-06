@@ -9,6 +9,6 @@ import com.count_out.domain.entity.workout.Domain
 value class BooleanDb(val item: Boolean): Data {
     fun toResultData(): ResultData<Data> =
         if (this.item) ResultData.Success(this)
-        else ResultData.Error(ThrowableDS.RequestFailed())
+        else ResultData.Error(ThrowableDS.ErrorBoolean())
     override fun toDomain(ind: Int): Domain = object: Domain {}
 }

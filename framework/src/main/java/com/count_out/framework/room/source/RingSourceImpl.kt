@@ -1,10 +1,8 @@
 package com.count_out.framework.room.source
 
-import android.util.Log
 import com.count_out.data.models.Data
 import com.count_out.data.models.ResultData
 import com.count_out.data.models.entity.ExerciseDb
-import com.count_out.data.models.entity.LongDb
 import com.count_out.data.models.entity.RingDb
 import com.count_out.data.models.throwable.ThrowableDS
 import com.count_out.data.source.room.ExerciseSource
@@ -43,13 +41,9 @@ class RingSourceImpl @Inject constructor(
         ring.safeUse<RingDb, Long> { dao.update(it.toTb()).toLong() }
 
 //##############################################################################################
-    fun copyExercises(exercises: List<ExerciseDb>, id: Long): ResultData<LongDb> =
-        if (exercises.isEmpty()) {
-            Log.d("KDS","RingSourceImpl.copyExercises")
-            source.insert( ExerciseDb.new(id) )
-            ResultData.Success(LongDb(0L)) }
-        else {
-            exercises.map{ex-> source.insert((ex.toTb()).apply{this.ringId = id}) }
-            ResultData.Success(LongDb(exercises.size.toLong()))
-        }
+    fun copyExercises(exercises: List<ExerciseDb>, ownerId: Long): ResultData<Data> =
+        if (exercises.isEmpty()) source.insert( ExerciseDb.new(ownerId))
+        else exercises.map { exercise->
+            source.insert(exercise.toTb(idExercise = 0L, ringId = ownerId)) }[0]
+
 }

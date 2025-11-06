@@ -12,40 +12,26 @@ plugins {
 android {
     namespace = "com.count_out.presentation"
     compileSdk = 36
-    buildToolsVersion = "35.0.0"
 
-    defaultConfig {
-        minSdk = 28
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-    }
+    defaultConfig { minSdk = 28 }
     buildTypes {
-        release { isMinifyEnabled = false }
+        release { isMinifyEnabled = true}
         debug { isMinifyEnabled = false }
     }
     buildFeatures {
         compose = true
-        buildConfig = true
+        viewBinding = true
     }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
     }
-    composeOptions { kotlinCompilerExtensionVersion = "2.2.21" }
+    composeOptions { kotlinCompilerExtensionVersion = libs.versions.kotlin.get() }
     testOptions {
         unitTests.isReturnDefaultValues = true
         unitTests.isIncludeAndroidResources = true
     }
-    packaging {
-        resources.excludes.addAll(listOf("META-INF/LICENSE.md", "META-INF/LICENSE-notice.md", "/META-INF/{AL2.0,LGPL2.1}"))
-    }
-    kotlin {
-        compilerOptions{ jvmTarget = JvmTarget.JVM_17 }
-    }
-    repositories {
-        google()
-        mavenLocal()
-        mavenCentral()
-    }
+    kotlin { compilerOptions{ jvmTarget = JvmTarget.JVM_17 } }
 }
 
 dependencies {

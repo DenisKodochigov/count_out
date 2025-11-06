@@ -10,36 +10,15 @@ plugins {
 android {
     namespace = "com.count_out.data"
     compileSdk = 36
-
-    defaultConfig {
-        minSdk = 28
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-    }
-    repositories {
-        google()
-        mavenLocal()
-        mavenCentral()
-    }
-    buildTypes {
-        release {
-            isMinifyEnabled = false
-            proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
-        }
-        debug {
-            isMinifyEnabled = false
-            proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
-        }
-    }
+    defaultConfig { minSdk = 28 }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
     }
-    buildFeatures {
-        viewBinding = true
+    testOptions {
+        unitTests.isReturnDefaultValues = true
+        unitTests.isIncludeAndroidResources = true
     }
-    buildToolsVersion = "35.0.0"
     kotlin { compilerOptions{ jvmTarget = JvmTarget.JVM_17 } }
 }
 
@@ -51,6 +30,6 @@ dependencies {
 
     debugImplementation(libs.ui.test.manifest)
     testImplementation (libs.bundles.testImpl)
-    androidTestImplementation (platform(libs.compose.bom))
+//    androidTestImplementation (platform(libs.compose.bom))
     androidTestImplementation (libs.bundles.androidTestImpl)
 }

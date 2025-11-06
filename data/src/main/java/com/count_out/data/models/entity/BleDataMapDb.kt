@@ -10,6 +10,6 @@ import com.count_out.domain.entity.workout.Domain
 value class BleDataMapDb(val item: Map<String, DeviceBle>): Data {
     fun toResultData(): ResultData<Data> =
         if (this.item.isNotEmpty()) ResultData.Success(this)
-        else ResultData.Error(ThrowableDS.RequestFailed())
+        else ResultData.Error(ThrowableDS.ErrorBleIsEmpty())
     override fun toDomain(ind: Int): Domain = object: Domain {}
 }

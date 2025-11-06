@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -13,6 +14,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.CopyAll
+import androidx.compose.material.icons.filled.DeleteOutline
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.MaterialTheme.colorScheme
 import androidx.compose.material3.MaterialTheme.typography
@@ -36,7 +40,6 @@ import com.count_out.presentation.screens.plan.PlanEvent.ShowBS
 import com.count_out.presentation.screens.plan.PlanState
 import com.count_out.presentation.screens.plan.getSelecting
 import com.count_out.presentation.screens.plan.set.SetBody
-import com.count_out.presentation.screens.plan.set.SetContent
 import com.count_out.presentation.screens.plan.setSelecting
 import com.count_out.presentation.view_element.TextApp
 import com.count_out.presentation.view_element.borderMy
@@ -45,6 +48,7 @@ import com.count_out.presentation.view_element.bottom_sheet.ShowBottomSheetSpeec
 import com.count_out.presentation.view_element.custom_view.Frame
 import com.count_out.presentation.view_element.drag_drop_column.column.ColumnDragDrop
 import com.count_out.presentation.view_element.icons.IconGoal
+import com.count_out.presentation.view_element.icons.IconSingle
 import com.count_out.presentation.view_element.icons.IconZone
 import com.count_out.presentation.view_element.icons.IconsCollapsing
 import com.count_out.presentation.view_element.icons.IconsGroup
@@ -52,25 +56,35 @@ import com.count_out.presentation.view_element.icons.IconsGroup
 //#############################################################################################
 //                               Circle training
 @Composable fun RingCardBodyExerciseList(dataState: PlanState, ring: Ring) {
-    ColumnDragDrop(
-        items = ring.exercises,
-        modifier = Modifier.padding(end = 4.dp),
-        content = { item -> RingCardBodyExerciseListItem(item, dataState, ring) },
-        onMoveItem = { from, to ->
-            Log.d("KDS", " from=$from   to=$to")
-            dataState.event(
-                PlanEvent.ChangeSequenceExercise(SetViewId(ring.idRing,from,to)))
-        }
-    )
+    Column(modifier = Modifier.padding(end = 4.dp)) {
+        ring.exercises.forEach { item -> RingCardBodyExerciseListItem(item, dataState, ring) }
+    }
+//
+//    ColumnDragDrop(
+//        items = ring.exercises,
+//        modifier = Modifier.padding(end = 4.dp),
+//        content = { item -> RingCardBodyExerciseListItem(item, dataState, ring) },
+//        onMoveItem = { from, to ->
+//            Log.d("KDS", " from=$from   to=$to")
+//            dataState.event(
+//                PlanEvent.ChangeSequenceExercise(SetViewId(ring.idRing,from,to)))
+//        }
+//    )
 }
 @Composable fun RingCardBodyExerciseListItem(exercise: Exercise, dataState: PlanState, ring: Ring) {
     val selected = getSelecting(dataState, exercise)
-
-    Row( horizontalArrangement = Arrangement.Start, modifier= Modifier.width(45.dp).padding(horizontal = 2.dp)
+    ShowBottomSheetSpeech(dataState,dataState.showBS.exercise,exercise)
+    ShowBottomSheetSelectActivity(dataState, exercise)
+    Row( horizontalArrangement = Arrangement.Start,
+        modifier= Modifier
             .borderMy(2.dp, 1.dp, selected, color = colorScheme.surfaceContainerLow)
-            .clickable { setSelecting(dataState, exercise, ring.exercises.map { LongDm(it.idExercise) }) }
+            .padding(horizontal = 4.dp)
+            .combinedClickable(
+                onClick = { setSelecting(dataState, exercise, ring.exercises.map { LongDm(it.idExercise) }) },
+                onLongClick = { println("Долгое нажатие") }
+            )
     ) {
-        TextApp( modifier = Modifier.width(45.dp).padding(horizontal = 2.dp),
+        TextApp( modifier = Modifier.width(60.dp).padding(horizontal = 2.dp),
             textAlign = TextAlign.Center,
             text = "${stringResource(R.string.exer)} ${exercise.idView + 1}",
             style = typography.titleMedium)
@@ -95,7 +109,7 @@ import com.count_out.presentation.view_element.icons.IconsGroup
 }
 @Composable fun RingCardBodyExerciseName(dataState: PlanState, exercise: Exercise){
     Row(horizontalArrangement = Arrangement.Center, modifier = Modifier.fillMaxWidth()){
-        TextApp(text = exercise.activity?.name ?: "",
+        TextApp(text = exercise.activity.name,
             textDecoration = TextDecoration.Underline,
             style = typography.titleLarge,
             modifier = Modifier.padding(bottom = 0.dp, start = 6.dp)
@@ -113,20 +127,15 @@ import com.count_out.presentation.view_element.icons.IconsGroup
         Spacer(modifier = Modifier.weight(1f))
         IconZone(set.intensity.ordinal + 1, onClick = {dataState.event(PlanEvent.ChangeZone(set))})
         Spacer(modifier = Modifier.weight(1f))
-        Column(horizontalAlignment = Alignment.CenterHorizontally) {
-            IconsGroup(
-                type = false,
-                onClickCopy = { dataState.event(PlanEvent.CopyExercise(exercise))},
-                onClickDelete = { dataState.event(PlanEvent.DelExercise(exercise)) },
-//                onClickEdit = {
-//                    dataState.item = exercise
-//                    dataState.event(ShowBS(dataState.showBS.copy(domain = exercise.activity)))},
-                onClickSpeech = {
-                    dataState.item = exercise
-                    dataState.event(ShowBS(dataState.showBS.copy(domain = exercise))) },
-            )
-            TextApp(text = stringResource(R.string.other), style = typography.titleMedium )
-        }
+        IconSingle(image = Icons.Default.CopyAll, label = R.string.copy,
+            onClick = {dataState.event(PlanEvent.CopyExercise(exercise))} )
+        Spacer(modifier = Modifier.weight(1f))
+        IconSingle(image = R.drawable.waveform, label = R.string.speech,
+            onClick = { dataState.item = exercise
+            dataState.event(ShowBS(dataState.showBS.copy(domain = exercise)))} )
+        Spacer(modifier = Modifier.weight(1f))
+        IconSingle(image = Icons.Default.DeleteOutline, label = R.string.delete,
+            onClick = {dataState.event(PlanEvent.DelExercise(exercise))} )
         Spacer(modifier = Modifier.weight(1f))
     }
 }
@@ -150,9 +159,7 @@ import com.count_out.presentation.view_element.icons.IconsGroup
 @Composable fun <T>ElementColum (item:T, dataState: PlanState, ring: Ring){
     Spacer(modifier = Modifier.padding(top = 1.dp))
     Frame(contour = contourAll1) {
-        Column (modifier = Modifier
-            .fillMaxWidth()
-            .padding(vertical = 4.dp),) {
+        Column (modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp),) {
             Title(dataState, ring, item as Exercise)
             BodyExercise(dataState, item as Exercise)
         }
@@ -171,7 +178,7 @@ import com.count_out.presentation.view_element.icons.IconsGroup
         Spacer(modifier = Modifier.width(2.dp))
         Column {
             TextApp(
-                text = exercise.activity?.name ?: "",
+                text = exercise.activity.name,
                 textAlign = TextAlign.Start,
                 style = MaterialTheme.typography.titleMedium,
                 modifier = Modifier)
@@ -205,16 +212,9 @@ import com.count_out.presentation.view_element.icons.IconsGroup
 @Composable fun ListSets(dataState: PlanState, exercise: Exercise) {
     Column {
         exercise.sets.forEachIndexed { ind, set ->
-            Box (modifier = Modifier
-                .fillMaxWidth()
-                .border(
-                    width = 1.dp,
-                    color = MaterialTheme.colorScheme.surface,
-                    shape = MaterialTheme.shapes.extraSmall
-                ),
-                content = { SetContent(dataState,set
-//                    SetImplP(set, Pair(ind, exercise.sets.count()))
-                )}
+            Box (modifier = Modifier.fillMaxWidth()
+                .border(width = 1.dp, color = colorScheme.surface, shape = MaterialTheme.shapes.extraSmall),
+                content = { SetBody( dataState, set )}   //                    SetContent(dataState,set) }
             )
             Spacer(modifier = Modifier.height(1.dp))
         }

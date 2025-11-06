@@ -1,6 +1,5 @@
 package com.count_out.data.models
 
-import android.util.Log
 import com.count_out.data.models.throwable.ThrowableDS
 import com.count_out.domain.entity.throwable.ResultDomain
 import com.count_out.domain.entity.throwable.ThrowableUC
@@ -15,16 +14,16 @@ sealed class ResultData< out T: Data> {
     data class Error(val throwable: ThrowableDS):ResultData<Nothing>()
 
     companion object {
-        inline fun <T: Data, R: Data> ResultData<T>.flatMap(transform: (T) -> ResultData<R>): ResultData<R> =
-            when (this) {
-                is Success -> transform(data)
-                is Error -> this
-            }
+//        inline fun <T: Data, R: Data> ResultData<T>.flatMap(transform: (T) -> ResultData<R>): ResultData<R> =
+//            when (this) {
+//                is Success -> transform(data)
+//                is Error -> this
+//            }
 
         fun Flow<ResultData<Data>>.convertorFlow(): Flow<ResultDomain<Domain>> {
             return this.filterNotNull().map { resultS->
                 when(resultS){
-                    is Error -> ResultDomain.Error(ThrowableUC.Companion.extract(resultS.throwable))
+                    is Error -> ResultDomain.Error(ThrowableUC.extract(resultS.throwable))
                     is Success -> { ResultDomain.Success(resultS.data.toDomain())
                     }
                 }
@@ -34,7 +33,7 @@ sealed class ResultData< out T: Data> {
         fun ResultData<Data>.convertor(): Flow<ResultDomain<Domain>> {
             return flowOf(
                 when (this) {
-                    is Error -> ResultDomain.Error(ThrowableUC.Companion.extract(this.throwable))
+                    is Error -> ResultDomain.Error(ThrowableUC.extract(this.throwable))
                     is Success -> ResultDomain.Success(this.data.toDomain())
                 }
             )
@@ -47,17 +46,18 @@ sealed class ResultData< out T: Data> {
             }
 
         inline fun <T: Data, R: Data> ResultData<T>.flatMapCondition(
-            condition:(R)-> Boolean, transform: (T) -> ResultData<R>): ResultData<R> =
-            when (this) {
+            condition:(R)-> Boolean, transform: (T) -> ResultData<R>): ResultData<R> {
+            return when (this) {
                 is Error -> this
                 is Success -> {
-                    transform(data).let{ result->
-                        if (result is Success){
-                            if ( condition(result.data)) result
-                            else Error(ThrowableDS.RequestFailed())
+                    transform(data).let { result ->
+                        if (result is Success) {
+                            if (condition(result.data)) result
+                            else Error(ThrowableDS.RequestNotCondition())
                         } else result
                     }
                 }
             }
+        }
     }
 }

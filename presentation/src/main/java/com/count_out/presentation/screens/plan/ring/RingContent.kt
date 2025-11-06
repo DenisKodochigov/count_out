@@ -40,8 +40,9 @@ import com.count_out.presentation.view_element.TextApp
 import com.count_out.presentation.view_element.TextFieldApp
 import com.count_out.presentation.view_element.bottom_sheet.ShowBottomSheetSpeech
 import com.count_out.presentation.view_element.custom_view.Frame
+import com.count_out.presentation.view_element.icons.IconRingOrExercise
+import com.count_out.presentation.view_element.icons.IconSingle
 import com.count_out.presentation.view_element.icons.IconsCollapsing
-import com.count_out.presentation.view_element.icons.IconsGroup
 
 @Composable fun Rings(dataState: PlanState, part: Part){
     part.rings.forEachIndexed { ind,ring ->
@@ -94,12 +95,9 @@ import com.count_out.presentation.view_element.icons.IconsGroup
             style = MaterialTheme.typography.titleLarge,
         )
         Spacer(modifier = Modifier.weight(1f))
-        IconsGroup(
-            onClickSpeech = { showSpeechRound(dataState, ring) },
-            onClickAddRing = { dataState.event(PlanEvent.CopyRing(ring = Ring.default(ring.partId))) },
-            onClickRingExercise = { dataState.event(PlanEvent.RingOrExercise(ring)) },
-            selected = ring.amount > 1
-        )
+        IconSingle(image = R.drawable.waveform, onClick = {showSpeechRound(dataState, ring)} )
+        Spacer(modifier = Modifier.width(16.dp))
+        IconRingOrExercise( selected = ring.amount > 1, onClick = {dataState.event(PlanEvent.RingOrExercise(ring))} )
         Spacer(modifier = Modifier.width(6.dp))
     }
 }

@@ -8,7 +8,6 @@ import com.count_out.data.models.entity.LongDb
 import com.count_out.data.models.throwable.ThrowableDS
 import com.count_out.data.source.room.ActivitySource
 import com.count_out.framework.room.db.activity.ActivityDao
-import com.count_out.framework.room.db.activity.ActivityTb
 import com.count_out.framework.room.db.activity.ActivityTb.Companion.toTb
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
@@ -20,7 +19,7 @@ class ActivitySourceImpl @Inject constructor(private val dao: ActivityDao): Acti
         dao.gets().map { list->
             if(list.isNotEmpty()) ResultData.Success(object: ActivitiesDb{
                 override val activities: List<ActivityDb> = list})
-            else ResultData.Error(ThrowableDS.RequestFailed())
+            else ResultData.Error(ThrowableDS.ErrorActivities())
         }
 
     override fun get(activity: Data): Flow<ResultData<Data>> {

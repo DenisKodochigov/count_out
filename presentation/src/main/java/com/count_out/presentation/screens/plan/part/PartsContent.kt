@@ -5,8 +5,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.GraphicEq
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -17,9 +15,12 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.count_out.domain.entity.discard
 import com.count_out.domain.entity.enums.PartName
+import com.count_out.domain.entity.workout.Exercise
 import com.count_out.domain.entity.workout.Part
+import com.count_out.domain.entity.workout.Ring
 import com.count_out.presentation.R
 import com.count_out.presentation.models.Dimen.contourHor2
+import com.count_out.presentation.screens.plan.PlanEvent
 import com.count_out.presentation.screens.plan.PlanEvent.ShowBS
 import com.count_out.presentation.screens.plan.PlanState
 import com.count_out.presentation.screens.plan.getCollapsing
@@ -29,8 +30,8 @@ import com.count_out.presentation.view_element.EnumsTo
 import com.count_out.presentation.view_element.TextApp
 import com.count_out.presentation.view_element.bottom_sheet.ShowBottomSheetSpeech
 import com.count_out.presentation.view_element.custom_view.Frame
-import com.count_out.presentation.view_element.icons.IconSingle
 import com.count_out.presentation.view_element.icons.IconsCollapsing
+import com.count_out.presentation.view_element.icons.IconsGroup
 
 @Composable fun PartsContent(dataState: PlanState, part: Part){
     when(part.name){
@@ -59,8 +60,15 @@ import com.count_out.presentation.view_element.icons.IconsCollapsing
             TextApp( style = MaterialTheme.typography.bodySmall, fontWeight = FontWeight.Light,
                 text = "${ stringResource(id = R.string.exercises) }: ${part.amount}" +
                         " / ${part.duration.value.discard(2)} ${ stringResource(id = R.string.min)}",) }
-        IconSingle(image = Icons.Default.GraphicEq, onClick = { showSpeechRound(dataState, part) } )
-//        IconsGroup( onClickSpeech = { showSpeechRound(dataState, part) })
+        if (part.rings[0].amount > 1){
+            IconsGroup(
+                onClickAddRing = { dataState.event(PlanEvent.CopyRing(ring = Ring.default(part.idPart)))},
+                onClickSpeech = { showSpeechRound(dataState, part) })
+        } else {
+            IconsGroup(
+                onClickAddExercise = {dataState.event(PlanEvent.AddExercise(Exercise.default(part.rings[0].idRing)))},
+                onClickSpeech = { showSpeechRound(dataState, part) })
+        }
         Spacer(modifier = Modifier.width(6.dp))
     }
 }

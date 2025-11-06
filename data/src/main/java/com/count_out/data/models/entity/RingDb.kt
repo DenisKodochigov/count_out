@@ -40,6 +40,15 @@ interface RingDb: Data {
                 else -> EMPTY
             }
         }
+        fun new(partID: Long = 0L) = object: RingDb{
+            override val idRing: Long = 0
+            override val partId: Long = partID
+            override val speeches: List<SpeechDb> = emptyList()
+            override val exercises: List<ExerciseDb> = emptyList()
+            override val amount: Int = 2
+            override val duration: Double = 0.0
+            override val numberLaps: Int = 0
+        }
         val EMPTY = object: RingDb{
             override val idRing: Long = 0
             override val partId: Long = 0

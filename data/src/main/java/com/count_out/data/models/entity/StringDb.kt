@@ -10,7 +10,7 @@ import com.count_out.domain.entity.workout.Domain
 value class StringDb(val item: String): Data {
     fun toResultData(): ResultData<Data> =
         if (this.item.isNotEmpty()) ResultData.Success(this)
-        else ResultData.Error(ThrowableDS.RequestFailed())
+        else ResultData.Error(ThrowableDS.ErrorString())
     override fun toDomain(ind: Int): Domain = StringDm(item = this.item)
     companion object {
         fun fromDomain(domain: Domain): StringDb {

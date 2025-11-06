@@ -7,13 +7,10 @@ plugins {
     alias(libs.plugins.serialization)
     alias(libs.plugins.hilt)
     alias(libs.plugins.ksp)
-    }
-
+}
 android {
     namespace = "com.count_out.app"
     compileSdk = 36
-    buildToolsVersion = "35.0.0"
-
     defaultConfig {
         applicationId = "com.count_out"
         minSdk = 28
@@ -26,7 +23,7 @@ android {
     buildTypes {
         debug { isMinifyEnabled = false }
         release {
-            isMinifyEnabled = false
+            isMinifyEnabled = true
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
         }
@@ -35,21 +32,11 @@ android {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
     }
-    buildFeatures {
-        compose = true
-        buildConfig = true
-    }
+    buildFeatures { compose = true }
     packaging { resources.excludes.addAll(
         listOf("META-INF/LICENSE.md", "META-INF/LICENSE-notice.md", "/META-INF/{AL2.0,LGPL2.1}")) }
-    composeOptions { kotlinCompilerExtensionVersion = "2.2.21" }
-    repositories {
-        google()
-        mavenLocal()
-        mavenCentral()
-    }
-    kotlin {
-        compilerOptions{ jvmTarget = JvmTarget.JVM_17 }
-    }
+    composeOptions { kotlinCompilerExtensionVersion = libs.versions.kotlin.get() }
+    kotlin { compilerOptions{ jvmTarget = JvmTarget.JVM_17 } }
 }
 
 dependencies {

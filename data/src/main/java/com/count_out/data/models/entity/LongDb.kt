@@ -10,7 +10,7 @@ import com.count_out.domain.entity.workout.Domain
 value class LongDb(val item: Long): Data {
     fun toResultData(): ResultData<Data> =
         if (this.item > 0L) ResultData.Success(this)
-        else ResultData.Error(ThrowableDS.RequestFailed())
+        else ResultData.Error(ThrowableDS.ErrorLong())
     override fun toDomain(ind: Int): Domain = object: Domain {}
     companion object {
         fun fromDomain(domain: Domain): LongDb {

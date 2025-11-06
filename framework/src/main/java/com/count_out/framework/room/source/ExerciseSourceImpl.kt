@@ -1,6 +1,5 @@
 package com.count_out.framework.room.source
 
-import android.util.Log
 import com.count_out.data.models.Data
 import com.count_out.data.models.ResultData
 import com.count_out.data.models.entity.ExerciseDb
@@ -24,7 +23,7 @@ class ExerciseSourceImpl @Inject constructor(
 ): ExerciseSource, PrimeSource() {
 
     override fun insert (exercise: Data): ResultData<Data> = runCatching {
-        if (exercise is ExerciseDb){
+        return if (exercise is ExerciseDb){
             copyWithDependencies(
                 insertMain = { dao.insert(exercise.toTb(idExercise = 0L)) },
                 getSpeeches = { idNew-> speechSource.getListSpeech(exerciseId = exercise.idExercise)
@@ -35,16 +34,9 @@ class ExerciseSourceImpl @Inject constructor(
         } else ResultData.Error(ThrowableDS.NotValidType())
     }.getOrElse { ResultData.Error(ThrowableDS.extract(it)) }
 
-    fun copySets(sets: List<SetDb>, ownerId: Long): ResultData<LongDb> =
-        if (sets.isEmpty()) {
-            Log.d("KDS","ExerciseSourceImpl.copySets")
-            setSource.insert( SetTb().copy(exerciseId = ownerId))
-            ResultData.Success(LongDb(0L)) }
-        else {
-            Log.d("KDS","ExerciseSourceImpl.copySets")
-            sets.map {set-> setSource.insert((set.toTb()).copy(idSet = 0L, exerciseId = ownerId)) }
-            ResultData.Success(LongDb(sets.size.toLong()))
-        }
+    fun copySets(sets: List<SetDb>, ownerId: Long): ResultData<Data> =
+        if (sets.isEmpty()) { setSource.insert( SetTb().copy(exerciseId = ownerId))}
+        else sets.map { set-> setSource.insert( set.toTb(idSet = 0L, exerciseId = ownerId)) }[0]
 
     override fun update(exercise: Data): ResultData<Data> =
         exercise.safeUse<ExerciseTb, Long>{ item -> dao.update(item).toLong() }
@@ -60,7 +52,7 @@ class ExerciseSourceImpl @Inject constructor(
                 listExercise[from].idView = to
                 dao.update(listExercise).let { result->
                     if (result == listExercise.count()) ResultData.Success(LongDb(result.toLong()))
-                    else ResultData.Error(ThrowableDS.RequestFailed())
+                    else ResultData.Error(ThrowableDS.ErrorExercises())
                 }
             } else ResultData.Error(ThrowableDS.NotValidType())
         } catch (e: Exception) { ResultData.Error(ThrowableDS.extract(e)) }

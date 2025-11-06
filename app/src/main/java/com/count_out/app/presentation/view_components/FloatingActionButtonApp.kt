@@ -21,7 +21,7 @@ import com.count_out.presentation.view_element.TextApp
         onClick = onClick,
         modifier = modifier,
         icon = { IconFab(icon = icon) },
-        text = { TextApp(text = stringResource(id = textId), style = MaterialTheme.typography.labelSmall) }, //alumBodyMedium
+        text = { TextApp(text = stringResource(id = textId), style = MaterialTheme.typography.labelSmall) },
     )
 }
 @Composable fun IconFab(icon: ImageVector){

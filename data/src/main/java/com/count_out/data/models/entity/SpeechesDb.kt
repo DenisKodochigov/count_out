@@ -9,6 +9,6 @@ import com.count_out.domain.entity.workout.Domain
 value class SpeechesDb(val item: List<SpeechDb>): Data {
     fun toResultData(): ResultData<SpeechesDb> =
         if (this.item.isNotEmpty()) ResultData.Success(this)
-        else ResultData.Error(ThrowableDS.RequestFailed())
+        else ResultData.Error(ThrowableDS.ErrorSpeeches())
     override fun toDomain(ind: Int): Domain = object: Domain {}
 }

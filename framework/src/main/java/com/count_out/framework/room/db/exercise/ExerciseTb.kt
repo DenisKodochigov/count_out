@@ -30,7 +30,7 @@ import com.count_out.framework.room.db.speech.SpeechTb.Companion.toTb
 data class ExerciseTb(
     @PrimaryKey(autoGenerate = true) override var idExercise: Long = 0L,
     override var ringId: Long = 0,
-    override var activityId: Long = 0,
+    override var activityId: Long = 1,
     override var idView: Int = 0,
     override var amountSet: Int = 0,
     override var duration: Double = 0.0,

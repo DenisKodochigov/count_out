@@ -2,8 +2,6 @@ package com.count_out.framework.room.source
 
 import com.count_out.data.models.Data
 import com.count_out.data.models.ResultData
-import com.count_out.data.models.ResultData.Success
-import com.count_out.data.models.entity.LongDb
 import com.count_out.data.models.entity.PartDb
 import com.count_out.data.models.entity.RingDb
 import com.count_out.data.models.throwable.ThrowableDS
@@ -43,10 +41,7 @@ class PartSourceImpl @Inject constructor(
 
     //##############################################################################################
 
-    fun copyRings(ringes: List<RingDb>, ownerId: Long): ResultData<LongDb> =
-        if (ringes.isEmpty()) { Success(LongDb(0L)) }
-        else {
-            ringes.map {rg-> source.insert((rg.toTb()).apply{ this.partId = ownerId}) }
-            Success(LongDb(ringes.size.toLong()))
-        }
+    fun copyRings(ringes: List<RingDb>, ownerId: Long): ResultData<Data> =
+        if (ringes.isEmpty()) source.insert(RingDb.new(ownerId))
+        else ringes.map{ rg->source.insert((rg.toTb()).apply{ this.partId = ownerId}) }[0]
 }

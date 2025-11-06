@@ -181,4 +181,7 @@
     <string name="zone">Zone</string>
     <string name="goal">Goal</string>
     <string name="other">Other</string>
+    <string name="speech">Speech</string>
+    <string name="copy">Speech</string>
+    <string name="delete">Delete</string>
 </resources>

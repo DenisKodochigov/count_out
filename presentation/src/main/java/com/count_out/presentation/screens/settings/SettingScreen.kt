@@ -31,7 +31,6 @@ import com.count_out.domain.entity.enums.ConnectState
 import com.count_out.domain.entity.router.DeviceBle
 import com.count_out.presentation.R
 import com.count_out.presentation.models.ActivityImplP
-import com.count_out.presentation.models.alumBodySmall
 import com.count_out.presentation.screens.prime.PrimeScreen
 import com.count_out.presentation.view_element.EnumsTo
 import com.count_out.presentation.view_element.SwitchApp
@@ -184,7 +183,8 @@ import com.count_out.presentation.view_element.lg
         ?: stringResource(id = R.string.not_select_device)
     Column (modifier = modifier.padding(start = 12.dp, end = 12.dp).fillMaxWidth()) {
         TextApp(text = nameDevice, textAlign = TextAlign.Start, style = style)
-        TextApp(text = stringResource(id = EnumsTo(dataState.connectingState).string()), style = alumBodySmall)
+        TextApp(text = stringResource(id = EnumsTo(dataState.connectingState).string()),
+            style = MaterialTheme.typography.bodySmall)
     }
     TextApp(text = if (dataState.heartRate > 0) dataState.heartRate.toString() else "",
         style = MaterialTheme.typography.displayMedium,

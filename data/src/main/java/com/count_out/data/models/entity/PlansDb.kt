@@ -11,6 +11,6 @@ import com.count_out.domain.entity.workout.Plan
 value class PlansDb(val item: List<PlanDb>): Data {
     fun toResultData(): ResultData<PlansDb> =
         if (this.item.isNotEmpty()) ResultData.Success(this)
-        else ResultData.Error(ThrowableDS.RequestFailed())
+        else ResultData.Error(ThrowableDS.ErrorPlans())
     override fun toDomain(ind: Int): Domain = PlansDm(item.map { it.toDomain(0) as Plan })
 }
