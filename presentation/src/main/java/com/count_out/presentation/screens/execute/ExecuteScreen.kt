@@ -56,9 +56,7 @@ import com.count_out.domain.entity.workout.Set
 import com.count_out.presentation.R
 import com.count_out.presentation.models.ParameterImplP
 import com.count_out.presentation.screens.prime.PrimeScreen
-import com.count_out.presentation.view_element.Border
 import com.count_out.presentation.view_element.ProgressBar
-import com.count_out.presentation.view_element.TemplateList1
 import com.count_out.presentation.view_element.TextApp
 import com.count_out.presentation.view_element.TopBarApp
 import com.count_out.presentation.view_element.VerticalProgress
@@ -377,32 +375,32 @@ import java.math.RoundingMode
     TextApp(text = "bodySmall ${typography.bodySmall.fontSize} ", style = typography.bodySmall)
 }
 
-@Composable fun Test1(){
-    TemplateList1(
-        columnLeft = {
-            val modifier1 = Modifier.width(50.dp).padding(horizontal = 2.dp)
-            Border(open = false) { Text("text2-0", modifier = modifier1) }
-            Border(open = false) { Text("text2-1", modifier = modifier1) }
-            Border(open = true) { Text("text2-2", modifier = modifier1) }
-            Border(open = false) { Text("text2-3", modifier = modifier1) }
-            Border(open = false) { Text("text2-4", modifier = modifier1) }
-        },
-        columnRight = {
-            val modifier2 = Modifier.fillMaxWidth().padding(horizontal = 2.dp)
-            Text("text 3", modifier = modifier2)
-            Text("text 4, text 4, text 4, text", modifier = modifier2.background(Color.Gray))
-            Text("text 5", modifier = modifier2)
-            Text("text 6", modifier = modifier2)
-//            Text("text 7", modifier = modifier2)
-//            Text("text 8", modifier = modifier2)
-//            Text("text 8", modifier = modifier2)
-//            Text("text 8", modifier = modifier2)
-//            Text("text 8", modifier = modifier2)
-//            Text("text 8", modifier = modifier2)
-        },
-        button = {
-            Text("text1")
-        }
-    )
-}
+//@Composable fun Test1(){
+//    TemplateList1(
+//        columnLeft = {
+//            val modifier1 = Modifier.width(50.dp).padding(horizontal = 2.dp)
+////            Border(open = false) { Text("text2-0", modifier = modifier1) }
+////            Border(open = false) { Text("text2-1", modifier = modifier1) }
+////            Border(open = true) { Text("text2-2", modifier = modifier1) }
+////            Border(open = false) { Text("text2-3", modifier = modifier1) }
+////            Border(open = false) { Text("text2-4", modifier = modifier1) }
+//        },
+//        columnRight = {
+//            val modifier2 = Modifier.fillMaxWidth().padding(horizontal = 2.dp)
+//            Text("text 3", modifier = modifier2)
+//            Text("text 4, text 4, text 4, text", modifier = modifier2.background(Color.Gray))
+//            Text("text 5", modifier = modifier2)
+//            Text("text 6", modifier = modifier2)
+////            Text("text 7", modifier = modifier2)
+////            Text("text 8", modifier = modifier2)
+////            Text("text 8", modifier = modifier2)
+////            Text("text 8", modifier = modifier2)
+////            Text("text 8", modifier = modifier2)
+////            Text("text 8", modifier = modifier2)
+//        },
+//        button = {
+//            Text("text1")
+//        }
+//    )
+//}
 

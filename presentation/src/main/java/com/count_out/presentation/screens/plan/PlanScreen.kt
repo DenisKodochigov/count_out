@@ -26,6 +26,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.count_out.domain.entity.NavigateEvent
 import com.count_out.domain.entity.supportive.NameId
+import com.count_out.domain.entity.types_domai.LongDm
 import com.count_out.domain.entity.workout.Domain
 import com.count_out.domain.entity.workout.Exercise
 import com.count_out.domain.entity.workout.Part
@@ -113,8 +114,16 @@ fun getCollapsing(dataState: PlanState, item: Domain): Boolean {
     }
 }
 fun setSelecting(dataState: PlanState, item: Domain, list: List<Domain>) {
+    val listId = list.map { listItem->
+        LongDm(when(listItem){
+                is Exercise -> listItem.idExercise
+                is Set -> listItem.idSet
+                else-> 0
+            }
+        )
+    }
     dataState.event(PlanEvent.SetSelecting(
-        dataState.selecting.copy(item = item, listOwner = list)))
+        dataState.selecting.copy(item = item, listOwner = listId)))
 }
 fun getSelecting(dataState: PlanState, item: Domain): Boolean {
     return when(item) {

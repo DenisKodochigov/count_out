@@ -1,52 +1,42 @@
 package com.count_out.presentation.screens.plan.exercise
 
-import android.util.Log
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CopyAll
 import androidx.compose.material.icons.filled.DeleteOutline
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.MaterialTheme.colorScheme
 import androidx.compose.material3.MaterialTheme.typography
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
-import com.count_out.domain.entity.SetViewId
 import com.count_out.domain.entity.types_domai.LongDm
 import com.count_out.domain.entity.workout.Exercise
 import com.count_out.domain.entity.workout.Ring
 import com.count_out.domain.entity.workout.Set
 import com.count_out.presentation.R
 import com.count_out.presentation.models.Dimen.contourAll1
+import com.count_out.presentation.screens.plan.CarcassLeftList
+import com.count_out.presentation.screens.plan.CarcassTitle
+import com.count_out.presentation.screens.plan.CarcassTuningSet
 import com.count_out.presentation.screens.plan.PlanEvent
 import com.count_out.presentation.screens.plan.PlanEvent.ShowBS
 import com.count_out.presentation.screens.plan.PlanState
-import com.count_out.presentation.screens.plan.getSelecting
 import com.count_out.presentation.screens.plan.set.SetBody
 import com.count_out.presentation.screens.plan.setSelecting
 import com.count_out.presentation.view_element.TextApp
-import com.count_out.presentation.view_element.borderMy
 import com.count_out.presentation.view_element.bottom_sheet.ShowBottomSheetSelectActivity
 import com.count_out.presentation.view_element.bottom_sheet.ShowBottomSheetSpeech
 import com.count_out.presentation.view_element.custom_view.Frame
-import com.count_out.presentation.view_element.drag_drop_column.column.ColumnDragDrop
 import com.count_out.presentation.view_element.icons.IconGoal
 import com.count_out.presentation.view_element.icons.IconSingle
 import com.count_out.presentation.view_element.icons.IconZone
@@ -56,50 +46,8 @@ import com.count_out.presentation.view_element.icons.IconsGroup
 //#############################################################################################
 //                               Circle training
 @Composable fun RingCardBodyExerciseList(dataState: PlanState, ring: Ring) {
-    Column(modifier = Modifier.padding(end = 4.dp)) {
-        ring.exercises.forEach { item -> RingCardBodyExerciseListItem(item, dataState, ring) }
-    }
-//
-//    ColumnDragDrop(
-//        items = ring.exercises,
-//        modifier = Modifier.padding(end = 4.dp),
-//        content = { item -> RingCardBodyExerciseListItem(item, dataState, ring) },
-//        onMoveItem = { from, to ->
-//            Log.d("KDS", " from=$from   to=$to")
-//            dataState.event(
-//                PlanEvent.ChangeSequenceExercise(SetViewId(ring.idRing,from,to)))
-//        }
-//    )
-}
-@Composable fun RingCardBodyExerciseListItem(exercise: Exercise, dataState: PlanState, ring: Ring) {
-    val selected = getSelecting(dataState, exercise)
-    ShowBottomSheetSpeech(dataState,dataState.showBS.exercise,exercise)
-    ShowBottomSheetSelectActivity(dataState, exercise)
-    Row( horizontalArrangement = Arrangement.Start,
-        modifier= Modifier
-            .borderMy(2.dp, 1.dp, selected, color = colorScheme.surfaceContainerLow)
-            .padding(horizontal = 4.dp)
-            .combinedClickable(
-                onClick = { setSelecting(dataState, exercise, ring.exercises.map { LongDm(it.idExercise) }) },
-                onLongClick = { println("Долгое нажатие") }
-            )
-    ) {
-        TextApp( modifier = Modifier.width(60.dp).padding(horizontal = 2.dp),
-            textAlign = TextAlign.Center,
-            text = "${stringResource(R.string.exer)} ${exercise.idView + 1}",
-            style = typography.titleMedium)
-    }
-}
-@Composable fun RingCardBodyExerciseListButtonAdd(dataState: PlanState, exercise: Exercise) {
-//    Column( modifier= Modifier.padding(bottom = 8.dp)
-//        .border(width = 1.dp, shape = MaterialTheme.shapes.extraSmall, color = colorScheme.outline)
-//        .clickable { dataState.event(PlanEvent.CopyExercise(exercise)) }
-//    ) {
-//        TextApp(modifier = Modifier.width(50.dp).padding(horizontal = 4.dp),
-//            textAlign = TextAlign.Center,
-//            text = " + ",
-//            style = typography.titleMedium)
-//    }
+    CarcassLeftList( dataState, ring.exercises,
+        { ind-> "${stringResource(R.string.exer)} ${ind + 1}" })
 }
 @Composable fun RingCardBodyExerciseBody(dataState: PlanState, ring: Ring) {
     val selectedExercise = ring.exercises.find { it.idExercise in dataState.selecting.exercises } ?: ring.exercises[0]
@@ -112,8 +60,9 @@ import com.count_out.presentation.view_element.icons.IconsGroup
         TextApp(text = exercise.activity.name,
             textDecoration = TextDecoration.Underline,
             style = typography.titleLarge,
-            modifier = Modifier.padding(bottom = 0.dp, start = 6.dp)
-                .clickable{
+            modifier = Modifier
+                .padding(bottom = 0.dp, start = 6.dp)
+                .clickable {
                     dataState.item = exercise
                     dataState.event(ShowBS(dataState.showBS.copy(domain = exercise.activity)))
                 })
@@ -143,81 +92,91 @@ import com.count_out.presentation.view_element.icons.IconsGroup
 //#############################################################################################
 //                               Regular training
 @Composable fun ExercisesList(dataState: PlanState, ring: Ring) {
-    val listExercise = ring.exercises
-    ColumnDragDrop(
-        items = listExercise,
-        modifier = Modifier.padding(end = 0.dp),
-        content = { item -> ElementColum( item, dataState = dataState, ring) },
-        onMoveItem = { from, to->
-            Log.d("KDS"," from=$from   to=$to")
-            dataState.event(
-                PlanEvent.ChangeSequenceExercise(
-                    item = SetViewId(idOwner = ring.idRing, from = from, to = to)))
-        },)
-    Spacer(modifier = Modifier.height(0.dp))
+    Column(modifier = Modifier.padding(end = 4.dp)) {
+        ring.exercises.forEach { exercise-> ExerciseItem(dataState, ring, exercise)}
+    }
 }
-@Composable fun <T>ElementColum (item:T, dataState: PlanState, ring: Ring){
+@Composable fun ExerciseItem (dataState: PlanState, ring: Ring, exercise: Exercise){
     Spacer(modifier = Modifier.padding(top = 1.dp))
     Frame(contour = contourAll1) {
-        Column (modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp),) {
-            Title(dataState, ring, item as Exercise)
-            BodyExercise(dataState, item as Exercise)
+        Column (modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = 4.dp),) {
+            TitleExerciseItem(dataState, ring, exercise)
+            BodyExerciseItem(dataState, exercise)
         }
     }
 }
-@Composable fun Title(dataState: PlanState, ring: Ring, exercise: Exercise) {
+@Composable fun TitleExerciseItem(dataState: PlanState, ring: Ring, exercise: Exercise) {
     ShowBottomSheetSpeech(dataState,dataState.showBS.exercise,exercise)
     ShowBottomSheetSelectActivity(dataState, exercise)
+    val nameNewSet = stringResource(id = R.string.set) + " ${exercise.sets.size + 1}"
 
-    Row( verticalAlignment = Alignment.CenterVertically, modifier = Modifier.padding(end = 4.dp)){
-        val nameNewSet = stringResource(id = R.string.set) + " ${exercise.sets.size + 1}"
-        IconsCollapsing(
-            onClick = {
-                dataState.event(PlanEvent.SetCollapsing(dataState.collapsing.copy(item = exercise))) },
-            wrap = dataState.collapsing.exercises.find { it == exercise.idExercise } != null)
-        Spacer(modifier = Modifier.width(2.dp))
-        Column {
-            TextApp(
-                text = exercise.activity.name,
-                textAlign = TextAlign.Start,
-                style = MaterialTheme.typography.titleMedium,
-                modifier = Modifier)
-            TextApp(
-                style = MaterialTheme.typography.bodySmall, fontWeight = FontWeight.Light,
-                text = "${stringResource(id = R.string.sets)}: ${exercise.amountSet}/" +
-                        "${exercise.duration.value} ${stringResource(id = exercise.duration.unit.id)}",
+    CarcassTitle(onCollapsing = { IconsCollapsing( wrap = dataState.collapsing.exercises.find { it == exercise.idExercise } != null,
+            onClick = { dataState.event(PlanEvent.SetCollapsing(dataState.collapsing.copy(item = exercise))) },) },
+        nameItem = { TextApp(text = exercise.activity.name, style = typography.titleMedium,)},
+        infoItem = { TextApp( style = typography.bodySmall, fontWeight = FontWeight.Light,
+            text = """${stringResource(id = R.string.sets)}: ${exercise.amountSet}/${exercise.duration.value} ${stringResource(id = exercise.duration.unit.id)}""")},
+        actionItem = {
+            IconsGroup(
+                onClickCopy = { dataState.event(PlanEvent.CopyExercise(exercise))},
+                onClickDelete = { dataState.event(PlanEvent.DelExercise(exercise)) },
+                onClickEdit = {
+                    dataState.item = exercise
+                    dataState.event(ShowBS(dataState.showBS.copy(domain = exercise.activity)))},
+                onClickSpeech = {
+                    dataState.item = exercise
+                    dataState.event(ShowBS(dataState.showBS.copy(domain = exercise))) },
+                onClickAddSet = { dataState.event( PlanEvent.CopySet(
+                    Set.default(name = nameNewSet, exerciseId = exercise.idExercise)))},
+                onClickRingExercise = { dataState.event(PlanEvent.RingOrExercise(ring)) },
+                selected = ring.amount > 1
             )
         }
-        Spacer(modifier = Modifier.weight(1f))
-        IconsGroup(
-            onClickCopy = { dataState.event(PlanEvent.CopyExercise(exercise))},
-            onClickDelete = { dataState.event(PlanEvent.DelExercise(exercise)) },
-            onClickEdit = {
-                dataState.item = exercise
-                dataState.event(ShowBS(dataState.showBS.copy(domain = exercise.activity)))},
-            onClickSpeech = {
-                dataState.item = exercise
-                dataState.event(ShowBS(dataState.showBS.copy(domain = exercise))) },
-            onClickAddSet = { dataState.event( PlanEvent.CopySet(
-                    Set.default(name = nameNewSet, exerciseId = exercise.idExercise)))},
-            onClickRingExercise = { dataState.event(PlanEvent.RingOrExercise(ring)) },
-            selected = ring.amount > 1
-        )
+    )
+}
+@Composable fun BodyExerciseItem(dataState: PlanState, exercise: Exercise){
+    val visibleLazy = dataState.collapsing.exercises.find { it ==exercise.idExercise } != null
+    AnimatedVisibility( visible = visibleLazy){
+        val list = exercise.sets
+        if (list.isNotEmpty()) {
+            if (list.find{ it.idSet in dataState.selecting.sets } == null) {
+                setSelecting(dataState, list[0], list.map { LongDm(it.idSet) }) }
+            CarcassTuningSet(
+                columnLeft = { ListSets( dataState, exercise)},
+                columnRight = { BodyExerciseItemSetBody( dataState, exercise)},
+                button = {}
+            )
+        }
     }
 }
-@Composable fun BodyExercise(dataState: PlanState, exercise: Exercise){
-    val visibleLazy = dataState.collapsing.exercises.find { it ==exercise.idExercise } != null
-    AnimatedVisibility( visible = visibleLazy){ ListSets(dataState, exercise) }
-}
 @Composable fun ListSets(dataState: PlanState, exercise: Exercise) {
-    Column {
-        exercise.sets.forEachIndexed { ind, set ->
-            Box (modifier = Modifier.fillMaxWidth()
-                .border(width = 1.dp, color = colorScheme.surface, shape = MaterialTheme.shapes.extraSmall),
-                content = { SetBody( dataState, set )}   //                    SetContent(dataState,set) }
-            )
-            Spacer(modifier = Modifier.height(1.dp))
-        }
+    CarcassLeftList(dataState, list = exercise.sets,
+        textItem = { ind-> "${stringResource(R.string.set)} ${ind + 1}" },)
+}
+@Composable fun BodyExerciseItemSetBody(dataState: PlanState, exercise: Exercise){
+    val selectedSet = exercise.sets.find { it.idSet in dataState.selecting.sets } ?: exercise.sets[0]
+    SetBody( dataState, selectedSet )
+    ControlSet( dataState, selectedSet)
+}
+@Composable fun ControlSet(dataState: PlanState, set: Set){
+
+    Row(verticalAlignment = Alignment.CenterVertically){
+        Spacer(modifier = Modifier.weight(1f))
+        IconGoal(set.goal){dataState.event(PlanEvent.ChangeGoal( set))}
+        Spacer(modifier = Modifier.weight(1f))
+        IconZone(set.intensity.ordinal + 1, onClick = {dataState.event(PlanEvent.ChangeZone(set))})
+        Spacer(modifier = Modifier.weight(1f))
+        IconSingle(image = Icons.Default.CopyAll, label = R.string.copy,
+            onClick = {dataState.event(PlanEvent.CopySet(set))} )
+        Spacer(modifier = Modifier.weight(1f))
+        IconSingle(image = R.drawable.waveform, label = R.string.speech,
+            onClick = { dataState.item = set
+                dataState.event(ShowBS(dataState.showBS.copy(domain = set)))} )
+        Spacer(modifier = Modifier.weight(1f))
+        IconSingle(image = Icons.Default.DeleteOutline, label = R.string.delete,
+            onClick = {dataState.event(PlanEvent.DeleteSet(set))} )
+        Spacer(modifier = Modifier.weight(1f))
     }
 }
 //fun exerciseCollapsing(dataState: TrainingState, exercise: Exercise): Boolean {

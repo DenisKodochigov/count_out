@@ -1,34 +1,22 @@
 package com.count_out.presentation.view_element
 
-import androidx.compose.foundation.layout.Box
+import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 
-@Composable
-fun Border(modifier: Modifier = Modifier, open: Boolean, content: @Composable () -> Unit) {
-    val strokeWidth: Dp = 1.dp
-    val cornerRadius: Dp = 2.dp
-    val color =  Color.LightGray//colorScheme.surfaceContainerLow
-    Box( modifier = modifier
-        .borderMy(cornerRadius, strokeWidth, open, color = color)
-        .clip(RoundedCornerShape(topStart = cornerRadius, bottomStart = cornerRadius)),
-        content = { content() }
-    )
-}
-
-@Composable fun Modifier.borderMy(radius: Dp, strokeWidth: Dp, open: Boolean, color: Color) = Modifier.padding(2.dp)
-    .drawBehind {
+@SuppressLint("ModifierFactoryUnreferencedReceiver")
+@Composable fun Modifier.borderMy( open: Boolean, color: Color) =
+    Modifier.padding(vertical = 2.dp, horizontal = 4.dp).drawBehind {
+        val radius = 2.dp
+        val strokeWidth = 1.dp
         val strokeWidthPx = strokeWidth.toPx()
         val rPx = radius.toPx()
         val dPx = rPx * 2
