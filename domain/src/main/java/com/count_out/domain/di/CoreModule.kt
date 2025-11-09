@@ -5,10 +5,10 @@ import com.count_out.domain.core.CollapsingCore
 import com.count_out.domain.core.CountOutServiceCore
 import com.count_out.domain.core.ExecuteWorkOutCore
 import com.count_out.domain.core.LastPlanCore
+import com.count_out.domain.core.LauncherBottomSheetCore
 import com.count_out.domain.core.LocationCore
 import com.count_out.domain.core.RingOrExerciseCore
 import com.count_out.domain.core.SelectingCore
-import com.count_out.domain.core.ShowBSCore
 import com.count_out.domain.core.WeatherCore
 import com.count_out.domain.core.plans.ActivityCore
 import com.count_out.domain.core.plans.ExerciseCore
@@ -98,11 +98,12 @@ class CoreModule {
     fun provideCollapsingCore(): CollapsingCore = CollapsingCore()
     @Singleton @Provides
     fun provideSelectingCore(): SelectingCore = SelectingCore()
-    @Singleton @Provides
-    fun provideShowBSCore(): ShowBSCore = ShowBSCore()
+//    @Singleton @Provides
+//    fun provideShowBSCore(): ShowBSCore = ShowBSCore()
     @Singleton @Provides
     fun provideRingOrExerciseCore(repo: RingRepo): RingOrExerciseCore = RingOrExerciseCore(repo)
-
+    @Singleton @Provides
+    fun provideManagerBottomSheetCore(): LauncherBottomSheetCore = LauncherBottomSheetCore()
 
     @Singleton @Provides
     fun provideUseCaseConfiguration(): UseCase.Configuration = UseCase.Configuration(Dispatchers.IO)

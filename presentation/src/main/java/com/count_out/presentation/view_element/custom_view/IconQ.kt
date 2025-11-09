@@ -503,7 +503,7 @@ object IconQ{
             }
         )
     }
-    @Composable fun Multi1(color: Color = color(), onClick: ()->Unit = {}){
+    @Composable fun MultiWithFrame(color: Color = color(), onClick: ()->Unit = {}){
         val width = 30.dp
         val height = 30.dp
         Spacer(modifier = Modifier
@@ -1117,9 +1117,9 @@ object IconQ{
     @Composable fun ArrowChordCanvas(progress: Float = 0f, onClick: ()->Unit = {}) {
         val radius: Dp = width/2 - 5.dp
         val arrowCount = 4
-        val shaftLength = 4f
-        val arrowHeadSize = 18f
-        val chordAngleOffset: Float = (2 * PI / 30).toFloat()
+        val shaftLength = 2f
+        val arrowHeadSize = 12f
+        val chordAngleOffset: Float = (2 * PI / 10).toFloat()
         val color: Color =  color()
 
         Box(modifier = Modifier.width(width).height(height).clickable { onClick() }) {

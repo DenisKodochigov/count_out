@@ -30,7 +30,7 @@ class PartSourceImpl @Inject constructor(
                 .map{ item-> item.apply{ partId = idNew} }},
             insertSpeeches = { speechSource.insert(it) },
             copyNested = { id -> copyRings(part.rings,id)})}
-        else ResultData.Error(ThrowableDS.NotValidType())
+        else ResultData.Error(ThrowableDS.ErrorTypePart())
     }.getOrElse { ResultData.Error(ThrowableDS.extract(it)) }
 
     override fun del(part: Data): ResultData<Data> =

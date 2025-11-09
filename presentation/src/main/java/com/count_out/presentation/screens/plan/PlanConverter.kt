@@ -2,15 +2,16 @@ package com.count_out.presentation.screens.plan
 
 import com.count_out.domain.entity.workout.Activities
 import com.count_out.domain.entity.workout.Collapsing
+import com.count_out.domain.entity.workout.LauncherBS
 import com.count_out.domain.entity.workout.Plan
 import com.count_out.domain.entity.workout.Selecting
-import com.count_out.domain.entity.workout.ShowBottomSheet
 import com.count_out.domain.use_case.UseCase
 import com.count_out.domain.use_case.other.CollapsingUC
-import com.count_out.domain.use_case.other.ShowBottomSheetUC
+import com.count_out.domain.use_case.other.LauncherBottomSheetUC
 import com.count_out.domain.use_case.plans.GetPlanUC
 import com.count_out.domain.use_case.plans.SelectingUC
 import com.count_out.domain.use_case.plans.activity.GetActivitiesUC
+import com.count_out.presentation.models.LauncherBSp
 import com.count_out.presentation.screens.prime.PrimeConvertor
 import kotlinx.coroutines.flow.MutableStateFlow
 import javax.inject.Inject
@@ -20,13 +21,18 @@ class PlanConverter @Inject constructor(): PrimeConvertor<UseCase.Response, Plan
         return when(resultData){
             is GetPlanUC.Response-> converterLocal(resultData, state)
             is GetActivitiesUC.Response-> converterLocal(resultData, state)
-            is ShowBottomSheetUC.Response-> converterLocal(resultData, state)
+//            is ShowBottomSheetUC.Response-> converterLocal(resultData, state)
             is CollapsingUC.Response-> converterLocal(resultData, state)
             is SelectingUC.Response-> converterLocal(resultData, state)
+            is LauncherBottomSheetUC.Response-> converterLocal(resultData, state)
             else -> converterOther(state)
         }
     }
-
+    private fun converterLocal(data: LauncherBottomSheetUC.Response, state: MutableStateFlow<PlanState>): PlanState {
+        if (data.launcher is LauncherBS<*>) {
+            state.value = state.value.copy(launcherBS = data.launcher as LauncherBSp) }
+        return state.value
+    }
     private fun converterLocal(data: GetPlanUC.Response, state: MutableStateFlow<PlanState>): PlanState {
         if (data.plan is Plan) { state.value = state.value.copy(plan = data.plan as Plan) }
         return state.value
@@ -37,11 +43,11 @@ class PlanConverter @Inject constructor(): PrimeConvertor<UseCase.Response, Plan
         return state.value
     }
 
-    private fun converterLocal(data: ShowBottomSheetUC.Response, state: MutableStateFlow<PlanState>): PlanState {
-        if (data.show is ShowBottomSheet)
-            state.value = state.value.copy(showBS = data.show as ShowBottomSheet)
-        return state.value
-    }
+//    private fun converterLocal(data: ShowBottomSheetUC.Response, state: MutableStateFlow<PlanState>): PlanState {
+//        if (data.show is ShowBottomSheet)
+//            state.value = state.value.copy(showBS = data.show as ShowBottomSheet)
+//        return state.value
+//    }
     private fun converterLocal(data: CollapsingUC.Response, state: MutableStateFlow<PlanState>): PlanState {
         if (data.collaps is Collapsing)
             state.value = state.value.copy( collapsing = data.collaps as Collapsing)

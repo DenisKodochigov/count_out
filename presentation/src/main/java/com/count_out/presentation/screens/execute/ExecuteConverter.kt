@@ -4,12 +4,10 @@ import com.count_out.domain.entity.StepPlan
 import com.count_out.domain.entity.enums.ConnectState
 import com.count_out.domain.entity.router.DeviceBle
 import com.count_out.domain.entity.types_domai.LongDm
-import com.count_out.domain.entity.workout.ShowBottomSheet
 import com.count_out.domain.use_case.UseCase
 import com.count_out.domain.use_case.bluetooth.GetConnectionStateUC
 import com.count_out.domain.use_case.bluetooth.GetHeartRateUC
 import com.count_out.domain.use_case.bluetooth.LastBleDeviceUC
-import com.count_out.domain.use_case.other.ShowBottomSheetUC
 import com.count_out.domain.use_case.plans.GetStepPlanUC
 import com.count_out.presentation.screens.prime.PrimeConvertor
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -21,7 +19,7 @@ class ExecuteConverter @Inject constructor(): PrimeConvertor<UseCase.Response, E
         resultData: UseCase.Response, state: MutableStateFlow<ExecuteState>): ExecuteState {
         return when(resultData){
             is GetStepPlanUC.Response-> makeLocal(resultData, state)
-            is ShowBottomSheetUC.Response-> makeLocal(resultData, state)
+//            is ShowBottomSheetUC.Response-> makeLocal(resultData, state)
             is GetHeartRateUC.Response-> converterLocal(resultData, state)
             is LastBleDeviceUC.Response-> converterLocal(resultData, state)
             is GetConnectionStateUC.Response-> converterLocal(resultData, state)
@@ -33,11 +31,11 @@ class ExecuteConverter @Inject constructor(): PrimeConvertor<UseCase.Response, E
         state.value = state.value.copy( stepPlan = data.step as StepPlan?)
         return state.value
     }
-    private fun makeLocal(data: ShowBottomSheetUC.Response, state: MutableStateFlow<ExecuteState>): ExecuteState {
-        if (data.show is ShowBottomSheet)
-            state.value = state.value.copy( showBS = data.show as ShowBottomSheet)
-        return state.value
-    }
+//    private fun makeLocal(data: ShowBottomSheetUC.Response, state: MutableStateFlow<ExecuteState>): ExecuteState {
+//        if (data.show is ShowBottomSheet)
+//            state.value = state.value.copy( showBS = data.show as ShowBottomSheet)
+//        return state.value
+//    }
     private fun converterLocal(data: GetConnectionStateUC.Response, state: MutableStateFlow<ExecuteState>): ExecuteState {
         if (data.result is ConnectState)
             state.value = state.value.copy( bleConnectState = data.result as ConnectState)

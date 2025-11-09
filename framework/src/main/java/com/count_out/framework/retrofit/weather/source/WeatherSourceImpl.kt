@@ -21,7 +21,7 @@ class WeatherSourceImpl @Inject constructor( private val weatherService: Weather
                             weatherRequest.longitude,
                             weatherRequest.timeZone).current.toWeatherSource()
                     )
-                } else ResultData.Error(ThrowableDS.NotValidType())
+                } else ResultData.Error(ThrowableDS.ErrorTypeWeather())
             )
         }
     }

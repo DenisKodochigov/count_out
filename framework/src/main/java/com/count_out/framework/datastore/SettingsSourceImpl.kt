@@ -60,7 +60,7 @@ class SettingsSourceImpl @Inject constructor(
                     dataStore.edit { prefs -> extractValue(prefs, settings)}
                     ResultData.Success(BooleanDb(true))
                 } catch (e: Exception) { ResultData.Error(ThrowableDS.extract(e)) }
-            } else { ResultData.Error(ThrowableDS.NotValidType()) }
+            } else { ResultData.Error(ThrowableDS.ErrorSaveSetting()) }
         )
     }
 }

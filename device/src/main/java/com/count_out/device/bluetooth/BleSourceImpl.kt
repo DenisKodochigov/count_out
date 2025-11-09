@@ -24,7 +24,7 @@ class BleSourceImpl @Inject constructor(private val ble: Bluetooth): BleSource {
                     mapDevice.put(devUI.device.address, devUI.device)
                     ResultData.Success(BleDataMapDb(mapDevice ))
                 }
-                else -> ResultData.Error(throwable = ThrowableDS.NotValidType())
+                else -> ResultData.Error(throwable = ThrowableDS.ErrorBleSource())
             }
         }
     }

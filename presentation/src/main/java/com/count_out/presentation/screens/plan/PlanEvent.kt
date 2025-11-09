@@ -8,8 +8,8 @@ import com.count_out.domain.entity.workout.Plan
 import com.count_out.domain.entity.workout.Ring
 import com.count_out.domain.entity.workout.Selecting
 import com.count_out.domain.entity.workout.Set
-import com.count_out.domain.entity.workout.ShowBottomSheet
 import com.count_out.domain.entity.workout.Speech
+import com.count_out.presentation.models.LauncherBSp
 import com.count_out.presentation.screens.prime.Event
 
 sealed class PlanEvent: Event {
@@ -33,12 +33,12 @@ sealed class PlanEvent: Event {
     data class ChangeGoal(val item: Set): PlanEvent()
     data class ChangeZone(val item: Set): PlanEvent()
 
-    data class ShowBS(val item: ShowBottomSheet): PlanEvent()
+//    data class ShowBS(val item: ShowBottomSheet): PlanEvent()
+
+    data class Launcher(val item: LauncherBSp): PlanEvent()
     data class SetCollapsing(val item: Collapsing): PlanEvent()
     data class SetSelecting(val item: Selecting): PlanEvent()
     data class UpdateSpeech(val item: Speech): PlanEvent()
-    data object BackScreen : PlanEvent()
-    data class Init(val item: Long): PlanEvent()
 }
 
 //    data class WorkUpCollapsing(val item: Boolean): TrainingEvent()

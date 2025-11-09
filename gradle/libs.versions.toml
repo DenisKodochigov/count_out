@@ -57,6 +57,7 @@ activity = "1.11.0"
 activityKtx = "1.11.0"
 composeMaterial = "1.5.4"
 composeCompiler = "2.2.21"
+uiText = "1.9.4"
 #storage = "1.5.0"
 #androidMapsUtils = "2.3.0"
 #firebase_crashlytics = "3.0.2"
@@ -200,6 +201,7 @@ hilt-testing = { module = "com.google.dagger:hilt-android-testing", version.ref 
 
 ui-test-manifest = { module = "androidx.compose.ui:ui-test-manifest", version.ref = "ui-test" }
 compose-material = { group = "androidx.wear.compose", name = "compose-material", version.ref = "composeMaterial" }
+ui-text = { group = "androidx.compose.ui", name = "ui-text", version.ref = "uiText" }
 
 
 [plugins]

@@ -9,7 +9,7 @@ import com.count_out.domain.entity.workout.Domain
 import com.count_out.domain.entity.workout.ShowBottomSheet
 import com.count_out.presentation.models.ActivityImplP
 import com.count_out.presentation.models.BottomSheetInterface
-import com.count_out.presentation.screens.prime.DataState
+import com.count_out.presentation.models.LauncherBSp
 import com.count_out.presentation.screens.prime.Event
 
 data class SettingsState(
@@ -24,15 +24,16 @@ data class SettingsState(
     val scannedBle: Boolean = false,
     val connectingState: ConnectState = ConnectState.NOT_CONNECTED,
 
-    val activities: List<Activity> = emptyList(),
     val activityTmpl: Activity = ActivityImplP(1L),
     //for screen
 
     val showBS: ShowBottomSheet = ShowBottomSheet(),
+    val launcherBS: LauncherBSp = LauncherBSp().element(emptyList()).type(null),
     val collapsing: Collapsing = Collapsing(),
+    override var activities: List<Activity> = emptyList(),
     override val event: (Event) -> Unit,
     override var item: Domain? = null,
-    override val nameSection: String = "",
+    override var nameSection: String = "",
     override var onDismiss: () -> Unit= {},
     override var onConfirmation: (Domain) -> Unit = {},
-): BottomSheetInterface, DataState
+): BottomSheetInterface

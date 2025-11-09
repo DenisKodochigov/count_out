@@ -28,16 +28,12 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.count_out.domain.entity.Settings
 import com.count_out.domain.entity.enums.ConnectState
-import com.count_out.domain.entity.router.DeviceBle
 import com.count_out.presentation.R
-import com.count_out.presentation.models.ActivityImplP
 import com.count_out.presentation.screens.prime.PrimeScreen
 import com.count_out.presentation.view_element.EnumsTo
 import com.count_out.presentation.view_element.SwitchApp
 import com.count_out.presentation.view_element.TextApp
 import com.count_out.presentation.view_element.bottom_sheet.CardActivity
-import com.count_out.presentation.view_element.bottom_sheet.ShowBottomSheetAddActivity
-import com.count_out.presentation.view_element.bottom_sheet.ShowBottomSheetBle
 import com.count_out.presentation.view_element.custom_view.Frame
 import com.count_out.presentation.view_element.icons.AnimateIcon
 import com.count_out.presentation.view_element.icons.IconSingle
@@ -77,7 +73,7 @@ import com.count_out.presentation.view_element.lg
     }
 }
 @Composable fun ActivitySectionTitle(dataState: SettingsState){
-    ShowBottomSheetAddActivity(dataState, dataState.showBS.activity)
+//    ShowBottomSheetAddActivity(dataState, dataState.showBS.activity)
     Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.fillMaxWidth()){
         IconsCollapsing(
             onClick = { dataState.event(SettingsEvent.SetCollapsing(dataState.collapsing
@@ -87,8 +83,8 @@ import com.count_out.presentation.view_element.lg
         Spacer(modifier = Modifier.weight(1f))
         IconSingle(
             image = Icons.Default.Add,
-            onClick = { dataState.event(SettingsEvent.ShowBS(
-                dataState.showBS.copy(domain = ActivityImplP(0L))))})
+            onClick = {})
+//                dataState.event(SettingsEvent.ShowBS(dataState.showBS.copy(domain = ActivityImplP(0L))))})
         Spacer(modifier = Modifier.width(12.dp))
     }
 }
@@ -140,7 +136,8 @@ import com.count_out.presentation.view_element.lg
     }
 }
 @Composable fun SettingBluetoothTitle(dataState: SettingsState){
-    ShowBottomSheetBle(dataState,dataState.showBS.selectBleDevice)
+    dataState.launcherBS.execute(dataState)
+//    ShowBottomSheetBle(dataState,dataState.showBS.selectBleDevice)
     Row(
         horizontalArrangement = Arrangement.Start,
         verticalAlignment = Alignment.CenterVertically,
@@ -155,11 +152,13 @@ import com.count_out.presentation.view_element.lg
         AnimateIcon(
             icon = Icons.AutoMirrored.Rounded.BluetoothSearching,
             animate = dataState.connectingState != ConnectState.CONNECTED,
-            onClick = {dataState.event(SettingsEvent.ShowBS(dataState.showBS.copy( domain =
-                    object: DeviceBle{
-                        override var name: String = ""
-                        override var address: String = ""
-                })))},
+            onClick = {
+//                dataState.event(SettingsEvent.ShowBS(dataState.showBS.copy( domain =
+//                    object: DeviceBle{
+//                        override var name: String = ""
+//                        override var address: String = ""
+//                })))
+                      },
         )
         Spacer(modifier = Modifier.width(12.dp))
     }

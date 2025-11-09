@@ -10,7 +10,6 @@ import com.count_out.data.models.throwable.ThrowableDS
 import com.count_out.data.source.room.ExerciseSource
 import com.count_out.data.source.room.SetSource
 import com.count_out.framework.room.db.exercise.ExerciseDao
-import com.count_out.framework.room.db.exercise.ExerciseTb
 import com.count_out.framework.room.db.exercise.ExerciseTb.Companion.toTb
 import com.count_out.framework.room.db.set.SetTb
 import com.count_out.framework.room.db.set.SetTb.Companion.toTb
@@ -31,7 +30,7 @@ class ExerciseSourceImpl @Inject constructor(
                 insertSpeeches = { speechSource.insert(it) },
                 copyNested = { id ->  copySets(exercise.sets,id)}
             )
-        } else ResultData.Error(ThrowableDS.NotValidType())
+        } else ResultData.Error(ThrowableDS.ErrorTypeExercise())
     }.getOrElse { ResultData.Error(ThrowableDS.extract(it)) }
 
     fun copySets(sets: List<SetDb>, ownerId: Long): ResultData<Data> =
@@ -39,7 +38,7 @@ class ExerciseSourceImpl @Inject constructor(
         else sets.map { set-> setSource.insert( set.toTb(idSet = 0L, exerciseId = ownerId)) }[0]
 
     override fun update(exercise: Data): ResultData<Data> =
-        exercise.safeUse<ExerciseTb, Long>{ item -> dao.update(item).toLong() }
+        exercise.safeUse<ExerciseDb, Long>{ item -> dao.update(item.toTb()).toLong() }
 
     override fun changeSequenceExercise(setViewId: Data): ResultData<Data> {
         return try {
@@ -54,7 +53,7 @@ class ExerciseSourceImpl @Inject constructor(
                     if (result == listExercise.count()) ResultData.Success(LongDb(result.toLong()))
                     else ResultData.Error(ThrowableDS.ErrorExercises())
                 }
-            } else ResultData.Error(ThrowableDS.NotValidType())
+            } else ResultData.Error(ThrowableDS.ErrorTypeSetIdView())
         } catch (e: Exception) { ResultData.Error(ThrowableDS.extract(e)) }
     }
 

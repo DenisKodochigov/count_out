@@ -36,7 +36,7 @@ class BluetoothRepoImpl @Inject constructor(
                 f1 !is ResultData.Success -> f1
                 f2 !is ResultData.Success -> f2
                 f1.data !is StringDb || f2.data !is StringDb ->
-                    ResultData.Error(ThrowableDS.NotValidType())
+                    ResultData.Error(ThrowableDS.ErrorBleDeviceName())
                 else -> ResultData.Success(
                     object : DeviceBleDb {
                         override val name = f1.data.item

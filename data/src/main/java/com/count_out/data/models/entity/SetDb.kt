@@ -6,7 +6,6 @@ import com.count_out.domain.entity.enums.Zone
 import com.count_out.domain.entity.workout.Domain
 import com.count_out.domain.entity.workout.Parameter
 import com.count_out.domain.entity.workout.Set
-import com.count_out.domain.entity.workout.Speech
 import com.count_out.domain.entity.workout.SpeechKit
 
 interface SetDb: Data {
@@ -43,7 +42,7 @@ interface SetDb: Data {
         override val intervalReps: Double = this@SetDb.intervalReps
         override val intervalDown: Int = this@SetDb.intervalDown
         override val groupCount: String = this@SetDb.groupCount
-        override val rest: Parameter = Parameter.fill(this@SetDb.reps.toDouble(), 2)
+        override val rest: Parameter = Parameter.fill(this@SetDb.timeRestV,this@SetDb.timeRestU)
     }
     companion object{
         fun fromDomain(domain: Domain): SetDb {

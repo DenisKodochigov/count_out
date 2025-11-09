@@ -59,7 +59,7 @@ class Bluetooth @Inject constructor(
                 }
             } catch (e: Exception){ flow { emit(
                 ResultBle.Error(throwable = ThrowableBle.extract(t = e))) } }
-        } else flow { emit(ResultBle.Error(throwable = ThrowableBle.NotValidType())) }
+        } else flow { emit(ResultBle.Error(throwable = ThrowableBle.ErrorAddress())) }
     }
 
     @SuppressLint("MissingPermission")

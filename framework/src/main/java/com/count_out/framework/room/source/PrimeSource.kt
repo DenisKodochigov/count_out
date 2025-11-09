@@ -23,7 +23,7 @@ import kotlinx.coroutines.flow.map
 abstract class PrimeSource {
     fun <T : Data>Long.longToResult(number: Long = 0L, success: (Long) -> T): ResultData<T> =
         if (this > number) ResultData.Success(success(this))
-        else ResultData.Error(ThrowableDS.ErrorLong())
+        else ResultData.Error(ThrowableDS.ErrorTypeLong())
     fun <T: Data> List<Long>.listToResult(success: (List<Long>) -> T): ResultData<T> =
         ResultData.Success(success(this))
     inline fun <reified D: Data, R> Data.safeUse(crossinline block: (D) -> R): ResultData<Data> =
@@ -43,7 +43,7 @@ abstract class PrimeSource {
                     else -> ResultData.Success(LongDb(0L))
                 }
             }
-            else ResultData.Error(ThrowableDS.NotValidType())
+            else ResultData.Error(ThrowableDS.ErrorSafeUse())
         }.getOrElse  { ResultData.Error(ThrowableDS.Companion.extract(it)) }
     inline fun <reified D: Data, R> Data.safeUseFlow(crossinline block: (D) -> Flow<R>): Flow<ResultData<Data>> {
         return if (this is D) {
@@ -69,7 +69,7 @@ abstract class PrimeSource {
                 .flowOn(Dispatchers.IO)
                 .catch { ResultData.Error(ThrowableDS.Companion.extract(it)) }
         }
-        else flowOf(ResultData.Error(ThrowableDS.NotValidType()))}
+        else flowOf(ResultData.Error(ThrowableDS.ErrorSafeUseFlow()))}
     inline fun copyWithDependencies(
         insertMain: () -> Long,
         getSpeeches: (Long) -> List<SpeechTb>,

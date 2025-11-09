@@ -89,8 +89,8 @@ fun PlansScreen(vm: PlansViewModel, navigateEvent: NavigateEvent) {
             PlanInformation(dataState, item, Modifier.weight(1f))
             Spacer(modifier = Modifier.width(Dimen.width6))
             IconsGroup(
-                onClickCopy = {dataState.event(PlansEvent.Copy(item))},
-                onClickDelete = { dataState.event(PlansEvent.Del(item))})
+                onCopy = {dataState.event(PlansEvent.Copy(item))},
+                onDelete = { dataState.event(PlansEvent.Del(item))})
             Spacer(modifier = Modifier.width(Dimen.width6))
         }
     }

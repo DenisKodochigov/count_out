@@ -5,12 +5,10 @@ import com.count_out.domain.entity.enums.ConnectState
 import com.count_out.domain.entity.router.DeviceBle
 import com.count_out.domain.entity.workout.Activities
 import com.count_out.domain.entity.workout.Collapsing
-import com.count_out.domain.entity.workout.ShowBottomSheet
 import com.count_out.domain.use_case.UseCase
 import com.count_out.domain.use_case.bluetooth.GetConnectionStateUC
 import com.count_out.domain.use_case.bluetooth.LastBleDeviceUC
 import com.count_out.domain.use_case.other.CollapsingUC
-import com.count_out.domain.use_case.other.ShowBottomSheetUC
 import com.count_out.domain.use_case.plans.activity.GetActivitiesUC
 import com.count_out.domain.use_case.settings.GetSettingsUC
 import com.count_out.domain.use_case.settings.UpdateSettingUC
@@ -27,7 +25,7 @@ class SettingsConvertor @Inject constructor():
             is GetActivitiesUC.Response-> converterLocal(resultData, state)
             is UpdateSettingUC.Response-> converterLocal(resultData, state)
             is CollapsingUC.Response-> converterLocal(resultData, state)
-            is ShowBottomSheetUC.Response-> converterLocal(resultData, state)
+//            is ShowBottomSheetUC.Response-> converterLocal(resultData, state)
 //            is StartScanBleUC.Response-> converterLocal(resultData, state)
 //            is GetHeartRateUC.Response-> converterLocal(resultData, state)
             is LastBleDeviceUC.Response-> converterLocal(resultData, state)
@@ -53,11 +51,11 @@ class SettingsConvertor @Inject constructor():
             state.value = state.value.copy( collapsing = data.collaps as Collapsing)
         return state.value
     }
-    private fun converterLocal(data: ShowBottomSheetUC.Response, state: MutableStateFlow<SettingsState>): SettingsState {
-        if (data.show is ShowBottomSheet)
-            state.value = state.value.copy( showBS = data.show as ShowBottomSheet)
-        return state.value
-    }
+//    private fun converterLocal(data: ShowBottomSheetUC.Response, state: MutableStateFlow<SettingsState>): SettingsState {
+//        if (data.show is ShowBottomSheet)
+//            state.value = state.value.copy( showBS = data.show as ShowBottomSheet)
+//        return state.value
+//    }
     private fun converterLocal(data: GetConnectionStateUC.Response, state: MutableStateFlow<SettingsState>): SettingsState {
         if (data.result is ConnectState) state.value = state.value.copy( connectingState = data.result as ConnectState)
         return state.value

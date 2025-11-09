@@ -41,6 +41,7 @@ dependencies {
     //Hilt
     implementation (libs.bundles.hilt)
     implementation(libs.compose.material)
+    implementation(libs.ui.text)
     ksp (libs.bundles.hiltksp)
     //Permission
     implementation(libs.accompanist.permissions)

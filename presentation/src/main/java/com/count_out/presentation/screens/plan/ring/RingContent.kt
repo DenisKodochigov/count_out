@@ -25,23 +25,21 @@ import com.count_out.presentation.R
 import com.count_out.presentation.models.Dimen.contourHor2
 import com.count_out.presentation.models.TypeKeyboard
 import com.count_out.presentation.screens.plan.CarcassTitle
-import com.count_out.presentation.screens.plan.CarcassTuningSet
 import com.count_out.presentation.screens.plan.PlanEvent
-import com.count_out.presentation.screens.plan.PlanEvent.ShowBS
 import com.count_out.presentation.screens.plan.PlanState
 import com.count_out.presentation.screens.plan.exercise.ExercisesList
 import com.count_out.presentation.screens.plan.exercise.RingCardBodyExerciseBody
 import com.count_out.presentation.screens.plan.exercise.RingCardBodyExerciseList
 import com.count_out.presentation.screens.plan.getCollapsing
+import com.count_out.presentation.screens.plan.set.CarcassTuningSet
 import com.count_out.presentation.screens.plan.setCollapsing
 import com.count_out.presentation.screens.plan.setSelecting
+import com.count_out.presentation.screens.plan.showSpeech
 import com.count_out.presentation.view_element.TextApp
 import com.count_out.presentation.view_element.TextFieldApp
-import com.count_out.presentation.view_element.bottom_sheet.ShowBottomSheetSpeech
 import com.count_out.presentation.view_element.custom_view.Frame
-import com.count_out.presentation.view_element.icons.IconRingOrExercise
-import com.count_out.presentation.view_element.icons.IconSingle
 import com.count_out.presentation.view_element.icons.IconsCollapsing
+import com.count_out.presentation.view_element.icons.IconsGroup
 
 @Composable fun Rings(dataState: PlanState, part: Part){
     part.rings.forEachIndexed { ind,ring ->
@@ -60,18 +58,19 @@ import com.count_out.presentation.view_element.icons.IconsCollapsing
 }
 @Composable fun RingCardTitle(dataState: PlanState, ring: Ring, index: Int){
     val enteredName: MutableState<String> = remember { mutableStateOf(ring.amount.toString() ) }
-
-    ShowBottomSheetSpeech(dataState,dataState.showBS.ring,ring)
     CarcassTitle(
         onCollapsing = { IconsCollapsing(onClick = { setCollapsing(dataState, ring) },
             wrap = getCollapsing(dataState, ring) )},
         nameItem = { NameRing(dataState, ring, index, enteredName )},
         infoItem = { TextApp(style = MaterialTheme.typography.bodySmall,
-            text = stringResource(id = R.string.exercises) + " ${ring.exercises.count() + 1}: ",) },
+            text = stringResource(id = R.string.exercises) + " ${ring.exercises.count()}: ",) },
         actionItem = {
-            IconSingle(image = R.drawable.waveform, onClick = {showSpeechRound(dataState, ring)} )
-            Spacer(modifier = Modifier.width(16.dp))
-            IconRingOrExercise( selected = ring.amount > 1, onClick = {dataState.event(PlanEvent.RingOrExercise(ring))} )
+            IconsGroup(
+                onRingAdd = { dataState.event(PlanEvent.CopyRing(ring = Ring.default(ring.partId)))},
+                onRingDel = { dataState.event(PlanEvent.DelRing(ring))},
+                onRingSpeech = { showSpeech(dataState, ring)},
+                onToExercise = {dataState.event(PlanEvent.RingOrExercise(ring))}
+            )
         }
     )
 }
@@ -121,60 +120,4 @@ import com.count_out.presentation.view_element.icons.IconsCollapsing
 }
 
 
-
-//@Composable fun CardExercise(dataState: PlanState, ring: Ring){
-//    CardExerciseTitle(dataState, ring)
-////    CardExerciseBody(dataState, ring)
-//}
-//@Composable fun CardExerciseTitle(dataState: PlanState, ring: Ring){
-//    Row( verticalAlignment = Alignment.CenterVertically, modifier = Modifier.padding(end = 6.dp)){
-//        IconsCollapsing(
-//            onClick = { setCollapsing(dataState, ring) },
-//            wrap = getCollapsing(dataState, ring) )
-//        Spacer(modifier = Modifier.width(2.dp))
-//        TextApp(
-//            text = stringResource(id = R.string.ring)  ,
-//            textAlign = TextAlign.Start,
-//            style = MaterialTheme.typography.headlineMedium,)
-//
-//        TextApp(
-//            text = stringResource(id = R.string.times),
-//            textAlign = TextAlign.Start,
-//            style = MaterialTheme.typography.headlineMedium,)
-//        Spacer(modifier = Modifier.weight(1f))
-//        IconsGroup(
-//            onClickSpeech = { showSpeechRound(dataState, ring) },
-//            onClickAddExercise = {
-//                dataState.event(PlanEvent.CopyRing(ring = Ring.default(ring.partId))) },
-//            onClickRingExercise = { dataState.event(PlanEvent.RingOrExercise(ring)) },
-//            selected = ring.amount > 1
-//        )
-//        Spacer(modifier = Modifier.width(6.dp))
-//    }
-//}
-//@Composable fun CardExerciseBody(dataState: PlanState, ring: Ring){
-//
-//}
-
-
-//@Composable fun <T>ElementColum (item:T, dataState: PlanState){
-//    Spacer(modifier = Modifier.padding(top = 1.dp))
-//    Frame(contour = contourAll1) {
-//        Column (modifier = Modifier
-//            .fillMaxWidth()
-//            .padding(vertical = 4.dp),) {
-//            CardRingTitle(dataState, item as Ring, 0)
-//            BodyExercise(dataState, item as Exercise)
-//        }
-//    }
-//}
-//@Composable fun ListExercise(dataState: PlanState, ring: Ring){
-//    if (getCollapsing(dataState, ring) && ring.amount > 0){
-////        ListExercises(dataState = dataState, part = part, modifier = Modifier.padding(end = 8.dp))
-//    }
-//}
-fun showSpeechRound(dataState: PlanState, ring: Ring){
-    dataState.item = ring
-    dataState.event(ShowBS(dataState.showBS.copy(domain = ring)))
-}
 

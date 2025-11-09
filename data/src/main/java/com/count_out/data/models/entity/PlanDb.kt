@@ -1,6 +1,5 @@
 package com.count_out.data.models.entity
 
-import android.util.Log
 import com.count_out.data.models.Data
 import com.count_out.domain.entity.workout.Domain
 import com.count_out.domain.entity.workout.Part

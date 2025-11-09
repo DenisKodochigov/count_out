@@ -27,7 +27,7 @@ class LastPlanSourceImpl @Inject constructor( private val dataStore: DataStore<P
                 if (id is LongDb) {
                     dataStore.edit { it[keyName] = id.item }
                     ResultData.Success(BooleanDb(true))
-                } else ResultData.Error(ThrowableDS.NotValidType())
+                } else ResultData.Error(ThrowableDS.ErrorSavePlan())
             } catch (e: Exception){ ResultData.Error(ThrowableDS.extract(t = e))}
         )}
     }

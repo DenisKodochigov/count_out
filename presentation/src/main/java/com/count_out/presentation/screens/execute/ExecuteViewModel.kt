@@ -6,7 +6,6 @@ import com.count_out.domain.entity.workout.ShowBottomSheet
 import com.count_out.domain.use_case.bluetooth.ConnectDeviceHrUC
 import com.count_out.domain.use_case.bluetooth.GetConnectionStateUC
 import com.count_out.domain.use_case.bluetooth.GetHeartRateUC
-import com.count_out.domain.use_case.other.ShowBottomSheetUC
 import com.count_out.domain.use_case.plans.GetStepPlanUC
 import com.count_out.domain.use_case.workout.DownIntervalUC
 import com.count_out.domain.use_case.workout.PauseWorkoutUC
@@ -34,7 +33,7 @@ class ExecuteViewModel @Inject constructor(
     private val upIntervalUC: UpIntervalUC,
     private val downIntervalUC: DownIntervalUC,
     private val getStepPlanUC: GetStepPlanUC,
-    private val showBottomSheetUC: ShowBottomSheetUC,
+//    private val showBottomSheetUC: ShowBottomSheetUC,
     private val connectDeviceHr: ConnectDeviceHrUC,
     private val subscribeHeartRate: GetHeartRateUC,
     private val getConnectionState: GetConnectionStateUC,
@@ -53,7 +52,7 @@ class ExecuteViewModel @Inject constructor(
             is ExecuteEvent.Save -> { saveWorkOut() }
             is ExecuteEvent.UpInterval -> { upInterval() }
             is ExecuteEvent.DownInterval -> { downInterval() }
-            is ExecuteEvent.ShowBS -> { showBottomSheet(event.item) }
+//            is ExecuteEvent.ShowBS -> { showBottomSheet(event.item) }
         }
     }
     init {
@@ -83,7 +82,8 @@ class ExecuteViewModel @Inject constructor(
     private fun stopWorkOut(item: ShowBottomSheet){
         viewModelScope.launch(Dispatchers.IO) {
             stopWorkoutUC.execute(StopWorkoutUC.Request).collect { submitState( it ) } }
-        showBottomSheet(item) }
+//        showBottomSheet(item)
+    }
     private fun pauseWorkOut(){
         viewModelScope.launch(Dispatchers.IO) {
             pauseWorkoutUC.execute(PauseWorkoutUC.Request).collect { submitState( it ) } } }
@@ -96,10 +96,10 @@ class ExecuteViewModel @Inject constructor(
     private fun downInterval(){
         viewModelScope.launch(Dispatchers.IO) {
             downIntervalUC.execute(DownIntervalUC.Request).collect { submitState( it ) } } }
-    private fun showBottomSheet(item: ShowBottomSheet){
-        viewModelScope.launch(Dispatchers.Default) {
-            showBottomSheetUC.execute( ShowBottomSheetUC.Request(item))
-                .collect { submitState( it ) } } }
+//    private fun showBottomSheet(item: ShowBottomSheet){
+//        viewModelScope.launch(Dispatchers.Default) {
+//            showBottomSheetUC.execute( ShowBottomSheetUC.Request(item))
+//                .collect { submitState( it ) } } }
 //
 //    fun getTraining(id: Long) {
 //        viewModelScope.launch(Dispatchers.IO) {

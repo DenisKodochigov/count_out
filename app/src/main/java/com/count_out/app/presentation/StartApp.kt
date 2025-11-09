@@ -72,7 +72,7 @@ fun initUnits(){
     Units.M.id = R.string.min
     Units.H.id = R.string.hour
     Units.KM.id = R.string.km
-    Units.M.id = R.string.m
+    Units.MT.id = R.string.m
     Units.KG.id = R.string.kg
     Units.GR.id = R.string.gr
 }

@@ -4,10 +4,7 @@ import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.EaseInOut
 import androidx.compose.animation.core.LinearEasing
-import androidx.compose.animation.core.RepeatMode
-import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.animateFloatAsState
-import androidx.compose.animation.core.repeatable
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -24,7 +21,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Bluetooth
 import androidx.compose.material.icons.filled.CopyAll
 import androidx.compose.material.icons.filled.DeleteOutline
 import androidx.compose.material.icons.filled.Edit
@@ -35,9 +31,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.MaterialTheme.colorScheme
 import androidx.compose.material3.MaterialTheme.shapes
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -53,8 +47,6 @@ import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import com.count_out.domain.entity.enums.Goal
@@ -63,128 +55,98 @@ import com.count_out.presentation.models.Dimen
 import com.count_out.presentation.models.Dimen.TAB_FADE_IN_ANIMATION_DELAY
 import com.count_out.presentation.models.Dimen.TAB_FADE_IN_ANIMATION_DURATION
 import com.count_out.presentation.models.Dimen.TAB_FADE_OUT_ANIMATION_DURATION
-import com.count_out.presentation.models.Dimen.sizeBetweenIcon
 import com.count_out.presentation.models.Dimen.sizeIcon
 import com.count_out.presentation.view_element.TextApp
 import com.count_out.presentation.view_element.custom_view.IconQ
 import com.count_out.presentation.view_element.custom_view.IconQ.ArrowChordCanvas
 
 @Composable fun IconsGroup(
-    onClickEdit: (() -> Unit)? = null,
-    onClickCopy: (() -> Unit)? = null,
-    onClickSpeech: (() -> Unit)? = null,
-    onClickDelete: (() -> Unit)? = null,
-    onClickAddSet: (() -> Unit)? = null,
-    onClickAddRing: (() -> Unit)? = null,
-    onClickAddExercise: (() -> Unit)? = null,
-    onClickAddPlan: (() -> Unit)? = null,
-    onClickRingExercise: (() -> Unit)? = null,
-    selected: Boolean = true,
-    type: Boolean = true,
-    label: String = ""
+    onEdit: (() -> Unit)? = null,
+    onCopy: (() -> Unit)? = null,
+    onSpeech: (() -> Unit)? = null,
+    onDelete: (() -> Unit)? = null,
+    onSetAdd: (() -> Unit)? = null,
+    onSetDel: (() -> Unit)? = null,
+    onSetSpeech: (() -> Unit)? = null,
+    onExerciseAdd: (() -> Unit)? = null,
+    onExerciseDel: (() -> Unit)? = null,
+    onExerciseSpeech: (() -> Unit)? = null,
+    onRingAdd: (() -> Unit)? = null,
+    onRingDel: (() -> Unit)? = null,
+    onRingSpeech: (() -> Unit)? = null,
+    onPlanAdd: (() -> Unit)? = null,
+    onToExercise: (() -> Unit)? = null,
+    onToRing: (() -> Unit)? = null,
+    label: Int = 0
 ){
+    CarcassMultiIcons(label,
+        {expanded ->
+            ListIcons(expanded,onEdit,onCopy,onSpeech,onDelete,onSetAdd,onSetDel,onSetSpeech,onExerciseAdd,
+                    onExerciseDel,onExerciseSpeech,onRingAdd,onRingDel,onRingSpeech,onPlanAdd,
+                onToExercise, onToRing, label)
+        }
+    )
+}
+@Composable fun CarcassMultiIcons(label:Int, content: @Composable (expanded:()-> Unit)-> Unit){
     var expanded by remember { mutableStateOf(false) }
     Box {
-        if(type) IconQ.Multi(onClick = { expanded = true }) else IconQ.Multi1(onClick = { expanded = true })
-        MaterialTheme( shapes = shapes.copy(extraSmall = shapes.large)) {
-            DropdownMenu(
-                modifier = Modifier.padding(8.dp),
-                expanded = expanded,
-                offset = DpOffset((-8).dp, 8.dp),
-                onDismissRequest = { expanded = false }
-            ) {
-                VerIcons(
-                    onClickEdit,
-                    onClickCopy,
-                    onClickSpeech,
-                    onClickDelete,
-                    onClickAddSet,
-                    onClickAddRing,
-                    onClickAddExercise,
-                    onClickAddPlan,
-                    onClickRingExercise,
-                    selected,
-                    label
-                ) { expanded = false }
+        ButtonOther(label){ expanded = true }
+        DropdownMenu(
+            modifier = Modifier.padding(horizontal = 12.dp).background(color = colorScheme.surfaceContainer),
+            expanded = expanded,
+            offset = DpOffset((0).dp, (-48).dp),
+            onDismissRequest = { expanded = false },
+            content = {
+                Row(verticalAlignment = Alignment.CenterVertically)
+                    { content { expanded = false } }
             }
-        }
-    }
-}
-
-@Composable fun AnimateIcon(
-    initValue: Dp = sizeIcon,
-    targetValue: Dp = 22.dp,
-    icon: ImageVector = Icons.Default.Bluetooth,
-    animate: Boolean = false,
-    onClick: ()->Unit = {},
-){
-    var target by remember { mutableStateOf(initValue) }
-    var iteration by remember { mutableIntStateOf(1) }
-    LaunchedEffect(animate) {
-        iteration = if (animate) 1000 else 1
-        target = if (animate) if (target == initValue) targetValue else initValue else initValue
-    }
-    val size by animateDpAsState(
-        label = "size",
-        targetValue = target,
-        animationSpec = repeatable(
-            iterations = iteration,
-            animation = tween(durationMillis = 1000),
-            repeatMode = RepeatMode.Reverse
         )
-    )
-    Box(modifier = Modifier.size( sizeIcon)){
-        Icon( imageVector = icon, contentDescription = "", tint = colorScheme.outline,
-            modifier = Modifier.align(Alignment.Center).size(size).clickable { onClick() })
     }
 }
-@Composable fun VerIcons(
-    onClickEdit: (() -> Unit)? = null,
-    onClickCopy: (() -> Unit)? = null,
-    onClickSpeech: (() -> Unit)? = null,
-    onClickDelete: (() -> Unit)? = null,
-    onClickAddSet: (() -> Unit)? = null,
-    onClickAddRing: (() -> Unit)? = null,
-    onClickAddExercise: (() -> Unit)? = null,
-    onClickAddPlan: (() -> Unit)? = null,
-    onClickRingExercise: (() -> Unit)? = null,
-    selected: Boolean,
-    label: String = "",
+@Composable fun ButtonOther(label:Int, expanded: ()->Unit,){
+    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+        IconQ.Multi(onClick = expanded)
+        if (label > 0) TextApp(text = stringResource(label),
+            style = MaterialTheme.typography.labelSmall)
+    }
+}
+@Composable fun ListIcons(
     expanded: ()->Unit,
+    onEdit: (() -> Unit)? = null,
+    onCopy: (() -> Unit)? = null,
+    onSpeech: (() -> Unit)? = null,
+    onDelete: (() -> Unit)? = null,
+    onSetAdd: (() -> Unit)? = null,
+    onSetDel: (() -> Unit)? = null,
+    onSetSpeech: (() -> Unit)? = null,
+    onExerciseAdd: (() -> Unit)? = null,
+    onExerciseDel: (() -> Unit)? = null,
+    onExerciseSpeech: (() -> Unit)? = null,
+    onRingAdd: (() -> Unit)? = null,
+    onRingDel: (() -> Unit)? = null,
+    onRingSpeech: (() -> Unit)? = null,
+    onPlanAdd: (() -> Unit)? = null,
+    onToExercise: (() -> Unit)? = null,
+    onToRing: (() -> Unit)? = null,
+    label: Int = 0
 ){
-    Column( verticalArrangement = Arrangement.SpaceBetween, horizontalAlignment = Alignment.CenterHorizontally){
-//        Spacer(modifier = Modifier.height(sizeBetweenIcon))
-        onClickAddPlan?.let {
-            IconAddPlan(onClick = { it(); expanded()})
-            Spacer(modifier = Modifier.height(sizeBetweenIcon)) }
-        onClickAddRing?.let {
-            IconAddRing(onClick = { it(); expanded()})
-            Spacer(modifier = Modifier.height(sizeBetweenIcon))}
-        onClickAddExercise?.let {
-            IconAddExercise(onClick = { it(); expanded()})
-            Spacer(modifier = Modifier.height(sizeBetweenIcon)) }
-        onClickAddSet?.let {
-            IconAddSet(onClick = { it(); expanded()})
-            Spacer(modifier = Modifier.height(sizeBetweenIcon))}
-        onClickEdit?.let {
-            IconSingle(image = Icons.Default.Edit, onClick = { it(); expanded()} )
-            Spacer(modifier = Modifier.height(sizeBetweenIcon)) }
-        onClickCopy?.let {
-            IconSingle(image = Icons.Default.CopyAll, onClick = { it(); expanded()} )
-            Spacer(modifier = Modifier.height(sizeBetweenIcon)) }
-        onClickSpeech?.let {
-            IconSingle(image = R.drawable.waveform, onClick = { it(); expanded()} )
-            Spacer(modifier = Modifier.height(sizeBetweenIcon)) }
-        onClickDelete?.let {
-            IconSingle(image = Icons.Default.DeleteOutline, onClick = { it(); expanded()} )
-            Spacer(modifier = Modifier.height(sizeBetweenIcon)) }
-        onClickRingExercise?.let {
-            IconRingOrExercise(selected, onClick = { it(); expanded()} )
-            Spacer(modifier = Modifier.height(sizeBetweenIcon)) }
-        if (label != "") TextApp(text = stringResource(R.string.other), style = Dimen.typeLabel() )
-    }
+    onEdit?.let { IconSingle(image = Icons.Default.Edit, onClick = { it(); expanded()} )}
+    onCopy?.let { IconSingle(image = Icons.Default.CopyAll, onClick = { it(); expanded()} ) }
+    onSpeech?.let { IconSingle(image = R.drawable.waveform, onClick = { it(); expanded()} )}
+    onDelete?.let { IconSingle(image = Icons.Default.DeleteOutline, onClick = { it(); expanded()} ) }
+    onSetAdd?.let { IconCopyText("S",onClick = { it(); expanded()})}
+    onSetDel?.let { IconDelText("S",onClick = { it(); expanded()})}
+    onSetSpeech?.let { IconSpeechText("S",onClick = { it(); expanded()})}
+    onExerciseAdd?.let { IconCopyText("E",onClick = { it(); expanded()}) }
+    onExerciseDel?.let { IconDelText("E",onClick = { it(); expanded()}) }
+    onExerciseSpeech?.let { IconSpeechText("E",onClick = { it(); expanded()}) }
+    onRingAdd?.let { IconCopyText("R",onClick = { it(); expanded()})}
+    onRingDel?.let { IconDelText("R",onClick = { it(); expanded()})}
+    onRingSpeech?.let { IconSpeechText("R",onClick = { it(); expanded()})}
+    onPlanAdd?.let { IconCopyText("P",onClick = { it(); expanded()})}
+    onToExercise?.let { IconRingOrExercise(true, onClick = { it(); expanded()} ) }
+    onToRing?.let { IconRingOrExercise(false, onClick = { it(); expanded()} ) }
 }
-
 @Composable fun IconSingle(image: ImageVector, onClick:()->Unit = {}, idDescription: Int = 0, label: Int = 0){
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
         Icon(imageVector = image,
@@ -370,53 +332,9 @@ import com.count_out.presentation.view_element.custom_view.IconQ.ArrowChordCanva
     }
 }
 
-@Composable fun IconCount(selected: Boolean, onClick: ()->Unit){
-    Column(verticalArrangement = Arrangement.Center){
-        IconQ.Count(selected = selected, onClick = onClick)
-        TextApp(
-            text = "${ stringResource(R.string.counts) } ",
-            textAlign = TextAlign.Center,
-            style = MaterialTheme.typography.bodyMedium)
-    }
-}
-@Composable fun IconDuration(selected: Boolean, onClick: ()->Unit){
-    Column(verticalArrangement = Arrangement.Center){
-        IconQ.Count(selected = selected, onClick = onClick)
-        TextApp(
-            text = "${ stringResource(R.string.duration) } ",
-            textAlign = TextAlign.Center,
-            style = MaterialTheme.typography.bodyMedium)
-    }
-}
-@Composable fun IconDistance(selected: Boolean, onClick: ()->Unit){
-    Column(verticalArrangement = Arrangement.Center){
-        IconQ.Count(selected = selected, onClick = onClick)
-        TextApp(
-            text = "${ stringResource(R.string.distance) } ",
-            textAlign = TextAlign.Center,
-            style = MaterialTheme.typography.bodyMedium)
-    }
-}
-@Composable fun IconSingleLarge(image: ImageVector, onClick:()->Unit){
-    Icon(imageVector = image,
-        contentDescription = "",
-        tint = colorScheme.tertiary,
-        modifier = Modifier
-            .size(Dimen.sizeIconLarge)
-            .clickable { onClick() })
-}
-@Composable fun IconSingleLarge(image: ImageVector){
-    Icon(imageVector = image, contentDescription = "",
-        tint = colorScheme.tertiary,
-        modifier = Modifier.size(Dimen.sizeIconLarge)
-    )
-}
-
-fun masValue(current: Int): List<Int> = listOf(0, 1, 2, 3, 4).map { ((it + current + 3) % 5) + 1}
-
-@Composable
-@Preview(backgroundColor = 0xFF9FA1AF)
-fun Preview(){
-//    IconZoneNew(1)
-    IconGoal(Goal.Count, {})
-}
+//@Composable
+//@Preview(backgroundColor = 0xFF9FA1AF)
+//fun Preview(){
+////    IconZoneNew(1)
+//    IconGoal(Goal.Count, {})
+//}

@@ -51,6 +51,7 @@
     <string name="counts_by_group_add">Введите группу отсчетов (каждое слово соответствует одному отсчету)</string>
 
     <string name="set">Подход</string>
+    <string name="set_short">Под</string>
     <string name="sets">Подходы</string>
     <string name="no_name">нет имени.</string>
     <string name="history">History</string>
@@ -160,11 +161,11 @@
     <string name="save_traning">Сохранить тренировку?</string>
     <string name="no">NO</string>
     <string name="yes">YES</string>
-    <string name="zone1">  I  </string>
-    <string name="zone2">  II </string>
-    <string name="zone3"> III </string>
-    <string name="zone4">  IV </string>
-    <string name="zone5">  V  </string>
+    <string name="zone1">I</string>
+    <string name="zone2">II</string>
+    <string name="zone3">III</string>
+    <string name="zone4">IV</string>
+    <string name="zone5">V</string>
     <string name="gr">гр</string>
     <string name="interval">Интервал</string>
     <string name="reps">Повтор</string>

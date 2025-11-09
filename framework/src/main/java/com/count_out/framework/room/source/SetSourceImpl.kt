@@ -23,7 +23,7 @@ class SetSourceImpl @Inject constructor(
                 insertSpeeches = { speechSource.insert(it) },
                 copyNested = { ResultData.Success(LongDb(1L)) }
             )
-        } else ResultData.Error(ThrowableDS.NotValidType())
+        } else ResultData.Error(ThrowableDS.ErrorTypeSet())
     }.getOrElse { ResultData.Error(ThrowableDS.extract(it)) }
 
     override fun del(set: Data): ResultData<Data> =

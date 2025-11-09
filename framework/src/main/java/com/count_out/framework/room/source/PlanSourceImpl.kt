@@ -53,7 +53,7 @@ class PlanSourceImpl @Inject constructor(
                 insertSpeeches = { speechSource.insert(it) },
                 copyNested = { id -> copyParts(plan.parts, id)}
             )
-        } else ResultData.Error(ThrowableDS.NotValidType())
+        } else ResultData.Error(ThrowableDS.ErrorTypePlan())
     }.getOrElse { ResultData.Error(ThrowableDS.extract(it)) }
 
     override fun del(plan: Data): ResultData<Data> =

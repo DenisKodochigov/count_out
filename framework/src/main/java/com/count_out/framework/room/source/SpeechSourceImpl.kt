@@ -36,7 +36,7 @@ class SpeechSourceImpl @Inject constructor(private val dao: SpeechDao) : SpeechS
             } catch (e: Exception) {
                 ResultData.Error(ThrowableDS.extract(e))
             }
-        } else ResultData.Error(ThrowableDS.NotValidType())
+        } else ResultData.Error(ThrowableDS.ErrorTypeSpeech())
     fun getListSpeech(
         setId: Long? = null, exerciseId: Long? = null, ringId: Long? = null,
         partId: Long? = null, planId: Long? = null

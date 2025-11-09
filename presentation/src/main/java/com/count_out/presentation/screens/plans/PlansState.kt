@@ -9,5 +9,5 @@ data class PlansState(
     var selectedId: Long? = null,
     var goToScreenExecuteWorkout: ()->Unit = {},
     var goToScreenPlan: (Long)->Unit = {},
-    override val event:(Event) -> Unit,
+    override val event: (Event) -> Unit ={},
 ): DataState

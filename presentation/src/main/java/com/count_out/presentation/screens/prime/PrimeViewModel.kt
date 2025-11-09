@@ -4,6 +4,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.count_out.domain.entity.throwable.ResultDomain
 import com.count_out.domain.use_case.UseCase
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -30,4 +32,6 @@ abstract class PrimeViewModel<T: Any, C: PrimeConvertor<UseCase.Response,T>>: Vi
     fun submitEvent(event: Event) { viewModelScope.launch { eventFlow.emit(event) } }
     fun submitState(result: ResultDomain<UseCase.Response>){
         viewModelScope.launch { _screenState.value = convertor().make(result, dataState) }}
+    fun template( execute: ()-> Flow<ResultDomain<UseCase.Response>>){
+        viewModelScope.launch(Dispatchers.IO) { execute().collect { submitState( it ) } }}
 }
