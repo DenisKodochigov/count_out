@@ -60,7 +60,6 @@ import com.count_out.presentation.view_element.ProgressBar
 import com.count_out.presentation.view_element.TextApp
 import com.count_out.presentation.view_element.TopBarApp
 import com.count_out.presentation.view_element.VerticalProgress
-import com.count_out.presentation.view_element.bottom_sheet.BottomSheetSaveTraining
 import com.count_out.presentation.view_element.custom_view.Frame
 import com.count_out.presentation.view_element.custom_view.IconQ
 import java.math.RoundingMode
@@ -69,15 +68,13 @@ import java.math.RoundingMode
     viewModel.screenState.collectAsState().value.let { screenState ->
         PrimeScreen(loader = screenState) { dataState ->
             dataState.goToScreenPlans = { navigateEvent.goToScreenPlans() }
+            dataState.launcherBS.execute(dataState)
             ExecuteWorkoutScreenLayout( dataState)
         }
     }
 }
 @Composable fun ExecuteWorkoutScreenLayout(dataState: ExecuteState){
-    if (dataState.showBS.plan) BottomSheetSaveTraining(dataState)
-    Column(modifier = Modifier
-        .fillMaxSize()
-        .padding(horizontal = 4.dp),
+    Column(modifier = Modifier.fillMaxSize().padding(horizontal = 4.dp),
         content = {
             TopBar(dataState)
             SensorInfo(dataState)
@@ -300,11 +297,11 @@ import java.math.RoundingMode
             RunningState.Started -> {
                 IconQ.Pause(onClick = { dataState.event(ExecuteEvent.Pause)})
                 Spacer(modifier = Modifier.width(32.dp))
-                IconQ.Stop(onClick = { dataState.event(ExecuteEvent.Stop(dataState.showBS))}) }
+                IconQ.Stop(onClick = { dataState.event(ExecuteEvent.Stop)}) }
             RunningState.Paused -> {
                 IconQ.Play( onClick = { dataState.event(ExecuteEvent.Start) })
                 Spacer(modifier = Modifier.width(32.dp))
-                IconQ.Stop(onClick = { dataState.event(ExecuteEvent.Stop(dataState.showBS))})}
+                IconQ.Stop(onClick = { dataState.event(ExecuteEvent.Stop)})}
         }
     }
 }
@@ -356,7 +353,9 @@ import java.math.RoundingMode
             text = nextExercise?.nextActivityName ?: "")
     }
 }
-
+//fun showBS(dataState: ExecuteState, item: Domain){
+//    dataState.event(ExecuteEvent.Launcher(LauncherBSp().init(TypeBS.SavePlan, item)))
+//}
 @Composable fun ShowTypography(){
     TextApp(text = "displayLarge ${typography.displayLarge.fontSize} ", style = typography.displayLarge)
     TextApp(text = "displayMedium ${typography.displayMedium.fontSize} ", style = typography.displayMedium)

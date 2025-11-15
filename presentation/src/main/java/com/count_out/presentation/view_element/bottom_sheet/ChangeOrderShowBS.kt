@@ -13,7 +13,7 @@ import com.count_out.domain.entity.workout.Domain
 import com.count_out.presentation.models.BottomSheetInterface
 import com.count_out.presentation.models.Dimen
 import com.count_out.presentation.models.LauncherBSp
-import com.count_out.presentation.screens.plan.PlanEvent
+import com.count_out.presentation.screens.plans.model.PlansEvent
 import com.count_out.presentation.view_element.ModalBottomSheetApp
 import com.count_out.presentation.view_element.drag_drop_column.column.ColumnDragDrop
 
@@ -33,12 +33,12 @@ import com.count_out.presentation.view_element.drag_drop_column.column.ColumnDra
     )
 }
 @OptIn(ExperimentalMaterial3Api::class)
-@Composable fun ChangeOrderShowBS(dataState: BottomSheetInterface, elements: List<Domain> = emptyList()){
-    if (elements.isNotEmpty()){
-        dataState.onDismiss = { dataState.event(PlanEvent.Launcher(LauncherBSp())) }
+@Composable fun ChangeOrderShowBS(dataState: BottomSheetInterface, owner: Domain, list: List<Domain>){
+    if (list.isNotEmpty()){
+        dataState.onDismiss = { dataState.event(PlansEvent.Launcher(LauncherBSp())) }
         dataState.onConfirmation = { setViewId ->
-            dataState.event( PlanEvent.ChangeSequenceExercise(setViewId as SetViewId))
-            dataState.event(PlanEvent.Launcher(LauncherBSp()))
+            dataState.event( PlansEvent.ChangeSequenceExercise(setViewId as SetViewId))
+            dataState.event(PlansEvent.Launcher(LauncherBSp()))
         }
         val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded=true, confirmValueChange={true})
 
@@ -49,7 +49,7 @@ import com.count_out.presentation.view_element.drag_drop_column.column.ColumnDra
             sheetState = sheetState,
             content = {
                 CarcassBS(
-                    list = { elements },
+                    list = { list },
                     viewElementList = {},
                     actionOnMove = { from, to ->
                         dataState.onConfirmation(SetViewId(1L, null, from, to))

@@ -59,5 +59,5 @@ abstract class RepositoryBindModule {
     @Binds
     abstract fun bindLastPlanRepo(lastPlanRepoImpl: LastPlanRepoImpl): LastPlanRepo
     @Binds
-    abstract fun bindRingRepo(lastPlanRepoImpl: RingRepoImpl): RingRepo
+    abstract fun bindRingRepo(ringRepoImpl: RingRepoImpl): RingRepo
 }

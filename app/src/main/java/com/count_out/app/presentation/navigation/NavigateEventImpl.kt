@@ -4,7 +4,7 @@ import androidx.navigation.NavHostController
 import com.count_out.domain.entity.NavigateEvent
 
 class NavigateEventImpl (private val navController: NavHostController): NavigateEvent {
-    override fun goToScreenPlan(id: Long) { navController.navigateToScreenPlan(id) }
+//    override fun goToScreenPlan(id: Long) { navController.navigateToScreenPlan(id) }
     override fun goToScreenPlans() { navController.navigateToScreenPlans() }
     override fun goToScreenExecuteWorkout() {navController.navigateToScreenExecuteWorkout() }
     override fun backStack() { navController.popBackStack() }

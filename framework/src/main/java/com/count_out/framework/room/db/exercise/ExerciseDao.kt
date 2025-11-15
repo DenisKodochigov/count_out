@@ -13,5 +13,5 @@ interface ExerciseDao: PrimeDao<ExerciseTb> {
     fun setActivity(exerciseId: Long, activityId: Long): Int
     @Transaction
     @Query("SELECT * FROM exercise_tb WHERE ringId = :id ORDER BY idView ASC")
-    fun getExerciseRound(id: Long): List<ExerciseTb>
+    fun getExerciseRing(id: Long): List<ExerciseTb>
 }

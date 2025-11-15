@@ -25,29 +25,28 @@ import com.count_out.domain.entity.workout.Domain
 import com.count_out.domain.entity.workout.Exercise
 import com.count_out.domain.entity.workout.Exercise.Companion.copy
 import com.count_out.presentation.R
-import com.count_out.presentation.models.ActivityImplP
 import com.count_out.presentation.models.BottomSheetInterface
 import com.count_out.presentation.models.Dimen
 import com.count_out.presentation.models.LauncherBSp
-import com.count_out.presentation.screens.plan.PlanEvent
+import com.count_out.presentation.screens.plans.model.PlansEvent
 import com.count_out.presentation.view_element.ModalBottomSheetApp
 
-@Composable fun ActivityBS(dataState: BottomSheetInterface, elements: List<Domain> = emptyList()){
-    dataState.item = elements.firstNotNullOf{it}
+@Composable fun ActivityBS(dataState: BottomSheetInterface, owner: Domain){
+    dataState.item = owner
     val item = dataState.item
     if (dataState.item != null && item is Exercise){
         dataState.nameSection = stringResource(id = R.string.list_activity)
-        dataState.onDismiss = { dataState.event(PlanEvent.Launcher(LauncherBSp())) }
+        dataState.onDismiss = { dataState.event(PlansEvent.Launcher(LauncherBSp())) }
         dataState.onConfirmation = { activity ->
-            if (activity is Activity) dataState.event(PlanEvent.UpdateExercise(
+            if (activity is Activity) dataState.event(PlansEvent.UpdateExercise(
                 item.copy( activity = activity, activityId = activity.idActivity )))
-            dataState.event(PlanEvent.Launcher(LauncherBSp()))
+            dataState.event(PlansEvent.Launcher(LauncherBSp()))
         }
-        BottomSheetSelectActivity1(dataState)
+        BottomSheetSelectActivity(dataState)
     }
 }
 @OptIn(ExperimentalMaterial3Api::class)
-@Composable fun BottomSheetSelectActivity1(dataState: BottomSheetInterface) {
+@Composable fun BottomSheetSelectActivity(dataState: BottomSheetInterface) {
     val sheetState = rememberModalBottomSheetState(
         skipPartiallyExpanded = true, confirmValueChange = { true },)
 
@@ -56,30 +55,31 @@ import com.count_out.presentation.view_element.ModalBottomSheetApp
         modifier = Modifier.padding(horizontal = Dimen.bsPaddingHor1),
         shape = MaterialTheme.shapes.small,
         sheetState = sheetState,
-        content = { BottomSheetSelectActivityContent1(dataState) }
+        content = { BottomSheetSelectActivityContent(dataState) }
     )
 }
 
-@Composable fun BottomSheetSelectActivityContent1(dataState: BottomSheetInterface) {
+@Composable fun BottomSheetSelectActivityContent(dataState: BottomSheetInterface) {
     Column( horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier.fillMaxWidth().padding(Dimen.bsItemPaddingHor)
     ){
         Spacer(Modifier.height(Dimen.bsSpacerHeight))
-        LazyActivity1(dataState)
+        LazyActivity(dataState)
         Spacer(Modifier.height(Dimen.bsSpacerBottomHeight))
     }
 }
-@Composable fun LazyActivity1(dataState: BottomSheetInterface){
+@Composable fun LazyActivity(dataState: BottomSheetInterface){
     LazyColumn(
         state = rememberLazyListState(),
         verticalArrangement = Arrangement.spacedBy(8.dp),
         modifier = Modifier.heightIn(min = 0.dp, max = 250.dp)
     ){
-        items(items = dataState.activities) { item ->
-            ActivityTitle(
-                activity = remember{ mutableStateOf(ActivityImplP(item))},
-                onSelect = { dataState.onConfirmation( item )},
-            )
+        items(items = dataState.list) { item ->
+            if ( item is Activity)
+                ActivityTitle(
+                    activity = remember{ mutableStateOf(item)},
+                    onSelect = { dataState.onConfirmation( item )},
+                )
         }
     }
 }

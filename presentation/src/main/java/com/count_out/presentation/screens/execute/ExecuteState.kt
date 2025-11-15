@@ -1,15 +1,15 @@
 package com.count_out.presentation.screens.execute
 
-import androidx.compose.runtime.Stable
 import com.count_out.domain.entity.Coordinate
 import com.count_out.domain.entity.StepPlan
 import com.count_out.domain.entity.TickTime
 import com.count_out.domain.entity.enums.ConnectState
 import com.count_out.domain.entity.enums.RunningState
 import com.count_out.domain.entity.router.DeviceBle
-import com.count_out.domain.entity.workout.ShowBottomSheet
+import com.count_out.domain.entity.workout.Domain
+import com.count_out.presentation.models.BottomSheetInterface
+import com.count_out.presentation.models.LauncherBSp
 import com.count_out.presentation.models.TickTimeImplP
-import com.count_out.presentation.screens.prime.DataState
 import com.count_out.presentation.screens.prime.Event
 import javax.inject.Singleton
 
@@ -29,13 +29,18 @@ data class ExecuteState(
     val bleConnectState: ConnectState = ConnectState.NOT_CONNECTED,
 
     val coordinate: Coordinate? = null,
-    val showBS: ShowBottomSheet = ShowBottomSheet(),
+    val launcherBS: LauncherBSp = LauncherBSp(),
 
-    @Stable var startTime: Long = 0L,
-    override val event: (Event) -> Unit = {},
+    var startTime: Long = 0L,
 
     var goToScreenPlans: ()->Unit = {},
-): DataState
+    override var list: List<Domain> = emptyList(),
+    override var nameSection: String = "",
+    override var item: Domain? = null,
+    override var onConfirmation: (Domain) -> Unit = {},
+    override var onDismiss: () -> Unit = {},
+    override val event: (Event) -> Unit ={},
+): BottomSheetInterface
 
 
 

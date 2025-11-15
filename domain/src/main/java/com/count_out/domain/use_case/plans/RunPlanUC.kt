@@ -10,9 +10,9 @@ import com.count_out.domain.use_case.UseCase
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
-class SelectPlanUC @Inject constructor(
+class RunPlanUC @Inject constructor(
     configuration: Configuration, private val repoLastPlan: LastPlanRepo
-): UseCase<SelectPlanUC.Request, SelectPlanUC.Response>(configuration)  {
+): UseCase<RunPlanUC.Request, RunPlanUC.Response>(configuration)  {
     override fun method(request: Request): Flow<ResultDomain<Domain>> {
         GlobalValueApp.planLast.value = ResultDomain.Success(request.plan)
         return repoLastPlan.saveLastUsedPlan(LongDm(item = request.plan.idPlan))

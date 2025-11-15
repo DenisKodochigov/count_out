@@ -29,9 +29,11 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.count_out.domain.entity.enums.TypeBS
 import com.count_out.domain.entity.workout.Activity
+import com.count_out.domain.entity.workout.Activity.Companion.copy
 import com.count_out.presentation.R
-import com.count_out.presentation.models.ActivityImplP
+import com.count_out.presentation.models.LauncherBSp
 import com.count_out.presentation.models.TypeKeyboard
 import com.count_out.presentation.screens.settings.SettingsEvent
 import com.count_out.presentation.screens.settings.SettingsState
@@ -44,11 +46,9 @@ import com.count_out.presentation.view_element.dialog.ChangeColorSectionDialog
 @Composable fun CardActivity(dataState: SettingsState, activity: Activity) {
     Frame {
         ActivityTitle(
-            activity = mutableStateOf(ActivityImplP(activity)),
-            onSelect = {
-//                dataState.item = activity
-//                dataState.event(SettingsEvent.ShowBS(dataState.showBS.copy(domain = activity)))
-                       },
+            activity = mutableStateOf(activity),
+            onSelect = { dataState.event(SettingsEvent.Launcher(
+                    LauncherBSp().type(TypeBS.Activity).list(listOf(activity))))},
             onChange = { dataState.event(SettingsEvent.SetColorActivity(activity)) }, //
             onDeleteActivity = { dataState.event(SettingsEvent.DeleteActivity(activity)) },
         )
@@ -57,9 +57,9 @@ import com.count_out.presentation.view_element.dialog.ChangeColorSectionDialog
 
 @Composable fun ActivityTitle(
     edit: Boolean = false,
-    activity: MutableState<ActivityImplP>,
+    activity: MutableState<Activity>,
     onSelect: () -> Unit = {},
-    onChange: (ActivityImplP) -> Unit = {},
+    onChange: (Activity) -> Unit = {},
     onDeleteActivity:(Long)-> Unit = {}
 ){
     val activityChangeColor: MutableState<Activity?> = remember { mutableStateOf(null) }
@@ -107,8 +107,8 @@ import com.count_out.presentation.view_element.dialog.ChangeColorSectionDialog
     }
 }
 @Composable fun ActivityEdit(
-    activity: MutableState<ActivityImplP>,
-    onChange: (ActivityImplP) -> Unit = {},
+    activity: MutableState<Activity>,
+    onChange: (Activity) -> Unit = {},
 ){
     val modifier = Modifier.padding(horizontal = 6.dp, vertical = 4.dp)
     val modifier1 = Modifier.padding(horizontal = 6.dp, vertical = 0.dp)

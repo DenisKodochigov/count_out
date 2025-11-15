@@ -3,6 +3,8 @@ package com.count_out.domain.entity.workout
 interface Ring: Domain {
     val idRing: Long
     val partId: Long
+
+    val idView: Long
     val numberLaps: Int
     val amount: Int
     val duration: Parameter
@@ -12,6 +14,7 @@ interface Ring: Domain {
         fun default(partId: Long) = object: Ring{
             override val idRing: Long = 0
             override val partId: Long = partId
+            override val idView: Long = 0
             override val numberLaps: Int = 0
             override val amount: Int = 2
             override val duration: Parameter = Parameter.EMPTY
@@ -22,6 +25,7 @@ interface Ring: Domain {
         fun Ring.amount(value: Int) = object: Ring{
             override val idRing: Long = this@amount.idRing
             override val partId: Long = this@amount.partId
+            override val idView: Long = this@amount.idView
             override val numberLaps: Int = this@amount.numberLaps
             override val amount: Int = value
             override val duration: Parameter = this@amount.duration

@@ -14,5 +14,4 @@ class LauncherBottomSheetCore: Core()  {
     fun execute(item: Domain): Domain {
         return item as? LauncherBS<*> ?: object:Domain{}
     }
-
 }

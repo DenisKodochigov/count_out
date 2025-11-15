@@ -32,24 +32,24 @@ import com.count_out.presentation.models.BottomSheetInterface
 import com.count_out.presentation.models.Dimen
 import com.count_out.presentation.models.LauncherBSp
 import com.count_out.presentation.models.TypeKeyboard
-import com.count_out.presentation.screens.plan.PlanEvent
+import com.count_out.presentation.screens.plans.model.PlansEvent
 import com.count_out.presentation.view_element.ButtonConfirm
 import com.count_out.presentation.view_element.ModalBottomSheetApp
 import com.count_out.presentation.view_element.TextApp
 import com.count_out.presentation.view_element.TextFieldApp
 
-@Composable fun SpeechBS(dataState: BottomSheetInterface, elements: List<Domain> = emptyList()){
-    dataState.item = elements.firstNotNullOf{it}
+@Composable fun SpeechBS(dataState: BottomSheetInterface, owner: Domain){
+    dataState.item = owner
     if (dataState.item != null) {
         dataState.nameSection = nameSection1( dataState.item ?: Domain.EMPTY )
-        dataState.onDismiss = { dataState.event(PlanEvent.Launcher(LauncherBSp())) }
+        dataState.onDismiss = { dataState.event(PlansEvent.Launcher(LauncherBSp())) }
         dataState.onConfirmation = { speechKit ->
             if (speechKit is SpeechKit) {
-                dataState.event(PlanEvent.UpdateSpeech(speechKit.beforeStart))
-                dataState.event(PlanEvent.UpdateSpeech(speechKit.afterStart))
-                dataState.event(PlanEvent.UpdateSpeech(speechKit.beforeEnd))
-                dataState.event(PlanEvent.UpdateSpeech(speechKit.afterEnd))
-                dataState.event(PlanEvent.Launcher(LauncherBSp()))
+                dataState.event(PlansEvent.UpdateSpeech(speechKit.beforeStart))
+                dataState.event(PlansEvent.UpdateSpeech(speechKit.afterStart))
+                dataState.event(PlansEvent.UpdateSpeech(speechKit.beforeEnd))
+                dataState.event(PlansEvent.UpdateSpeech(speechKit.afterEnd))
+                dataState.event(PlansEvent.Launcher(LauncherBSp()))
             }
         }
         BottomSheetSpeech1(dataState)

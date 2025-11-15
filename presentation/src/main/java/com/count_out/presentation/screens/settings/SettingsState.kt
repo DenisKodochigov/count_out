@@ -3,11 +3,8 @@ package com.count_out.presentation.screens.settings
 import com.count_out.domain.entity.Settings
 import com.count_out.domain.entity.enums.ConnectState
 import com.count_out.domain.entity.router.DeviceBle
-import com.count_out.domain.entity.workout.Activity
 import com.count_out.domain.entity.workout.Collapsing
 import com.count_out.domain.entity.workout.Domain
-import com.count_out.domain.entity.workout.ShowBottomSheet
-import com.count_out.presentation.models.ActivityImplP
 import com.count_out.presentation.models.BottomSheetInterface
 import com.count_out.presentation.models.LauncherBSp
 import com.count_out.presentation.screens.prime.Event
@@ -24,13 +21,9 @@ data class SettingsState(
     val scannedBle: Boolean = false,
     val connectingState: ConnectState = ConnectState.NOT_CONNECTED,
 
-    val activityTmpl: Activity = ActivityImplP(1L),
-    //for screen
-
-    val showBS: ShowBottomSheet = ShowBottomSheet(),
-    val launcherBS: LauncherBSp = LauncherBSp().element(emptyList()).type(null),
+    val launcherBS: LauncherBSp = LauncherBSp().list(emptyList()).type(null),
     val collapsing: Collapsing = Collapsing(),
-    override var activities: List<Activity> = emptyList(),
+    override var list: List<Domain> = emptyList(),
     override val event: (Event) -> Unit,
     override var item: Domain? = null,
     override var nameSection: String = "",

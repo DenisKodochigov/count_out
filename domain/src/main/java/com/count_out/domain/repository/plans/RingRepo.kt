@@ -8,4 +8,5 @@ interface RingRepo {
     fun update(ring: Domain): Flow<ResultDomain<Domain>>
     fun del(ring: Domain): Flow<ResultDomain<Domain>>
     fun insert(ring: Domain): Flow<ResultDomain<Domain>>
+    fun changeSequenceExercise(setViewId: Domain): Flow<ResultDomain<Domain>>
 }

@@ -1,10 +1,6 @@
 package com.count_out.presentation.screens.settings
 
 import androidx.lifecycle.SavedStateHandle
-import com.count_out.domain.entity.Settings
-import com.count_out.domain.entity.router.DeviceBle
-import com.count_out.domain.entity.workout.Activity
-import com.count_out.domain.entity.workout.Collapsing
 import com.count_out.domain.use_case.bluetooth.ClearCacheBleUC
 import com.count_out.domain.use_case.bluetooth.ConnectDeviceHrUC
 import com.count_out.domain.use_case.bluetooth.GetConnectionStateUC
@@ -21,8 +17,6 @@ import com.count_out.domain.use_case.plans.activity.GetActivitiesUC
 import com.count_out.domain.use_case.plans.activity.UpdateActivityUC
 import com.count_out.domain.use_case.settings.GetSettingsUC
 import com.count_out.domain.use_case.settings.UpdateSettingUC
-import com.count_out.presentation.models.LauncherBSp
-import com.count_out.presentation.screens.plan.PlanEvent
 import com.count_out.presentation.screens.prime.Event
 import com.count_out.presentation.screens.prime.PrimeViewModel
 import com.count_out.presentation.screens.prime.ScreenState
@@ -43,12 +37,12 @@ class SettingViewModel @Inject constructor(
     private val getSettings: GetSettingsUC,
     private val updateSetting: UpdateSettingUC,
 //    private val showBottomSheetUC: ShowBottomSheetUC,
-    private val collapsingSetUC: CollapsingUC,
+    private val collapsingSet: CollapsingUC,
     private val getConnectionState: GetConnectionStateUC,
     private val subscribeHeartRate: GetHeartRateUC,
     private val getLastBleDevice: LastBleDeviceUC,
     private val connectDeviceHr: ConnectDeviceHrUC,
-    private val launcherBSUC: LauncherBottomSheetUC,
+    private val launcherBS: LauncherBottomSheetUC,
 ): PrimeViewModel<SettingsState, SettingsConvertor>() {
 
     override fun initScreenState(): ScreenState<SettingsState> = ScreenState.Loading
@@ -57,61 +51,25 @@ class SettingViewModel @Inject constructor(
     override fun routeEvent(event: Event) {
         when (event) {
 //            is SettingsEvent.BackScreen -> { navigate.backStack() }
-            is SettingsEvent.AddActivity -> { addActivity(event.activity) }
-            is SettingsEvent.DeleteActivity -> { delActivity(event.activity) }
-            is SettingsEvent.UpdateActivity -> { updateActivity(event.activity) }
-            is SettingsEvent.UpdateSetting -> { updateSetting(event.setting) }
-            is SettingsEvent.GetSettings -> { getSettings() }
-            is SettingsEvent.StartScanBLE -> { startScanBle() }
-            is SettingsEvent.StopScanBLE -> { stopScanBle() }
-            is SettingsEvent.SelectDevice -> { selectDeviceBle(event.device) }
-            is SettingsEvent.ClearCacheBLE -> { clearCacheBle() }
-//            is SettingsEvent.ShowBS -> { showBottomSheet(event.item) }
-            is SettingsEvent.SetCollapsing -> { collapsingSet(event.item) }
-            is PlanEvent.Launcher -> { launcherBS(event.item) }
-//            is SettingsEvent.Init -> { init() }
+            is SettingsEvent.AddActivity -> { run(addActivity, AddActivityUC.Request(event.activity))}
+            is SettingsEvent.DeleteActivity -> { run(delActivity,DeleteActivityUC.Request(event.activity))}
+            is SettingsEvent.UpdateActivity -> { run(updateActivity, UpdateActivityUC.Request(event.activity)) }
+            is SettingsEvent.UpdateSetting -> { run(updateSetting,UpdateSettingUC.Request(event.setting)) }
+            is SettingsEvent.GetSettings -> { run(getSettings,GetSettingsUC.Request) }
+            is SettingsEvent.StartScanBLE -> {run( startScanBle,StartScanBleUC.Request) }
+            is SettingsEvent.StopScanBLE -> { run(stopScanBle,StopScanBleUC.Request) }
+            is SettingsEvent.SelectDevice -> { run(selectDeviceBle,SelectDeviceBleUC.Request(event.device)) }
+            is SettingsEvent.ClearCacheBLE -> { run(clearCacheBle,ClearCacheBleUC.Request) }
+            is SettingsEvent.SetCollapsing -> { run(collapsingSet,CollapsingUC.Request(event.item)) }
+            is SettingsEvent.Launcher -> { run(launcherBS, LauncherBottomSheetUC.Request(event.item))}
         }
     }
     init {
-        getSettings()
-        getsActivity()
-        getConnectionState()
-        subscribeHeartRate()
-        connectDeviceHr()
-        getLastBleDevice()
+        template{getSettings.execute(GetSettingsUC.Request) }
+        template{getsActivity.execute(GetActivitiesUC.Request) }
+        template{getConnectionState.execute(GetConnectionStateUC.Request)}
+        template{subscribeHeartRate.execute(GetHeartRateUC.Request) }
+        template{connectDeviceHr.execute(ConnectDeviceHrUC.Request) }
+        template{getLastBleDevice.execute(LastBleDeviceUC.Request) }
     }
-    private fun launcherBS(manager: LauncherBSp){
-        template{ launcherBSUC.execute( LauncherBottomSheetUC.Request(manager))}}
-    private fun connectDeviceHr() {
-        template{connectDeviceHr.execute(ConnectDeviceHrUC.Request) } }
-    private fun getConnectionState() {
-        template{getConnectionState.execute(GetConnectionStateUC.Request)} }
-    private fun subscribeHeartRate() {
-        template{subscribeHeartRate.execute(GetHeartRateUC.Request) } }
-    private fun getLastBleDevice() {
-        template{getLastBleDevice.execute(LastBleDeviceUC.Request) } }
-    private fun addActivity(activity: Activity) {
-        template{addActivity.execute(AddActivityUC.Request(activity)) } }
-    private fun getsActivity() {
-        template{getsActivity.execute(GetActivitiesUC.Request) } }
-    private fun delActivity(activity: Activity) {
-        template{delActivity.execute(DeleteActivityUC.Request(activity))}}
-    private fun updateActivity(activity: Activity) {
-        template{updateActivity.execute(UpdateActivityUC.Request(activity)) } }
-    private fun getSettings() {
-        template{getSettings.execute(GetSettingsUC.Request) } }
-    private fun updateSetting(setting: Settings) {
-        template{updateSetting.execute(UpdateSettingUC.Request(setting))} }
-    private fun startScanBle() {
-        template{startScanBle.execute(StartScanBleUC.Request)} }
-    private fun stopScanBle() {
-        template{stopScanBle.execute(StopScanBleUC.Request)} }
-    private fun clearCacheBle() {
-        template{clearCacheBle.execute(ClearCacheBleUC.Request)} }
-    private fun selectDeviceBle(device: DeviceBle) {
-        template{selectDeviceBle.execute(SelectDeviceBleUC.Request(device)) } }
-//    private fun showBottomSheet(show: ShowBottomSheet){
-//        template{showBottomSheetUC.execute( ShowBottomSheetUC.Request(show)) } }
-    private fun collapsingSet(collaps: Collapsing){
-        template{collapsingSetUC.execute( CollapsingUC.Request(collaps)) } }
 }

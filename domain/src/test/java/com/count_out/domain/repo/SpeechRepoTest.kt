@@ -3,7 +3,7 @@ package com.count_out.domain.repo
 import com.count_out.domain.repository.plans.PlanRepo
 import com.count_out.domain.use_case.plans.DeletePlanUC
 import com.count_out.domain.use_case.plans.GetPlansUC
-import com.count_out.domain.use_case.plans.SelectPlanUC
+import com.count_out.domain.use_case.plans.RunPlanUC
 import com.count_out.domain.use_case.speech.UpdateSpeechUC
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
@@ -38,7 +38,7 @@ class SpeechRepoTest {
         val repo = mock<PlanRepo>()
         val delTrainingUC = mock<DeletePlanUC>()
         val getPlansUC = mock<GetPlansUC>()
-        val selectPlanUC = mock<SelectPlanUC>()
+        val runPlanUC = mock<RunPlanUC>()
         val updateSpeechUC = mock<UpdateSpeechUC>()
 
         @JvmStatic

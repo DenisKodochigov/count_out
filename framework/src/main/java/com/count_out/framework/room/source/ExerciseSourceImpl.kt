@@ -45,7 +45,7 @@ class ExerciseSourceImpl @Inject constructor(
             if (setViewId is SetIdViewDb) {
                 val from = setViewId.from
                 val to = setViewId.to
-                val listExercise = dao.getExerciseRound(setViewId.ringId).toMutableList()
+                val listExercise = dao.getExerciseRing(setViewId.ownerId).toMutableList()
                 if (from > to) for ( id in to..< from){ listExercise[id].idView = id + 1 }
                 else for ( id in (from + 1)..to){ listExercise[id].idView = id - 1}
                 listExercise[from].idView = to
@@ -60,6 +60,7 @@ class ExerciseSourceImpl @Inject constructor(
     override fun del(exercise: Data): ResultData<Data> =
         exercise.safeUse<ExerciseDb, Long>{ item -> dao.delete(item.toTb()).toLong() }
 }
+
 //
 //        exercise.safeUse<ExerciseTb, ResultData<Data>> { exerciseTb->
 //            var idNew = LongDb(0L)

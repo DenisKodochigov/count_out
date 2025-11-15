@@ -39,7 +39,7 @@ class SettingsConvertor @Inject constructor():
         return state.value
     }
     private fun converterLocal(data: GetActivitiesUC.Response, state: MutableStateFlow<SettingsState>): SettingsState{
-        if (data.activity is Activities) state.value = state.value.copy(activities = (data.activity as Activities).activities)
+        if (data.activity is Activities) state.value = state.value.copy(list = (data.activity as Activities).activities)
         return state.value
     }
     private fun converterLocal(data: UpdateSettingUC.Response, state: MutableStateFlow<SettingsState>): SettingsState{
@@ -51,11 +51,6 @@ class SettingsConvertor @Inject constructor():
             state.value = state.value.copy( collapsing = data.collaps as Collapsing)
         return state.value
     }
-//    private fun converterLocal(data: ShowBottomSheetUC.Response, state: MutableStateFlow<SettingsState>): SettingsState {
-//        if (data.show is ShowBottomSheet)
-//            state.value = state.value.copy( showBS = data.show as ShowBottomSheet)
-//        return state.value
-//    }
     private fun converterLocal(data: GetConnectionStateUC.Response, state: MutableStateFlow<SettingsState>): SettingsState {
         if (data.result is ConnectState) state.value = state.value.copy( connectingState = data.result as ConnectState)
         return state.value
@@ -68,3 +63,8 @@ class SettingsConvertor @Inject constructor():
         return state.value
     }
 }
+//    private fun converterLocal(data: ShowBottomSheetUC.Response, state: MutableStateFlow<SettingsState>): SettingsState {
+//        if (data.show is ShowBottomSheet)
+//            state.value = state.value.copy( showBS = data.show as ShowBottomSheet)
+//        return state.value
+//    }

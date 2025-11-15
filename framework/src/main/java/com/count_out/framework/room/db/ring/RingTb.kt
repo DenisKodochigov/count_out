@@ -26,6 +26,7 @@ import com.count_out.framework.room.db.speech.SpeechTb.Companion.toTb
 data class RingTb(
     @PrimaryKey(autoGenerate = true) override var idRing: Long = 0L,
     override var partId: Long = 0L,
+    override var idView: Long = 0,
     override var numberLaps: Int = 0,
     override var amount: Int = 0,
     override var duration: Double = 0.0,
@@ -36,6 +37,7 @@ data class RingTb(
         fun RingDb.toTb(
             idRing: Long = this.idRing,
             partId: Long = this.partId,
+            idView: Long = this.idView,
             numberLaps: Int = this.numberLaps,
             amount: Int = this.amount,
             duration: Double = this.duration,
@@ -44,6 +46,7 @@ data class RingTb(
         ) = RingTb(
             idRing = idRing,
             partId = partId,
+            idView = idView,
             numberLaps = numberLaps,
             amount = amount,
             duration = duration,

@@ -4,7 +4,7 @@ import com.count_out.domain.entity.Settings
 import com.count_out.domain.entity.router.DeviceBle
 import com.count_out.domain.entity.workout.Activity
 import com.count_out.domain.entity.workout.Collapsing
-import com.count_out.domain.entity.workout.ShowBottomSheet
+import com.count_out.presentation.models.LauncherBSp
 import com.count_out.presentation.screens.prime.Event
 
 sealed class SettingsEvent: Event {
@@ -19,8 +19,8 @@ sealed class SettingsEvent: Event {
     data class UpdateActivity(val activity: Activity): SettingsEvent()
     data class DeleteActivity(val activity: Activity): SettingsEvent()
     data class SetColorActivity(val activity: Activity): SettingsEvent()
-
-    data class ShowBS(val item: ShowBottomSheet): SettingsEvent()
     data class SetCollapsing(val item: Collapsing): SettingsEvent()
     data class SelectDevice(val device: DeviceBle): SettingsEvent()
+
+    data class Launcher(val item: LauncherBSp): SettingsEvent()
 }

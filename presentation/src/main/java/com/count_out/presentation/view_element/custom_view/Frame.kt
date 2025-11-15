@@ -23,7 +23,6 @@ import androidx.compose.ui.unit.dp
     content:@Composable ()->Unit)
 {
     val color = with(colorBorder){ Color(red, green, blue, alpha * colorAlpha) }
-
     Box( content = { content() },
         modifier = modifier
             .animateContentSize()

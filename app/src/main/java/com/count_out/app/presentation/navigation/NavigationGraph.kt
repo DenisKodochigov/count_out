@@ -22,8 +22,7 @@ import com.count_out.app.presentation.Const.DELAY_SCREEN
 import com.count_out.app.presentation.Const.DURATION_SCREEN
 import com.count_out.presentation.screens.execute.ExecuteViewModel
 import com.count_out.presentation.screens.history.HistoryViewModel
-import com.count_out.presentation.screens.plan.PlanViewModel
-import com.count_out.presentation.screens.plans.PlansViewModel
+import com.count_out.presentation.screens.plans.model.PlansViewModel
 import com.count_out.presentation.screens.settings.SettingViewModel
 
 fun NavGraphBuilder.executeWorkout( navigateEvent: NavigateEventImpl) {
@@ -44,16 +43,16 @@ fun NavGraphBuilder.plans( navigateEvent: NavigateEventImpl ) {
         }
     )
 }
-fun NavGraphBuilder.plan( navigateEvent: NavigateEventImpl) {
-    template(
-        routeTo = PlanDestination.routeWithArgs,
-        argument = PlanDestination.arguments,
-        content = {navBackStackEntry ->
-            PlanDestination.Show(navigateEvent = navigateEvent,
-                vm = hiltViewModel(navBackStackEntry) as PlanViewModel)
-        }
-    )
-}
+//fun NavGraphBuilder.plan( navigateEvent: NavigateEventImpl) {
+//    template(
+//        routeTo = PlanDestination.routeWithArgs,
+//        argument = PlanDestination.arguments,
+//        content = {navBackStackEntry ->
+//            PlanDestination.Show(navigateEvent = navigateEvent,
+//                vm = hiltViewModel(navBackStackEntry) as PlanViewModel)
+//        }
+//    )
+//}
 fun NavGraphBuilder.history( navigateEvent: NavigateEventImpl) {
     template(
         routeTo = HistoryDestination.route,

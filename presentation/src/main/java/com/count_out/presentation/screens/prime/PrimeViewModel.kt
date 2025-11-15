@@ -24,9 +24,6 @@ abstract class PrimeViewModel<T: Any, C: PrimeConvertor<UseCase.Response,T>>: Vi
         MutableStateFlow(initScreenState()) }
     val screenState: StateFlow< ScreenState<T>> = _screenState
 
-//    lateinit var navigate: NavigateEvent
-//    fun initNavigate(navigateEvent: NavigateEvent) { navigate = navigateEvent}
-
     init { viewModelScope.launch { eventFlow.collect { routeEvent(it) } } }
 
     fun submitEvent(event: Event) { viewModelScope.launch { eventFlow.emit(event) } }
@@ -34,4 +31,6 @@ abstract class PrimeViewModel<T: Any, C: PrimeConvertor<UseCase.Response,T>>: Vi
         viewModelScope.launch { _screenState.value = convertor().make(result, dataState) }}
     fun template( execute: ()-> Flow<ResultDomain<UseCase.Response>>){
         viewModelScope.launch(Dispatchers.IO) { execute().collect { submitState( it ) } }}
+    fun <R : UseCase.Request> run(useCase: UseCase<R, *>, request: R) = template { useCase.execute(request) }
+
 }

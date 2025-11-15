@@ -42,7 +42,7 @@ import com.count_out.domain.use_case.plans.GetPlansUC
 import com.count_out.domain.use_case.plans.GetStepPlanUC
 import com.count_out.domain.use_case.plans.RingOrExerciseUC
 import com.count_out.domain.use_case.plans.SaveLastUsePlanUC
-import com.count_out.domain.use_case.plans.SelectPlanUC
+import com.count_out.domain.use_case.plans.RunPlanUC
 import com.count_out.domain.use_case.plans.UpdateNamePlanUC
 import com.count_out.domain.use_case.plans.exercise.CopyExerciseUC
 import com.count_out.domain.use_case.plans.exercise.DeleteExerciseUC
@@ -116,7 +116,7 @@ class CoreModule {
     @Singleton @Provides
     fun provideGetTrainingUseCase(configuration: UseCase.Configuration, repo: PlanRepo): GetPlanUC = GetPlanUC(configuration, repo)
     @Singleton @Provides
-    fun provideSelectTrainingUseCase(configuration: UseCase.Configuration, repo: LastPlanRepo): SelectPlanUC = SelectPlanUC(configuration, repo)
+    fun provideSelectTrainingUseCase(configuration: UseCase.Configuration, repo: LastPlanRepo): RunPlanUC = RunPlanUC(configuration, repo)
     @Singleton @Provides
     fun provideUpdateTrainingUseCase(configuration: UseCase.Configuration, planRepo: PlanRepo): UpdateNamePlanUC = UpdateNamePlanUC(configuration, planRepo)
     @Singleton @Provides

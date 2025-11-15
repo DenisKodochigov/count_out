@@ -2,13 +2,17 @@ package com.count_out.presentation.screens.execute
 
 import com.count_out.domain.entity.StepPlan
 import com.count_out.domain.entity.enums.ConnectState
+import com.count_out.domain.entity.lg
 import com.count_out.domain.entity.router.DeviceBle
 import com.count_out.domain.entity.types_domai.LongDm
+import com.count_out.domain.entity.workout.LauncherBS
 import com.count_out.domain.use_case.UseCase
 import com.count_out.domain.use_case.bluetooth.GetConnectionStateUC
 import com.count_out.domain.use_case.bluetooth.GetHeartRateUC
 import com.count_out.domain.use_case.bluetooth.LastBleDeviceUC
+import com.count_out.domain.use_case.other.LauncherBottomSheetUC
 import com.count_out.domain.use_case.plans.GetStepPlanUC
+import com.count_out.presentation.models.LauncherBSp
 import com.count_out.presentation.screens.prime.PrimeConvertor
 import kotlinx.coroutines.flow.MutableStateFlow
 import javax.inject.Inject
@@ -18,24 +22,23 @@ class ExecuteConverter @Inject constructor(): PrimeConvertor<UseCase.Response, E
     override fun makeSuccess(
         resultData: UseCase.Response, state: MutableStateFlow<ExecuteState>): ExecuteState {
         return when(resultData){
-            is GetStepPlanUC.Response-> makeLocal(resultData, state)
-//            is ShowBottomSheetUC.Response-> makeLocal(resultData, state)
+            is GetStepPlanUC.Response-> converterLocal(resultData, state)
             is GetHeartRateUC.Response-> converterLocal(resultData, state)
             is LastBleDeviceUC.Response-> converterLocal(resultData, state)
             is GetConnectionStateUC.Response-> converterLocal(resultData, state)
+            is LauncherBottomSheetUC.Response-> converterLocal(resultData, state)
             else -> converterOther(state)
         }
     }
-
-    private fun makeLocal(data: GetStepPlanUC.Response, state: MutableStateFlow<ExecuteState>): ExecuteState {
+    private fun converterLocal(data: LauncherBottomSheetUC.Response, state: MutableStateFlow<ExecuteState>): ExecuteState {
+        if (data.launcher is LauncherBS<*>) {
+            state.value = state.value.copy(launcherBS = data.launcher as LauncherBSp) }
+        return state.value
+    }
+    private fun converterLocal(data: GetStepPlanUC.Response, state: MutableStateFlow<ExecuteState>): ExecuteState {
         state.value = state.value.copy( stepPlan = data.step as StepPlan?)
         return state.value
     }
-//    private fun makeLocal(data: ShowBottomSheetUC.Response, state: MutableStateFlow<ExecuteState>): ExecuteState {
-//        if (data.show is ShowBottomSheet)
-//            state.value = state.value.copy( showBS = data.show as ShowBottomSheet)
-//        return state.value
-//    }
     private fun converterLocal(data: GetConnectionStateUC.Response, state: MutableStateFlow<ExecuteState>): ExecuteState {
         if (data.result is ConnectState)
             state.value = state.value.copy( bleConnectState = data.result as ConnectState)

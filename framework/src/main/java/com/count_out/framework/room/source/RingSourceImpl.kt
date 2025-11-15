@@ -3,7 +3,9 @@ package com.count_out.framework.room.source
 import com.count_out.data.models.Data
 import com.count_out.data.models.ResultData
 import com.count_out.data.models.entity.ExerciseDb
+import com.count_out.data.models.entity.LongDb
 import com.count_out.data.models.entity.RingDb
+import com.count_out.data.models.entity.SetIdViewDb
 import com.count_out.data.models.throwable.ThrowableDS
 import com.count_out.data.source.room.ExerciseSource
 import com.count_out.data.source.room.RingSource
@@ -40,6 +42,22 @@ class RingSourceImpl @Inject constructor(
     override fun update(ring: Data): ResultData<Data> =
         ring.safeUse<RingDb, Long> { dao.update(it.toTb()).toLong() }
 
+    override fun changeSequenceExercise(setViewId: Data): ResultData<Data> {
+        return try {
+            if (setViewId is SetIdViewDb) {
+                val from = setViewId.from
+                val to = setViewId.to
+                val listRing = dao.getRingInPart(setViewId.ownerId).toMutableList()
+                if (from > to) for ( id in to..< from){ listRing[id].idView = (id + 1).toLong() }
+                else for ( id in (from + 1)..to){ listRing[id].idView = (id - 1).toLong()}
+                listRing[from].idView = to.toLong()
+                dao.update(listRing).let { result->
+                    if (result == listRing.count()) ResultData.Success(LongDb(result.toLong()))
+                    else ResultData.Error(ThrowableDS.ErrorExercises())
+                }
+            } else ResultData.Error(ThrowableDS.ErrorTypeSetIdView())
+        } catch (e: Exception) { ResultData.Error(ThrowableDS.extract(e)) }
+    }
 //##############################################################################################
     fun copyExercises(exercises: List<ExerciseDb>, ownerId: Long): ResultData<Data> =
         if (exercises.isEmpty()) source.insert( ExerciseDb.new(ownerId))
