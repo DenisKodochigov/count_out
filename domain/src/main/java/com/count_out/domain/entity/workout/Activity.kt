@@ -2,6 +2,7 @@ package com.count_out.domain.entity.workout
 
 interface Activity: Domain {
     val idActivity: Long
+    val idView: Int
     val name: String
     val description: String
     val icon: Int
@@ -11,6 +12,7 @@ interface Activity: Domain {
     companion object{
         val EMPTY = object: Activity{
             override val idActivity: Long = 1
+            override val idView: Int = 0
             override val name: String = ""
             override val description: String = ""
             override val icon: Int = 0
@@ -20,6 +22,7 @@ interface Activity: Domain {
         }
         fun Activity.copy(
             idActivity: Long = this@copy.idActivity,
+            idView: Int = this@copy.idView,
             name:String = this@copy.name,
             description: String = this@copy.description,
             icon: Int = this@copy.icon,
@@ -28,6 +31,7 @@ interface Activity: Domain {
             audioTrack: String = this@copy.audioTrack,
         ) = object: Activity{
             override val idActivity: Long = idActivity
+            override val idView: Int = idView
             override val name: String = name
             override val description: String = description
             override val icon: Int = icon

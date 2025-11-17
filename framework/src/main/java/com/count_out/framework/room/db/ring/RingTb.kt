@@ -13,7 +13,7 @@ import com.count_out.framework.room.db.speech.SpeechTb
 import com.count_out.framework.room.db.speech.SpeechTb.Companion.toTb
 
 @Entity(
-    tableName = "tb_ring",
+    tableName = "ring_tb",
     ignoredColumns = ["speeches","exercises"],
     indices = [Index(value = ["idRing"], unique = true), Index(value = ["partId"])],
     foreignKeys = [ForeignKey(
@@ -26,7 +26,7 @@ import com.count_out.framework.room.db.speech.SpeechTb.Companion.toTb
 data class RingTb(
     @PrimaryKey(autoGenerate = true) override var idRing: Long = 0L,
     override var partId: Long = 0L,
-    override var idView: Long = 0,
+    override var idView: Int = 0,
     override var numberLaps: Int = 0,
     override var amount: Int = 0,
     override var duration: Double = 0.0,
@@ -37,7 +37,7 @@ data class RingTb(
         fun RingDb.toTb(
             idRing: Long = this.idRing,
             partId: Long = this.partId,
-            idView: Long = this.idView,
+            idView: Int = this.idView,
             numberLaps: Int = this.numberLaps,
             amount: Int = this.amount,
             duration: Double = this.duration,

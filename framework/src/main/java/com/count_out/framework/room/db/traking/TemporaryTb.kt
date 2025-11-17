@@ -4,7 +4,7 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 
 
-@Entity(tableName = "tb_temporary")
+@Entity(tableName = "temporary_tb")
 data class TemporaryTb(
     @PrimaryKey(autoGenerate = true) var id: Long = 0,
      val latitude: Double = 0.0,

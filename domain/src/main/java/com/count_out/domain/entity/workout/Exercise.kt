@@ -11,6 +11,17 @@ interface Exercise: Domain {
      val amountSet: Int
      val duration: Parameter
      companion object{
+         val EMPTY = object: Exercise{
+             override val idExercise: Long = 0
+             override val ringId: Long = 0
+             override val idView: Int = 0
+             override val activity: Activity = Activity.EMPTY
+             override val activityId: Long = 0
+             override val speechKit: SpeechKit = SpeechKit.EMPTY
+             override val sets: List<Set> = emptyList()
+             override val amountSet: Int = 0
+             override val duration: Parameter = Parameter.EMPTY
+         }
           fun default(ringId: Long) = object: Exercise{
                override val idExercise: Long = 0
                override val ringId: Long = ringId

@@ -47,7 +47,6 @@ import com.count_out.presentation.view_element.icons.IconSingle
         dataState.event(SettingsEvent.StopScanBLE)
         dataState.event(SettingsEvent.Launcher(LauncherBSp()))
     }
-
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true, confirmValueChange = { true },)
     ModalBottomSheetApp(
         onDismissRequest = dataState.onDismiss,
@@ -60,7 +59,10 @@ import com.count_out.presentation.view_element.icons.IconSingle
 @Composable fun BottomSheetBleContent(dataState: BottomSheetInterface) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = Modifier.fillMaxWidth().height(bsHeightWindowsListBle).padding(4.dp),
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(bsHeightWindowsListBle)
+            .padding(4.dp),
         content = { SettingsBluetooth(dataState) }
     )
     Spacer(modifier = Modifier.height(bsSpacerBottomHeight))
@@ -69,7 +71,10 @@ import com.count_out.presentation.view_element.icons.IconSingle
 @Composable fun SettingsBluetooth(dataState: BottomSheetInterface) {
     Row(
         horizontalArrangement = Arrangement.Center,
-        modifier = Modifier.fillMaxWidth().padding(horizontal = 12.dp).height(30.dp)
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 12.dp)
+            .height(30.dp)
     ) {
         TextApp(
             text = stringResource(id = R.string.section_heart_rate),
@@ -81,25 +86,43 @@ import com.count_out.presentation.view_element.icons.IconSingle
         Spacer(modifier = Modifier.width(12.dp))
     }
     Spacer(modifier = Modifier.height(12.dp))
-
-    dataState.list.forEach { dev->
-        if (dev is DeviceBle){
-            Spacer(modifier = Modifier.height(0.dp))
-            Row(horizontalArrangement = Arrangement.Start,
-                modifier = Modifier.fillMaxWidth().padding(top = 16.dp, start = 12.dp, end = 12.dp)
-                    .clickable {
-                        dataState.event(SettingsEvent.StopScanBLE)
-                        dataState.event(SettingsEvent.SelectDevice(dev))
-                        dataState.event(SettingsEvent.Launcher(LauncherBSp()))
-                    }
-            ) {
-                TextApp(text = dev.address, style = MaterialTheme.typography.bodyLarge)
-                Spacer(modifier = Modifier.width(12.dp))
-                TextApp(
-                    text = dev.name.ifEmpty { stringResource(id = R.string.no_name) },
-                    style = MaterialTheme.typography.bodyLarge
-                )
-            }
+    dataState.devicesUI.forEach { dev ->
+        Spacer(modifier = Modifier.height(0.dp))
+        Row(horizontalArrangement = Arrangement.Start,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 16.dp, start = 12.dp, end = 12.dp)
+                .clickable {
+                    dataState.event(SettingsEvent.SelectDevice(dev))
+                    dataState.event(SettingsEvent.Launcher(LauncherBSp()))
+                }
+        ) {
+            TextApp(text = dev.address, style = MaterialTheme.typography.bodyLarge)
+            Spacer(modifier = Modifier.width(12.dp))
+            TextApp(
+                text = dev.name.ifEmpty { stringResource(id = R.string.no_name) },
+                style = MaterialTheme.typography.bodyLarge
+            )
         }
     }
+//    dataState.list.forEach { dev->
+//        if (dev is DeviceBle){
+//            Spacer(modifier = Modifier.height(0.dp))
+//            Row(horizontalArrangement = Arrangement.Start,
+//                modifier = Modifier.fillMaxWidth().padding(top = 16.dp, start = 12.dp, end = 12.dp)
+//                    .clickable {
+//                        dataState.event(SettingsEvent.StopScanBLE)
+//                        dataState.event(SettingsEvent.SelectDevice(dev))
+//                        dataState.event(SettingsEvent.Launcher(LauncherBSp()))
+//                    }
+//            ) {
+//                TextApp(text = dev.address, style = MaterialTheme.typography.bodyLarge)
+//                Spacer(modifier = Modifier.width(12.dp))
+//                TextApp(
+//                    text = dev.name.ifEmpty { stringResource(id = R.string.no_name) },
+//                    style = MaterialTheme.typography.bodyLarge
+//                )
+//            }
+//        }
+//    }
 }

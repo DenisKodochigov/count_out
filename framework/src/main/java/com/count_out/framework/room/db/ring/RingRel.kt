@@ -13,7 +13,7 @@ data class RingRel(
 {
     fun toTable(): RingTb {
         parentTb.speeches = speeches
-        parentTb.exercises = exercises.map { it.toTable() }
+        parentTb.exercises = exercises.map { it.toTable() }.sortedBy { it.idView }
         return parentTb
     }
 }

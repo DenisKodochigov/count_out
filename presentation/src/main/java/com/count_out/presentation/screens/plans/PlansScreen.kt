@@ -12,6 +12,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.count_out.domain.entity.NavigateEvent
 import com.count_out.domain.entity.enums.TypeBS
+import com.count_out.domain.entity.lg
 import com.count_out.domain.entity.types_domai.LongDm
 import com.count_out.domain.entity.workout.Domain
 import com.count_out.domain.entity.workout.Exercise
@@ -25,6 +26,7 @@ import com.count_out.presentation.screens.plans.model.PlansEvent
 import com.count_out.presentation.screens.plans.model.PlansState
 import com.count_out.presentation.screens.plans.model.PlansViewModel
 import com.count_out.presentation.screens.plans.part.PartContent
+import com.count_out.presentation.screens.plans.ring_exercise.getItemByIndex
 import com.count_out.presentation.screens.prime.PrimeScreen
 import com.count_out.presentation.view_element.TextApp
 import com.count_out.presentation.view_element.TopBarApp
@@ -35,7 +37,6 @@ import com.count_out.presentation.view_element.icons.IconsGroup
     viewModel.screenState.collectAsState().value.let { screenState ->
         PrimeScreen(loader = screenState) { dataState ->
             dataState.goToScreenExecuteWorkout = { navigateEvent.goToScreenExecuteWorkout() }
-//            dataState.goToScreenPlan = { navigateEvent.goToScreenPlan(it) }
             dataState.launcherBS.execute(dataState)
             PlansScreenLayout(dataState) }
     }
@@ -47,9 +48,10 @@ import com.count_out.presentation.view_element.icons.IconsGroup
         startIcon = { modifier, plan-> IconRun( modifier, dataState, plan )},
         actionItem = { plan-> IconsGroup( dataState, plan)},
         namePlan = { name-> TextApp(text = name, style = MaterialTheme.typography.titleLarge) },
-        initSelecting = {plan-> SelectingInit(dataState, plan) },
-        getCollaps = { plan-> getCollapsing(dataState, plan)},
-        setCollaps = { plan-> setCollapsing(dataState, plan)},
+        initSelecting = { plan-> SelectingInit(dataState, plan) },
+        getCollaps = { plan-> getCollapsing(dataState,plan)},
+        setCollaps = { plan-> setCollapsing(dataState,plan)},
+        onChangeSequence = { showChangeOrder(dataState,Plan.EMPTY, dataState.plans)},
         listPart = { plan-> plan.parts.forEach { PartContent(dataState, it) } },
         infoPlan = { amount-> TextApp(style = MaterialTheme.typography.bodyLarge,
             text = pluralStringResource(
@@ -75,13 +77,14 @@ import com.count_out.presentation.view_element.icons.IconsGroup
         onDelete = { dataState.event(PlansEvent.DelPlan(plan))})
 }
 fun showSpeech(dataState: PlansState, item: Domain){
-    dataState.event(PlansEvent.Launcher(LauncherBSp().init(TypeBS.Speech, item)))
+    dataState.event(PlansEvent.Launcher(LauncherBSp().init(TypeBS.Speech,item)))
 }
 fun showActivities(dataState: PlansState, owner: Domain, listActivity: List<Domain>){
     dataState.event(PlansEvent.Launcher(LauncherBSp().init(TypeBS.Activity, owner, listActivity)))
 }
-fun showChangeOrder(dataState: PlansState, owner: Domain, list: List<Domain>){
-    dataState.event(PlansEvent.Launcher(LauncherBSp().init(TypeBS.Order, owner, list)))
+fun showChangeOrder(dataState: PlansState, type: Domain, list: List<Domain> = emptyList(), idOwner: Long = 0){
+    lg("PlansScreen  size:${list.size}")
+    dataState.event(PlansEvent.Launcher(LauncherBSp().init(TypeBS.Order,type,list,idOwner)))
 }
 fun setCollapsing(dataState: PlansState, item: Domain) {
     dataState.event(PlansEvent.SetCollapsing(dataState.collapsing.copy(item = item))) }
@@ -94,7 +97,7 @@ fun getCollapsing(dataState: PlansState, item: Domain): Boolean {
         else -> false
     }
 }
-fun setSelecting(dataState: PlansState, item: Domain, list: List<Domain>) {
+fun setSelecting(dataState: PlansState, ind: Int, list: List<Domain>): Int {
     val listId = list.map { listItem->
         LongDm(
             when (listItem) {
@@ -104,7 +107,10 @@ fun setSelecting(dataState: PlansState, item: Domain, list: List<Domain>) {
             }
         )
     }
-    dataState.event(PlansEvent.SetSelecting(dataState.selecting.copy(item = item, listOwner = listId)))
+    dataState.event(
+        PlansEvent.SetSelecting(
+            dataState.selecting.copy(item = getItemByIndex(ind,list), listOwner = listId)))
+    return ind
 }
 fun getSelecting(dataState: PlansState, item: Domain): Boolean {
     return when(item) {
@@ -115,60 +121,3 @@ fun getSelecting(dataState: PlansState, item: Domain): Boolean {
         else -> false
     }
 }
-
-
-//    Column(modifier = Modifier.fillMaxSize()) {
-//        TopBar()
-//        Frame(contour = contourHor2, modifier = Modifier.weight(1f)) {
-//            PlanList(dataState, modifier = Modifier.weight(1f)) }
-//    }
-
-//@Composable fun TopBar(){
-//    TopBarApp(text = stringResource(R.string.plans_workout), selected = false, onClickText = {})
-//}
-//@Composable fun PlanInformation(dataState: PlansState, item: Plan, modifier: Modifier = Modifier) {
-//    Column(modifier = modifier.clickable {
-//        dataState.goToScreenPlan(item.idPlan)}) {
-//        TextApp(text = item.name, style = MaterialTheme.typography.titleLarge)
-//        Spacer(modifier = Modifier.height(Dimen.height4))
-//        TextApp(
-//            text = pluralStringResource(
-//                R.plurals.exercise, item.amountActivity, item.amountActivity)
-//                .replaceFirstChar { it.uppercase() },
-//            style = MaterialTheme.typography.bodyLarge
-//        )
-//    }
-//}
-//@Composable fun PlanList(dataState: PlansState, modifier: Modifier = Modifier) {
-//    Spacer(modifier = Modifier.fillMaxWidth())
-//    LazyColumn(
-//        state = rememberLazyListState(),
-//        contentPadding = PaddingValues(horizontal = Dimen.paddingAppHor),
-//        modifier = modifier.testTag("1").animateContentSize()
-//    ) {
-//        items(dataState.plans) { item ->
-//            Spacer(modifier = Modifier.height(Dimen.width4))
-//            PlanCard(dataState, item, Modifier.animateItem())
-//        }
-//    }
-//}
-//
-//@Composable fun PlanCard(dataState: PlansState, item: Plan, modifier: Modifier) {
-//    Frame(contour = contourAll2) {
-//        Row(
-//            horizontalArrangement = Arrangement.Start,
-//            verticalAlignment = Alignment.CenterVertically,
-//            modifier = modifier.fillMaxWidth().padding(vertical = 6.dp)
-//        ) {
-//            Spacer(modifier = Modifier.width(12.dp))
-//            IconRun(dataState, plan = item )
-//            Spacer(modifier = Modifier.width(16.dp))
-//            PlanInformation(dataState, item, Modifier.weight(1f))
-//            Spacer(modifier = Modifier.width(Dimen.width6))
-//            IconsGroup(
-//                onCopy = {dataState.event(PlansEvent.CopyPlan(item))},
-//                onDelete = { dataState.event(PlansEvent.DelPlan(item))})
-//            Spacer(modifier = Modifier.width(Dimen.width6))
-//        }
-//    }
-//}

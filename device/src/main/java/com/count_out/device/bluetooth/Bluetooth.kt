@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.bluetooth.BluetoothAdapter
 import android.util.Log
 import com.count_out.data.models.Data
+import com.count_out.data.models.entity.StringDb
 import com.count_out.device.bluetooth.models.BleConnectionImpl
 import com.count_out.device.bluetooth.models.ResultBle
 import com.count_out.device.bluetooth.models.ThrowableBle
@@ -12,6 +13,7 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flatMapConcat
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -42,18 +44,18 @@ class Bluetooth @Inject constructor(
 
     @OptIn(ExperimentalCoroutinesApi::class)
     fun connectDevice(address: Data): Flow<ResultBle>  {
-        if (!bluetoothAdapter.isEnabled) return flow { emit(
-            ResultBle.Error(throwable = ThrowableBle.NotValidBle())) }
-        return if (address is String){
+        if (!bluetoothAdapter.isEnabled)
+            return flowOf(ResultBle.Error(throwable = ThrowableBle.NotValidBle()))
+        return if (address is StringDb){
             try {
                 disconnectDevice()
-                Log.d("KDS", "connectDevice")
+                Log.d("KDS", "Bluetooth.connectDevice")
                 bleScanner.stopScanner().flatMapConcat{ it1->
-                    if (it1 is ResultBle.Error) flow { emit(it1) } else {
-                        getRemoteDevice(address).flatMapConcat{ it2->
-                            if (it2 is ResultBle.Error) flow { emit(it2) } else {
-                                bleConnecting.connectDevice(currentConnection)
-                            }
+                    if (it1 is ResultBle.Error) flowOf(it1)
+                    else {
+                        getRemoteDevice(address.item).flatMapConcat{ it2->
+                            if (it2 is ResultBle.Error) flowOf(it2)
+                            else bleConnecting.connectDevice(currentConnection)
                         }
                     }
                 }

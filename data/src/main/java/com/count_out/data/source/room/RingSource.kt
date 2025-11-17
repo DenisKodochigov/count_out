@@ -7,5 +7,5 @@ interface RingSource {
     fun del(ring: Data): ResultData<Data>
     fun insert(ring: Data): ResultData<Data>
     fun update(ring: Data): ResultData<Data>
-    fun changeSequenceExercise(setViewId: Data): ResultData<Data>
+    fun changeSequence(setViewId: Data): ResultData<Data>
 }

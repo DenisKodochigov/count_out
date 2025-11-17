@@ -37,6 +37,7 @@ data class ExecuteState(
     override var list: List<Domain> = emptyList(),
     override var nameSection: String = "",
     override var item: Domain? = null,
+    override val devicesUI: List<DeviceBle> = emptyList(),
     override var onConfirmation: (Domain) -> Unit = {},
     override var onDismiss: () -> Unit = {},
     override val event: (Event) -> Unit ={},

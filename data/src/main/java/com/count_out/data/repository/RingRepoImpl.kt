@@ -1,8 +1,8 @@
 package com.count_out.data.repository
 
 import com.count_out.data.models.ResultData.Companion.convertor
-import com.count_out.data.models.entity.ExerciseDb
 import com.count_out.data.models.entity.RingDb
+import com.count_out.data.models.entity.SetViewIdDb
 import com.count_out.data.source.room.RingSource
 import com.count_out.domain.entity.throwable.ResultDomain
 import com.count_out.domain.entity.workout.Domain
@@ -18,8 +18,8 @@ class RingRepoImpl @Inject constructor( private val source: RingSource): RingRep
     override fun insert(ring: Domain): Flow<ResultDomain<Domain>> {
         return source.insert(RingDb.fromDomain(ring)).convertor() }
 
-    override fun changeSequenceExercise(setViewId: Domain): Flow<ResultDomain<Domain>> {
-        return source.changeSequenceExercise(ExerciseDb.fromDomain(setViewId)).convertor()
+    override fun changeSequence(setViewId: Domain): Flow<ResultDomain<Domain>> {
+        return source.changeSequence( SetViewIdDb.fromDomain(setViewId)).convertor()
     }
 
     override fun update(ring: Domain): Flow<ResultDomain<Domain>> {

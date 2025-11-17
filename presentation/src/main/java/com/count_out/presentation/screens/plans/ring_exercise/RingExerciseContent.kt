@@ -55,6 +55,10 @@ import com.count_out.presentation.view_element.icons.IconsGroup
     var id by remember { mutableIntStateOf(0) }
     LaunchedEffect(ring.exercises.size) {
         if (id >= ring.exercises.size) id = maxOf(0, ring.exercises.size - 1) }
+    if (ring.exercises.isEmpty()){
+//        lg("Exercise have not sets ${ring.idRing}")
+        return
+    }
     val selectedItem = getItemByIndex(id,ring.exercises)
     RingExerciseCarcass(
         getExpand = { getCollapsing(dataState, ring) },
@@ -64,11 +68,8 @@ import com.count_out.presentation.view_element.icons.IconsGroup
         infoItem = { RingNameInfo(ring) },
         actionItem = { RingActions(dataState, ring) },
         listItem = ring.exercises,
-        onClick = { ind->
-            id = ind
-            setSelecting( dataState,getItemByIndex(ind,ring.exercises),ring.exercises)
-        },
-        onLongClick = { showChangeOrder(dataState, ring, ring.exercises) },
+        onClick = { ind-> id = setSelecting( dataState,ind,ring.exercises) },
+        onChangeSequence = { showChangeOrder(dataState, Exercise.EMPTY, ring.exercises,ring.idRing) },
         nameItemLeftList = { ind->  "${stringResource(R.string.exer)} ${ind + 1}" },
         textFieldTopSetBody = { ExerciseName(dataState, selectedItem)},
         setBody = { SetBody(dataState, selectedItem.sets[0])},
@@ -116,7 +117,7 @@ import com.count_out.presentation.view_element.icons.IconsGroup
     IconsGroup(
         onRingAdd = { dataState.event(PlansEvent.CopyRing(ring = Ring.default(ring.partId)))},
         onRingDel = { dataState.event(PlansEvent.DelRing(ring))},
-        onRingSpeech = { showSpeech(dataState, ring)},
+        onRingSpeech = { showSpeech(dataState,ring)},
         onToExercise = {dataState.event(PlansEvent.RingOrExercise(ring))}
     )
 }
@@ -124,7 +125,12 @@ import com.count_out.presentation.view_element.icons.IconsGroup
     var id by remember { mutableIntStateOf(0) }
     LaunchedEffect(exercise.sets.size) {
         if (id >= exercise.sets.size) id = maxOf(0, exercise.sets.size - 1) }
+    if (exercise.sets.isEmpty()){
+//        lg("Exercise have not sets ${exercise.idExercise}:${exercise.activity.name}")
+        return
+    }
     val selectedItem = getItemByIndex(id,exercise.sets)
+//    lg("Exercise have sets ${exercise.idExercise}:${exercise.activity.name} selectedItem:$selectedItem")
     RingExerciseCarcass(
         getExpand = { getCollapsing(dataState, exercise) },
         setExpand = { setCollapsing(dataState, exercise) },
@@ -133,11 +139,8 @@ import com.count_out.presentation.view_element.icons.IconsGroup
         infoItem = { ExerciseNameInfo(exercise) },
         actionItem = { ExerciseActions(dataState, ring, exercise) },
         listItem = exercise.sets,
-        onClick = { ind->
-                id = ind
-                setSelecting( dataState,getItemByIndex(ind,exercise.sets), exercise.sets)
-        },
-        onLongClick = { showChangeOrder(dataState, exercise, exercise.sets) },
+        onClick = { ind-> id = setSelecting( dataState,ind,exercise.sets) },
+        onChangeSequence = { showChangeOrder(dataState,Exercise.EMPTY,ring.exercises,ring.idRing) },
         nameItemLeftList = { ind-> "${stringResource(R.string.set_short)} ${ind + 1}" },
         textFieldTopSetBody = { },
         setBody = { SetBody(dataState, selectedItem)},
@@ -151,8 +154,9 @@ import com.count_out.presentation.view_element.icons.IconsGroup
 @Composable fun ExerciseName(dataState: PlansState, exercise: Exercise){
     TextApp( text = exercise.activity.name,
         textDecoration = TextDecoration.Underline, style = typography.titleLarge,
-        modifier = Modifier.padding(bottom = 0.dp, start = 6.dp)
-            .clickable { showActivities(dataState,exercise,dataState.list) }
+        modifier = Modifier
+            .padding(bottom = 0.dp, start = 6.dp)
+            .clickable { showActivities(dataState, exercise, dataState.list) }
     )
 }
 @Composable fun ExerciseNameInfo(exercise: Exercise){
@@ -177,10 +181,7 @@ import com.count_out.presentation.view_element.icons.IconsGroup
         label = R.string.other
     )
 }
-fun <T: Any>getItemByIndex(ind: Int, list: List<T>): T{
-    return list.getOrNull(ind) ?: list.first()
-}
-
+fun <T: Any>getItemByIndex(ind: Int, list: List<T>): T = list.getOrNull(ind) ?: list.first()
 
 
 //@Composable fun RingCardTitle(dataState: PlansState, ring: Ring, index: Int){

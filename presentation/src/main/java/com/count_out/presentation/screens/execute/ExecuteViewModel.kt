@@ -54,9 +54,9 @@ class ExecuteViewModel @Inject constructor(
     }
     init {
         template{ getStepPlanUC.execute(GetStepPlanUC.Request)}
-//        template{ getConnectionState.execute(GetConnectionStateUC.Request) }
-//        template{ subscribeHeartRate.execute(GetHeartRateUC.Request)}
-//        template{ connectDeviceHr.execute(ConnectDeviceHrUC.Request) }
+        template{ getConnectionState.execute(GetConnectionStateUC.Request) }
+        template{ subscribeHeartRate.execute(GetHeartRateUC.Request)}
+        template{ connectDeviceHr.execute(ConnectDeviceHrUC.Request) }
     }
 
     private val dataForServ = DataForServImpl()

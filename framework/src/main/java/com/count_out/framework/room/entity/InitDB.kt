@@ -5,11 +5,11 @@ import com.count_out.framework.R
 import com.count_out.framework.room.AppDataBase
 import com.count_out.framework.room.db.activity.ActivityTb
 import com.count_out.framework.room.db.exercise.ExerciseTb
-import com.count_out.framework.room.db.old.settings.SettingTb
 import com.count_out.framework.room.db.part.PartTb
 import com.count_out.framework.room.db.plan.PlanTb
 import com.count_out.framework.room.db.ring.RingTb
 import com.count_out.framework.room.db.set.SetTb
+import com.count_out.framework.room.db.settings.SettingTb
 import com.count_out.framework.room.db.speech.SpeechTb
 
 private fun createPlanId0(db: AppDataBase) {
@@ -44,7 +44,12 @@ fun prepopulateRealDb( db: AppDataBase){
 fun prepopulateTestDb( db: AppDataBase){
     createSetting(db)
     createActivity(db)
-    createTrainingPlansTesting(db)
+    createPlanId0( db )
+    createTrainingPlansTesting(db,1)
+    createTrainingPlansTesting(db,2)
+    createTrainingPlansTesting(db,3)
+    createTrainingPlansTesting(db,4)
+    createTrainingPlansTesting(db,5)
 }
 private fun createActivity( db: AppDataBase){
     db.activityDao().insert(ActivityTb(idActivity = 1, name = "Бег", icon = R.drawable.ic_setka))
@@ -94,16 +99,15 @@ private fun createSetting( db: AppDataBase){
     db.settingDao().insert(SettingTb(parameter = R.string.speech_description, value = 1))
 }
 
-private fun createTrainingPlansTesting( db: AppDataBase) {
-    createPlanId0( db )
+private fun createTrainingPlansTesting( db: AppDataBase, id: Int) {
     val rest = 10.0
     val reps = 3
-    val idPlan = db.planDao().insert(PlanTb(name = "Тестовая"))
+    val idPlan = db.planDao().insert(PlanTb(name = "Тестовая $id", idView = id))
     insertSpeeches(db, planId = idPlan, bs = "Начало тренировки", ae = "Тренировка окончена")
 //Разминка
     var idPart = db.partDao().insert(PartTb( planId = idPlan ))
     insertSpeeches(db, partId = idPart, bs = "Разминка")
-    var idRing = db.ringDao().insert(RingTb(partId = idPart, amount = 2))
+    var idRing = db.ringDao().insert(RingTb(partId = idPart, amount = 1))
     insertSpeeches(db, ringId = idRing)
     //Упражнение 1
     var idExercise = db.exerciseDao().insert(ExerciseTb(ringId = idRing, activityId = 4, idView = 0)) //"Растереть уши"

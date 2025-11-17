@@ -18,6 +18,7 @@ import com.count_out.presentation.view_element.custom_view.Frame
     infoItem: @Composable ()->Unit,
     actionItem: @Composable ()->Unit,
     listRing: @Composable ()->Unit,
+    onChangeSequence: ()-> Unit,
 ){
     Frame(colorAlpha = 0.8f, contour = contourAll2,
         modifier = Modifier.padding(start = 4.dp, bottom = 12.dp, end = 4.dp)){
@@ -27,7 +28,8 @@ import com.count_out.presentation.view_element.custom_view.Frame
                 nameItem = nameItem,
                 infoItem = infoItem,
                 actionItem = { Box(modifier = Modifier.padding(end = 8.dp)){ actionItem() } },
-                onSetCollaps = setCollaps
+                onSetCollaps = setCollaps,
+                onChangeSequence = onChangeSequence,
             )
             AnimatedVisibility(modifier = Modifier.padding(horizontal = 4.dp),
                 visible = getCollaps()) {

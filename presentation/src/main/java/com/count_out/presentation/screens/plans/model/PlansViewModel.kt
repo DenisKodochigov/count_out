@@ -11,7 +11,7 @@ import com.count_out.domain.use_case.plans.RunPlanUC
 import com.count_out.domain.use_case.plans.SelectingUC
 import com.count_out.domain.use_case.plans.UpdateNamePlanUC
 import com.count_out.domain.use_case.plans.activity.GetActivitiesUC
-import com.count_out.domain.use_case.plans.exercise.ChangeSequenceExerciseUC
+import com.count_out.domain.use_case.plans.exercise.ChangeSequenceUC
 import com.count_out.domain.use_case.plans.exercise.CopyExerciseUC
 import com.count_out.domain.use_case.plans.exercise.DeleteExerciseUC
 import com.count_out.domain.use_case.plans.exercise.UpdateExerciseUC
@@ -47,7 +47,7 @@ class PlansViewModel @Inject constructor(
     private val copyExerciseUC: CopyExerciseUC,
     private val delExerciseUC: DeleteExerciseUC,
     private val updateExerciseUC: UpdateExerciseUC,
-    private val changeSequenceExerciseUC: ChangeSequenceExerciseUC,
+    private val changeSequenceUC: ChangeSequenceUC,
     private val copySetUC: CopySetUC,
     private val deleteSetUC: DeleteSetUC,
     private val updateSetUC: UpdateSetUC,
@@ -57,8 +57,6 @@ class PlansViewModel @Inject constructor(
     private val changeGoalUC: ChangeGoalUC,
     private val launcherBSUC: LauncherBottomSheetUC,
     private val updateSpeechUC: UpdateSpeechUC,
-
-
     private val getActivitiesUC: GetActivitiesUC,
 ): PrimeViewModel<PlansState, PlansConvertor>() {
 
@@ -84,7 +82,7 @@ class PlansViewModel @Inject constructor(
             is PlansEvent.DelExercise -> { run(delExerciseUC, DeleteExerciseUC.Request(event.exercise)) }
             is PlansEvent.UpdateExercise -> { run(updateExerciseUC, UpdateExerciseUC.Request(event.exercise)) }
             is PlansEvent.ChangeSequenceExercise -> {
-                run(changeSequenceExerciseUC, ChangeSequenceExerciseUC.Request(event.item)) }
+                run(changeSequenceUC, ChangeSequenceUC.Request(event.item)) }
             is PlansEvent.CopySet -> { run(copySetUC, CopySetUC.Request(event.item)) }
             is PlansEvent.DeleteSet -> { run(deleteSetUC, DeleteSetUC.Request(event.item)) }
             is PlansEvent.UpdateSet -> { run(updateSetUC, UpdateSetUC.Request(event.item)) }

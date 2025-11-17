@@ -36,7 +36,6 @@ class SettingViewModel @Inject constructor(
     private val selectDeviceBle: SelectDeviceBleUC,
     private val getSettings: GetSettingsUC,
     private val updateSetting: UpdateSettingUC,
-//    private val showBottomSheetUC: ShowBottomSheetUC,
     private val collapsingSet: CollapsingUC,
     private val getConnectionState: GetConnectionStateUC,
     private val subscribeHeartRate: GetHeartRateUC,
@@ -69,7 +68,6 @@ class SettingViewModel @Inject constructor(
         template{getsActivity.execute(GetActivitiesUC.Request) }
         template{getConnectionState.execute(GetConnectionStateUC.Request)}
         template{subscribeHeartRate.execute(GetHeartRateUC.Request) }
-        template{connectDeviceHr.execute(ConnectDeviceHrUC.Request) }
         template{getLastBleDevice.execute(LastBleDeviceUC.Request) }
     }
 }

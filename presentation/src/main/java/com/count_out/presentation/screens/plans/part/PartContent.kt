@@ -14,6 +14,7 @@ import com.count_out.presentation.screens.plans.model.PlansEvent
 import com.count_out.presentation.screens.plans.model.PlansState
 import com.count_out.presentation.screens.plans.ring_exercise.RingContent
 import com.count_out.presentation.screens.plans.setCollapsing
+import com.count_out.presentation.screens.plans.showChangeOrder
 import com.count_out.presentation.screens.plans.showSpeech
 import com.count_out.presentation.view_element.EnumsTo
 import com.count_out.presentation.view_element.TextApp
@@ -29,16 +30,19 @@ import com.count_out.presentation.view_element.icons.IconsGroup
                 text = """${stringResource(id = R.string.exercises)}: ${part.amount} / ${
                     part.duration.value.discard(2)} ${stringResource(id = R.string.min)}""",) },
         actionItem = {
-            if (part.rings[0].amount > 1) {
-                IconsGroup(
-                    onRingAdd = { dataState.event(PlansEvent.CopyRing(ring = Ring.default(part.idPart))) },
-                    onSpeech = { showSpeech(dataState, part) })
-            } else {
-                IconsGroup(
-                    onExerciseAdd = { dataState.event(PlansEvent.AddExercise(Exercise.default(part.rings[0].idRing))) },
-                    onSpeech = { showSpeech(dataState, part) })
+            if (part.rings.isNotEmpty()){
+                if (part.rings[0].amount > 1) {
+                    IconsGroup(
+                        onRingAdd = { dataState.event(PlansEvent.CopyRing(ring = Ring.default(part.idPart))) },
+                        onSpeech = { showSpeech(dataState, part) })
+                } else {
+                    IconsGroup(
+                        onExerciseAdd = { dataState.event(PlansEvent.AddExercise(Exercise.default(part.rings[0].idRing))) },
+                        onSpeech = { showSpeech(dataState, part) })
+                }
             }
         },
+        onChangeSequence = {showChangeOrder(dataState,Ring.EMPTY,part.rings,part.idPart)},
         listRing = { part.rings.forEachIndexed { index, ring ->  RingContent(dataState, ring, index) }}
     )
 }

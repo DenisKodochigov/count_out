@@ -11,4 +11,5 @@ interface PlanSource {
     fun copy(plan: Data): ResultData<Data>
     fun update(nameId: Data): ResultData<Data>
     fun del(plan: Data): ResultData<Data>
+    fun changeSequence(setViewId: Data): ResultData<Data>
 }

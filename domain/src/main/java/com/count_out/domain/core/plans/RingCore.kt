@@ -20,6 +20,6 @@ class RingCore @Inject constructor(private val repo: RingRepo): Core()  {
     }
     @OptIn(ExperimentalCoroutinesApi::class)
     fun changeSequenceExercise(sequence: Domain): Flow<ResultDomain<Domain>>{
-        return repo.changeSequenceExercise(sequence)
+        return repo.changeSequence(sequence)
     }
 }

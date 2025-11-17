@@ -39,8 +39,7 @@ import com.count_out.presentation.view_element.EnumsTo
 import com.count_out.presentation.view_element.SwitchApp
 import com.count_out.presentation.view_element.TextApp
 import com.count_out.presentation.view_element.bottom_sheet.CardActivity
-import com.count_out.presentation.view_element.bottom_sheet.SettingsBluetooth
-import com.count_out.presentation.view_element.custom_view.Frame
+import com.count_out.presentation.view_element.custom_view.FrameBackground
 import com.count_out.presentation.view_element.icons.AnimateIcon
 import com.count_out.presentation.view_element.icons.IconSingle
 import com.count_out.presentation.view_element.icons.IconsCollapsing
@@ -56,8 +55,7 @@ import com.count_out.presentation.view_element.lg
 }
 @SuppressLint("UnrememberedMutableState")
 @Composable fun SettingScreenLayout(dataState: SettingsState){
-    Column(
-        modifier = Modifier
+    Column( modifier = Modifier
             .verticalScroll(rememberScrollState()).padding(8.dp).fillMaxSize(),
         content = {
             ActivitySection(dataState = dataState)
@@ -67,7 +65,7 @@ import com.count_out.presentation.view_element.lg
 }
 
 @Composable fun ActivitySection(dataState: SettingsState) {
-    Frame {
+    FrameBackground {
         Column( modifier = Modifier.padding(start = 6.dp, top = 6.dp, bottom = 6.dp))
         {
             ActivitySectionTitle(dataState = dataState)
@@ -106,11 +104,11 @@ import com.count_out.presentation.view_element.lg
 }
 @Composable fun OtherSettings(dataState: SettingsState) {
     OtherSettingSpeechDescription(dataState)
-    SettingsBluetooth(dataState)
+    BluetoothSettings(dataState)
 }
 @Composable fun OtherSettingSpeechDescription(dataState: SettingsState){
     Spacer(modifier = Modifier.height(12.dp))
-    Frame{
+    FrameBackground{
         SwitchApp(
             setting = dataState.speechDescription,
             description = R.string.speech_description,
@@ -122,9 +120,9 @@ import com.count_out.presentation.view_element.lg
     }
 }
 
-@Composable fun SettingsBluetooth(dataState: SettingsState){
+@Composable fun BluetoothSettings(dataState: SettingsState){
     Spacer(modifier = Modifier.height(12.dp))
-    Frame{
+    FrameBackground{
         Column (modifier = Modifier
             .padding(start = 4.dp, top = 12.dp, bottom = 12.dp)
             .fillMaxWidth()){
@@ -181,5 +179,5 @@ import com.count_out.presentation.view_element.lg
 }
 
 fun showDeviceBleBS(dataState: SettingsState, item: Domain){
-    dataState.event(SettingsEvent.Launcher(LauncherBSp().init(TypeBS.Device, owner = item)))
+    dataState.event(SettingsEvent.Launcher(LauncherBSp().init(TypeBS.Device, type = item)))
 }

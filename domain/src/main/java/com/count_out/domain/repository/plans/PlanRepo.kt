@@ -11,4 +11,5 @@ interface PlanRepo {
     fun copy(plan: Domain): Flow<ResultDomain<Domain>> //: Flow<List<Training>>
 //    fun select(training: Domain): Flow<ResultUC<Domain>> //: Flow<List<Training>>
     fun update(nameId: Domain): Flow<ResultDomain<Domain>> // Flow<Training>
+    fun changeSequence(setViewId: Domain): Flow<ResultDomain<Domain>>
 }

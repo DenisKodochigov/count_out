@@ -30,11 +30,11 @@ class BleConnecting @Inject constructor(val context: Context) {
     private val uuidClientCharacteristicConfig = UUID.fromString(UUIDBle.CLIENT_CHARACTERISTIC_CONFIG)
 
     fun connectDevice( bleConnection: BleConnectionImpl): Flow<ResultBle> {
-        Log.d("KDS", "connectDevice ${connection.value.newState}")
-            connection.value = bleConnection
-            return connectingGatt()
+        Log.d("KDS", "BleConnecting.connectDevice ${connection.value.newState}")
+        connection.value = bleConnection
+        return connectingGatt()
 //            if (bleStates.error == ErrorBleService.NOT_CONNECT_GATT)  connectingGatt( bleStates )
-//        dataForBle.currentConnection?.let {
+//            dataForBle.currentConnection?.let {
 //            connection = BleConnectionImpl(it)
 //            connectingGatt( bleStates )
 //            if (bleStates.error == ErrorBleService.NOT_CONNECT_GATT)  connectingGatt( bleStates )

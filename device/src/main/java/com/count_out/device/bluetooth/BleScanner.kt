@@ -68,7 +68,7 @@ class BleScanner @Inject constructor(
         override fun onScanResult(callbackType: Int, result: ScanResult?) {
             super.onScanResult(callbackType, result)
             result?.device?.let { dev ->
-                Log.d("KDS", "onScanResult $dev")
+//                Log.d("KDS", "onScanResult $dev")
                 dataFromBle.value = ResultBle.Device(
                     BleConnectionImpl().fromBluetoothDevice(dev)) }
         }

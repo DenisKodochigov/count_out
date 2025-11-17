@@ -8,5 +8,5 @@ interface ExerciseRepo {
     fun del(exercise: Domain): Flow<ResultDomain<Domain>>
     fun copy(exercise: Domain): Flow<ResultDomain<Domain>>
     fun update(exercise: Domain): Flow<ResultDomain<Domain>>
-    fun changeSequenceExercise(setViewId: Domain): Flow<ResultDomain<Domain>>
+    fun changeSequence(setViewId: Domain): Flow<ResultDomain<Domain>>
 }

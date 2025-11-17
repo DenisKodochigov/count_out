@@ -38,7 +38,7 @@ val interval_between_pole = 8.dp
         Goal.Distance -> Distance( dataState, set)
         Goal.Duration -> Duration( dataState, set)
         Goal.Count -> Count( dataState, set)
-        Goal.CountGroup -> {}
+        Goal.CountGroup -> Count( dataState, set)
     }
 }
 @Composable fun Distance(dataState: PlansState, set: Set) {

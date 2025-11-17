@@ -6,8 +6,9 @@ import com.count_out.domain.entity.workout.Part
 import com.count_out.domain.entity.workout.Plan
 import com.count_out.domain.entity.workout.SpeechKit
 
-interface PlanDb : Data {
+interface PlanDb: Data {
     val idPlan: Long
+    val idView: Int
     val name: String
     val speeches: List<SpeechDb>
     val parts: List<PartDb>
@@ -16,6 +17,7 @@ interface PlanDb : Data {
     override fun toDomain(ind: Int): Domain {
         return object : Plan {
             override val idPlan: Long = this@PlanDb.idPlan
+            override val idView: Int = this@PlanDb.idView
             override val name: String = this@PlanDb.name
             override val amountActivity: Int = this@PlanDb.amountActivity
             override val parts: List<Part> =
@@ -28,6 +30,7 @@ interface PlanDb : Data {
             return when (domain) {
                 is Plan -> object: PlanDb{
                     override val idPlan: Long = domain.idPlan
+                    override val idView: Int = domain.idView
                     override val name: String = domain.name
                     override val speeches: List<SpeechDb> = domain.speechKit.toList().map { SpeechDb.fromDomain(it) }
                     override val parts: List<PartDb> = domain.parts.map { PartDb.fromDomain(it) }
@@ -38,6 +41,7 @@ interface PlanDb : Data {
         }
         val EMPTY = object: PlanDb{
             override val idPlan: Long = 0
+            override val idView: Int = 0
             override val name: String = ""
             override val speeches: List<SpeechDb> = emptyList()
             override val parts: List<PartDb> = emptyList()

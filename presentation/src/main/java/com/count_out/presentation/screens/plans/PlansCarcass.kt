@@ -11,14 +11,14 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.material3.Card
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
 import com.count_out.domain.entity.workout.Plan
-import com.count_out.presentation.models.Dimen.contourAll2
 import com.count_out.presentation.screens.carcasses.CarcassTitle
-import com.count_out.presentation.view_element.custom_view.Frame
 
 @Composable fun PlansCarcass(
     planList: List<Plan>,
@@ -30,37 +30,62 @@ import com.count_out.presentation.view_element.custom_view.Frame
     actionItem: @Composable (Plan)->Unit,
     getCollaps: (Plan)-> Boolean,
     setCollaps: (Plan)-> Unit,
+    onChangeSequence: ()-> Unit,
     listPart: @Composable (Plan)->Unit,
 ){
     Column(modifier = Modifier.fillMaxSize()) {
         topBar()
-//        Frame(contour = contourHor2, modifier = Modifier.weight(1f)) {
-            Spacer(modifier = Modifier.fillMaxWidth())
-            LazyColumn(
-                state = rememberLazyListState(),
-                modifier = Modifier.weight(1f).testTag("1").animateContentSize()
-            ) {
-                items(planList) { item ->
-                    initSelecting(item)
-                    Frame(contour = contourAll2, modifier = Modifier.padding(bottom = 12.dp)) {
-                        Column{
-                            CarcassTitle (
-                                startIcon = { modifier-> startIcon( modifier, item ) },
-                                nameItem = { namePlan(item.name) },
-                                infoItem = { infoPlan( item.amountActivity) },
-                                actionItem = {
-                                    Box(modifier = Modifier.padding(end = 10.dp)){ actionItem(item) }},
-                                onSetCollaps = { setCollaps(item)},
-                            )
-                            AnimatedVisibility( visible = getCollaps(item)) {
-                                Column(modifier = Modifier.padding(start = 0.dp)
-                                ) { listPart(item) }
-                            }
+        Spacer(modifier = Modifier.fillMaxWidth())
+        LazyColumn(
+            state = rememberLazyListState(),
+            modifier = Modifier.weight(1f).testTag("1").animateContentSize()
+        ) {
+            items(planList) { item ->
+                initSelecting(item)
+                Card( shape = MaterialTheme.shapes.small,
+//                    colors = CardColors(
+//                        containerColor = MaterialTheme.colorScheme.surfaceVariant,
+//                        contentColor = MaterialTheme.colorScheme.primary,
+//                        disabledContainerColor = MaterialTheme.colorScheme.surfaceVariant,
+//                        disabledContentColor = MaterialTheme.colorScheme.primary
+//                    ),
+                    modifier = Modifier.padding(bottom = 12.dp)
+                ) {
+                    Column{
+                        CarcassTitle (
+                            startIcon = { modifier-> startIcon( modifier, item ) },
+                            nameItem = { namePlan(item.name) },
+                            infoItem = { infoPlan( item.amountActivity) },
+                            actionItem = {
+                                Box(modifier = Modifier.padding(end = 10.dp)){ actionItem(item) }},
+                            onSetCollaps = { setCollaps(item)},
+                            onChangeSequence = { onChangeSequence() }
+                        )
+                        AnimatedVisibility( visible = getCollaps(item)) {
+                            Column(modifier = Modifier.padding(start = 0.dp)
+                            ) { listPart(item) }
                         }
                     }
                 }
+//                Frame(contour = contourAll2, modifier = Modifier.padding(bottom = 12.dp)) {
+//                    Column{
+//                        CarcassTitle (
+//                            startIcon = { modifier-> startIcon( modifier, item ) },
+//                            nameItem = { namePlan(item.name) },
+//                            infoItem = { infoPlan( item.amountActivity) },
+//                            actionItem = {
+//                                Box(modifier = Modifier.padding(end = 10.dp)){ actionItem(item) }},
+//                            onSetCollaps = { setCollaps(item)},
+//                            onChangeSequence = { onChangeSequence() }
+//                        )
+//                        AnimatedVisibility( visible = getCollaps(item)) {
+//                            Column(modifier = Modifier.padding(start = 0.dp)
+//                            ) { listPart(item) }
+//                        }
+//                    }
+//                }
             }
-//        }
+        }
     }
 }
 

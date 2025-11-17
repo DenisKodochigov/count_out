@@ -6,8 +6,6 @@ import com.count_out.framework.room.db.activity.ActivityDao
 import com.count_out.framework.room.db.activity.ActivityTb
 import com.count_out.framework.room.db.exercise.ExerciseDao
 import com.count_out.framework.room.db.exercise.ExerciseTb
-import com.count_out.framework.room.db.old.settings.SettingDao
-import com.count_out.framework.room.db.old.settings.SettingTb
 import com.count_out.framework.room.db.part.PartDao
 import com.count_out.framework.room.db.part.PartTb
 import com.count_out.framework.room.db.plan.PlanDao
@@ -16,6 +14,8 @@ import com.count_out.framework.room.db.ring.RingDao
 import com.count_out.framework.room.db.ring.RingTb
 import com.count_out.framework.room.db.set.SetDao
 import com.count_out.framework.room.db.set.SetTb
+import com.count_out.framework.room.db.settings.SettingDao
+import com.count_out.framework.room.db.settings.SettingTb
 import com.count_out.framework.room.db.speech.SpeechDao
 import com.count_out.framework.room.db.speech.SpeechTb
 import com.count_out.framework.room.db.traking.TemporaryTb

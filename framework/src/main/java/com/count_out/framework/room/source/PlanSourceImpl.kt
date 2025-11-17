@@ -7,6 +7,7 @@ import com.count_out.data.models.entity.NameIdDb
 import com.count_out.data.models.entity.PartDb
 import com.count_out.data.models.entity.PlanDb
 import com.count_out.data.models.entity.PlansDb
+import com.count_out.data.models.entity.SetViewIdDb
 import com.count_out.data.models.throwable.ThrowableDS
 import com.count_out.data.source.room.PartSource
 import com.count_out.data.source.room.PlanSource
@@ -61,6 +62,22 @@ class PlanSourceImpl @Inject constructor(
 
     override fun update(nameId: Data): ResultData<Data> =
         nameId.safeUse<NameIdDb, Long> { dao.updateName(it.name, it.id).toLong() }
+
+    override fun changeSequence(setViewId: Data): ResultData<Data> {
+        return try {
+            if (setViewId is SetViewIdDb) {
+                val from = setViewId.from
+                val to = setViewId.to
+                val list = dao.gets()
+                if (from > to) for ( id in to..< from){ list[id].idView = (id + 1) }
+                else for ( id in (from + 1)..to){ list[id].idView = (id - 1)}
+                list[from].idView = to
+                if (dao.update(list) == list.size) ResultData.Success(LongDb(list.size.toLong()))
+                else ResultData.Error(ThrowableDS.ErrorExercises())
+            } else ResultData.Error(ThrowableDS.ErrorTypeSetIdView())
+        } catch (e: Exception) { ResultData.Error(ThrowableDS.extract(e)) }
+    }
+
     fun copyParts(parts: List<PartDb>, id: Long): ResultData<LongDb> =
         if (parts.isEmpty()) { ResultData.Success(LongDb(0L)) }
         else {

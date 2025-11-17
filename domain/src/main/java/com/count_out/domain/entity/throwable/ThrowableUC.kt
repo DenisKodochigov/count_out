@@ -8,7 +8,7 @@ sealed class ThrowableUC (private val t: Throwable?): Throwable(t){
     class DataSourceTrow(t:Throwable): ThrowableUC(t)
     class RequestFailed(t:Throwable = Exception("return null")): ThrowableUC(t)
     class ReturnNull(t:Throwable = Exception("return null")): ThrowableUC(t)
-    class NotValidType(t:Throwable = Exception("not valid type")): ThrowableUC(t)
+    class NotValidType(t:Throwable = Exception("not valid type UC")): ThrowableUC(t)
     class UnknownThrow(t:Throwable): ThrowableUC(t)
     companion object {
         fun extract(t: Throwable): ThrowableUC = if (t is ThrowableUC) t else UnknownThrow(t)

@@ -7,4 +7,5 @@ import kotlinx.coroutines.flow.Flow
 interface SettingsRepo {
     fun getSettings(): Flow<ResultDomain<Domain>>
     fun saveSetting(setting: Domain): Flow<ResultDomain<Domain>>
+    fun getLastBle(): Flow<ResultDomain<Domain>>
 }

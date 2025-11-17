@@ -13,7 +13,7 @@ data class PartRel(
 ){
     fun toTable(): PartTb {
         this.parentTb.speeches = this.speeches
-        this.parentTb.rings = this.rings.map { it.toTable() }
+        this.parentTb.rings = this.rings.map { it.toTable() }.sortedBy { it.idView }
         return this.parentTb
     }
 }

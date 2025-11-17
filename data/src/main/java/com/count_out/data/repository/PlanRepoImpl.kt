@@ -5,6 +5,7 @@ import com.count_out.data.models.ResultData.Companion.convertorFlow
 import com.count_out.data.models.entity.LongDb
 import com.count_out.data.models.entity.NameIdDb
 import com.count_out.data.models.entity.PlanDb
+import com.count_out.data.models.entity.SetViewIdDb
 import com.count_out.data.source.room.PlanSource
 import com.count_out.domain.entity.throwable.ResultDomain
 import com.count_out.domain.entity.workout.Domain
@@ -29,4 +30,8 @@ class PlanRepoImpl @Inject constructor(
 
     override fun update(nameId: Domain): Flow<ResultDomain<Domain>> {
         return source.update( NameIdDb.fromDomain(nameId)).convertor() }
+
+    override fun changeSequence(setViewId: Domain): Flow<ResultDomain<Domain>> {
+        return source.changeSequence(SetViewIdDb.fromDomain(setViewId)).convertor()
+    }
 }

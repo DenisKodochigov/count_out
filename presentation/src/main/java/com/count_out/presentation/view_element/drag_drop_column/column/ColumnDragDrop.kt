@@ -27,32 +27,29 @@ fun <T>ColumnDragDrop(
     if (items.isEmpty()) return
     val stateDrag =  remember { StateDDColumn(sizeList = items.count()) }
     stateDrag.init()
-    AnimatedVisibility(
-        visible = showList,
-        content = {
-            Column(modifier = modifier
-                .onGloballyPositioned { stateDrag.heightList.value = it.size.height }
-                .pointerInput(Unit) {
-                    detectDragGesturesAfterLongPress(
-                        onDragStart = { offset -> stateDrag.onStartDrag(offset.y) },
-                        onDrag = { change, offset ->
-                            change.consume()
-                            stateDrag.onDrag(offset.y) },
-                        onDragEnd = { stateDrag.onDragEnd(onMoveItem) },
-                        onDragCancel = {stateDrag.onDragCancel()} )
-                }){
-                items.forEachIndexed { index, item ->
-                    Column(
-                        modifier = Modifier
-                            .onGloballyPositioned { stateDrag.heightItem.value = it.size.height }
-                            .clickable { onClickItem(index) }
-                            .zIndex( stateDrag.itemZ(index) )
-                            .offset { IntOffset(0,  stateDrag.offsetIt(index) ) },
-                        content = { content(item) }
-                    )
-                }
+    AnimatedVisibility(visible = showList,) {
+        Column(modifier = modifier
+            .onGloballyPositioned { stateDrag.heightList.value = it.size.height }
+            .pointerInput(Unit) {
+                detectDragGesturesAfterLongPress(
+                    onDragStart = { offset -> stateDrag.onStartDrag(offset.y) },
+                    onDrag = { change, offset ->
+                        change.consume()
+                        stateDrag.onDrag(offset.y) },
+                    onDragEnd = { stateDrag.onDragEnd(onMoveItem) },
+                    onDragCancel = {stateDrag.onDragCancel()} )
+            }){
+            items.forEachIndexed { index, item ->
+                Column(
+                    modifier = Modifier
+                        .onGloballyPositioned { stateDrag.heightItem.value = it.size.height }
+                        .clickable { onClickItem(index) }
+                        .zIndex( stateDrag.itemZ(index) )
+                        .offset { IntOffset(0,  stateDrag.offsetIt(index) ) },
+                    content = { content(item) }
+                )
             }
         }
-    )
+    }
 }
 

@@ -1,5 +1,6 @@
 package com.count_out.presentation.screens.plans.model
 
+import com.count_out.domain.entity.router.DeviceBle
 import com.count_out.domain.entity.workout.Collapsing
 import com.count_out.domain.entity.workout.Domain
 import com.count_out.domain.entity.workout.Plan
@@ -20,6 +21,7 @@ data class PlansState(
     override var list: List<Domain> = emptyList(),
     override var nameSection: String = "",
     override var item: Domain? = null,
+    override val devicesUI: List<DeviceBle> = emptyList(),
     override var onConfirmation: (Domain) -> Unit = {},
     override var onDismiss: () -> Unit = {},
     override val event: (Event) -> Unit ={},

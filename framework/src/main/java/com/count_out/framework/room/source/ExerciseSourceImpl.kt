@@ -5,7 +5,7 @@ import com.count_out.data.models.ResultData
 import com.count_out.data.models.entity.ExerciseDb
 import com.count_out.data.models.entity.LongDb
 import com.count_out.data.models.entity.SetDb
-import com.count_out.data.models.entity.SetIdViewDb
+import com.count_out.data.models.entity.SetViewIdDb
 import com.count_out.data.models.throwable.ThrowableDS
 import com.count_out.data.source.room.ExerciseSource
 import com.count_out.data.source.room.SetSource
@@ -40,12 +40,12 @@ class ExerciseSourceImpl @Inject constructor(
     override fun update(exercise: Data): ResultData<Data> =
         exercise.safeUse<ExerciseDb, Long>{ item -> dao.update(item.toTb()).toLong() }
 
-    override fun changeSequenceExercise(setViewId: Data): ResultData<Data> {
+    override fun changeSequence(setViewId: Data): ResultData<Data> {
         return try {
-            if (setViewId is SetIdViewDb) {
+            if (setViewId is SetViewIdDb) {
                 val from = setViewId.from
                 val to = setViewId.to
-                val listExercise = dao.getExerciseRing(setViewId.ownerId).toMutableList()
+                val listExercise = dao.getExerciseRing(setViewId.idOwner).toMutableList()
                 if (from > to) for ( id in to..< from){ listExercise[id].idView = id + 1 }
                 else for ( id in (from + 1)..to){ listExercise[id].idView = id - 1}
                 listExercise[from].idView = to

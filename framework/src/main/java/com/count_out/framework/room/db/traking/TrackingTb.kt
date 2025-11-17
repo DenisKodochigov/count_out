@@ -3,7 +3,7 @@ package com.count_out.framework.room.db.traking
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
-@Entity(tableName = "tb_workout")
+@Entity(tableName = "workout_tb")
 data class TrackingTb(
     @PrimaryKey(autoGenerate = true)  var idWorkout: Long = 0L,
      var trainingId: Long = 0,

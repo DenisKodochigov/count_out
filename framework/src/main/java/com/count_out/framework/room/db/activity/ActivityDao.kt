@@ -7,11 +7,11 @@ import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface ActivityDao: PrimeDao<ActivityTb> {
-    @Query("SELECT * FROM tb_activity")
+    @Query("SELECT * FROM activity_tb")
     fun gets(): Flow<List<ActivityTb>>
-    @Query("SELECT * FROM tb_activity WHERE idActivity = :id")
+    @Query("SELECT * FROM activity_tb WHERE idActivity = :id")
     fun get(id: Long): Flow<ActivityTb>
-    @Query("DELETE FROM tb_activity WHERE idActivity = :id")
+    @Query("DELETE FROM activity_tb WHERE idActivity = :id")
     fun del(id: Long): Int
     @Query("SELECT idExercise FROM exercise_tb WHERE activityId =:activityId")
     fun checkExerciseWithActivity(activityId: Long): Long?

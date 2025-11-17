@@ -6,10 +6,10 @@ import com.count_out.framework.room.db.PrimeDao
 
 @Dao
 interface TrackingDao: PrimeDao<TemporaryTb> {
-    @Query("DELETE FROM tb_temporary")
+    @Query("DELETE FROM temporary_tb")
     fun clearTemporaryData()
-    @Query("SELECT COUNT(id) FROM tb_temporary")
+    @Query("SELECT COUNT(id) FROM temporary_tb")
     fun countTemporary(): Int
-    @Query("SELECT * FROM tb_temporary LIMIT :limit OFFSET :offset")
+    @Query("SELECT * FROM temporary_tb LIMIT :limit OFFSET :offset")
     fun selectNRecord(limit: Int, offset: Int): List<TemporaryTb>
 }

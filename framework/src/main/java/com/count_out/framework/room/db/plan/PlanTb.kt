@@ -16,6 +16,7 @@ import com.count_out.framework.room.db.speech.SpeechTb.Companion.toTb
 )
 data class PlanTb(
     @PrimaryKey(autoGenerate = true) override var idPlan: Long = 0L,
+    override var idView: Int = 0,
     override var name: String = "",
     override var amountActivity: Int = 0,
     override var speeches: List<SpeechTb> = emptyList(),
@@ -24,6 +25,7 @@ data class PlanTb(
     companion object{
         fun PlanDb.toTb() = PlanTb(
             idPlan = this.idPlan,
+            idView = this.idView,
             name = this.name,
             amountActivity = this.amountActivity,
             speeches = this.speeches.map { it.toTb() },

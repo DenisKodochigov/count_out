@@ -24,13 +24,13 @@ import com.count_out.presentation.view_element.custom_view.Frame
     nameItemLeftList: @Composable (Int)->String,
     listItem: List<Domain>,
     onClick: (Int)->Unit,
-    onLongClick:()->Unit,
     textFieldTopSetBody: @Composable () -> Unit,
     actionTitle: @Composable () -> Unit,
     actionBottom: @Composable () -> Unit,
     setBody: @Composable () -> Unit,
     iconGoal: @Composable () -> Unit,
     iconZone: @Composable () -> Unit,
+    onChangeSequence: ()-> Unit,
 ){
     Frame(colorAlpha = 0.6f, contour = contourAll1, modifier = Modifier
         .fillMaxWidth()
@@ -42,6 +42,8 @@ import com.count_out.presentation.view_element.custom_view.Frame
                 nameItem = nameItem,
                 infoItem = infoItem,
                 actionItem = { Box(modifier = Modifier.padding(end = 2.dp)){ actionItem() } },
+                onChangeSequence = onChangeSequence,
+
             )
             AnimatedVisibility(modifier = Modifier.padding(horizontal = 0.dp), visible = getExpand()) {
                 if ( listItem.isNotEmpty()) {
@@ -51,7 +53,7 @@ import com.count_out.presentation.view_element.custom_view.Frame
                         getSelect = getSelect,
                         nameItemLeftList = { ind-> nameItemLeftList(ind)},
                         onClick = onClick,
-                        onLongClick = onLongClick,
+                        onLongClick = onChangeSequence,
                         nameExercise = textFieldTopSetBody,
                         actionTitle = actionTitle,
                         setBody = setBody,

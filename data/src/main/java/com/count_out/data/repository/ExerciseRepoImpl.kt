@@ -2,6 +2,7 @@ package com.count_out.data.repository
 
 import com.count_out.data.models.ResultData.Companion.convertor
 import com.count_out.data.models.entity.ExerciseDb
+import com.count_out.data.models.entity.SetViewIdDb
 import com.count_out.data.source.room.ExerciseSource
 import com.count_out.domain.entity.throwable.ResultDomain
 import com.count_out.domain.entity.workout.Domain
@@ -21,7 +22,7 @@ class ExerciseRepoImpl @Inject constructor(
     override fun update(exercise: Domain): Flow<ResultDomain<Domain>> {
         return source.update(ExerciseDb.fromDomain(exercise)).convertor()
     }
-    override fun changeSequenceExercise(setViewId: Domain): Flow<ResultDomain<Domain>> {
-        return source.changeSequenceExercise(ExerciseDb.fromDomain(setViewId)).convertor()
+    override fun changeSequence(setViewId: Domain): Flow<ResultDomain<Domain>> {
+        return source.changeSequence( SetViewIdDb.fromDomain(setViewId)).convertor()
     }
 }

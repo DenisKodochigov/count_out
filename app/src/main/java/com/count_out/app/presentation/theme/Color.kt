@@ -36,7 +36,7 @@ val surfaceContainerLowestLight = Color(0xFFE1E1E1) //3 level Frame 0xFF797979
 val surfaceContainerLowLight = Color(0xFFCBCBCB)    //2 level frame 0xFF9F9F9F //Bottomsheet background
 val surfaceContainerLight = Color(0xFFE8E8E8)       //BottomBar background
 val surfaceContainerHighLight = Color(0xFFBDBDBD)   //1 level Frame 0xFFE1E1E1
-val surfaceContainerHighestLight = Color(0xFFF3F3F3) // Card background
+val surfaceContainerHighestLight = Color(0xFFE4E6E6) // Card background
 
 val primaryDark = Color(0xFF1A4360)
 val onPrimaryDark = Color(0xFF939393)// Text default color (TextApp)

@@ -1,4 +1,4 @@
-package com.count_out.framework.room.db.old.settings
+package com.count_out.framework.room.db.settings
 
 import androidx.room.Dao
 import androidx.room.Insert
@@ -13,12 +13,12 @@ interface SettingDao {
     @Update
     fun update(item: SettingTb)
 
-    @Query("SELECT * FROM tb_settings")
+    @Query("SELECT * FROM settings_tb")
     fun gets(): List<SettingTb>
 
-    @Query("SELECT * FROM tb_settings WHERE parameter = :parameter")
+    @Query("SELECT * FROM settings_tb WHERE parameter = :parameter")
     fun get(parameter: Int): SettingTb
 
-    @Query("SELECT * FROM tb_settings WHERE idSetting = :id")
+    @Query("SELECT * FROM settings_tb WHERE idSetting = :id")
     fun getId(id: Long): SettingTb
 }

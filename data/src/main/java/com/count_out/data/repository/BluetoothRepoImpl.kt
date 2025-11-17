@@ -1,22 +1,17 @@
 package com.count_out.data.repository
 
-import com.count_out.data.models.ResultData
 import com.count_out.data.models.ResultData.Companion.convertorFlow
-import com.count_out.data.models.entity.DeviceBleDb
 import com.count_out.data.models.entity.StringDb
-import com.count_out.data.models.throwable.ThrowableDS
 import com.count_out.data.source.framework.BleSource
-import com.count_out.data.source.local.SettingsSource
 import com.count_out.domain.entity.throwable.ResultDomain
 import com.count_out.domain.entity.workout.Domain
 import com.count_out.domain.repository.BluetoothRepo
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.combine
 import javax.inject.Inject
 
 class BluetoothRepoImpl @Inject constructor(
     private val bleSource: BleSource,
-    private val storeDevice: SettingsSource
+//    private val storeDevice: SettingsSource
 ): BluetoothRepo {
     override fun startScanning(): Flow<ResultDomain<Domain>> {
         return bleSource.startScanning().convertorFlow() }
@@ -27,28 +22,28 @@ class BluetoothRepoImpl @Inject constructor(
     override fun connectDevice(address: Domain): Flow<ResultDomain<Domain>>{
         return bleSource.connectDevice(StringDb.fromDomain(address)).convertorFlow() }
 
-    override fun lastDevice(): Flow<ResultDomain<Domain>> {
-        return combine(
-            storeDevice.getBleName(),
-            storeDevice.getBleAddress()
-        ) { f1, f2 ->
-            when {
-                f1 !is ResultData.Success -> f1
-                f2 !is ResultData.Success -> f2
-                f1.data !is StringDb || f2.data !is StringDb ->
-                    ResultData.Error(ThrowableDS.ErrorBleDeviceName())
-                else -> ResultData.Success(
-                    object : DeviceBleDb {
-                        override val name = f1.data.item
-                        override val address = f2.data.item
-//                        override fun toResultData(): ResultData<Data> =
-//                            ResultData.Success(BooleanDb(true))
-                        override fun toDomain(ind: Int) = object : Domain {}
-                    }
-                )
-            }
-        }.convertorFlow()
-    }
+//    override fun lastDevice(): Flow<ResultDomain<Domain>> {
+//        return combine(
+//            storeDevice.getBleName(),
+//            storeDevice.getBleAddress()
+//        ) { f1, f2 ->
+//            when {
+//                f1 !is ResultData.Success -> f1
+//                f2 !is ResultData.Success -> f2
+//                f1.data !is StringDb || f2.data !is StringDb ->
+//                    ResultData.Error(ThrowableDS.ErrorBleDeviceName())
+//                else -> ResultData.Success(
+//                    object : DeviceBleDb {
+//                        override val name = f1.data.item
+//                        override val address = f2.data.item
+////                        override fun toResultData(): ResultData<Data> =
+////                            ResultData.Success(BooleanDb(true))
+//                        override fun toDomain(ind: Int) = object : Domain {}
+//                    }
+//                )
+//            }
+//        }.convertorFlow()
+//    }
 
     override fun clearCache(): Flow<ResultDomain<Domain>> {
         return bleSource.clearCache().convertorFlow()}

@@ -4,17 +4,28 @@ interface Ring: Domain {
     val idRing: Long
     val partId: Long
 
-    val idView: Long
+    val idView: Int
     val numberLaps: Int
     val amount: Int
     val duration: Parameter
     val speechKit: SpeechKit
     val exercises: List<Exercise>
     companion object{
+        val EMPTY = object: Ring{
+            override val idRing: Long = 0
+            override val partId: Long = 0
+            override val idView: Int = 0
+            override val numberLaps: Int = 0
+            override val amount: Int = 2
+            override val duration: Parameter = Parameter.EMPTY
+            override val speechKit: SpeechKit = SpeechKit.EMPTY
+            override val exercises: List<Exercise> = emptyList()
+
+        }
         fun default(partId: Long) = object: Ring{
             override val idRing: Long = 0
             override val partId: Long = partId
-            override val idView: Long = 0
+            override val idView: Int = 0
             override val numberLaps: Int = 0
             override val amount: Int = 2
             override val duration: Parameter = Parameter.EMPTY
@@ -25,7 +36,7 @@ interface Ring: Domain {
         fun Ring.amount(value: Int) = object: Ring{
             override val idRing: Long = this@amount.idRing
             override val partId: Long = this@amount.partId
-            override val idView: Long = this@amount.idView
+            override val idView: Int = this@amount.idView
             override val numberLaps: Int = this@amount.numberLaps
             override val amount: Int = value
             override val duration: Parameter = this@amount.duration

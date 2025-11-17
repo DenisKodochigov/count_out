@@ -23,5 +23,5 @@ interface ExerciseSource {
     fun insert(exercise: Data): ResultData<Data>
     fun del(exercise: Data): ResultData<Data>
     fun update(exercise: Data): ResultData<Data>
-    fun changeSequenceExercise(setViewId: Data): ResultData<Data>
+    fun changeSequence(setViewId: Data): ResultData<Data>
 }

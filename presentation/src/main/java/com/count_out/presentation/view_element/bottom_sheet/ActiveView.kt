@@ -32,6 +32,7 @@ import androidx.compose.ui.unit.dp
 import com.count_out.domain.entity.enums.TypeBS
 import com.count_out.domain.entity.workout.Activity
 import com.count_out.domain.entity.workout.Activity.Companion.copy
+import com.count_out.domain.entity.workout.Domain
 import com.count_out.presentation.R
 import com.count_out.presentation.models.LauncherBSp
 import com.count_out.presentation.models.TypeKeyboard
@@ -48,7 +49,7 @@ import com.count_out.presentation.view_element.dialog.ChangeColorSectionDialog
         ActivityTitle(
             activity = mutableStateOf(activity),
             onSelect = { dataState.event(SettingsEvent.Launcher(
-                    LauncherBSp().type(TypeBS.Activity).list(listOf(activity))))},
+            LauncherBSp().init(TypeBS.Activity, Domain.EMPTY,listOf(activity))))},
             onChange = { dataState.event(SettingsEvent.SetColorActivity(activity)) }, //
             onDeleteActivity = { dataState.event(SettingsEvent.DeleteActivity(activity)) },
         )

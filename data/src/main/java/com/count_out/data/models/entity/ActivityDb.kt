@@ -6,6 +6,7 @@ import com.count_out.domain.entity.workout.Domain
 
 interface ActivityDb: Data {
     val idActivity: Long
+    var idView: Int
     val name: String
     val description: String
     val icon: Int
@@ -14,6 +15,7 @@ interface ActivityDb: Data {
     val audioTrack: String
     override fun toDomain(ind: Int) = object: Activity {
         override val idActivity: Long = this@ActivityDb.idActivity
+        override val idView: Int = this@ActivityDb.idView
         override val name: String = this@ActivityDb.name
         override val description: String = this@ActivityDb.description
         override val icon: Int = this@ActivityDb.icon
@@ -27,6 +29,7 @@ interface ActivityDb: Data {
             return when (domain) {
                 is Activity -> object: ActivityDb{
                     override val idActivity: Long = domain.idActivity
+                    override var idView: Int = domain.idView
                     override val name: String = domain.name
                     override val description: String = domain.description
                     override val icon: Int = domain.icon
@@ -39,6 +42,7 @@ interface ActivityDb: Data {
         }
         val EMPTY = object: ActivityDb{
             override val idActivity: Long = 0
+            override var idView: Int = 0
             override val name: String = ""
             override val description: String = ""
             override val icon: Int = 0
