@@ -13,10 +13,10 @@ import androidx.core.app.ActivityCompat
 import androidx.core.net.toUri
 import androidx.core.view.WindowCompat
 import androidx.lifecycle.lifecycleScope
+import com.count_out.app.permission.ReqPermission
 import com.count_out.app.permission.RequestPermissionsAll
 import com.count_out.app.presentation.StartApp
 import com.count_out.domain.entity.throwable.ResultDomain
-import com.count_out.domain.use_case.bluetooth.LastBleDeviceUC
 import com.count_out.domain.use_case.other.CountOutServiceBindUC
 import com.count_out.domain.use_case.other.CountOutServiceUnBindUC
 import dagger.hilt.android.AndroidEntryPoint
@@ -27,12 +27,12 @@ import javax.inject.Inject
 class MainActivity: ComponentActivity() {
 
     @Inject lateinit var bluetoothAdapter: BluetoothAdapter
-    @Inject lateinit var lastHearthRateDevice: LastBleDeviceUC
+//    @Inject lateinit var lastHearthRateDevice: LastBleDeviceUC
     @Inject lateinit var countOutServiceBind: CountOutServiceBindUC
     @Inject lateinit var countOutServiceUnBind: CountOutServiceUnBindUC
     var bindingWorkOut: ResultDomain<CountOutServiceBindUC.Response>? = null
     var unBindingWorkOut: ResultDomain<CountOutServiceUnBindUC.Response>? = null
-    var connectedBleDevice: ResultDomain<LastBleDeviceUC.Response>? = null
+//    var connectedBleDevice: ResultDomain<LastBleDeviceUC.Response>? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,13 +40,14 @@ class MainActivity: ComponentActivity() {
         lifecycleScope.launch {
             countOutServiceBind.execute(CountOutServiceBindUC.Request).collect{
                 bindingWorkOut = it}
-            lastHearthRateDevice.execute(LastBleDeviceUC.Request).collect{
-                connectedBleDevice = it}
+//            lastHearthRateDevice.execute(LastBleDeviceUC.Request).collect{
+//                connectedBleDevice = it}
         }
 //        enableEdgeToEdge()
         WindowCompat.setDecorFitsSystemWindows(window, false)
         setContent {
             RequestPermissionsAll()
+            ReqPermission()
             StartApp()
         }
     }

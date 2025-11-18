@@ -4,7 +4,9 @@ import androidx.lifecycle.SavedStateHandle
 import com.count_out.domain.use_case.bluetooth.ConnectDeviceHrUC
 import com.count_out.domain.use_case.bluetooth.GetConnectionStateUC
 import com.count_out.domain.use_case.bluetooth.GetHeartRateUC
-import com.count_out.domain.use_case.other.LauncherBottomSheetUC
+import com.count_out.domain.use_case.bluetooth.LastBleDeviceUC
+import com.count_out.domain.use_case.location.StartLocationUC
+import com.count_out.domain.use_case.other.LauncherBSUC
 import com.count_out.domain.use_case.plans.GetStepPlanUC
 import com.count_out.domain.use_case.workout.DownIntervalUC
 import com.count_out.domain.use_case.workout.PauseWorkoutUC
@@ -30,10 +32,12 @@ class ExecuteViewModel @Inject constructor(
     private val upIntervalUC: UpIntervalUC,
     private val downIntervalUC: DownIntervalUC,
     private val getStepPlanUC: GetStepPlanUC,
-    private val launcherBSUC: LauncherBottomSheetUC,
+    private val launcherBSUC: LauncherBSUC,
     private val connectDeviceHr: ConnectDeviceHrUC,
     private val subscribeHeartRate: GetHeartRateUC,
     private val getConnectionState: GetConnectionStateUC,
+    private val startLocationUC: StartLocationUC,
+    private val getLastBleDevice: LastBleDeviceUC,
     private val internet: Internet,
 ): PrimeViewModel<ExecuteState, ExecuteConverter>() {
 
@@ -49,7 +53,7 @@ class ExecuteViewModel @Inject constructor(
             is ExecuteEvent.Save -> { run(saveWorkoutUC,SaveWorkoutUC.Request)}
             is ExecuteEvent.UpInterval -> { run(upIntervalUC,UpIntervalUC.Request)}
             is ExecuteEvent.DownInterval -> { run(downIntervalUC,DownIntervalUC.Request)}
-            is ExecuteEvent.Launcher -> { run(launcherBSUC, LauncherBottomSheetUC.Request(event.item)) }
+            is ExecuteEvent.Launcher -> { run(launcherBSUC, LauncherBSUC.Request(event.item)) }
         }
     }
     init {
@@ -57,7 +61,7 @@ class ExecuteViewModel @Inject constructor(
         template{ getConnectionState.execute(GetConnectionStateUC.Request) }
         template{ subscribeHeartRate.execute(GetHeartRateUC.Request)}
         template{ connectDeviceHr.execute(ConnectDeviceHrUC.Request) }
+        template{getLastBleDevice.execute(LastBleDeviceUC.Request) }
+        template{ startLocationUC.execute(StartLocationUC.Request) }
     }
-
-    private val dataForServ = DataForServImpl()
 }

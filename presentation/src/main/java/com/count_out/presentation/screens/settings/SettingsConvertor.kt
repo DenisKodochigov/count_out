@@ -14,7 +14,7 @@ import com.count_out.domain.use_case.bluetooth.GetHeartRateUC
 import com.count_out.domain.use_case.bluetooth.LastBleDeviceUC
 import com.count_out.domain.use_case.bluetooth.StartScanBleUC
 import com.count_out.domain.use_case.other.CollapsingUC
-import com.count_out.domain.use_case.other.LauncherBottomSheetUC
+import com.count_out.domain.use_case.other.LauncherBSUC
 import com.count_out.domain.use_case.plans.activity.GetActivitiesUC
 import com.count_out.domain.use_case.settings.GetSettingsUC
 import com.count_out.domain.use_case.settings.UpdateSettingUC
@@ -37,11 +37,11 @@ class SettingsConvertor @Inject constructor():
             is GetHeartRateUC.Response-> converterLocal(resultData, state)
             is LastBleDeviceUC.Response-> converterLocal(resultData, state)
             is GetConnectionStateUC.Response-> converterLocal(resultData, state)
-            is LauncherBottomSheetUC.Response-> converterLocal(resultData, state)
+            is LauncherBSUC.Response-> converterLocal(resultData, state)
             else -> converterOther(state)
         }
     }
-    private fun converterLocal(data: LauncherBottomSheetUC.Response, state: MutableStateFlow<SettingsState>): SettingsState {
+    private fun converterLocal(data: LauncherBSUC.Response, state: MutableStateFlow<SettingsState>): SettingsState {
         if (data.launcher is LauncherBS<*>) {
             state.value = state.value.copy(launcherBS = data.launcher as LauncherBSp) }
         return state.value
@@ -59,7 +59,7 @@ class SettingsConvertor @Inject constructor():
         return state.value
     }
     private fun converterLocal(data: GetHeartRateUC.Response, state: MutableStateFlow<SettingsState>): SettingsState{
-        if (data.result is LongDm) state.value = state.value.copy( heartRate = (data.result as LongDm).item.toInt())
+        if (data.result is LongDm) { state.value = state.value.copy(heartRate = (data.result as LongDm).item.toInt()) }
         return state.value
     }
     private fun converterLocal(data: CollapsingUC.Response, state: MutableStateFlow<SettingsState>): SettingsState{
@@ -68,11 +68,13 @@ class SettingsConvertor @Inject constructor():
         return state.value
     }
     private fun converterLocal(data: GetConnectionStateUC.Response, state: MutableStateFlow<SettingsState>): SettingsState {
-        if (data.result is ConnectState) state.value = state.value.copy( connectingState = data.result as ConnectState)
+        if (data.result is LongDm) state.value = state.value.copy( connectingState = ConnectState.entries[(data.result as LongDm).item.toInt()] )
         return state.value
     }
     private fun converterLocal(data: LastBleDeviceUC.Response, state: MutableStateFlow<SettingsState>): SettingsState {
-        if (data.result is DeviceBle) state.value = state.value.copy( lastConnectHearthRateDevice = data.result as DeviceBle?)
+        if (data.result is DeviceBle) {
+            state.value = state.value.copy(lastConnectHearthRateDevice = data.result as DeviceBle?)
+        }
         return state.value
     }
     private fun converterLocal(data: StartScanBleUC.Response, state: MutableStateFlow<SettingsState>): SettingsState {

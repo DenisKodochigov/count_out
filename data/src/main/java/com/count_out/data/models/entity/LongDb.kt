@@ -11,7 +11,7 @@ value class LongDb(val item: Long): Data {
     fun toResultData(): ResultData<Data> =
         if (this.item > 0L) ResultData.Success(this)
         else ResultData.Error(ThrowableDS.ErrorTypeLong())
-    override fun toDomain(ind: Int): Domain = object: Domain {}
+    override fun toDomain(ind: Int): Domain = LongDm(item = this.item)
     companion object {
         fun fromDomain(domain: Domain): LongDb {
             return when (domain) {

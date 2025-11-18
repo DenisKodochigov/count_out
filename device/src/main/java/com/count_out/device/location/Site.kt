@@ -16,7 +16,6 @@ import javax.inject.Inject
 class Site @Inject constructor( private val context: Context,
 //                               val permission: PermissionApp
 ) {
-
     private lateinit var locationListener: LocationListener
     private lateinit var locationRequest: LocationRequest
     private val fusedClient = LocationServices.getFusedLocationProviderClient(context)

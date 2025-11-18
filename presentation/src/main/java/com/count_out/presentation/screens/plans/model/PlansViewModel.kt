@@ -2,7 +2,7 @@ package com.count_out.presentation.screens.plans.model
 
 import androidx.lifecycle.SavedStateHandle
 import com.count_out.domain.use_case.other.CollapsingUC
-import com.count_out.domain.use_case.other.LauncherBottomSheetUC
+import com.count_out.domain.use_case.other.LauncherBSUC
 import com.count_out.domain.use_case.plans.CopyPlanUC
 import com.count_out.domain.use_case.plans.DeletePlanUC
 import com.count_out.domain.use_case.plans.GetPlansUC
@@ -55,7 +55,7 @@ class PlansViewModel @Inject constructor(
     private val selectingUC: SelectingUC,
     private val changeZoneUC: ChangeZoneUC,
     private val changeGoalUC: ChangeGoalUC,
-    private val launcherBSUC: LauncherBottomSheetUC,
+    private val launcherBSUC: LauncherBSUC,
     private val updateSpeechUC: UpdateSpeechUC,
     private val getActivitiesUC: GetActivitiesUC,
 ): PrimeViewModel<PlansState, PlansConvertor>() {
@@ -91,7 +91,7 @@ class PlansViewModel @Inject constructor(
             is PlansEvent.ChangeZone -> { run(changeZoneUC, ChangeZoneUC.Request(event.item)) }
             is PlansEvent.ChangeGoal -> {
                 run(changeGoalUC, ChangeGoalUC.Request(event.item)) }
-            is PlansEvent.Launcher -> { run(launcherBSUC, LauncherBottomSheetUC.Request(event.item)) }
+            is PlansEvent.Launcher -> { run(launcherBSUC, LauncherBSUC.Request(event.item)) }
             is PlansEvent.UpdateSpeech -> {
                 run(updateSpeechUC, UpdateSpeechUC.Request(event.item)) }
         }

@@ -64,7 +64,7 @@ class BleSourceImpl @Inject constructor(private val ble: Bluetooth): BleSource {
             when (it) {
                 is ResultBle.Error -> ResultData.Error(throwable = ThrowableDS.extract(t = it.throwable))
                 is ResultBle.Nothing -> ResultData.Success(LongDb(0L))
-                is ResultBle.ConnectingStateT -> ResultData.Success(LongDb(it.connectState.ordinal.toLong()))
+                is ResultBle.ConnectingStateBl -> ResultData.Success(LongDb(it.connectState.ordinal.toLong()))
                 else -> ResultData.Success(BooleanDb(true))
             }
         }
@@ -75,7 +75,7 @@ class BleSourceImpl @Inject constructor(private val ble: Bluetooth): BleSource {
             when (it) {
                 is ResultBle.Error -> ResultData.Error(throwable = ThrowableDS.extract(t = it.throwable))
                 is ResultBle.Nothing -> ResultData.Success(LongDb(0L))
-                is ResultBle.IntT -> ResultData.Success(LongDb(it.value.toLong()))
+                is ResultBle.LongBl -> ResultData.Success(LongDb(it.value))
                 else -> ResultData.Success(LongDb(0L))
             }
         }

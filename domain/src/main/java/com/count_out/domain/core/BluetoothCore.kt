@@ -16,6 +16,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flatMapConcat
 import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 class BluetoothCore @Inject constructor(
@@ -38,16 +39,14 @@ class BluetoothCore @Inject constructor(
             else flowOf (ResultDomain.Success(BooleanDm(false)))
         }
     }
-
     @OptIn(ExperimentalCoroutinesApi::class)
     fun lastDevice(): Flow<ResultDomain<Domain>>{
-        return repoSetting.getLastBle()
-//        return repo.lastDevice().map { device->
-////            if (device is ResultDomain.Success &&
-////                device.data is DeviceBle &&
-////                device.data.address.isNotEmpty()) { lastBleAddress.value = device.data.address }
-//            device
-//        }
+        return repoSetting.getLastBle().map { device->
+            if (device is ResultDomain.Success &&
+                device.data is DeviceBle &&
+                device.data.address.isNotEmpty()) { lastBleAddress.value = device.data.address }
+            device
+        }
     }
 
     fun clearCache(): Flow<ResultDomain<Domain>>{
@@ -76,5 +75,6 @@ class BluetoothCore @Inject constructor(
     fun getStateBle(): Flow<ResultDomain<Domain>>{
         return repo.getStateBle() }
     fun getHeartRate(): Flow<ResultDomain<Domain>>{
-        return repo.getHeartRate() }
+        return repo.getHeartRate()
+    }
 }

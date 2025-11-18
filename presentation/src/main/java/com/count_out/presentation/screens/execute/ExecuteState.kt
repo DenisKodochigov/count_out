@@ -1,10 +1,10 @@
 package com.count_out.presentation.screens.execute
 
-import com.count_out.domain.entity.Coordinate
 import com.count_out.domain.entity.StepPlan
 import com.count_out.domain.entity.TickTime
 import com.count_out.domain.entity.enums.ConnectState
 import com.count_out.domain.entity.enums.RunningState
+import com.count_out.domain.entity.location.Coordinate
 import com.count_out.domain.entity.router.DeviceBle
 import com.count_out.domain.entity.workout.Domain
 import com.count_out.presentation.models.BottomSheetInterface

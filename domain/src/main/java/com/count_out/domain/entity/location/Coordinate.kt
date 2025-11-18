@@ -1,6 +1,8 @@
-package com.count_out.domain.entity
+package com.count_out.domain.entity.location
 
-interface Coordinate {
+import com.count_out.domain.entity.workout.Domain
+
+interface Coordinate: Domain {
     val latitude: Double
     val longitude: Double
     val altitude: Double

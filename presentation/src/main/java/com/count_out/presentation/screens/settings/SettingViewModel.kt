@@ -10,7 +10,7 @@ import com.count_out.domain.use_case.bluetooth.SelectDeviceBleUC
 import com.count_out.domain.use_case.bluetooth.StartScanBleUC
 import com.count_out.domain.use_case.bluetooth.StopScanBleUC
 import com.count_out.domain.use_case.other.CollapsingUC
-import com.count_out.domain.use_case.other.LauncherBottomSheetUC
+import com.count_out.domain.use_case.other.LauncherBSUC
 import com.count_out.domain.use_case.plans.activity.AddActivityUC
 import com.count_out.domain.use_case.plans.activity.DeleteActivityUC
 import com.count_out.domain.use_case.plans.activity.GetActivitiesUC
@@ -41,7 +41,7 @@ class SettingViewModel @Inject constructor(
     private val subscribeHeartRate: GetHeartRateUC,
     private val getLastBleDevice: LastBleDeviceUC,
     private val connectDeviceHr: ConnectDeviceHrUC,
-    private val launcherBS: LauncherBottomSheetUC,
+    private val launcherBS: LauncherBSUC,
 ): PrimeViewModel<SettingsState, SettingsConvertor>() {
 
     override fun initScreenState(): ScreenState<SettingsState> = ScreenState.Loading
@@ -60,7 +60,7 @@ class SettingViewModel @Inject constructor(
             is SettingsEvent.SelectDevice -> { run(selectDeviceBle,SelectDeviceBleUC.Request(event.device)) }
             is SettingsEvent.ClearCacheBLE -> { run(clearCacheBle,ClearCacheBleUC.Request) }
             is SettingsEvent.SetCollapsing -> { run(collapsingSet,CollapsingUC.Request(event.item)) }
-            is SettingsEvent.Launcher -> { run(launcherBS, LauncherBottomSheetUC.Request(event.item))}
+            is SettingsEvent.Launcher -> { run(launcherBS, LauncherBSUC.Request(event.item))}
         }
     }
     init {

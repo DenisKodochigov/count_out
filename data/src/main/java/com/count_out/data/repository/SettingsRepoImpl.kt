@@ -1,5 +1,6 @@
 package com.count_out.data.repository
 
+import com.count_out.data.models.Data
 import com.count_out.data.models.Data.Companion.fromDomain
 import com.count_out.data.models.ResultData
 import com.count_out.data.models.ResultData.Companion.convertorFlow
@@ -41,15 +42,8 @@ class SettingsRepoImpl @Inject constructor(
             when {
                 f1 !is ResultData.Success -> f1
                 f2 !is ResultData.Success -> f2
-                f1.data !is StringDb || f2.data !is StringDb ->
-                    ResultData.Error(ThrowableDS.ErrorBleDeviceName())
-                else -> ResultData.Success(
-                    object : DeviceBleDb {
-                        override val name = f1.data.item
-                        override val address = f2.data.item
-                        override fun toDomain(ind: Int) = object : Domain {}
-                    }
-                )
+                f1.data !is StringDb || f2.data !is StringDb -> ResultData.Error(ThrowableDS.ErrorBleDeviceName())
+                else -> ResultData.Success( DeviceBleDb.create(f1.data.item, f2.data.item) as Data)
             }
         }.convertorFlow()
     }

@@ -7,9 +7,9 @@ import com.count_out.domain.use_case.UseCase
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
-class LauncherBottomSheetUC @Inject constructor(
+class LauncherBSUC @Inject constructor(
     private val configuration: Configuration, private val core: LauncherBottomSheetCore
-): UseCase<LauncherBottomSheetUC.Request, LauncherBottomSheetUC.Response>(configuration)  {
+): UseCase<LauncherBSUC.Request, LauncherBSUC.Response>(configuration)  {
 
     override fun method(request: Request): Flow<ResultDomain<Domain>> = core.get(request.launcher)
     override fun response(result: Domain): Response = Response(result)

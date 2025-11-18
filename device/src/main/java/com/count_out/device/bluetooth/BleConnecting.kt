@@ -11,7 +11,6 @@ import android.bluetooth.BluetoothGattDescriptor.ENABLE_INDICATION_VALUE
 import android.bluetooth.BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE
 import android.content.Context
 import android.os.Build
-import android.util.Log
 import com.count_out.device.bluetooth.models.BleConnectionImpl
 import com.count_out.device.bluetooth.models.ResultBle
 import com.count_out.device.bluetooth.models.ThrowableBle
@@ -20,17 +19,16 @@ import com.count_out.domain.entity.enums.UUIDBle
 import jakarta.inject.Inject
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOf
 import java.util.UUID
 
 class BleConnecting @Inject constructor(val context: Context) {
     val connection: MutableStateFlow<BleConnectionImpl> = MutableStateFlow( BleConnectionImpl())
-    val heartRate: MutableStateFlow<Int> = MutableStateFlow(0)
+    val heartRate: MutableStateFlow<Long> = MutableStateFlow(0)
     private val uuidHeartRateMeasurement = UUID.fromString(UUIDBle.HEART_RATE_MEASUREMENT)
     private val uuidClientCharacteristicConfig = UUID.fromString(UUIDBle.CLIENT_CHARACTERISTIC_CONFIG)
 
     fun connectDevice( bleConnection: BleConnectionImpl): Flow<ResultBle> {
-        Log.d("KDS", "BleConnecting.connectDevice ${connection.value.newState}")
         connection.value = bleConnection
         return connectingGatt()
 //            if (bleStates.error == ErrorBleService.NOT_CONNECT_GATT)  connectingGatt( bleStates )
@@ -42,13 +40,13 @@ class BleConnecting @Inject constructor(val context: Context) {
     }
     @SuppressLint("MissingPermission")
     fun connectingGatt(): Flow<ResultBle>{
-        return flow { emit(
+        return flowOf(
             connection.value.device?.let { dev->
                 if ( dev.connectGatt(context, true, bluetoothGattCallback, TRANSPORT_LE) != null) {
                     ResultBle.StateConnectingBle(StateBleConnecting.CONNECT_GAT)
                 } else ResultBle.Error(ThrowableBle.NotConnectingGatt())
             } ?: ResultBle.Error(ThrowableBle.NoDevice())
-        ) }
+        )
     }
 
     private val bluetoothGattCallback = object: BluetoothGattCallback() {
@@ -124,9 +122,9 @@ class BleConnecting @Inject constructor(val context: Context) {
             else -> { heartRateSDK(value, characteristic) }
         }
     }
-    private fun heartRateSDK(value: ByteArray, characteristic: BluetoothGattCharacteristic): Int{
-        val heartRate = if ( Build.VERSION.SDK_INT >= 33 ) value[1].dec().toInt()
-                        else characteristic.value[1].dec().toInt()
+    private fun heartRateSDK(value: ByteArray, characteristic: BluetoothGattCharacteristic): Long{
+        val heartRate = if ( Build.VERSION.SDK_INT >= 33 ) value[1].dec().toLong()
+                        else characteristic.value[1].dec().toLong()
 //        Log.d("KDS", "heartRateSDK $heartRate")
         return heartRate
     }
@@ -137,13 +135,10 @@ class BleConnecting @Inject constructor(val context: Context) {
             try {
                 val refreshMethod = gattL.javaClass.getMethod("refresh")
                 result = refreshMethod.invoke(gattL) as Boolean
-            } catch (e: Exception) {
-//                messengerA.errorApi(R.string.error_refresh,": $e")
-            }
+            } catch (e: Exception) { }
         }
         return result
     }
-
     @SuppressLint("MissingPermission")
     fun disconnectDevice(gatt: BluetoothGatt? = connection.value.gatt) {
         gatt?.let {
@@ -151,7 +146,6 @@ class BleConnecting @Inject constructor(val context: Context) {
             it.close()
         }
     }
-
     @SuppressLint("MissingPermission")
     fun setCharacteristicNotification(gatt: BluetoothGatt, uuid: UUID, enabled: Boolean) {
         gatt.findCharacteristic(uuid)?.let{ characteristic ->
@@ -167,7 +161,6 @@ class BleConnecting @Inject constructor(val context: Context) {
             }
         }
     }
-
     private fun BluetoothGatt.findCharacteristic(uuid: UUID): BluetoothGattCharacteristic?{
         if (services.isEmpty()) return null
         services.forEach { service ->
@@ -175,7 +168,6 @@ class BleConnecting @Inject constructor(val context: Context) {
         }
         return null
     }
-
     private fun BluetoothGattCharacteristic.containsProperty(property: Int) = properties and property != 0
     private fun BluetoothGattCharacteristic.isNotify(): Boolean =
         containsProperty(BluetoothGattCharacteristic.PROPERTY_NOTIFY)

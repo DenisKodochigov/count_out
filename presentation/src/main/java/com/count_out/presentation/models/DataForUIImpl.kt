@@ -1,7 +1,7 @@
 package com.count_out.presentation.models
 
 import android.util.Pair
-import com.count_out.domain.entity.Coordinate
+import com.count_out.domain.entity.location.Coordinate
 import com.count_out.domain.entity.StepPlan
 import com.count_out.domain.entity.TickTime
 import com.count_out.domain.entity.enums.ConnectState

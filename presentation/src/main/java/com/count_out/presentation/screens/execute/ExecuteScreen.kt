@@ -101,15 +101,26 @@ import java.math.RoundingMode
         TextApp(text = "${dataState.flowTime.hour}:${dataState.flowTime.min}:${dataState.flowTime.sec}", style = style)
         Spacer(modifier = Modifier.weight(1f))
         //Location
-        Icon(contentDescription = null, modifier = Modifier.size(sizeIcon),
-            imageVector = if(dataState.coordinate == null) Icons.Outlined.LocationOn
-            else Icons.Filled.LocationOn,)
+        val image = if(dataState.coordinate != null &&
+            dataState.coordinate.longitude > 0.0000001  &&
+            dataState.coordinate.latitude > 0.00000001) Icons.Filled.LocationOn
+        else Icons.Outlined.LocationOn
+        Icon(contentDescription = null, modifier = Modifier.size(sizeIcon), imageVector = image)
+        Column(verticalArrangement = Arrangement.Center,
+            modifier = Modifier.padding(horizontal = 0.dp).width(60.dp)){
+            TextApp(text = dataState.coordinate?.latitude.toString(),
+                style = typography.bodySmall,
+                textAlign = TextAlign.Start)
+            TextApp(text = dataState.coordinate?.longitude.toString(),
+                style = typography.bodySmall,
+                textAlign = TextAlign.Start)
+        }
         Spacer(modifier = Modifier.weight(1f))
         //HearthRate
         Icon( modifier = Modifier.size(sizeIcon), contentDescription = null,
             imageVector = if(dataState.bleConnectState != ConnectState.CONNECTED) Icons.Outlined.HeartBroken
             else Icons.Filled.Favorite)
-        TextApp(style = style, modifier = Modifier.padding(start=12.dp),
+        TextApp(style = style, modifier = Modifier.padding(start=12.dp).width(60.dp),
             text = if(dataState.bleConnectState != ConnectState.CONNECTED) "---"
             else dataState.heartRate.toString() )
     }

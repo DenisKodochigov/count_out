@@ -66,12 +66,12 @@ class Bluetooth @Inject constructor(
 
     @SuppressLint("MissingPermission")
     private fun getRemoteDevice(address: String): Flow<ResultBle> {
-        Log.d("KDS","getRemoteDevice")
+        Log.d("KDS","getRemoteDevice address $address")
         return flow { emit(
             try {
                 bluetoothAdapter.getRemoteDevice(address)?.let { dv ->
                     currentConnection = BleConnectionImpl(device = dv)
-                    ResultBle.BooleanT(true)
+                    ResultBle.BooleanBl(true)
                 } ?: ResultBle.Error(ThrowableBle.NotValidBle())
             } catch (e: IllegalArgumentException) { ResultBle.Error(ThrowableBle.extract(t=e)) }
         ) }
@@ -84,15 +84,15 @@ class Bluetooth @Inject constructor(
     fun onClearCacheBLE(): Flow<ResultBle> {
         ConnectState.entries[0]
         return flow { emit(
-            if (bleConnecting.clearServicesCache()) ResultBle.BooleanT(true)
+            if (bleConnecting.clearServicesCache()) ResultBle.BooleanBl(true)
             else ResultBle.Error(throwable = ThrowableBle.ClearCache())
         ) }
     }
     fun getStateBle(): Flow<ResultBle> {
-        return bleConnecting.connection.map { ResultBle.ConnectingStateT(ConnectState.entries[it.newState]) }
+        return bleConnecting.connection.map { ResultBle.ConnectingStateBl(ConnectState.entries[it.newState]) }
     }
     fun getHeartRate(): Flow<ResultBle> {
-        return bleConnecting.heartRate.map { ResultBle.IntT( it) }
+        return bleConnecting.heartRate.map { ResultBle.LongBl(it) }
     }
 
 //    private fun sendHeartRate(heartRate: MutableStateFlow<Int>, dataFromBle: DataFromBle): Flow<ResultBle> {

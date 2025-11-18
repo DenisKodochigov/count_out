@@ -1,51 +1,59 @@
 package com.count_out.device.location
 
-import android.content.Context
-import android.content.Context.LOCATION_SERVICE
 import android.location.Location
 import android.location.LocationListener
 import android.location.LocationManager
-import com.count_out.data.router.models.DataFromSite
+import android.os.Looper
+import com.count_out.data.models.Data
+import com.count_out.data.models.ResultData
+import com.count_out.data.models.entity.BooleanDb
+import com.count_out.data.models.entity.CoordinateDb
+import com.count_out.data.models.throwable.ThrowableDS
+import com.count_out.device.permission.PermissionApp
+import com.count_out.domain.entity.lg
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.flowOf
 import javax.inject.Inject
 
 class LocationWithOutGoogle @Inject constructor(
-    private val context: Context,
-//                                                val permission: PermissionApp
+     private val locationManager : LocationManager,
+     val permission: PermissionApp
 ){
-
-    private lateinit var locationManager : LocationManager
-    private lateinit var locationListener: LocationListener
-
-    private fun initService(dataFromSite: DataFromSite){
-        locationManager = context.getSystemService(LOCATION_SERVICE) as LocationManager
-        locationListener = object : LocationListener {
-            override fun onLocationChanged(location: Location) {
-//                dataFromSite.coordinate.value = TemporaryDB(
-//                    latitude = location.latitude,
-//                    longitude = location.longitude,
-//                    altitude = location.altitude,
-//                    timeLocation = location.time,
-//                    accuracy = location.accuracy,
-//                    speed = location.speed
-//                )
-            }
-            override fun onProviderEnabled(provider: String) {}
-            override fun onProviderDisabled(provider: String) {}
+    val coordinate: MutableStateFlow<CoordinateDb> = MutableStateFlow(CoordinateDb.EMPTY)
+    private val listener: LocationListener = object : LocationListener {
+        override fun onLocationChanged(location: Location) {
+            lg("location ${location.longitude} ${location.latitude}")
+            coordinate.value = CoordinateDb.new(
+                latitude = location.latitude,
+                longitude = location.longitude,
+                altitude = location.altitude,
+                timeLocation = location.time,
+                accuracy = location.accuracy,
+//                    distance = location.distanceTo(),
+                speed = location.speed
+            )
         }
+        override fun onProviderEnabled(provider: String) {}
+        override fun onProviderDisabled(provider: String) {}
     }
-    private fun getLocation(){
+    private fun requestLocation(){
         try {
-//            locationManager.requestLocationUpdates( LocationManager.GPS_PROVIDER, 0L, 0f, locationListener)
-//            lg("Location Request Successful")
+            if (permission.checkLocation()) { lg("NO PERMISSION") }
+            locationManager.requestLocationUpdates(
+                LocationManager.GPS_PROVIDER, 500L, 0f, listener, Looper.getMainLooper())
         } catch(ex: SecurityException) {
-//            lg("Security Exception, no location available")
+            lg("Security Exception, no location available $ex")
         }
     }
-    fun startService(dataFromSite: DataFromSite){
-        initService(dataFromSite)
-        getLocation()
+    fun startService(): Flow<CoordinateDb> {
+        requestLocation()
+        return coordinate
     }
-    fun cancelService(){
-        locationManager.removeUpdates(locationListener)
+    fun cancelService(): Flow<ResultData<Data>>{
+        return flowOf( try {
+            locationManager.removeUpdates(listener)
+            ResultData.Success(BooleanDb(true))
+        } catch (e: Exception) { ResultData.Error(throwable = ThrowableDS.extract(e))})
     }
 }

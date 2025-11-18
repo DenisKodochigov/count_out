@@ -43,7 +43,6 @@ import com.count_out.presentation.view_element.custom_view.FrameBackground
 import com.count_out.presentation.view_element.icons.AnimateIcon
 import com.count_out.presentation.view_element.icons.IconSingle
 import com.count_out.presentation.view_element.icons.IconsCollapsing
-import com.count_out.presentation.view_element.lg
 
 @Composable fun SettingScreen( viewModel: SettingViewModel){
     viewModel.screenState.collectAsStateWithLifecycle().value.let { screenState ->
@@ -165,7 +164,7 @@ import com.count_out.presentation.view_element.lg
     }
 }
 @Composable fun RowBleDeviceItem(modifier: Modifier, dataState: SettingsState, style: TextStyle){
-    lg("RowBleDeviceItem ${dataState.lastConnectHearthRateDevice?.name ?: ""}")
+//    lg("RowBleDeviceItem ${dataState.lastConnectHearthRateDevice?.name ?: ""}")
     val nameDevice = dataState.lastConnectHearthRateDevice?.name?.ifEmpty { stringResource(id = R.string.no_name)}
         ?: stringResource(id = R.string.not_select_device)
     Column (modifier = modifier.padding(start = 12.dp, end = 12.dp).fillMaxWidth()) {

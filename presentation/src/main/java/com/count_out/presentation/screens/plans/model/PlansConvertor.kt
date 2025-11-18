@@ -8,7 +8,7 @@ import com.count_out.domain.entity.workout.LauncherBS
 import com.count_out.domain.entity.workout.Selecting
 import com.count_out.domain.use_case.UseCase
 import com.count_out.domain.use_case.other.CollapsingUC
-import com.count_out.domain.use_case.other.LauncherBottomSheetUC
+import com.count_out.domain.use_case.other.LauncherBSUC
 import com.count_out.domain.use_case.plans.GetPlansUC
 import com.count_out.domain.use_case.plans.RunPlanUC
 import com.count_out.domain.use_case.plans.SelectingUC
@@ -27,7 +27,7 @@ class PlansConvertor @Inject constructor(): PrimeConvertor<UseCase.Response, Pla
             is GetActivitiesUC.Response-> converterLocal(resultData, state)
             is CollapsingUC.Response-> converterLocal(resultData, state)
             is SelectingUC.Response-> converterLocal(resultData, state)
-            is LauncherBottomSheetUC.Response-> converterLocal(resultData, state)
+            is LauncherBSUC.Response-> converterLocal(resultData, state)
             else -> converterOther(state)
         }
     }
@@ -42,7 +42,7 @@ class PlansConvertor @Inject constructor(): PrimeConvertor<UseCase.Response, Pla
             state.value = state.value.copy( selectedId = (data.selectedTraining as LongDm).item)
         return state.value
     }
-    private fun converterLocal(data: LauncherBottomSheetUC.Response, state: MutableStateFlow<PlansState>): PlansState {
+    private fun converterLocal(data: LauncherBSUC.Response, state: MutableStateFlow<PlansState>): PlansState {
         if (data.launcher is LauncherBS<*>) {
             state.value = state.value.copy(launcherBS = data.launcher as LauncherBSp) }
         return state.value

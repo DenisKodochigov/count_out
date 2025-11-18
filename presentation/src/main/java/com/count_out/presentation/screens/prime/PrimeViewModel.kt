@@ -31,6 +31,8 @@ abstract class PrimeViewModel<T: Any, C: PrimeConvertor<UseCase.Response,T>>: Vi
         viewModelScope.launch { _screenState.value = convertor().make(result, dataState) }}
     fun template( execute: ()-> Flow<ResultDomain<UseCase.Response>>){
         viewModelScope.launch(Dispatchers.IO) { execute().collect { submitState( it ) } }}
+    fun templateMain( execute: ()-> Flow<ResultDomain<UseCase.Response>>){
+        viewModelScope.launch(Dispatchers.Main) { execute().collect { submitState( it ) } }}
     fun <R : UseCase.Request> run(useCase: UseCase<R, *>, request: R) = template { useCase.execute(request) }
 
 }
