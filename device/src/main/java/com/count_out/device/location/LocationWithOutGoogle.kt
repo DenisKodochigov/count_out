@@ -39,7 +39,7 @@ class LocationWithOutGoogle @Inject constructor(
     }
     private fun requestLocation(){
         try {
-            if (permission.checkLocation()) { lg("NO PERMISSION") }
+//            if (permission.checkLocation()) { lg("NO PERMISSION") }
             locationManager.requestLocationUpdates(
                 LocationManager.GPS_PROVIDER, 500L, 0f, listener, Looper.getMainLooper())
         } catch(ex: SecurityException) {

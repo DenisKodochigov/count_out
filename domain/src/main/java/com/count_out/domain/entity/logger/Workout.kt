@@ -5,8 +5,8 @@ import com.count_out.domain.entity.workout.Plan
 
 interface Workout {
     val idWorkout: Long
-    val trainingId: Long
-    val training: Plan?
+    val planId: Long
+    val plan: Plan?
     val isSelected: Boolean
     val name: String
     val address: String
@@ -51,6 +51,6 @@ interface Workout {
     val resultAmount :Double
     val resultRange  :Double
 
-    fun formTraining(training: Plan)
+    fun formPlan(plan: Plan)
     fun formWeather(weather: Weather)
 }

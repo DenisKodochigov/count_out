@@ -9,6 +9,9 @@ sealed class ThrowableUC (private val t: Throwable?): Throwable(t){
     class RequestFailed(t:Throwable = Exception("return null")): ThrowableUC(t)
     class ReturnNull(t:Throwable = Exception("return null")): ThrowableUC(t)
     class NotValidType(t:Throwable = Exception("not valid type UC")): ThrowableUC(t)
+    class ErrorBindingService(t:Throwable = Exception("Error binding service")): ThrowableUC(t)
+    class ErrorUnBindingService(t:Throwable = Exception("Error unbinding service")): ThrowableUC(t)
+    class ErrorStartService(t:Throwable = Exception("Error unbinding service")): ThrowableUC(t)
     class UnknownThrow(t:Throwable): ThrowableUC(t)
     companion object {
         fun extract(t: Throwable): ThrowableUC = if (t is ThrowableUC) t else UnknownThrow(t)

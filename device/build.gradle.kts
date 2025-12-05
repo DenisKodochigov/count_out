@@ -36,7 +36,7 @@ dependencies {
     ksp (libs.bundles.hiltksp)
     //Location
     implementation(libs.bundles.gms)
-
+    implementation(libs.bundles.retrofit)
     debugImplementation(libs.ui.test.manifest)
     testImplementation (libs.bundles.testImpl)
 //    androidTestImplementation (platform(libs.compose.bom))

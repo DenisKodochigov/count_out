@@ -1,10 +1,10 @@
 package com.count_out.service.service_count_out.di
 
 import android.content.Context
-import com.count_out.framework.text_to_speech.SpeechManager
 import com.count_out.service.service_count_out.CountOutServiceBind
 import com.count_out.service.service_count_out.RunWorkOut
 import com.count_out.service.service_count_out.Work
+import com.count_out.service.service_count_out.text_to_speech.SpeechManager
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

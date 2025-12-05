@@ -1,10 +1,10 @@
 package com.count_out.domain.entity.router
 
-import com.count_out.domain.entity.location.Coordinate
 import com.count_out.domain.entity.StepPlan
 import com.count_out.domain.entity.TickTime
 import com.count_out.domain.entity.enums.ConnectState
 import com.count_out.domain.entity.enums.RunningState
+import com.count_out.domain.entity.location.Coordinate
 import kotlinx.coroutines.flow.MutableStateFlow
 
 //data class Buffer (
@@ -33,7 +33,6 @@ interface Buffer {
     val bleConnectState: MutableStateFlow<ConnectState>
     val foundDevices: MutableStateFlow<List<DeviceBle>>
     val lastConnectHearthRateDevice: MutableStateFlow<DeviceBle?>
-
     val flowTime: MutableStateFlow<TickTime?>
     val countRest: MutableStateFlow<Int>
     val currentCount: MutableStateFlow<Int>

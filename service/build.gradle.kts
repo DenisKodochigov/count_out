@@ -28,11 +28,13 @@ android {
 
 dependencies {
     implementation(project(":domain"))
-    implementation(project(":data"))
-    implementation(project(":framework"))
+    implementation(project(":app"))
+    implementation(project(":device"))
+    implementation(libs.bundles.core)
     implementation(libs.core.ktx)
     //Hilt
     implementation (libs.bundles.hilt)
+    implementation(libs.lifecycle.service)
     ksp (libs.bundles.hiltksp)
 //Testing
     testImplementation (libs.bundles.testImpl)

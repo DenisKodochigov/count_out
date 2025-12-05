@@ -18,6 +18,8 @@ import com.count_out.framework.room.db.settings.SettingDao
 import com.count_out.framework.room.db.settings.SettingTb
 import com.count_out.framework.room.db.speech.SpeechDao
 import com.count_out.framework.room.db.speech.SpeechTb
+import com.count_out.framework.room.db.telemetriy.TelemetryDao
+import com.count_out.framework.room.db.telemetriy.TelemetryEntity
 import com.count_out.framework.room.db.traking.TemporaryTb
 import com.count_out.framework.room.db.traking.TrackingDao
 import com.count_out.framework.room.db.traking.TrackingTb
@@ -33,6 +35,7 @@ import com.count_out.framework.room.db.traking.TrackingTb
     SettingTb::class,
     TrackingTb::class,
     TemporaryTb::class,
+    TelemetryEntity::class,
 ], version = 1, exportSchema = false)
 //@TypeConverters(
 //    ConverterZone::class,
@@ -50,5 +53,6 @@ abstract class AppDataBase : RoomDatabase() {
     abstract fun speechDao(): SpeechDao
     abstract fun settingDao(): SettingDao
     abstract fun trackingDao(): TrackingDao
+    abstract fun telemetryDao(): TelemetryDao
 }
 

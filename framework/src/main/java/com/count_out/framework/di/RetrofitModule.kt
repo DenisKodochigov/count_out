@@ -1,5 +1,6 @@
 package com.count_out.framework.di
 
+import com.count_out.framework.retrofit.upload.TelemetryApi
 import com.count_out.framework.retrofit.weather.WeatherService
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
@@ -40,5 +41,8 @@ class RetrofitModule {
     @Provides
     fun provideUserService(retrofit: Retrofit): WeatherService =
         retrofit.create(WeatherService::class.java)
-
+    @Singleton
+    @Provides
+    fun provideTelemetryApi(retrofit: Retrofit): TelemetryApi =
+        retrofit.create(TelemetryApi::class.java)
 }

@@ -384,7 +384,22 @@ import java.math.RoundingMode
     TextApp(text = "bodyMedium ${typography.bodyMedium.fontSize} ", style = typography.bodyMedium)
     TextApp(text = "bodySmall ${typography.bodySmall.fontSize} ", style = typography.bodySmall)
 }
+@Composable
+fun PendingUploadScreen(dataState: ExecuteState) {
 
+//    Column(modifier = Modifier.fillMaxSize().padding(16.dp), horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center) {
+//        Text(text = "Неотправленные точки: ${dataState.value}")
+//        Spacer(modifier = Modifier.height(12.dp))
+//        Button(onClick = { viewModel.uploadNow() }) {
+//            Text("Upload now")
+//        }
+//        Spacer(modifier = Modifier.height(16.dp))
+//        // Optionally: toggle simulator
+//        Button(onClick = { viewModel.useSimulator(true) }) { Text("Use simulator") }
+//        Spacer(modifier = Modifier.height(8.dp))
+//        Button(onClick = { viewModel.useSimulator(false) }) { Text("Use real BLE") }
+//    }
+}
 //@Composable fun Test1(){
 //    TemplateList1(
 //        columnLeft = {

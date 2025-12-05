@@ -1,9 +1,9 @@
 package com.count_out.service.service_count_out
 
-import com.count_out.data.router.models.DataForWork
-import com.count_out.data.router.models.DataFromWork
 import com.count_out.domain.entity.enums.RunningState
-import com.count_out.framework.text_to_speech.SpeechManager
+import com.count_out.domain.entity.router.DataForWork
+import com.count_out.domain.entity.router.DataFromWork
+import com.count_out.service.service_count_out.text_to_speech.SpeechManager
 import com.count_out.service.service_timing.Ticker
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -11,11 +11,7 @@ import kotlinx.coroutines.launch
 import java.util.concurrent.CancellationException
 import javax.inject.Inject
 
-class Work @Inject constructor(
-    val speechManager: SpeechManager,
-    val runWorkOut: RunWorkOut
-){
-
+class Work @Inject constructor(val speechManager: SpeechManager, val runWorkOut: RunWorkOut){
     fun start(dataForWork: DataForWork, dataFromWork: DataFromWork){
         speechManager.init {
             getTick( dataFromWork )
@@ -32,7 +28,7 @@ class Work @Inject constructor(
             dataFromWork.trap = {
                 if (dataFromWork.runningState.value == RunningState.Stopped) {
                     dataFromWork.empty()
-                    dataForWork.empty()
+//                    dataForWork.empty()
                     stop()
                 } }
 //            runWorkOut.runWorkOut(dataForWork, dataFromWork)

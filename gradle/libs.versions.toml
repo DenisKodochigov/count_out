@@ -3,17 +3,19 @@
 kotlin = "2.2.21"
 kspVersion = "2.2.20-2.0.3"
 serialization_plugin = "2.2.21"
-agp = "8.13.0"
-composeV = "1.9.4"
-composeBom = "2025.10.01"
-composeActivity = "1.11.0"
+agp = "8.13.1"
+composeV = "1.9.5"
+composeBom = "2025.11.01"
+composeActivity = "1.12.0"
 #constraintlayout = "1.1.1"
 material-icons = "1.7.8"
 legacy = "1.0.0"
+work = "2.8.1"
 #graphics = "1.0.2"
 #graphics1 = "1.0.1"
 #fragmentKtx = "1.8.5"
 hiltAndroid = "2.57.2"
+hiltWork = "1.3.0"
 hiltViewModel = "1.3.0"
 hiltNavigationCompose = "1.3.0"
 
@@ -24,14 +26,14 @@ material3 = "1.4.0"
 permissions = "0.37.3"
 moshi = "1.15.2"
 
-navigationCompose = "2.9.5"
-roomV = "2.8.3"
-datastore = "1.1.7"
+navigationCompose = "2.9.6"
+roomV = "2.8.4"
+datastore = "1.2.0"
 serialization = "1.9.0"
 kotlinx-coroutines = "1.10.2"
 gmsV = "21.3.0"
 retrofit = "3.0.0"
-okhttp3 = "5.3.0"
+okhttp3 = "5.3.2"
 paletteKtx = "1.0.0"
 
 junit = "4.13.2"
@@ -51,13 +53,14 @@ moskito-kotlin = "6.1.0"
 #moskito-inline = "5.2.0"
 #moskito-android = "2.28.2"
 
-ui-test = "1.9.4"
+ui-test = "1.9.5"
 #robolectric = "4.2.1"
-activity = "1.11.0"
-activityKtx = "1.11.0"
-composeMaterial = "1.5.4"
+activity = "1.12.0"
+activityKtx = "1.12.0"
+composeMaterial = "1.5.5"
 composeCompiler = "2.2.21"
-uiText = "1.9.4"
+uiText = "1.9.5"
+lifecycleService = "2.9.4"
 #storage = "1.5.0"
 #androidMapsUtils = "2.3.0"
 #firebase_crashlytics = "3.0.2"
@@ -87,7 +90,8 @@ legacy-support = { module = "androidx.legacy:legacy-support-v13", version.ref = 
 #fragment-ktx = { module = "androidx.fragment:fragment-ktx", version.ref = "fragmentKtx" }
 #Navigation
 navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "navigationCompose" }
-
+#Work
+work = { module = "androidx.work:work-runtime-ktx", version.ref = "work" }
 #Lifecycle
 lifecycle-viewmodel-compose = { module = "androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "lifecycle" }
 lifecycle-viewmodel-ktx = { module = "androidx.lifecycle:lifecycle-viewmodel-ktx", version.ref = "lifecycle" }
@@ -124,6 +128,7 @@ accompanist-permissions = { module = "com.google.accompanist:accompanist-permiss
 
 #Hilt
 hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hiltAndroid" }
+hilt-work = { module = "androidx.hilt:hilt-work", version.ref = "hiltWork" }
 hilt-viewmodel = { module = "androidx.hilt:hilt-lifecycle-viewmodel", version.ref = "hiltViewModel" }
 hilt-navigation-compose = { module = "androidx.hilt:hilt-navigation-compose", version.ref = "hiltNavigationCompose" }
 hilt-compiler = { module = "com.google.dagger:hilt-compiler", version.ref = "hiltAndroid" }
@@ -202,6 +207,7 @@ hilt-testing = { module = "com.google.dagger:hilt-android-testing", version.ref 
 ui-test-manifest = { module = "androidx.compose.ui:ui-test-manifest", version.ref = "ui-test" }
 compose-material = { group = "androidx.wear.compose", name = "compose-material", version.ref = "composeMaterial" }
 ui-text = { group = "androidx.compose.ui", name = "ui-text", version.ref = "uiText" }
+lifecycle-service = { group = "androidx.lifecycle", name = "lifecycle-service", version.ref = "lifecycleService" }
 
 
 [plugins]
@@ -217,6 +223,7 @@ serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref 
 
 [bundles]
     core = [
+        "work",
         "core-ktx",
         "activity",
         "activity-ktx",
@@ -250,7 +257,7 @@ serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref 
     datastore = ["datastore", "datastore-preferences"]
     lifecycle = ["lifecycle-viewmodel-compose", "lifecycle-viewmodel-ktx", "lifecycle-runtime-ktx", ]
     material3 = ["material3", "material-icons-core", "material-icons-extended", "compose-ui-text-google-fonts", "palette-ktx"]
-    hilt = ["hilt-android", "hilt-navigation-compose", "hilt-viewmodel"]
+    hilt = ["hilt-android", "hilt-navigation-compose", "hilt-viewmodel", "hilt-work"]
     hiltksp = ["hilt-compiler", "dagger-compiler"]
     gms = [ "gms"]
 

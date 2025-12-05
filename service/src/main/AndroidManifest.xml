@@ -10,8 +10,7 @@
 
         <service
             android:name="com.count_out.service.service_count_out.CountOutService"
-            android:foregroundServiceType="dataSync"
-            android:exported="false"
-            android:permission="TODO" />
+            android:foregroundServiceType="location|connectedDevice"
+            android:exported="false" />
     </application>
 </manifest>

@@ -21,7 +21,6 @@
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE"
         tools:ignore="ForegroundServicesPolicy" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE_DATA_SYNC" />
-    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_CONNECTED_DEVICE" />
     <uses-permission android:name="android.permission.BLUETOOTH" android:maxSdkVersion="30" />
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" android:maxSdkVersion="30" />
     <uses-permission android:name="android.permission.BLUETOOTH_CONNECT" />
@@ -51,7 +50,7 @@
         android:hardwareAccelerated="true"
         android:networkSecurityConfig="@xml/network_security_config"
         tools:targetApi="35">
-
+        <uses-library android:name="android.work" android:required="false" />
         <activity
             android:name=".MainActivity"
             android:exported="true"

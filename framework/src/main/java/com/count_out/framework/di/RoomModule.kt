@@ -40,7 +40,10 @@ class RoomModule {
                 .addPrepopulate { prepopulateRealDb(database) }
             else -> Room.databaseBuilder(appContext, AppDataBase::class.java, "count_out.db")
         }
-        return builder.build().also { database = it }
+        return builder
+            .setJournalMode(RoomDatabase.JournalMode.WRITE_AHEAD_LOGGING)
+            .build()
+            .also { database = it }
     }
     private fun RoomDatabase.Builder<AppDataBase>.addPrepopulate(block: () -> Unit) =
         addCallback(object : RoomDatabase.Callback() {
